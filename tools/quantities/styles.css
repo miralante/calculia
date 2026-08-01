@@ -1,0 +1,26 @@
+.tool-header h1 { color: var(--mod-razonamiento); }
+.practice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--espacio); }
+.btn-practice { min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: var(--mod-razonamiento); text-align: center; }
+.practice-icon, .task-icon { font-size: 42px; line-height: 1; }
+.btn-practice small { font-size: var(--texto-pequeno); font-weight: 400; }
+.task-card { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); text-align: center; border-color: var(--mod-razonamiento-suave); }
+.task-card h2 { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); }
+.task-detail { margin: 0; color: var(--color-texto-suave); }
+.value-display { min-width: 220px; padding: 12px 20px; border: 3px solid var(--mod-razonamiento); border-radius: var(--radio); background: var(--mod-razonamiento-suave); color: var(--color-texto); font-size: var(--texto-grande); font-weight: 700; }
+.slider-wrap { width: min(100%, 620px); padding: 8px 0; }
+#amountSlider { width: 100%; min-height: var(--boton-min); accent-color: var(--mod-razonamiento); cursor: pointer; }
+.slider-ends { display: flex; justify-content: space-between; gap: var(--espacio); color: var(--color-texto-suave); font-weight: 700; }
+.step-button { min-width: var(--boton-min); font-size: 34px; line-height: 1; }
+#nextTask { align-self: center; }
+@media (max-width: 480px) {
+  .practice-grid { grid-template-columns: 1fr; }
+  .task-card { padding: var(--espacio); }
+  .value-display { min-width: 0; width: 100%; }
+
+#pantallaFinal .transferencia {
+  margin: 8px auto 24px;
+  font-size: 1.1rem;
+  color: var(--color-texto-secundario, #555);
+  max-width: 480px;
+}
+}

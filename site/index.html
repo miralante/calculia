@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculia</title>
+  <meta name="description" content="Actividades de cálculo y razonamiento lógico, a tu ritmo.">
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" href="../assets/img/icono.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="cabecera centrado">
+      <div class="idioma-selector" role="group" aria-label="Elegir idioma">
+        <button type="button" class="btn-idioma" id="btnIdiomaEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
+        <button type="button" class="btn-idioma" id="btnIdiomaEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
+      </div>
+      <img src="../assets/img/icono.svg" alt="" width="72" height="72" class="logo">
+      <h1>Calculia</h1>
+      <div class="fila centrado-fila">
+        <p class="saludo" id="saludo" data-i18n="saludo">Hola. ¿Qué quieres practicar hoy?</p>
+        <button type="button" class="btn btn-audio" id="btnSaludo" data-i18n-aria="listenGreeting" aria-label="Escuchar el saludo">🔊</button>
+      </div>
+      <p class="stars" id="estrellasTotales">⭐ 0</p>
+    </header>
+
+    <nav class="anclas-modulo" aria-label="Ir a un bloque">
+      <a href="#mod-mates" class="ancla-modulo" style="--acento: var(--mod-razonamiento);"><span data-i18n="modMates">🧮 Matemáticas</span></a>
+      <a href="#mod-logica" class="ancla-modulo" style="--acento: var(--mod-memoria);"><span data-i18n="modLogica">🧩 Razonamiento y lógica</span></a>
+    </nav>
+
+    <main class="pila modulos">
+
+      <!-- Bloque: Matemáticas -->
+      <section class="modulo" id="mod-mates" style="--acento: var(--mod-razonamiento); --acento-suave: var(--mod-razonamiento-suave);">
+        <h2><span aria-hidden="true" data-i18n="modMates">🧮 Matemáticas</span></h2>
+        <div class="grid-tarjetas">
+          <a href="../tools/numbers/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🧮</span>
+            <span class="nombre" data-i18n="numbers_nombre">Los Números</span>
+            <span class="detalle" data-i18n="numbers_detalle">Cuenta, suma y mide.</span>
+          </a>
+          <a href="../tools/quantities/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">↔️</span>
+            <span class="nombre" data-i18n="quantities_nombre">Cantidades</span>
+            <span class="detalle" data-i18n="quantities_detalle">Practica poco, mucho y aproximar.</span>
+          </a>
+          <a href="../tools/math-tables/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🔢</span>
+            <span class="nombre" data-i18n="mathtables_nombre">Las Tablas</span>
+            <span class="detalle" data-i18n="mathtables_detalle">Cuenta, suma, multiplica y divide con colores.</span>
+          </a>
+          <a href="../tools/roman-numerals/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🏛️</span>
+            <span class="nombre" data-i18n="romannumerals_nombre">Números Romanos</span>
+            <span class="detalle" data-i18n="romannumerals_detalle">Aprende a reconocer los siglos.</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Bloque: Razonamiento y lógica -->
+      <section class="modulo" id="mod-logica" style="--acento: var(--mod-memoria); --acento-suave: var(--mod-memoria-suave);">
+        <h2><span aria-hidden="true" data-i18n="modLogica">🧩 Razonamiento y lógica</span></h2>
+        <div class="grid-tarjetas">
+          <a href="../tools/riddles/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🧩</span>
+            <span class="nombre" data-i18n="riddles_nombre">Adivinanzas</span>
+            <span class="detalle" data-i18n="riddles_detalle">¿Qué es? Piensa y elige.</span>
+          </a>
+          <a href="../tools/patterns/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🔵</span>
+            <span class="nombre" data-i18n="patterns_nombre">Patrones</span>
+            <span class="detalle" data-i18n="patterns_detalle">¿Qué sigue ahora?</span>
+          </a>
+          <a href="../tools/wallet/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">💶</span>
+            <span class="nombre" data-i18n="wallet_nombre">El Monedero</span>
+            <span class="detalle" data-i18n="wallet_detalle">Paga el precio justo.</span>
+          </a>
+          <a href="../tools/clock/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🕐</span>
+            <span class="nombre" data-i18n="clock_nombre">El Reloj</span>
+            <span class="detalle" data-i18n="clock_detalle">¿Qué hora es?</span>
+          </a>
+          <a href="../tools/stories/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">📖</span>
+            <span class="nombre" data-i18n="stories_nombre">Historias</span>
+            <span class="detalle" data-i18n="stories_detalle">Ordena lo que pasó primero.</span>
+          </a>
+          <a href="../tools/odd-one-out/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🔎</span>
+            <span class="nombre" data-i18n="oddoneout_nombre">¿Qué no encaja?</span>
+            <span class="detalle" data-i18n="oddoneout_detalle">Encuentra el que sobra.</span>
+          </a>
+          <a href="../tools/puzzle/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🧩</span>
+            <span class="nombre" data-i18n="puzzle_nombre">Puzzle</span>
+            <span class="detalle" data-i18n="puzzle_detalle">Coloca cada pieza en su sitio.</span>
+          </a>
+          <a href="../tools/oca/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🦢</span>
+            <span class="nombre" data-i18n="oca_nombre">La Oca</span>
+            <span class="detalle" data-i18n="oca_detalle">Tira el dado y avanza.</span>
+          </a>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="pie-app">
+      <a href="../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+    </footer>
+  </div>
+
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/tts.js"></script>
+  <script src="../assets/js/storage.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      function pintarSelectorIdioma() {
+        var activo = App.i18n.locale();
+        document.getElementById('btnIdiomaEs').setAttribute('aria-pressed', String(activo === 'es'));
+        document.getElementById('btnIdiomaEn').setAttribute('aria-pressed', String(activo === 'en'));
+      }
+
+      document.getElementById('estrellasTotales').textContent =
+        '⭐ ' + App.storage.estrellasTotales();
+      document.getElementById('estrellasTotales').title = App.i18n.t('yourStars');
+
+      document.getElementById('btnSaludo').addEventListener('click', function () {
+        App.tts.speak(App.i18n.t('saludo'));
+      });
+
+      document.getElementById('btnIdiomaEs').addEventListener('click', function () {
+        App.i18n.setLocale('es');
+      });
+      document.getElementById('btnIdiomaEn').addEventListener('click', function () {
+        App.i18n.setLocale('en');
+      });
+      pintarSelectorIdioma();
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('../sw.js').catch(function () {});
+      }
+    })();
+  </script>
+</body>
+</html>

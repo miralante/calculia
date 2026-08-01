@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Monedero | Apptonomia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="title">💶 El Monedero</h1>
+      <span class="stars" id="stars">⭐ 0</span>
+    </header>
+
+    <!-- Screen: 5-activity menu -->
+    <section id="pantallaMenu" class="pila">
+      <div class="fila centrado-fila">
+        <p class="instruccion" id="instruccion" data-i18n="instruccion">Aquí practicas el dinero de verdad: contarlo, pagar, comprobar el cambio y ahorrar.</p>
+      </div>
+      <div class="grid-tarjetas">
+        <button type="button" class="tarjeta-actividad" data-actividad="contar">
+          <span class="picto" aria-hidden="true">🪙</span>
+          <span class="nombre" data-i18n="menuContar">¿Cuánto hay?</span>
+          <span class="detalle" data-i18n="menuContarDetalle">Mira el dinero y elige el total.</span>
+        </button>
+        <button type="button" class="tarjeta-actividad" data-actividad="pagar">
+          <span class="picto" aria-hidden="true">🛒</span>
+          <span class="nombre" data-i18n="menuPagar">Paga justo</span>
+          <span class="detalle" data-i18n="menuPagarDetalle">Toca el dinero hasta el precio exacto.</span>
+        </button>
+        <button type="button" class="tarjeta-actividad" data-actividad="conquepago">
+          <span class="picto" aria-hidden="true">💵</span>
+          <span class="nombre" data-i18n="menuConQuePago">¿Con qué pago?</span>
+          <span class="detalle" data-i18n="menuConQuePagoDetalle">Elige el dinero que llega.</span>
+        </button>
+        <button type="button" class="tarjeta-actividad" data-actividad="cambio">
+          <span class="picto" aria-hidden="true">🔍</span>
+          <span class="nombre" data-i18n="menuCambio">¿Está bien el cambio?</span>
+          <span class="detalle" data-i18n="menuCambioDetalle">Cuenta el cambio y decide.</span>
+        </button>
+        <button type="button" class="tarjeta-actividad" data-actividad="hucha">
+          <span class="picto" aria-hidden="true">🐷</span>
+          <span class="nombre" data-i18n="menuHucha">La Hucha</span>
+          <span class="detalle" data-i18n="menuHuchaDetalle">¿Cuánto te falta para comprarlo?</span>
+        </button>
+        <button type="button" class="tarjeta-actividad" data-actividad="redondeo">
+          <span class="picto" aria-hidden="true">🎯</span>
+          <span class="nombre" data-i18n="menuRedondeo">Más o menos</span>
+          <span class="detalle" data-i18n="menuRedondeoDetalle">¿Cuánto es, sin contar céntimos?</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Pantalla de niveles (compartida por todas las actividades) -->
+    <section id="pantallaNiveles" class="oculto pila centrado">
+      <div class="fila"><button type="button" class="btn btn-secundario" id="btnVolverMenuNiveles" data-i18n="volverMenu">← Menú</button></div>
+      <div class="fila centrado-fila">
+        <p class="instruccion" id="instruccionActividad"></p>
+      </div>
+      <h2 data-i18n="elegirNivel">Elige el nivel</h2>
+      <div class="pila" id="niveles"></div>
+    </section>
+
+    <!-- Pantalla de juego de los quiz (compartida: contar, conquepago, cambio, hucha) -->
+    <section id="pantallaJuegoQuiz" class="oculto pila">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressQuizFill"></div>
+        <span class="progress-text" id="progressQuizText">0 / 6</span>
+      </div>
+
+      <div class="fila centrado-fila">
+        <p class="pregunta" id="enunciadoQuiz"></p>
+        <button type="button" class="btn btn-audio" id="btnEnunciadoQuiz" data-i18n-aria="core.listenText" aria-label="Escuchar el texto">🔊</button>
+      </div>
+
+      <div class="mesa-dinero oculto" id="mesaDinero" role="group" data-i18n-aria="ariaMesa" aria-label="Dinero sobre la mesa"></div>
+
+      <div class="opciones pila" id="opcionesQuiz"></div>
+
+      <div class="feedback" id="feedbackQuiz" aria-live="polite"></div>
+      <div class="fila explicacion oculto" id="explicacionQuizWrap">
+        <p id="explicacionQuiz" aria-live="polite"></p>
+      </div>
+      <button type="button" class="btn oculto" id="btnSiguienteQuiz" data-i18n="core.next">Siguiente →</button>
+    </section>
+
+    <!-- Pantalla de juego de Paga justo (interactiva, propia) -->
+    <section id="pantallaJuegoPagar" class="oculto pila">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressPagarFill"></div>
+        <span class="progress-text" id="progressPagarText">0 / 6</span>
+      </div>
+
+      <div class="card centrado pila">
+        <div class="producto" id="producto"></div>
+        <p class="precio" id="precioTexto"></p>
+        <button type="button" class="btn btn-audio" id="btnEscuchar" data-i18n-aria="escucharPrecio" aria-label="Escuchar el precio">🔊</button>
+      </div>
+
+      <div class="fila centrado-fila">
+        <p class="total" id="totalPuesto" aria-live="polite">Has puesto: 0,00 €</p>
+        <button type="button" class="btn btn-secundario" id="btnAyudaPagar" data-i18n="btnAyuda">💡 Ayuda</button>
+      </div>
+
+      <div class="pila-monedas" id="monedas"></div>
+
+      <div class="fila centrado-fila acciones">
+        <button type="button" class="btn btn-secundario" id="btnQuitar" data-i18n="quitarUltima">↩ Quitar última</button>
+        <button type="button" class="btn btn-secundario" id="btnVaciar" data-i18n="vaciar">🗑 Vaciar</button>
+        <button type="button" class="btn" id="btnComprobar" data-i18n="comprobar">Comprobar</button>
+      </div>
+
+      <div class="fila explicacion oculto" id="ayudaPagarWrap">
+        <p id="ayudaPagarTexto" aria-live="polite"></p>
+        <button type="button" class="btn btn-audio" id="btnEscucharAyudaPagar" data-i18n-aria="ariaEscucharAyuda" aria-label="Escuchar la ayuda">🔊</button>
+      </div>
+
+      <div class="feedback" id="feedbackPagar" aria-live="polite"></div>
+      <button type="button" class="btn oculto" id="btnSiguientePagar" data-i18n="core.next">Siguiente →</button>
+    </section>
+
+    <!-- Pantalla final (compartida por todas las actividades) -->
+    <section id="pantallaFinal" class="oculto centrado pila" aria-live="polite">
+      <div class="emoji-grande" aria-hidden="true">🎉</div>
+      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+      <p id="resumenFinal"></p>
+      <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
+      <button type="button" class="btn" id="btnRepetir" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secundario" id="btnOtroNivelFinal" data-i18n="btnOtroNivel">Elegir otro nivel</button>
+      <button type="button" class="btn btn-secundario" id="btnVolverMenuFinal" data-i18n="volverMenu">← Menú</button>
+    </section>
+    <footer class="pie-app">
+      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+    </footer>
+  </div>
+
+  <script src="../../assets/js/utils.js"></script>
+  <script src="../../assets/js/i18n.js"></script>
+  <script src="../../assets/js/tts.js"></script>
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/feedback.js"></script>
+  <script src="../../assets/js/dinero.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../../sw.js').catch(function () {});
+    }
+  </script>
+</body>
+</html>
+

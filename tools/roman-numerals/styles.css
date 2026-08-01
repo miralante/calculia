@@ -1,0 +1,78 @@
+/* Roman Numerals — tool-specific styles. Shared styles live in assets/css/.
+   Acento del módulo Pensar y contar (teal --mod-razonamiento). */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+.btn:not(.btn-secundario):not(.btn-audio) {
+  background: var(--mod-razonamiento);
+}
+
+.instruction { font-size: var(--texto-base); }
+
+.center-row { justify-content: center; }
+
+/* ---- Ficha de referencia (I, V, X) ---- */
+.reference-card {
+  border-color: var(--mod-razonamiento-suave);
+  align-items: center;
+}
+
+.reference-title {
+  font-weight: 800;
+  color: var(--mod-razonamiento);
+  margin: 0;
+}
+
+.symbol-chip {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border: 2px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  font-size: var(--texto-base);
+  font-weight: 700;
+}
+
+.reference-text {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-suave);
+  text-align: center;
+  margin: 0;
+}
+
+.btn-level { min-width: 300px; align-self: center; }
+
+.level-info {
+  display: block;
+  font-weight: 400;
+  font-size: var(--texto-pequeno);
+  opacity: 0.9;
+}
+
+.progress-bar { margin-top: var(--espacio); }
+
+/* ---- Pantalla de juego ---- */
+.card { border-color: var(--mod-razonamiento-suave); margin-top: var(--espacio-grande); }
+
+.numeral-display {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.question { color: var(--color-texto-suave); }
+
+.big-emoji { font-size: 96px; }
+
+#endScreen { padding-top: 48px; }
+
+#endScreen .btn { align-self: center; min-width: 280px; 
+#endScreen .transferencia {
+  margin: 8px auto 24px;
+  font-size: 1.1rem;
+  color: var(--color-texto-secundario, #555);
+  max-width: 480px;
+}
+}

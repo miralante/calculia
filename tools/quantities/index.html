@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apptonomia</title>
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
+    <header class="tool-header centrado">
+      <h1 data-i18n="title">↔️ Cantidades</h1>
+      <div class="fila centrado-fila">
+        <p id="instruction" data-i18n="instruction">Mueve la barra para practicar cantidades.</p>
+      </div>
+      <p class="stars" id="stars">⭐ 0</p>
+    </header>
+
+    <main>
+      <section id="screenMenu" class="pila" aria-labelledby="menuTitle">
+        <h2 id="menuTitle" data-i18n="choosePractice">Elige qué quieres practicar.</h2>
+        <div class="practice-grid" id="practiceGrid"></div>
+      </section>
+
+      <section id="screenTask" class="pila oculto" aria-live="polite">
+        <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+        <p class="progress-text" id="progressText"></p>
+        <article class="card task-card">
+          <p class="task-icon" id="taskIcon" aria-hidden="true"></p>
+          <h2 id="prompt"></h2>
+          <p class="task-detail" id="taskDetail"></p>
+          <div class="value-display" id="valueDisplay" aria-live="polite"></div>
+          <div class="slider-wrap">
+            <label class="sr-only" for="amountSlider" id="sliderLabel"></label>
+            <input type="range" id="amountSlider" aria-label="Cantidad elegida">
+            <div class="slider-ends" id="sliderEnds" aria-hidden="true"></div>
+          </div>
+          <div class="fila centrado-fila">
+            <button type="button" class="btn btn-secundario step-button" id="decrease" aria-label="Bajar">−</button>
+            <button type="button" class="btn" id="checkAnswer" data-i18n="check">Comprobar</button>
+            <button type="button" class="btn btn-secundario step-button" id="increase" aria-label="Subir">+</button>
+          </div>
+          <p class="feedback" id="feedback" aria-live="polite"></p>
+          <button type="button" class="btn oculto" id="nextTask" data-i18n="core.next">Siguiente →</button>
+        </article>
+        <button type="button" class="btn btn-secundario" id="backToMenu" data-i18n="core.backToMenu">Volver al menú</button>
+      </section>
+
+      <section id="screenFinish" class="pila oculto centrado">
+        <h2 data-i18n="roundComplete">¡Ronda terminada!</h2>
+        <p id="finishText"></p>
+        <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
+        <button type="button" class="btn" id="playAgain" data-i18n="core.playAgain">Jugar otra vez</button>
+        <button type="button" class="btn btn-secundario" id="chooseAnother" data-i18n="chooseAnother">Elegir otra práctica</button>
+      </section>
+    </main>
+    <footer class="pie-app">
+      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+    </footer>
+  </div>
+
+  <script src="../../assets/js/utils.js"></script>
+  <script src="../../assets/js/i18n.js"></script>
+  <script src="../../assets/js/tts.js"></script>
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/feedback.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

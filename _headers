@@ -1,0 +1,142 @@
+# Cloudflare Pages custom headers
+# (https://developers.cloudflare.com/pages/configuration/headers/).
+#
+# Calculia is a fully static site with no API: activity data ships in
+# `tools/<slug>/data.js`, strings in `tools/<slug>/strings.*.js`, the
+# shared core lives in `assets/js/`, and every other asset is HTML/CSS
+# or an icon. The headers here are written to:
+#   1. Block the most common web attack classes (clickjacking, MIME
+#      sniffing, mixed content).
+#   2. Lock down a minimal-but-correct CSP that allows what the app
+#      actually does (see assets/js/ and tools/<slug>/app.js for the
+#      runtime behaviour):
+#        - inline styles via `style.X =` on progress bars and grid
+#          layouts (so `style-src-attr 'unsafe-inline'`)
+#        - data: URLs for the celebration emoji overlay
+#          (assets/js/feedback.js builds the wrapper with innerHTML)
+#        - no inline scripts, no eval, no remote scripts
+#   3. Long-cache the immutable assets so users don't re-download
+#      the same activity files on every visit. The HTML entry points
+#      and the service worker are *not* long-cached — otherwise the
+#      PWA's cache-first strategy gets pinned to an old shell.
+
+# ---------------------------------------------------------------------------
+# Security headers — applied to every response, including HTML.
+# ---------------------------------------------------------------------------
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  # Hides the full URL (which may contain a word search / activity state)
+  # from cross-origin Referer headers.
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Disable features we don't use. Cheap, belt-and-braces hardening.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), midi=()
+  # Cross-origin isolation. `credentialless` is the modern alternative that
+  # doesn't require `Cross-Origin-Opener-Policy: same-origin`; it lets us
+  # keep the site embeddable in iframes with credentials off without
+  # breaking the PWA's offline-first fetch.
+  Cross-Origin-Resource-Policy: same-origin
+  Cross-Origin-Opener-Policy: same-origin
+  # Upgrade any accidental http:// subresources to https. Belt-and-braces —
+  # we don't link to any http:// URLs.
+  Upgrade-Insecure-Requests: 1
+  # Strict CSP. Directives:
+  #   default-src 'self'                          — deny everything by default
+  #   script-src 'self'                           — no inline scripts, no eval
+  #   style-src 'self' 'unsafe-inline'            — allow the external
+  #                                                stylesheet AND inline
+  #                                                `element.style.X =` writes
+  #                                                done by every tools/<slug>/app.js
+  #                                                (progress bar fill, grid
+  #                                                layout columns in Puzzle, etc.)
+  #                                                We do NOT use `style-src-elem`
+  #                                                on purpose: Safari had
+  #                                                inconsistent support and the
+  #                                                single `style-src` directive
+  #                                                is enough here.
+  #   img-src 'self' data:                        — local images + data: URIs
+  #                                                (icono.svg is a self-hosted
+  #                                                SVG, no remote CDNs used)
+  #   font-src 'self' data:                       — self-hosted fonts in
+  #                                                assets/fonts/ + data: URIs
+  #   connect-src 'self'                          — no XHR/fetch to third
+  #                                                parties
+  #   worker-src 'self'                           — Calculia DOES ship its
+  #                                                own service worker (sw.js)
+  #                                                — allow it to be installed
+  #                                                from the same origin.
+  #                                                We deliberately do NOT
+  #                                                allow third-party SWs
+  #                                                (no `*`).
+  #   manifest-src 'self'                         — PWA manifest
+  #   object-src 'none'                           — no <object>/<embed>/<applet>
+  #   base-uri 'self'                             — block <base> hijacking
+  #   form-action 'self'                          — block form submission to
+  #                                                third parties
+  #   frame-ancestors 'none'                      — supersedes X-Frame-Options
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+
+# ---------------------------------------------------------------------------
+# Cache policy per asset type.
+#
+# The globs use `*` per the Pages docs (one path segment). Both string
+# files per activity (`strings.es.js`, `strings.en.js`) match
+# `/tools/<slug>/strings.*`.
+#
+# `assets/js/*`, `assets/css/*`, `assets/fonts/*`, the per-activity files
+# (app.js, data.js, strings.*.js) and the PWA manifest don't change on
+# most commits. A year-long `immutable` cache is safe — and when content
+# does change, the service worker picks up the new files via its
+# `VERSION` bump in sw.js (see "When adding new files: add them to
+# ARCHIVOS and bump VERSION" at the top of sw.js).
+#
+# The HTML entry points and the service worker itself must NOT be
+# long-cached, otherwise the PWA's cache-first strategy gets pinned to
+# an old shell. Five minutes is short enough that any visitor who
+# reloads within that window (very common for repeat visits) gets the
+# latest version without a manual "borrar historial y datos de sitios
+# web"; long enough to deduplicate within a single browsing session.
+# ---------------------------------------------------------------------------
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/404.html
+  Cache-Control: public, max-age=0, must-revalidate
+/site/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/settings/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/legal/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+/manifest.json
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/js/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/css/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/site/styles.css
+  Cache-Control: public, max-age=300
+/site/strings.*
+  Cache-Control: public, max-age=31536000, immutable
+
+/settings/styles.css
+  Cache-Control: public, max-age=300
+/settings/app.js
+  Cache-Control: public, max-age=300
+/settings/strings.*
+  Cache-Control: public, max-age=31536000, immutable
+
+/legal/styles.css
+  Cache-Control: public, max-age=300
+/legal/strings.*
+  Cache-Control: public, max-age=31536000, immutable
+
+/tools/*
+  Cache-Control: public, max-age=0, must-revalidate

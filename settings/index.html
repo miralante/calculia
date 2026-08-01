@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajustes | Calculia</title>
+  <!-- Hidden route: not linked from the main menu and should not be indexed.
+       Aimed at families, therapists, or teachers managing the device. -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="icon" href="../assets/img/icono.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container settings">
+    <header class="cabecera-settings">
+      <div class="idioma-selector" role="group" aria-label="Elegir idioma">
+        <button type="button" class="btn-idioma" id="btnIdiomaEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
+        <button type="button" class="btn-idioma" id="btnIdiomaEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
+      </div>
+      <p class="aviso-ruta" data-i18n="routeNotice">Página de ajustes. No aparece en el menú de la aplicación:
+        solo se llega escribiendo esta dirección.</p>
+      <h1 data-i18n="title">⚙️ Calculia — Ajustes</h1>
+      <p class="entradilla" data-i18n="intro">Aquí se puede borrar lo guardado en este navegador. Pensada para
+        quien gestiona el dispositivo (familia, profesorado), no para la persona usuaria.</p>
+    </header>
+
+    <main class="pila">
+
+      <section id="estado" class="card">
+        <h2 data-i18n="stateTitle">Estado actual de este navegador</h2>
+        <ul id="listaEstado">
+          <li data-i18n="core.loading">Cargando…</li>
+        </ul>
+      </section>
+
+      <section id="progreso-actividades" class="card guia">
+        <h2 data-i18n="progressTitle">Progreso por actividad</h2>
+        <p data-i18n="progressIntro">Estrellas ⭐ guardadas en este navegador, actividad por actividad. "Sin empezar" quiere
+          decir que la persona todavía no ha jugado a esa actividad en este dispositivo.</p>
+
+        <article class="card modulo-guia" style="--acento: var(--mod-razonamiento);">
+          <h3 data-i18n="module1">🧮 Matemáticas</h3>
+          <table>
+            <thead><tr><th data-i18n="colActivity">Actividad</th><th data-i18n="colProgress">Progreso</th></tr></thead>
+            <tbody>
+              <tr><td data-i18n="activity.numbers">Los Números</td><td data-tool="numbers">—</td></tr>
+              <tr><td data-i18n="activity.quantities">Cantidades</td><td data-tool="quantities">—</td></tr>
+              <tr><td data-i18n="activity.math-tables">Las Tablas</td><td data-tool="math-tables">—</td></tr>
+              <tr><td data-i18n="activity.roman-numerals">Números Romanos</td><td data-tool="roman-numerals">—</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card modulo-guia" style="--acento: var(--mod-memoria);">
+          <h3 data-i18n="module2">🧩 Razonamiento y lógica</h3>
+          <table>
+            <thead><tr><th data-i18n="colActivity">Actividad</th><th data-i18n="colProgress">Progreso</th></tr></thead>
+            <tbody>
+              <tr><td data-i18n="activity.riddles">Adivinanzas</td><td data-tool="riddles">—</td></tr>
+              <tr><td data-i18n="activity.patterns">Patrones</td><td data-tool="patterns">—</td></tr>
+              <tr><td data-i18n="activity.wallet">El Monedero</td><td data-tool="wallet">—</td></tr>
+              <tr><td data-i18n="activity.clock">El Reloj</td><td data-tool="clock">—</td></tr>
+              <tr><td data-i18n="activity.stories">Historias</td><td data-tool="stories">—</td></tr>
+              <tr><td data-i18n="activity.odd-one-out">¿Qué no encaja?</td><td data-tool="odd-one-out">—</td></tr>
+              <tr><td data-i18n="activity.puzzle">Puzzle</td><td data-tool="puzzle">—</td></tr>
+              <tr><td data-i18n="activity.oca">La Oca</td><td data-tool="oca">—</td></tr>
+            </tbody>
+          </table>
+        </article>
+      </section>
+
+      <section id="reset-persona" class="card tarjeta-reset">
+        <h2 data-i18n="resetPersonTitle">Restablecer los datos de la persona</h2>
+        <p data-i18n="resetPersonIntro">Borra el idioma elegido (la próxima vez se detecta de nuevo o se
+          vuelve a español).</p>
+        <p class="nota-reset"><span data-i18n="resetPersonNote1">El progreso (estrellas y niveles guardados) de todas las actividades </span><strong data-i18n="resetPersonNoteStrong">NO se borra</strong><span data-i18n="resetPersonNote2">.</span></p>
+        <button type="button" class="btn btn-secundario" id="btnResetPersona" data-i18n="btnResetPerson">🧑 Restablecer datos de la persona</button>
+        <p class="feedback" id="feedbackPersona" aria-live="polite"></p>
+      </section>
+
+      <section id="reset-app" class="card tarjeta-reset tarjeta-peligro">
+        <h2 data-i18n="resetAppTitle">Restablecer toda la aplicación</h2>
+        <p><span data-i18n="resetAppIntro1">Borra </span><strong data-i18n="resetAppIntroStrong">todo</strong><span data-i18n="resetAppIntro2"> lo guardado en este navegador: idioma, estrellas y niveles completados de todas las actividades.</span></p>
+        <p class="nota-reset"><strong data-i18n="resetAppNoteStrong">No se puede deshacer.</strong><span data-i18n="resetAppNote2"> Es como si la aplicación se abriera por primera vez.</span></p>
+        <button type="button" class="btn btn-secundario" id="btnResetApp" data-i18n="btnResetApp">🗑️ Restablecer toda la aplicación</button>
+        <p class="feedback" id="feedbackApp" aria-live="polite"></p>
+      </section>
+
+      <footer class="pie-settings">
+        <a class="btn btn-secundario" href="../site/index.html" data-i18n="footerActivities">Ir a las actividades</a>
+        <a class="btn btn-secundario" href="../legal/index.html" data-i18n="core.dataProtection">Protección de datos</a>
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/storage.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="app.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      function paintLanguageSelector() {
+        var active = App.i18n.locale();
+        document.getElementById('btnIdiomaEs').setAttribute('aria-pressed', String(active === 'es'));
+        document.getElementById('btnIdiomaEn').setAttribute('aria-pressed', String(active === 'en'));
+      }
+      document.getElementById('btnIdiomaEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
+      document.getElementById('btnIdiomaEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
+      paintLanguageSelector();
+    })();
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../sw.js').catch(function () {});
+    }
+  </script>
+</body>
+</html>

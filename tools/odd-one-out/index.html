@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¿Qué no encaja? | Apptonomia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="title">🔎 ¿Qué no encaja?</h1>
+      <span class="stars" id="stars">⭐ 0</span>
+    </header>
+
+    <!-- Start screen -->
+    <section id="pantallaInicio" class="pila centrado">
+      <div class="fila centrado-fila">
+        <p class="instruccion" id="instruccion" data-i18n="instruccion">Mira los cuatro dibujos. Toca el que no va con los demás.</p>
+      </div>
+      <h2 data-i18n="tituloNiveles">Elige el nivel</h2>
+      <div class="pila" id="niveles"></div>
+    </section>
+
+    <!-- Game screen -->
+    <section id="pantallaJuego" class="oculto pila">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+        <span class="progress-text" id="progressText">0 / 8</span>
+      </div>
+
+      <h2 class="pregunta centrado" data-i18n="pregunta">¿Cuál no encaja?</h2>
+      <div class="rejilla-grupo" id="grupo"></div>
+
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="fila explicacion oculto" id="explicacionWrap">
+        <p id="explicacion" aria-live="polite"></p>
+      </div>
+      <button type="button" class="btn oculto" id="btnSiguiente" data-i18n="core.next">Siguiente →</button>
+    </section>
+
+    <!-- End screen -->
+    <section id="pantallaFinal" class="oculto centrado pila" aria-live="polite">
+      <div class="emoji-grande" aria-hidden="true">🎉</div>
+      <h2 data-i18n="rondaCompletadaTitulo">¡Ronda completada!</h2>
+      <p id="resumenFinal"></p>
+      <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
+      <button type="button" class="btn" id="btnRepetir" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secundario" id="btnOtroNivel" data-i18n="otroNivel">Elegir otro nivel</button>
+      <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
+    </section>
+    <footer class="pie-app">
+      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+    </footer>
+  </div>
+
+  <script src="../../assets/js/utils.js"></script>
+  <script src="../../assets/js/i18n.js"></script>
+  <script src="../../assets/js/tts.js"></script>
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/feedback.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../../sw.js').catch(function () {});
+    }
+  </script>
+</body>
+</html>
+

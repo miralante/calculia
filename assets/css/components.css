@@ -1,0 +1,337 @@
+/* ==========================================================================
+   Calculia — Reusable components
+   Requires tokens.css and base.css.
+   Buttons >= 64px, gap >= 16px (CLAUDE.md rules 2 and 10).
+   ========================================================================== */
+
+/* ---- Page container ---- */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--espacio-grande) var(--espacio);
+}
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: var(--boton-min);
+  min-width: var(--boton-min);
+  padding: 12px 28px;
+  border: 3px solid transparent;
+  border-radius: var(--radio);
+  background: var(--mod-coordinacion);
+  color: #FFFFFF;
+  font-size: var(--texto-base);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover { transform: scale(1.03); box-shadow: var(--sombra); }
+.btn:active { transform: scale(0.98); }
+
+.btn-secundario {
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border-color: var(--color-borde);
+}
+
+.btn-acierto { background: var(--color-acierto); }
+
+/* Audio button (CLAUDE.md rule 4) */
+.btn-audio {
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border: 3px solid var(--color-borde);
+}
+
+.btn-audio[aria-pressed="true"],
+.btn-audio.hablando {
+  border-color: var(--mod-coordinacion);
+  background: var(--mod-coordinacion-suave);
+}
+
+/* Answer options (multiple choice) */
+.btn-opcion {
+  width: 100%;
+  min-height: var(--boton-min);
+  padding: 16px 24px;
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: var(--texto-base);
+  font-weight: 600;
+  text-align: left;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.btn-opcion:hover { border-color: var(--mod-coordinacion); }
+
+.btn-opcion.correcta {
+  border-color: var(--color-acierto);
+  background: var(--color-acierto-suave);
+}
+
+.btn-opcion.animo {
+  border-color: var(--color-animo);
+  background: var(--color-animo-suave);
+}
+
+/* ---- Back link (always top left) ---- */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--boton-min);
+  padding: 12px 20px;
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  border: 3px solid var(--color-borde);
+  color: var(--color-texto);
+  font-size: var(--texto-base);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.back-link:hover { border-color: var(--mod-coordinacion); }
+
+/* ---- Cards ---- */
+.card {
+  background: var(--color-superficie);
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: var(--espacio-grande);
+  box-shadow: var(--sombra);
+}
+
+/* ---- Progress bar (no pressure: informational only) ---- */
+.progress-bar {
+  position: relative;
+  height: 28px;
+  background: var(--color-superficie);
+  border: 2px solid var(--color-borde);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--color-acierto);
+  border-radius: 14px;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+/* ---- Stars ---- */
+.stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  color: var(--color-estrella);
+}
+
+/* ---- Feedback zone (aria-live) ---- */
+.feedback {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  text-align: center;
+}
+
+.feedback.acierto { color: var(--color-acierto); }
+.feedback.animo { color: var(--color-animo); }
+
+/* ---- Explanation of why an answer is right/wrong (quiz) ---- */
+.explicacion {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--espacio);
+  background: var(--color-superficie);
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  font-size: var(--texto-base);
+  align-items: center;
+  gap: 8px;
+}
+.explicacion p { margin: 0; flex: 1; }
+
+/* ---- "Entendido" gate: reading pause after a wrong answer (rule 12) ---- */
+.btn-entendido {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+button.bloqueada {
+  opacity: 0.6;
+}
+
+/* ---- Celebration (brief, <= 2 s) ---- */
+.celebration {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio);
+  background: rgba(250, 247, 242, 0.95);
+  z-index: 100;
+  text-align: center;
+  padding: var(--espacio);
+}
+
+.celebration.hidden { display: none; }
+
+.celebration .emoji {
+  font-size: 96px;
+  animation: celebrar 0.6s ease;
+}
+
+.celebration .mensaje {
+  font-size: var(--texto-titulo);
+  font-weight: 700;
+  color: var(--color-acierto);
+}
+
+@keyframes celebrar {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ---- Standard tool header ---- */
+.tool-header {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio);
+  flex-wrap: wrap;
+  margin-bottom: var(--espacio-grande);
+}
+
+.tool-header h1 {
+  flex: 1;
+  font-size: var(--texto-grande);
+}
+
+/* ---- Grid of large cards (menu) ---- */
+.grid-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--espacio-grande);
+}
+
+/* ---- Legal footer link (present on every page) ---- */
+.pie-app {
+  display: flex;
+  justify-content: center;
+  padding: var(--espacio) 0 8px;
+  margin-top: var(--espacio);
+}
+
+.enlace-legal {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-pequeno);
+  padding: 8px 12px;
+  text-decoration: underline;
+}
+
+.enlace-legal:hover, .enlace-legal:focus {
+  color: var(--color-texto);
+}
+
+/* Utilities */
+.centrado { text-align: center; }
+.oculto { display: none !important; }
+.pila { display: flex; flex-direction: column; gap: var(--espacio); }
+.fila { display: flex; align-items: center; gap: var(--espacio); flex-wrap: wrap; }
+
+/* ---- Visual money (euros drawn with CSS; logic in assets/js/dinero.js) ---- */
+.dinero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 800;
+  color: #3A2E1E;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  box-shadow: var(--sombra);
+}
+
+/* Coins: round, >= 64 px (rule 2) */
+.dinero.moneda {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+.m5c { background: #C98850; border: 4px solid #A2652F; }                /* copper */
+.m10c, .m20c, .m50c { background: #E9C55B; border: 4px solid #BC9430; } /* gold */
+.m1e { background: #D9D9D9; border: 7px solid #C9A227; }                /* silver center, gold ring */
+.m2e { background: #E3C14B; border: 7px solid #B9B9B9; }                /* gold center, silver ring */
+/* Number must be readable inside the coin so users can sum the
+   table by eye in "How much is there?". Coins are 68 px wide;
+   22 px gives a clear number without clipping. */
+.dinero.moneda { font-size: 22px; }
+
+/* Banknotes: rectangular with the real colors */
+.dinero.billete {
+  min-width: 112px;
+  height: 64px;
+  border-radius: 8px;
+  font-size: 22px;
+}
+
+.b5e { background: #C9CFD8; border: 4px solid #8E99A8; }    /* gray */
+.b10e { background: #EFB2A6; border: 4px solid #C56F5C; }   /* red */
+.b20e { background: #AFC8E8; border: 4px solid #6D8FBC; }   /* blue */
+.b50e { background: #F2C08A; border: 4px solid #C98B3F; }   /* orange */
+
+button.dinero { cursor: pointer; }
+button.dinero:hover { transform: scale(1.05); }
+button.dinero:disabled { cursor: default; }
+
+.dinero.correcta {
+  outline: 4px solid var(--color-acierto);
+  outline-offset: 3px;
+}
+
+.dinero.animo { opacity: 0.45; }
+
+/* Table where the money is displayed */
+.mesa-dinero {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--espacio);
+  padding: var(--espacio-grande);
+  background: var(--color-superficie);
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button.dinero:hover { transform: none; }
+}

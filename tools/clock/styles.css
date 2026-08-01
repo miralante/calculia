@@ -1,0 +1,54 @@
+/* The Clock — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+.btn:not(.btn-secundario):not(.btn-audio) {
+  background: var(--mod-razonamiento);
+}
+
+.instruccion { font-size: var(--texto-base); }
+
+.centrado-fila { justify-content: center; }
+
+.btn-nivel { min-width: 300px; align-self: center; }
+
+.nivel-info {
+  font-weight: 400;
+  font-size: var(--texto-pequeno);
+  opacity: 0.9;
+}
+
+.progress-bar { margin-top: var(--espacio); }
+
+.card { border-color: var(--mod-razonamiento-suave); margin-top: var(--espacio-grande); }
+
+.momento-picto { font-size: 72px; }
+
+.pregunta { color: var(--color-texto-suave); }
+
+.opciones-reloj {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.opcion-reloj {
+  width: auto;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emoji-grande { font-size: 96px; }
+
+#pantallaFinal { padding-top: 48px; }
+
+#pantallaFinal .btn { align-self: center; min-width: 280px; 
+#pantallaFinal .transferencia {
+  margin: 8px auto 24px;
+  font-size: 1.1rem;
+  color: var(--color-texto-secundario, #555);
+  max-width: 480px;
+}
+}

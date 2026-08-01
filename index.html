@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=site/index.html">
+  <title>Calculia</title>
+</head>
+<body>
+  <p><a href="site/index.html">Entrar en Calculia</a></p>
+  <script>
+    // Register the service worker on the root entry so the SW is active
+    // before the first navigation is intercepted, even when the user lands
+    // here directly (bookmark, home-screen icon, refresh, etc.). Safari is
+    // stricter than Chromium about SW activation; registering at every entry
+    // point avoids the "Safari cannot open the page" error on subpage nav.
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(function () {});
+    }
+  </script>
+</body>
+</html>

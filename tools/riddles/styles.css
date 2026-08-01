@@ -1,0 +1,36 @@
+/* Riddles — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+.btn:not(.btn-secundario):not(.btn-audio) {
+  background: var(--mod-razonamiento);
+}
+
+.instruccion { flex: 1; min-width: 200px; }
+
+.progress-bar { margin-top: var(--espacio); }
+
+main { margin-top: var(--espacio-grande); }
+
+.texto-principal {
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  margin: 0 auto;
+}
+
+.card { border-color: var(--mod-razonamiento-suave); }
+
+.pregunta { color: var(--color-texto-suave); }
+
+.emoji-grande { font-size: 96px; }
+
+#pantallaFinal { padding-top: 48px; }
+
+#pantallaFinal .btn { align-self: center; min-width: 280px; 
+#pantallaFinal .transferencia {
+  margin: 8px auto 24px;
+  font-size: 1.1rem;
+  color: var(--color-texto-secundario, #555);
+  max-width: 480px;
+}
+}

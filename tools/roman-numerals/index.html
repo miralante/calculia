@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Números Romanos | Apptonomia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="title">🏛️ Números Romanos</h1>
+      <span class="stars" id="stars">⭐ 0</span>
+    </header>
+
+    <!-- Pantalla inicial: referencia + niveles -->
+    <section id="startScreen" class="pila">
+      <div class="fila center-row">
+        <p class="instruction" id="instructionText" data-i18n="instruction">Aprende los números romanos y úsalos para reconocer los siglos.</p>
+      </div>
+      <div class="card reference-card pila">
+        <p class="reference-title" data-i18n="referenceTitle">Recuerda</p>
+        <div class="fila center-row" id="referenceSymbols"></div>
+        <p class="reference-text" id="referenceText" data-i18n="referenceText">I vale 1. V vale 5. X vale 10.</p>
+        <button type="button" class="btn btn-audio" id="referenceListenBtn" data-i18n-aria="core.listenText" aria-label="Escuchar">🔊</button>
+      </div>
+      <div class="pila" id="levels"></div>
+    </section>
+
+    <!-- Game screen -->
+    <section id="quizScreen" class="oculto pila">
+      <div class="fila">
+        <button type="button" class="btn btn-secundario" id="backLevelsBtn" data-i18n="core.back">← Volver</button>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+        <span class="progress-text" id="progressText">0 / 8</span>
+      </div>
+      <div class="card centrado pila">
+        <div class="numeral-display" id="numeralDisplay"></div>
+        <button type="button" class="btn btn-audio" id="listenBtn" data-i18n-aria="core.listenText" aria-label="Escuchar">🔊</button>
+      </div>
+      <h2 class="question centrado" id="questionText"></h2>
+      <div class="pila" id="options"></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="fila explicacion oculto" id="explanationWrap">
+        <p id="explanation" aria-live="polite"></p>
+        <button type="button" class="btn btn-audio" id="explanationListenBtn" data-i18n-aria="core.listenText" aria-label="Escuchar el texto">🔊</button>
+      </div>
+      <button type="button" class="btn oculto" id="nextBtn" data-i18n="core.next">Siguiente →</button>
+    </section>
+
+    <!-- End screen -->
+    <section id="endScreen" class="oculto centrado pila" aria-live="polite">
+      <div class="big-emoji" aria-hidden="true">🎉</div>
+      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+      <p id="finalSummary"></p>
+      <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
+      <button type="button" class="btn" id="replayBtn" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secundario" id="otherLevelBtn" data-i18n="chooseAnotherLevel">Elegir otro nivel</button>
+      <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
+    </section>
+    <footer class="pie-app">
+      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+    </footer>
+  </div>
+
+  <script src="../../assets/js/utils.js"></script>
+  <script src="../../assets/js/i18n.js"></script>
+  <script src="../../assets/js/tts.js"></script>
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/feedback.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../../sw.js').catch(function () {});
+    }
+  </script>
+</body>
+</html>

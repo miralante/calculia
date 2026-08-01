@@ -1,0 +1,84 @@
+/* Stories — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+.btn:not(.btn-secundario):not(.btn-audio) {
+  background: var(--mod-razonamiento);
+}
+
+.instruccion { font-size: var(--texto-base); }
+
+.centrado-fila { justify-content: center; }
+
+.btn-nivel { min-width: 300px; align-self: center; }
+
+.nivel-info {
+  font-weight: 400;
+  font-size: var(--texto-pequeno);
+  opacity: 0.9;
+}
+
+.progress-bar { margin-top: var(--espacio); }
+
+.historia-titulo {
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  color: var(--mod-razonamiento);
+}
+
+.etiqueta {
+  font-weight: 700;
+  color: var(--color-texto-suave);
+  margin-top: var(--espacio);
+}
+
+.pila-secuencia, .pila-disponibles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--espacio);
+}
+
+.slot {
+  min-width: 64px;
+  min-height: 64px;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px dashed var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+
+.slot.lleno {
+  border-style: solid;
+  border-color: var(--color-acierto);
+  background: var(--color-acierto-suave);
+}
+
+.vineta {
+  min-width: 64px;
+  min-height: 64px;
+  font-size: 32px;
+  background: var(--mod-razonamiento-suave);
+  color: var(--color-texto);
+  border: 3px solid var(--mod-razonamiento);
+}
+
+.vineta.colocada {
+  opacity: 0.35;
+}
+
+.emoji-grande { font-size: 96px; }
+
+#pantallaFinal { padding-top: 48px; }
+
+#pantallaFinal .btn { align-self: center; min-width: 280px; 
+#pantallaFinal .transferencia {
+  margin: 8px auto 24px;
+  font-size: 1.1rem;
+  color: var(--color-texto-secundario, #555);
+  max-width: 480px;
+}
+}

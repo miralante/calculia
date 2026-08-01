@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apptonomia</title>
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
+    <header class="tool-header centrado">
+      <h1 data-i18n="title">🔢 Las Tablas</h1>
+      <div class="fila centrado-fila">
+        <p id="instruction" data-i18n="instruction">Aprende a contar de cabeza, sumar y multiplicar con puntos de colores.</p>
+        <button type="button" class="btn btn-audio" id="listenInstruction" data-i18n-aria="core.listenInstructions" aria-label="Escuchar las instrucciones">🔊</button>
+      </div>
+      <p class="stars" id="stars">⭐ 0</p>
+    </header>
+
+    <main>
+      <!-- Choose operation -->
+      <section id="screenMenu" class="pila" aria-labelledby="menuTitle">
+        <h2 id="menuTitle" data-i18n="chooseOperation">Elige qué quieres practicar.</h2>
+        <div class="operation-grid" id="operationGrid"></div>
+      </section>
+
+      <!-- Choose table -->
+      <section id="screenTables" class="pila oculto" aria-labelledby="tablesTitle">
+        <h2 id="tablesTitle" data-i18n="chooseTable">Elige una tabla.</h2>
+        <div class="table-grid" id="tableGrid"></div>
+        <button type="button" class="btn btn-secundario" id="tablesBack" data-i18n="core.backToMenu">Volver al menú</button>
+      </section>
+
+      <!-- Learn the table -->
+      <section id="screenLearn" class="pila oculto" aria-labelledby="learnTitle">
+        <h2 id="learnTitle"></h2>
+        <div class="fila centrado-fila">
+          <p id="learnInstruction" data-i18n="learnInstruction">Toca una fila para verla con puntos y escucharla.</p>
+          <button type="button" class="btn btn-audio" id="listenLearn" data-i18n-aria="core.listenInstructions" aria-label="Escuchar las instrucciones">🔊</button>
+        </div>
+        <div class="learn-layout">
+          <div class="fact-list" id="factList"></div>
+          <div class="card visual-card" id="learnVisual" role="img"></div>
+        </div>
+        <button type="button" class="btn" id="startPractice" data-i18n="practiceTable">Practicar esta tabla</button>
+        <button type="button" class="btn btn-secundario" id="learnBack" data-i18n="backToTables">← Elegir otra tabla</button>
+      </section>
+
+      <!-- Practice quiz -->
+      <section id="screenQuiz" class="pila oculto" aria-live="polite">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+          <span class="progress-text" id="progressText">0 / 10</span>
+        </div>
+        <article class="card task-card pila">
+          <div class="fila centrado-fila">
+            <h2 class="equation" id="quizPrompt"></h2>
+            <button type="button" class="btn btn-audio" id="listenPrompt" data-i18n-aria="core.listenText" aria-label="Escuchar el texto">🔊</button>
+          </div>
+          <div class="visual-card" id="quizVisual" role="img"></div>
+          <div class="option-row" id="options"></div>
+          <p class="feedback" id="feedback" aria-live="polite"></p>
+          <p class="explanation oculto" id="explanation" aria-live="polite"></p>
+          <button type="button" class="btn oculto" id="nextFact" data-i18n="core.next">Siguiente →</button>
+        </article>
+        <button type="button" class="btn btn-secundario" id="quizBack" data-i18n="backToTables">← Elegir otra tabla</button>
+      </section>
+
+      <!-- Round finished -->
+      <section id="screenFinish" class="pila oculto centrado">
+        <div class="emoji-grande" aria-hidden="true">🎉</div>
+        <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+        <p id="finishText"></p>
+        <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
+        <button type="button" class="btn" id="playAgain" data-i18n="core.playAgain">Jugar otra vez</button>
+        <button type="button" class="btn btn-secundario" id="anotherTable" data-i18n="chooseAnotherTable">Elegir otra tabla</button>
+        <button type="button" class="btn btn-secundario" id="anotherOperation" data-i18n="changeOperation">Cambiar de actividad</button>
+      </section>
+    </main>
+    <footer class="pie-app">
+      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+    </footer>
+  </div>
+
+  <script src="../../assets/js/utils.js"></script>
+  <script src="../../assets/js/i18n.js"></script>
+  <script src="../../assets/js/tts.js"></script>
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/feedback.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../../sw.js').catch(function () {});
+    }
+  </script>
+</body>
+</html>
