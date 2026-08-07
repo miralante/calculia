@@ -15,6 +15,13 @@
    5. Catalog parity lock: the set of activity slugs must match between
       tools/ folders on disk, the landing cards in site/index.html, the
       progress rows in settings/index.html, and sw.js's ARCHIVOS.
+   6. Mandatory rule: zero mentions of disability, occupational therapy
+      or minors in user-facing files (see doc/<locale>/SPEC.md §4).
+   7. _headers: every quoted Content-Security-Policy source expression
+      (e.g. 'self') has exactly one leading and one trailing quote —
+      catches malformed quoting like ''self'' that browsers silently
+      drop, turning a directive into "block everything" (this bit
+      teclatlon in production; see the sibling repo's CLOUDFLARE.md).
    Output: list of failures with the exact file. Exit code 1 if there
    are any, "OK (N checks)" otherwise.
    ============================================================ */
@@ -229,6 +236,96 @@ Object.keys(destinos).forEach(function (f) {
   });
   targetSet.forEach(function (slug) {
     if (!slugsSet.has(slug)) fallos.push('catálogo: ' + f + ' contiene slug inexistente "' + slug + '"');
+  });
+});
+
+/* --- 6. Mandatory rule: zero disability / occupational therapy / minors mentions ---
+   doc/<locale>/SPEC.md §4: the end user never sees terms naming
+   intellectual disability, occupational therapy, minors, or equivalents.
+   This scan only covers the files the end user actually reaches;
+   internal docs (SPEC.md, README.md, CONTRIBUTING.md, CLAUDE.md) are
+   out of scope by design (they explain the project's real objective,
+   which is the very reason this rule exists).
+
+   Each entry pairs a substring or word-boundary match mode. Spanish
+   phrases and unambiguous English stems use substring; English words
+   that would produce false positives as substrings (e.g. "minor"
+   inside "minor annoyance") use word-boundary.
+*/
+checks += 1;
+var TERMINOS_PROHIBIDOS = [
+  { term: 'discapacidad', match: 'substring' },
+  { term: 'disabilit', match: 'substring' },
+  { term: 'intelectual', match: 'substring' },
+  { term: 'intellectual', match: 'substring' },
+  { term: 'terapia ocupacional', match: 'substring' },
+  { term: 'occupational therap', match: 'substring' },
+  { term: 'dificultades cognitivas', match: 'substring' },
+  { term: 'cognitive difficult', match: 'substring' },
+  { term: 'necesidades especiales', match: 'substring' },
+  { term: 'special needs', match: 'substring' },
+  { term: 'capacidades diferentes', match: 'substring' },
+  { term: 'different abilities', match: 'substring' },
+  { term: 'menor de edad', match: 'substring' },
+  { term: 'menores de edad', match: 'substring' },
+  { term: 'personas menores', match: 'substring' },
+  { term: 'minor', match: 'word' },
+  { term: 'underage', match: 'word' },
+  { term: 'children', match: 'word' }
+];
+function esArchivoDeUsuario(archivo) {
+  var nombre = path.basename(archivo).toLowerCase();
+  return /\.html?$/.test(nombre) || /\.js$/.test(nombre);
+}
+function listar(dir) {
+  var out = [];
+  if (!fs.existsSync(dir)) return out;
+  fs.readdirSync(dir).forEach(function (f) {
+    var full = path.join(dir, f);
+    if (fs.statSync(full).isFile() && esArchivoDeUsuario(full)) out.push(full);
+  });
+  return out;
+}
+var objetivosUsuario = []
+  .concat(listar(path.join(RAIZ, 'site')))
+  .concat(listar(path.join(RAIZ, 'settings')))
+  .concat(listar(path.join(RAIZ, 'legal')));
+slugs.forEach(function (slug) {
+  objetivosUsuario = objetivosUsuario.concat(listar(path.join(toolsDir, slug)));
+});
+objetivosUsuario.forEach(function (archivo) {
+  var contenido = fs.readFileSync(archivo, 'utf8').toLowerCase();
+  TERMINOS_PROHIBIDOS.forEach(function (entrada) {
+    var termino = entrada.term;
+    var encontrado;
+    if (entrada.match === 'word') {
+      encontrado = new RegExp('\\b' + termino.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(contenido);
+    } else {
+      encontrado = contenido.indexOf(termino.toLowerCase()) !== -1;
+    }
+    if (encontrado) {
+      fallos.push(rel(archivo) + ': contiene "' + termino + '" — ninguna página visible puede mencionar discapacidad, terapia ocupacional o menores (ver doc/es/SPEC.md §4)');
+    }
+  });
+});
+
+/* --- 7. _headers: CSP source-expression quoting --- */
+checks += 1;
+var contenidoHeaders = fs.readFileSync(path.join(RAIZ, '_headers'), 'utf8');
+contenidoHeaders.split('\n').filter(function (linea) {
+  return /^\s*Content-Security-Policy:/i.test(linea);
+}).forEach(function (linea) {
+  var valor = linea.replace(/^\s*Content-Security-Policy:/i, '');
+  valor.split(';').forEach(function (directiva) {
+    directiva.trim().split(/\s+/).filter(Boolean).forEach(function (token) {
+      var numComillas = (token.match(/'/g) || []).length;
+      if (numComillas === 0) return;
+      var bienFormado = numComillas === 2 && token[0] === "'" && token[token.length - 1] === "'";
+      if (!bienFormado) {
+        fallos.push('_headers: malformed CSP source expression "' + token +
+          '" — quotes should wrap the keyword exactly once (e.g. \'self\', not \'\'self\'\')');
+      }
+    });
   });
 });
 
