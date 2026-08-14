@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>El Monedero | Apptonomia</title>
+  <title>El Monedero | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
@@ -63,7 +63,7 @@
       <div class="fila centrado-fila">
         <p class="instruccion" id="instruccionActividad"></p>
       </div>
-      <h2 data-i18n="elegirNivel">Elige el nivel</h2>
+      <h2 data-i18n="elegirNivel">Elige un paso</h2>
       <div class="pila" id="niveles"></div>
     </section>
 
@@ -76,7 +76,6 @@
 
       <div class="fila centrado-fila">
         <p class="pregunta" id="enunciadoQuiz"></p>
-        <button type="button" class="btn btn-audio" id="btnEnunciadoQuiz" data-i18n-aria="core.listenText" aria-label="Escuchar el texto">🔊</button>
       </div>
 
       <div class="mesa-dinero oculto" id="mesaDinero" role="group" data-i18n-aria="ariaMesa" aria-label="Dinero sobre la mesa"></div>
@@ -100,7 +99,6 @@
       <div class="card centrado pila">
         <div class="producto" id="producto"></div>
         <p class="precio" id="precioTexto"></p>
-        <button type="button" class="btn btn-audio" id="btnEscuchar" data-i18n-aria="escucharPrecio" aria-label="Escuchar el precio">🔊</button>
       </div>
 
       <div class="fila centrado-fila">
@@ -119,8 +117,7 @@
       <div class="fila explicacion oculto" id="ayudaPagarWrap">
         <p id="ayudaPagarTexto" aria-live="polite"></p>
         <button type="button" class="btn btn-audio" id="btnEscucharAyudaPagar" data-i18n-aria="ariaEscucharAyuda" aria-label="Escuchar la ayuda">🔊</button>
-      </div>
-
+      
       <div class="feedback" id="feedbackPagar" aria-live="polite"></div>
       <button type="button" class="btn oculto" id="btnSiguientePagar" data-i18n="core.next">Siguiente →</button>
     </section>
@@ -132,7 +129,7 @@
       <p id="resumenFinal"></p>
       <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
       <button type="button" class="btn" id="btnRepetir" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secundario" id="btnOtroNivelFinal" data-i18n="btnOtroNivel">Elegir otro nivel</button>
+      <button type="button" class="btn btn-secundario" id="btnOtroNivelFinal" data-i18n="btnOtroNivel">Elegir otro paso</button>
       <button type="button" class="btn btn-secundario" id="btnVolverMenuFinal" data-i18n="volverMenu">← Menú</button>
     </section>
     <footer class="pie-app">
@@ -150,11 +147,7 @@
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../../sw.js').catch(function () {});
-    }
-  </script>
+  <script src="../../assets/js/sw-register.js"></script>
 </body>
 </html>
 

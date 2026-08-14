@@ -11,6 +11,13 @@
   padding: var(--espacio-grande) var(--espacio);
 }
 
+/* Reduce padding vertical del container en escritorios altos para
+   aprovechar mejor la pantalla sin afectar al padding horizontal
+   (que sí aporta respiración al texto en pantallas estrechas). */
+@media (min-height: 720px) {
+  .container { padding: var(--espacio) var(--espacio); }
+}
+
 /* ---- Buttons ---- */
 .btn {
   display: inline-flex;
@@ -40,6 +47,21 @@
 }
 
 .btn-acierto { background: var(--color-acierto); }
+
+/* En pantallas altas (escritorio típico) los botones se compactan:
+   no hay touch, así que min-height 64px deja de ser obligatorio
+   (CLAUDE.md regla 2 es para táctil). El padding y font bajan
+   para reducir desperdicio vertical sin perder clicabilidad
+   (ratón: ~32px de altura es cómodo). */
+@media (min-height: 720px) {
+  .btn {
+    min-height: 40px;
+    min-width: 40px;
+    padding: 6px 18px;
+    font-size: var(--texto-pequeno);
+    border-width: 2px;
+  }
+}
 
 /* Audio button (CLAUDE.md rule 4) */
 .btn-audio {
@@ -87,25 +109,35 @@
   align-items: center;
   gap: 8px;
   min-height: var(--boton-min);
-  padding: 12px 20px;
+  padding: 6px 16px;
   border-radius: var(--radio);
   background: var(--color-superficie);
-  border: 3px solid var(--color-borde);
+  border: 2px solid var(--color-borde);
   color: var(--color-texto);
-  font-size: var(--texto-base);
+  font-size: var(--texto-pequeno);
   font-weight: 700;
   text-decoration: none;
 }
 
 .back-link:hover { border-color: var(--mod-coordinacion); }
 
-/* ---- Cards ---- */
+/* ---- Cards ----
+   Padding/border/shadow reducidos para que las cards no dominen la
+   pantalla en escritorios. Las tools sobreescriben `border-color` por
+   módulo; el resto de propiedades son globales y se aplican igual en
+   todas las activities (regla de CLAUDE.md: mantener la "shared
+   core" intacta, no per-tool). */
 .card {
   background: var(--color-superficie);
-  border: 3px solid var(--color-borde);
+  border: 2px solid var(--color-borde);
   border-radius: var(--radio);
-  padding: var(--espacio-grande);
-  box-shadow: var(--sombra);
+  padding: var(--espacio);
+}
+
+/* Pantallas altas (escritorio típico) aprietan aún más el padding
+   para reducir desperdicio vertical sin tocar la legibilidad. */
+@media (min-height: 720px) {
+  .card { padding: 12px var(--espacio); }
 }
 
 /* ---- Progress bar (no pressure: informational only) ---- */
@@ -166,9 +198,9 @@
 .explicacion {
   max-width: 640px;
   margin: 0 auto;
-  padding: var(--espacio);
+  padding: 12px var(--espacio);
   background: var(--color-superficie);
-  border: 3px solid var(--color-borde);
+  border: 2px solid var(--color-borde);
   border-radius: var(--radio);
   font-size: var(--texto-base);
   align-items: center;
@@ -208,7 +240,7 @@ button.bloqueada {
   animation: celebrar 0.6s ease;
 }
 
-.celebration .mensaje {
+.celebration .message {
   font-size: var(--texto-titulo);
   font-weight: 700;
   color: var(--color-acierto);
@@ -226,7 +258,7 @@ button.bloqueada {
   align-items: center;
   gap: var(--espacio);
   flex-wrap: wrap;
-  margin-bottom: var(--espacio-grande);
+  margin-bottom: var(--espacio);
 }
 
 .tool-header h1 {
@@ -263,7 +295,7 @@ button.bloqueada {
 /* Utilities */
 .centrado { text-align: center; }
 .oculto { display: none !important; }
-.pila { display: flex; flex-direction: column; gap: var(--espacio); }
+.pila { display: flex; flex-direction: column; gap: 12px; }
 .fila { display: flex; align-items: center; gap: var(--espacio); flex-wrap: wrap; }
 
 /* ---- Visual money (euros drawn with CSS; logic in assets/js/dinero.js) ---- */

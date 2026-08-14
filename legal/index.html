@@ -29,7 +29,6 @@
         <a href="#responsable" data-i18n="navResponsible">Quién trata tus datos</a>
         <a href="#datos" data-i18n="navData">Qué guardamos</a>
         <a href="#derechos" data-i18n="navRights">Tus derechos</a>
-        <a href="#menores" data-i18n="navMinors">Menores de edad</a>
         <a href="#contacto" data-i18n="navContact">Cambios y contacto</a>
       </nav>
     </header>
@@ -65,12 +64,6 @@
         <p><a class="btn btn-secundario" href="../settings/index.html" data-i18n="rightsLinkSettings">Ir a Ajustes</a></p>
       </section>
 
-      <section id="menores" class="card">
-        <h2 data-i18n="minorsTitle">Menores de edad y personas con discapacidad</h2>
-        <p data-i18n="minorsP1">Calculia está pensada para que la use de forma autónoma cualquier persona, incluidas personas menores de edad y personas con discapacidad intelectual.</p>
-        <p data-i18n="minorsP2">Como la aplicación no recoge datos personales en ningún servidor, no es necesario el consentimiento de un tutor para tratar datos: no hay ningún tratamiento que autorizar. Sí recomendamos la supervisión habitual que una familia o un profesional haga sobre el uso de cualquier dispositivo.</p>
-      </section>
-
       <section id="contacto" class="card">
         <h2 data-i18n="contactTitle">Cambios y contacto</h2>
         <p data-i18n="contactP1">Esta página puede actualizarse si cambia la aplicación.</p>
@@ -88,21 +81,7 @@
   <script src="../assets/js/i18n.js"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
-  <script>
-    (function () {
-      'use strict';
-      function paintLanguageSelector() {
-        var active = App.i18n.locale();
-        document.getElementById('btnIdiomaEs').setAttribute('aria-pressed', String(active === 'es'));
-        document.getElementById('btnIdiomaEn').setAttribute('aria-pressed', String(active === 'en'));
-      }
-      document.getElementById('btnIdiomaEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
-      document.getElementById('btnIdiomaEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
-      paintLanguageSelector();
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('../sw.js').catch(function () {});
-      }
-    })();
-  </script>
+  <script src="app.js"></script>
+  <script src="../assets/js/sw-register.js"></script>
 </body>
 </html>

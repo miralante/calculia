@@ -4,13 +4,13 @@
   var TOOL_ID = 'math-tables';
   var $ = App.utils.$;
   var progress = App.storage.get(TOOL_ID);
-  var mode = null;    // 'steps' | 'add' | 'decompose' | 'multiply' | 'divide'
+  var mode = null;    // 'steps' | 'add' | 'decompose' | 'multiply' | 'divide' | 'parity'
   var table = null;   // chosen table (add/multiply) or step size (steps)
   var round = [];     // items: { a, b, sym } with sym '+', '−', '×' or '÷'
   var index = 0;
   var attempts = 0;
 
-  if (typeof progress.estrellas !== 'number') progress.estrellas = 0;
+  if (typeof progress.stars !== 'number') progress.stars = 0;
 
   function saveProgress() { App.storage.set(TOOL_ID, progress); }
   function show(element) { element.classList.remove('oculto'); }
@@ -32,13 +32,6 @@
     return item.a * item.b;
   }
 
-  function symWord(sym) {
-    if (sym === '+') return App.i18n.t('addWord');
-    if (sym === '−') return App.i18n.t('subtractWord');
-    if (sym === '÷') return App.i18n.t('divideWord');
-    return App.i18n.t('multiplyWord');
-  }
-
   /* Steps of 5 and 10 are drawn and counted in rows instead of one by one. */
   function stepsInRows(item) { return mode === 'steps' && item.b >= 5; }
 
@@ -50,8 +43,11 @@
     }
     if (mode === 'decompose') return 'Decompose';
     if (mode === 'divide') return 'Divide';
+    if (mode === 'parity') return 'Parity';
     return mode === 'add' ? 'Add' : 'Multiply';
   }
+
+  function isEven(item) { return item.a % 2 === 0; }
 
   function itemValues(item) {
     var toTen = 10 - item.a;
@@ -202,12 +198,26 @@
     container.appendChild(line);
   }
 
+  /* Even/odd: dots paired two by two in the base color; a single leftover
+     dot in the second color means the number is odd. */
+  function renderParityVisual(container, item) {
+    var stack = document.createElement('div');
+    stack.className = 'group-stack';
+    var pairs = Math.floor(item.a / 2);
+    for (var i = 0; i < pairs; i += 1) {
+      stack.appendChild(dotRow(2, DATA.dotColors[0]));
+    }
+    if (item.a % 2) stack.appendChild(dotRow(1, DATA.dotColors[1]));
+    container.appendChild(stack);
+  }
+
   function renderVisual(container, item, showTotal) {
     container.innerHTML = '';
     container.setAttribute('aria-label', fill('visual' + keySuffix(item), itemValues(item)));
     if (mode === 'multiply') renderMultiplyVisual(container, item);
     else if (mode === 'divide') renderDivideVisual(container, item);
     else if (mode === 'decompose') renderDecomposeVisual(container, item, showTotal);
+    else if (mode === 'parity') renderParityVisual(container, item);
     else if (stepsInRows(item)) renderStepsRowVisual(container, item, showTotal);
     else if (item.sym === '−') renderSubtractVisual(container, item);
     else renderAddVisual(container, item, showTotal);
@@ -215,14 +225,6 @@
 
   function equationText(item, withResult) {
     return item.a + ' ' + item.sym + ' ' + item.b + (withResult ? ' = ' + itemResult(item) : '');
-  }
-
-  function speakFact(item) {
-    var key = 'speakAdd';
-    if (item.sym === '−') key = 'speakSubtract';
-    else if (item.sym === '×') key = 'speakMultiply';
-    else if (item.sym === '÷') key = 'speakDivide';
-    App.tts.speak(fill(key, itemValues(item)));
   }
 
   /* ---- Round generation ---- */
@@ -256,6 +258,14 @@
     return App.utils.shuffle(items).slice(0, DATA.perRound);
   }
 
+  function parityRound() {
+    var items = [];
+    for (var i = 0; i < DATA.perRound; i += 1) {
+      items.push({ a: randInt(0, DATA.parity.max), sym: 'parity' });
+    }
+    return items;
+  }
+
   function decomposeRound() {
     var pairs = [];
     for (var a = DATA.decompose.aMin; a <= DATA.decompose.aMax; a += 1) {
@@ -283,7 +293,6 @@
           list.querySelectorAll('.fact-row').forEach(function (row) { row.classList.remove('activa'); });
           button.classList.add('activa');
           renderVisual($('#learnVisual'), item, true);
-          speakFact(item);
         });
         list.appendChild(button);
       })(n);
@@ -306,12 +315,19 @@
     return App.utils.shuffle(options);
   }
 
+  function parityOptions() {
+    return App.utils.shuffle([
+      { value: true, label: App.i18n.t('evenLabel') },
+      { value: false, label: App.i18n.t('oddLabel') }
+    ]);
+  }
+
   function renderQuiz() {
     var item = round[index];
     attempts = 0;
     $('#progressFill').style.width = ((index / round.length) * 100) + '%';
     $('#progressText').textContent = fill('progress', { current: index + 1, total: round.length });
-    $('#quizPrompt').textContent = equationText(item, false) + ' = ?';
+    $('#quizPrompt').textContent = mode === 'parity' ? fill('parityPrompt', itemValues(item)) : equationText(item, false) + ' = ?';
     renderVisual($('#quizVisual'), item, false);
     $('#feedback').textContent = '';
     $('#explanation').textContent = '';
@@ -319,19 +335,22 @@
     hide($('#nextFact'));
     var options = $('#options');
     options.innerHTML = '';
-    answerOptions(item).forEach(function (value) {
+    var choices = mode === 'parity' ? parityOptions() :
+      answerOptions(item).map(function (v) { return { value: v, label: String(v) }; });
+    choices.forEach(function (choice) {
       var button = document.createElement('button');
       button.type = 'button';
       button.className = 'btn option-btn';
-      button.textContent = value;
-      button.addEventListener('click', function () { checkAnswer(item, value, button); });
+      button.textContent = choice.label;
+      button.addEventListener('click', function () { checkAnswer(item, choice.value, button); });
       options.appendChild(button);
     });
   }
 
   function checkAnswer(item, value, button) {
     var feedback = $('#feedback');
-    if (value !== itemResult(item)) {
+    var correct = mode === 'parity' ? isEven(item) : itemResult(item);
+    if (value !== correct) {
       attempts += 1;
       button.disabled = true;
       App.feedback.encourage(feedback);
@@ -340,9 +359,9 @@
       }
       return;
     }
-    progress.estrellas += 1;
+    progress.stars += 1;
     saveProgress();
-    $('#stars').textContent = '⭐ ' + progress.estrellas;
+    $('#stars').textContent = '⭐ ' + progress.stars;
     App.feedback.success(feedback);
     renderVisual($('#quizVisual'), item, true);
     $('#explanation').textContent = fill('explain' + keySuffix(item), itemValues(item));
@@ -361,14 +380,14 @@
     hide($('#screenQuiz'));
     show($('#screenFinish'));
     var pickAnother = $('#anotherTable');
-    if (mode === 'decompose' || mode === 'divide') hide(pickAnother);
+    if (mode === 'decompose' || mode === 'divide' || mode === 'parity') hide(pickAnother);
     else {
       show(pickAnother);
       pickAnother.textContent = App.i18n.t(mode === 'steps' ? 'chooseAnotherLevel' : 'chooseAnotherTable');
     }
-    $('#finishText').textContent = fill('roundSummary', { count: round.length, stars: progress.estrellas });
+    $('#finishText').textContent = fill('roundSummary', { count: round.length, stars: progress.stars });
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
-$('#transferencia').textContent = App.i18n.t('transferencia');
+$('#transfer').textContent = App.i18n.t('transferencia');
   }
 
   /* ---- Navigation ---- */
@@ -384,8 +403,9 @@ $('#transferencia').textContent = App.i18n.t('transferencia');
     if (mode === 'steps') round = stepsRound();
     else if (mode === 'decompose') round = decomposeRound();
     else if (mode === 'divide') round = divideRound();
+    else if (mode === 'parity') round = parityRound();
     else round = tablesRound();
-    if (mode === 'decompose' || mode === 'divide') {
+    if (mode === 'decompose' || mode === 'divide' || mode === 'parity') {
       $('#quizBack').textContent = App.i18n.t('core.backToMenu');
     }
     index = 0;
@@ -394,7 +414,7 @@ $('#transferencia').textContent = App.i18n.t('transferencia');
   }
 
   function backFromQuiz() {
-    var noPicker = mode === 'decompose' || mode === 'divide';
+    var noPicker = mode === 'decompose' || mode === 'divide' || mode === 'parity';
     showOnly(noPicker ? '#screenMenu' : '#screenTables');
   }
 
@@ -433,7 +453,7 @@ $('#transferencia').textContent = App.i18n.t('transferencia');
         App.i18n.t(entry.id + 'Name') + '</span><small>' + App.i18n.t(entry.id + 'Detail') + '</small>';
       button.addEventListener('click', function () {
         mode = entry.id;
-        if (entry.id === 'decompose' || entry.id === 'divide') startPractice();
+        if (entry.id === 'decompose' || entry.id === 'divide' || entry.id === 'parity') startPractice();
         else openPicker();
       });
       grid.appendChild(button);
@@ -442,14 +462,8 @@ $('#transferencia').textContent = App.i18n.t('transferencia');
 
   function init() {
     App.i18n.apply();
-    $('#stars').textContent = '⭐ ' + progress.estrellas;
+    $('#stars').textContent = '⭐ ' + progress.stars;
     renderModeMenu();
-    $('#listenInstruction').addEventListener('click', function () { App.tts.speak(App.i18n.t('instruction')); });
-    $('#listenLearn').addEventListener('click', function () { App.tts.speak(App.i18n.t('learnInstruction')); });
-    $('#listenPrompt').addEventListener('click', function () {
-      var item = round[index];
-      App.tts.speak(fill('quizPrompt', { a: item.a, b: item.b, symbol: symWord(item.sym) }));
-    });
     $('#tablesBack').addEventListener('click', function () { showOnly('#screenMenu'); });
     $('#learnBack').addEventListener('click', function () { showOnly('#screenTables'); });
     $('#quizBack').addEventListener('click', backFromQuiz);

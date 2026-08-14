@@ -1,87 +1,84 @@
 /* ============================================================
    Datos: ¿Qué no encaja? (razonamiento — coherencia temática).
-   Formato: DATA[locale] = { porRonda, niveles: [{ id, nombreKey,
-     descKey, estrellas, grupos: [{ comunes: string[2], intruso }] }] }
+   Formato: DATA[locale] = { porRonda, levels: [{ id,
+     descKey, estrellas, grupos: [{ common: string[2], intruso }] }] }
    'comunes' son 2 pictos del mismo grupo; 'intruso' es el que no
    pertenece y el que hay que tocar (3 opciones en pantalla en total).
    Los pictos son emojis: iguales en es/en (la coherencia es visual,
-   no lingüística). nombreKey y descKey apuntan a textos registrados
-   en strings.js (App.i18n.t).
+   no lingüística). descKey apunta al texto registrado en strings.js
+   (App.i18n.t) que sirve de nombre de la actividad.
    Para ampliar: añadir grupos. app.js usa DATA[App.i18n.locale()].
    ============================================================ */
 const NIVELES = [
   {
     id: 1,
-    nombreKey: 'nivel1Nombre',
     descKey: 'nivel1Desc',
     estrellas: 1,
     grupos: [
-      { comunes: ['🐶', '🐱'], intruso: '👕' },
-      { comunes: ['🍎', '🍞'], intruso: '🚗' },
-      { comunes: ['🚗', '🚌'], intruso: '🍎' },
-      { comunes: ['👕', '👖'], intruso: '🐶' },
-      { comunes: ['🎸', '🥁'], intruso: '🍌' },
-      { comunes: ['🍎', '🍌'], intruso: '🚌' },
-      { comunes: ['🛏️', '🪑'], intruso: '🐱' },
-      { comunes: ['⚽', '🏀'], intruso: '🧦' },
-      { comunes: ['🔨', '🪛'], intruso: '🍇' },
-      { comunes: ['☕', '🧃'], intruso: '⚽' },
-      { comunes: ['🐝', '🦋'], intruso: '🎸' },
-      { comunes: ['🌸', '🌹'], intruso: '🔨' },
-      { comunes: ['📺', '💻'], intruso: '🌹' },
-      { comunes: ['🐦', '🦅'], intruso: '📺' },
-      { comunes: ['🍰', '🍩'], intruso: '🦅' }
+      { common: ['🐶', '🐱'], oddOne: '👕' },
+      { common: ['🍎', '🍞'], oddOne: '🚗' },
+      { common: ['🚗', '🚌'], oddOne: '🍎' },
+      { common: ['👕', '👖'], oddOne: '🐶' },
+      { common: ['🎸', '🥁'], oddOne: '🍌' },
+      { common: ['🍎', '🍌'], oddOne: '🚌' },
+      { common: ['🛏️', '🪑'], oddOne: '🐱' },
+      { common: ['⚽', '🏀'], oddOne: '🧦' },
+      { common: ['🔨', '🪛'], oddOne: '🍇' },
+      { common: ['☕', '🧃'], oddOne: '⚽' },
+      { common: ['🐝', '🦋'], oddOne: '🎸' },
+      { common: ['🌸', '🌹'], oddOne: '🔨' },
+      { common: ['📺', '💻'], oddOne: '🌹' },
+      { common: ['🐦', '🦅'], oddOne: '📺' },
+      { common: ['🍰', '🍩'], oddOne: '🦅' }
     ]
   },
   {
     id: 2,
-    nombreKey: 'nivel2Nombre',
     descKey: 'nivel2Desc',
     estrellas: 2,
     grupos: [
-      { comunes: ['🍎', '🍌'], intruso: '🥕' },
-      { comunes: ['🥕', '🥦'], intruso: '🍎' },
-      { comunes: ['🐶', '🐱'], intruso: '🦁' },
-      { comunes: ['🦁', '🐘'], intruso: '🐶' },
-      { comunes: ['🧥', '🧣'], intruso: '👕' },
-      { comunes: ['👕', '🩳'], intruso: '🧥' },
-      { comunes: ['🚗', '🚌'], intruso: '✈️' },
-      { comunes: ['✈️', '🚁'], intruso: '🚗' },
-      { comunes: ['⚽', '🏀'], intruso: '🏊' },
-      { comunes: ['🏊', '🤿'], intruso: '⚽' },
-      { comunes: ['🎸', '🎻'], intruso: '🥁' },
-      { comunes: ['🥁', '🪘'], intruso: '🎸' },
-      { comunes: ['🍦', '🍧'], intruso: '🍰' },
-      { comunes: ['🍰', '🥧'], intruso: '🍦' },
-      { comunes: ['🐦', '🦅'], intruso: '🐟' }
+      { common: ['🍎', '🍌'], oddOne: '🥕' },
+      { common: ['🥕', '🥦'], oddOne: '🍎' },
+      { common: ['🐶', '🐱'], oddOne: '🦁' },
+      { common: ['🦁', '🐘'], oddOne: '🐶' },
+      { common: ['🧥', '🧣'], oddOne: '👕' },
+      { common: ['👕', '🩳'], oddOne: '🧥' },
+      { common: ['🚗', '🚌'], oddOne: '✈️' },
+      { common: ['✈️', '🚁'], oddOne: '🚗' },
+      { common: ['⚽', '🏀'], oddOne: '🏊' },
+      { common: ['🏊', '🤿'], oddOne: '⚽' },
+      { common: ['🎸', '🎻'], oddOne: '🥁' },
+      { common: ['🥁', '🪘'], oddOne: '🎸' },
+      { common: ['🍦', '🍧'], oddOne: '🍰' },
+      { common: ['🍰', '🥧'], oddOne: '🍦' },
+      { common: ['🐦', '🦅'], oddOne: '🐟' }
     ]
   },
   {
     id: 3,
-    nombreKey: 'nivel3Nombre',
     descKey: 'nivel3Desc',
     estrellas: 3,
     grupos: [
-      { comunes: ['🍎', '🍓'], intruso: '🍌' },
-      { comunes: ['🍌', '🍋'], intruso: '🍓' },
-      { comunes: ['🐦', '🦋'], intruso: '🐟' },
-      { comunes: ['🐟', '🐬'], intruso: '🦋' },
-      { comunes: ['🧊', '❄️'], intruso: '🔥' },
-      { comunes: ['🔥', '☀️'], intruso: '❄️' },
-      { comunes: ['🍳', '🍽️'], intruso: '🧼' },
-      { comunes: ['🧼', '🪥'], intruso: '🍳' },
-      { comunes: ['🧦', '👟'], intruso: '🎩' },
-      { comunes: ['🎩', '👒'], intruso: '🧦' },
-      { comunes: ['🍍', '🥭'], intruso: '🍎' },
-      { comunes: ['🍎', '🍐'], intruso: '🍍' },
-      { comunes: ['🐮', '🐷'], intruso: '🦁' },
-      { comunes: ['🦁', '🐯'], intruso: '🐮' },
-      { comunes: ['🚲', '🏍️'], intruso: '🚗' }
+      { common: ['🍎', '🍓'], oddOne: '🍌' },
+      { common: ['🍌', '🍋'], oddOne: '🍓' },
+      { common: ['🐦', '🦋'], oddOne: '🐟' },
+      { common: ['🐟', '🐬'], oddOne: '🦋' },
+      { common: ['🧊', '❄️'], oddOne: '🔥' },
+      { common: ['🔥', '☀️'], oddOne: '❄️' },
+      { common: ['🍳', '🍽️'], oddOne: '🧼' },
+      { common: ['🧼', '🪥'], oddOne: '🍳' },
+      { common: ['🧦', '👟'], oddOne: '🎩' },
+      { common: ['🎩', '👒'], oddOne: '🧦' },
+      { common: ['🍍', '🥭'], oddOne: '🍎' },
+      { common: ['🍎', '🍐'], oddOne: '🍍' },
+      { common: ['🐮', '🐷'], oddOne: '🦁' },
+      { common: ['🦁', '🐯'], oddOne: '🐮' },
+      { common: ['🚲', '🏍️'], oddOne: '🚗' }
     ]
   }
 ];
 
 const DATA = {
-  es: { porRonda: 8, niveles: NIVELES },
-  en: { porRonda: 8, niveles: NIVELES }
+  es: { perRound: 8, levels: NIVELES },
+  en: { perRound: 8, levels: NIVELES }
 };

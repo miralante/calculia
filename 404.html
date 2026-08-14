@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Calculia — Página no encontrada</title>
-  <meta http-equiv="refresh" content="0; url=site/index.html">
+  <meta http-equiv="refresh" content="0; url=site/">
   <style>
     body { font-family: system-ui, sans-serif; text-align: center; padding: 4rem 1rem; color: #2a2a2a; }
     a { color: #2563eb; }
@@ -13,14 +13,9 @@
 <body>
   <h1>404</h1>
   <p>La página que buscas no existe.</p>
-  <p><a href="site/index.html">Volver al inicio de Calculia</a></p>
-  <script>
-    // Register the service worker on this fallback too, so a 404 hit
-    // still leaves the SW active for the next navigation back into the
-    // app (matches the pattern in ./index.html).
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(function () {});
-    }
-  </script>
+  <p><a href="site/">Volver al inicio de Calculia</a></p>
+  <!-- Registers the SW on this fallback too, so a 404 hit still leaves
+       it active for the next navigation back into the app. -->
+  <script src="assets/js/sw-register.js"></script>
 </body>
 </html>

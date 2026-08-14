@@ -1,11 +1,20 @@
 .DS_Store
 Thumbs.db
 node_modules/
+.wrangler/
 .check_out.txt
 .dev/
 **/graphify-out/
 .graphify*
 .graphifyignore
+# Temporary / scratch files (never commit; not part of the app)
+/_tmp_*.js
+/_tmp_*.md
+/_tmp_*.txt
+/scripts/_tmp_*.js
+/scripts/_tmp_*.txt
+/diff-fm.txt
+.playwright-mcp/
 
 # Secrets and credentials — never commit
 .env

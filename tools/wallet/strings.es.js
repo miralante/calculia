@@ -1,5 +1,5 @@
 /* ============================================================
-   Apptonomia — Textos de monedero (ES)
+   Calculia — Textos de monedero (ES)
    Archivo específico del idioma. Generado/actualizado por scripts/refactor-i18n.js.
    Se carga condicionalmente desde index.html según App.i18n.locale().
    ============================================================ */
@@ -10,9 +10,8 @@
     "title": "💶 El Monedero",
     "instruccion": "Aquí practicas el dinero de verdad: contarlo, pagar, comprobar el cambio y ahorrar.",
     "volverMenu": "← Menú",
-    "elegirNivel": "Elige el nivel",
-    "vecesTexto": "{n} veces",
-    "btnOtroNivel": "Elegir otro nivel",
+    "elegirNivel": "Elige un paso",
+    "btnOtroNivel": "Elegir otro paso",
     "menuContar": "¿Cuánto hay?",
     "menuContarDetalle": "Mira el dinero y elige el total.",
     "menuPagar": "Paga justo",
@@ -32,8 +31,8 @@
     "instruccionRedondeo": "Mira el precio. Di cuánto es, más o menos, sin contar los céntimos.",
     "anadirDinero": "Añadir {d}",
     "contarPregunta": "¿Cuánto dinero hay?",
-    "contarEnunciadoAudio": "En la mesa hay: {d}. ¿Cuánto dinero hay en total?",
     "ariaMesa": "Dinero sobre la mesa",
+    "ariaEscucharAyuda": "Escuchar la ayuda",
     "pistaContar": "Cuenta otra vez, despacio. Empieza por el dinero más grande.",
     "explicacionBien": "¡Eso es! Hay {d}. En total, {total}.",
     "explicacionCasi": "Mira: hay {d}. En total, {total}.",
@@ -70,7 +69,6 @@
     "quitarUltima": "↩ Quitar última",
     "vaciar": "🗑 Vaciar",
     "comprobar": "Comprobar",
-    "escucharPrecio": "Escuchar el precio",
     "cuesta": "{nombre}: {precio}",
     "faltaDinero1": "Falta dinero. Mira el precio y mira lo que has puesto.",
     "sobraDinero1": "Sobra dinero. Mira el precio y mira lo que has puesto.",
@@ -78,7 +76,6 @@
     "sobraDinero2": "Sobran {dif}. Quita algún dinero.",
     "resumenPagar": "Has pagado justo a la primera {n} de {t}.",
     "btnAyuda": "💡 Ayuda",
-    "ariaEscucharAyuda": "Escuchar la ayuda",
     "ayudaPagar1": "Mira el precio y mira tu total. ¿Cuál es el dinero más grande que cabe sin pasarte?",
     "ayudaPagar2": "Toca el dinero marcado: cabe sin pasarte del precio.",
     "ayudaQuita1": "Mira tu total. ¿Has puesto más dinero que el precio?",

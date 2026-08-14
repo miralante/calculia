@@ -3,13 +3,14 @@
    Cache-first strategy for the app shell (works offline).
    When adding new files: add them to ARCHIVOS and bump VERSION.
    ============================================================ */
-var VERSION = 'calculia-v2';
+var VERSION = 'calculia-v33';
 
 var ARCHIVOS = [
   './index.html',
   './404.html',
   './manifest.json',
   './site/index.html',
+  './site/app.js',
   './site/styles.css',
   './site/strings.es.js',
   './site/strings.en.js',
@@ -19,6 +20,7 @@ var ARCHIVOS = [
   './settings/strings.es.js',
   './settings/strings.en.js',
   './legal/index.html',
+  './legal/app.js',
   './legal/styles.css',
   './legal/strings.es.js',
   './legal/strings.en.js',
@@ -34,6 +36,7 @@ var ARCHIVOS = [
   './assets/js/storage.js',
   './assets/js/feedback.js',
   './assets/js/dinero.js',
+  './assets/js/sw-register.js',
   './assets/img/icono.svg',
   './tools/clock/index.html',
   './tools/clock/app.js',
@@ -41,24 +44,36 @@ var ARCHIVOS = [
   './tools/clock/strings.es.js',
   './tools/clock/strings.en.js',
   './tools/clock/styles.css',
+  './tools/fractions-measures/index.html',
+  './tools/fractions-measures/app.js',
+  './tools/fractions-measures/data.js',
+  './tools/fractions-measures/strings.es.js',
+  './tools/fractions-measures/strings.en.js',
+  './tools/fractions-measures/styles.css',
   './tools/math-tables/index.html',
   './tools/math-tables/app.js',
   './tools/math-tables/data.js',
   './tools/math-tables/strings.es.js',
   './tools/math-tables/strings.en.js',
   './tools/math-tables/styles.css',
+  './tools/mental-math/index.html',
+  './tools/mental-math/app.js',
+  './tools/mental-math/data.js',
+  './tools/mental-math/strings.es.js',
+  './tools/mental-math/strings.en.js',
+  './tools/mental-math/styles.css',
+  './tools/money/index.html',
+  './tools/money/app.js',
+  './tools/money/data.js',
+  './tools/money/strings.es.js',
+  './tools/money/strings.en.js',
+  './tools/money/styles.css',
   './tools/numbers/index.html',
   './tools/numbers/app.js',
   './tools/numbers/data.js',
   './tools/numbers/strings.es.js',
   './tools/numbers/strings.en.js',
   './tools/numbers/styles.css',
-  './tools/oca/index.html',
-  './tools/oca/app.js',
-  './tools/oca/data.js',
-  './tools/oca/strings.es.js',
-  './tools/oca/strings.en.js',
-  './tools/oca/styles.css',
   './tools/odd-one-out/index.html',
   './tools/odd-one-out/app.js',
   './tools/odd-one-out/data.js',
@@ -113,10 +128,10 @@ self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(VERSION).then(function (cache) {
       /* cache: 'reload' avoids storing stale copies from the browser's HTTP cache */
-      var peticiones = ARCHIVOS.map(function (a) {
+      var requests = ARCHIVOS.map(function (a) {
         return new Request(a, { cache: 'reload' });
       });
-      return cache.addAll(peticiones);
+      return cache.addAll(requests);
     }).then(function () {
       return self.skipWaiting();
     })
@@ -125,9 +140,9 @@ self.addEventListener('install', function (event) {
 
 self.addEventListener('activate', function (event) {
   event.waitUntil(
-    caches.keys().then(function (claves) {
+    caches.keys().then(function (keys) {
       return Promise.all(
-        claves.filter(function (c) { return c !== VERSION; })
+        keys.filter(function (c) { return c !== VERSION; })
           .map(function (c) { return caches.delete(c); })
       );
     }).then(function () {
@@ -139,8 +154,8 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('fetch', function (event) {
   if (event.request.method !== 'GET') return;
   event.respondWith(
-    caches.match(event.request).then(function (respuesta) {
-      if (respuesta) return respuesta;
+    caches.match(event.request).then(function (response) {
+      if (response) return response;
       return fetch(event.request).then(function (r) {
         /* Also cache new same-origin resources — but never cache a
            redirect. Safari (and the Fetch spec) rejects a top-level

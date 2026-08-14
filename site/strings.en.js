@@ -16,7 +16,13 @@
     "modLogica": "🧩 Reasoning and logic",
 
     "numbers_nombre": "Numbers",
-    "numbers_detalle": "Count, add and measure.",
+    "numbers_detalle": "Read, order and compare numbers.",
+    "fractionsmeasures_nombre": "Fractions and Measures",
+    "fractionsmeasures_detalle": "Parts, halves and units.",
+    "mentalmath_nombre": "Subtraction and Mental Math",
+    "mentalmath_detalle": "Subtract and calculate in your head.",
+    "money_nombre": "Money",
+    "money_detalle": "Count, pay and work out change.",
     "quantities_nombre": "Quantities",
     "quantities_detalle": "Practise little, much and rounding.",
     "mathtables_nombre": "Math Tables",
@@ -38,7 +44,7 @@
     "oddoneout_detalle": "Find the odd one out.",
     "puzzle_nombre": "Puzzle",
     "puzzle_detalle": "Put each piece in its place.",
-    "oca_nombre": "Goose Game",
-    "oca_detalle": "Roll the dice and move on."
+
+    "otraAppLinkHint": "Opens another app, in a new tab."
   }, 'en');
 })();

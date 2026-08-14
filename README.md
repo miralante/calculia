@@ -73,6 +73,7 @@ it or built next to it on the same stack.
 |---|---|---|
 | **Apptonomia** *(main)* | Occupational therapy: 7 modules, 69 activities | [github.com/thenkdframe/apptonomia](https://github.com/thenkdframe/apptonomia) |
 | Calculia | Math and logical reasoning: 11 activities | [github.com/thenkdframe/calculia](https://github.com/thenkdframe/calculia) |
+| Memofun | Flashcards built around meaningful learning | [github.com/thenkdframe/memofun](https://github.com/thenkdframe/memofun) |
 | Okeymoney | Personal finance and everyday autonomy | [github.com/thenkdframe/okeymoney](https://github.com/thenkdframe/okeymoney) |
 | Sinonimia | Plain-language dictionary (easy-read) | [github.com/thenkdframe/sinonimia](https://github.com/thenkdframe/sinonimia) |
 | Teclatlon | Touch-typing with a physical keyboard | [github.com/thenkdframe/teclatlon](https://github.com/thenkdframe/teclatlon) |

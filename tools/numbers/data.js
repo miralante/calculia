@@ -1,56 +1,28 @@
 /* ============================================================
-   Apptonomia — Los Números — datos
+   Calculia — Los Números — datos
    Formato:
-   - DATA.grupos: secciones del menú. Cada una lista ids de actividades.
-     Los nombres de grupos, actividades, niveles y productos NO están
-     aquí: son texto y viven en strings.js, indexados por 'id':
-     App.i18n.t('grupo.<id>'), App.i18n.t('actividad.<id>.nombre'),
-     App.i18n.t('actividad.<id>.detalle'), App.i18n.t('actividad.<id>.instruccion'),
-     App.i18n.t('nivel.<id>'), App.i18n.t('producto.<id>').
-   - DATA.actividades[id]: picto y niveles[]. Cada nivel: { id, tipo,
+   - DATA.activities[id]: picto y niveles[]. Cada nivel: { id, tipo,
      ...config }. El tipo elige el generador de preguntas en app.js.
-   - DATA.lecturas: números grandes con su lectura en palabras, por
-     idioma (DATA.lecturas[locale][lista]). OJO: la escala numérica
+     Object.keys(DATA.activities) fija el orden del menú.
+   - DATA.readings: números grandes con su lectura en palabras, por
+     idioma (DATA.readings[locale][lista]). OJO: la escala numérica
      cambia entre idiomas (1.000.000.000 es "mil millones" en español
      pero "one billion" en inglés; 10^12 es "un billón" en español
       pero "one trillion" en inglés). Ver I18N.md §2.
-   - DATA.medidas: equivalencias del sistema métrico, por idioma
-     (DATA.medidas[locale]). Las respuestas falsas están escritas a
-     mano para controlar la dificultad.
-   - DATA.llegaUno / DATA.llegaDos / DATA.cambio: solo importes en
-     céntimos (independientes del idioma).
-   - DATA.productos: productos cotidianos para los precios (solo
-     picto e id; el nombre está en strings.js).
-   Para ampliar: añadir una actividad, nivel o producto nuevo con un
-   id, y sus textos a strings.js (es y en).
+   Los nombres de actividades y niveles NO están aquí: son texto y
+   viven en strings.js, indexados por 'id': App.i18n.t('actividad.<id>.nombre'),
+   App.i18n.t('actividad.<id>.detalle'), App.i18n.t('actividad.<id>.instruccion'),
+   App.i18n.t('nivel.<id>').
+   Para ampliar: añadir un nivel nuevo con un id, y sus textos a
+   strings.js (es y en).
    ============================================================ */
 var DATA = {
   porRonda: 6,
 
-  grupos: [
-    { id: 'numeros', ids: ['contar', 'enteros', 'unidades', 'placevalue', 'fracciones', 'decimales'] },
-    { id: 'calcular', ids: ['sumar', 'restar', 'multiplicar', 'cabeza', 'llega', 'cambio', 'medidas'] }
-  ],
-
-  actividades: {
-    contar: {
-      /* Progression (rule 13): c1→c2→c5→c10 only change 'paso'. 'max'
-         (the available number range) is derived from 'paso' in app.js.
-         c2→c2p keeps the exact same 'paso' (2) and range: it doesn't add
-         a new number range to learn, only a new skill (classify a number
-         already reached by counting in twos as even/odd). */
-      picto: '🔢',
-      niveles: [
-        { id: 'c1', tipo: 'contar', paso: 1 },
-        { id: 'c2', tipo: 'contar', paso: 2 },
-        { id: 'c2p', tipo: 'paresImpares', paso: 2, max: 24 },
-        { id: 'c5', tipo: 'contar', paso: 5 },
-        { id: 'c10', tipo: 'contar', paso: 10 }
-      ]
-    },
-
-    enteros: {
-      /* Negative numbers via an elevator (floors below ground = negative).
+  activities: {
+    "positivos-y-negativos": {
+      /* Positive and negative numbers via an elevator (floors below ground
+         = negative, floors above ground = positive, ground floor = 0).
          Progression (rule 13): en1→en2 keeps the same reading skill and
          adds movement (only variable: gains a start+delta instead of a
          fixed floor). en2→en3 introduces comparing two floors instead of
@@ -59,7 +31,7 @@ var DATA = {
          reading one shown floor. The range (min/max) stays fixed across
          all 4 levels so the only real change each step is the skill. */
       picto: '🛗',
-      niveles: [
+      levels: [
         { id: 'en1', tipo: 'ascensorLeer', min: -5, max: 5 },
         { id: 'en2', tipo: 'ascensorMover', min: -5, max: 5 },
         { id: 'en3', tipo: 'ascensorComparar', min: -5, max: 5 },
@@ -74,7 +46,7 @@ var DATA = {
          a minimal magnitude jump (999→thousands, the next natural
          scale). umiles→umillones only changes 'lista'. */
       picto: '🧱',
-      niveles: [
+      levels: [
         { id: 'u99', tipo: 'bloques', max: 99 },
         { id: 'u999', tipo: 'bloques', max: 999 },
         { id: 'udictado', tipo: 'dictado', max: 999 },
@@ -90,127 +62,19 @@ var DATA = {
          (exchange → ladder). pv4→pv5 only changes the exponent range
          (up to a million → up to a trillion / billón). */
       picto: '🔁',
-      niveles: [
+      levels: [
         { id: 'pv1', tipo: 'canje', lugar: 0 },
         { id: 'pv2', tipo: 'canje', lugar: 1 },
         { id: 'pv3', tipo: 'canje', lugar: 2 },
         { id: 'pv4', tipo: 'escalera', minExp: 0, maxExp: 5 },
         { id: 'pv5', tipo: 'escalera', minExp: 6, maxExp: 11 }
       ]
-    },
-
-    fracciones: {
-      /* Progression (rule 13): f1→f2 only changes the fractions
-         (halves/quarters → thirds/sixths). f2→f3 changes the type
-         (identify → compare), but f3's 'pares' EXCLUSIVELY reuses
-         fractions already seen in f1/f2 — the only real novelty
-         is the comparing skill, not new fractions adding to the
-         load. */
-      picto: '🍕',
-      niveles: [
-        {
-          id: 'f1', tipo: 'fracciones',
-          fracs: [[1, 2], [1, 4], [3, 4], [2, 4]]
-        },
-        {
-          id: 'f2', tipo: 'fracciones',
-          fracs: [[1, 3], [2, 3], [1, 6], [5, 6]]
-        },
-        {
-          id: 'f3', tipo: 'comparaFrac',
-          pares: [
-            [[1, 2], [1, 4]], [[3, 4], [1, 4]], [[2, 3], [1, 3]],
-            [[1, 2], [3, 4]], [[1, 6], [5, 6]], [[1, 3], [2, 3]]
-          ]
-        }
-      ]
-    },
-
-    decimales: {
-      picto: '💶',
-      niveles: [
-        { id: 'd1', tipo: 'precios' },
-        { id: 'd2', tipo: 'comparaPrecios' }
-      ]
-    },
-
-    sumar: {
-      picto: '➕',
-      niveles: [
-        { id: 's10', tipo: 'sumar', a: [1, 5], b: [1, 5] },
-        { id: 's20', tipo: 'sumar', a: [4, 10], b: [4, 10] }
-      ]
-    },
-
-    restar: {
-      picto: '➖',
-      niveles: [
-        { id: 'r10', tipo: 'restar', a: [5, 10], maxB: 5 },
-        { id: 'r20', tipo: 'restar', a: [10, 20], maxB: 10 }
-      ]
-    },
-
-    multiplicar: {
-      picto: '✖️',
-      niveles: [
-        { id: 'm1', tipo: 'multiplicar', tablas: [2, 5, 10] },
-        { id: 'm2', tipo: 'multiplicar', tablas: [3, 4] },
-        { id: 'm3', tipo: 'multiplicar', tablas: [6, 7] },
-        { id: 'm4', tipo: 'multiplicar', tablas: [8, 9] }
-      ]
-    },
-
-    cabeza: {
-      /* Progression (rule 13): within each operation (sumaGrande,
-         restaGrande, multiplicaGrande) only the magnitude increases
-         (10→100→1000). When the operation changes, the magnitude
-         always resets to the SAME fixed constant (10) — it's not a
-         second variable being re-chosen each time, it's a fixed
-         anchor — so the only real change across those jumps is the
-         operation. */
-      picto: '🧠',
-      niveles: [
-        { id: 'k1', tipo: 'dobles' },
-        { id: 'k2', tipo: 'sumaGrande', suma: 10 },
-        { id: 'k3', tipo: 'sumaGrande', suma: 100 },
-        { id: 'k4', tipo: 'sumaGrande', suma: 1000 },
-        { id: 'k5', tipo: 'restaGrande', resta: 10 },
-        { id: 'k6', tipo: 'restaGrande', resta: 100 },
-        { id: 'k7', tipo: 'restaGrande', resta: 1000 },
-        { id: 'k8', tipo: 'multiplicaGrande', factor: 10 },
-        { id: 'k9', tipo: 'multiplicaGrande', factor: 100 }
-      ]
-    },
-
-    llega: {
-      picto: '🛍️',
-      niveles: [
-        { id: 'll1', tipo: 'llegaUno' },
-        { id: 'll2', tipo: 'llegaDos' }
-      ]
-    },
-
-    cambio: {
-      picto: '💰',
-      niveles: [
-        { id: 'ca1', tipo: 'cambio', lista: 'facil' },
-        { id: 'ca2', tipo: 'cambio', lista: 'centimos' }
-      ]
-    },
-
-    medidas: {
-      picto: '📏',
-      niveles: [
-        { id: 'me1', tipo: 'medidas', lista: 'longitud' },
-        { id: 'me2', tipo: 'medidas', lista: 'peso' },
-        { id: 'me3', tipo: 'medidas', lista: 'capacidad' }
-      ]
     }
   },
 
   /* Large numbers and how to read them, per language. nota is shown as a hint.
      The scale differs between languages: see the note above. */
-  lecturas: {
+  readings: {
     es: {
       miles: [
         { n: 1000, palabras: 'mil' },
@@ -281,144 +145,5 @@ var DATA = {
     en: ['one', 'ten', 'one hundred', 'one thousand', 'ten thousand',
       'one hundred thousand', 'one million', 'ten million', 'one hundred million',
       'one billion', 'ten billion', 'one hundred billion', 'one trillion']
-  },
-
-  /* Metric system equivalences, per language.
-     q: what is being asked · r: correct answer · falsas: 2 wrong answers
-     ej: everyday example (optional). */
-  medidas: {
-    es: {
-      longitud: {
-        picto: '📏',
-        items: [
-          { q: '1 metro', pregunta: '¿Cuántos centímetros son?', r: '100 centímetros', falsas: ['10 centímetros', '1.000 centímetros'], ej: 'Una guitarra mide casi 1 metro.' },
-          { q: 'Medio metro', pregunta: '¿Cuántos centímetros son?', r: '50 centímetros', falsas: ['5 centímetros', '500 centímetros'] },
-          { q: '2 metros', pregunta: '¿Cuántos centímetros son?', r: '200 centímetros', falsas: ['20 centímetros', '2.000 centímetros'], ej: 'Una puerta mide 2 metros.' },
-          { q: '1 kilómetro', pregunta: '¿Cuántos metros son?', r: '1.000 metros', falsas: ['100 metros', '10.000 metros'], ej: 'Un paseo de 15 minutos.' },
-          { q: 'Medio kilómetro', pregunta: '¿Cuántos metros son?', r: '500 metros', falsas: ['50 metros', '5.000 metros'] },
-          { q: '1 centímetro', pregunta: '¿Cuántos milímetros son?', r: '10 milímetros', falsas: ['100 milímetros', '5 milímetros'], ej: 'La uña de un dedo.' },
-          { q: '3 metros', pregunta: '¿Cuántos centímetros son?', r: '300 centímetros', falsas: ['30 centímetros', '3.000 centímetros'] }
-        ]
-      },
-      peso: {
-        picto: '⚖️',
-        items: [
-          { q: '1 kilo', pregunta: '¿Cuántos gramos son?', r: '1.000 gramos', falsas: ['100 gramos', '10.000 gramos'], ej: 'Un paquete de arroz pesa 1 kilo.' },
-          { q: 'Medio kilo', pregunta: '¿Cuántos gramos son?', r: '500 gramos', falsas: ['50 gramos', '5.000 gramos'], ej: 'Un paquete de macarrones.' },
-          { q: 'Un cuarto de kilo', pregunta: '¿Cuántos gramos son?', r: '250 gramos', falsas: ['25 gramos', '2.500 gramos'], ej: 'Un paquete de mantequilla.' },
-          { q: '2 kilos', pregunta: '¿Cuántos gramos son?', r: '2.000 gramos', falsas: ['200 gramos', '20.000 gramos'], ej: 'Una bolsa de naranjas.' },
-          { q: '5 kilos', pregunta: '¿Cuántos gramos son?', r: '5.000 gramos', falsas: ['500 gramos', '50.000 gramos'] },
-          { q: 'Kilo y medio', pregunta: '¿Cuántos gramos son?', r: '1.500 gramos', falsas: ['1.050 gramos', '15.000 gramos'] }
-        ]
-      },
-      capacidad: {
-        picto: '🥛',
-        items: [
-          { q: '1 litro', pregunta: '¿Cuántos mililitros son?', r: '1.000 mililitros', falsas: ['100 mililitros', '10.000 mililitros'], ej: 'Un brik de leche.' },
-          { q: 'Medio litro', pregunta: '¿Cuántos mililitros son?', r: '500 mililitros', falsas: ['50 mililitros', '5.000 mililitros'], ej: 'Una botella pequeña de agua.' },
-          { q: 'Litro y medio', pregunta: '¿Cuántos mililitros son?', r: '1.500 mililitros', falsas: ['1.050 mililitros', '15.000 mililitros'], ej: 'Una botella grande de agua.' },
-          { q: '2 litros', pregunta: '¿Cuántos mililitros son?', r: '2.000 mililitros', falsas: ['200 mililitros', '20.000 mililitros'] },
-          { q: 'Un cuarto de litro', pregunta: '¿Cuántos mililitros son?', r: '250 mililitros', falsas: ['25 mililitros', '2.500 mililitros'], ej: 'Una taza de leche.' }
-        ]
-      }
-    },
-    en: {
-      longitud: {
-        picto: '📏',
-        items: [
-          { q: '1 meter', pregunta: 'How many centimeters is that?', r: '100 centimeters', falsas: ['10 centimeters', '1,000 centimeters'], ej: 'A guitar is almost 1 meter long.' },
-          { q: 'Half a meter', pregunta: 'How many centimeters is that?', r: '50 centimeters', falsas: ['5 centimeters', '500 centimeters'] },
-          { q: '2 meters', pregunta: 'How many centimeters is that?', r: '200 centimeters', falsas: ['20 centimeters', '2,000 centimeters'], ej: 'A door is 2 meters tall.' },
-          { q: '1 kilometer', pregunta: 'How many meters is that?', r: '1,000 meters', falsas: ['100 meters', '10,000 meters'], ej: 'A 15-minute walk.' },
-          { q: 'Half a kilometer', pregunta: 'How many meters is that?', r: '500 meters', falsas: ['50 meters', '5,000 meters'] },
-          { q: '1 centimeter', pregunta: 'How many millimeters is that?', r: '10 millimeters', falsas: ['100 millimeters', '5 millimeters'], ej: 'A fingernail.' },
-          { q: '3 meters', pregunta: 'How many centimeters is that?', r: '300 centimeters', falsas: ['30 centimeters', '3,000 centimeters'] }
-        ]
-      },
-      peso: {
-        picto: '⚖️',
-        items: [
-          { q: '1 kilogram', pregunta: 'How many grams is that?', r: '1,000 grams', falsas: ['100 grams', '10,000 grams'], ej: 'A bag of rice weighs 1 kilogram.' },
-          { q: 'Half a kilogram', pregunta: 'How many grams is that?', r: '500 grams', falsas: ['50 grams', '5,000 grams'], ej: 'A bag of pasta.' },
-          { q: 'A quarter kilogram', pregunta: 'How many grams is that?', r: '250 grams', falsas: ['25 grams', '2,500 grams'], ej: 'A pack of butter.' },
-          { q: '2 kilograms', pregunta: 'How many grams is that?', r: '2,000 grams', falsas: ['200 grams', '20,000 grams'], ej: 'A bag of oranges.' },
-          { q: '5 kilograms', pregunta: 'How many grams is that?', r: '5,000 grams', falsas: ['500 grams', '50,000 grams'] },
-          { q: 'A kilogram and a half', pregunta: 'How many grams is that?', r: '1,500 grams', falsas: ['1,050 grams', '15,000 grams'] }
-        ]
-      },
-      capacidad: {
-        picto: '🥛',
-        items: [
-          { q: '1 liter', pregunta: 'How many milliliters is that?', r: '1,000 milliliters', falsas: ['100 milliliters', '10,000 milliliters'], ej: 'A carton of milk.' },
-          { q: 'Half a liter', pregunta: 'How many milliliters is that?', r: '500 milliliters', falsas: ['50 milliliters', '5,000 milliliters'], ej: 'A small bottle of water.' },
-          { q: 'A liter and a half', pregunta: 'How many milliliters is that?', r: '1,500 milliliters', falsas: ['1,050 milliliters', '15,000 milliliters'], ej: 'A large bottle of water.' },
-          { q: '2 liters', pregunta: 'How many milliliters is that?', r: '2,000 milliliters', falsas: ['200 milliliters', '20,000 milliliters'] },
-          { q: 'A quarter liter', pregunta: 'How many milliliters is that?', r: '250 milliliters', falsas: ['25 milliliters', '2,500 milliliters'], ej: 'A cup of milk.' }
-        ]
-      }
-    }
-  },
-
-  /* Cases for "Is it enough?" (amounts in cents, language-independent).
-     llegaUno: amount held vs. price of one product.
-     llegaDos: amount held vs. the sum of two products. */
-  llegaUno: [
-    { tiene: 300, precio: 250 },
-    { tiene: 300, precio: 380 },
-    { tiene: 500, precio: 495 },
-    { tiene: 500, precio: 650 },
-    { tiene: 800, precio: 750 },
-    { tiene: 800, precio: 920 },
-    { tiene: 1000, precio: 999 },
-    { tiene: 1000, precio: 1250 },
-    { tiene: 500, precio: 500 }
-  ],
-  llegaDos: [
-    { tiene: 500, precios: [150, 200] },
-    { tiene: 500, precios: [300, 250] },
-    { tiene: 800, precios: [350, 300] },
-    { tiene: 800, precios: [450, 400] },
-    { tiene: 1000, precios: [600, 350] },
-    { tiene: 1000, precios: [550, 500] },
-    { tiene: 300, precios: [120, 175] },
-    { tiene: 300, precios: [150, 175] }
-  ],
-
-  /* Cases for "The Change" (amounts in cents, language-independent).
-     billete: amount paid with · precio: what it costs.
-     The change due (billete - precio) is computed in app.js. */
-  cambio: {
-    facil: [
-      { billete: 500, precio: 300 },
-      { billete: 500, precio: 150 },
-      { billete: 500, precio: 400 },
-      { billete: 1000, precio: 600 },
-      { billete: 1000, precio: 750 },
-      { billete: 1000, precio: 900 },
-      { billete: 2000, precio: 1200 },
-      { billete: 2000, precio: 1500 }
-    ],
-    centimos: [
-      { billete: 500, precio: 380 },
-      { billete: 500, precio: 275 },
-      { billete: 500, precio: 495 },
-      { billete: 1000, precio: 650 },
-      { billete: 1000, precio: 825 },
-      { billete: 1000, precio: 990 },
-      { billete: 2000, precio: 1450 },
-      { billete: 2000, precio: 1675 }
-    ]
-  },
-
-  /* Productos cotidianos para leer y comparar precios. */
-  productos: [
-    { id: 'pan', picto: '🍞' },
-    { id: 'leche', picto: '🥛' },
-    { id: 'zumo', picto: '🧃' },
-    { id: 'manzanas', picto: '🍎' },
-    { id: 'queso', picto: '🧀' },
-    { id: 'galletas', picto: '🍪' },
-    { id: 'lapiz', picto: '✏️' },
-    { id: 'cuaderno', picto: '📒' }
-  ]
+  }
 };

@@ -171,17 +171,15 @@ const NIVELES_TXT = {
 function construirMonedero(loc) {
   var txt = NIVELES_TXT[loc] || NIVELES_TXT.es;
   var nombres = NOMBRES[loc] || NOMBRES.es;
-  var prefijo = loc === 'en' ? 'Level ' : 'Nivel ';
 
   var contar = CONTAR_BASE.map(function (n) {
-    return { id: n.id, nombre: prefijo + n.id, descripcion: txt.contar[n.id], cents: n.cents };
+    return { id: n.id, descripcion: txt.contar[n.id], cents: n.cents };
   });
 
   var pagar = Object.keys(PAGAR_CENTS).map(function (idStr) {
     var id = Number(idStr);
     return {
       id: id,
-      nombre: prefijo + id,
       descripcion: txt.pagar[id],
       cents: PAGAR_CENTS[id],
       productos: PRODUCTOS.filter(function (p) {
@@ -193,11 +191,11 @@ function construirMonedero(loc) {
   });
 
   var importe = NIVELES_IMPORTE.map(function (n) {
-    return { id: n.id, nombre: prefijo + n.id, descripcion: txt.importe[n.id], paso: n.paso };
+    return { id: n.id, descripcion: txt.importe[n.id], paso: n.paso };
   });
 
   var redondeo = REDONDEO_BASE.map(function (n) {
-    return { id: n.id, nombre: prefijo + n.id, descripcion: txt.redondeo[n.id], deltas: n.deltas };
+    return { id: n.id, descripcion: txt.redondeo[n.id], deltas: n.deltas };
   });
 
   return {

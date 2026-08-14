@@ -1,11 +1,10 @@
 /* ============================================================
    Datos: Historias (razonamiento — ordenar viñetas en el tiempo).
    Formato: DATA.niveles = [{ id, estrellas,
-     historias: [{ id, vinetas: string[] }] }]
+     stories: [{ id, panels: string[] }] }]
    'vinetas' está en el orden correcto (el primero pasa primero).
    Los nombres NO están aquí: son texto y viven en strings.js.
-   Nivel: App.i18n.t('nivelNombre').replace('{n}', nivel.id) +
-   App.i18n.t('nivelDescripcion').replace('{n}', viñetas del nivel).
+   Nivel: App.i18n.t('nivelDescripcion').replace('{n}', viñetas del nivel).
    Historia: App.i18n.t('historia.' + historia.id).
    Progresión (regla 13, un solo cambio por nivel): solo cambia el número
    de viñetas por historia (nivel 1: 3, nivel 2: 4, nivel 3: 5).
@@ -13,46 +12,46 @@
    nuevo) y su nombre a strings.js (es y en).
    ============================================================ */
 const DATA = {
-  porRonda: 5,
-  niveles: [
+  perRound: 5,
+  levels: [
     {
       id: 1,
       estrellas: 1,
-      historias: [
-        { id: 'lavarse-manos', vinetas: ['🚰', '🧼', '🤲'] },
-        { id: 'tostar-pan', vinetas: ['🍞', '🔥', '🧈'] },
-        { id: 'dia-noche', vinetas: ['☀️', '🌇', '🌙'] },
-        { id: 'flor-crece', vinetas: ['🌰', '🌱', '🌸'] },
-        { id: 'vestir-piernas', vinetas: ['🧦', '👖', '👟'] },
-        { id: 'crecer', vinetas: ['👶', '🧒', '🧑'] },
-        { id: 'lavar-ropa', vinetas: ['🧺', '🌀', '👕'] },
-        { id: 'bocadillo', vinetas: ['🍞', '🧀', '🥪'] }
+      stories: [
+        { id: 'lavarse-manos', panels: ['🚰', '🧼', '🤲'] },
+        { id: 'tostar-pan', panels: ['🍞', '🔥', '🧈'] },
+        { id: 'dia-noche', panels: ['☀️', '🌇', '🌙'] },
+        { id: 'flor-crece', panels: ['🌰', '🌱', '🌸'] },
+        { id: 'vestir-piernas', panels: ['🧦', '👖', '👟'] },
+        { id: 'crecer', panels: ['👶', '🧒', '🧑'] },
+        { id: 'lavar-ropa', panels: ['🧺', '🌀', '👕'] },
+        { id: 'bocadillo', panels: ['🍞', '🧀', '🥪'] }
       ]
     },
     {
       id: 2,
       estrellas: 2,
-      historias: [
-        { id: 'tarta', vinetas: ['🥚', '🥣', '🔥', '🎂'] },
-        { id: 'dormir', vinetas: ['🛁', '🦷', '🛏️', '😴'] },
-        { id: 'dia-lluvia', vinetas: ['☀️', '☁️', '🌧️', '🌈'] },
-        { id: 'plantar-arbol', vinetas: ['🕳️', '🌱', '🌿', '🌳'] },
-        { id: 'compra', vinetas: ['📝', '🛒', '💳', '🛍️'] },
-        { id: 'fiesta-cumpleanos', vinetas: ['🎈', '🎂', '🕯️', '🎁'] },
-        { id: 'freir-huevo', vinetas: ['🥚', '🍳', '🍽️', '😋'] },
-        { id: 'ir-colegio', vinetas: ['🛏️', '🥣', '🎒', '🏫'] }
+      stories: [
+        { id: 'tarta', panels: ['🥚', '🥣', '🔥', '🎂'] },
+        { id: 'dormir', panels: ['🛁', '🦷', '🛏️', '😴'] },
+        { id: 'dia-lluvia', panels: ['☀️', '☁️', '🌧️', '🌈'] },
+        { id: 'plantar-arbol', panels: ['🕳️', '🌱', '🌿', '🌳'] },
+        { id: 'compra', panels: ['📝', '🛒', '💳', '🛍️'] },
+        { id: 'fiesta-cumpleanos', panels: ['🎈', '🎂', '🕯️', '🎁'] },
+        { id: 'freir-huevo', panels: ['🥚', '🍳', '🍽️', '😋'] },
+        { id: 'ir-colegio', panels: ['🛏️', '🥣', '🎒', '🏫'] }
       ]
     },
     {
       id: 3,
       estrellas: 3,
-      historias: [
-        { id: 'ciclo-agua', vinetas: ['☀️', '🌊', '☁️', '🌧️', '🌈'] },
-        { id: 'tarta-cumpleanos', vinetas: ['🥣', '🔥', '🎂', '🕯️', '🎁'] },
-        { id: 'dia-completo', vinetas: ['🌅', '☀️', '🌇', '🌙', '😴'] },
-        { id: 'semilla-fruto', vinetas: ['🌰', '🌱', '🌿', '🌸', '🍎'] },
-        { id: 'preparar-bocadillo', vinetas: ['🍞', '🧀', '🥪', '🍽️', '😋'] },
-        { id: 'lavar-guardar-ropa', vinetas: ['🧺', '🌀', '☀️', '👕', '🚪'] }
+      stories: [
+        { id: 'ciclo-agua', panels: ['☀️', '🌊', '☁️', '🌧️', '🌈'] },
+        { id: 'tarta-cumpleanos', panels: ['🥣', '🔥', '🎂', '🕯️', '🎁'] },
+        { id: 'dia-completo', panels: ['🌅', '☀️', '🌇', '🌙', '😴'] },
+        { id: 'semilla-fruto', panels: ['🌰', '🌱', '🌿', '🌸', '🍎'] },
+        { id: 'preparar-bocadillo', panels: ['🍞', '🧀', '🥪', '🍽️', '😋'] },
+        { id: 'lavar-guardar-ropa', panels: ['🧺', '🌀', '☀️', '👕', '🚪'] }
       ]
     }
   ]

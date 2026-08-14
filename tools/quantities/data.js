@@ -1,54 +1,79 @@
-/* Quantity-training cases.
-   Each group contains eight shared cases. Amounts are raw numbers;
-   their unit and all user-facing text are resolved in app.js and strings. */
+/* ============================================================
+   Calculia — Quantities (read and write large numbers).
+   Four practices:
+     - read:      the number is shown (without separator) and the
+                  user writes it with the right separator (or
+                  without it if < 10.000).
+     - write:     the number is heard and the user writes it,
+                  with separator if applicable.
+     - points:    the number is shown WITHOUT separator and the
+                  user must write it WITH the separator in the
+                  right place.
+     - decompose: the number is shown with digits coloured by
+                  position and the user is asked for the value of
+                  a specific digit (3 options).
+
+   "Thousand" rule: below 10.000 no separator is used (matches
+   how primary textbooks present positional value before
+   introducing the thousands separator). From 10.000 up the
+   separator is mandatory in read, write and points modes.
+   In decompose the user does not type the number, only the
+   single digit.
+
+   Ranges per practice (gradual, SPEC §6 rule 13: each level
+   changes only the range or the response mode, never both at
+   once):
+     - read, write, points share the same ranges so difficulty
+       is comparable;
+     - decompose keeps the same ceiling but includes the
+       "millions" range to ask for digits in higher groups.
+   ============================================================ */
 var DATA = {
   perRound: 6,
+  /* Absolute ceiling of the activity. The user asked "up to one
+     trillion" (10⁹). In Spanish 10� reads "mil millones" — we do
+     not use the word "billón" to avoid introducing a new unit;
+     the ceiling is 999,999,999, which falls in the "mil millones"
+     group. */
+  ceiling: 999999999,
   practices: [
-    { id: 'amount', icon: '⚖️' },
-    { id: 'change', icon: '↕️' },
-    { id: 'round', icon: '≈' },
-    { id: 'middle', icon: '↔️' }
+    { id: 'read', icon: '👀' },
+    { id: 'write', icon: '✍️' },
+    { id: 'points', icon: '·' },
+    { id: 'decompose', icon: '🧱' }
   ],
-  cases: {
-    amount: [
-      { goal: 'little', min: 0, max: 10, step: 1, target: [0, 2] },
-      { goal: 'much', min: 0, max: 10, step: 1, target: [8, 10] },
-      { goal: 'little', min: 0, max: 20, step: 2, target: [0, 4] },
-      { goal: 'much', min: 0, max: 20, step: 2, target: [16, 20] },
-      { goal: 'little', min: 0, max: 50, step: 5, target: [0, 10] },
-      { goal: 'much', min: 0, max: 50, step: 5, target: [40, 50] },
-      { goal: 'little', min: 0, max: 100, step: 10, target: [0, 20] },
-      { goal: 'much', min: 0, max: 100, step: 10, target: [80, 100] }
+  /* Available ranges per practice. min/max inclusive.
+     'level' is informational only (the UI uses it in messages). */
+  ranges: {
+    read: [
+      { id: 'l1', min: 0,         max: 99 },           /* no separator */
+      { id: 'l2', min: 100,       max: 9999 },        /* no separator */
+      { id: 'l3', min: 10000,     max: 99999 },       /* one separator */
+      { id: 'l4', min: 100000,    max: 999999 },      /* one separator */
+      { id: 'l5', min: 1000000,   max: 999999999 }    /* two separators */
     ],
-    change: [
-      { direction: 'increase', start: 2, target: 5, min: 0, max: 10, step: 1 },
-      { direction: 'decrease', start: 8, target: 5, min: 0, max: 10, step: 1 },
-      { direction: 'increase', start: 10, target: 16, min: 0, max: 20, step: 2 },
-      { direction: 'decrease', start: 18, target: 12, min: 0, max: 20, step: 2 },
-      { direction: 'increase', start: 15, target: 30, min: 0, max: 50, step: 5 },
-      { direction: 'decrease', start: 40, target: 25, min: 0, max: 50, step: 5 },
-      { direction: 'increase', start: 20, target: 60, min: 0, max: 100, step: 10 },
-      { direction: 'decrease', start: 90, target: 50, min: 0, max: 100, step: 10 }
+    write: [
+      { id: 'e1', min: 0,         max: 99 },
+      { id: 'e2', min: 100,       max: 9999 },
+      { id: 'e3', min: 10000,     max: 99999 },
+      { id: 'e4', min: 100000,    max: 999999 },
+      { id: 'e5', min: 1000000,   max: 999999999 }
     ],
-    round: [
-      { value: 23, target: 20, min: 0, max: 50, step: 10, unit: 'euro' },
-      { value: 37, target: 40, min: 0, max: 50, step: 10, unit: 'euro' },
-      { value: 62, target: 60, min: 0, max: 100, step: 10, unit: 'meter' },
-      { value: 78, target: 80, min: 0, max: 100, step: 10, unit: 'meter' },
-      { value: 145, target: 150, min: 100, max: 200, step: 10, unit: 'euro' },
-      { value: 184, target: 180, min: 100, max: 200, step: 10, unit: 'euro' },
-      { value: 247, target: 250, min: 200, max: 300, step: 10, unit: 'liter' },
-      { value: 263, target: 260, min: 200, max: 300, step: 10, unit: 'liter' }
+    points: [
+      /* For the exercise to make sense the number must be >= 10.000.
+         In "points" mode the separator is removed; the user must
+         put it back. */
+      { id: 'p1', min: 10000,     max: 99999 },
+      { id: 'p2', min: 100000,    max: 999999 },
+      { id: 'p3', min: 1000000,   max: 9999999 },
+      { id: 'p4', min: 10000000,  max: 99999999 },
+      { id: 'p5', min: 100000000, max: 999999999 }
     ],
-    middle: [
-      { min: 0, max: 10, step: 1, target: 5 },
-      { min: 2, max: 8, step: 1, target: 5 },
-      { min: 0, max: 20, step: 2, target: 10 },
-      { min: 10, max: 30, step: 2, target: 20 },
-      { min: 0, max: 50, step: 5, target: 25 },
-      { min: 20, max: 60, step: 5, target: 40 },
-      { min: 0, max: 100, step: 10, target: 50 },
-      { min: 40, max: 80, step: 10, target: 60 }
+    decompose: [
+      { id: 'd1', min: 0,         max: 99 },
+      { id: 'd2', min: 100,       max: 9999 },
+      { id: 'd3', min: 10000,     max: 999999 },
+      { id: 'd4', min: 1000000,   max: 999999999 }
     ]
   }
 };

@@ -6,17 +6,11 @@
   background: var(--mod-razonamiento);
 }
 
-.instruccion { font-size: var(--texto-base); }
+.instruction { font-size: var(--texto-base); }
 
 .centrado-fila { justify-content: center; }
 
 .btn-nivel { min-width: 300px; align-self: center; }
-
-.nivel-info {
-  font-weight: 400;
-  font-size: var(--texto-pequeno);
-  opacity: 0.9;
-}
 
 .progress-bar { margin-top: var(--espacio); }
 
@@ -24,15 +18,15 @@
 
 .momento-picto { font-size: 72px; }
 
-.pregunta { color: var(--color-texto-suave); }
+.question { color: var(--color-texto-suave); }
 
-.opciones-reloj {
+.options-clock {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.opcion-reloj {
+.option-clock {
   width: auto;
   padding: 8px;
   display: flex;
@@ -42,13 +36,16 @@
 
 .emoji-grande { font-size: 96px; }
 
-#pantallaFinal { padding-top: 48px; }
+#screenEnd { padding-top: 48px; }
 
-#pantallaFinal .btn { align-self: center; min-width: 280px; 
-#pantallaFinal .transferencia {
+#screenEnd .btn {
+  align-self: center;
+  min-width: 280px;
+}
+
+#screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);
   max-width: 480px;
-}
 }

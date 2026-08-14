@@ -28,10 +28,12 @@
     module2: '🧩 Reasoning and logic',
 
     activity: {
-      'numbers': 'Numbers', 'quantities': 'Quantities', 'math-tables': 'Math Tables',
+      'numbers': 'Numbers', 'fractions-measures': 'Fractions and Measures',
+      'mental-math': 'Subtraction and Mental Math', 'money': 'Money',
+      'quantities': 'Quantities', 'math-tables': 'Math Tables',
       'roman-numerals': 'Roman Numerals', 'riddles': 'Riddles', 'patterns': 'Patterns',
       'wallet': 'The Wallet', 'clock': 'The Clock', 'stories': 'Stories',
-      'odd-one-out': "What doesn't belong?", 'puzzle': 'Puzzle', 'oca': 'Goose Game'
+      'odd-one-out': "What doesn't belong?", 'puzzle': 'Puzzle'
     },
 
     resetPersonTitle: "Reset the person's data",

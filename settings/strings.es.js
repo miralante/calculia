@@ -28,10 +28,12 @@
     module2: '🧩 Razonamiento y lógica',
 
     activity: {
-      'numbers': 'Los Números', 'quantities': 'Cantidades', 'math-tables': 'Las Tablas',
+      'numbers': 'Los Números', 'fractions-measures': 'Fracciones y Medidas',
+      'mental-math': 'Restar y Cálculo Mental', 'money': 'Dinero',
+      'quantities': 'Cantidades', 'math-tables': 'Las Tablas',
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',
       'wallet': 'El Monedero', 'clock': 'El Reloj', 'stories': 'Historias',
-      'odd-one-out': '¿Qué no encaja?', 'puzzle': 'Puzzle', 'oca': 'La Oca'
+      'odd-one-out': '¿Qué no encaja?', 'puzzle': 'Puzzle'
     },
 
     resetPersonTitle: 'Restablecer los datos de la persona',

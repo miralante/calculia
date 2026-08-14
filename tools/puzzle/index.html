@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Puzzle | Apptonomia</title>
+  <title>Puzzle | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
@@ -19,49 +19,49 @@
     </header>
 
     <!-- Start screen -->
-    <section id="pantallaInicio" class="pila centrado">
+    <section id="screenStart" class="pila centrado">
       <div class="fila centrado-fila">
-        <p class="instruccion" id="instruccion" data-i18n="instruccion">Mira el modelo. Toca una pieza y después toca su sitio en el tablero.</p>
+        <p class="instruccion" id="instruction" data-i18n="instruction">Mira el modelo. Toca una pieza y después toca su sitio en el tablero.</p>
       </div>
-      <h2 data-i18n="tituloNiveles">Elige el nivel</h2>
-      <div class="pila" id="niveles"></div>
+      <h2 data-i18n="levelsTitle">Elige una actividad</h2>
+      <div class="pila" id="levels"></div>
     </section>
 
     <!-- Game screen -->
-    <section id="pantallaJuego" class="oculto pila">
+    <section id="screenGame" class="oculto pila">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText"></span>
       </div>
 
-      <p class="imagen-titulo centrado" id="imagenTitulo"></p>
+      <p class="imagen-titulo centrado" id="titleImage"></p>
 
       <div class="zona-puzzle">
         <div class="bloque-modelo">
-          <p class="etiqueta centrado" data-i18n="etiquetaModelo">Modelo</p>
-          <div class="rejilla-puzzle modelo" id="modelo"></div>
+          <p class="etiqueta centrado" data-i18n="modelLabel">Modelo</p>
+          <div class="rejilla-puzzle modelo" id="model"></div>
         </div>
         <div class="bloque-tablero">
-          <p class="etiqueta centrado" data-i18n="etiquetaTablero">Tu tablero</p>
-          <div class="rejilla-puzzle" id="tablero"></div>
+          <p class="etiqueta centrado" data-i18n="boardLabel">Tu tablero</p>
+          <div class="rejilla-puzzle" id="board"></div>
         </div>
       </div>
 
-      <p class="etiqueta centrado" data-i18n="etiquetaPiezas">Piezas</p>
-      <div class="pila-piezas" id="piezas"></div>
+      <p class="etiqueta centrado" data-i18n="piecesLabel">Piezas</p>
+      <div class="pila-piezas" id="pieces"></div>
 
       <div class="feedback" id="feedback" aria-live="polite"></div>
-      <button type="button" class="btn oculto" id="btnSiguiente" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn oculto" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
     <!-- End screen -->
-    <section id="pantallaFinal" class="oculto centrado pila" aria-live="polite">
+    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
       <div class="emoji-grande" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
-      <p id="resumenFinal"></p>
-      <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
-      <button type="button" class="btn" id="btnRepetir" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secundario" id="btnOtroNivel" data-i18n="otroNivel">Elegir otro nivel</button>
+      <p id="endSummary"></p>
+      <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secundario" id="btnOtherLevel" data-i18n="otherLevel">Elegir otra actividad</button>
       <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer class="pie-app">
@@ -78,11 +78,6 @@
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../../sw.js').catch(function () {});
-    }
-  </script>
+  <script src="../../assets/js/sw-register.js"></script>
 </body>
 </html>
-

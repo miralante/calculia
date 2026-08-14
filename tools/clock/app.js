@@ -1,69 +1,76 @@
 /* ============================================================
-   Apptonomia — El Reloj (tiempo)
-   Datos en data.js (DATA.niveles, DATA.momentos). Módulos
-   compartidos en assets/js/. Dos tipos de pregunta por ronda:
-   "leer" (mirar un reloj y elegir la hora en texto) y "asociar"
-   (leer un momento del día y elegir el reloj correcto).
+   Calculia — The Clock (time)
+   Data in data.js (DATA.levels, DATA.moments). Shared modules
+   in assets/js/. Two question types per round:
+   "read" (look at a clock and pick the time in text) and
+   "associate" (read a moment of the day and pick the right clock).
    ============================================================ */
 (function () {
   'use strict';
 
-  var TOOL_ID = 'reloj';
+  var TOOL_ID = 'clock';
   var $ = App.utils.$;
 
-  var pantallaInicio = $('#pantallaInicio');
-  var pantallaJuego = $('#pantallaJuego');
-  var pantallaFinal = $('#pantallaFinal');
-  var preguntaZonaEl = $('#preguntaZona');
-  var preguntaTextoEl = $('#preguntaTexto');
-  var opcionesEl = $('#opciones');
+  var screenStart = $('#screenStart');
+  var screenGame = $('#screenGame');
+  var screenEnd = $('#screenEnd');
+  var questionZoneEl = $('#questionZone');
+  var questionTextEl = $('#questionText');
+  var optionsEl = $('#options');
   var feedbackEl = $('#feedback');
-  var explicacionWrap = $('#explicacionWrap');
-  var explicacionEl = $('#explicacion');
-  var btnEscuchar = $('#btnEscuchar');
-  var btnSiguiente = $('#btnSiguiente');
+  var explanationWrap = $('#explanationWrap');
+  var explanationEl = $('#explanation');
+  var btnNext = $('#btnNext');
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
   var starsEl = $('#stars');
 
   /* Persistent progress */
-  var progreso = App.storage.get(TOOL_ID);
-  if (typeof progreso.estrellas !== 'number') progreso.estrellas = 0;
-  if (!progreso.completados) progreso.completados = {};
+  var progress = App.storage.get(TOOL_ID);
+  if (typeof progress.stars !== 'number') progress.stars = 0;
 
   /* Round state */
-  var nivel = null;
-  var preguntas = [];
-  var idx = 0;
-  var aciertosRonda = 0;
-  var resuelto = false;
-  var intentos = 0;
+  var level = null;
+  var questions = [];
+  var roundIndex = 0;
+  var roundCorrect = 0;
+  /* Reinforcement: missed questions are replayed at the end.
+     inReinforce prevents the mini-round from chaining. currentQ is
+     what render() paints: in the normal round it is questions[roundIndex],
+     in the mini-round it is reinforceList[reinforceIndex]. */
+  var inReinforce = false;
+  var reinforceIndex = 0;
+  var reinforceList = [];
+  var reinforceTotal = 0;
+  var currentQ = null;
+  var answered = false;
+  var attempts = 0;
 
-  function guardar() { App.storage.set(TOOL_ID, progreso); }
+  function save() { App.storage.set(TOOL_ID, progress); }
 
-  function pintarEstrellas() { starsEl.textContent = '⭐ ' + progreso.estrellas; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
-  function hora12(hora24) {
-    var h = hora24 % 12;
+  function hour12(hour24) {
+    var h = hour24 % 12;
     return h === 0 ? 12 : h;
   }
 
   /* Easy Read text for a given time (12-hour analog format).
      Each language has its own time expressions (see strings.js);
      it is NOT a literal word-for-word translation. */
-  function textoHora(h, minuto) {
-    if (minuto === 0) return App.i18n.t('horaEnPunto').replace('{h}', h);
-    if (minuto === 15) return App.i18n.t('horaYCuarto').replace('{h}', h);
-    if (minuto === 30) return App.i18n.t('horaYMedia').replace('{h}', h);
-    /* 45: se nombra respecto a la hora siguiente */
-    var siguiente = h === 12 ? 1 : h + 1;
-    return App.i18n.t('horaMenosCuarto').replace('{h}', siguiente);
+  function timeText(h, minute) {
+    if (minute === 0) return App.i18n.t('oClock').replace('{h}', h);
+    if (minute === 15) return App.i18n.t('quarterPast').replace('{h}', h);
+    if (minute === 30) return App.i18n.t('halfPast').replace('{h}', h);
+    /* 45: it is named with respect to the next hour */
+    var next = h === 12 ? 1 : h + 1;
+    return App.i18n.t('quarterTo').replace('{h}', next);
   }
 
-  function svgReloj(h, minuto) {
-    var anguloHora = ((h % 12) + minuto / 60) * 30;
-    var anguloMinuto = minuto * 6;
-    var numeros = [
+  function clockSvg(h, minute) {
+    var hourAngle = ((h % 12) + minute / 60) * 30;
+    var minuteAngle = minute * 6;
+    var numbers = [
       { n: 12, x: 50, y: 20 },
       { n: 3, x: 80, y: 52 },
       { n: 6, x: 50, y: 84 },
@@ -76,227 +83,270 @@
 
     return '<svg viewBox="0 0 100 100" width="120" height="120" role="img" aria-hidden="true">' +
       '<circle cx="50" cy="50" r="45" fill="#FFFFFF" stroke="var(--color-texto)" stroke-width="4"/>' +
-      numeros +
+      numbers +
       '<line x1="50" y1="50" x2="50" y2="28" stroke="var(--color-texto)" stroke-width="5" ' +
-      'stroke-linecap="round" transform="rotate(' + anguloHora + ' 50 50)"/>' +
+      'stroke-linecap="round" transform="rotate(' + hourAngle + ' 50 50)"/>' +
       '<line x1="50" y1="50" x2="50" y2="18" stroke="var(--color-texto)" stroke-width="3.5" ' +
-      'stroke-linecap="round" transform="rotate(' + anguloMinuto + ' 50 50)"/>' +
+      'stroke-linecap="round" transform="rotate(' + minuteAngle + ' 50 50)"/>' +
       '<circle cx="50" cy="50" r="3" fill="var(--color-texto)"/>' +
       '</svg>';
   }
 
-  function horaAleatoria() { return 1 + Math.floor(Math.random() * 12); }
+  function randomHour() { return 1 + Math.floor(Math.random() * 12); }
 
-  function minutoAleatorio() {
-    var opciones = nivel.minutos;
-    return opciones[Math.floor(Math.random() * opciones.length)];
+  function randomMinute() {
+    var options = level.minutes;
+    return options[Math.floor(Math.random() * options.length)];
   }
 
-  function combinacionDistinta(excluir) {
-    var h, m, intentos = 0;
+  function differentCombination(exclude) {
+    var h, m, attempts = 0;
     do {
-      h = horaAleatoria();
-      m = minutoAleatorio();
-      intentos++;
-    } while (excluir.some(function (e) { return e.h === h && e.m === m; }) && intentos < 30);
+      h = randomHour();
+      m = randomMinute();
+      attempts++;
+    } while (exclude.some(function (e) { return e.h === h && e.m === m; }) && attempts < 30);
     return { h: h, m: m };
   }
 
-  function generarPreguntaLeer() {
-    var h = horaAleatoria();
-    var m = minutoAleatorio();
-    var usadas = [{ h: h, m: m }];
-    var opciones = [{ texto: textoHora(h, m), esCorrecta: true }];
-    while (opciones.length < 3) {
-      var d = combinacionDistinta(usadas);
-      usadas.push(d);
-      var texto = textoHora(d.h, d.m);
-      if (opciones.some(function (o) { return o.texto === texto; })) continue;
-      opciones.push({ texto: texto, esCorrecta: false });
+  function makeReadQuestion() {
+    var h = randomHour();
+    var m = randomMinute();
+    var used = [{ h: h, m: m }];
+    var options = [{ text: timeText(h, m), isCorrect: true }];
+    while (options.length < 3) {
+      var d = differentCombination(used);
+      used.push(d);
+      var text = timeText(d.h, d.m);
+      if (options.some(function (o) { return o.text === text; })) continue;
+      options.push({ text: text, isCorrect: false });
     }
-    return { tipo: 'leer', hora: h, minuto: m, opciones: opciones };
+    return { type: 'read', hour: h, minute: m, options: options };
   }
 
-  function generarPreguntaAsociar() {
-    var momento = DATA.momentos[Math.floor(Math.random() * DATA.momentos.length)];
-    var h = hora12(momento.hora);
-    var m = minutoAleatorio();
-    var usadas = [{ h: h, m: m }];
-    var opciones = [{ h: h, m: m, esCorrecta: true }];
-    while (opciones.length < 3) {
-      var d = combinacionDistinta(usadas);
-      usadas.push(d);
-      opciones.push({ h: d.h, m: d.m, esCorrecta: false });
+  function makeAssociateQuestion() {
+    var moment = DATA.moments[Math.floor(Math.random() * DATA.moments.length)];
+    var h = hour12(moment.hour);
+    var m = randomMinute();
+    var used = [{ h: h, m: m }];
+    var options = [{ h: h, m: m, isCorrect: true }];
+    while (options.length < 3) {
+      var d = differentCombination(used);
+      used.push(d);
+      options.push({ h: d.h, m: d.m, isCorrect: false });
     }
-    return { tipo: 'asociar', momento: momento, opciones: opciones };
+    return { type: 'associate', moment: moment, options: options };
   }
 
-  /* ---- Pantalla inicial ---- */
-  function pintarNiveles() {
-    var cont = $('#niveles');
+  /* ---- Start screen ---- */
+  function paintLevels() {
+    var cont = $('#levels');
     cont.innerHTML = '';
-    DATA.niveles.forEach(function (n) {
+    DATA.levels.forEach(function (n) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn btn-nivel';
-      var veces = progreso.completados[n.id] || 0;
-      var nombreNivel = App.i18n.t('nivelNombre').replace('{n}', n.id);
-      var descripcionNivel = App.i18n.t('nivelDescripcion.' + n.id);
-      var vecesTxt = App.i18n.t('veces').replace('{n}', veces);
-      btn.innerHTML = nombreNivel + ' — ' + descripcionNivel +
-        ' <span class="nivel-info">(' + vecesTxt + ')</span>';
-      btn.addEventListener('click', function () { iniciarRonda(n); });
+      var levelDescription = App.i18n.t('levelDescription.' + n.id);
+      btn.innerHTML = levelDescription;
+      btn.addEventListener('click', function () { startRound(n); });
       cont.appendChild(btn);
     });
   }
 
-  function iniciarRonda(n) {
-    nivel = n;
-    preguntas = [];
-    for (var i = 0; i < DATA.porRonda; i++) {
-      preguntas.push(i % 2 === 0 ? generarPreguntaLeer() : generarPreguntaAsociar());
+  function startRound(n) {
+    level = n;
+    questions = [];
+    for (var i = 0; i < DATA.perRound; i++) {
+      questions.push(i % 2 === 0 ? makeReadQuestion() : makeAssociateQuestion());
     }
-    idx = 0;
-    aciertosRonda = 0;
-    pantallaInicio.classList.add('oculto');
-    pantallaFinal.classList.add('oculto');
-    pantallaJuego.classList.remove('oculto');
+    roundIndex = 0;
+    roundCorrect = 0;
+    inReinforce = false;
+    reinforceIndex = 0;
+    currentQ = null;
+    App.reinforce.banner.hide();
+    /* Reinforcement: the callback is called with the missed questions
+       at the end of the normal round. startReinforce mounts the
+       mini-round with those questions. */
+    App.reinforce.start(function (fallos) { startReinforce(fallos); });
+    screenStart.classList.add('oculto');
+    screenEnd.classList.add('oculto');
+    screenGame.classList.remove('oculto');
     render();
   }
 
-  function pintarProgreso() {
-    progressFill.style.width = ((idx / DATA.porRonda) * 100) + '%';
-    progressText.textContent = idx + ' / ' + DATA.porRonda;
+  /* Launches the mini-round with the missed questions. The bar shows
+     the progress inside the reinforcement. Stars are already added
+     on each correct item (see answer); roundCorrect is not incremented
+     here (it is the normal round counter). */
+  function startReinforce(fallos) {
+    reinforceList = fallos.map(function (f) { return f.payload; });
+    reinforceTotal = reinforceList.length;
+    reinforceIndex = 0;
+    inReinforce = true;
+    App.reinforce.banner.set(
+      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceIntro').replace('{n}', reinforceTotal)
+    );
+    currentQ = reinforceList[0];
+    paintReinforceProgress();
+    render();
+  }
+
+  function paintReinforceProgress() {
+    progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
+    progressText.textContent = (reinforceIndex + 1) + ' / ' + reinforceTotal;
+  }
+
+  function paintProgress() {
+    progressFill.style.width = ((roundIndex / DATA.perRound) * 100) + '%';
+    progressText.textContent = roundIndex + ' / ' + DATA.perRound;
   }
 
   function render() {
-    var p = preguntas[idx];
-    resuelto = false;
-    intentos = 0;
+    var p = questions[roundIndex];
+    answered = false;
+    attempts = 0;
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
-    explicacionWrap.classList.add('oculto');
-    explicacionEl.textContent = '';
-    btnSiguiente.classList.add('oculto');
-    opcionesEl.innerHTML = '';
+    explanationWrap.classList.add('oculto');
+    explanationEl.textContent = '';
+    btnNext.classList.add('oculto');
+    optionsEl.innerHTML = '';
 
-    if (p.tipo === 'leer') {
-      preguntaZonaEl.innerHTML = svgReloj(p.hora, p.minuto);
-      preguntaTextoEl.textContent = App.i18n.t('preguntaQueHora');
-      var opcionesLeer = App.utils.shuffle(p.opciones);
-      opcionesLeer.forEach(function (op) {
+    if (p.type === 'read') {
+      questionZoneEl.innerHTML = clockSvg(p.hour, p.minute);
+      questionTextEl.textContent = App.i18n.t('whatTime');
+      var readOptions = App.utils.shuffle(p.options);
+      readOptions.forEach(function (op) {
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn-opcion';
-        btn.textContent = op.texto;
-        btn.addEventListener('click', function () { responder(btn, op.esCorrecta, p); });
-        opcionesEl.appendChild(btn);
+        btn.textContent = op.text;
+        btn.addEventListener('click', function () { answer(btn, op.isCorrect, p); });
+        optionsEl.appendChild(btn);
       });
     } else {
-      preguntaZonaEl.innerHTML = '<div class="momento-picto" aria-hidden="true">' + p.momento.picto + '</div>';
-      preguntaTextoEl.textContent = App.i18n.t('momento.' + p.momento.id + '.pregunta');
-      opcionesEl.className = 'pila opciones-reloj';
-      var opcionesAsociar = App.utils.shuffle(p.opciones);
-      opcionesAsociar.forEach(function (op) {
+      questionZoneEl.innerHTML = '<div class="momento-picto" aria-hidden="true">' + p.moment.picto + '</div>';
+      questionTextEl.textContent = App.i18n.t('moment.' + p.moment.id + '.question');
+      optionsEl.className = 'pila options-clock';
+      var associateOptions = App.utils.shuffle(p.options);
+      associateOptions.forEach(function (op) {
         var btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'btn-opcion opcion-reloj';
-        btn.innerHTML = svgReloj(op.h, op.m);
-        btn.setAttribute('aria-label', App.i18n.t('relojAria').replace('{texto}', textoHora(op.h, op.m)));
-        btn.addEventListener('click', function () { responder(btn, op.esCorrecta, p); });
-        opcionesEl.appendChild(btn);
+        btn.className = 'btn-opcion option-clock';
+        btn.innerHTML = clockSvg(op.h, op.m);
+        btn.setAttribute('aria-label', App.i18n.t('clockAria').replace('{text}', timeText(op.h, op.m)));
+        btn.addEventListener('click', function () { answer(btn, op.isCorrect, p); });
+        optionsEl.appendChild(btn);
       });
     }
 
-    pintarProgreso();
-    pintarEstrellas();
+    paintProgress();
+    paintStars();
   }
 
-  function respuestaCorrectaTexto(p) {
-    var correcta = p.opciones.filter(function (o) { return o.esCorrecta; })[0];
-    return p.tipo === 'leer' ? correcta.texto : textoHora(correcta.h, correcta.m);
+  function correctAnswerText(p) {
+    var correct = p.options.filter(function (o) { return o.isCorrect; })[0];
+    return p.type === 'read' ? correct.text : timeText(correct.h, correct.m);
   }
 
-  function mostrarExplicacion(esCorrecta, p) {
-    var texto = (esCorrecta ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
-      respuestaCorrectaTexto(p) + '.';
-    explicacionEl.textContent = texto;
-    explicacionWrap.classList.remove('oculto');
+  function showExplanation(isCorrect, p) {
+    var text = (isCorrect ? App.i18n.t('correctExplanation') : App.i18n.t('incorrectExplanationA')) +
+      correctAnswerText(p) + '.';
+    explanationEl.textContent = text;
+    explanationWrap.classList.remove('oculto');
   }
 
-  /* Socratic method: on the first mistake the answer isn't given,
+  /* Socratic method: on the first mistake the answer is not given,
      the person is encouraged to look at the clock/moment again.
      Only on the second mistake is the correct time explained
-     (mostrarExplicacion). */
-  function mostrarPista(p) {
-    explicacionEl.textContent = App.i18n.t(p.tipo === 'leer' ? 'pistaLeer' : 'pistaAsociar');
-    explicacionWrap.classList.remove('oculto');
+     (showExplanation). */
+  function showHint(p) {
+    explanationEl.textContent = App.i18n.t(p.type === 'read' ? 'readHint' : 'associateHint');
+    explanationWrap.classList.remove('oculto');
   }
 
-  function responder(btn, esCorrecta, p) {
-    if (resuelto) return;
-    if (esCorrecta) {
-      mostrarExplicacion(esCorrecta, p);
-      resuelto = true;
+  function answer(btn, isCorrect, p) {
+    if (answered) return;
+    if (isCorrect) {
+      showExplanation(isCorrect, p);
+      answered = true;
       btn.classList.add('correcta');
-      App.utils.$$('#opciones .btn-opcion').forEach(function (b) { b.disabled = true; });
+      App.utils.$$('#options .btn-opcion').forEach(function (b) { b.disabled = true; });
       App.feedback.success(feedbackEl);
-      progreso.estrellas += 1;
-      aciertosRonda += 1;
-      guardar();
-      pintarEstrellas();
-      btnSiguiente.classList.remove('oculto');
-      btnSiguiente.focus();
+      progress.stars += 1;
+      roundCorrect += 1;
+      save();
+      paintStars();
+      btnNext.classList.remove('oculto');
+      btnNext.focus();
     } else {
-      intentos += 1;
-      if (intentos === 1) {
-        mostrarPista(p);
+      attempts += 1;
+      /* Reinforcement: register the first miss of the question so
+         it is replayed in the mini-round. Stable key:
+         level.id + ':' + roundIndex. */
+      if (attempts === 1) App.reinforce.add(level.id + ':' + roundIndex, p);
+      if (attempts === 1) {
+        showHint(p);
       } else {
-        mostrarExplicacion(esCorrecta, p);
+        showExplanation(isCorrect, p);
       }
       btn.classList.add('animo');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#opciones .btn-opcion'), explicacionWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#options .btn-opcion'), explanationWrap);
     }
   }
 
-  function siguiente() {
-    idx += 1;
-    App.tts.stop();
-    opcionesEl.className = 'pila';
-    if (idx >= DATA.porRonda) {
-      terminarRonda();
-    } else {
+  function goNext() {
+    /* Mini-round: go to the next item or close. */
+    if (inReinforce) {
+      reinforceIndex += 1;
+      if (reinforceIndex >= reinforceTotal) {
+        inReinforce = false;
+        currentQ = null;
+        App.reinforce.clear();
+        App.reinforce.banner.hide();
+        endRound();
+        return;
+      }
+      currentQ = reinforceList[reinforceIndex];
+      paintReinforceProgress();
+      optionsEl.className = 'pila';
       render();
+      return;
     }
+    roundIndex += 1;
+    optionsEl.className = 'pila';
+    if (roundIndex >= DATA.perRound) {
+      var consume = App.reinforce.consume();
+      if (consume.length === 0) endRound();
+      return;
+    }
+    currentQ = null;
+    render();
   }
 
-  function terminarRonda() {
-    progreso.completados[nivel.id] = (progreso.completados[nivel.id] || 0) + 1;
-    guardar();
-    pantallaJuego.classList.add('oculto');
-    pantallaFinal.classList.remove('oculto');
-    $('#resumenFinal').textContent = App.i18n.t('resumenFinal')
-      .replace('{n}', aciertosRonda)
-      .replace('{estrellas}', progreso.estrellas);
-$('#transferencia').textContent = App.i18n.t('transferencia');
+  function endRound() {
+    save();
+    screenGame.classList.add('oculto');
+    screenEnd.classList.remove('oculto');
+    $('#endSummary').textContent = App.i18n.t('endSummary')
+      .replace('{n}', roundCorrect)
+      .replace('{estrellas}', progress.stars);
+$('#transfer').textContent = App.i18n.t('transfer');
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
   /* Events */
-  btnEscuchar.addEventListener('click', function () {
-    App.tts.speak(preguntaTextoEl.textContent);
-  });
-  btnSiguiente.addEventListener('click', siguiente);
-  $('#btnRepetir').addEventListener('click', function () { iniciarRonda(nivel); });
-  $('#btnOtroNivel').addEventListener('click', function () {
-    pantallaFinal.classList.add('oculto');
-    pintarNiveles();
-    pantallaInicio.classList.remove('oculto');
+  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
+  $('#btnOtherLevel').addEventListener('click', function () {
+    screenEnd.classList.add('oculto');
+    paintLevels();
+    screenStart.classList.remove('oculto');
   });
 
-  pintarNiveles();
-  pintarEstrellas();
+  paintLevels();
+  paintStars();
 })();
-

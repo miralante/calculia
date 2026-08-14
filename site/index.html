@@ -16,17 +16,21 @@
 <body>
   <div class="container">
     <header class="cabecera centrado">
-      <div class="idioma-selector" role="group" aria-label="Elegir idioma">
-        <button type="button" class="btn-idioma" id="btnIdiomaEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
-        <button type="button" class="btn-idioma" id="btnIdiomaEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
+      <div class="cabecera-izq">
+        <img src="../assets/img/icono.svg" alt="" width="72" height="72" class="logo">
       </div>
-      <img src="../assets/img/icono.svg" alt="" width="72" height="72" class="logo">
-      <h1>Calculia</h1>
-      <div class="fila centrado-fila">
-        <p class="saludo" id="saludo" data-i18n="saludo">Hola. ¿Qué quieres practicar hoy?</p>
-        <button type="button" class="btn btn-audio" id="btnSaludo" data-i18n-aria="listenGreeting" aria-label="Escuchar el saludo">🔊</button>
+      <div class="cabecera-der">
+        <div class="idioma-selector" role="group" aria-label="Elegir idioma">
+          <button type="button" class="btn-idioma" id="btnIdiomaEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
+          <button type="button" class="btn-idioma" id="btnIdiomaEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
+        </div>
+        <h1>Calculia</h1>
+        <div class="fila centrado-fila">
+          <p class="saludo" id="saludo" data-i18n="saludo">Hola. ¿Qué quieres practicar hoy?</p>
+          <button type="button" class="btn btn-audio" id="btnSaludo" data-i18n-aria="listenGreeting" aria-label="Escuchar el saludo">🔊</button>
+        </div>
+        <p class="stars" id="totalStars">⭐ 0</p>
       </div>
-      <p class="stars" id="estrellasTotales">⭐ 0</p>
     </header>
 
     <nav class="anclas-modulo" aria-label="Ir a un bloque">
@@ -43,17 +47,32 @@
           <a href="../tools/numbers/index.html" class="tarjeta">
             <span class="picto" aria-hidden="true">🧮</span>
             <span class="nombre" data-i18n="numbers_nombre">Los Números</span>
-            <span class="detalle" data-i18n="numbers_detalle">Cuenta, suma y mide.</span>
+            <span class="detalle" data-i18n="numbers_detalle">Lee, ordena y compara números.</span>
           </a>
           <a href="../tools/quantities/index.html" class="tarjeta">
             <span class="picto" aria-hidden="true">↔️</span>
             <span class="nombre" data-i18n="quantities_nombre">Cantidades</span>
             <span class="detalle" data-i18n="quantities_detalle">Practica poco, mucho y aproximar.</span>
           </a>
+          <a href="../tools/mental-math/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🧠</span>
+            <span class="nombre" data-i18n="mentalmath_nombre">Restar y Cálculo Mental</span>
+            <span class="detalle" data-i18n="mentalmath_detalle">Resta y calcula de cabeza.</span>
+          </a>
           <a href="../tools/math-tables/index.html" class="tarjeta">
             <span class="picto" aria-hidden="true">🔢</span>
             <span class="nombre" data-i18n="mathtables_nombre">Las Tablas</span>
             <span class="detalle" data-i18n="mathtables_detalle">Cuenta, suma, multiplica y divide con colores.</span>
+          </a>
+          <a href="../tools/fractions-measures/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🍕</span>
+            <span class="nombre" data-i18n="fractionsmeasures_nombre">Fracciones y Medidas</span>
+            <span class="detalle" data-i18n="fractionsmeasures_detalle">Partes, mitades y unidades.</span>
+          </a>
+          <a href="../tools/money/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">💰</span>
+            <span class="nombre" data-i18n="money_nombre">Dinero</span>
+            <span class="detalle" data-i18n="money_detalle">Cuenta, paga y calcula el cambio.</span>
           </a>
           <a href="../tools/roman-numerals/index.html" class="tarjeta">
             <span class="picto" aria-hidden="true">🏛️</span>
@@ -102,11 +121,6 @@
             <span class="nombre" data-i18n="puzzle_nombre">Puzzle</span>
             <span class="detalle" data-i18n="puzzle_detalle">Coloca cada pieza en su sitio.</span>
           </a>
-          <a href="../tools/oca/index.html" class="tarjeta">
-            <span class="picto" aria-hidden="true">🦢</span>
-            <span class="nombre" data-i18n="oca_nombre">La Oca</span>
-            <span class="detalle" data-i18n="oca_detalle">Tira el dado y avanza.</span>
-          </a>
         </div>
       </section>
 
@@ -123,36 +137,7 @@
   <script src="../assets/js/storage.js"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
-  <script>
-    (function () {
-      'use strict';
-
-      function pintarSelectorIdioma() {
-        var activo = App.i18n.locale();
-        document.getElementById('btnIdiomaEs').setAttribute('aria-pressed', String(activo === 'es'));
-        document.getElementById('btnIdiomaEn').setAttribute('aria-pressed', String(activo === 'en'));
-      }
-
-      document.getElementById('estrellasTotales').textContent =
-        '⭐ ' + App.storage.estrellasTotales();
-      document.getElementById('estrellasTotales').title = App.i18n.t('yourStars');
-
-      document.getElementById('btnSaludo').addEventListener('click', function () {
-        App.tts.speak(App.i18n.t('saludo'));
-      });
-
-      document.getElementById('btnIdiomaEs').addEventListener('click', function () {
-        App.i18n.setLocale('es');
-      });
-      document.getElementById('btnIdiomaEn').addEventListener('click', function () {
-        App.i18n.setLocale('en');
-      });
-      pintarSelectorIdioma();
-
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('../sw.js').catch(function () {});
-      }
-    })();
-  </script>
+  <script src="app.js"></script>
+  <script src="../assets/js/sw-register.js"></script>
 </body>
 </html>

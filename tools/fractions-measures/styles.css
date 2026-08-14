@@ -1,0 +1,58 @@
+/* Fractions and Measures — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+.btn:not(.btn-secundario):not(.btn-audio) { background: var(--mod-razonamiento); }
+.instruccion { font-size: var(--texto-base); }
+.centrado-fila { justify-content: center; }
+
+/* Activity menu */
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
+.btn-actividad {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  min-height: var(--boton-min); padding: 20px;
+  border: 3px solid var(--color-borde); border-radius: var(--radio);
+  background: var(--color-superficie); color: var(--color-texto);
+  font-size: var(--texto-base); font-weight: 700; text-align: center;
+}
+.btn-actividad:hover { border-color: var(--mod-razonamiento); }
+.btn-actividad .picto { font-size: 48px; }
+.btn-actividad .detalle { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
+
+#pantallaNiveles h2 { text-align: center; color: var(--mod-razonamiento); }
+.btn-nivel { min-width: 300px; align-self: center; }
+#btnVolverMenu { align-self: center; }
+
+/* Color-coded legend text (parts painted / parts total) */
+.cifra-u { color: var(--mod-coordinacion); }
+.cifra-d { color: var(--mod-secuencia); }
+
+.card { border-color: var(--mod-razonamiento-suave); }
+.enunciado { font-size: var(--texto-grande); font-weight: 700; }
+.visual { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); }
+.leyenda { font-size: var(--texto-pequeno); font-weight: 700; }
+.pista { color: var(--color-texto-suave); font-size: var(--texto-base); }
+
+/* Fractions */
+.frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 800; font-size: 28px; line-height: 1.2; }
+.frac-num { color: var(--mod-coordinacion); border-bottom: 4px solid var(--color-texto); padding: 0 10px; }
+.frac-den { color: var(--mod-secuencia); padding: 0 10px; }
+.op-frac { display: inline-flex; flex-direction: column; align-items: center; gap: 8px; }
+
+/* Measurements */
+.picto-medida { font-size: 64px; }
+.medida-txt { font-size: var(--texto-grande); font-weight: 800; }
+
+/* Answer options */
+.opciones .btn-opcion { text-align: center; font-size: 26px; }
+.opciones.opciones-fila { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+.opciones.opciones-fila .btn-opcion { width: auto; min-width: 180px; }
+
+.emoji-grande { font-size: 96px; }
+#pantallaFinal { padding-top: 48px; }
+#pantallaFinal .btn { align-self: center; min-width: 280px; }
+#pantallaFinal .transferencia {
+  margin: 8px auto 24px;
+  font-size: 1.1rem;
+  color: var(--color-texto-secundario, #555);
+  max-width: 480px;
+}

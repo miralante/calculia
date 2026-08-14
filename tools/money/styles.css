@@ -1,0 +1,68 @@
+/* Money — tool-specific styles. Shared styles live in assets/css/.
+   Euros in the base text color; the comma and cents are shown in orange. */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+.btn:not(.btn-secundario):not(.btn-audio) { background: var(--mod-razonamiento); }
+.instruccion { font-size: var(--texto-base); }
+.centrado-fila { justify-content: center; }
+
+/* Activity menu */
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
+.btn-actividad {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  min-height: var(--boton-min); padding: 20px;
+  border: 3px solid var(--color-borde); border-radius: var(--radio);
+  background: var(--color-superficie); color: var(--color-texto);
+  font-size: var(--texto-base); font-weight: 700; text-align: center;
+}
+.btn-actividad:hover { border-color: var(--mod-razonamiento); }
+.btn-actividad .picto { font-size: 48px; }
+.btn-actividad .detalle { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
+.nota-extra { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
+
+#pantallaNiveles h2 { text-align: center; color: var(--mod-razonamiento); }
+.btn-nivel { min-width: 300px; align-self: center; }
+#btnVolverMenu { align-self: center; }
+
+/* Prices */
+.num-color { font-weight: 800; letter-spacing: 2px; }
+.cifra-u { color: var(--mod-coordinacion); }   /* blue — euro units */
+.cifra-d { color: var(--mod-secuencia); }      /* green — euro tens */
+.cifra-c { color: var(--mod-emocional); }      /* purple — euro hundreds */
+.cifra-coma, .cifra-dec { color: var(--mod-memoria); } /* orange — comma and cents */
+
+.card { border-color: var(--mod-razonamiento-suave); }
+.enunciado { font-size: var(--texto-grande); font-weight: 700; }
+.visual { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); }
+.visual-num { font-size: 52px; }
+.leyenda { font-size: var(--texto-pequeno); font-weight: 700; }
+.pista { color: var(--color-texto-suave); font-size: var(--texto-base); }
+
+/* Is it enough? / The change */
+.llega-caja {
+  background: var(--color-superficie); border: 3px solid var(--color-borde);
+  border-radius: var(--radio); padding: var(--espacio); text-align: center;
+}
+.llega-etq { font-weight: 700; margin-bottom: 8px; color: var(--color-texto-suave); }
+.llega-fila { display: flex; gap: var(--espacio); flex-wrap: wrap; justify-content: center; }
+
+/* Reading and comparing prices */
+.picto-medida { font-size: 64px; }
+.op-precio { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; font-size: var(--texto-base); }
+.op-precio .num-color { font-size: 30px; }
+.op-precio .op-picto { font-size: 44px; }
+
+/* Answer options */
+.opciones .btn-opcion { text-align: center; font-size: 26px; }
+.opciones.opciones-fila { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+.opciones.opciones-fila .btn-opcion { width: auto; min-width: 180px; }
+
+.emoji-grande { font-size: 96px; }
+#pantallaFinal { padding-top: 48px; }
+#pantallaFinal .btn { align-self: center; min-width: 280px; }
+#pantallaFinal .transferencia {
+  margin: 8px auto 24px;
+  font-size: 1.1rem;
+  color: var(--color-texto-secundario, #555);
+  max-width: 480px;
+}

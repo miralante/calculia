@@ -26,7 +26,8 @@ var DATA = {
     { id: 'add', icon: '➕' },
     { id: 'decompose', icon: '🔟' },
     { id: 'multiply', icon: '✖️' },
-    { id: 'divide', icon: '➗' }
+    { id: 'divide', icon: '➗' },
+    { id: 'parity', icon: '🟦' }
   ],
   stepLevels: [1, 2, 3, 5, 10],
   stepBaseMax: 12,
@@ -35,6 +36,8 @@ var DATA = {
   factsPerTable: 10,
   decompose: { aMin: 6, aMax: 9, bMax: 9, minSum: 11 },
   divide: { divisor: 10, maxQuotient: 10 },
+  /* Even/odd classification: numbers drawn from 0 to max, no table/level picker. */
+  parity: { max: 24 },
   perRound: 10,
   dotColors: [
     '#1565C0', '#E65100', '#00695C', '#6A1B9A', '#AD1457',

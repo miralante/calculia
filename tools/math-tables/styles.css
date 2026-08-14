@@ -34,17 +34,17 @@
 .explanation { margin: 0; color: var(--color-texto-suave); }
 #nextFact { align-self: center; }
 
-@media (max-width: 640px) {
-  .learn-layout { grid-template-columns: 1fr; }
-  .operation-grid, .table-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 400px) {
-  .operation-grid { grid-template-columns: 1fr; }
-
 #pantallaFinal .transferencia {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);
   max-width: 480px;
 }
+
+@media (max-width: 640px) {
+  .learn-layout { grid-template-columns: 1fr; }
+  .operation-grid, .table-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 400px) {
+  .operation-grid { grid-template-columns: 1fr; }
 }

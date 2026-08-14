@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Patrones | Apptonomia</title>
+  <title>Patterns | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
@@ -19,42 +19,41 @@
     </header>
 
     <!-- Start screen -->
-    <section id="pantallaInicio" class="pila centrado">
+    <section id="screenStart" class="pila centrado">
       <div class="fila centrado-fila">
-        <p class="instruccion" id="instruccion" data-i18n="instruccion">Mira la serie. Elige lo que sigue.</p>
+        <p class="instruccion" id="instruction" data-i18n="instruction">Mira la serie. Elige lo que sigue.</p>
       </div>
-      <h2 data-i18n="eligeNivel">Elige el nivel</h2>
-      <div class="pila" id="niveles"></div>
+      <h2 data-i18n="chooseLevel">Elige una actividad</h2>
+      <div class="pila" id="levels"></div>
     </section>
 
     <!-- Game screen -->
-    <section id="pantallaJuego" class="oculto pila">
+    <section id="screenGame" class="oculto pila">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText">0 / 8</span>
       </div>
 
       <div class="card centrado pila">
-        <div class="serie" id="serie"></div>
-        <button type="button" class="btn btn-audio" id="btnEscuchar" data-i18n-aria="escucharSerie" aria-label="Escuchar la serie">🔊 Escuchar</button>
+        <div class="serie" id="series"></div>
       </div>
-      <h2 class="pregunta centrado" data-i18n="queSigue">¿Qué sigue?</h2>
-      <div class="pila" id="opciones"></div>
+      <h2 class="pregunta centrado" data-i18n="whatNext">¿Qué sigue?</h2>
+      <div class="pila" id="options"></div>
       <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="fila explicacion oculto" id="explicacionWrap">
-        <p id="explicacion" aria-live="polite"></p>
+      <div class="fila explicacion oculto" id="explanationWrap">
+        <p id="explanation" aria-live="polite"></p>
       </div>
-      <button type="button" class="btn oculto" id="btnSiguiente" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn oculto" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
     <!-- End screen -->
-    <section id="pantallaFinal" class="oculto centrado pila" aria-live="polite">
+    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
       <div class="emoji-grande" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
-      <p id="resumenFinal"></p>
-      <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
-      <button type="button" class="btn" id="btnRepetir" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secundario" id="btnOtroNivel" data-i18n="elegirOtroNivel">Elegir otro nivel</button>
+      <p id="endSummary"></p>
+      <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secundario" id="btnOtherLevel" data-i18n="chooseOtherLevel">Elegir otra actividad</button>
       <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer class="pie-app">
@@ -71,11 +70,6 @@
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../../sw.js').catch(function () {});
-    }
-  </script>
+  <script src="../../assets/js/sw-register.js"></script>
 </body>
 </html>
-

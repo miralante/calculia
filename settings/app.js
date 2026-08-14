@@ -2,7 +2,7 @@
    Calculia — Settings (hidden route)
    View/reset what's saved in localStorage. Two actions:
    - "Reset the person's data": deletes the language preference only
-     (none of Calculia's 12 activities store a name or other personal
+     (none of Calculia's 11 activities store a name or other personal
      field). Progress in every activity is kept.
    - "Reset the whole app": deletes everything under
      'calculia:*' (equivalent to opening the app for the first time).
@@ -15,7 +15,7 @@
 
   function renderState() {
     var ids = App.storage.listaToolIds();
-    var stars = App.storage.estrellasTotales();
+    var stars = App.storage.totalStars();
     var languageName = App.i18n.t(App.i18n.locale() === 'en' ? 'languageNameEn' : 'languageNameEs');
     var list = $('#listaEstado');
     list.innerHTML = '';
@@ -38,7 +38,7 @@
   function renderActivityProgress() {
     App.utils.$$('#progreso-actividades [data-tool]').forEach(function (cell) {
       var data = App.storage.get(cell.dataset.tool);
-      var stars = typeof data.estrellas === 'number' ? data.estrellas : 0;
+      var stars = typeof data.stars === 'number' ? data.stars : 0;
       cell.textContent = stars > 0 ? '⭐ ' + stars : App.i18n.t('notStarted');
     });
   }
@@ -90,8 +90,17 @@
     App.storage.remove('locale');
   }
 
+  function paintLanguageSelector() {
+    var active = App.i18n.locale();
+    $('#btnIdiomaEs').setAttribute('aria-pressed', String(active === 'es'));
+    $('#btnIdiomaEn').setAttribute('aria-pressed', String(active === 'en'));
+  }
+
   confirmTwice($('#btnResetPersona'), 'btnResetPerson', 'confirmResetPerson', resetPerson);
   confirmTwice($('#btnResetApp'), 'btnResetApp', 'confirmResetApp', resetApp);
+  $('#btnIdiomaEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
+  $('#btnIdiomaEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
+  paintLanguageSelector();
 
   renderState();
   renderActivityProgress();

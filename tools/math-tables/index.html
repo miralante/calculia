@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apptonomia</title>
+  <title>Calculia</title>
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
   <link rel="stylesheet" href="../../assets/css/components.css">
@@ -14,10 +14,7 @@
     <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
     <header class="tool-header centrado">
       <h1 data-i18n="title">🔢 Las Tablas</h1>
-      <div class="fila centrado-fila">
-        <p id="instruction" data-i18n="instruction">Aprende a contar de cabeza, sumar y multiplicar con puntos de colores.</p>
-        <button type="button" class="btn btn-audio" id="listenInstruction" data-i18n-aria="core.listenInstructions" aria-label="Escuchar las instrucciones">🔊</button>
-      </div>
+      <p id="instruction" data-i18n="instruction">Aprende a contar de cabeza, sumar y multiplicar con puntos de colores.</p>
       <p class="stars" id="stars">⭐ 0</p>
     </header>
 
@@ -38,10 +35,7 @@
       <!-- Learn the table -->
       <section id="screenLearn" class="pila oculto" aria-labelledby="learnTitle">
         <h2 id="learnTitle"></h2>
-        <div class="fila centrado-fila">
-          <p id="learnInstruction" data-i18n="learnInstruction">Toca una fila para verla con puntos y escucharla.</p>
-          <button type="button" class="btn btn-audio" id="listenLearn" data-i18n-aria="core.listenInstructions" aria-label="Escuchar las instrucciones">🔊</button>
-        </div>
+        <p id="learnInstruction" data-i18n="learnInstruction">Toca una fila para verla con puntos.</p>
         <div class="learn-layout">
           <div class="fact-list" id="factList"></div>
           <div class="card visual-card" id="learnVisual" role="img"></div>
@@ -57,10 +51,7 @@
           <span class="progress-text" id="progressText">0 / 10</span>
         </div>
         <article class="card task-card pila">
-          <div class="fila centrado-fila">
-            <h2 class="equation" id="quizPrompt"></h2>
-            <button type="button" class="btn btn-audio" id="listenPrompt" data-i18n-aria="core.listenText" aria-label="Escuchar el texto">🔊</button>
-          </div>
+          <h2 class="equation" id="quizPrompt"></h2>
           <div class="visual-card" id="quizVisual" role="img"></div>
           <div class="option-row" id="options"></div>
           <p class="feedback" id="feedback" aria-live="polite"></p>
@@ -75,7 +66,7 @@
         <div class="emoji-grande" aria-hidden="true">🎉</div>
         <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
         <p id="finishText"></p>
-        <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
+        <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
         <button type="button" class="btn" id="playAgain" data-i18n="core.playAgain">Jugar otra vez</button>
         <button type="button" class="btn btn-secundario" id="anotherTable" data-i18n="chooseAnotherTable">Elegir otra tabla</button>
         <button type="button" class="btn btn-secundario" id="anotherOperation" data-i18n="changeOperation">Cambiar de actividad</button>
@@ -88,17 +79,12 @@
 
   <script src="../../assets/js/utils.js"></script>
   <script src="../../assets/js/i18n.js"></script>
-  <script src="../../assets/js/tts.js"></script>
   <script src="../../assets/js/storage.js"></script>
   <script src="../../assets/js/feedback.js"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../../sw.js').catch(function () {});
-    }
-  </script>
+  <script src="../../assets/js/sw-register.js"></script>
 </body>
 </html>

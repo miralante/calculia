@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Los Números | Apptonomia</title>
+  <title>Numbers | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
@@ -18,60 +18,53 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-    <!-- Activity menu -->
-    <section id="pantallaMenu" class="pila">
+    <section id="screenMenu" class="pila">
       <div class="fila centrado-fila">
-        <p class="instruccion" id="instruccion" data-i18n="instruccionMenu">Matemáticas para el día a día. Elige una actividad.</p>
+        <p class="instruccion" id="instruction" data-i18n="instructionMenu">Elige una actividad.</p>
       </div>
-      <div id="menuGrupos"></div>
-      <p class="nota-monedero" id="notaMonedero"></p>
+      <div id="activitiesMenu"></div>
+      <p class="nota-extra" id="noteExtra"></p>
     </section>
 
-    <!-- Niveles de la actividad elegida -->
-    <section id="pantallaNiveles" class="oculto pila">
-      <h2 id="tituloActividad"></h2>
+    <section id="screenLevels" class="oculto pila">
+      <h2 id="activityTitle"></h2>
       <div class="fila centrado-fila">
-        <p class="instruccion" id="instruccionActividad"></p>
+        <p class="instruccion" id="activityInstruction"></p>
       </div>
-      <div class="pila" id="niveles"></div>
-      <button type="button" class="btn btn-secundario" id="btnVolverMenu" data-i18n="btnVolverMenu">← Otras actividades</button>
+      <div class="pila" id="levels"></div>
+      <button type="button" class="btn btn-secundario" id="btnBackToMenu" data-i18n="btnBackToMenu">← Otras actividades</button>
     </section>
 
-    <!-- Game screen -->
-    <section id="pantallaJuego" class="oculto pila">
+    <section id="screenGame" class="oculto pila">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText">0 / 6</span>
       </div>
 
       <div class="card centrado pila">
-        <div class="fila centrado-fila">
-          <p class="enunciado" id="enunciado"></p>
-          <button type="button" class="btn btn-audio" id="btnEscuchar" data-i18n-aria="core.listenText" aria-label="Escuchar la pregunta">🔊</button>
-        </div>
+        <p class="enunciado" id="prompt"></p>
         <div class="visual" id="visual"></div>
-        <p class="leyenda oculto" id="leyenda"></p>
+        <p class="leyenda oculto" id="legend"></p>
       </div>
 
-      <div class="pila opciones" id="opciones"></div>
+      <div class="pila opciones" id="options"></div>
 
       <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="fila explicacion oculto" id="explicacionWrap">
-        <p id="explicacion" aria-live="polite"></p>
+      <div class="fila explicacion oculto" id="explanationWrap">
+        <p id="explanation" aria-live="polite"></p>
       </div>
-      <button type="button" class="btn oculto" id="btnSiguiente" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn oculto" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
-    <!-- End screen -->
-    <section id="pantallaFinal" class="oculto centrado pila" aria-live="polite">
+    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
       <div class="emoji-grande" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
-      <p id="resumenFinal"></p>
-      <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
-      <button type="button" class="btn btn-secundario oculto" id="btnMasDificil"></button>
-      <button type="button" class="btn" id="btnRepetir" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secundario" id="btnOtroNivel" data-i18n="otroNivel">Elegir otro nivel</button>
-      <button type="button" class="btn btn-secundario" id="btnOtraActividad" data-i18n="btnOtraActividad">Otra actividad</button>
+      <p id="endSummary"></p>
+      <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
+      <button type="button" class="btn btn-secundario oculto" id="btnHarder"></button>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secundario" id="btnOtherLevel" data-i18n="otherLevel">Elegir otro paso</button>
+      <button type="button" class="btn btn-secundario" id="btnOtherActivity" data-i18n="btnOtherActivity">Otra actividad</button>
       <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer class="pie-app">
@@ -88,10 +81,6 @@
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../../sw.js').catch(function () {});
-    }
-  </script>
+  <script src="../../assets/js/sw-register.js"></script>
 </body>
 </html>

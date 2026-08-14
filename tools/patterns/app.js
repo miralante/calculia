@@ -1,14 +1,14 @@
 /* ============================================================
-   Apptonomia — Patrones (razonamiento)
-   Datos en data.js (DATA.niveles). Módulos compartidos en assets/js/.
-   Mecánica: se muestra una serie con un hueco y 3 opciones.
-   Ronda de 8 series por nivel. El error nunca se castiga.
+   Calculia — Patterns (reasoning)
+   Data in data.js (DATA.niveles). Shared modules in assets/js/.
+   Mechanic: a series is shown with a blank and 3 options.
+   Round of 8 series per level. Errors are never punished.
    ============================================================ */
 (function () {
   'use strict';
 
-  var TOOL_ID = 'patrones';
-  var POR_RONDA = 8;
+  var TOOL_ID = 'patterns';
+  var PER_ROUND = 8;
   var $ = App.utils.$;
 
   /* Spoken names of the symbols, for the audio button (per language) */
@@ -39,203 +39,243 @@
     }
   };
 
-  var pantallaInicio = $('#pantallaInicio');
-  var pantallaJuego = $('#pantallaJuego');
-  var pantallaFinal = $('#pantallaFinal');
-  var serieEl = $('#serie');
-  var opcionesEl = $('#opciones');
+  var screenStart = $('#screenStart');
+  var screenGame = $('#screenGame');
+  var screenEnd = $('#screenEnd');
+  var seriesEl = $('#series');
+  var optionsEl = $('#options');
   var feedbackEl = $('#feedback');
-  var explicacionWrap = $('#explicacionWrap');
-  var explicacionEl = $('#explicacion');
-  var btnEscuchar = $('#btnEscuchar');
-  var btnSiguiente = $('#btnSiguiente');
+  var explanationWrap = $('#explanationWrap');
+  var explanationEl = $('#explanation');
+  var btnNext = $('#btnNext');
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
   var starsEl = $('#stars');
 
   /* Persistent progress */
-  var progreso = App.storage.get(TOOL_ID);
-  if (typeof progreso.estrellas !== 'number') progreso.estrellas = 0;
-  if (!progreso.completados) progreso.completados = {};
+  var progress = App.storage.get(TOOL_ID);
+  if (typeof progress.stars !== 'number') progress.stars = 0;
 
   /* Round state */
-  var nivel = null;
+  var level = null;
   var items = [];
-  var idx = 0;
-  var aciertosRonda = 0;
-  var resuelto = false;
-  var intentos = 0;
+  var index = 0;
+  var roundCorrect = 0;
+  var answered = false;
+  var attempts = 0;
+  /* Refuerzo: ver core en assets/js/feedback.js (App.reinforce).
+     currentItem permite reutilizar render() con un item externo
+     (el del refuerzo); si es null, render() toma items[idx]. */
+  var currentItem = null;
+  var inReinforce = false;
+  var reinforceList = [];
+  var reinforceIndex = 0;
+  var reinforceTotal = 0;
 
-  function guardar() { App.storage.set(TOOL_ID, progreso); }
+  function save() { App.storage.set(TOOL_ID, progress); }
 
-  function pintarEstrellas() { starsEl.textContent = '⭐ ' + progreso.estrellas; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
-  function textoLegible(simbolo) {
+  function readableText(simbolo) {
     var loc = App.i18n.locale();
-    var nombres = NOMBRES[loc] || NOMBRES.es;
-    return nombres[simbolo] || simbolo;
+    var names = NOMBRES[loc] || NOMBRES.es;
+    return names[simbolo] || simbolo;
   }
 
-  function textoSerie(patron) {
+  function seriesText(patron) {
     return patron.map(function (s) {
-      return s === '❓' ? App.i18n.t('queSigueAudio') : textoLegible(s);
+      return s === '❓' ? App.i18n.t('queSigueAudio') : readableText(s);
     }).join(', ');
   }
 
-  /* ---- Pantalla inicial ---- */
-  function pintarNiveles() {
-    var cont = $('#niveles');
+  /* ---- Initial screen ---- */
+  function paintLevels() {
+    var cont = $('#levels');
     cont.innerHTML = '';
-    var datos = DATA[App.i18n.locale()] || DATA.es;
-    datos.niveles.forEach(function (n) {
+    var data = DATA[App.i18n.locale()] || DATA.es;
+    data.levels.forEach(function (n) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn btn-nivel';
-      var veces = progreso.completados[n.id] || 0;
-      btn.innerHTML = n.nombre + ' — ' + n.descripcion +
-        ' <span class="nivel-info">(' + App.i18n.t('vecesTexto').replace('{n}', veces) + ')</span>';
-      btn.addEventListener('click', function () { iniciarRonda(n); });
+      btn.innerHTML = n.descripcion;
+      btn.addEventListener('click', function () { startRound(n); });
       cont.appendChild(btn);
     });
   }
 
-  function iniciarRonda(n) {
-    nivel = n;
-    items = App.utils.shuffle(nivel.series).slice(0, POR_RONDA);
-    idx = 0;
-    aciertosRonda = 0;
-    pantallaInicio.classList.add('oculto');
-    pantallaFinal.classList.add('oculto');
-    pantallaJuego.classList.remove('oculto');
+  function startRound(n) {
+    level = n;
+    items = App.utils.shuffle(level.series).slice(0, PER_ROUND);
+    index = 0;
+    roundCorrect = 0;
+    inReinforce = false;
+    currentItem = null;
+    reinforceList = [];
+    reinforceIndex = 0;
+    App.reinforce.banner.hide();
+    App.reinforce.start(function (fallos) { startReinforce(fallos); });
+    screenStart.classList.add('oculto');
+    screenEnd.classList.add('oculto');
+    screenGame.classList.remove('oculto');
     render();
   }
 
-  function pintarProgreso() {
-    progressFill.style.width = ((idx / POR_RONDA) * 100) + '%';
-    progressText.textContent = idx + ' / ' + POR_RONDA;
+  function startReinforce(fallos) {
+    reinforceList = fallos.map(function (f) { return f.payload; });
+    reinforceTotal = reinforceList.length;
+    reinforceIndex = 0;
+    inReinforce = true;
+    App.reinforce.banner.set(
+      App.i18n.t('refuerzoTitulo') + ' — ' +
+      App.i18n.t('refuerzoIntro').replace('{n}', reinforceTotal)
+    );
+    currentItem = reinforceList[0];
+    paintReinforceProgress();
+    render();
+  }
+
+  function paintReinforceProgress() {
+    progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
+    progressText.textContent = (reinforceIndex + 1) + ' / ' + reinforceTotal;
+  }
+
+  function paintProgress() {
+    progressFill.style.width = ((index / PER_ROUND) * 100) + '%';
+    progressText.textContent = index + ' / ' + PER_ROUND;
   }
 
   function render() {
-    var item = items[idx];
-    resuelto = false;
-    intentos = 0;
+    var item = currentItem || items[index];
+    currentItem = null;
+    resolved = false;
+    attempts = 0;
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
-    explicacionWrap.classList.add('oculto');
-    explicacionEl.textContent = '';
-    btnSiguiente.classList.add('oculto');
-    opcionesEl.innerHTML = '';
+    explanationWrap.classList.add('oculto');
+    explanationEl.textContent = '';
+    btnNext.classList.add('oculto');
+    optionsEl.innerHTML = '';
 
-    serieEl.innerHTML = '';
+    seriesEl.innerHTML = '';
     item.patron.forEach(function (simbolo) {
       var span = document.createElement('span');
       span.className = 'simbolo' + (simbolo === '❓' ? ' hueco' : '');
       span.textContent = simbolo;
-      serieEl.appendChild(span);
+      seriesEl.appendChild(span);
     });
 
-    var opciones = App.utils.shuffle(item.opciones.map(function (opt, i) {
-      return { texto: opt, esCorrecta: i === item.correcta };
+    var options = App.utils.shuffle(item.opciones.map(function (opt, i) {
+      return { text: opt, isCorrect: i === item.correcta };
     }));
 
-    opciones.forEach(function (op) {
+    options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn-opcion opcion-simbolo';
-      btn.textContent = op.texto;
+      btn.textContent = op.text;
       btn.addEventListener('click', function () {
-        responder(btn, op.esCorrecta, item);
+        answer(btn, op.isCorrect, item);
       });
-      opcionesEl.appendChild(btn);
+      optionsEl.appendChild(btn);
     });
 
-    pintarProgreso();
-    pintarEstrellas();
+    paintProgress();
+    paintStars();
   }
 
-  function mostrarExplicacion(esCorrecta, item) {
-    var respuesta = textoLegible(item.opciones[item.correcta]);
-    var texto = esCorrecta
-      ? App.i18n.t('explicacionCorrecta') + respuesta + '.'
-      : App.i18n.t('explicacionIncorrectaA') + respuesta + '.';
-    explicacionEl.textContent = texto;
-    explicacionWrap.classList.remove('oculto');
+  function showExplanation(isCorrect, item) {
+    var answer = readableText(item.opciones[item.correcta]);
+    var text = isCorrect
+      ? App.i18n.t('explicacionCorrecta') + answer + '.'
+      : App.i18n.t('explicacionIncorrectaA') + answer + '.';
+    explanationEl.textContent = text;
+    explanationWrap.classList.remove('oculto');
   }
 
   /* Socratic method: on the first mistake the answer isn't given,
      the person is encouraged to look at the sequence again. Only on
      the second mistake is the correct answer explained
-     (mostrarExplicacion). */
-  function mostrarPista() {
-    explicacionEl.textContent = App.i18n.t('pista');
-    explicacionWrap.classList.remove('oculto');
+     (showExplanation). */
+  function showHint() {
+    explanationEl.textContent = App.i18n.t('pista');
+    explanationWrap.classList.remove('oculto');
   }
 
-  function responder(btn, esCorrecta, item) {
-    if (resuelto) return;
-    if (esCorrecta) {
-      mostrarExplicacion(esCorrecta, item);
-      resuelto = true;
+  function answer(btn, isCorrect, item) {
+    if (resolved) return;
+    if (isCorrect) {
+      showExplanation(isCorrect, item);
+      resolved = true;
       btn.classList.add('correcta');
-      App.utils.$$('#opciones .btn-opcion').forEach(function (b) {
+      App.utils.$$('#options .btn-opcion').forEach(function (b) {
         b.disabled = true;
       });
       App.feedback.success(feedbackEl);
-      progreso.estrellas += 1;
-      aciertosRonda += 1;
-      guardar();
-      pintarEstrellas();
-      btnSiguiente.classList.remove('oculto');
-      btnSiguiente.focus();
+      progress.stars += 1;
+      roundCorrect += 1;
+      save();
+      paintStars();
+      btnNext.classList.remove('oculto');
+      btnNext.focus();
     } else {
-      intentos += 1;
-      if (intentos === 1) {
-        mostrarPista();
+      attempts += 1;
+      if (attempts === 1) App.reinforce.add(level.id + ':' + index, item);
+      if (attempts === 1) {
+        showHint();
       } else {
-        mostrarExplicacion(esCorrecta, item);
+        showExplanation(isCorrect, item);
       }
       btn.classList.add('animo');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#opciones .btn-opcion'), explicacionWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#options .btn-opcion'), explanationWrap);
     }
   }
 
-  function siguiente() {
-    idx += 1;
-    App.tts.stop();
-    if (idx >= POR_RONDA) {
-      terminarRonda();
-    } else {
+  function goNext() {
+    if (inReinforce) {
+      reinforceIndex += 1;
+      if (reinforceIndex >= reinforceTotal) {
+        inReinforce = false;
+        App.reinforce.clear();
+        App.reinforce.banner.hide();
+        endRound();
+        return;
+      }
+      currentItem = reinforceList[reinforceIndex];
+      paintReinforceProgress();
       render();
+      return;
     }
+    index += 1;
+    if (index >= PER_ROUND) {
+      var consume = App.reinforce.consume();
+      if (consume.length === 0) endRound();
+      return;
+    }
+    render();
   }
 
-  function terminarRonda() {
-    progreso.completados[nivel.id] = (progreso.completados[nivel.id] || 0) + 1;
-    guardar();
-    pantallaJuego.classList.add('oculto');
-    pantallaFinal.classList.remove('oculto');
-    $('#resumenFinal').textContent = App.i18n.t('resumenFinal')
-      .replace('{n}', aciertosRonda)
-      .replace('{total}', progreso.estrellas);
-$('#transferencia').textContent = App.i18n.t('transferencia');
+  function endRound() {
+    save();
+    screenGame.classList.add('oculto');
+    screenEnd.classList.remove('oculto');
+    $('#endSummary').textContent = App.i18n.t('resumenFinal')
+      .replace('{n}', roundCorrect)
+      .replace('{total}', progress.stars);
+$('#transfer').textContent = App.i18n.t('transferencia');
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
   /* Events */
-  btnEscuchar.addEventListener('click', function () {
-    App.tts.speak(textoSerie(items[idx].patron));
-  });
-  btnSiguiente.addEventListener('click', siguiente);
-  $('#btnRepetir').addEventListener('click', function () { iniciarRonda(nivel); });
-  $('#btnOtroNivel').addEventListener('click', function () {
-    pantallaFinal.classList.add('oculto');
-    pintarNiveles();
-    pantallaInicio.classList.remove('oculto');
+  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
+  $('#btnOtherLevel').addEventListener('click', function () {
+    screenEnd.classList.add('oculto');
+    paintLevels();
+    screenStart.classList.remove('oculto');
   });
 
-  pintarNiveles();
-  pintarEstrellas();
+  paintLevels();
+  paintStars();
 })();
 

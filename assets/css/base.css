@@ -50,8 +50,8 @@ body {
 }
 
 h1 { font-size: var(--texto-titulo); line-height: 1.2; }
-h2 { font-size: var(--texto-grande); line-height: 1.25; }
-h3 { font-size: 24px; line-height: 1.3; }
+h2 { font-size: calc(var(--texto-grande) * 0.85); line-height: 1.2; }
+h3 { font-size: var(--texto-pequeno); line-height: 1.3; }
 
 p { max-width: 36em; }
 

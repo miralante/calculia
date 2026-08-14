@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adivinanzas | Apptonomia</title>
+  <title>Riddles | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
@@ -19,7 +19,7 @@
     </header>
 
     <div class="fila">
-      <p class="instruccion" id="instruccion" data-i18n="instruccion">Lee la adivinanza. Después elige la respuesta.</p>
+      <p class="instruccion" id="instruction" data-i18n="instruction">Lee la adivinanza. Después elige la respuesta.</p>
     </div>
 
     <div class="progress-bar">
@@ -27,26 +27,25 @@
       <span class="progress-text" id="progressText">0 / 10</span>
     </div>
 
-    <main id="pantallaJuego" class="pila">
+    <main id="screenGame" class="pila">
       <div class="card centrado pila">
-        <p class="texto-principal" id="textoPregunta" data-i18n="core.loading">Cargando…</p>
-        <button type="button" class="btn btn-audio" id="btnEscuchar" data-i18n-aria="core.listenText" aria-label="Escuchar el texto"><span data-i18n="core.listen">🔊 Escuchar</span></button>
+        <p class="texto-principal" id="textQuestion" data-i18n="core.loading">Cargando…</p>
       </div>
-      <h2 class="pregunta centrado" data-i18n="pregunta">¿Qué es?</h2>
-      <div class="pila" id="opciones"></div>
+      <h2 class="pregunta centrado" data-i18n="question">¿Qué es?</h2>
+      <div class="pila" id="options"></div>
       <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="fila explicacion oculto" id="explicacionWrap">
-        <p id="explicacion" aria-live="polite"></p>
+      <div class="fila explicacion oculto" id="explanationWrap">
+        <p id="explanation" aria-live="polite"></p>
       </div>
-      <button type="button" class="btn oculto" id="btnSiguiente" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn oculto" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </main>
 
-    <section id="pantallaFinal" class="oculto centrado pila" aria-live="polite">
+    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
       <div class="emoji-grande" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
-      <p id="resumenFinal"></p>
-      <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
-      <button type="button" class="btn" id="btnRepetir" data-i18n="core.playAgain">Jugar otra vez</button>
+      <p id="endSummary"></p>
+      <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
       <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer class="pie-app">
@@ -63,11 +62,6 @@
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../../sw.js').catch(function () {});
-    }
-  </script>
+  <script src="../../assets/js/sw-register.js"></script>
 </body>
 </html>
-

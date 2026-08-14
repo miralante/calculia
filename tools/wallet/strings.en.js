@@ -1,5 +1,5 @@
 /* ============================================================
-   Apptonomia — Textos de monedero (EN)
+   Calculia — Textos de monedero (EN)
    Archivo específico del idioma. Generado/actualizado por scripts/refactor-i18n.js.
    Se carga condicionalmente desde index.html según App.i18n.locale().
    ============================================================ */
@@ -10,9 +10,8 @@
     "title": "💶 The Coin Purse",
     "instruccion": "Here you practise real money: counting it, paying, checking the change and saving.",
     "volverMenu": "← Menu",
-    "elegirNivel": "Choose the level",
-    "vecesTexto": "{n} times",
-    "btnOtroNivel": "Choose another level",
+    "elegirNivel": "Choose a step",
+    "btnOtroNivel": "Choose another step",
     "menuContar": "How much is there?",
     "menuContarDetalle": "Look at the money and choose the total.",
     "menuPagar": "Pay the exact price",
@@ -32,8 +31,8 @@
     "instruccionRedondeo": "Look at the price. Say how much it is, more or less, without counting the cents.",
     "anadirDinero": "Add {d}",
     "contarPregunta": "How much money is there?",
-    "contarEnunciadoAudio": "On the table there is: {d}. How much money is there altogether?",
     "ariaMesa": "Money on the table",
+    "ariaEscucharAyuda": "Listen to the help",
     "pistaContar": "Count again, slowly. Start with the biggest money.",
     "explicacionBien": "That is it! There is {d}. In total, {total}.",
     "explicacionCasi": "Look: there is {d}. In total, {total}.",
@@ -70,7 +69,6 @@
     "quitarUltima": "↩ Remove last",
     "vaciar": "🗑 Empty",
     "comprobar": "Check",
-    "escucharPrecio": "Listen to the price",
     "cuesta": "{nombre}: {precio}",
     "faltaDinero1": "Not enough money. Look at the price and look at what you have put in.",
     "sobraDinero1": "Too much money. Look at the price and look at what you have put in.",
@@ -78,7 +76,6 @@
     "sobraDinero2": "{dif} too much. Remove some money.",
     "resumenPagar": "You paid the exact price first time {n} out of {t}.",
     "btnAyuda": "💡 Help",
-    "ariaEscucharAyuda": "Listen to the help",
     "ayudaPagar1": "Look at the price and look at your total. What is the biggest money that fits without going over?",
     "ayudaPagar2": "Touch the marked money: it fits without going over the price.",
     "ayudaQuita1": "Look at your total. Have you put in more money than the price?",

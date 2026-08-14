@@ -22,6 +22,14 @@
       catches malformed quoting like ''self'' that browsers silently
       drop, turning a directive into "block everything" (this bit
       teclatlon in production; see the sibling repo's CLOUDFLARE.md).
+   8. Usage vs registration: every data-i18n / data-i18n-aria /
+      data-i18n-title key referenced in a unit's index.html, and every
+      literal key passed to App.i18n.t() / App.i18n.pick() / a local
+      t() alias in its app.js, must be registered in BOTH
+      strings.es.js and strings.en.js. Point 4 only compares the two
+      strings.<locale>.js files against each other, so a key that is
+      used on the page but never registered in EITHER language would
+      pass silently there; this point closes that gap.
    Output: list of failures with the exact file. Exit code 1 if there
    are any, "OK (N checks)" otherwise.
    ============================================================ */
@@ -33,50 +41,50 @@ var vm = require('vm');
 var execFileSync = require('child_process').execFileSync;
 
 var RAIZ = path.join(__dirname, '..');
-var fallos = [];
+var failures = [];
 var checks = 0;
 
 function rel(p) {
   return path.relative(RAIZ, p).split(path.sep).join('/');
 }
 
-function listarJs(dir) {
-  var out = [];
-  if (!fs.existsSync(dir)) return out;
-  (function recorrer(actual) {
-    var entradas = fs.readdirSync(actual, { withFileTypes: true });
-    entradas.forEach(function (entrada) {
-      var full = path.join(actual, entrada.name);
-      if (entrada.isDirectory()) {
-        recorrer(full);
-      } else if (entrada.isFile() && entrada.name.endsWith('.js')) {
-        out.push(full);
+function listJs(dir) {
+  var result = [];
+  if (!fs.existsSync(dir)) return result;
+  (function walk(current) {
+    var entries = fs.readdirSync(current, { withFileTypes: true });
+    entries.forEach(function (entry) {
+      var filePath = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        walk(filePath);
+      } else if (entry.isFile() && entry.name.endsWith('.js')) {
+        result.push(filePath);
       }
     });
   })(dir);
-  return out;
+  return result;
 }
 
 /* --- 1. node --check on tools/, site/, settings/, legal/, assets/js/ --- */
-var archivosJs = []
-  .concat(listarJs(path.join(RAIZ, 'tools')))
-  .concat(listarJs(path.join(RAIZ, 'site')))
-  .concat(listarJs(path.join(RAIZ, 'settings')))
-  .concat(listarJs(path.join(RAIZ, 'legal')))
-  .concat(listarJs(path.join(RAIZ, 'assets', 'js')));
+var jsFiles = []
+  .concat(listJs(path.join(RAIZ, 'tools')))
+  .concat(listJs(path.join(RAIZ, 'site')))
+  .concat(listJs(path.join(RAIZ, 'settings')))
+  .concat(listJs(path.join(RAIZ, 'legal')))
+  .concat(listJs(path.join(RAIZ, 'assets', 'js')));
 
-archivosJs.forEach(function (archivo) {
+jsFiles.forEach(function (archivo) {
   checks += 1;
   try {
     execFileSync(process.execPath, ['--check', archivo], { stdio: 'pipe' });
   } catch (e) {
-    fallos.push(rel(archivo) + ': no parsea (node --check) — ' +
+    failures.push(rel(archivo) + ': no parsea (node --check) — ' +
       (e.stderr ? e.stderr.toString().trim().split('\n')[0] : e.message));
   }
 });
 
 /* --- 2. Standard anatomy of tools/<slug>/ --- */
-var CANONICOS_BASE = ['index.html', 'app.js', 'data.js', 'styles.css'];
+var CANONICAL_BASE = ['index.html', 'app.js', 'data.js', 'styles.css'];
 var STRING_LOCALES = ['es', 'en'];
 var toolsDir = path.join(RAIZ, 'tools');
 var slugs = fs.readdirSync(toolsDir, { withFileTypes: true })
@@ -87,59 +95,59 @@ var slugs = fs.readdirSync(toolsDir, { withFileTypes: true })
 slugs.forEach(function (slug) {
   checks += 1;
   var dir = path.join(toolsDir, slug);
-  var archivos = fs.readdirSync(dir);
-  var faltanBase = CANONICOS_BASE.filter(function (c) { return archivos.indexOf(c) === -1; });
-  var faltanStrings = STRING_LOCALES
+  var files = fs.readdirSync(dir);
+  var missingBase = CANONICAL_BASE.filter(function (c) { return files.indexOf(c) === -1; });
+  var missingStrings = STRING_LOCALES
     .map(function (loc) { return 'strings.' + loc + '.js'; })
-    .filter(function (f) { return archivos.indexOf(f) === -1; });
-  var esperados = CANONICOS_BASE.concat(STRING_LOCALES.map(function (loc) { return 'strings.' + loc + '.js'; }));
-  var sobran = archivos.filter(function (a) { return esperados.indexOf(a) === -1; });
-  if (faltanBase.length || faltanStrings.length || sobran.length) {
-    var detalle = [];
-    if (faltanBase.length) detalle.push('faltan base: ' + faltanBase.join(', '));
-    if (faltanStrings.length) detalle.push('faltan strings: ' + faltanStrings.join(', '));
-    if (sobran.length) detalle.push('sobran: ' + sobran.join(', '));
-    fallos.push('tools/' + slug + '/: ' + detalle.join('; '));
+    .filter(function (f) { return files.indexOf(f) === -1; });
+  var expected = CANONICAL_BASE.concat(STRING_LOCALES.map(function (loc) { return 'strings.' + loc + '.js'; }));
+  var extras = files.filter(function (a) { return expected.indexOf(a) === -1; });
+  if (missingBase.length || missingStrings.length || extras.length) {
+    var detail = [];
+    if (missingBase.length) detail.push('faltan base: ' + missingBase.join(', '));
+    if (missingStrings.length) detail.push('faltan strings: ' + missingStrings.join(', '));
+    if (extras.length) detail.push('sobran: ' + extras.join(', '));
+    failures.push('tools/' + slug + '/: ' + detail.join('; '));
   }
 });
 
 /* --- 3. sw.js <-> disk parity --- */
 checks += 1;
-var swContenido = fs.readFileSync(path.join(RAIZ, 'sw.js'), 'utf8');
-var matchArchivos = swContenido.match(/var ARCHIVOS = \[([\s\S]*?)\];/);
-var rutasSw = [];
-if (matchArchivos) {
+var swContent = fs.readFileSync(path.join(RAIZ, 'sw.js'), 'utf8');
+var archMatch = swContent.match(/var ARCHIVOS = \[([\s\S]*?)\];/);
+var swPaths = [];
+if (archMatch) {
   var re = /'([^']+)'/g;
   var m;
-  while ((m = re.exec(matchArchivos[1])) !== null) {
-    rutasSw.push(m[1]);
+  while ((m = re.exec(archMatch[1])) !== null) {
+    swPaths.push(m[1]);
   }
 } else {
-  fallos.push('sw.js: no se ha encontrado el array ARCHIVOS');
+  failures.push('sw.js: no se ha encontrado el array ARCHIVOS');
 }
 
-rutasSw.forEach(function (ruta) {
-  var full = path.join(RAIZ, ruta.replace(/^\.\//, ''));
-  if (!fs.existsSync(full)) {
-    fallos.push('sw.js: ARCHIVOS incluye ' + ruta + ' pero no existe en disco');
+swPaths.forEach(function (entry) {
+  var filePath = path.join(RAIZ, entry.replace(/^\.\//, ''));
+  if (!fs.existsSync(filePath)) {
+    failures.push('sw.js: ARCHIVOS incluye ' + entry + ' pero no existe en disco');
   }
 });
 
 slugs.forEach(function (slug) {
-  CANONICOS_BASE.concat(STRING_LOCALES.map(function (loc) { return 'strings.' + loc + '.js'; }))
+  CANONICAL_BASE.concat(STRING_LOCALES.map(function (loc) { return 'strings.' + loc + '.js'; }))
     .forEach(function (archivo) {
       var ruta = './tools/' + slug + '/' + archivo;
-      if (rutasSw.indexOf(ruta) === -1) {
-        fallos.push('sw.js: falta ' + ruta + ' en ARCHIVOS');
+      if (swPaths.indexOf(ruta) === -1) {
+        failures.push('sw.js: falta ' + ruta + ' en ARCHIVOS');
       }
     });
 });
 
 /* --- 4. es/en key parity --- */
-function extraerDictDeStrings(archivo) {
-  var capturado = null;
+function extractDictFromStrings(archivo) {
+  var captured = null;
   var sandbox = {
-    App: { i18n: { register: function (dict, loc) { if (typeof loc === 'string') capturado = dict; } } },
+    App: { i18n: { register: function (dict, loc) { if (typeof loc === 'string') captured = dict; } } },
     window: {}
   };
   sandbox.window = sandbox;
@@ -149,50 +157,50 @@ function extraerDictDeStrings(archivo) {
   } catch (e) {
     return null;
   }
-  return capturado;
+  return captured;
 }
 
-function clavesPlanas(obj, prefijo) {
-  var out = [];
+function flatKeys(obj, prefix) {
+  var result = [];
   Object.keys(obj || {}).forEach(function (k) {
-    var clave = prefijo ? prefijo + '.' + k : k;
-    var valor = obj[k];
-    if (valor && typeof valor === 'object' && !Array.isArray(valor)) {
-      out = out.concat(clavesPlanas(valor, clave));
+    var key = prefix ? prefix + '.' + k : k;
+    var value = obj[k];
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      result = result.concat(flatKeys(value, key));
     } else {
-      out.push(clave);
+      result.push(key);
     }
   });
-  return out;
+  return result;
 }
 
-function compararEsEn(dir, etiqueta) {
-  var archivoEs = path.join(dir, 'strings.es.js');
-  var archivoEn = path.join(dir, 'strings.en.js');
-  if (!fs.existsSync(archivoEs) || !fs.existsSync(archivoEn)) return;
+function compareEsEn(dir, label) {
+  var esFile = path.join(dir, 'strings.es.js');
+  var enFile = path.join(dir, 'strings.en.js');
+  if (!fs.existsSync(esFile) || !fs.existsSync(enFile)) return;
   checks += 1;
-  var dictEs = extraerDictDeStrings(archivoEs);
-  var dictEn = extraerDictDeStrings(archivoEn);
+  var dictEs = extractDictFromStrings(esFile);
+  var dictEn = extractDictFromStrings(enFile);
   if (!dictEs || !dictEn) {
-    fallos.push(etiqueta + ': no se han podido extraer los dicts es/en');
+    failures.push(label + ': no se han podido extraer los dicts es/en');
     return;
   }
-  var clavesEs = clavesPlanas(dictEs, '').sort();
-  var clavesEn = clavesPlanas(dictEn, '').sort();
-  var soloEs = clavesEs.filter(function (c) { return clavesEn.indexOf(c) === -1; });
-  var soloEn = clavesEn.filter(function (c) { return clavesEs.indexOf(c) === -1; });
-  if (soloEs.length || soloEn.length) {
-    var detalle = [];
-    if (soloEs.length) detalle.push('solo en es: ' + soloEs.join(', '));
-    if (soloEn.length) detalle.push('solo en en: ' + soloEn.join(', '));
-    fallos.push(etiqueta + ': ' + detalle.join('; '));
+  var keysEs = flatKeys(dictEs, '').sort();
+  var keysEn = flatKeys(dictEn, '').sort();
+  var onlyEs = keysEs.filter(function (c) { return keysEn.indexOf(c) === -1; });
+  var onlyEn = keysEn.filter(function (c) { return keysEs.indexOf(c) === -1; });
+  if (onlyEs.length || onlyEn.length) {
+    var detail = [];
+    if (onlyEs.length) detail.push('solo en es: ' + onlyEs.join(', '));
+    if (onlyEn.length) detail.push('solo en en: ' + onlyEn.join(', '));
+    failures.push(label + ': ' + detail.join('; '));
   }
 }
 
-slugs.forEach(function (slug) { compararEsEn(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
-compararEsEn(path.join(RAIZ, 'site'), 'site/');
-compararEsEn(path.join(RAIZ, 'settings'), 'settings/');
-compararEsEn(path.join(RAIZ, 'legal'), 'legal/');
+slugs.forEach(function (slug) { compareEsEn(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
+compareEsEn(path.join(RAIZ, 'site'), 'site/');
+compareEsEn(path.join(RAIZ, 'settings'), 'settings/');
+compareEsEn(path.join(RAIZ, 'legal'), 'legal/');
 
 /* --- 5. Catalog parity lock ---
    The set of activity slugs must match between:
@@ -203,15 +211,15 @@ compararEsEn(path.join(RAIZ, 'legal'), 'legal/');
 */
 checks += 1;
 var siteHtml = fs.readFileSync(path.join(RAIZ, 'site', 'index.html'), 'utf8');
-var slugsEnSite = [];
+var slugsInSite = [];
 var reHref = /href="\.\.\/tools\/([^/]+)\/index\.html"/g;
 var mh;
 while ((mh = reHref.exec(siteHtml)) !== null) {
-  slugsEnSite.push(mh[1]);
+  slugsInSite.push(mh[1]);
 }
 
-function parsearSlugsDeSw() {
-  var matches = swContenido.match(/'\.\/tools\/([^/]+)\//g) || [];
+function parseSlugsFromSw() {
+  var matches = swContent.match(/'\.\/tools\/([^/]+)\//g) || [];
   var set = new Set();
   matches.forEach(function (m) {
     var slug = m.replace(/'.\/tools\//, '').replace(/\//, '');
@@ -219,7 +227,7 @@ function parsearSlugsDeSw() {
   });
   return set;
 }
-function parsearDataToolInSettings() {
+function parseDataToolInSettings() {
   var html = fs.readFileSync(path.join(RAIZ, 'settings', 'index.html'), 'utf8');
   var re = /data-tool="([^"]+)"/g;
   var set = new Set();
@@ -228,14 +236,14 @@ function parsearDataToolInSettings() {
   return set;
 }
 var slugsSet = new Set(slugs);
-var destinos = { site: new Set(slugsEnSite), settings: parsearDataToolInSettings(), sw: parsearSlugsDeSw() };
-Object.keys(destinos).forEach(function (f) {
-  var targetSet = destinos[f];
+var targets = { site: new Set(slugsInSite), settings: parseDataToolInSettings(), sw: parseSlugsFromSw() };
+Object.keys(targets).forEach(function (f) {
+  var targetSet = targets[f];
   slugs.forEach(function (slug) {
-    if (!targetSet.has(slug)) fallos.push('catálogo: ' + f + ' no contiene el slug "' + slug + '"');
+    if (!targetSet.has(slug)) failures.push('catálogo: ' + f + ' no contiene el slug "' + slug + '"');
   });
   targetSet.forEach(function (slug) {
-    if (!slugsSet.has(slug)) fallos.push('catálogo: ' + f + ' contiene slug inexistente "' + slug + '"');
+    if (!slugsSet.has(slug)) failures.push('catálogo: ' + f + ' contiene slug inexistente "' + slug + '"');
   });
 });
 
@@ -253,7 +261,7 @@ Object.keys(destinos).forEach(function (f) {
    inside "minor annoyance") use word-boundary.
 */
 checks += 1;
-var TERMINOS_PROHIBIDOS = [
+var FORBIDDEN_TERMS = [
   { term: 'discapacidad', match: 'substring' },
   { term: 'disabilit', match: 'substring' },
   { term: 'intelectual', match: 'substring' },
@@ -273,66 +281,163 @@ var TERMINOS_PROHIBIDOS = [
   { term: 'underage', match: 'word' },
   { term: 'children', match: 'word' }
 ];
-function esArchivoDeUsuario(archivo) {
-  var nombre = path.basename(archivo).toLowerCase();
-  return /\.html?$/.test(nombre) || /\.js$/.test(nombre);
+function isUserFile(archivo) {
+  var name = path.basename(archivo).toLowerCase();
+  return /\.html?$/.test(name) || /\.js$/.test(name);
 }
-function listar(dir) {
-  var out = [];
-  if (!fs.existsSync(dir)) return out;
+function listDir(dir) {
+  var result = [];
+  if (!fs.existsSync(dir)) return result;
   fs.readdirSync(dir).forEach(function (f) {
-    var full = path.join(dir, f);
-    if (fs.statSync(full).isFile() && esArchivoDeUsuario(full)) out.push(full);
+    var filePath = path.join(dir, f);
+    if (fs.statSync(filePath).isFile() && isUserFile(filePath)) result.push(filePath);
   });
-  return out;
+  return result;
 }
-var objetivosUsuario = []
-  .concat(listar(path.join(RAIZ, 'site')))
-  .concat(listar(path.join(RAIZ, 'settings')))
-  .concat(listar(path.join(RAIZ, 'legal')));
+var userTargets = []
+  .concat(listDir(path.join(RAIZ, 'site')))
+  .concat(listDir(path.join(RAIZ, 'settings')))
+  .concat(listDir(path.join(RAIZ, 'legal')));
 slugs.forEach(function (slug) {
-  objetivosUsuario = objetivosUsuario.concat(listar(path.join(toolsDir, slug)));
+  userTargets = userTargets.concat(listDir(path.join(toolsDir, slug)));
 });
-objetivosUsuario.forEach(function (archivo) {
-  var contenido = fs.readFileSync(archivo, 'utf8').toLowerCase();
-  TERMINOS_PROHIBIDOS.forEach(function (entrada) {
-    var termino = entrada.term;
-    var encontrado;
-    if (entrada.match === 'word') {
-      encontrado = new RegExp('\\b' + termino.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(contenido);
+userTargets.forEach(function (archivo) {
+  var content = fs.readFileSync(archivo, 'utf8').toLowerCase();
+  FORBIDDEN_TERMS.forEach(function (entry) {
+    var term = entry.term;
+    var found;
+    if (entry.match === 'word') {
+      found = new RegExp('\\b' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(content);
     } else {
-      encontrado = contenido.indexOf(termino.toLowerCase()) !== -1;
+      found = content.indexOf(term.toLowerCase()) !== -1;
     }
-    if (encontrado) {
-      fallos.push(rel(archivo) + ': contiene "' + termino + '" — ninguna página visible puede mencionar discapacidad, terapia ocupacional o menores (ver doc/es/SPEC.md §4)');
+    if (found) {
+      failures.push(rel(archivo) + ': contiene "' + term + '" — ninguna página visible puede mencionar discapacidad, terapia ocupacional o menores (ver doc/es/SPEC.md §4)');
     }
   });
 });
 
 /* --- 7. _headers: CSP source-expression quoting --- */
 checks += 1;
-var contenidoHeaders = fs.readFileSync(path.join(RAIZ, '_headers'), 'utf8');
-contenidoHeaders.split('\n').filter(function (linea) {
-  return /^\s*Content-Security-Policy:/i.test(linea);
-}).forEach(function (linea) {
-  var valor = linea.replace(/^\s*Content-Security-Policy:/i, '');
-  valor.split(';').forEach(function (directiva) {
-    directiva.trim().split(/\s+/).filter(Boolean).forEach(function (token) {
-      var numComillas = (token.match(/'/g) || []).length;
-      if (numComillas === 0) return;
-      var bienFormado = numComillas === 2 && token[0] === "'" && token[token.length - 1] === "'";
-      if (!bienFormado) {
-        fallos.push('_headers: malformed CSP source expression "' + token +
+var headersContent = fs.readFileSync(path.join(RAIZ, '_headers'), 'utf8');
+headersContent.split('\n').filter(function (line) {
+  return /^\s*Content-Security-Policy:/i.test(line);
+}).forEach(function (line) {
+  var value = line.replace(/^\s*Content-Security-Policy:/i, '');
+  value.split(';').forEach(function (directive) {
+    directive.trim().split(/\s+/).filter(Boolean).forEach(function (token) {
+      var quoteCount = (token.match(/'/g) || []).length;
+      if (quoteCount === 0) return;
+      var wellFormed = quoteCount === 2 && token[0] === "'" && token[token.length - 1] === "'";
+      if (!wellFormed) {
+        failures.push('_headers: malformed CSP source expression "' + token +
           '" — quotes should wrap the keyword exactly once (e.g. \'self\', not \'\'self\'\')');
       }
     });
   });
 });
 
+/* --- 8. Usage vs registration ---
+   Point 4 only checks that strings.es.js and strings.en.js agree with
+   EACH OTHER. It does not catch a key that is referenced from
+   index.html (data-i18n*) or app.js (App.i18n.t()/App.i18n.pick(), or
+   a local t() alias — e.g. tools/roman-numerals/app.js defines
+   `function t(key) { return App.i18n.t(key); }`) but was never
+   registered in either language file: browser fallback then renders
+   the literal key name on the page. This section cross-references
+   actual usage sites against the registered keys, per unit
+   (tools/<slug>/, site/, settings/, legal/) and per language.
+*/
+/* Each usage entry is { key, prefix }: prefix=false means the call
+   passed a complete literal key (App.i18n.t('yourStars')) and must
+   match a registered key EXACTLY; prefix=true means the literal was
+   only the start of a string built with '+' concatenation
+   (App.i18n.t('actividad.' + id + '.nombre')) and is validated as a
+   key family below (some registered key must start with it). Without
+   this distinction a literal like 'yourStars' would wrongly pass by
+   "prefix-matching" a registered 'yourStarsBROKEN'. */
+function extractKeysFromHtml(archivo) {
+  if (!fs.existsSync(archivo)) return [];
+  var content = fs.readFileSync(archivo, 'utf8');
+  var keys = [];
+  ['data-i18n', 'data-i18n-aria', 'data-i18n-title'].forEach(function (attr) {
+    var re = new RegExp(attr + '="([^"]+)"', 'g');
+    var m;
+    while ((m = re.exec(content)) !== null) keys.push({ key: m[1], prefix: false });
+  });
+  return keys;
+}
+
+function extractKeysFromAppJs(archivo) {
+  if (!fs.existsSync(archivo)) return [];
+  var content = fs.readFileSync(archivo, 'utf8');
+  var keys = [];
+  /* App.i18n.t('key'), App.i18n.pick('key'), or a local alias t('key').
+     Only literal-first-argument calls are resolvable statically;
+     App.i18n.t(variable) or App.i18n.t(cond ? 'a' : 'b') cannot be
+     resolved and are skipped — same limitation as apptonomia's
+     i18n-keys-smoke.js. Capture group 3 (an optional '+' right after
+     the closing quote) tells apart a complete key from a dynamic
+     prefix. */
+  var re = /\b(?:App\.i18n\.t|App\.i18n\.pick|t)\(\s*(['"])([^'"]+)\1(\s*\+)?/g;
+  var m;
+  while ((m = re.exec(content)) !== null) {
+    keys.push({ key: m[2], prefix: !!m[3] });
+  }
+  return keys;
+}
+
+var GLOBAL_KEY_PREFIXES = ['core.', 'feedback.'];
+function isGlobalKey(key) {
+  return GLOBAL_KEY_PREFIXES.some(function (p) { return key.indexOf(p) === 0; });
+}
+
+function checkUsageVsRegistration(dir, label) {
+  var esFile = path.join(dir, 'strings.es.js');
+  var enFile = path.join(dir, 'strings.en.js');
+  if (!fs.existsSync(esFile) || !fs.existsSync(enFile)) return;
+  checks += 1;
+  var dictEs = extractDictFromStrings(esFile);
+  var dictEn = extractDictFromStrings(enFile);
+  if (!dictEs || !dictEn) return; /* ya reportado en el punto 4 */
+  var keysEs = flatKeys(dictEs, '');
+  var keysEn = flatKeys(dictEn, '');
+  var used = extractKeysFromHtml(path.join(dir, 'index.html'))
+    .concat(extractKeysFromAppJs(path.join(dir, 'app.js')));
+  var seen = {};
+  used = used.filter(function (u) {
+    var id = (u.prefix ? 'prefijo:' : 'exacta:') + u.key;
+    if (isGlobalKey(u.key) || seen[id]) return false;
+    seen[id] = true;
+    return true;
+  });
+
+  ['es', 'en'].forEach(function (loc) {
+    var registered = loc === 'es' ? keysEs : keysEn;
+    var missing = used.filter(function (u) {
+      if (u.prefix) {
+        /* Dynamic-key prefix: valid if at least one registered key in
+           this locale starts with it. */
+        return !registered.some(function (rk) { return rk.indexOf(u.key) === 0; });
+      }
+      return registered.indexOf(u.key) === -1;
+    });
+    if (missing.length) {
+      var labels = missing.map(function (u) { return u.key + (u.prefix ? '.*' : ''); });
+      failures.push(label + ': usada(s) pero no registrada(s) en strings.' + loc + '.js: ' + labels.join(', '));
+    }
+  });
+}
+
+slugs.forEach(function (slug) { checkUsageVsRegistration(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
+checkUsageVsRegistration(path.join(RAIZ, 'site'), 'site/');
+checkUsageVsRegistration(path.join(RAIZ, 'settings'), 'settings/');
+checkUsageVsRegistration(path.join(RAIZ, 'legal'), 'legal/');
+
 /* --- Result --- */
-if (fallos.length) {
-  console.log('FALLOS (' + fallos.length + '):');
-  fallos.forEach(function (f) { console.log('  - ' + f); });
+if (failures.length) {
+  console.log('FALLOS (' + failures.length + '):');
+  failures.forEach(function (f) { console.log('  - ' + f); });
   process.exitCode = 1;
 } else {
   console.log('OK (' + checks + ' checks)');

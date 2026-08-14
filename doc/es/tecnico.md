@@ -78,7 +78,7 @@ calculia/
 │   ├── js/dinero.js       #   window.App.dinero (usado por El Monedero)
 │   ├── fonts/              #   woff2 autoalojadas (Atkinson Hyperlegible, Nunito)
 │   └── img/icono.svg       #   icono de la app (también icono PWA)
-├── tools/<slug>/          # Nivel 2: una carpeta por ACTIVIDAD (12 en total)
+├── tools/<slug>/          # Nivel 2: una carpeta por ACTIVIDAD (14 en total)
 │   ├── index.html         #   estructura y carga de assets
 │   ├── app.js             #   solo lógica
 │   ├── data.js             #   solo datos
@@ -92,12 +92,13 @@ calculia/
 └── _headers                # Cabeceras de caché y seguridad de Cloudflare Pages
 ```
 
-Misma arquitectura de tres niveles que Apptonomia, acotada a 12
+Misma arquitectura de tres niveles que Apptonomia, acotada a 14
 actividades agrupadas en dos bloques en vez de 7 módulos terapéuticos:
 `site/index.html` tiene un bloque "🧮 Matemáticas" (Los Números,
-Cantidades, Las Tablas, Números Romanos) y un bloque "🧩 Razonamiento y
-lógica" (Adivinanzas, Patrones, El Monedero, El Reloj, Historias, ¿Qué
-no encaja?, Puzzle, La Oca).
+Fracciones y Medidas, Restar y Cálculo Mental, Dinero, Las Tablas,
+Cantidades, Números Romanos) y un bloque "🧩 Razonamiento y lógica"
+(Adivinanzas, Patrones, El Monedero, El Reloj, Historias, ¿Qué no
+encaja?, Puzzle).
 
 ### 2.1 `assets/` — núcleo compartido, conservado entero
 
@@ -106,7 +107,7 @@ Este núcleo se migró desde Apptonomia **sin recortar ninguna función**
 `Apptonomia` → `Calculia` en comentarios/textos/`document.title`). A
 diferencia del proyecto hermano de una sola actividad Teclatlon —que
 pudo eliminar funciones sin usar con seguridad porque solo el código de
-una actividad llamaba al núcleo—, Calculia tiene 12 actividades
+una actividad llamaba al núcleo—, Calculia tiene 14 actividades
 distintas, y entre todas usan casi cada rincón de la API:
 
 - `App.dinero` (`dinero.js`): usado por El Monedero para dibujar y
@@ -141,7 +142,7 @@ de datos específico.
 Dos acciones, mismo patrón de confirmación en dos pasos que Apptonomia:
 
 - **Restablecer datos de la persona**: solo elimina la preferencia de
-  idioma. Ninguna de las 12 actividades de Calculia guarda un nombre u
+  idioma. Ninguna de las 14 actividades de Calculia guarda un nombre u
   otro dato personal, así que aquí no hay lista `TOOLS_WITH_NAME`
   (el settings/app.js de Apptonomia sí tiene una, para Piano).
 - **Restablecer toda la aplicación**: borra todas las claves `calculia:*`.
@@ -157,12 +158,25 @@ de reinventarla.
 
 ## 3. Internacionalización
 
-Mismo patrón multi-archivo que Apptonomia: `strings.es.js` y
-`strings.en.js` registran cada uno un idioma con
-`App.i18n.register(dict, 'es' | 'en')`; ambos archivos se cargan siempre,
-y `App.i18n.locale()` decide cuál está activo. `scripts/check.js`
-comprueba la paridad de claves entre ambos archivos para cada
-`tools/<slug>/`, además de `site/`, `settings/` y `legal/`.
+Patrón multi-archivo, **diseñado para más de dos idiomas** desde el
+primer commit (la arquitectura viene del i18n maduro de Apptonomia).
+Hoy se distribuye en español (`es`, por defecto) e inglés (`en`); para
+añadir un tercer locale se sigue la receta de
+[`doc/es/I18N.md`](I18N.md) (y su espejo en inglés
+[`doc/en/I18N.md`](../en/I18N.md)).
+
+Resumen: `strings.<locale>.js` por actividad/landing registra cada
+uno un idioma con `App.i18n.register(dict, '<locale>')`; ambos
+archivos se cargan siempre y `App.i18n.locale()` decide cuál está
+activo. `scripts/check.js` comprueba la paridad de claves entre todos
+los archivos de locale para cada `tools/<slug>/`, además de `site/`,
+`settings/` y `legal/`.
+
+El núcleo está listo para multi-idioma desde el inicio — ver
+`I18N.md` §4 para los tres puntos binarios `es`/`en` que hay que
+generalizar al añadir un tercer idioma (mapa `BCP47` en `i18n.js`,
+`DECIMAL_SEP` en `dinero.js` y mapa `BOTONES_IDIOMA` en
+`site/index.html`).
 
 ---
 
@@ -172,6 +186,20 @@ comprueba la paridad de claves entre ambos archivos para cada
   1. Archivo nuevo → añádelo a la lista `ARCHIVOS`.
   2. Cualquier cambio a un archivo cacheado → sube `VERSION`
      (`calculia-vN`), o quienes tengan la PWA instalada no recibirán el cambio.
+- **Sube `VERSION` en cada commit que toque un archivo cacheado.** No
+  es solo "añadir una actividad": aplica a cualquier retoque de CSS,
+  cualquier fix de cadena, cualquier refactor de JS en `tools/`,
+  cada asignación de color de un símbolo. La caché es silenciosa:
+  el desarrollador ve el código nuevo en un Ctrl+Shift+R, pero el
+  usuario ve la versión vieja hasta que desregistre el SW a mano. El
+  coste de subir el entero es trivial; el coste de no subirlo es
+  "el usuario cree que el fix no llegó". Sube liberalmente, no de
+  forma conservadora.
+  El patrón de bug en la práctica: el desarrollador edita una clase
+  CSS, espera ver el nuevo color en la app en ejecución, no lo ve,
+  "arregla" el código otra vez, sigue sin verlo — y lo único que
+  faltaba era el bump de `VERSION`. La solución es bumpear primero y
+  verificar después.
 - `manifest.json` actualmente incluye un único icono SVG (`sizes: "any"`).
   Conviene añadir un conjunto de iconos PNG 192×192 / 512×512 para la
   mejor experiencia de "Añadir a pantalla de inicio" en iOS, que no usa

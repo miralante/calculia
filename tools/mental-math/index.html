@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subtraction and Mental Math | Calculia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="title">� Restar y Cálculo Mental</h1>
+      <span class="stars" id="stars">⭐ 0</span>
+    </header>
+
+    <section id="screenMenu" class="pila">
+      <div class="fila centrado-fila">
+        <p class="instruccion" id="instruction" data-i18n="instructionMenu">Elige una actividad.</p>
+      </div>
+      <div id="activitiesMenu"></div>
+    </section>
+
+    <section id="screenLevels" class="oculto pila">
+      <h2 id="activityTitle"></h2>
+      <div class="fila centrado-fila">
+        <p class="instruccion" id="activityInstruction"></p>
+      </div>
+      <div class="pila" id="levels"></div>
+      <button type="button" class="btn btn-secundario" id="btnBackToMenu" data-i18n="btnBackToMenu">← Otras actividades</button>
+    </section>
+
+    <section id="screenGame" class="oculto pila">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+        <span class="progress-text" id="progressText">0 / 6</span>
+      </div>
+
+      <div class="card centrado pila">
+        <p class="enunciado" id="prompt"></p>
+        <div class="visual" id="visual"></div>
+        <p class="leyenda oculto" id="legend"></p>
+      </div>
+
+      <div class="pila opciones" id="options"></div>
+
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="fila explicacion oculto" id="explanationWrap">
+        <p id="explanation" aria-live="polite"></p>
+      </div>
+      <button type="button" class="btn oculto" id="btnNext" data-i18n="core.next">Siguiente →</button>
+    </section>
+
+    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
+      <div class="emoji-grande" aria-hidden="true">🎉</div>
+      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+      <p id="endSummary"></p>
+      <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
+      <button type="button" class="btn btn-secundario oculto" id="btnHarder"></button>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secundario" id="btnOtherLevel" data-i18n="otherLevel">Elegir otro nivel</button>
+      <button type="button" class="btn btn-secundario" id="btnOtherActivity" data-i18n="btnOtherActivity">Otra actividad</button>
+      <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
+    </section>
+    <footer class="pie-app">
+      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+    </footer>
+  </div>
+
+  <script src="../../assets/js/utils.js"></script>
+  <script src="../../assets/js/i18n.js"></script>
+  <script src="../../assets/js/tts.js"></script>
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/feedback.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="../../assets/js/sw-register.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Historias | Apptonomia</title>
+  <title>Stories | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
@@ -18,45 +18,42 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-    <!-- Start screen -->
-    <section id="pantallaInicio" class="pila centrado">
+    <section id="screenStart" class="pila centrado">
       <div class="fila centrado-fila">
-        <p class="instruccion" id="instruccion" data-i18n="instruccion">Toca las viñetas en el orden correcto, de primero a último.</p>
+        <p class="instruccion" id="instruction" data-i18n="instruction">Toca las viñetas en el orden correcto, de primero a último.</p>
       </div>
-      <h2 data-i18n="tituloNiveles">Elige el nivel</h2>
-      <div class="pila" id="niveles"></div>
+      <h2 data-i18n="levelsTitle">Elige una actividad</h2>
+      <div class="pila" id="levels"></div>
     </section>
 
-    <!-- Game screen -->
-    <section id="pantallaJuego" class="oculto pila">
+    <section id="screenGame" class="oculto pila">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText">0 / 5</span>
       </div>
 
-      <p class="historia-titulo centrado" id="historiaTitulo"></p>
+      <p class="historia-titulo centrado" id="storyTitle"></p>
 
-      <p class="etiqueta centrado" data-i18n="etiquetaOrden">Tu orden</p>
-      <div class="pila-secuencia" id="secuencia"></div>
+      <p class="etiqueta centrado" data-i18n="orderLabel">Your order</p>
+      <div class="pila-secuencia" id="sequence"></div>
 
-      <p class="etiqueta centrado" data-i18n="etiquetaVinetas">Viñetas</p>
-      <div class="pila-disponibles" id="disponibles"></div>
+      <p class="etiqueta centrado" data-i18n="panelsLabel">Panels</p>
+      <div class="pila-disponibles" id="available"></div>
 
       <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="explicacion-wrap oculto" id="explicacionWrap">
-        <p id="explicacion" class="explicacion" aria-live="polite"></p>
+      <div class="explicacion-wrap oculto" id="explanationWrap">
+        <p id="explanation" class="explicacion" aria-live="polite"></p>
       </div>
-      <button type="button" class="btn oculto" id="btnSiguiente" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn oculto" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
-    <!-- End screen -->
-    <section id="pantallaFinal" class="oculto centrado pila" aria-live="polite">
-      <div class="emoji-grande" aria-hidden="true">🎉</div>
-      <h2 data-i18n="finalTitulo">¡Ronda completada!</h2>
-      <p id="resumenFinal"></p>
-      <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
-      <button type="button" class="btn" id="btnRepetir" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secundario" id="btnOtroNivel" data-i18n="otroNivel">Elegir otro nivel</button>
+    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
+      <div class="emoji-grande" aria-hidden="true">�</div>
+      <h2 data-i18n="endTitle">¡Ronda completada!</h2>
+      <p id="endSummary"></p>
+      <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secundario" id="btnOtherLevel" data-i18n="otherLevel">Elegir otra actividad</button>
       <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer class="pie-app">
@@ -73,11 +70,6 @@
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../../sw.js').catch(function () {});
-    }
-  </script>
+  <script src="../../assets/js/sw-register.js"></script>
 </body>
 </html>
-

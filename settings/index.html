@@ -48,8 +48,11 @@
             <thead><tr><th data-i18n="colActivity">Actividad</th><th data-i18n="colProgress">Progreso</th></tr></thead>
             <tbody>
               <tr><td data-i18n="activity.numbers">Los Números</td><td data-tool="numbers">—</td></tr>
-              <tr><td data-i18n="activity.quantities">Cantidades</td><td data-tool="quantities">—</td></tr>
+              <tr><td data-i18n="activity.fractions-measures">Fracciones y Medidas</td><td data-tool="fractions-measures">—</td></tr>
+              <tr><td data-i18n="activity.mental-math">Restar y Cálculo Mental</td><td data-tool="mental-math">—</td></tr>
+              <tr><td data-i18n="activity.money">Dinero</td><td data-tool="money">—</td></tr>
               <tr><td data-i18n="activity.math-tables">Las Tablas</td><td data-tool="math-tables">—</td></tr>
+              <tr><td data-i18n="activity.quantities">Cantidades</td><td data-tool="quantities">—</td></tr>
               <tr><td data-i18n="activity.roman-numerals">Números Romanos</td><td data-tool="roman-numerals">—</td></tr>
             </tbody>
           </table>
@@ -67,7 +70,6 @@
               <tr><td data-i18n="activity.stories">Historias</td><td data-tool="stories">—</td></tr>
               <tr><td data-i18n="activity.odd-one-out">¿Qué no encaja?</td><td data-tool="odd-one-out">—</td></tr>
               <tr><td data-i18n="activity.puzzle">Puzzle</td><td data-tool="puzzle">—</td></tr>
-              <tr><td data-i18n="activity.oca">La Oca</td><td data-tool="oca">—</td></tr>
             </tbody>
           </table>
         </article>
@@ -104,23 +106,6 @@
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="app.js"></script>
-  <script>
-    (function () {
-      'use strict';
-      function paintLanguageSelector() {
-        var active = App.i18n.locale();
-        document.getElementById('btnIdiomaEs').setAttribute('aria-pressed', String(active === 'es'));
-        document.getElementById('btnIdiomaEn').setAttribute('aria-pressed', String(active === 'en'));
-      }
-      document.getElementById('btnIdiomaEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
-      document.getElementById('btnIdiomaEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
-      paintLanguageSelector();
-    })();
-  </script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../sw.js').catch(function () {});
-    }
-  </script>
+  <script src="../assets/js/sw-register.js"></script>
 </body>
 </html>

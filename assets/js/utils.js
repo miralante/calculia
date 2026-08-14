@@ -34,7 +34,7 @@
   }
 
   /** Today's date as 'YYYY-MM-DD' (for daily routines). */
-  function hoy() {
+  function today() {
     var d = new Date();
     var m = String(d.getMonth() + 1).padStart(2, '0');
     var day = String(d.getDate()).padStart(2, '0');
@@ -54,18 +54,18 @@
      is released automatically when the tab is hidden). */
   if ('wakeLock' in navigator) {
     var wakeLockSentinel = null;
-    var pedirWakeLock = function () {
+    var requestWakeLock = function () {
       navigator.wakeLock.request('screen').then(function (sentinel) {
         wakeLockSentinel = sentinel;
       }).catch(function () { /* denied or unavailable: keep going without the lock */ });
     };
-    document.addEventListener('pointerdown', function primeraVez() {
-      pedirWakeLock();
-      document.removeEventListener('pointerdown', primeraVez);
+    document.addEventListener('pointerdown', function onFirstInteraction() {
+      requestWakeLock();
+      document.removeEventListener('pointerdown', onFirstInteraction);
     });
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'visible' && wakeLockSentinel) {
-        pedirWakeLock();
+        requestWakeLock();
       }
     });
   }
@@ -74,7 +74,7 @@
     shuffle: shuffle,
     $: $,
     $$: $$,
-    hoy: hoy,
+    today: today,
     reducedMotion: reducedMotion
   };
 })();

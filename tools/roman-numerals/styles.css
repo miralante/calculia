@@ -1,5 +1,15 @@
 /* Roman Numerals — tool-specific styles. Shared styles live in assets/css/.
-   Acento del módulo Pensar y contar (teal --mod-razonamiento). */
+   Acento del módulo Pensar y contar (teal --mod-razonamiento).
+
+   Diseño de la mecánica con colores:
+     I → azul claro   (rgb 95 158 215)
+     V → verde        (rgb 96 168 116)
+     X → naranja      (rgb 217 138 64)
+   Cada letra del número se muestra con su color para asociar
+   visualmente el símbolo con su valor decimal. La resta (letra
+   menor delante de mayor) se marca en rojo para reforzar la
+   regla. La pista óptico-simbólica sustituye al audio (este
+   módulo no usa TTS). */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 
@@ -7,9 +17,26 @@
   background: var(--mod-razonamiento);
 }
 
-.instruction { font-size: var(--texto-base); }
+.instruction { font-size: var(--texto-pequeno); }
 
 .center-row { justify-content: center; }
+
+/* Cabecera de la mini-ronda de refuerzo de fallos. Solo se muestra
+   cuando enRefuerzo=true (app.js). Borde y fondo suaves con el
+   color del módulo para que sea visible pero sin parecer una
+   "alerta": reforzar no es un castigo, es un repaso. */
+.round-header {
+  background: var(--mod-razonamiento-suave);
+  color: var(--mod-razonamiento);
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  padding: 8px 14px;
+  font-weight: 700;
+  font-size: var(--texto-pequeno);
+  text-align: center;
+  margin: 0 auto;
+  max-width: 480px;
+}
 
 /* ---- Ficha de referencia (I, V, X) ---- */
 .reference-card {
@@ -53,13 +80,30 @@
 
 .progress-bar { margin-top: var(--espacio); }
 
-/* ---- Pantalla de juego ---- */
-.card { border-color: var(--mod-razonamiento-suave); margin-top: var(--espacio-grande); }
+/* Cabecera de la mini-ronda de refuerzo. Se muestra solo cuando la
+   ronda actual es de repaso, con tono amable (acento del módulo)
+   y sin icono de advertencia para no transmitir presión (regla 5:
+   los errores nunca se castigan). */
+.round-header {
+  margin: var(--espacio) auto 0;
+  padding: 10px 16px;
+  border-radius: var(--radio);
+  background: var(--mod-razonamiento-suave);
+  color: var(--mod-razonamiento);
+  font-weight: 700;
+  text-align: center;
+  max-width: 560px;
+}
 
-.numeral-display {
-  font-size: 64px;
-  font-weight: 800;
-  letter-spacing: 2px;
+/* ---- Pantalla de juego ---- */
+.card { border-color: var(--mod-razonamiento-suave); }
+
+.context-text {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-suave);
+  text-align: center;
+  margin: 0;
+  max-width: 480px;
 }
 
 .question { color: var(--color-texto-suave); }
@@ -68,11 +112,438 @@
 
 #endScreen { padding-top: 48px; }
 
-#endScreen .btn { align-self: center; min-width: 280px; 
+#endScreen .btn { align-self: center; min-width: 280px; }
+
 #endScreen .transferencia {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);
   max-width: 480px;
 }
+
+/* ============================================================
+   Paleta de colores por letra (I, V, X)
+   ============================================================ */
+:root {
+  --roman-i: #5F8ED7;
+  --roman-i-bg: #E5EEF9;
+  --roman-v: #60A874;
+  --roman-v-bg: #E0F1E5;
+  --roman-x: #D98A40;
+  --roman-x-bg: #FBE9D6;
+  --roman-resta: #C9483E;
+  --roman-resta-bg: #FBE6E3;
+}
+
+/* Aplica la paleta a cualquier letra, esté sola o como parte
+   de un Roman numeral completo. font-weight reforzado para que
+   el color se lea con peso, no solo con tono (importante para
+   usuarios con baja visión de color). */
+.letra-i, .roman-join .ltr-I { color: var(--roman-i); font-weight: 800; }
+.letra-v, .roman-join .ltr-V { color: var(--roman-v); font-weight: 800; }
+.letra-x, .roman-join .ltr-X { color: var(--roman-x); font-weight: 800; }
+.letra-resta            { color: var(--roman-resta); font-weight: 800; }
+
+/* Same specificity as .roman-join .ltr-X above (two classes), placed
+   after it so source order lets "subtracts" win over the letter's
+   own color when a token is both (e.g. the I in IV). */
+.roman-join .letra-resta { color: var(--roman-resta); }
+
+/* Cada letra grande con borde + fondo coloreado, útil para la
+   fila de referencia y para la descomposición. */
+.symbol-chip.letra-i, .deco-token.letra-i { background: var(--roman-i-bg); border-color: var(--roman-i); color: var(--roman-i); }
+.symbol-chip.letra-v, .deco-token.letra-v { background: var(--roman-v-bg); border-color: var(--roman-v); color: var(--roman-v); }
+.symbol-chip.letra-x, .deco-token.letra-x { background: var(--roman-x-bg); border-color: var(--roman-x); color: var(--roman-x); }
+.symbol-chip.letra-resta, .deco-token.letra-resta { background: var(--roman-resta-bg); border-color: var(--roman-resta); color: var(--roman-resta); }
+
+/* ============================================================
+   Pantalla 1: introducción
+   ============================================================ */
+.intro-buttons {
+  justify-content: space-between;
+  gap: var(--espacio);
+}
+
+.carousel-card {
+  border-color: var(--mod-razonamiento-suave);
+  align-items: center;
+}
+
+.carousel-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  padding: 4px var(--espacio);
+  border: 2px dashed var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  width: 100%;
+  max-width: 480px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s ease;
+}
+
+.carousel-display:active { transform: scale(0.97); }
+
+.carousel-display:focus-visible {
+  outline: 3px solid var(--mod-razonamiento);
+  outline-offset: 2px;
+}
+
+.carousel-caption {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto);
+  text-align: center;
+  margin: 0;
+  min-height: 1.2em;
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio);
+  width: 100%;
+}
+
+.carousel-controls .btn {
+  min-width: 64px;
+  align-self: center;
+  padding: 4px 14px;
+}
+
+
+.famosos-card {
+  border-color: var(--mod-razonamiento-suave);
+  align-items: center;
+}
+
+.famoso-ejemplo {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  padding: var(--espacio) var(--espacio-grande);
+  border: 3px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  text-align: center;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Fila que contiene el ejemplo famoso + botón de audio. El flex
+   permite que el botón quede a la derecha del romano en pantallas
+   anchas y, en pantallas estrechas, que se coloque debajo sin
+   romper el centrado. */
+.famoso-ejemplo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio);
+  width: 100%;
+  max-width: 560px;
+  flex-wrap: wrap;
+}
+
+.famoso-ejemplo-row .famoso-ejemplo {
+  flex: 1 1 240px;
+  min-width: 200px;
+  max-width: 460px;
+}
+
+/* Misma idea para el enunciado del quiz: romano/texto + botón
+   de audio en una fila, con el botón a la derecha. */
+.quiz-shown-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio);
+  width: 100%;
+  max-width: 560px;
+  flex-wrap: wrap;
+}
+
+.quiz-shown-row .quiz-shown {
+  flex: 1 1 240px;
+  min-width: 200px;
+  max-width: 460px;
+}
+
+/* Botones de audio compactos para el enunciado (solo emoji, sin
+   texto). Mantienen el tamaño mínimo accesible. */
+.btn-quiz-audio,
+.btn-famoso-audio {
+  min-width: 56px;
+  min-height: 56px;
+  padding: 0 16px;
+  font-size: 24px;
+  flex: 0 0 auto;
+}
+
+.famoso-texto {
+  font-size: var(--texto-base);
+  color: var(--color-texto);
+  text-align: center;
+  margin: 0;
+  max-width: 480px;
+  min-height: 1.5em;
+}
+
+
+.intro-card {
+  border-color: var(--mod-razonamiento-suave);
+}
+
+/* ============================================================
+   Pantalla 2: recordatorio (mecánica con colores)
+   ============================================================ */
+.reminder-buttons {
+  justify-content: center;
+  margin-top: var(--espacio-grande);
+}
+
+.symbols-card {
+  border-color: var(--mod-razonamiento-suave);
+  align-items: center;
+}
+
+.symbols-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--espacio);
+  width: 100%;
+}
+
+.symbol-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--espacio);
+  min-width: 140px;
+  border: 3px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+
+.symbol-pill .pill-letter {
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.symbol-pill .pill-value {
+  /* El color lo pone la clase letra-i / letra-v / letra-x del
+     pill (mismo color que el símbolo al que pertenece). Se
+     re-declara aquí explícitamente (en vez de heredar de
+     .letra-i/.letra-v/.letra-x) para que la especificidad
+     .symbol-pill .pill-value no se quede sin color en
+     navegadores que no aplican la cascada esperada. */
+  font-size: var(--texto-base);
+  font-weight: 700;
+  margin: 0 4px;
+}
+.symbol-pill .pill-value.letra-i { color: var(--roman-i); }
+.symbol-pill .pill-value.letra-v { color: var(--roman-v); }
+.symbol-pill .pill-value.letra-x { color: var(--roman-x); }
+.symbol-pill .pill-value.letra-resta { color: var(--roman-resta); }
+
+.symbol-pill .pill-caption {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-suave);
+  text-align: center;
+}
+
+.rule-card {
+  border-color: var(--mod-razonamiento-suave);
+  align-items: center;
+  gap: var(--espacio);
+}
+
+.rule-title {
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+  font-size: var(--texto-base);
+  color: var(--color-texto);
+}
+
+.rule-example {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.roman-join {
+  display: inline-flex;
+  gap: 4px;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.roman-join .ltr {
+  display: inline-block;
+  line-height: 1;
+}
+
+.rule-equals {
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+/* ============================================================
+   Pantalla de juego: descomposición con colores
+   ============================================================ */
+.quiz-card {
+  border-color: var(--mod-razonamiento-suave);
+  align-items: center;
+}
+
+.quiz-shown {
+  font-size: 80px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-align: center;
+  min-height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.decomposition {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--espacio);
+  padding: var(--espacio);
+  border: 2px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  width: 100%;
+  max-width: 480px;
+}
+
+.deco-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: var(--texto-base);
+  font-variant-numeric: tabular-nums;
+}
+
+.deco-row.deco-formula {
+  font-size: var(--texto-grande);
+  font-weight: 800;
+}
+
+.deco-token {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  padding: 4px 10px;
+  border: 2px solid currentColor;
+  border-radius: var(--radio);
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+/* Las letras de un chunk (una para "V", varias para un par
+   resta-suma como "IV" o una tirada repetida como "III"), cada una
+   con su propio color. */
+.deco-letters {
+  display: inline-flex;
+  gap: 2px;
+}
+
+/* El valor decimal del chunk, pequeño y bajo las letras, para
+   asociar símbolo(s) → color → valor. */
+.deco-token-value {
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.deco-op {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-texto);
+}
+
+.deco-equals {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-texto);
+}
+
+.deco-total, .deco-formula-text {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-texto);
+}
+
+/* Opciones: marca visual para los distractor siempre presentes */
+.btn-opcion.distractor-no, .btn-opcion.distractor-inf {
+  position: relative;
+}
+
+.btn-opcion.distractor-no::after,
+.btn-opcion.distractor-inf::after {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 4px;
+  border: 2px dashed var(--color-texto-suave);
+  opacity: 0.35;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.btn-opcion.distractor-no::before {
+  content: "0";
+  position: absolute;
+  top: -10px;
+  right: 8px;
+  background: var(--color-superficie);
+  padding: 0 6px;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-suave);
+  font-weight: 700;
+}
+
+.btn-opcion.distractor-inf::before {
+  content: "∞";
+  position: absolute;
+  top: -10px;
+  right: 8px;
+  background: var(--color-superficie);
+  padding: 0 6px;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-suave);
+  font-weight: 700;
+}
+
+/* Pantalla final */
+@media (max-width: 640px) {
+  .carousel-display, .famoso-ejemplo { font-size: 56px; }
+  .symbol-pill { min-width: 120px; }
+  .quiz-shown { font-size: 64px; }
+  .roman-join { font-size: 36px; }
 }

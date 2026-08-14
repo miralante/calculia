@@ -14,7 +14,6 @@
     "navResponsible": 'Who processes your data',
     "navData": 'What we save',
     "navRights": 'Your rights',
-    "navMinors": 'Minors',
     "navContact": 'Changes and contact',
 
     "responsibleTitle": 'Who processes your data',
@@ -39,10 +38,6 @@
     "rightsItem2Text": 'deletes absolutely everything, as if it were installed for the first time.',
     "rightsP3": 'You can also delete this data by clearing this site\'s browsing data from your browser\'s settings.',
     "rightsLinkSettings": 'Go to Settings',
-
-    "minorsTitle": 'Minors and people with a disability',
-    "minorsP1": 'Calculia is designed to be used autonomously by anyone, including minors and people with an intellectual disability.',
-    "minorsP2": 'Since the app does not collect personal data on any server, no guardian consent is needed to process data: there is no processing to authorize. We do recommend the usual supervision a family or professional would give to the use of any device.',
 
     "contactTitle": 'Changes and contact',
     "contactP1": 'This page may be updated if the app changes.',

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apptonomia</title>
+  <title>Calculia</title>
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
   <link rel="stylesheet" href="../../assets/css/components.css">
@@ -13,19 +13,27 @@
   <div class="container">
     <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
     <header class="tool-header centrado">
-      <h1 data-i18n="title">↔️ Cantidades</h1>
+      <h1 data-i18n="title">👀 Cantidades</h1>
       <div class="fila centrado-fila">
-        <p id="instruction" data-i18n="instruction">Mueve la barra para practicar cantidades.</p>
+        <p id="instruction" data-i18n="instruction">Lee y escribe números hasta mil millones.</p>
       </div>
       <p class="stars" id="stars">⭐ 0</p>
     </header>
 
     <main>
+      <!-- Menú principal: 4 prácticas -->
       <section id="screenMenu" class="pila" aria-labelledby="menuTitle">
         <h2 id="menuTitle" data-i18n="choosePractice">Elige qué quieres practicar.</h2>
         <div class="practice-grid" id="practiceGrid"></div>
       </section>
 
+      <!-- Pantalla de ejercicio.
+           Zonas por modo (todas viven aquí, app.js muestra/oculta según el modo):
+             - #numberShown: número que se muestra al usuario (leer, puntos).
+             - #numberWithSep: número SIN separador (puntos).
+             - #optionsGrid: 3 opciones para descomponer.
+             - #answerInput: input de texto para leer/escribir/puntos.
+             - #btnEscuchar: botón de audio (escribir y el refuerzo tras ver). -->
       <section id="screenTask" class="pila oculto" aria-live="polite">
         <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
         <p class="progress-text" id="progressText"></p>
@@ -33,18 +41,33 @@
           <p class="task-icon" id="taskIcon" aria-hidden="true"></p>
           <h2 id="prompt"></h2>
           <p class="task-detail" id="taskDetail"></p>
-          <div class="value-display" id="valueDisplay" aria-live="polite"></div>
-          <div class="slider-wrap">
-            <label class="sr-only" for="amountSlider" id="sliderLabel"></label>
-            <input type="range" id="amountSlider" aria-label="Cantidad elegida">
-            <div class="slider-ends" id="sliderEnds" aria-hidden="true"></div>
-          </div>
-          <div class="fila centrado-fila">
-            <button type="button" class="btn btn-secundario step-button" id="decrease" aria-label="Bajar">−</button>
-            <button type="button" class="btn" id="checkAnswer" data-i18n="check">Comprobar</button>
-            <button type="button" class="btn btn-secundario step-button" id="increase" aria-label="Subir">+</button>
-          </div>
+
+          <!-- Zona "leer": se muestra el número formateado para que el usuario lo copie -->
+          <div class="number-shown" id="numberShown" aria-live="polite"></div>
+
+          <!-- Zona "puntos": se muestra el número SIN separador -->
+          <div class="number-shown number-shown--raw" id="numberWithSep" aria-live="polite"></div>
+
+          <!-- Zona "descomponer": número con cifras coloreadas por posición -->
+          <div class="number-shown number-shown--colored" id="numberColored" aria-live="polite"></div>
+
+          <!-- Leyenda de colores, sólo se muestra en descomponer -->
+          <p class="leyenda-pos oculto" id="legend" aria-hidden="true"></p>
+
+          <!-- Input para escribir la respuesta (leer / escribir / puntos) -->
+          <input type="text" id="answerInput" class="answer-input oculto"
+                 inputmode="numeric" autocomplete="off" autocapitalize="off"
+                 autocorrect="off" spellcheck="false"
+                 data-i18n-aria="answerInputAria" aria-label="Escribe el número">
+
+          <!-- 3 opciones para descomponer (máx. 3 por SPEC §6 regla 11) -->
+          <div id="optionsGrid" class="options-grid oculto" aria-label="Opciones"></div>
+
+          <button type="button" class="btn btn-audio oculto" id="btnEscuchar"
+                  data-i18n-aria="audioAria" aria-label="Escuchar el número">🔊</button>
+
           <p class="feedback" id="feedback" aria-live="polite"></p>
+          <button type="button" class="btn" id="checkAnswer" data-i18n="check">Comprobar</button>
           <button type="button" class="btn oculto" id="nextTask" data-i18n="core.next">Siguiente →</button>
         </article>
         <button type="button" class="btn btn-secundario" id="backToMenu" data-i18n="core.backToMenu">Volver al menú</button>
@@ -53,7 +76,7 @@
       <section id="screenFinish" class="pila oculto centrado">
         <h2 data-i18n="roundComplete">¡Ronda terminada!</h2>
         <p id="finishText"></p>
-        <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
+        <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
         <button type="button" class="btn" id="playAgain" data-i18n="core.playAgain">Jugar otra vez</button>
         <button type="button" class="btn btn-secundario" id="chooseAnother" data-i18n="chooseAnother">Elegir otra práctica</button>
       </section>

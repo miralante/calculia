@@ -1016,30 +1016,18 @@ const NIVELES_BASE = [
     }
 ];
 
-/* Name and description of each level, per language (id -> {nombre, descripcion}). */
-const NOMBRES_NIVEL = {
-  es: {
-    1: { nombre: 'Nivel 1', descripcion: 'Colores y formas' },
-    2: { nombre: 'Nivel 2', descripcion: 'Series de 3 y tamaños' },
-    3: { nombre: 'Nivel 3', descripcion: 'Números' },
-    4: { nombre: 'Nivel 4', descripcion: 'Descifra el código' }
-  },
-  en: {
-    1: { nombre: 'Level 1', descripcion: 'Colours and shapes' },
-    2: { nombre: 'Level 2', descripcion: 'Sets of 3 and sizes' },
-    3: { nombre: 'Level 3', descripcion: 'Numbers' },
-    4: { nombre: 'Level 4', descripcion: 'Crack the code' }
-  }
+/* Description of each activity, per language (id -> descripcion). */
+const DESCRIPCION_NIVEL = {
+  es: { 1: 'Colores y formas', 2: 'Series de 3 y tamaños', 3: 'Números', 4: 'Descifra el código' },
+  en: { 1: 'Colours and shapes', 2: 'Sets of 3 and sizes', 3: 'Numbers', 4: 'Crack the code' }
 };
 
 function nivelesPatrones(loc) {
-  var nombres = NOMBRES_NIVEL[loc] || NOMBRES_NIVEL.es;
+  var descripciones = DESCRIPCION_NIVEL[loc] || DESCRIPCION_NIVEL.es;
   return NIVELES_BASE.map(function (n) {
-    var etiquetas = nombres[n.id] || {};
     return {
       id: n.id,
-      nombre: etiquetas.nombre,
-      descripcion: etiquetas.descripcion,
+      descripcion: descripciones[n.id],
       estrellas: n.estrellas,
       series: n.series
     };

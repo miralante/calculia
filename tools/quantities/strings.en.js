@@ -1,49 +1,77 @@
+/* ============================================================
+   Calculia — Quantities texts (EN)
+   Locale-specific file. Loaded conditionally from index.html
+   according to App.i18n.locale().
+   ============================================================ */
 (function () {
   'use strict';
 
   App.i18n.register({
-    title: '↔️ Quantities',
-    instruction: 'Move the slider to practise quantities.',
+    title: '👀 Quantities',
+    instruction: 'Read and write numbers up to one billion.',
     choosePractice: 'Choose what you want to practise.',
-    amountName: 'Little or much',
-    amountDetail: 'Choose a small or large amount.',
-    changeName: 'Increase and decrease',
-    changeDetail: 'Move an amount up or down.',
-    roundName: 'Round',
-    roundDetail: 'Find the nearest ten.',
-    middleName: 'The number in the middle',
-    middleDetail: 'Find what is exactly in the middle.',
+
+    readName: 'Read numbers',
+    readDetail: 'Look at the number and type it.',
+    writeName: 'Write numbers',
+    writeDetail: 'Listen to the number and type it.',
+    pointsName: 'Add the commas',
+    pointsDetail: 'Separate thousands with commas.',
+    decomposeName: 'Break apart',
+    decomposeDetail: 'Look at the colour of each digit.',
+
+    /* {n} formatted, {nRaw} no separator, {placeLabel} digit position */
+    promptRead: 'Type this number: {n}',
+    promptWrite: 'Type the number you hear.',
+    promptPoints: 'Type this number with commas: {nRaw}',
+    promptDecompose: 'What is the {placeLabel} digit in {n}?',
+
+    detailRead: 'Copy the digits. Add the comma every three, if needed.',
+    detailWrite: 'Press 🔊 if you need to hear it again.',
+    detailPoints: 'Count three digits from the right and add the comma.',
+    detailDecompose: 'Look at the colour of each digit.',
+
+    /* Failure reinforcement: after the round, failed exercises are
+       replayed in a mini-round until every one is answered right.
+       Stars already earned stay (rule 5: mistakes are never punished). */
+    reinforceTitle: 'Reinforcement',
+    reinforceIntro: "Let's repeat the {n} exercises you missed until you get them all right.",
+    reinforceDone: "Reinforcement done! You've got them all.",
+
+    hintRead: 'Count the digits. If there are four or more, group them in threes from the right.',
+    hintWrite: 'Press � and write what you hear.',
+    hintPoints: 'The comma goes every three digits, starting from the right.',
+    hintDecompose: 'Look at the colour of the digit being asked.',
+
+    /* Position labels (used in decompose) */
+    posU: 'ones',
+    posD: 'tens',
+    posC: 'hundreds',
+    posUM: 'thousands ones',
+    posDM: 'thousands tens',
+    posCM: 'thousands hundreds',
+    posUMM: 'millions ones',
+    posDMM: 'millions tens',
+    posCMM: 'millions hundreds',
+    posUMMM: 'billions ones',
+
+    legendTitle: 'Colour by position:',
+
     check: 'Check',
     chooseAnother: 'Choose another practice',
     roundComplete: 'Round complete!',
-    roundSummary: 'You solved {count} quantities. Now you have {stars} stars.',
+    roundSummary: 'You solved {count} exercises. Now you have {stars} stars.',
     progress: '{current} of {total}',
-    value: 'Now: {value}',
-    promptAmount: 'Choose {goal}.',
-    promptChange: 'Start at {start}. {direction} to {target}.',
-    promptRound: 'Round {value} to the nearest ten.',
-    promptMiddle: 'Between {min} and {max}. Find the number in the middle.',
-    detailAmount: 'Move the slider. Then check.',
-    detailChange: 'Look where you start. Move the slider.',
-    detailRound: 'Find the number ending in zero that is closest.',
-    detailMiddle: 'It must be the same distance from each end.',
-    goalLittle: 'a little',
-    goalMuch: 'a lot',
-    directionIncrease: 'Increase',
-    directionDecrease: 'Decrease',
-    hintAmount: 'A little is near the beginning. A lot is near the end.',
-    hintChange: 'Increasing goes right. Decreasing goes left.',
-    hintRound: 'Look at the two tens that are closest.',
-    hintMiddle: 'Count the same amount from each end.',
-    sliderLabel: 'Chosen quantity',
-    decrease: 'Decrease one amount',
-    increase: 'Increase one amount',
-    euro: '{value} euros',
-    meter: '{value} metres',
-    liter: '{value} litres',
-  "contexto": "You are measuring or comparing everyday amounts: little or a lot, more or less, how many are missing.",
-  "pista": "🤔 Look at the picture calmly. Is it a little or a lot?",
-  "explicacion": "✅ That is how to estimate. Next time, try thinking about it before you measure.",
-  "transferencia": "This will help you calculate real amounts: at the shop, in the kitchen, sharing things out or measuring.",
+
+    audioAria: 'Listen to the number',
+    answerInputAria: 'Type the number',
+    answerOptionsAria: 'Answer options',
+
+    correctFormat: 'It is written: {n}',
+
+    transfer: 'This will help you read prices, news headlines or any large number in daily life.',
+
+    hint: '🤔 Read the number aloud and then write it.',
+    transferencia: 'This will help you read prices, news headlines or any large number in daily life.'
   }, 'en');
 })();

@@ -76,6 +76,7 @@ stack.
 |---|---|---|
 | **Apptonomia** *(principal)* | Terapia ocupacional: 7 módulos, 69 actividades | [github.com/thenkdframe/apptonomia](https://github.com/thenkdframe/apptonomia) |
 | Calculia | Cálculo y razonamiento lógico: 11 actividades | [github.com/thenkdframe/calculia](https://github.com/thenkdframe/calculia) |
+| Memofun | Tarjetas de memoria con aprendizaje significativo | [github.com/thenkdframe/memofun](https://github.com/thenkdframe/memofun) |
 | Okeymoney | Finanzas personales y autonomía cotidiana | [github.com/thenkdframe/okeymoney](https://github.com/thenkdframe/okeymoney) |
 | Sinonimia | Diccionario en lectura fácil | [github.com/thenkdframe/sinonimia](https://github.com/thenkdframe/sinonimia) |
 | Teclatlon | Mecanografía con el teclado físico | [github.com/thenkdframe/teclatlon](https://github.com/thenkdframe/teclatlon) |

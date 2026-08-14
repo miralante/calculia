@@ -16,7 +16,13 @@
     "modLogica": "🧩 Razonamiento y lógica",
 
     "numbers_nombre": "Los Números",
-    "numbers_detalle": "Cuenta, suma y mide.",
+    "numbers_detalle": "Lee, ordena y compara números.",
+    "fractionsmeasures_nombre": "Fracciones y Medidas",
+    "fractionsmeasures_detalle": "Partes, mitades y unidades.",
+    "mentalmath_nombre": "Restar y Cálculo Mental",
+    "mentalmath_detalle": "Resta y calcula de cabeza.",
+    "money_nombre": "Dinero",
+    "money_detalle": "Cuenta, paga y calcula el cambio.",
     "quantities_nombre": "Cantidades",
     "quantities_detalle": "Practica poco, mucho y aproximar.",
     "mathtables_nombre": "Las Tablas",
@@ -38,7 +44,7 @@
     "oddoneout_detalle": "Encuentra el que sobra.",
     "puzzle_nombre": "Puzzle",
     "puzzle_detalle": "Coloca cada pieza en su sitio.",
-    "oca_nombre": "La Oca",
-    "oca_detalle": "Tira el dado y avanza."
+
+    "otraAppLinkHint": "Se abre en otra aplicación, en una pestaña nueva."
   }, 'es');
 })();

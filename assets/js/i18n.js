@@ -17,9 +17,9 @@
 
   window.App = window.App || {};
 
-  var CLAVE_LOCALE = 'calculia:locale';
-  var SOPORTADOS = ['es', 'en'];
-  var POR_DEFECTO = 'es';
+  var LOCALE_KEY = 'calculia:locale';
+  var SUPPORTED = ['es', 'en'];
+  var DEFAULT = 'es';
 
   var DICT = {
     es: {
@@ -64,37 +64,43 @@
     }
   };
 
-  function detectar() {
+  function detect() {
     try {
-      var idiomas = navigator.languages && navigator.languages.length
+      var languages = navigator.languages && navigator.languages.length
         ? navigator.languages
         : [navigator.language || ''];
-      for (var i = 0; i < idiomas.length; i++) {
-        var prefijo = (idiomas[i] || '').slice(0, 2).toLowerCase();
-        if (SOPORTADOS.indexOf(prefijo) !== -1) return prefijo;
+      for (var i = 0; i < languages.length; i++) {
+        var prefix = (languages[i] || '').slice(0, 2).toLowerCase();
+        if (SUPPORTED.indexOf(prefix) !== -1) return prefix;
       }
     } catch (e) { /* ignore */ }
-    return POR_DEFECTO;
+    return DEFAULT;
   }
 
   function locale() {
     try {
-      var guardado = localStorage.getItem(CLAVE_LOCALE);
-      if (guardado && SOPORTADOS.indexOf(guardado) !== -1) return guardado;
+      var saved = localStorage.getItem(LOCALE_KEY);
+      if (saved && SUPPORTED.indexOf(saved) !== -1) return saved;
     } catch (e) { /* ignore */ }
-    return detectar();
+    return detect();
   }
 
   function setLocale(loc) {
-    if (SOPORTADOS.indexOf(loc) === -1) return;
+    if (SUPPORTED.indexOf(loc) === -1) return;
     try {
-      localStorage.setItem(CLAVE_LOCALE, loc);
+      localStorage.setItem(LOCALE_KEY, loc);
     } catch (e) { /* ignore */ }
     location.reload();
   }
 
+  /* BCP-47 map per supported locale, with fallback to the default
+     locale's BCP-47. App.tts.speak() uses this to pick the speechSynthesis
+     voice. Add an entry here when adding a new language — see doc/I18N.md
+     §4 for the full recipe. */
+  var BCP47 = { es: 'es-ES', en: 'en-US' };
+
   function lang() {
-    return locale() === 'en' ? 'en-US' : 'es-ES';
+    return BCP47[locale()] || BCP47[DEFAULT];
   }
 
   /**
@@ -110,57 +116,57 @@
   function register(dict, locale) {
     // New signature: (dict, locale)
     if (typeof locale === 'string') {
-      if (SOPORTADOS.indexOf(locale) === -1) return;
+      if (SUPPORTED.indexOf(locale) === -1) return;
       if (!dict || typeof dict !== 'object') return;
       DICT[locale] = DICT[locale] || {};
-      for (var clave in dict) {
-        if (Object.prototype.hasOwnProperty.call(dict, clave)) {
-          DICT[locale][clave] = dict[clave];
+      for (var key in dict) {
+        if (Object.prototype.hasOwnProperty.call(dict, key)) {
+          DICT[locale][key] = dict[key];
         }
       }
       return;
     }
     // Old signature: ({es: {...}, en: {...}})
-    SOPORTADOS.forEach(function (loc) {
+    SUPPORTED.forEach(function (loc) {
       if (!dict[loc]) return;
       DICT[loc] = DICT[loc] || {};
-      for (var clave in dict[loc]) {
-        if (Object.prototype.hasOwnProperty.call(dict[loc], clave)) {
-          DICT[loc][clave] = dict[loc][clave];
+      for (var key in dict[loc]) {
+        if (Object.prototype.hasOwnProperty.call(dict[loc], key)) {
+          DICT[loc][key] = dict[loc][key];
         }
       }
     });
   }
 
-  function buscar(dictLoc, key) {
-    var partes = key.split('.');
-    var actual = dictLoc;
-    for (var i = 0; i < partes.length; i++) {
-      if (actual == null) return undefined;
-      actual = actual[partes[i]];
+  function lookup(dictLoc, key) {
+    var parts = key.split('.');
+    var current = dictLoc;
+    for (var i = 0; i < parts.length; i++) {
+      if (current == null) return undefined;
+      current = current[parts[i]];
     }
-    return actual;
+    return current;
   }
 
   function t(key) {
     var loc = locale();
-    var valor = buscar(DICT[loc], key);
-    if (valor === undefined && loc !== POR_DEFECTO) {
-      valor = buscar(DICT[POR_DEFECTO], key);
+    var value = lookup(DICT[loc], key);
+    if (value === undefined && loc !== DEFAULT) {
+      value = lookup(DICT[DEFAULT], key);
     }
-    if (valor === undefined) return key;
-    if (Array.isArray(valor)) return valor.join(', ');
-    return valor;
+    if (value === undefined) return key;
+    if (Array.isArray(value)) return value.join(', ');
+    return value;
   }
 
   function pick(key) {
     var loc = locale();
-    var valor = buscar(DICT[loc], key);
-    if (!Array.isArray(valor) && loc !== POR_DEFECTO) {
-      valor = buscar(DICT[POR_DEFECTO], key);
+    var value = lookup(DICT[loc], key);
+    if (!Array.isArray(value) && loc !== DEFAULT) {
+      value = lookup(DICT[DEFAULT], key);
     }
-    if (!Array.isArray(valor) || !valor.length) return '';
-    return valor[Math.floor(Math.random() * valor.length)];
+    if (!Array.isArray(value) || !value.length) return '';
+    return value[Math.floor(Math.random() * value.length)];
   }
 
   /**
@@ -178,11 +184,11 @@
    */
   function data(key) {
     var loc = locale();
-    var valor = buscar(DICT[loc], key);
-    if (valor === undefined && loc !== POR_DEFECTO) {
-      valor = buscar(DICT[POR_DEFECTO], key);
+    var value = lookup(DICT[loc], key);
+    if (value === undefined && loc !== DEFAULT) {
+      value = lookup(DICT[DEFAULT], key);
     }
-    return valor;
+    return value;
   }
 
   /**
@@ -202,12 +208,12 @@
    * If a tool never called registerStructure, the result is just the
    * registered `data` trees in the legacy {es, en} shape.
    */
-  function datos() {
+  function dataByLocale() {
     var out = {};
-    SOPORTADOS.forEach(function (loc) {
-      var texto = (DICT[loc] && DICT[loc].data) || null;
-      var estructura = DICT[loc] && DICT[loc].__structure__;
-      out[loc] = mergeEstructuraTextos(estructura, texto);
+    SUPPORTED.forEach(function (loc) {
+      var text = (DICT[loc] && DICT[loc].data) || null;
+      var structure = DICT[loc] && DICT[loc].__structure__;
+      out[loc] = mergeStructureAndText(structure, text);
     });
     return out;
   }
@@ -217,11 +223,11 @@
    * data.js). The structure has ids/types/booleans and no text. The
    * text lives in strings.<locale>.js as a parallel tree registered
    * with register({data: ...}, locale). Together they form the legacy
-   * {es, en} shape returned by datos().
+   * {es, en} shape returned by dataByLocale().
    */
   function registerStructure(structure) {
-    /* Bind to every supported locale so datos() can find it for any of them. */
-    SOPORTADOS.forEach(function (loc) {
+    /* Bind to every supported locale so dataByLocale() can find it for any of them. */
+    SUPPORTED.forEach(function (loc) {
       DICT[loc] = DICT[loc] || {};
       DICT[loc].__structure__ = structure;
     });
@@ -242,68 +248,68 @@
     titulo: 1, texto: 1, aviso: 1, avisoSeguro: 1,
     confirmacion: 1, regla: 1, contacto: 1, relacion: 1
   };
-  function mergeEstructuraTextos(estructura, texto) {
-    if (!estructura && !texto) return null;
-    if (!texto) return estructura;
-    if (!estructura) return texto;
-    if (Array.isArray(estructura)) {
-      return estructura.map(function (item, i) {
-        return mergeEstructuraTextos(item, Array.isArray(texto) ? texto[i] : null);
+  function mergeStructureAndText(structure, text) {
+    if (!structure && !text) return null;
+    if (!text) return structure;
+    if (!structure) return text;
+    if (Array.isArray(structure)) {
+      return structure.map(function (item, i) {
+        return mergeStructureAndText(item, Array.isArray(text) ? text[i] : null);
       });
     }
-    if (typeof estructura === 'object') {
+    if (typeof structure === 'object') {
       var out = {};
       var keys = new Set();
-      Object.keys(estructura).forEach(function (k) { keys.add(k); });
-      Object.keys(texto).forEach(function (k) { keys.add(k); });
+      Object.keys(structure).forEach(function (k) { keys.add(k); });
+      Object.keys(text).forEach(function (k) { keys.add(k); });
       keys.forEach(function (k) {
-        var sVal = estructura[k];
-        var tVal = texto[k];
+        var sVal = structure[k];
+        var tVal = text[k];
         if (TEXT_FIELDS[k]) {
           out[k] = (tVal !== undefined) ? tVal : sVal;
         } else if (Array.isArray(sVal) || Array.isArray(tVal)) {
-          out[k] = mergeEstructuraTextos(sVal, tVal);
+          out[k] = mergeStructureAndText(sVal, tVal);
         } else if (sVal && typeof sVal === 'object') {
-          out[k] = mergeEstructuraTextos(sVal, tVal);
+          out[k] = mergeStructureAndText(sVal, tVal);
         } else {
           out[k] = (tVal !== undefined) ? tVal : sVal;
         }
       });
       return out;
     }
-    return texto !== undefined ? texto : estructura;
+    return text !== undefined ? text : structure;
   }
 
   function apply(root) {
     root = root || document;
-    var nodos = root.querySelectorAll('[data-i18n]');
-    for (var i = 0; i < nodos.length; i++) {
-      nodos[i].textContent = t(nodos[i].getAttribute('data-i18n'));
+    var nodes = root.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      nodes[i].textContent = t(nodes[i].getAttribute('data-i18n'));
     }
-    var ariaNodos = root.querySelectorAll('[data-i18n-aria]');
-    for (var j = 0; j < ariaNodos.length; j++) {
-      ariaNodos[j].setAttribute('aria-label', t(ariaNodos[j].getAttribute('data-i18n-aria')));
+    var ariaNodes = root.querySelectorAll('[data-i18n-aria]');
+    for (var j = 0; j < ariaNodes.length; j++) {
+      ariaNodes[j].setAttribute('aria-label', t(ariaNodes[j].getAttribute('data-i18n-aria')));
     }
-    var tituloClave = document.documentElement.getAttribute('data-i18n-title');
-    if (tituloClave) {
-      document.title = t(tituloClave) + ' | Calculia';
+    var titleKey = document.documentElement.getAttribute('data-i18n-title');
+    if (titleKey) {
+      document.title = t(titleKey) + ' | Calculia';
     }
   }
 
-  function inicio() {
+  function init() {
     document.documentElement.lang = locale();
     apply(document);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', inicio);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    inicio();
+    init();
   }
 
   window.App.i18n = {
-    SOPORTADOS: SOPORTADOS,
-    POR_DEFECTO: POR_DEFECTO,
+    SUPPORTED: SUPPORTED,
+    DEFAULT: DEFAULT,
     locale: locale,
     setLocale: setLocale,
     lang: lang,
@@ -312,7 +318,7 @@
     t: t,
     pick: pick,
     data: data,
-    datos: datos,
+    dataByLocale: dataByLocale,
     apply: apply
   };
 })();
