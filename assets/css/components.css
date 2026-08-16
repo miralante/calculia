@@ -40,7 +40,7 @@
 .btn:hover { transform: scale(1.03); box-shadow: var(--sombra); }
 .btn:active { transform: scale(0.98); }
 
-.btn-secundario {
+.btn-secondary {
   background: var(--color-superficie);
   color: var(--color-texto);
   border-color: var(--color-borde);
@@ -77,7 +77,7 @@
 }
 
 /* Answer options (multiple choice) */
-.btn-opcion {
+.option-btn {
   width: 100%;
   min-height: var(--boton-min);
   padding: 16px 24px;
@@ -91,14 +91,14 @@
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.btn-opcion:hover { border-color: var(--mod-coordinacion); }
+.option-btn:hover { border-color: var(--mod-coordinacion); }
 
-.btn-opcion.correcta {
+.option-btn.correcta {
   border-color: var(--color-acierto);
   background: var(--color-acierto-suave);
 }
 
-.btn-opcion.animo {
+.option-btn.animo {
   border-color: var(--color-animo);
   background: var(--color-animo-suave);
 }
@@ -195,7 +195,7 @@
 .feedback.animo { color: var(--color-animo); }
 
 /* ---- Explanation of why an answer is right/wrong (quiz) ---- */
-.explicacion {
+.explanation {
   max-width: 640px;
   margin: 0 auto;
   padding: 12px var(--espacio);
@@ -206,7 +206,7 @@
   align-items: center;
   gap: 8px;
 }
-.explicacion p { margin: 0; flex: 1; }
+.explanation p { margin: 0; flex: 1; }
 
 /* ---- "Entendido" gate: reading pause after a wrong answer (rule 12) ---- */
 .btn-entendido {
@@ -281,22 +281,22 @@ button.bloqueada {
   margin-top: var(--espacio);
 }
 
-.enlace-legal {
+.legal-link {
   color: var(--color-texto-suave);
   font-size: var(--texto-pequeno);
   padding: 8px 12px;
   text-decoration: underline;
 }
 
-.enlace-legal:hover, .enlace-legal:focus {
+.legal-link:hover, .legal-link:focus {
   color: var(--color-texto);
 }
 
 /* Utilities */
-.centrado { text-align: center; }
-.oculto { display: none !important; }
-.pila { display: flex; flex-direction: column; gap: 12px; }
-.fila { display: flex; align-items: center; gap: var(--espacio); flex-wrap: wrap; }
+.centered { text-align: center; }
+.hidden { display: none !important; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.row { display: flex; align-items: center; gap: var(--espacio); flex-wrap: wrap; }
 
 /* ---- Visual money (euros drawn with CSS; logic in assets/js/dinero.js) ---- */
 .dinero {
