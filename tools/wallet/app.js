@@ -1,20 +1,20 @@
 /* ============================================================
-   Calculia — El Monedero (razonamiento: manejo funcional del
-   dinero). Datos en data.js. Módulos compartidos en assets/js/.
-   Cinco actividades desde un menú (patrón La Compra):
-   - ¿Cuánto hay? · ¿Con qué pago? · ¿Está bien el cambio? ·
-     La Hucha: quiz de dinero físico con casos GENERADOS al vuelo.
-     Corren sobre un runner genérico (montarQuiz más abajo):
-     ▶ AÑADIR UNA ACTIVIDAD DE DINERO NUEVA = un objeto de
-       configuración en ACTIVIDADES (generar, enunciado, mesa,
-       opciones, pista, explicación) + su tarjeta en index.html
-       + sus textos en strings.js.
-     Todas cumplen las reglas 11 y 12: explicación generada del
-     propio caso al resolver, pista socrática al primer fallo.
-   - Paga justo: interactiva (tocar dinero hasta el precio exacto),
-     con Comprobar en dos pasos y botón 💡 de estrategia greedy.
-   Los importes se trabajan en céntimos (enteros) para evitar
-   errores de coma flotante. El error nunca se castiga (regla 5).
+   Calculia — The Wallet (reasoning: functional money handling).
+   Data in data.js. Shared modules in assets/js/.
+   Five activities from a menu (the "shop" pattern):
+   - How much is there? · What do I pay with? · Is the change correct? ·
+     The Piggy Bank: money quiz with cases GENERATED at runtime.
+     They run on a generic quiz runner (buildQuiz below):
+     ▶ TO ADD A NEW MONEY ACTIVITY: one configuration object in
+       ACTIVITIES (generate, prompt, table, options, hint, explanation)
+       + its card in index.html + its texts in strings.<locale>.js.
+     Every activity respects rules 11 and 12: the explanation is
+     generated from the resolved case; the first failure triggers a
+     Socratic hint (no answer given).
+   - Pay exactly: interactive (touch money up to the exact price),
+     with Check in two steps and a 💡 greedy-strategy hint button.
+   Amounts are stored in cents (integers) to avoid floating-point
+   errors. Mistakes are never punished (rule 5).
    ============================================================ */
 (function () {
   'use strict';
@@ -29,706 +29,705 @@
 
   function save() { App.storage.set(TOOL_ID, progress); }
   function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
-  function datos() { return DATA[App.i18n.locale()] || DATA.es; }
-  function azar(lista) { return lista[Math.floor(Math.random() * lista.length)]; }
+  function localeData() { return DATA[App.i18n.locale()] || DATA.es; }
+  function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
 
   /* ---- Screens ---- */
-  var SCREENS = ['pantallaMenu', 'pantallaNiveles', 'pantallaJuegoQuiz',
-    'pantallaJuegoPagar', 'pantallaFinal'];
+  var SCREENS = ['screenMenu', 'screenLevels', 'screenQuizGame',
+    'screenPayGame', 'screenEnd'];
   function show(id) {
     SCREENS.forEach(function (p) { $('#' + p).classList.add('oculto'); });
     $('#' + id).classList.remove('oculto');
   }
 
   /* ============================================================
-     Dinero: módulo compartido App.dinero (assets/js/dinero.js)
+     Money: shared module App.dinero (assets/js/dinero.js)
      ============================================================ */
   var format = App.dinero.format;
   var spoken = App.dinero.spoken;
-  var ariaDinero = App.dinero.aria;
+  var ariaMoney = App.dinero.aria;
   var createToken = App.dinero.createToken;
   var breakdown = App.dinero.breakdown;
   var breakdownText = App.dinero.breakdownText;
 
-  /* Pinta fichas decorativas en la mesa (oculta si no hay). */
-  function pintarMesa(piezas) {
-    var mesaEl = $('#mesaDinero');
-    App.dinero.paintTokens(mesaEl, piezas);
-    mesaEl.classList.toggle('oculto', !piezas || !piezas.length);
+  /* Paints decorative tokens on the table (hidden if empty). */
+  function paintTable(pieces) {
+    var tableEl = $('#moneyTable');
+    App.dinero.paintTokens(tableEl, pieces);
+    tableEl.classList.toggle('oculto', !pieces || !pieces.length);
   }
 
   /* ============================================================
-     Generadores de casos (variedad infinita, cero autoría)
+     Case generators (infinite variety, zero authoring)
      ============================================================ */
 
-  /* Todos los productos del banco, en el idioma activo. */
-  function todosLosProductos() {
-    return datos().pagar.niveles.reduce(function (lista, n) {
-      return lista.concat(n.productos);
+  /* All products from the bank, in the active locale. */
+  function allProducts() {
+    return localeData().pay.levels.reduce(function (list, n) {
+      return list.concat(n.products);
     }, []);
   }
 
   /* Is the amount in the step's "bucket"? (a level's amounts
-     don't fall into the previous level, like in Paga justo). */
-  function enBucket(cent, paso) {
-    if (paso === 100) return cent % 100 === 0;
-    if (paso === 50) return cent % 50 === 0 && cent % 100 !== 0;
+     don't fall into the previous level, like in Pay exactly). */
+  function inBucket(cent, step) {
+    if (step === 100) return cent % 100 === 0;
+    if (step === 50) return cent % 50 === 0 && cent % 100 !== 0;
     return cent % 10 === 0 && cent % 50 !== 0;
   }
 
-  /* Importes del bucket estrictamente entre min y max. */
-  function importesEnHueco(min, max, paso) {
-    var lista = [];
-    for (var v = paso; v < max; v += paso) {
-      if (v > min && enBucket(v, paso)) lista.push(v);
+  /* Amounts in the bucket strictly between min and max. */
+  function gapAmounts(min, max, step) {
+    var list = [];
+    for (var v = step; v < max; v += step) {
+      if (v > min && inBucket(v, step)) list.push(v);
     }
-    return lista;
+    return list;
   }
 
-  /* Pair (precio, pagado): pagado is the only amount that's enough and
-     the change is never zero. Shared by conquepago and cambio. */
-  function generarPar(paso) {
-    var pares = [[200, 100], [500, 200], [1000, 500]];   /* [pagado, inferior] */
-    var candidatos = [];
-    pares.forEach(function (par) {
-      var precios = importesEnHueco(par[1], par[0], paso);
-      if (precios.length) candidatos.push({ pagado: par[0], inferior: par[1], precios: precios });
+  /* Pair (price, paid): paid is the only amount that's enough and
+     the change is never zero. Shared by payWith and change. */
+  function generatePair(step) {
+    var pairs = [[200, 100], [500, 200], [1000, 500]];   /* [paid, lower] */
+    var candidates = [];
+    pairs.forEach(function (pair) {
+      var prices = gapAmounts(pair[1], pair[0], step);
+      if (prices.length) candidates.push({ paid: pair[0], lower: pair[1], prices: prices });
     });
-    var c = azar(candidatos);
-    return { pagado: c.pagado, inferior: c.inferior, precio: azar(c.precios) };
+    var c = pickRandom(candidates);
+    return { paid: c.paid, lower: c.lower, price: pickRandom(c.prices) };
   }
 
-  /* Distractores de importe: cercanos, distintos y positivos. */
-  function distractoresDe(correcto, paso) {
-    var lista = [];
-    App.utils.shuffle([paso, 100, paso * 2]).forEach(function (d) {
-      [correcto + d, correcto - d].forEach(function (x) {
-        if (x > 0 && x !== correcto && lista.indexOf(x) === -1 && lista.length < 2) lista.push(x);
+  /* Amount distractors: close, distinct, positive. */
+  function amountDistractors(correct, step) {
+    var list = [];
+    App.utils.shuffle([step, 100, step * 2]).forEach(function (d) {
+      [correct + d, correct - d].forEach(function (x) {
+        if (x > 0 && x !== correct && list.indexOf(x) === -1 && list.length < 2) list.push(x);
       });
     });
-    while (lista.length < 2) lista.push(correcto + (lista.length + 1) * paso);
-    return lista;
+    while (list.length < 2) list.push(correct + (list.length + 1) * step);
+    return list;
   }
 
   /* ============================================================
-     Runner genérico de quiz de dinero
+     Generic money quiz runner
      ============================================================ */
-  var enunciadoQuizEl = $('#enunciadoQuiz');
-  var opcionesQuizEl = $('#opcionesQuiz');
-  var feedbackQuizEl = $('#feedbackQuiz');
-  var explicacionQuizWrap = $('#explicacionQuizWrap');
-  var explicacionQuizEl = $('#explicacionQuiz');
-  var btnSiguienteQuiz = $('#btnSiguienteQuiz');
+  var quizPromptEl = $('#quizPrompt');
+  var quizOptionsEl = $('#quizOptions');
+  var quizFeedbackEl = $('#quizFeedback');
+  var quizExplanationWrap = $('#quizExplanationWrap');
+  var quizExplanationEl = $('#quizExplanation');
+  var btnNextQuiz = $('#btnNextQuiz');
 
-  var actividadActual = 'contar';
-  var nivelQ = null;
-  var casoQ = null;
+  var currentActivity = 'count';
+  var levelQ = null;
+  var caseQ = null;
   var idxQ = 0;
-  var aciertosQ = 0;
-  var intentosQ = 0;
-  var resueltoQ = false;
-  var opcionBotones = [];
+  var correctQ = 0;
+  var attemptsQ = 0;
+  var solvedQ = false;
+  var optionButtons = [];
 
-  function cfgActual() { return ACTIVIDADES[actividadActual]; }
+  function currentConfig() { return ACTIVITIES[currentActivity]; }
 
-  function mostrarTextoQuiz(texto) {
-    explicacionQuizEl.textContent = texto;
-    explicacionQuizWrap.classList.remove('oculto');
+  function showQuizText(text) {
+    quizExplanationEl.textContent = text;
+    quizExplanationWrap.classList.remove('oculto');
   }
 
-  function pintarProgresoQuiz() {
-    var total = datos().porRonda;
+  function paintQuizProgress() {
+    var total = localeData().perRound;
     $('#progressQuizFill').style.width = (idxQ / total * 100) + '%';
     $('#progressQuizText').textContent = idxQ + ' / ' + total;
   }
 
-  function iniciarRondaQuiz(nivel) {
-    nivelQ = nivel;
+  function startQuizRound(level) {
+    levelQ = level;
     idxQ = 0;
-    aciertosQ = 0;
-    show('pantallaJuegoQuiz');
+    correctQ = 0;
+    show('screenQuizGame');
     renderQuiz();
   }
 
   function renderQuiz() {
-    var cfg = cfgActual();
-    casoQ = cfg.generar(nivelQ);
-    intentosQ = 0;
-    resueltoQ = false;
-    feedbackQuizEl.textContent = '';
-    feedbackQuizEl.className = 'feedback';
-    explicacionQuizWrap.classList.add('oculto');
-    explicacionQuizEl.textContent = '';
-    btnSiguienteQuiz.classList.add('oculto');
+    var cfg = currentConfig();
+    caseQ = cfg.generate(levelQ);
+    attemptsQ = 0;
+    solvedQ = false;
+    quizFeedbackEl.textContent = '';
+    quizFeedbackEl.className = 'feedback';
+    quizExplanationWrap.classList.add('oculto');
+    quizExplanationEl.textContent = '';
+    btnNextQuiz.classList.add('oculto');
 
-    enunciadoQuizEl.textContent = cfg.enunciado(casoQ);
+    quizPromptEl.textContent = cfg.prompt(caseQ);
     /* Show the table: the person needs to see the money to count it.
        Earlier some rounds were audio-only (no table), but the
        activity no longer has audio. */
-    pintarMesa(cfg.mesa ? cfg.mesa(casoQ) : null);
+    paintTable(cfg.table ? cfg.table(caseQ) : null);
 
-    opcionesQuizEl.innerHTML = '';
-    opcionBotones = [];
-    cfg.opciones(casoQ).forEach(function (op) {
+    quizOptionsEl.innerHTML = '';
+    optionButtons = [];
+    cfg.options(caseQ).forEach(function (op) {
       var btn;
-      if (cfg.tipoOpcion === 'ficha') {
+      if (cfg.optionKind === 'token') {
         btn = createToken(op.cent, true);
-        btn.setAttribute('aria-label', ariaDinero(op.cent));
+        btn.setAttribute('aria-label', ariaMoney(op.cent));
       } else {
         btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn-opcion';
-        btn.textContent = op.texto;
+        btn.textContent = op.text;
       }
-      btn.addEventListener('click', function () { responderQuiz(btn, op); });
-      opcionesQuizEl.appendChild(btn);
-      opcionBotones.push({ btn: btn, op: op });
+      btn.addEventListener('click', function () { answerQuiz(btn, op); });
+      quizOptionsEl.appendChild(btn);
+      optionButtons.push({ btn: btn, op: op });
     });
 
-    pintarProgresoQuiz();
+    paintQuizProgress();
     paintStars();
   }
 
-  function resolverQuiz(bien) {
-    var cfg = cfgActual();
-    resueltoQ = true;
-    opcionBotones.forEach(function (par) {
-      par.btn.disabled = true;
-      if (par.op.correcta) par.btn.classList.add('correcta');
+  function resolveQuiz(right) {
+    var cfg = currentConfig();
+    solvedQ = true;
+    optionButtons.forEach(function (pair) {
+      pair.btn.disabled = true;
+      if (pair.op.correct) pair.btn.classList.add('correcta');
     });
-    mostrarTextoQuiz(cfg.explicacion(casoQ, bien));
-    if (cfg.alResolver) cfg.alResolver(casoQ);
-    btnSiguienteQuiz.classList.remove('oculto');
-    btnSiguienteQuiz.focus();
+    showQuizText(cfg.explanation(caseQ, right));
+    if (cfg.onResolve) cfg.onResolve(caseQ);
+    btnNextQuiz.classList.remove('oculto');
+    btnNextQuiz.focus();
   }
 
-  function responderQuiz(btn, op) {
-    if (resueltoQ) return;
-    if (op.correcta) {
-      if (intentosQ === 0) {
-        aciertosQ += 1;
+  function answerQuiz(btn, op) {
+    if (solvedQ) return;
+    if (op.correct) {
+      if (attemptsQ === 0) {
+        correctQ += 1;
         progress.stars += 1;
         save();
         paintStars();
       }
-      App.feedback.success(feedbackQuizEl);
-      resolverQuiz(true);
+      App.feedback.success(quizFeedbackEl);
+      resolveQuiz(true);
       return;
     }
-    intentosQ += 1;
+    attemptsQ += 1;
     btn.classList.add('animo');
     btn.disabled = true;
-    App.feedback.encourage(feedbackQuizEl);
-    if (intentosQ === 1) {
+    App.feedback.encourage(quizFeedbackEl);
+    if (attemptsQ === 1) {
       /* First failure: Socratic hint, without giving the answer (rule 12). */
-      mostrarTextoQuiz(cfgActual().pista(casoQ));
-      App.feedback.lockUntilAck(opcionBotones.map(function (p) { return p.btn; }), explicacionQuizWrap);
+      showQuizText(currentConfig().hint(caseQ));
+      App.feedback.lockUntilAck(optionButtons.map(function (p) { return p.btn; }), quizExplanationWrap);
     } else {
       /* Second failure: the correct answer is marked and explained
          (rule 11: no one is left without a resolution). */
-      resolverQuiz(false);
+      resolveQuiz(false);
     }
   }
 
-  function siguienteQuiz() {
+  function nextQuiz() {
     idxQ += 1;
     App.tts.stop();
-    if (idxQ >= datos().porRonda) terminarRonda(aciertosQ);
+    if (idxQ >= localeData().perRound) endRound(correctQ);
     else renderQuiz();
   }
 
   /* ============================================================
-     Configuración de las actividades (▶ añadir aquí las nuevas)
+     Activity configuration (▶ add new ones here)
      ============================================================ */
-  var ACTIVIDADES = {
+  var ACTIVITIES = {
 
     /* --- How much is there? — count the money on the table ---
        Half the rounds are visual (table shown); the other half are
        audio-only (no table, the breakdown is read aloud). On the
        first failure of an audio round, the table is shown as a
        hint so the user is never left without a way to count. */
-    contar: {
-      esQuiz: true,
-      instruccion: 'instruccionContar',
-      resumen: 'resumenContar',
-      niveles: function () { return datos().contar.niveles; },
-      generar: function (nivel) {
+    count: {
+      isQuiz: true,
+      instruction: 'instructionCount',
+      summary: 'countSummary',
+      levels: function () { return localeData().count.levels; },
+      generate: function (level) {
         var n = 2 + Math.floor(Math.random() * 3);
-        var piezas = [];
+        var pieces = [];
         var total = 0;
         for (var k = 0; k < n; k++) {
-          var v = azar(nivel.cents);
-          piezas.push(v);
+          var v = pickRandom(level.cents);
+          pieces.push(v);
           total += v;
         }
-        piezas.sort(function (a, b) { return b - a; });
-        var distractores = [];
-        App.utils.shuffle(nivel.cents).forEach(function (d) {
+        pieces.sort(function (a, b) { return b - a; });
+        var distractors = [];
+        App.utils.shuffle(level.cents).forEach(function (d) {
           [total + d, total - d].forEach(function (x) {
-            if (x > 0 && x !== total && distractores.indexOf(x) === -1 && distractores.length < 2) {
-              distractores.push(x);
+            if (x > 0 && x !== total && distractors.indexOf(x) === -1 && distractors.length < 2) {
+              distractors.push(x);
             }
           });
         });
-        while (distractores.length < 2) {
-          distractores.push(total + (distractores.length + 1) * nivel.cents[0]);
+        while (distractors.length < 2) {
+          distractors.push(total + (distractors.length + 1) * level.cents[0]);
         }
         return {
-          piezas: piezas,
+          pieces: pieces,
           total: total,
-          importes: App.utils.shuffle([total].concat(distractores)),
-          sinMesa: false
+          amounts: App.utils.shuffle([total].concat(distractors)),
+          noTable: false
         };
       },
-      enunciado: function () { return App.i18n.t('contarPregunta'); },
-      mesa: function (caso) { return caso.piezas; },
-      opciones: function (caso) {
-        return caso.importes.map(function (cent) {
-          return { texto: format(cent), correcta: cent === caso.total };
+      prompt: function () { return App.i18n.t('countPrompt'); },
+      table: function (c) { return c.pieces; },
+      options: function (c) {
+        return c.amounts.map(function (cent) {
+          return { text: format(cent), correct: cent === c.total };
         });
       },
-      pista: function () { return App.i18n.t('pistaContar'); },
-      explicacion: function (caso, bien) {
-        return App.i18n.t(bien ? 'explicacionBien' : 'explicacionCasi')
-          .replace('{d}', breakdownText(caso.piezas))
-          .replace('{total}', format(caso.total));
+      hint: function () { return App.i18n.t('countHint'); },
+      explanation: function (c, right) {
+        return App.i18n.t(right ? 'correctExplanation' : 'almostExplanation')
+          .replace('{d}', breakdownText(c.pieces))
+          .replace('{total}', format(c.total));
       }
     },
 
     /* --- What do I pay with? — choose the money that's enough --- */
-    conquepago: {
-      esQuiz: true,
-      tipoOpcion: 'ficha',
-      instruccion: 'instruccionConQuePago',
-      resumen: 'resumenConQuePago',
-      niveles: function () { return datos().importe.niveles; },
-      generar: function (nivel) {
-        var par = generarPar(nivel.paso);
-        var producto = azar(todosLosProductos());
-        var menores = [500, 200, 100, 50].filter(function (c) { return c < par.inferior; });
-        var opciones = App.utils.shuffle([
-          { cent: par.pagado, correcta: true },
-          { cent: par.inferior, correcta: false },
-          { cent: azar(menores), correcta: false }
+    payWith: {
+      isQuiz: true,
+      optionKind: 'token',
+      instruction: 'instructionPayWith',
+      summary: 'payWithSummary',
+      levels: function () { return localeData().amount.levels; },
+      generate: function (level) {
+        var pair = generatePair(level.step);
+        var product = pickRandom(allProducts());
+        var lowers = [500, 200, 100, 50].filter(function (c) { return c < pair.lower; });
+        var options = App.utils.shuffle([
+          { cent: pair.paid, correct: true },
+          { cent: pair.lower, correct: false },
+          { cent: pickRandom(lowers), correct: false }
         ]);
         return {
-          picto: producto.picto,
-          nombre: producto.nombre,
-          precio: par.precio,
-          pagado: par.pagado,
-          cambio: par.pagado - par.precio,
-          lista: opciones
+          picto: product.picto,
+          name: product.name,
+          price: pair.price,
+          paid: pair.paid,
+          change: pair.paid - pair.price,
+          list: options
         };
       },
-      enunciado: function (caso) {
-        return caso.picto + ' ' + App.i18n.t('enunciadoConQuePago')
-          .replace('{nombre}', caso.nombre)
-          .replace('{precio}', format(caso.precio));
+      prompt: function (c) {
+        return c.picto + ' ' + App.i18n.t('payWithPrompt')
+          .replace('{nombre}', c.name)
+          .replace('{precio}', format(c.price));
       },
-      mesa: function () { return null; },
-      opciones: function (caso) { return caso.lista; },
-      pista: function () { return App.i18n.t('pistaConQuePago'); },
-      explicacion: function (caso, bien) {
-        return App.i18n.t(bien ? 'explicacionPagoBien' : 'explicacionPagoCasi')
-          .replace('{pagado}', spoken(caso.pagado))
-          .replace('{cambio}', format(caso.cambio));
+      table: function () { return null; },
+      options: function (c) { return c.list; },
+      hint: function () { return App.i18n.t('payWithHint'); },
+      explanation: function (c, right) {
+        return App.i18n.t(right ? 'payCorrectExplanation' : 'payAlmostExplanation')
+          .replace('{pagado}', spoken(c.paid))
+          .replace('{cambio}', format(c.change));
       },
       /* When resolved, the change appears as tokens on the table:
          connects paying with the physical change. */
-      alResolver: function (caso) { pintarMesa(breakdown(caso.cambio)); }
+      onResolve: function (c) { paintTable(breakdown(c.change)); }
     },
 
     /* --- Is the change correct? — verify what's given back --- */
-    cambio: {
-      esQuiz: true,
-      instruccion: 'instruccionCambio',
-      resumen: 'resumenCambio',
-      niveles: function () { return datos().importe.niveles; },
-      generar: function (nivel) {
-        var par = generarPar(nivel.paso);
-        var bueno = par.pagado - par.precio;
-        var esBien = Math.random() < 0.5;
-        var mostrado = bueno;
-        if (!esBien) {
-          var deltas = App.utils.shuffle([nivel.paso, -nivel.paso, 100, -100]);
+    change: {
+      isQuiz: true,
+      instruction: 'instructionCheckChange',
+      summary: 'changeSummary',
+      levels: function () { return localeData().amount.levels; },
+      generate: function (level) {
+        var pair = generatePair(level.step);
+        var right = pair.paid - pair.price;
+        var isRight = Math.random() < 0.5;
+        var shown = right;
+        if (!isRight) {
+          var deltas = App.utils.shuffle([level.step, -level.step, 100, -100]);
           for (var k = 0; k < deltas.length; k++) {
-            var m = bueno + deltas[k];
-            if (m > 0 && m !== bueno) { mostrado = m; break; }
+            var m = right + deltas[k];
+            if (m > 0 && m !== right) { shown = m; break; }
           }
         }
-        return { precio: par.precio, pagado: par.pagado, bueno: bueno, mostrado: mostrado, esBien: mostrado === bueno };
+        return { price: pair.price, paid: pair.paid, right: right, shown: shown, isRight: shown === right };
       },
-      enunciado: function (caso) {
-        return App.i18n.t('enunciadoCambio')
-          .replace('{precio}', format(caso.precio))
-          .replace('{pagado}', spoken(caso.pagado));
+      prompt: function (c) {
+        return App.i18n.t('changePrompt')
+          .replace('{precio}', format(c.price))
+          .replace('{pagado}', spoken(c.paid));
       },
-      mesa: function (caso) { return breakdown(caso.mostrado); },
+      table: function (c) { return breakdown(c.shown); },
       /* Yes/No in fixed (natural) order, not shuffled. */
-      opciones: function (caso) {
+      options: function (c) {
         return [
-          { texto: App.i18n.t('si'), correcta: caso.esBien },
-          { texto: App.i18n.t('no'), correcta: !caso.esBien }
+          { text: App.i18n.t('answerYes'), correct: c.isRight },
+          { text: App.i18n.t('answerNo'), correct: !c.isRight }
         ];
       },
-      pista: function () { return App.i18n.t('pistaCambio'); },
-      explicacion: function (caso) {
-        var clave = caso.esBien ? 'explicacionCambioBien' :
-          (caso.mostrado < caso.bueno ? 'explicacionCambioFalta' : 'explicacionCambioSobra');
-        return App.i18n.t(clave)
-          .replace('{bueno}', format(caso.bueno))
-          .replace('{mostrado}', format(caso.mostrado));
+      hint: function () { return App.i18n.t('changeHint'); },
+      explanation: function (c) {
+        var key = c.isRight ? 'changeCorrectExplanation' :
+          (c.shown < c.right ? 'changeShortExplanation' : 'changeOverExplanation');
+        return App.i18n.t(key)
+          .replace('{bueno}', format(c.right))
+          .replace('{mostrado}', format(c.shown));
       }
     },
 
     /* --- The Piggy Bank — how much is left to buy it? --- */
-    hucha: {
-      esQuiz: true,
-      instruccion: 'instruccionHucha',
-      resumen: 'resumenHucha',
-      niveles: function () { return datos().importe.niveles; },
-      generar: function (nivel) {
-        /* Objetivos: el banco PRODUCTOS del bucket del nivel. */
-        var banco = datos().pagar.niveles.filter(function (n) { return n.id === nivel.id; })[0];
-        var candidatos = banco.productos.filter(function (p) { return p.precioCent >= 2 * nivel.paso; });
-        var producto = azar(candidatos);
-        var pasos = producto.precioCent / nivel.paso;
-        var tienes = nivel.paso * (1 + Math.floor(Math.random() * (pasos - 1)));
-        var falta = producto.precioCent - tienes;
-        var opciones = App.utils.shuffle([falta].concat(distractoresDe(falta, nivel.paso)));
+    piggyBank: {
+      isQuiz: true,
+      instruction: 'instructionPiggyBank',
+      summary: 'piggyBankSummary',
+      levels: function () { return localeData().amount.levels; },
+      generate: function (level) {
+        /* Targets: the PRODUCTS bank for the level's bucket. */
+        var bank = localeData().pay.levels.filter(function (n) { return n.id === level.id; })[0];
+        var candidates = bank.products.filter(function (p) { return p.priceCent >= 2 * level.step; });
+        var product = pickRandom(candidates);
+        var steps = product.priceCent / level.step;
+        var have = level.step * (1 + Math.floor(Math.random() * (steps - 1)));
+        var missing = product.priceCent - have;
+        var options = App.utils.shuffle([missing].concat(amountDistractors(missing, level.step)));
         return {
-          picto: producto.picto,
-          nombre: producto.nombre,
-          precio: producto.precioCent,
-          tienes: tienes,
-          falta: falta,
-          importes: opciones
+          picto: product.picto,
+          name: product.name,
+          price: product.priceCent,
+          have: have,
+          missing: missing,
+          amounts: options
         };
       },
-      enunciado: function (caso) {
-        var nombre = caso.nombre.charAt(0).toLowerCase() + caso.nombre.slice(1);
-        return caso.picto + ' ' + App.i18n.t('enunciadoHucha')
-          .replace('{nombre}', nombre)
-          .replace('{precio}', format(caso.precio));
+      prompt: function (c) {
+        var name = c.name.charAt(0).toLowerCase() + c.name.slice(1);
+        return c.picto + ' ' + App.i18n.t('piggyBankPrompt')
+          .replace('{nombre}', name)
+          .replace('{precio}', format(c.price));
       },
-      mesa: function (caso) { return breakdown(caso.tienes); },
-      opciones: function (caso) {
-        return caso.importes.map(function (cent) {
-          return { texto: format(cent), correcta: cent === caso.falta };
+      table: function (c) { return breakdown(c.have); },
+      options: function (c) {
+        return c.amounts.map(function (cent) {
+          return { text: format(cent), correct: cent === c.missing };
         });
       },
-      pista: function () { return App.i18n.t('pistaHucha'); },
-      explicacion: function (caso, bien) {
-        return App.i18n.t(bien ? 'explicacionHuchaBien' : 'explicacionHuchaCasi')
-          .replace('{precio}', format(caso.precio))
-          .replace('{tienes}', format(caso.tienes))
-          .replace('{falta}', format(caso.falta));
+      hint: function () { return App.i18n.t('piggyBankHint'); },
+      explanation: function (c, right) {
+        return App.i18n.t(right ? 'piggyBankCorrectExplanation' : 'piggyBankAlmostExplanation')
+          .replace('{precio}', format(c.price))
+          .replace('{tienes}', format(c.have))
+          .replace('{falta}', format(c.missing));
       }
     },
 
     /* --- More or less — mental rounding ("costs about 3 €") --- */
-    redondeo: {
-      esQuiz: true,
-      instruccion: 'instruccionRedondeo',
-      resumen: 'resumenRedondeo',
-      niveles: function () { return datos().redondeo.niveles; },
-      generar: function (nivel) {
-        var objetivo = 2 + Math.floor(Math.random() * 8);   /* 2-9 € */
-        var delta = azar(nivel.deltas);
-        /* El ,50 siempre por debajo del objetivo: x,50 SUBE a x+1. */
-        var signo = delta === 50 ? -1 : azar([-1, 1]);
-        var mostrado = objetivo * 100 + signo * delta;
-        /* Producto de sabor con precio de referencia cercano. */
-        var cercanos = todosLosProductos().filter(function (p) {
-          return Math.abs(p.precioCent - mostrado) <= 150;
+    rounding: {
+      isQuiz: true,
+      instruction: 'instructionRounding',
+      summary: 'roundingSummary',
+      levels: function () { return localeData().rounding.levels; },
+      generate: function (level) {
+        var target = 2 + Math.floor(Math.random() * 8);   /* 2-9 € */
+        var delta = pickRandom(level.deltas);
+        /* The ,50 always below the target: x,50 rounds UP to x+1. */
+        var sign = delta === 50 ? -1 : pickRandom([-1, 1]);
+        var shown = target * 100 + sign * delta;
+        /* Flavoured product with a nearby reference price. */
+        var close = allProducts().filter(function (p) {
+          return Math.abs(p.priceCent - shown) <= 150;
         });
-        var producto = azar(cercanos.length ? cercanos : todosLosProductos());
+        var product = pickRandom(close.length ? close : allProducts());
         return {
-          picto: producto.picto,
-          nombre: producto.nombre,
-          mostrado: mostrado,
-          objetivo: objetivo,
-          esMedio: delta === 50,
-          candidatos: [objetivo - 1, objetivo, objetivo + 1]
+          picto: product.picto,
+          name: product.name,
+          shown: shown,
+          target: target,
+          isHalf: delta === 50,
+          candidates: [target - 1, target, target + 1]
         };
       },
-      enunciado: function (caso) {
-        return caso.picto + ' ' + App.i18n.t('enunciadoRedondeo')
-          .replace('{nombre}', caso.nombre)
-          .replace('{precio}', format(caso.mostrado));
+      prompt: function (c) {
+        return c.picto + ' ' + App.i18n.t('roundingPrompt')
+          .replace('{nombre}', c.name)
+          .replace('{precio}', format(c.shown));
       },
-      mesa: function () { return null; },
-      /* Tres euros consecutivos, en orden (no se barajan: es una
-         recta numérica, no un quiz de despiste). */
-      opciones: function (caso) {
-        return caso.candidatos.map(function (n) {
-          return { texto: App.i18n.t('unosEuros').replace('{n}', n), correcta: n === caso.objetivo };
+      table: function () { return null; },
+      /* Three consecutive euros, in order (no shuffle: this is a
+         number line, not a distraction quiz). */
+      options: function (c) {
+        return c.candidates.map(function (n) {
+          return { text: App.i18n.t('aboutEuros').replace('{n}', n), correct: n === c.target };
         });
       },
-      pista: function () { return App.i18n.t('pistaRedondeo'); },
-      explicacion: function (caso, bien) {
-        var clave = caso.esMedio ?
-          (bien ? 'explicacionRedondeoMedioBien' : 'explicacionRedondeoMedioCasi') :
-          (bien ? 'explicacionRedondeoBien' : 'explicacionRedondeoCasi');
-        return App.i18n.t(clave)
-          .replace('{precio}', format(caso.mostrado))
-          .replace(/\{n\}/g, caso.objetivo);
+      hint: function () { return App.i18n.t('roundingHint'); },
+      explanation: function (c, right) {
+        var key = c.isHalf ?
+          (right ? 'roundingHalfCorrectExplanation' : 'roundingHalfAlmostExplanation') :
+          (right ? 'roundingCorrectExplanation' : 'roundingAlmostExplanation');
+        return App.i18n.t(key)
+          .replace('{precio}', format(c.shown))
+          .replace(/\{n\}/g, c.target);
       }
     },
 
-    /* --- Paga justo — interactiva, fuera del runner --- */
-    pagar: {
-      esQuiz: false,
-      instruccion: 'pagarInstruccion',
-      resumen: 'resumenPagar',
-      niveles: function () { return datos().pagar.niveles; }
+    /* --- Pay exactly — interactive, outside the runner --- */
+    pay: {
+      isQuiz: false,
+      instruction: 'payInstruction',
+      summary: 'paySummary',
+      levels: function () { return localeData().pay.levels; }
     }
   };
 
   /* ============================================================
-     Menú y niveles (compartidos)
+     Menu and levels (shared)
      ============================================================ */
-  function abrirActividad(id) {
-    actividadActual = id;
-    var cfg = cfgActual();
-    $('#instruccionActividad').textContent = App.i18n.t(cfg.instruccion);
-    pintarNiveles();
-    show('pantallaNiveles');
+  function openActivity(id) {
+    currentActivity = id;
+    var cfg = currentConfig();
+    $('#activityInstruction').textContent = App.i18n.t(cfg.instruction);
+    paintLevels();
+    show('screenLevels');
   }
 
-  function pintarNiveles() {
-    var cfg = cfgActual();
-    var cont = $('#niveles');
+  function paintLevels() {
+    var cfg = currentConfig();
+    var cont = $('#levels');
     cont.innerHTML = '';
-    cfg.niveles().forEach(function (n) {
+    cfg.levels().forEach(function (n) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn btn-nivel';
-      btn.innerHTML = n.descripcion;
+      btn.innerHTML = n.description;
       btn.addEventListener('click', function () {
-        if (cfg.esQuiz) iniciarRondaQuiz(n);
-        else iniciarRondaPagar(n);
+        if (cfg.isQuiz) startQuizRound(n);
+        else startPayRound(n);
       });
       cont.appendChild(btn);
     });
   }
 
-  function terminarRonda(aciertos) {
-    var cfg = cfgActual();
+  function endRound(correct) {
+    var cfg = currentConfig();
     save();
-    $('#resumenFinal').textContent = App.i18n.t(cfg.resumen)
-      .replace('{n}', aciertos)
-      .replace('{t}', datos().porRonda);
-$('#transferencia').textContent = App.i18n.t('transferencia');
-    show('pantallaFinal');
+    $('#endSummary').textContent = App.i18n.t(cfg.summary)
+      .replace('{n}', correct)
+      .replace('{t}', localeData().perRound);
+    $('#transfer').textContent = App.i18n.t('transfer');
+    show('screenEnd');
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
   /* ============================================================
-     Actividad — Paga justo (interactiva)
+     Activity — Pay exactly (interactive)
      ============================================================ */
-  var productoEl = $('#producto');
-  var precioTextoEl = $('#precioTexto');
-  var totalPuestoEl = $('#totalPuesto');
-  var monedasEl = $('#monedas');
-  var feedbackPagarEl = $('#feedbackPagar');
-  var ayudaPagarWrap = $('#ayudaPagarWrap');
-  var ayudaPagarTextoEl = $('#ayudaPagarTexto');
-  var btnComprobar = $('#btnComprobar');
-  var btnQuitar = $('#btnQuitar');
-  var btnSiguientePagar = $('#btnSiguientePagar');
+  var productEl = $('#product');
+  var priceTextEl = $('#priceText');
+  var totalPlacedEl = $('#totalPlaced');
+  var moneyEl = $('#money');
+  var payFeedbackEl = $('#payFeedback');
+  var payHintWrap = $('#payHintWrap');
+  var payHintTextEl = $('#payHintText');
+  var btnCheck = $('#btnCheck');
+  var btnRemoveLast = $('#btnRemoveLast');
+  var btnNextPay = $('#btnNextPay');
 
-  var nivelP = null;
-  var productosRonda = [];
+  var levelP = null;
+  var roundProducts = [];
   var idxP = 0;
-  var aciertosP = 0;
-  var puestas = [];      /* cents of each piece placed, in order */
-  var fallosP = 0;       /* comprobaciones falladas de este producto */
-  var resueltoP = false;
-  var ayudaPasoP = 0;
-  var botonesDinero = {};  /* cent -> button, to mark the hint */
+  var correctP = 0;
+  var placedPieces = [];      /* cents of each piece placed, in order */
+  var failuresP = 0;          /* failed checks of this product */
+  var solvedP = false;
+  var hintStepP = 0;
+  var moneyButtons = {};      /* cent -> button, to mark the hint */
 
-  function iniciarRondaPagar(n) {
-    nivelP = n;
-    productosRonda = App.utils.shuffle(n.productos).slice(0, datos().porRonda);
+  function startPayRound(n) {
+    levelP = n;
+    roundProducts = App.utils.shuffle(n.products).slice(0, localeData().perRound);
     idxP = 0;
-    aciertosP = 0;
-    pintarDineroPagar();
-    show('pantallaJuegoPagar');
-    renderPagar();
+    correctP = 0;
+    paintPayMoney();
+    show('screenPayGame');
+    renderPay();
   }
 
   /* Level's money buttons, from largest to smallest (teaches paying
      by starting with the largest). */
-  function pintarDineroPagar() {
-    monedasEl.innerHTML = '';
-    botonesDinero = {};
-    nivelP.cents.slice().sort(function (a, b) { return b - a; }).forEach(function (cent) {
+  function paintPayMoney() {
+    moneyEl.innerHTML = '';
+    moneyButtons = {};
+    levelP.cents.slice().sort(function (a, b) { return b - a; }).forEach(function (cent) {
       var btn = createToken(cent, true);
-      btn.setAttribute('aria-label', App.i18n.t('anadirDinero').replace('{d}', ariaDinero(cent)));
-      btn.addEventListener('click', function () { anadirDinero(cent); });
-      monedasEl.appendChild(btn);
-      botonesDinero[cent] = btn;
+      btn.setAttribute('aria-label', App.i18n.t('addMoney').replace('{d}', ariaMoney(cent)));
+      btn.addEventListener('click', function () { addMoney(cent); });
+      moneyEl.appendChild(btn);
+      moneyButtons[cent] = btn;
     });
   }
 
-  function totalPuestas() {
-    return puestas.reduce(function (suma, c) { return suma + c; }, 0);
+  function placedTotal() {
+    return placedPieces.reduce(function (sum, c) { return sum + c; }, 0);
   }
 
-  function pintarTotal() {
-    totalPuestoEl.textContent = App.i18n.t('hasPuesto').replace('{total}', format(totalPuestas()));
+  function paintTotal() {
+    totalPlacedEl.textContent = App.i18n.t('placed').replace('{total}', format(placedTotal()));
   }
 
-  function pintarProgresoPagar() {
-    var total = datos().porRonda;
-    $('#progressPagarFill').style.width = (idxP / total * 100) + '%';
-    $('#progressPagarText').textContent = idxP + ' / ' + total;
+  function paintPayProgress() {
+    var total = localeData().perRound;
+    $('#progressPayFill').style.width = (idxP / total * 100) + '%';
+    $('#progressPayText').textContent = idxP + ' / ' + total;
   }
 
-  function renderPagar() {
-    var item = productosRonda[idxP];
-    resueltoP = false;
-    fallosP = 0;
-    puestas = [];
-    feedbackPagarEl.textContent = '';
-    feedbackPagarEl.className = 'feedback';
-    btnSiguientePagar.classList.add('oculto');
-    btnComprobar.disabled = false;
-    productoEl.textContent = item.picto;
-    precioTextoEl.textContent = App.i18n.t('cuesta')
-      .replace('{nombre}', item.nombre)
-      .replace('{precio}', format(item.precioCent));
-    limpiarAyudaPagar();
-    pintarTotal();
-    pintarProgresoPagar();
+  function renderPay() {
+    var item = roundProducts[idxP];
+    solvedP = false;
+    failuresP = 0;
+    placedPieces = [];
+    payFeedbackEl.textContent = '';
+    payFeedbackEl.className = 'feedback';
+    btnNextPay.classList.add('oculto');
+    btnCheck.disabled = false;
+    productEl.textContent = item.picto;
+    priceTextEl.textContent = App.i18n.t('costs')
+      .replace('{nombre}', item.name)
+      .replace('{precio}', format(item.priceCent));
+    clearPayHint();
+    paintTotal();
+    paintPayProgress();
     paintStars();
   }
 
-  function anadirDinero(cent) {
-    if (resueltoP) return;
-    puestas.push(cent);
-    limpiarAyudaPagar();
-    pintarTotal();
+  function addMoney(cent) {
+    if (solvedP) return;
+    placedPieces.push(cent);
+    clearPayHint();
+    paintTotal();
   }
 
-  function quitarUltima() {
-    if (resueltoP) return;
-    puestas.pop();
-    limpiarAyudaPagar();
-    pintarTotal();
+  function removeLastPiece() {
+    if (solvedP) return;
+    placedPieces.pop();
+    clearPayHint();
+    paintTotal();
   }
 
-  function vaciar() {
-    if (resueltoP) return;
-    puestas = [];
-    limpiarAyudaPagar();
-    pintarTotal();
+  function clearAll() {
+    if (solvedP) return;
+    placedPieces = [];
+    clearPayHint();
+    paintTotal();
   }
 
-  /* Comprobar con andamiaje (regla 12 adaptada): el primer fallo
-     solo da la dirección; a partir del segundo, la cantidad exacta
-     que falta o sobra — nadie se queda atascado. */
-  function comprobar() {
-    if (resueltoP) return;
-    var objetivo = productosRonda[idxP].precioCent;
-    var puesto = totalPuestas();
+  /* Check with scaffolding (rule 12 adapted): the first failure
+     only gives the direction; from the second, the exact amount
+     that is missing or extra — nobody gets stuck. */
+  function check() {
+    if (solvedP) return;
+    var target = roundProducts[idxP].priceCent;
+    var placed = placedTotal();
 
-    if (puesto === objetivo) {
-      resueltoP = true;
-      if (fallosP === 0) {
-        aciertosP += 1;
+    if (placed === target) {
+      solvedP = true;
+      if (failuresP === 0) {
+        correctP += 1;
         progress.stars += 1;
         save();
         paintStars();
       }
-      App.feedback.success(feedbackPagarEl);
-      btnComprobar.disabled = true;
-      btnSiguientePagar.classList.remove('oculto');
-      btnSiguientePagar.focus();
+      App.feedback.success(payFeedbackEl);
+      btnCheck.disabled = true;
+      btnNextPay.classList.remove('oculto');
+      btnNextPay.focus();
       return;
     }
 
-    fallosP += 1;
-    var falta = puesto < objetivo;
-    var texto;
-    if (fallosP === 1) {
-      texto = App.i18n.t(falta ? 'faltaDinero1' : 'sobraDinero1');
+    failuresP += 1;
+    var missing = placed < target;
+    var text;
+    if (failuresP === 1) {
+      text = App.i18n.t(missing ? 'missingMoney1' : 'tooMuchMoney1');
     } else {
-      var dif = Math.abs(objetivo - puesto);
-      texto = App.i18n.t(falta ? 'faltaDinero2' : 'sobraDinero2')
-        .replace('{dif}', spoken(dif));
+      var diff = Math.abs(target - placed);
+      text = App.i18n.t(missing ? 'missingMoney2' : 'tooMuchMoney2')
+        .replace('{dif}', spoken(diff));
     }
-    feedbackPagarEl.textContent = texto;
-    feedbackPagarEl.className = 'feedback animo';
+    payFeedbackEl.textContent = text;
+    payFeedbackEl.className = 'feedback animo';
   }
 
   /* ---- 💡 On-demand hint (two-step Socratic method) ----
      Teaches the largest-to-smallest paying strategy: 1st tap
      asks for the largest amount that fits; the 2nd marks it. */
-  function limpiarAyudaPagar() {
-    ayudaPasoP = 0;
-    ayudaPagarWrap.classList.add('oculto');
-    ayudaPagarTextoEl.textContent = '';
-    Object.keys(botonesDinero).forEach(function (c) {
-      botonesDinero[c].classList.remove('sugerida');
+  function clearPayHint() {
+    hintStepP = 0;
+    payHintWrap.classList.add('oculto');
+    payHintTextEl.textContent = '';
+    Object.keys(moneyButtons).forEach(function (c) {
+      moneyButtons[c].classList.remove('sugerida');
     });
-    btnQuitar.classList.remove('sugerida');
-    btnComprobar.classList.remove('sugerida');
+    btnRemoveLast.classList.remove('sugerida');
+    btnCheck.classList.remove('sugerida');
   }
 
-  function pedirAyudaPagar() {
-    if (resueltoP) return;
-    var objetivo = productosRonda[idxP].precioCent;
-    var restante = objetivo - totalPuestas();
-    ayudaPasoP = ayudaPasoP >= 2 ? 2 : ayudaPasoP + 1;
-    var texto;
+  function requestPayHint() {
+    if (solvedP) return;
+    var target = roundProducts[idxP].priceCent;
+    var remaining = target - placedTotal();
+    hintStepP = hintStepP >= 2 ? 2 : hintStepP + 1;
+    var text;
 
-    if (restante === 0) {
-      texto = App.i18n.t('ayudaComprobar');
-      btnComprobar.classList.add('sugerida');
-    } else if (restante < 0) {
-      texto = App.i18n.t('ayudaQuita' + ayudaPasoP);
-      if (ayudaPasoP === 2) btnQuitar.classList.add('sugerida');
+    if (remaining === 0) {
+      text = App.i18n.t('checkHint');
+      btnCheck.classList.add('sugerida');
+    } else if (remaining < 0) {
+      text = App.i18n.t('removeHint' + hintStepP);
+      if (hintStepP === 2) btnRemoveLast.classList.add('sugerida');
     } else {
-      texto = App.i18n.t('ayudaPagar' + ayudaPasoP);
-      if (ayudaPasoP === 2) {
+      text = App.i18n.t('payHint' + hintStepP);
+      if (hintStepP === 2) {
         /* The largest money in the level that fits in what's left. */
-        var mejor = nivelP.cents.filter(function (c) { return c <= restante; })
+        var best = levelP.cents.filter(function (c) { return c <= remaining; })
           .sort(function (a, b) { return b - a; })[0];
-        if (mejor) botonesDinero[mejor].classList.add('sugerida');
+        if (best) moneyButtons[best].classList.add('sugerida');
       }
     }
-    ayudaPagarTextoEl.textContent = texto;
-    ayudaPagarWrap.classList.remove('oculto');
+    payHintTextEl.textContent = text;
+    payHintWrap.classList.remove('oculto');
   }
 
-  function siguientePagar() {
+  function nextPay() {
     idxP += 1;
     App.tts.stop();
-    if (idxP >= datos().porRonda) terminarRonda(aciertosP);
-    else renderPagar();
+    if (idxP >= localeData().perRound) endRound(correctP);
+    else renderPay();
   }
 
-  /* ---- Eventos ---- */
-  App.utils.$$('.tarjeta-actividad').forEach(function (btn) {
-    btn.addEventListener('click', function () { abrirActividad(btn.getAttribute('data-actividad')); });
+  /* ---- Events ---- */
+  App.utils.$$('.activity-card').forEach(function (btn) {
+    btn.addEventListener('click', function () { openActivity(btn.getAttribute('data-activity')); });
   });
-  $('#btnVolverMenuNiveles').addEventListener('click', function () { show('pantallaMenu'); });
-  $('#btnVolverMenuFinal').addEventListener('click', function () { show('pantallaMenu'); });
+  $('#btnBackToMenuLevels').addEventListener('click', function () { show('screenMenu'); });
+  $('#btnBackToMenuEnd').addEventListener('click', function () { show('screenMenu'); });
 
-  btnSiguienteQuiz.addEventListener('click', siguienteQuiz);
-  btnComprobar.addEventListener('click', comprobar);
-  btnQuitar.addEventListener('click', quitarUltima);
-  $('#btnVaciar').addEventListener('click', vaciar);
-  btnSiguientePagar.addEventListener('click', siguientePagar);
-  $('#btnAyudaPagar').addEventListener('click', pedirAyudaPagar);
-  $('#btnRepetir').addEventListener('click', function () {
-    if (cfgActual().esQuiz) iniciarRondaQuiz(nivelQ);
-    else iniciarRondaPagar(nivelP);
+  btnNextQuiz.addEventListener('click', nextQuiz);
+  btnCheck.addEventListener('click', check);
+  btnRemoveLast.addEventListener('click', removeLastPiece);
+  $('#btnClear').addEventListener('click', clearAll);
+  btnNextPay.addEventListener('click', nextPay);
+  $('#btnPayHint').addEventListener('click', requestPayHint);
+  $('#btnRepeat').addEventListener('click', function () {
+    if (currentConfig().isQuiz) startQuizRound(levelQ);
+    else startPayRound(levelP);
   });
-  $('#btnOtroNivelFinal').addEventListener('click', function () { abrirActividad(actividadActual); });
+  $('#btnAnotherLevelEnd').addEventListener('click', function () { openActivity(currentActivity); });
 
   paintStars();
 })();
-

@@ -35,7 +35,10 @@
         loading: 'Cargando…',
         roundComplete: '¡Ronda completada!',
         rest: '¡Llevas un buen rato! Puedes descansar si quieres.',
-        dataProtection: 'Calculia no recolecta datos'
+        dataProtection: 'Calculia no recolecta datos',
+        offline: 'Sin conexión',
+        offlineMessage: 'No hemos podido cargar esta página. Comprueba tu conexión a Internet y vuelve a intentarlo.',
+        offlineBack: 'Volver a la portada'
       },
       feedback: {
         success: ['¡Muy bien!', '¡Genial!', '¡Lo has conseguido!', '¡Estupendo!', '¡Sigue así!'],
@@ -55,7 +58,10 @@
         loading: 'Loading…',
         roundComplete: 'Round complete!',
         rest: 'You have been playing a while! You can rest if you want.',
-        dataProtection: 'Calculia does not collect data'
+        dataProtection: 'Calculia does not collect data',
+        offline: 'Offline',
+        offlineMessage: 'We could not load this page. Check your Internet connection and try again.',
+        offlineBack: 'Back to the home page'
       },
       feedback: {
         success: ['Well done!', 'Great!', 'You got it!', 'Fantastic!', 'Keep it up!'],

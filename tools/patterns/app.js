@@ -164,8 +164,8 @@
       seriesEl.appendChild(span);
     });
 
-    var options = App.utils.shuffle(item.opciones.map(function (opt, i) {
-      return { text: opt, isCorrect: i === item.correcta };
+    var options = App.utils.shuffle(item.options.map(function (opt, i) {
+      return { text: opt, isCorrect: i === item.correct };
     }));
 
     options.forEach(function (op) {
@@ -184,7 +184,7 @@
   }
 
   function showExplanation(isCorrect, item) {
-    var answer = readableText(item.opciones[item.correcta]);
+    var answer = readableText(item.options[item.correct]);
     var text = isCorrect
       ? App.i18n.t('explicacionCorrecta') + answer + '.'
       : App.i18n.t('explicacionIncorrectaA') + answer + '.';

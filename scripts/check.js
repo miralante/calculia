@@ -40,12 +40,12 @@ var path = require('path');
 var vm = require('vm');
 var execFileSync = require('child_process').execFileSync;
 
-var RAIZ = path.join(__dirname, '..');
+var ROOT = path.join(__dirname, '..');
 var failures = [];
 var checks = 0;
 
 function rel(p) {
-  return path.relative(RAIZ, p).split(path.sep).join('/');
+  return path.relative(ROOT, p).split(path.sep).join('/');
 }
 
 function listJs(dir) {
@@ -67,11 +67,11 @@ function listJs(dir) {
 
 /* --- 1. node --check on tools/, site/, settings/, legal/, assets/js/ --- */
 var jsFiles = []
-  .concat(listJs(path.join(RAIZ, 'tools')))
-  .concat(listJs(path.join(RAIZ, 'site')))
-  .concat(listJs(path.join(RAIZ, 'settings')))
-  .concat(listJs(path.join(RAIZ, 'legal')))
-  .concat(listJs(path.join(RAIZ, 'assets', 'js')));
+  .concat(listJs(path.join(ROOT, 'tools')))
+  .concat(listJs(path.join(ROOT, 'site')))
+  .concat(listJs(path.join(ROOT, 'settings')))
+  .concat(listJs(path.join(ROOT, 'legal')))
+  .concat(listJs(path.join(ROOT, 'assets', 'js')));
 
 jsFiles.forEach(function (archivo) {
   checks += 1;
@@ -86,7 +86,7 @@ jsFiles.forEach(function (archivo) {
 /* --- 2. Standard anatomy of tools/<slug>/ --- */
 var CANONICAL_BASE = ['index.html', 'app.js', 'data.js', 'styles.css'];
 var STRING_LOCALES = ['es', 'en'];
-var toolsDir = path.join(RAIZ, 'tools');
+var toolsDir = path.join(ROOT, 'tools');
 var slugs = fs.readdirSync(toolsDir, { withFileTypes: true })
   .filter(function (e) { return e.isDirectory(); })
   .map(function (e) { return e.name; })
@@ -113,7 +113,7 @@ slugs.forEach(function (slug) {
 
 /* --- 3. sw.js <-> disk parity --- */
 checks += 1;
-var swContent = fs.readFileSync(path.join(RAIZ, 'sw.js'), 'utf8');
+var swContent = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
 var archMatch = swContent.match(/var ARCHIVOS = \[([\s\S]*?)\];/);
 var swPaths = [];
 if (archMatch) {
@@ -127,7 +127,7 @@ if (archMatch) {
 }
 
 swPaths.forEach(function (entry) {
-  var filePath = path.join(RAIZ, entry.replace(/^\.\//, ''));
+  var filePath = path.join(ROOT, entry.replace(/^\.\//, ''));
   if (!fs.existsSync(filePath)) {
     failures.push('sw.js: ARCHIVOS incluye ' + entry + ' pero no existe en disco');
   }
@@ -198,9 +198,9 @@ function compareEsEn(dir, label) {
 }
 
 slugs.forEach(function (slug) { compareEsEn(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
-compareEsEn(path.join(RAIZ, 'site'), 'site/');
-compareEsEn(path.join(RAIZ, 'settings'), 'settings/');
-compareEsEn(path.join(RAIZ, 'legal'), 'legal/');
+compareEsEn(path.join(ROOT, 'site'), 'site/');
+compareEsEn(path.join(ROOT, 'settings'), 'settings/');
+compareEsEn(path.join(ROOT, 'legal'), 'legal/');
 
 /* --- 5. Catalog parity lock ---
    The set of activity slugs must match between:
@@ -210,7 +210,7 @@ compareEsEn(path.join(RAIZ, 'legal'), 'legal/');
      - the assets listed for tools in sw.js ARCHIVOS
 */
 checks += 1;
-var siteHtml = fs.readFileSync(path.join(RAIZ, 'site', 'index.html'), 'utf8');
+var siteHtml = fs.readFileSync(path.join(ROOT, 'site', 'index.html'), 'utf8');
 var slugsInSite = [];
 var reHref = /href="\.\.\/tools\/([^/]+)\/index\.html"/g;
 var mh;
@@ -228,7 +228,7 @@ function parseSlugsFromSw() {
   return set;
 }
 function parseDataToolInSettings() {
-  var html = fs.readFileSync(path.join(RAIZ, 'settings', 'index.html'), 'utf8');
+  var html = fs.readFileSync(path.join(ROOT, 'settings', 'index.html'), 'utf8');
   var re = /data-tool="([^"]+)"/g;
   var set = new Set();
   var m;
@@ -295,9 +295,9 @@ function listDir(dir) {
   return result;
 }
 var userTargets = []
-  .concat(listDir(path.join(RAIZ, 'site')))
-  .concat(listDir(path.join(RAIZ, 'settings')))
-  .concat(listDir(path.join(RAIZ, 'legal')));
+  .concat(listDir(path.join(ROOT, 'site')))
+  .concat(listDir(path.join(ROOT, 'settings')))
+  .concat(listDir(path.join(ROOT, 'legal')));
 slugs.forEach(function (slug) {
   userTargets = userTargets.concat(listDir(path.join(toolsDir, slug)));
 });
@@ -319,7 +319,7 @@ userTargets.forEach(function (archivo) {
 
 /* --- 7. _headers: CSP source-expression quoting --- */
 checks += 1;
-var headersContent = fs.readFileSync(path.join(RAIZ, '_headers'), 'utf8');
+var headersContent = fs.readFileSync(path.join(ROOT, '_headers'), 'utf8');
 headersContent.split('\n').filter(function (line) {
   return /^\s*Content-Security-Policy:/i.test(line);
 }).forEach(function (line) {
@@ -430,9 +430,9 @@ function checkUsageVsRegistration(dir, label) {
 }
 
 slugs.forEach(function (slug) { checkUsageVsRegistration(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
-checkUsageVsRegistration(path.join(RAIZ, 'site'), 'site/');
-checkUsageVsRegistration(path.join(RAIZ, 'settings'), 'settings/');
-checkUsageVsRegistration(path.join(RAIZ, 'legal'), 'legal/');
+checkUsageVsRegistration(path.join(ROOT, 'site'), 'site/');
+checkUsageVsRegistration(path.join(ROOT, 'settings'), 'settings/');
+checkUsageVsRegistration(path.join(ROOT, 'legal'), 'legal/');
 
 /* --- Result --- */
 if (failures.length) {

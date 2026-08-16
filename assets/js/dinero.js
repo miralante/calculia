@@ -90,7 +90,7 @@
     return (cent / 100).toFixed(2).replace('.', sep) + ' €';
   }
 
-  /* "2 euros y 50 céntimos" — for speech and for hints. */
+  /* "2 euros and 50 cents" — for speech and for hints. */
   function spoken(cent) {
     var e = Math.floor(cent / 100);
     var c = cent % 100;

@@ -4,8 +4,8 @@
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 .btn:not(.btn-secundario):not(.btn-audio) { background: var(--mod-razonamiento); }
-.instruccion { font-size: var(--texto-base); }
-.centrado-fila { justify-content: center; }
+.instruction { font-size: var(--texto-base); }
+.center-row { justify-content: center; }
 
 /* Activity menu */
 .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
@@ -19,104 +19,104 @@
 .btn-actividad:hover { border-color: var(--mod-razonamiento); }
 .btn-actividad .picto { font-size: 48px; }
 .btn-actividad .detalle { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
-.nota-extra { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
+.extra-note { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
 
-#pantallaNiveles h2 { text-align: center; color: var(--mod-razonamiento); }
+#screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
 .btn-nivel { min-width: 300px; align-self: center; }
-#btnVolverMenu { align-self: center; }
+#btnBackToMenu { align-self: center; }
 
 /* Color-coded digits by place value */
 .num-color { font-weight: 800; letter-spacing: 2px; }
-.cifra-u { color: var(--mod-coordinacion); }   /* blue — units / ground floor (0) */
-.cifra-d { color: var(--mod-secuencia); }      /* green — tens */
-.cifra-c { color: var(--mod-emocional); }      /* purple — hundreds */
-.cifra-sep { color: var(--color-texto-suave); }
-.cifra-pos { color: var(--mod-secuencia); }    /* green — positive scale (above 0) */
-.cifra-coma, .cifra-dec, .signo { color: var(--mod-memoria); } /* orange — negative scale (below 0) */
-.destacada { text-decoration: underline; text-underline-offset: 6px; }
-.grupo { display: inline-flex; flex-direction: column; align-items: center; }
-.grupo-etq { font-size: 14px; font-weight: 700; color: var(--color-texto-suave); letter-spacing: 0; }
+.digit-u { color: var(--mod-coordinacion); }   /* blue — units / ground floor (0) */
+.digit-d { color: var(--mod-secuencia); }      /* green — tens */
+.digit-c { color: var(--mod-emocional); }      /* purple — hundreds */
+.digit-sep { color: var(--color-texto-suave); }
+.digit-pos { color: var(--mod-secuencia); }    /* green — positive scale (above 0) */
+.digit-coma, .digit-dec, .sign { color: var(--mod-memoria); } /* orange — negative scale (below 0) */
+.highlight { text-decoration: underline; text-underline-offset: 6px; }
+.group { display: inline-flex; flex-direction: column; align-items: center; }
+.group-label { font-size: 14px; font-weight: 700; color: var(--color-texto-suave); letter-spacing: 0; }
 
 .card { border-color: var(--mod-razonamiento-suave); }
-.enunciado { font-size: var(--texto-grande); font-weight: 700; }
+.prompt { font-size: var(--texto-grande); font-weight: 700; }
 .visual { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); }
-.visual-num { font-size: 52px; }
-.leyenda { font-size: var(--texto-pequeno); font-weight: 700; }
-.pista { color: var(--color-texto-suave); font-size: var(--texto-base); }
-.palabras-num { font-size: var(--texto-grande); font-weight: 800; }
+.visual-number { font-size: 52px; }
+.legend { font-size: var(--texto-pequeno); font-weight: 700; }
+.hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
+.words-number { font-size: var(--texto-grande); font-weight: 800; }
 
 /* Expressions (×10 ladder) */
-.expresion {
+.expression {
   display: flex; align-items: center; justify-content: center;
   gap: 12px; font-size: 40px; font-weight: 800; flex-wrap: wrap;
 }
-.signo { font-size: 40px; font-weight: 800; }
-.caja-num {
+.sign { font-size: 40px; font-weight: 800; }
+.num-box {
   min-width: 64px; min-height: 64px; padding: 8px 12px;
   display: inline-flex; align-items: center; justify-content: center;
   border: 3px solid var(--color-borde); border-radius: var(--radio);
   background: var(--color-superficie); font-size: 30px; font-weight: 800;
 }
-.caja-num.hueco { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
+.num-box.empty { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
 
 /* Number dictation */
-.dictado-espera { font-size: 80px; }
+.dictation-pending { font-size: 80px; }
 
 /* Units, tens, and hundreds blocks */
-.bloques { display: flex; align-items: flex-end; justify-content: center; gap: var(--espacio-grande); flex-wrap: wrap; }
-.bloques-grupo { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; justify-content: center; max-width: 340px; }
-.bloque-100 {
+.blocks { display: flex; align-items: flex-end; justify-content: center; gap: var(--espacio-grande); flex-wrap: wrap; }
+.blocks-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; justify-content: center; max-width: 340px; }
+.block-100 {
   width: 60px; height: 60px; display: inline-flex; align-items: center; justify-content: center;
   background: var(--mod-emocional-suave); border: 3px solid var(--mod-emocional);
   border-radius: 8px; font-weight: 800; color: var(--mod-emocional);
 }
-.bloque-10 {
+.block-10 {
   width: 26px; height: 60px; display: inline-flex; align-items: center; justify-content: center;
   background: var(--mod-secuencia-suave); border: 3px solid var(--mod-secuencia);
   border-radius: 8px; font-weight: 700; font-size: 12px; color: var(--mod-secuencia);
 }
-.bloque-1 { width: 26px; height: 26px; border-radius: 50%; background: var(--mod-coordinacion-suave); border: 3px solid var(--mod-coordinacion); }
-.bloque-1000 {
+.block-1 { width: 26px; height: 26px; border-radius: 50%; background: var(--mod-coordinacion-suave); border: 3px solid var(--mod-coordinacion); }
+.block-1000 {
   min-width: 76px; height: 60px; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center;
   background: var(--mod-razonamiento-suave); border: 3px solid var(--mod-razonamiento);
   border-radius: 8px; font-weight: 800; color: var(--mod-razonamiento);
 }
 /* Ten small blocks framed together: ready to trade for 1 big one. */
-.canje-grupo {
+.trade-group {
   display: inline-flex; flex-wrap: wrap; gap: 4px; align-items: flex-end; justify-content: center;
   max-width: 200px; padding: 8px; border: 3px dashed var(--mod-razonamiento); border-radius: var(--radio);
 }
 
 /* Answer options */
 .opciones .btn-opcion { text-align: center; font-size: 26px; }
-.opciones.opciones-fila { flex-direction: row; justify-content: center; flex-wrap: wrap; }
-.opciones.opciones-fila .btn-opcion { width: auto; min-width: 180px; }
+.opciones.options-row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+.opciones.options-row .btn-opcion { width: auto; min-width: 180px; }
 
 /* Elevator shaft (negative numbers): rows go from the top floor down to
    the bottom floor, matching the order they're built in app.js. */
-.ascensor-shaft {
+.elevator-shaft {
   display: flex; flex-direction: column; width: 90px; margin: 0 auto;
   border: 3px solid var(--color-borde); border-radius: var(--radio); overflow: hidden;
 }
-.piso-fila {
+.floor-row {
   height: 32px; display: flex; align-items: center; justify-content: center;
   border-top: 1px solid var(--color-borde); font-size: 18px;
 }
-.piso-fila:first-child { border-top: none; }
-.piso-suelo {
+.floor-row:first-child { border-top: none; }
+.ground-floor {
   background: var(--mod-razonamiento-suave);
   border-top: 3px solid var(--mod-razonamiento); border-bottom: 3px solid var(--mod-razonamiento);
 }
-.piso-actual { background: var(--mod-memoria-suave); font-weight: 800; }
-.piso-marca { background: var(--mod-secuencia-suave); font-weight: 800; }
-.piso-opcion { background: var(--mod-coordinacion-suave); font-weight: 800; }
-.piso-icono { font-size: 18px; }
-.pista-flecha { font-size: 28px; font-weight: 800; text-align: center; }
+.current-floor { background: var(--mod-memoria-suave); font-weight: 800; }
+.target-floor { background: var(--mod-secuencia-suave); font-weight: 800; }
+.option-floor { background: var(--mod-coordinacion-suave); font-weight: 800; }
+.floor-icon { font-size: 18px; }
+.hint-arrow { font-size: 28px; font-weight: 800; text-align: center; }
 
-.emoji-grande { font-size: 96px; }
-#pantallaFinal { padding-top: 48px; }
-#pantallaFinal .btn { align-self: center; min-width: 280px; }
-#pantallaFinal .transferencia {
+.emoji-large { font-size: 96px; }
+#screenEnd { padding-top: 48px; }
+#screenEnd .btn { align-self: center; min-width: 280px; }
+#screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);

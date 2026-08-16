@@ -1,7 +1,7 @@
 /* The Wallet — tool-specific styles. Shared styles live in assets/css/.
-   Acento del módulo Razonamiento (teal --mod-razonamiento).
-   El dinero se dibuja con CSS (sin imágenes): monedas redondas con
-   los colores reales del euro y billetes rectangulares. */
+   Reasoning-module accent (teal --mod-razonamiento).
+   Money is drawn with CSS (no images): round coins in the real euro
+   colours and rectangular banknotes. */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 
@@ -9,33 +9,33 @@
   background: var(--mod-razonamiento);
 }
 
-.instruccion { font-size: var(--texto-base); }
+.instruction { font-size: var(--texto-base); }
 
-.centrado-fila { justify-content: center; }
+.center-row { justify-content: center; }
 
 .btn-nivel { min-width: 300px; align-self: center; }
 
 .progress-bar { margin-top: var(--espacio); }
 
 /* Menu cards (same pattern as The Shop) */
-.tarjeta-actividad {
+.activity-card {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 8px; min-height: 160px; padding: var(--espacio-grande);
   background: var(--color-superficie); border: 3px solid var(--color-borde);
   border-radius: var(--radio); box-shadow: var(--sombra);
   font-family: inherit; color: var(--color-texto); cursor: pointer;
 }
-.tarjeta-actividad:hover { border-color: var(--mod-razonamiento); }
-.tarjeta-actividad .picto { font-size: 48px; }
-.tarjeta-actividad .nombre { font-weight: 800; font-size: var(--texto-base); }
-.tarjeta-actividad .detalle { font-size: var(--texto-pequeno); color: var(--color-texto-suave); text-align: center; }
+.activity-card:hover { border-color: var(--mod-razonamiento); }
+.activity-card .picto { font-size: 48px; }
+.activity-card .name { font-weight: 800; font-size: var(--texto-base); }
+.activity-card .detail { font-size: var(--texto-pequeno); color: var(--color-texto-suave); text-align: center; }
 
-/* El dinero visual (.dinero, .m5c….b50e, .mesa-dinero) es compartido:
-   vive en assets/css/components.css + assets/js/dinero.js. Aquí solo
-   los ajustes propios de la herramienta. */
+/* Visual money (.dinero, .m5c….b50e, .money-table) is shared:
+   lives in assets/css/components.css + assets/js/dinero.js. Here we
+   only override tool-specific tweaks. */
 
-/* The table with the Reasoning module's tint */
-.mesa-dinero { background: var(--mod-razonamiento-suave); }
+/* The table with the Reasoning-module tint */
+.money-table { background: var(--mod-razonamiento-suave); }
 
 /* Money marked by the 💡 hint (2nd tap) */
 .sugerida {
@@ -51,53 +51,10 @@
 }
 
 /* Money token used as a quiz option ("What do I pay with?") */
-.opciones .dinero { align-self: center; }
+.options .dinero { align-self: center; }
 
 /* ---- Quiz compartido ---- */
-.pregunta {
+.prompt {
   font-size: var(--texto-grande);
   font-weight: 700;
-}
-
-.opciones { align-items: center; }
-
-.opciones .btn-opcion { min-width: 220px; }
-
-/* ---- Paga justo ---- */
-.card { border-color: var(--mod-razonamiento-suave); margin-top: var(--espacio); }
-
-.producto { font-size: 72px; }
-
-.precio {
-  font-size: var(--texto-grande);
-  font-weight: 700;
-}
-
-.total {
-  font-size: var(--texto-grande);
-  font-weight: 700;
-  color: var(--mod-razonamiento);
-}
-
-.pila-monedas {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: var(--espacio);
-}
-
-.acciones { margin-top: var(--espacio); }
-
-.emoji-grande { font-size: 96px; }
-
-#pantallaFinal { padding-top: 48px; }
-
-#pantallaFinal .btn { align-self: center; min-width: 280px; 
-#pantallaFinal .transferencia {
-  margin: 8px auto 24px;
-  font-size: 1.1rem;
-  color: var(--color-texto-secundario, #555);
-  max-width: 480px;
-}
 }

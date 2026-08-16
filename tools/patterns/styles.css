@@ -6,9 +6,9 @@
   background: var(--mod-razonamiento);
 }
 
-.instruccion { font-size: var(--texto-base); }
+.instruction { font-size: var(--texto-base); }
 
-.centrado-fila { justify-content: center; }
+.center-row { justify-content: center; }
 
 .btn-nivel { min-width: 300px; align-self: center; }
 
@@ -33,7 +33,7 @@
   justify-content: center;
 }
 
-.simbolo.hueco {
+.simbolo.empty {
   border: 3px dashed var(--mod-razonamiento);
   border-radius: var(--radio);
   background: var(--mod-razonamiento-suave);
@@ -46,12 +46,12 @@
   font-size: 32px;
 }
 
-.emoji-grande { font-size: 96px; }
+.emoji-large { font-size: 96px; }
 
-#pantallaFinal { padding-top: 48px; }
+#screenEnd { padding-top: 48px; }
 
-#pantallaFinal .btn { align-self: center; min-width: 280px; 
-#pantallaFinal .transferencia {
+#screenEnd .btn { align-self: center; min-width: 280px; 
+#screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);

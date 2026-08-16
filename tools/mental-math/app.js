@@ -55,7 +55,7 @@
 
   /* ---- Utilities ---- */
 
-  function ri(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  function randInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
   /* ---- Color-coded digits by place value ---- */
 
@@ -63,12 +63,12 @@
 
   /* Thousands separator ('.' is / ',' in). Not only styling: switching
      the separator between locales is mandatory (see I18N.md §2). */
-  function separadorMiles() { return App.i18n.locale() === 'en' ? ',' : '.'; }
+  function thousandsSeparator() { return App.i18n.locale() === 'en' ? ',' : '.'; }
 
   function legendPos() {
-    return '<span class="cifra-u">' + App.i18n.t('leyendaUnidadesTxt') + '</span> · ' +
-      '<span class="cifra-d">' + App.i18n.t('leyendaDecenasTxt') + '</span> · ' +
-      '<span class="cifra-c">' + App.i18n.t('leyendaCentenasTxt') + '</span>';
+    return '<span class="digit-u">' + App.i18n.t('leyendaUnidadesTxt') + '</span> · ' +
+      '<span class="digit-d">' + App.i18n.t('leyendaDecenasTxt') + '</span> · ' +
+      '<span class="digit-c">' + App.i18n.t('leyendaCentenasTxt') + '</span>';
   }
 
   /* html for the digits of n, grouped in 3s with a thousands separator.
@@ -88,18 +88,18 @@
         if (highlight === posAbs) cls += ' destacada';
         body += '<span class="' + cls + '">' + groups[g][j] + '</span>';
       }
-      if (g > 0) html += '<span class="cifra-sep">' + separadorMiles() + '</span>';
+      if (g > 0) html += '<span class="digit-sep">' + thousandsSeparator() + '</span>';
       html += body;
     }
     return html;
   }
 
-  function number(n, opts) {
+  function paintNumber(n, opts) {
     opts = opts || {};
     return '<span class="num-color">' + digits(n, opts.highlight) + '</span>';
   }
 
-  function sign(s) { return '<span class="signo">' + s + '</span>'; }
+  function paintSign(s) { return '<span class="paintSign">' + s + '</span>'; }
 
   /* ---- Numeric options (3, unique, shuffled) ---- */
 
@@ -148,108 +148,108 @@
   var GENERATORS = {
 
     restar: function (nv) {
-      var a = ri(nv.a[0], nv.a[1]);
-      var b = ri(1, Math.min(nv.maxB, a));
+      var a = randInt(nv.a[0], nv.a[1]);
+      var b = randInt(1, Math.min(nv.maxB, a));
       var correct = a - b;
       return {
-        enunciado: App.i18n.t('gen.restarEnunciado').replace('{a}', a).replace('{b}', b),
-        visual: '<div class="expresion">' + number(a) + sign('−') + number(b) +
-          sign('=') + '<span class="caja-num hueco">?</span></div>' +
+        prompt: App.i18n.t('gen.restarEnunciado').replace('{a}', a).replace('{b}', b),
+        visual: '<div class="expression">' + paintNumber(a) + paintSign('−') + paintNumber(b) +
+          paintSign('=') + '<span class="num-box empty">?</span></div>' +
           '<div class="puntos" aria-hidden="true">' + dotsGroupSubtract(a, b) + '</div>' +
-          '<p class="pista">' + App.i18n.t('gen.restarPista').replace('{b}', b) + '</p>',
-        opciones: buildOptions(correct, [correct - 1, correct + 1, a],
-          function (v) { return number(v); })
+          '<p class="hint">' + App.i18n.t('gen.restarPista').replace('{b}', b) + '</p>',
+        options: buildOptions(correct, [correct - 1, correct + 1, a],
+          function (v) { return paintNumber(v); })
       };
     },
 
     doubles: function () {
-      var a = ri(2, 12);
+      var a = randInt(2, 12);
       return {
-        enunciado: App.i18n.t('gen.doblesEnunciado').replace(/\{a\}/g, a),
-        visual: '<div class="expresion">' + number(a) + sign('+') + number(a) +
-          sign('=') + '<span class="caja-num hueco">?</span></div>' +
+        prompt: App.i18n.t('gen.doblesEnunciado').replace(/\{a\}/g, a),
+        visual: '<div class="expression">' + paintNumber(a) + paintSign('+') + paintNumber(a) +
+          paintSign('=') + '<span class="num-box empty">?</span></div>' +
           '<div class="puntos" aria-hidden="true">' + dotsGroup(a, 'pa') +
-          sign('+') + dotsGroup(a, 'pb') + '</div>' +
-          '<p class="pista">' + App.i18n.t('gen.doblesPista') + '</p>',
-        opciones: buildOptions(2 * a, [2 * a - 1, 2 * a + 2, 2 * a + 1],
-          function (v) { return number(v); })
+          paintSign('+') + dotsGroup(a, 'pb') + '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.doblesPista') + '</p>',
+        options: buildOptions(2 * a, [2 * a - 1, 2 * a + 2, 2 * a + 1],
+          function (v) { return paintNumber(v); })
       };
     },
 
     sumLarge: function (nv) {
       var n, highlight, hint;
       if (nv.suma === 10) {
-        n = ri(1, 8) * 10 + ri(1, 9);
-        if (Math.random() < 0.4) n += ri(1, 4) * 100;
+        n = randInt(1, 8) * 10 + randInt(1, 9);
+        if (Math.random() < 0.4) n += randInt(1, 4) * 100;
         highlight = 1;
-        hint = App.i18n.t('gen.pistaDecenas');
+        hint = App.i18n.t('gen.hintDecenas');
       } else if (nv.suma === 100) {
-        n = ri(1, 8) * 100 + ri(0, 99);
+        n = randInt(1, 8) * 100 + randInt(0, 99);
         highlight = 2;
-        hint = App.i18n.t('gen.pistaCentenas');
+        hint = App.i18n.t('gen.hintCentenas');
       } else {
-        n = ri(1, 8) * 1000 + ri(0, 999);
+        n = randInt(1, 8) * 1000 + randInt(0, 999);
         highlight = 3;
-        hint = App.i18n.t('gen.pistaMiles');
+        hint = App.i18n.t('gen.hintMiles');
       }
       var correct = n + nv.suma;
       return {
-        enunciado: App.i18n.t('gen.sumaGrandeEnunciado').replace('{n}', n).replace('{suma}', nv.suma),
-        visual: '<div class="expresion">' + number(n, { highlight: highlight }) +
-          sign('+') + number(nv.suma) + sign('=') +
-          '<span class="caja-num hueco">?</span></div>' +
-          '<p class="pista">' + hint + '</p>',
-        leyenda: legendPos(),
-        opciones: buildOptions(correct,
+        prompt: App.i18n.t('gen.sumaGrandeEnunciado').replace('{n}', n).replace('{suma}', nv.suma),
+        visual: '<div class="expression">' + paintNumber(n, { highlight: highlight }) +
+          paintSign('+') + paintNumber(nv.suma) + paintSign('=') +
+          '<span class="num-box empty">?</span></div>' +
+          '<p class="hint">' + hint + '</p>',
+        legend: legendPos(),
+        options: buildOptions(correct,
           App.utils.shuffle([n + 1, n + nv.suma * 2, correct + nv.suma / 10]),
-          function (v) { return number(v); })
+          function (v) { return paintNumber(v); })
       };
     },
 
     subtractLarge: function (nv) {
       var n, highlight, hint;
       if (nv.resta === 10) {
-        n = ri(1, 8) * 10 + ri(1, 9);
-        if (Math.random() < 0.4) n += ri(1, 4) * 100;
+        n = randInt(1, 8) * 10 + randInt(1, 9);
+        if (Math.random() < 0.4) n += randInt(1, 4) * 100;
         highlight = 1;
-        hint = App.i18n.t('gen.pistaDecenas');
+        hint = App.i18n.t('gen.hintDecenas');
       } else if (nv.resta === 100) {
-        n = ri(1, 8) * 100 + ri(0, 99);
+        n = randInt(1, 8) * 100 + randInt(0, 99);
         highlight = 2;
-        hint = App.i18n.t('gen.pistaCentenas');
+        hint = App.i18n.t('gen.hintCentenas');
       } else {
-        n = ri(1, 8) * 1000 + ri(0, 999);
+        n = randInt(1, 8) * 1000 + randInt(0, 999);
         highlight = 3;
-        hint = App.i18n.t('gen.pistaMiles');
+        hint = App.i18n.t('gen.hintMiles');
       }
       var correct = n - nv.resta;
       return {
-        enunciado: App.i18n.t('gen.restaGrandeEnunciado').replace('{n}', n).replace('{resta}', nv.resta),
-        visual: '<div class="expresion">' + number(n, { highlight: highlight }) +
-          sign('−') + number(nv.resta) + sign('=') +
-          '<span class="caja-num hueco">?</span></div>' +
-          '<p class="pista">' + hint + '</p>',
-        leyenda: legendPos(),
-        opciones: buildOptions(correct,
+        prompt: App.i18n.t('gen.restaGrandeEnunciado').replace('{n}', n).replace('{resta}', nv.resta),
+        visual: '<div class="expression">' + paintNumber(n, { highlight: highlight }) +
+          paintSign('−') + paintNumber(nv.resta) + paintSign('=') +
+          '<span class="num-box empty">?</span></div>' +
+          '<p class="hint">' + hint + '</p>',
+        legend: legendPos(),
+        options: buildOptions(correct,
           App.utils.shuffle([n - 1, correct - nv.resta, n + nv.resta]),
-          function (v) { return number(v); })
+          function (v) { return paintNumber(v); })
       };
     },
 
     multiplyLarge: function (nv) {
-      var n = ri(2, 99);
+      var n = randInt(2, 99);
       var correct = n * nv.factor;
       var zeros = App.i18n.t(nv.factor === 10 ? 'gen.cerosUno' : 'gen.cerosDos');
       var distractors = nv.factor === 10 ?
         [n, n * 100, correct + 1] :
         [n, n * 10, correct + 10];
       return {
-        enunciado: App.i18n.t('gen.multiplicaGrandeEnunciado').replace('{n}', n).replace('{factor}', nv.factor),
-        visual: '<div class="expresion">' + number(n) + sign('×') + number(nv.factor) +
-          sign('=') + '<span class="caja-num hueco">?</span></div>' +
-          '<p class="pista">' + App.i18n.t('gen.multiplicaGrandePista').replace('{ceros}', zeros).replace('{n}', n) + '</p>',
-        opciones: buildOptions(correct, App.utils.shuffle(distractors),
-          function (v) { return number(v); })
+        prompt: App.i18n.t('gen.multiplicaGrandeEnunciado').replace('{n}', n).replace('{factor}', nv.factor),
+        visual: '<div class="expression">' + paintNumber(n) + paintSign('×') + paintNumber(nv.factor) +
+          paintSign('=') + '<span class="num-box empty">?</span></div>' +
+          '<p class="hint">' + App.i18n.t('gen.multiplicaGrandePista').replace('{ceros}', zeros).replace('{n}', n) + '</p>',
+        options: buildOptions(correct, App.utils.shuffle(distractors),
+          function (v) { return paintNumber(v); })
       };
     }
   };
@@ -346,7 +346,7 @@
     question = p;
     answered = false;
     attempts = 0;
-    promptEl.textContent = question.enunciado;
+    promptEl.textContent = question.prompt;
     visualEl.innerHTML = question.visual || '';
     if (question.visualAria) {
       visualEl.setAttribute('role', 'img');
@@ -355,16 +355,16 @@
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.innerHTML = question.leyenda || '';
-    legendEl.classList.toggle('oculto', !question.leyenda);
+    legendEl.innerHTML = question.legend || '';
+    legendEl.classList.toggle('oculto', !question.legend);
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
     explanationWrap.classList.add('oculto');
     explanationEl.textContent = '';
     btnNext.classList.add('oculto');
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('opciones-fila', !!question.enFila);
-    question.opciones.forEach(function (op) {
+    optionsEl.classList.toggle('opciones-fila', !!question.inline);
+    question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn-opcion';
@@ -383,7 +383,7 @@
     attempts = 0;
     question = GENERATORS[level.tipo](level, idx);
 
-    promptEl.textContent = question.enunciado;
+    promptEl.textContent = question.prompt;
     visualEl.innerHTML = question.visual || '';
     if (question.visualAria) {
       visualEl.setAttribute('role', 'img');
@@ -392,8 +392,8 @@
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.innerHTML = question.leyenda || '';
-    legendEl.classList.toggle('oculto', !question.leyenda);
+    legendEl.innerHTML = question.legend || '';
+    legendEl.classList.toggle('oculto', !question.legend);
 
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
@@ -402,8 +402,8 @@
     btnNext.classList.add('oculto');
 
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('opciones-fila', !!question.enFila);
-    question.opciones.forEach(function (op) {
+    optionsEl.classList.toggle('opciones-fila', !!question.inline);
+    question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn-opcion';
@@ -426,7 +426,7 @@
   }
 
   function showExplanation(isCorrect) {
-    var correct = question.opciones.filter(function (o) { return o.correct; })[0];
+    var correct = question.options.filter(function (o) { return o.correct; })[0];
     var text = (isCorrect ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
       plainText(correct.html) + '.';
     explanationEl.textContent = text;

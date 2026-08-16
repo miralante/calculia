@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>El Monedero | Calculia</title>
+  <title>The Wallet | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
@@ -13,127 +13,128 @@
 <body>
   <div class="container">
     <header class="tool-header">
-      <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
-      <h1 data-i18n="title">💶 El Monedero</h1>
+      <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Back</a>
+      <h1 data-i18n="title">💶 The Wallet</h1>
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
     <!-- Screen: 5-activity menu -->
-    <section id="pantallaMenu" class="pila">
-      <div class="fila centrado-fila">
-        <p class="instruccion" id="instruccion" data-i18n="instruccion">Aquí practicas el dinero de verdad: contarlo, pagar, comprobar el cambio y ahorrar.</p>
+    <section id="screenMenu" class="pila">
+      <div class="fila center-row">
+        <p class="instruction" id="instruction" data-i18n="instruction">Here you practise real money: counting it, paying, checking the change and saving.</p>
       </div>
-      <div class="grid-tarjetas">
-        <button type="button" class="tarjeta-actividad" data-actividad="contar">
+      <div class="card-grid">
+        <button type="button" class="activity-card" data-activity="count">
           <span class="picto" aria-hidden="true">🪙</span>
-          <span class="nombre" data-i18n="menuContar">¿Cuánto hay?</span>
-          <span class="detalle" data-i18n="menuContarDetalle">Mira el dinero y elige el total.</span>
+          <span class="name" data-i18n="menuCount">How much is there?</span>
+          <span class="detail" data-i18n="menuCountDetail">Look at the money and choose the total.</span>
         </button>
-        <button type="button" class="tarjeta-actividad" data-actividad="pagar">
+        <button type="button" class="activity-card" data-activity="pay">
           <span class="picto" aria-hidden="true">🛒</span>
-          <span class="nombre" data-i18n="menuPagar">Paga justo</span>
-          <span class="detalle" data-i18n="menuPagarDetalle">Toca el dinero hasta el precio exacto.</span>
+          <span class="name" data-i18n="menuPay">Pay the exact price</span>
+          <span class="detail" data-i18n="menuPayDetail">Touch the money up to the exact price.</span>
         </button>
-        <button type="button" class="tarjeta-actividad" data-actividad="conquepago">
+        <button type="button" class="activity-card" data-activity="payWith">
           <span class="picto" aria-hidden="true">💵</span>
-          <span class="nombre" data-i18n="menuConQuePago">¿Con qué pago?</span>
-          <span class="detalle" data-i18n="menuConQuePagoDetalle">Elige el dinero que llega.</span>
+          <span class="name" data-i18n="menuPayWith">What do I pay with?</span>
+          <span class="detail" data-i18n="menuPayWithDetail">Choose the money that is enough.</span>
         </button>
-        <button type="button" class="tarjeta-actividad" data-actividad="cambio">
+        <button type="button" class="activity-card" data-activity="change">
           <span class="picto" aria-hidden="true">🔍</span>
-          <span class="nombre" data-i18n="menuCambio">¿Está bien el cambio?</span>
-          <span class="detalle" data-i18n="menuCambioDetalle">Cuenta el cambio y decide.</span>
+          <span class="name" data-i18n="menuCheckChange">Is the change right?</span>
+          <span class="detail" data-i18n="menuCheckChangeDetail">Count the change and decide.</span>
         </button>
-        <button type="button" class="tarjeta-actividad" data-actividad="hucha">
+        <button type="button" class="activity-card" data-activity="piggyBank">
           <span class="picto" aria-hidden="true">🐷</span>
-          <span class="nombre" data-i18n="menuHucha">La Hucha</span>
-          <span class="detalle" data-i18n="menuHuchaDetalle">¿Cuánto te falta para comprarlo?</span>
+          <span class="name" data-i18n="menuPiggyBank">The Piggy Bank</span>
+          <span class="detail" data-i18n="menuPiggyBankDetail">How much is missing to buy it?</span>
         </button>
-        <button type="button" class="tarjeta-actividad" data-actividad="redondeo">
+        <button type="button" class="activity-card" data-activity="rounding">
           <span class="picto" aria-hidden="true">🎯</span>
-          <span class="nombre" data-i18n="menuRedondeo">Más o menos</span>
-          <span class="detalle" data-i18n="menuRedondeoDetalle">¿Cuánto es, sin contar céntimos?</span>
+          <span class="name" data-i18n="menuRounding">More or less</span>
+          <span class="detail" data-i18n="menuRoundingDetail">How much is it, without counting cents?</span>
         </button>
       </div>
     </section>
 
-    <!-- Pantalla de niveles (compartida por todas las actividades) -->
-    <section id="pantallaNiveles" class="oculto pila centrado">
-      <div class="fila"><button type="button" class="btn btn-secundario" id="btnVolverMenuNiveles" data-i18n="volverMenu">← Menú</button></div>
-      <div class="fila centrado-fila">
-        <p class="instruccion" id="instruccionActividad"></p>
+    <!-- Levels screen (shared by every activity) -->
+    <section id="screenLevels" class="oculto pila centrado">
+      <div class="fila"><button type="button" class="btn btn-secundario" id="btnBackToMenuLevels" data-i18n="backToMenu">← Menu</button></div>
+      <div class="fila center-row">
+        <p class="instruction" id="activityInstruction"></p>
       </div>
-      <h2 data-i18n="elegirNivel">Elige un paso</h2>
-      <div class="pila" id="niveles"></div>
+      <h2 data-i18n="chooseLevel">Choose a step</h2>
+      <div class="pila" id="levels"></div>
     </section>
 
-    <!-- Pantalla de juego de los quiz (compartida: contar, conquepago, cambio, hucha) -->
-    <section id="pantallaJuegoQuiz" class="oculto pila">
+    <!-- Quiz game screen (shared: count, payWith, change, piggyBank) -->
+    <section id="screenQuizGame" class="oculto pila">
       <div class="progress-bar">
         <div class="progress-fill" id="progressQuizFill"></div>
         <span class="progress-text" id="progressQuizText">0 / 6</span>
       </div>
 
-      <div class="fila centrado-fila">
-        <p class="pregunta" id="enunciadoQuiz"></p>
+      <div class="fila center-row">
+        <p class="prompt" id="quizPrompt"></p>
       </div>
 
-      <div class="mesa-dinero oculto" id="mesaDinero" role="group" data-i18n-aria="ariaMesa" aria-label="Dinero sobre la mesa"></div>
+      <div class="money-table oculto" id="moneyTable" role="group" data-i18n-aria="tableAria" aria-label="Money on the table"></div>
 
-      <div class="opciones pila" id="opcionesQuiz"></div>
+      <div class="options pila" id="quizOptions"></div>
 
-      <div class="feedback" id="feedbackQuiz" aria-live="polite"></div>
-      <div class="fila explicacion oculto" id="explicacionQuizWrap">
-        <p id="explicacionQuiz" aria-live="polite"></p>
+      <div class="feedback" id="quizFeedback" aria-live="polite"></div>
+      <div class="fila explanation oculto" id="quizExplanationWrap">
+        <p id="quizExplanation" aria-live="polite"></p>
       </div>
-      <button type="button" class="btn oculto" id="btnSiguienteQuiz" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn oculto" id="btnNextQuiz" data-i18n="core.next">Next →</button>
     </section>
 
-    <!-- Pantalla de juego de Paga justo (interactiva, propia) -->
-    <section id="pantallaJuegoPagar" class="oculto pila">
+    <!-- Pay-exactly game screen (interactive, its own) -->
+    <section id="screenPayGame" class="oculto pila">
       <div class="progress-bar">
-        <div class="progress-fill" id="progressPagarFill"></div>
-        <span class="progress-text" id="progressPagarText">0 / 6</span>
+        <div class="progress-fill" id="progressPayFill"></div>
+        <span class="progress-text" id="progressPayText">0 / 6</span>
       </div>
 
       <div class="card centrado pila">
-        <div class="producto" id="producto"></div>
-        <p class="precio" id="precioTexto"></p>
+        <div class="product" id="product"></div>
+        <p class="price" id="priceText"></p>
       </div>
 
-      <div class="fila centrado-fila">
-        <p class="total" id="totalPuesto" aria-live="polite">Has puesto: 0,00 €</p>
-        <button type="button" class="btn btn-secundario" id="btnAyudaPagar" data-i18n="btnAyuda">💡 Ayuda</button>
+      <div class="fila center-row">
+        <p class="total" id="totalPlaced" aria-live="polite">You have put in: 0,00 €</p>
+        <button type="button" class="btn btn-secundario" id="btnPayHint" data-i18n="btnHint">💡 Help</button>
       </div>
 
-      <div class="pila-monedas" id="monedas"></div>
+      <div class="pila-monedas" id="money"></div>
 
-      <div class="fila centrado-fila acciones">
-        <button type="button" class="btn btn-secundario" id="btnQuitar" data-i18n="quitarUltima">↩ Quitar última</button>
-        <button type="button" class="btn btn-secundario" id="btnVaciar" data-i18n="vaciar">🗑 Vaciar</button>
-        <button type="button" class="btn" id="btnComprobar" data-i18n="comprobar">Comprobar</button>
+      <div class="fila center-row acciones">
+        <button type="button" class="btn btn-secundario" id="btnRemoveLast" data-i18n="removeLast">↩ Remove last</button>
+        <button type="button" class="btn btn-secundario" id="btnClear" data-i18n="clear">🗑 Empty</button>
+        <button type="button" class="btn" id="btnCheck" data-i18n="check">Check</button>
       </div>
 
-      <div class="fila explicacion oculto" id="ayudaPagarWrap">
-        <p id="ayudaPagarTexto" aria-live="polite"></p>
-        <button type="button" class="btn btn-audio" id="btnEscucharAyudaPagar" data-i18n-aria="ariaEscucharAyuda" aria-label="Escuchar la ayuda">🔊</button>
-      
-      <div class="feedback" id="feedbackPagar" aria-live="polite"></div>
-      <button type="button" class="btn oculto" id="btnSiguientePagar" data-i18n="core.next">Siguiente →</button>
+      <div class="fila explanation oculto" id="payHintWrap">
+        <p id="payHintText" aria-live="polite"></p>
+        <button type="button" class="btn btn-audio" id="btnListenPayHint" data-i18n-aria="listenHintAria" aria-label="Listen to the help">🔊</button>
+      </div>
+
+      <div class="feedback" id="payFeedback" aria-live="polite"></div>
+      <button type="button" class="btn oculto" id="btnNextPay" data-i18n="core.next">Next →</button>
     </section>
 
-    <!-- Pantalla final (compartida por todas las actividades) -->
-    <section id="pantallaFinal" class="oculto centrado pila" aria-live="polite">
+    <!-- End screen (shared by every activity) -->
+    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
       <div class="emoji-grande" aria-hidden="true">🎉</div>
-      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
-      <p id="resumenFinal"></p>
-      <p id="transferencia" class="transferencia" data-i18n="transferencia"></p>
-      <button type="button" class="btn" id="btnRepetir" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secundario" id="btnOtroNivelFinal" data-i18n="btnOtroNivel">Elegir otro paso</button>
-      <button type="button" class="btn btn-secundario" id="btnVolverMenuFinal" data-i18n="volverMenu">← Menú</button>
+      <h2 data-i18n="core.roundComplete">Round complete!</h2>
+      <p id="endSummary"></p>
+      <p id="transfer" class="transfer" data-i18n="transfer"></p>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Play again</button>
+      <button type="button" class="btn btn-secundario" id="btnAnotherLevelEnd" data-i18n="btnAnotherLevel">Choose another step</button>
+      <button type="button" class="btn btn-secundario" id="btnBackToMenuEnd" data-i18n="backToMenu">← Menu</button>
     </section>
     <footer class="pie-app">
-      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Data protection</a>
     </footer>
   </div>
 
@@ -150,4 +151,3 @@
   <script src="../../assets/js/sw-register.js"></script>
 </body>
 </html>
-

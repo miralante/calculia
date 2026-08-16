@@ -1,16 +1,16 @@
 /* ============================================================
    Calculia — Quantities (read and write large numbers).
    Four practices in the menu:
-     - read     : the number is shown WITHOUT separator (< 10.000)
+     - read     : the paintNumber is shown WITHOUT separator (< 10.000)
                  or with separator (>= 10.000); the user copies it.
-                 (Showing it with separator trains reading the sign.)
-     - write    : the number is spoken and the user writes it.
-     - points   : the number is shown WITHOUT separator; the user
+                 (Showing it with separator trains reading the paintSign.)
+     - write    : the paintNumber is spoken and the user writes it.
+     - points   : the paintNumber is shown WITHOUT separator; the user
                  must type it WITH the separator in the right place.
-     - decompose: the number is shown with digits coloured by
+     - decompose: the paintNumber is shown with digits coloured by
                  position and the user is asked for the value of
                  ONE digit (3 options: the correct one + 2
-                 distractors from the same number, avoiding repeats).
+                 distractors from the same paintNumber, avoiding repeats).
 
    "Thousand" rule (see data.js): < 10.000 has no separator;
    >= 10.000 does. In read/write modes the format shown matches
@@ -18,7 +18,7 @@
    on purpose — the exercise is precisely to put the separator back.
 
    The reading in words uses a custom algorithm (not a lookup
-   table) so the activity can generate any number in the range
+   table) so the activity can generate any paintNumber in the range
    0..999,999,999. Localized to es and en.
    ============================================================ */
 (function () {
@@ -128,18 +128,18 @@
         var clase = POS_CLASS[posAbs] || 'cifra-u';
         cuerpo += '<span class="' + clase + '">' + groups[g][j] + '</span>';
       }
-      if (g > 0) htmlOut += '<span class="cifra-sep">' + sep + '</span>';
+      if (g > 0) htmlOut += '<span class="digit-sep">' + sep + '</span>';
       htmlOut += cuerpo;
     }
-    if (n < 0) htmlOut = '<span class="signo">−</span>' + htmlOut;
+    if (n < 0) htmlOut = '<span class="paintSign">−</span>' + htmlOut;
     return htmlOut;
   }
 
   function legendHTML() {
     var parts = [];
-    parts.push('<span class="cifra-u">' + App.i18n.t('posU') + '</span>');
-    parts.push('<span class="cifra-d">' + App.i18n.t('posD') + '</span>');
-    parts.push('<span class="cifra-c">' + App.i18n.t('posC') + '</span>');
+    parts.push('<span class="digit-u">' + App.i18n.t('posU') + '</span>');
+    parts.push('<span class="digit-d">' + App.i18n.t('posD') + '</span>');
+    parts.push('<span class="digit-c">' + App.i18n.t('posC') + '</span>');
     return App.i18n.t('legendTitle') + ' ' + parts.join(' · ');
   }
 
@@ -153,7 +153,10 @@
   var TENS_ES = ['', '', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
   var TENS_EN = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
   /* Special 11-19 (es): once, doce, trece, catorce, quince, dieciséis, diecisiete, dieciocho, diecinueve.
-     Special 11-19 (en): eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen. */
+     Special 11-19 (en): eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen.
+     The Spanish forms are kept here as data so the paintNumber-to-words
+     algorithm below can read them directly; they are not a comment
+     translation. */
   var TEENS_ES = ['diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve'];
   var TEENS_EN = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
   /* Hundreds (es): 100 cien, 200 doscientos, ..., 900 novecientos (apocopated).
@@ -219,9 +222,10 @@
   }
 
   /* Apocope: "veintiún" / "veintiuna" is used before "millones",
-     "billones"… To keep it simple and because the user will hear
+     "billones"… (the apocopated forms of veintiuno / veintiuna when
+     they precede a noun). To keep it simple and because the user will hear
      the audio, we keep the full forms ("veintiuno millones").
-     Valid in standard Spanish for reading. */
+     Valid in standard Spanish for reading aloud. */
   function readGroup(n, locale, singular, plural) {
     if (n === 1) return locale === 'en' ? 'one ' + singular : singular;
     var num = threeDigits(n, locale);
@@ -298,8 +302,8 @@
          applicable). The user must copy it EXACTLY: with separator
          if >= 10.000, without it if < 10.000. This trains reading
          the sign. */
-      mostrar: format(n),
-      correcto: format(n),
+      show: format(n),
+      correct: format(n),
       prompt: App.i18n.t('promptRead').replace('{n}', format(n)),
       detail: App.i18n.t('detailRead'),
       audio: readNumber(n, App.i18n.locale())
@@ -312,9 +316,9 @@
       n: n,
       tipo: 'typing',
       /* In "write" the number is NOT shown, only spoken.
-         The mostrar field stays empty; the 🔊 button appears. */
-      mostrar: '',
-      correcto: format(n),
+         The show field stays empty; the 🔊 button appears. */
+      show: '',
+      correct: format(n),
       prompt: App.i18n.t('promptWrite'),
       detail: App.i18n.t('detailWrite'),
       audio: readNumber(n, App.i18n.locale())
@@ -328,8 +332,8 @@
       tipo: 'typing',
       /* Shown without separator (even if >= 10.000). The user
          must type the version WITH separator. */
-      mostrar: withoutSeparator(n),
-      correcto: format(n),
+      show: withoutSeparator(n),
+      correct: format(n),
       prompt: App.i18n.t('promptPoints').replace('{nRaw}', withoutSeparator(n)),
       detail: App.i18n.t('detailPoints'),
       audio: ''
@@ -340,7 +344,7 @@
     var n = drawCase('decompose');
     var s = String(Math.abs(n));
     var totalDigits = s.length;
-    /* Pick a random position that exists in the number. The target
+    /* Pick a random position that exists in the paintNumber. The target
        digit should be != 0 more often than 0, because asking for
        a 0 digit is trivial; but we allow 0 to avoid bias. */
     var posAbs;
@@ -348,7 +352,7 @@
       posAbs = randomInt(0, totalDigits - 1);
     } while (digitAtPosition(n, posAbs) === 0 && Math.random() < 0.6);
     var correctDigit = digitAtPosition(n, posAbs);
-    /* Distractors: other digits from the same number. */
+    /* Distractors: other digits from the same paintNumber. */
     var others = [];
     for (var p = 0; p < totalDigits; p++) {
       if (p !== posAbs) {
@@ -371,9 +375,9 @@
     return {
       n: n,
       tipo: 'options',
-      mostrar: '',
-      correcto: correctDigit,
-      opciones: opciones,
+      show: '',
+      correct: correctDigit,
+      options: opciones,
       posAbs: posAbs,
       prompt: App.i18n.t('promptDecompose')
         .replace('{placeLabel}', App.i18n.t(POS_KEYS[posAbs]))
@@ -424,7 +428,7 @@
       show($('#answerInput'));
       show($('#btnEscuchar'));
     } else if (practice === 'points') {
-      $('#numberWithSep').textContent = case_.mostrar;
+      $('#numberWithSep').textContent = case_.show;
       show($('#numberWithSep'));
       show($('#answerInput'));
     } else if (practice === 'decompose') {
@@ -433,15 +437,15 @@
       show($('#legend'));
       $('#legend').innerHTML = legendHTML();
       var grid = $('#optionsGrid');
-      case_.opciones.forEach(function (opcion) {
-        var boton = document.createElement('button');
-        boton.type = 'button';
-        boton.className = 'btn-opcion btn-opcion--digit';
-        boton.textContent = String(opcion);
-        boton.setAttribute('data-value', opcion);
-        boton.setAttribute('aria-label', opcion);
-        boton.addEventListener('click', function () { clickOption(boton, opcion); });
-        grid.appendChild(boton);
+      case_.options.forEach(function (opcion) {
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn-opcion btn-opcion--digit';
+        button.textContent = String(opcion);
+        button.setAttribute('data-value', opcion);
+        button.setAttribute('aria-label', opcion);
+        button.addEventListener('click', function () { clickOption(button, opcion); });
+        grid.appendChild(button);
       });
       show(grid);
     }
@@ -471,21 +475,21 @@
 
   /* ----------- Click option (decompose mode) ----------- */
 
-  function clickOption(boton, valor) {
+  function clickOption(button, value) {
     if (!waitingCheck) return;
-    var correcto = valor === case_.correcto;
-    if (correcto) {
+    var correct = value === case_.correct;
+    if (correct) {
       correct();
     } else {
       attempts += 1;
-      if (attempts === 1) App.reinforce.add(practice + ':' + case_.correcto, case_);
+      if (attempts === 1) App.reinforce.add(practice + ':' + case_.correct, case_);
       App.feedback.encourage($('#feedback'));
       $('#feedback').textContent += ' ' + App.i18n.t('hintDecompose');
       /* Socratic lock: block the rest of the options until the
          person confirms "Got it". Consistent with numbers and
          SPEC §6 rule 12. */
-      var botones = $('#optionsGrid').querySelectorAll('.btn-opcion');
-      App.feedback.lockUntilAck(botones, $('#feedback'));
+      var buttons = $('#optionsGrid').querySelectorAll('.btn-opcion');
+      App.feedback.lockUntilAck(buttons, $('#feedback'));
     }
   }
 
@@ -500,14 +504,14 @@
     var sepLocal = separator();
     var sepOther = sepLocal === '.' ? ',' : '.';
     var clean = raw.trim().replace(new RegExp('\\s', 'g'), '').replace(sepOther, sepLocal);
-    if (clean === case_.correcto) {
+    if (clean === case_.correct) {
       correct();
     } else {
       attempts += 1;
       /* Reinforcement: register the first miss of the item. Stable
-         key: practice + ':' + case_.correcto. case_ is regenerated
+         key: practice + ':' + case_.correct. case_ is regenerated
       each round by GENERATORS, so we need something stable. */
-      if (attempts === 1) App.reinforce.add(practice + ':' + case_.correcto, case_);
+      if (attempts === 1) App.reinforce.add(practice + ':' + case_.correct, case_);
       App.feedback.encourage($('#feedback'));
       $('#feedback').textContent += ' ' + App.i18n.t('hint' + practice.charAt(0).toUpperCase() + practice.slice(1));
       /* In typing mode, re-focus input to retry. We do not lock:
@@ -525,7 +529,7 @@
     App.feedback.success($('#feedback'));
     /* In typing, show the correct form as reinforcement. */
     if (case_.tipo === 'typing') {
-      $('#feedback').textContent += ' ' + App.i18n.t('correctFormat').replace('{n}', case_.correcto);
+      $('#feedback').textContent += ' ' + App.i18n.t('correctFormat').replace('{n}', case_.correct);
     }
     waitingCheck = false;
     hide($('#checkAnswer'));

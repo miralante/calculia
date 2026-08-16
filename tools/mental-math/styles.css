@@ -4,8 +4,8 @@
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 .btn:not(.btn-secundario):not(.btn-audio) { background: var(--mod-razonamiento); }
-.instruccion { font-size: var(--texto-base); }
-.centrado-fila { justify-content: center; }
+.instruction { font-size: var(--texto-base); }
+.center-row { justify-content: center; }
 
 /* Activity menu */
 .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
@@ -20,38 +20,38 @@
 .btn-actividad .picto { font-size: 48px; }
 .btn-actividad .detalle { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
 
-#pantallaNiveles h2 { text-align: center; color: var(--mod-razonamiento); }
+#screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
 .btn-nivel { min-width: 300px; align-self: center; }
-#btnVolverMenu { align-self: center; }
+#btnBackToMenu { align-self: center; }
 
 /* Color-coded digits by place value */
 .num-color { font-weight: 800; letter-spacing: 2px; }
-.cifra-u { color: var(--mod-coordinacion); }   /* blue — units */
-.cifra-d { color: var(--mod-secuencia); }      /* green — tens */
-.cifra-c { color: var(--mod-emocional); }      /* purple — hundreds */
-.cifra-sep { color: var(--color-texto-suave); }
-.signo { color: var(--mod-memoria); }          /* orange */
-.destacada { text-decoration: underline; text-underline-offset: 6px; }
+.digit-u { color: var(--mod-coordinacion); }   /* blue — units */
+.digit-d { color: var(--mod-secuencia); }      /* green — tens */
+.digit-c { color: var(--mod-emocional); }      /* purple — hundreds */
+.digit-sep { color: var(--color-texto-suave); }
+.sign { color: var(--mod-memoria); }          /* orange */
+.highlight { text-decoration: underline; text-underline-offset: 6px; }
 
 .card { border-color: var(--mod-razonamiento-suave); }
-.enunciado { font-size: var(--texto-grande); font-weight: 700; }
+.prompt { font-size: var(--texto-grande); font-weight: 700; }
 .visual { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); }
-.leyenda { font-size: var(--texto-pequeno); font-weight: 700; }
-.pista { color: var(--color-texto-suave); font-size: var(--texto-base); }
+.legend { font-size: var(--texto-pequeno); font-weight: 700; }
+.hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
 
 /* Expressions (subtraction, doubles, round-number strategies) */
-.expresion {
+.expression {
   display: flex; align-items: center; justify-content: center;
   gap: 12px; font-size: 40px; font-weight: 800; flex-wrap: wrap;
 }
-.signo { font-size: 40px; font-weight: 800; }
-.caja-num {
+.sign { font-size: 40px; font-weight: 800; }
+.num-box {
   min-width: 64px; min-height: 64px; padding: 8px 12px;
   display: inline-flex; align-items: center; justify-content: center;
   border: 3px solid var(--color-borde); border-radius: var(--radio);
   background: var(--color-superficie); font-size: 30px; font-weight: 800;
 }
-.caja-num.hueco { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
+.num-box.empty { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
 
 /* Dots for counting */
 .puntos { display: flex; align-items: center; justify-content: center; gap: var(--espacio); flex-wrap: wrap; }
@@ -71,13 +71,13 @@
 
 /* Answer options */
 .opciones .btn-opcion { text-align: center; font-size: 26px; }
-.opciones.opciones-fila { flex-direction: row; justify-content: center; flex-wrap: wrap; }
-.opciones.opciones-fila .btn-opcion { width: auto; min-width: 180px; }
+.opciones.options-row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+.opciones.options-row .btn-opcion { width: auto; min-width: 180px; }
 
-.emoji-grande { font-size: 96px; }
-#pantallaFinal { padding-top: 48px; }
-#pantallaFinal .btn { align-self: center; min-width: 280px; }
-#pantallaFinal .transferencia {
+.emoji-large { font-size: 96px; }
+#screenEnd { padding-top: 48px; }
+#screenEnd .btn { align-self: center; min-width: 280px; }
+#screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);

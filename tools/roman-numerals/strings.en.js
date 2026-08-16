@@ -22,10 +22,16 @@
         to the next one within the same group without going back
         to the menu, preserving the gradual progression (rule 13).
 
-   In the test, the 3 options are always: the correct answer,
-   "0", and "∞". Since Roman numerals have no symbol for zero
-   or infinity, the correct answer is the only one backed by a
-   real Roman symbol: the format makes the right answer obvious.
+   In the test (and in every mode), the 3 options are always:
+   the correct answer and the two components that build the
+   Roman numeral (its decimal values for number-answer modes, or
+   its individual letters for the numberToRoman mode). For VI
+   the distractors are 5 and 1 (the values of V and I); for XI
+   they are 10 and 1. If the numeral has only one unique letter
+   (I, V, X, XX…), the second slot is filled with another value
+   from the {1, 5, 10} set the activity teaches. So instead of
+   a fixed "0/∞" decoy, the distractors are the actual pieces
+   the answer is built from.
 
    Each round shows the mechanics step-by-step (decomposition)
    with one color per letter (I→blue, V→green, X→orange).
@@ -104,8 +110,7 @@
     "whichRoman": "What is the Roman numeral for this?",
     "whichMonarchNumber": "What number is in their name?",
     "centuryRomanLabel": "Century {roman}",
-    "infinityOption": "∞ (infinity)",
-    "correctExplanation": "✅ Correct! Roman numerals have no symbol for 0 or infinity, only letters.",
+    "correctExplanation": "✅ Correct! Roman numerals are read letter by letter: each letter adds (or subtracts, if it sits before a larger one).",
     "wrongExplanationPrefix": "❌ That's not it. Look at the colors: ",
     "hintHint": "🤔 Hint: ",
     "finalSummary": "You earned {n} stars. Now you have {total} stars.",
@@ -132,11 +137,11 @@
        big symbol above and the reminder's formula. In IV,
        the {I} that subtracts is also colored red. */
     "carousel": {
-      "i": { "label": "I", "caption": "It's the number {i} in Roman numerals." },
-      "v": { "label": "V", "caption": "It's the number {v} in Roman numerals." },
-      "x": { "label": "X", "caption": "It's the number {x} in Roman numerals." },
-      "iv": { "label": "IV", "caption": "It's the number 4 in Roman numerals. {V} is worth {v} and {I} is worth {i}. If {I} comes before, it subtracts: {v} − {i} = {i4}." },
-      "ix": { "label": "IX", "caption": "It's the number 9 in Roman numerals. {X} is worth {x} and {I} is worth {i}. If {I} comes before, it subtracts: {x} − {i} = {i9}." },
+      "i": { "label": "I", "caption": "It's the first letter of the system. Its value is taught below." },
+      "v": { "label": "V", "caption": "It's the letter for five. Its value is taught below." },
+      "x": { "label": "X", "caption": "It's the letter for ten. Its value is taught below." },
+      "iv": { "label": "IV", "caption": "It's the number 4 in Roman numerals. {V} is worth {v} and {I} is worth {i}. If {I} comes before, it subtracts: {v} − {i}." },
+      "ix": { "label": "IX", "caption": "It's the number 9 in Roman numerals. {X} is worth {x} and {I} is worth {i}. If {I} comes before, it subtracts: {x} − {i}." },
       "vi": { "label": "VI", "caption": "It's the number 6 in Roman numerals. {V} is worth {v} and {I} is worth {i}. If {I} comes after, it adds: {v} + {i} = {i6}." },
       "xi": { "label": "XI", "caption": "It's the number 11 in Roman numerals. {X} is worth {x} and {I} is worth {i}. If {I} comes after, it adds: {x} + {i} = {i11}." }
     },
@@ -147,15 +152,15 @@
        app.js (formulaColoreada), with each number in the color of
        the letter that contributes it. */
     "famous": {
-      "century19": "The 19th century was the age of the invention of the telephone. {X} is worth {x} and {I} is worth {i}. The {I} sits in front of the last {X}, so I have {x} and subtract {i}: {x}+({x}−{i})={x}+{i9}={i19}.",
+      "century19": "The 19th century was the age of the invention of the telephone. {X} is worth {x} and {I} is worth {i}. The {I} sits in front of the last {X}, so I have {x} and subtract {i}:",
       "century20": "The previous century, the one that saw the Moon landing in 1969. {X} is worth {x}, and since both {X}'s sit one after the other, they add:",
-      "century21": "The century we live in. {X} is worth {x} and {I} is worth {i}. Since there are two {X}'s and each is worth {x}, they add up to {x}+{x}, and the {I} after them adds {i} more: {x}+{x}+{i}.",
+      "century21": "The century we live in. {X} is worth {x} and {I} is worth {i}. Since there are two {X}'s and each is worth {x}, they add:",
       "clock11": "On many clocks with Roman numerals, 11 o'clock is marked XI. {X} is worth {x} and {I} is worth {i}. Since the {I} sits after the {X}, it adds:",
-      "clock12": "On many clocks with Roman numerals, 12 o'clock is marked XII. {X} is worth {x} and {I} is worth {i}. Since both {I}'s sit after the {X}, each one adds {i}:",
-      "carlos3": "King of the United Kingdom since 2022. {I} is worth {i} and the three {I}'s sit one after the other, so each one adds {i}:",
-      "isabel2": "Queen of the United Kingdom for over 70 years. {I} is worth {i} and the two {I}'s sit one after the other, so each one adds {i}:",
+      "clock12": "On many clocks with Roman numerals, 12 o'clock is marked XII. {X} is worth {x} and {I} is worth {i}. Since both {I}'s sit after the {X}, they add:",
+      "carlos3": "King of the United Kingdom since 2022. {I} is worth {i} and the three {I}'s sit one after the other, so they add:",
+      "isabel2": "Queen of the United Kingdom for over 70 years. {I} is worth {i} and the two {I}'s sit one after the other, so they add:",
       "felipe6": "King of Spain since 2014. {V} is worth {v} and {I} is worth {i}. Since the {I} sits after the {V}, it adds:",
-      "henry8": "King of England. {V} is worth {v} and {I} is worth {i}. The {I} after the {V} adds {i}, and the next two {I}'s each add {i} as well:"
+      "henry8": "King of England. {V} is worth {v} and {I} is worth {i}. Since the {I}'s sit after the {V}, they add:"
     },
     /* Spoken phrase (TTS) per famous example. What the audio button
        actually says. Lives here because the spoken phrasing differs

@@ -499,47 +499,6 @@
   color: var(--color-texto);
 }
 
-/* Opciones: marca visual para los distractor siempre presentes */
-.btn-opcion.distractor-no, .btn-opcion.distractor-inf {
-  position: relative;
-}
-
-.btn-opcion.distractor-no::after,
-.btn-opcion.distractor-inf::after {
-  content: "";
-  display: block;
-  position: absolute;
-  inset: 4px;
-  border: 2px dashed var(--color-texto-suave);
-  opacity: 0.35;
-  border-radius: 6px;
-  pointer-events: none;
-}
-
-.btn-opcion.distractor-no::before {
-  content: "0";
-  position: absolute;
-  top: -10px;
-  right: 8px;
-  background: var(--color-superficie);
-  padding: 0 6px;
-  font-size: var(--texto-pequeno);
-  color: var(--color-texto-suave);
-  font-weight: 700;
-}
-
-.btn-opcion.distractor-inf::before {
-  content: "∞";
-  position: absolute;
-  top: -10px;
-  right: 8px;
-  background: var(--color-superficie);
-  padding: 0 6px;
-  font-size: var(--texto-pequeno);
-  color: var(--color-texto-suave);
-  font-weight: 700;
-}
-
 /* Pantalla final */
 @media (max-width: 640px) {
   .carousel-display, .famoso-ejemplo { font-size: 56px; }

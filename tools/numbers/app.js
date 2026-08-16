@@ -57,13 +57,13 @@
 
   /* ---- Utilidades ---- */
 
-  function ri(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  function randInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
   /* Takes elements from a list without repeating within the round. */
-  function sacar(clave, lista) {
-    var p = pools[clave];
+  function draw(key, list) {
+    var p = pools[key];
     if (!p || p.i >= p.orden.length) {
-      p = pools[clave] = { orden: App.utils.shuffle(lista), i: 0 };
+      p = pools[key] = { orden: App.utils.shuffle(list), i: 0 };
     }
     return p.orden[p.i++];
   }
@@ -74,13 +74,13 @@
 
   /* Thousands separator ('.' is / ',' in) and decimal (',' is / '.' in).
      Not only styling: switching the separator between locales is
-     mandatory so the number reads correctly (see I18N.md §2). */
+     mandatory so the paintNumber reads correctly (see I18N.md §2). */
   function thousandsSeparator() { return App.i18n.locale() === 'en' ? ',' : '.'; }
 
   function legendPos() {
-    return '<span class="cifra-u">' + App.i18n.t('leyendaUnidadesTxt') + '</span> · ' +
-      '<span class="cifra-d">' + App.i18n.t('leyendaDecenasTxt') + '</span> · ' +
-      '<span class="cifra-c">' + App.i18n.t('leyendaCentenasTxt') + '</span>';
+    return '<span class="digit-u">' + App.i18n.t('leyendaUnidadesTxt') + '</span> · ' +
+      '<span class="digit-d">' + App.i18n.t('leyendaDecenasTxt') + '</span> · ' +
+      '<span class="digit-c">' + App.i18n.t('leyendaCentenasTxt') + '</span>';
   }
 
   /* html for the digits of n. highlight: place (0=units, 1=tens…)
@@ -99,10 +99,10 @@
         if (highlight === posAbs) cls += ' destacada';
         body += '<span class="' + cls + '">' + groups[g][j] + '</span>';
       }
-      if (g > 0) html += '<span class="cifra-sep">' + thousandsSeparator() + '</span>';
+      if (g > 0) html += '<span class="digit-sep">' + thousandsSeparator() + '</span>';
       if (labels && groups.length > 1) {
-        html += '<span class="grupo"><span>' + body + '</span>' +
-          '<span class="grupo-etq">' + (App.i18n.t('grupoEtq.' + (groups.length - 1 - g)) || '&nbsp;') + '</span></span>';
+        html += '<span class="group"><span>' + body + '</span>' +
+          '<span class="group-label">' + (App.i18n.t('grupoEtq.' + (groups.length - 1 - g)) || '&nbsp;') + '</span></span>';
       } else {
         html += body;
       }
@@ -110,17 +110,17 @@
     return html;
   }
 
-  function number(n, opts) {
+  function paintNumber(n, opts) {
     opts = opts || {};
     return '<span class="num-color">' + digits(n, opts.labels, opts.highlight) + '</span>';
   }
 
-  function sign(s) { return '<span class="signo">' + s + '</span>'; }
+  function paintSign(s) { return '<span class="paintSign">' + s + '</span>'; }
 
   /* ---- Elevator (negative numbers) ---- */
 
   function floorHTML(n) {
-    return n < 0 ? sign('−') + number(Math.abs(n)) : number(n);
+    return n < 0 ? paintSign('−') + paintNumber(Math.abs(n)) : paintNumber(n);
   }
 
   /* Plain-text floor label (used for 'enunciado', which is set via
@@ -130,9 +130,9 @@
   }
 
   function legendElevator() {
-    return '<span class="cifra-u">' + App.i18n.t('leyendaPlantaBajaTxt') + '</span> · ' +
-      '<span class="cifra-pos">' + App.i18n.t('leyendaEscalaPositivaTxt') + '</span> · ' +
-      '<span class="cifra-coma">' + App.i18n.t('leyendaEscalaNegativaTxt') + '</span>';
+    return '<span class="digit-u">' + App.i18n.t('leyendaPlantaBajaTxt') + '</span> · ' +
+      '<span class="digit-pos">' + App.i18n.t('leyendaEscalaPositivaTxt') + '</span> · ' +
+      '<span class="digit-comma">' + App.i18n.t('leyendaEscalaNegativaTxt') + '</span>';
   }
 
   /* Vertical shaft visual (decorative, aria-hidden — the accessible
@@ -150,15 +150,15 @@
       var contenido = '';
       if (n === 0) {
         clases += ' piso-suelo';
-        contenido += '<span class="piso-icono">🏠</span>';
+        contenido += '<span class="floor-icon">🏠</span>';
       }
       (porPiso[n] || []).forEach(function (m) {
         clases += ' ' + (m.clase || 'piso-marca');
-        contenido += '<span class="piso-icono">' + m.icon + '</span>';
+        contenido += '<span class="floor-icon">' + m.icon + '</span>';
       });
       filas += '<div class="' + clases + '">' + contenido + '</div>';
     }
-    return '<div class="ascensor-shaft" aria-hidden="true">' + filas + '</div>';
+    return '<div class="elevator-shaft" aria-hidden="true">' + filas + '</div>';
   }
 
   /* ---- Numeric options (3, unique, shuffled) ---- */
@@ -198,7 +198,7 @@
        the same fact in words ("N floors up/down from the ground floor")
        so the question is answerable without seeing the shaft. */
     ascensorLeer: function (nv) {
-      var floor = ri(nv.min, nv.max);
+      var floor = randInt(nv.min, nv.max);
       var situacion = floor === 0 ? App.i18n.t('gen.ascensorLeerSituacionSuelo') :
         (floor > 0 ? App.i18n.t('gen.ascensorLeerSituacionArriba').replace('{n}', floor) :
           App.i18n.t('gen.ascensorLeerSituacionAbajo').replace('{n}', Math.abs(floor)));
@@ -209,10 +209,10 @@
         if (values.indexOf(candidates[i]) === -1) values.push(candidates[i]);
       }
       return {
-        enunciado: App.i18n.t('gen.ascensorLeerEnunciado'),
+        prompt: App.i18n.t('gen.ascensorLeerEnunciado'),
         visual: shaftHTML(nv.min, nv.max, [{ floor: floor, icon: '🛗', clase: 'piso-actual' }]),
-        leyenda: legendElevator(),
-        opciones: App.utils.shuffle(values).map(function (v) {
+        legend: legendElevator(),
+        options: App.utils.shuffle(values).map(function (v) {
           return { html: floorHTML(v), correct: v === floor };
         })
       };
@@ -223,10 +223,10 @@
        direction (rule 13: only 'delta'/direction vary per question,
        not the range). */
     ascensorMover: function (nv) {
-      var start = ri(nv.min + 1, nv.max - 1);
+      var start = randInt(nv.min + 1, nv.max - 1);
       var subir = Math.random() < 0.5;
       var available = subir ? (nv.max - start) : (start - nv.min);
-      var delta = ri(1, Math.max(1, Math.min(4, available)));
+      var delta = randInt(1, Math.max(1, Math.min(4, available)));
       var end = subir ? start + delta : start - delta;
       var keyPrefix = subir ? 'gen.ascensorMoverSube' : 'gen.ascensorMoverBaja';
       var candidates = App.utils.shuffle([end - 1, end + 1, start]
@@ -236,11 +236,11 @@
         if (values.indexOf(candidates[i]) === -1) values.push(candidates[i]);
       }
       return {
-        enunciado: App.i18n.t(keyPrefix + 'Enunciado').replace('{inicio}', floorPlain(start)).replace('{delta}', delta),
+        prompt: App.i18n.t(keyPrefix + 'Enunciado').replace('{inicio}', floorPlain(start)).replace('{delta}', delta),
         visual: shaftHTML(nv.min, nv.max, [{ floor: start, icon: '🛗', clase: 'piso-actual' }]) +
-          '<p class="pista-flecha" aria-hidden="true">' + (subir ? '⬆️' : '⬇️') + ' ' + delta + '</p>',
-        leyenda: legendElevator(),
-        opciones: App.utils.shuffle(values).map(function (v) {
+          '<p class="hint-arrow" aria-hidden="true">' + (subir ? '⬆️' : '⬇️') + ' ' + delta + '</p>',
+        legend: legendElevator(),
+        options: App.utils.shuffle(values).map(function (v) {
           return { html: floorHTML(v), correct: v === end };
         })
       };
@@ -250,20 +250,20 @@
        exist, so opciones has 2 (accessibility rule 11 sets a maximum of
        3, not a fixed count). */
     ascensorComparar: function (nv) {
-      var a = ri(nv.min, nv.max);
+      var a = randInt(nv.min, nv.max);
       var b;
-      do { b = ri(nv.min, nv.max); } while (b === a);
+      do { b = randInt(nv.min, nv.max); } while (b === a);
       var abajo = Math.random() < 0.5;
       var correct = abajo ? Math.min(a, b) : Math.max(a, b);
       var keyPrefix = abajo ? 'gen.ascensorCompararAbajo' : 'gen.ascensorCompararArriba';
       return {
-        enunciado: App.i18n.t(keyPrefix + 'Enunciado'),
+        prompt: App.i18n.t(keyPrefix + 'Enunciado'),
         visual: shaftHTML(nv.min, nv.max, [
           { floor: a, icon: '🛗', clase: 'piso-actual' },
           { floor: b, icon: '🚩', clase: 'piso-marca' }
         ]),
-        leyenda: legendElevator(),
-        opciones: [
+        legend: legendElevator(),
+        options: [
           { html: floorHTML(a), correct: a === correct },
           { html: floorHTML(b), correct: b === correct }
         ]
@@ -272,10 +272,10 @@
 
     /* "Place it in its spot": given a floor NUMBER, find which lettered
        spot on the shaft matches it, among 2 nearby decoys. This is the
-       inverse of ascensorLeer (there the shaft is given and the number
-       is guessed; here the number is given and the spot is guessed). */
+       inverse of ascensorLeer (there the shaft is given and the paintNumber
+       is guessed; here the paintNumber is given and the spot is guessed). */
     ascensorColocar: function (nv) {
-      var floor = ri(nv.min, nv.max);
+      var floor = randInt(nv.min, nv.max);
       var candidates = App.utils.shuffle([floor - 2, floor - 1, floor + 1, floor + 2]
         .filter(function (v) { return v >= nv.min && v <= nv.max && v !== floor; })).slice(0, 2);
       var letters = ['A', 'B', 'C'];
@@ -283,10 +283,10 @@
         return { floor: f, icon: letters[i], clase: 'piso-opcion' };
       });
       return {
-        enunciado: App.i18n.t('gen.ascensorColocarEnunciado').replace('{piso}', floorPlain(floor)),
+        prompt: App.i18n.t('gen.ascensorColocarEnunciado').replace('{piso}', floorPlain(floor)),
         visual: shaftHTML(nv.min, nv.max, markers),
-        leyenda: legendElevator(),
-        opciones: markers.map(function (m) {
+        legend: legendElevator(),
+        options: markers.map(function (m) {
           return {
             html: m.icon,
             aria: App.i18n.t('gen.ascensorColocarOpcionAria').replace('{l}', m.icon),
@@ -297,7 +297,7 @@
     },
 
     bloques: function (nv) {
-      var n = nv.max === 99 ? ri(11, 99) : ri(111, 999);
+      var n = nv.max === 99 ? randInt(11, 99) : randInt(111, 999);
       var c = Math.floor(n / 100);
       var d = Math.floor((n % 100) / 10);
       var u = n % 10;
@@ -307,46 +307,46 @@
       if (u) parts.push(u + ' ' + App.i18n.t(u === 1 ? 'unidadSingular' : 'unidadPlural'));
       var conjunction = App.i18n.locale() === 'en' ? ' and $1' : ' y $1';
       var text = parts.join(', ').replace(/, ([^,]+)$/, conjunction);
-      var html = '<div class="bloques">';
-      if (c) html += '<span class="bloques-grupo">' + repeat('<span class="bloque-100">100</span>', c) + '</span>';
-      if (d) html += '<span class="bloques-grupo">' + repeat('<span class="bloque-10">10</span>', d) + '</span>';
-      if (u) html += '<span class="bloques-grupo">' + repeat('<span class="bloque-1"></span>', u) + '</span>';
+      var html = '<div class="blocks">';
+      if (c) html += '<span class="blocks-group">' + repeat('<span class="block-100">100</span>', c) + '</span>';
+      if (d) html += '<span class="blocks-group">' + repeat('<span class="block-10">10</span>', d) + '</span>';
+      if (u) html += '<span class="blocks-group">' + repeat('<span class="block-1"></span>', u) + '</span>';
       html += '</div>';
       var swapped = c * 100 + u * 10 + d; /* tens and units swapped */
       return {
-        enunciado: App.i18n.t('gen.bloquesEnunciado'),
+        prompt: App.i18n.t('gen.bloquesEnunciado'),
         visual: html,
         visualAria: App.i18n.t('gen.bloquesVisualAria').replace('{text}', text),
-        leyenda: legendPos(),
-        opciones: buildOptions(n,
+        legend: legendPos(),
+        options: buildOptions(n,
           App.utils.shuffle([swapped !== n ? swapped : n + 1, n + 10, n - 10, n + 1]),
-          function (v) { return number(v); })
+          function (v) { return paintNumber(v); })
       };
     },
 
     lectura: function (nv, i) {
       var list = DATA.lecturas[App.i18n.locale()][nv.lista];
-      var item = sacar(nv.lista, list);
+      var item = draw(nv.lista, list);
       var others = App.utils.shuffle(list.filter(function (o) { return o.n !== item.n; })).slice(0, 2);
-      var note = item.nota ? '<p class="pista">' + item.nota + '</p>' : '';
+      var note = item.nota ? '<p class="hint">' + item.nota + '</p>' : '';
       if (i % 2 === 0) {
-        /* number → words */
+        /* paintNumber → words */
         return {
-          enunciado: App.i18n.t('gen.lecturaEnunciadoNumASim'),
-          visual: '<div class="visual-num">' + number(item.n, { labels: true }) + '</div>' + note,
-          leyenda: legendPos(),
-          opciones: App.utils.shuffle([{ html: item.palabras, correct: true }].concat(
+          prompt: App.i18n.t('gen.lecturaEnunciadoNumASim'),
+          visual: '<div class="visual-number">' + paintNumber(item.n, { labels: true }) + '</div>' + note,
+          legend: legendPos(),
+          options: App.utils.shuffle([{ html: item.palabras, correct: true }].concat(
             others.map(function (o) { return { html: o.palabras, correct: false }; })
           ))
         };
       }
-      /* words → number */
+      /* words → paintNumber */
       return {
-        enunciado: App.i18n.t('gen.lecturaEnunciadoSimANum'),
-        visual: '<p class="palabras-num">' + item.palabras + '</p>' + note,
-        leyenda: legendPos(),
-        opciones: App.utils.shuffle([{ html: number(item.n), correct: true }].concat(
-          others.map(function (o) { return { html: number(o.n), correct: false }; })
+        prompt: App.i18n.t('gen.lecturaEnunciadoSimANum'),
+        visual: '<p class="words-number">' + item.palabras + '</p>' + note,
+        legend: legendPos(),
+        options: App.utils.shuffle([{ html: paintNumber(item.n), correct: true }].concat(
+          others.map(function (o) { return { html: paintNumber(o.n), correct: false }; })
         ))
       };
     },
@@ -357,39 +357,39 @@
        way (how many small ones make these big blocks?). */
     canje: function (nv, i) {
       var blocks = [
-        '<span class="bloque-1"></span>',
-        '<span class="bloque-10">10</span>',
-        '<span class="bloque-100">100</span>',
-        '<span class="bloque-1000">1' + thousandsSeparator() + '000</span>'
+        '<span class="block-1"></span>',
+        '<span class="block-10">10</span>',
+        '<span class="block-100">100</span>',
+        '<span class="block-1000">1' + thousandsSeparator() + '000</span>'
       ];
       var hint = App.i18n.t('gen.canjePista' + nv.lugar);
       if (i % 2 === 0) {
         /* Big blocks get large fast: fewer groups for bigger places. */
-        var k = ri(2, [5, 4, 3][nv.lugar]);
+        var k = randInt(2, [5, 4, 3][nv.lugar]);
         var n = k * 10;
         var statement = App.i18n.t('gen.canjeDirecto' + nv.lugar).replace('{n}', n);
         return {
-          enunciado: statement,
-          visual: '<div class="bloques">' +
-            repeat('<span class="canje-grupo">' + repeat(blocks[nv.lugar], 10) + '</span>', k) +
-            '</div><p class="pista">' + hint + '</p>',
+          prompt: statement,
+          visual: '<div class="blocks">' +
+            repeat('<span class="trade-group">' + repeat(blocks[nv.lugar], 10) + '</span>', k) +
+            '</div><p class="hint">' + hint + '</p>',
           visualAria: App.i18n.t('gen.canjeAriaDirecto').replace('{k}', k),
-          leyenda: legendPos(),
-          opciones: buildOptions(k, [n, k + 1, k - 1],
-            function (v) { return number(v); })
+          legend: legendPos(),
+          options: buildOptions(k, [n, k + 1, k - 1],
+            function (v) { return paintNumber(v); })
         };
       }
-      var kInv = ri(2, 9);
+      var kInv = randInt(2, 9);
       var statementInv = App.i18n.t('gen.canjeInverso' + nv.lugar).replace('{k}', kInv);
       return {
-        enunciado: statementInv,
-        visual: '<div class="bloques"><span class="bloques-grupo">' +
+        prompt: statementInv,
+        visual: '<div class="blocks"><span class="blocks-group">' +
           repeat(blocks[nv.lugar + 1], kInv) +
-          '</span></div><p class="pista">' + hint + '</p>',
+          '</span></div><p class="hint">' + hint + '</p>',
         visualAria: App.i18n.t('gen.canjeAriaInverso').replace('{k}', kInv),
-        leyenda: legendPos(),
-        opciones: buildOptions(kInv * 10, [kInv, kInv * 10 + 10, (kInv - 1) * 10],
-          function (v) { return number(v); })
+        legend: legendPos(),
+        options: buildOptions(kInv * 10, [kInv, kInv * 10 + 10, (kInv - 1) * 10],
+          function (v) { return paintNumber(v); })
       };
     },
 
@@ -400,33 +400,33 @@
     escalera: function (nv) {
       var exponents = [];
       for (var e = nv.minExp; e <= nv.maxExp; e++) exponents.push(e);
-      var exp = sacar('esc' + nv.id, exponents);
+      var exp = draw('esc' + nv.id, exponents);
       var n = Math.pow(10, exp);
       var correct = n * 10;
       return {
-        enunciado: App.i18n.t('gen.escaleraEnunciado'),
-        visual: '<div class="expresion">' + number(10) + sign('×') +
-          number(n, { labels: true }) + sign('=') +
-          '<span class="caja-num hueco">?</span></div>' +
-          '<p class="pista">' + App.i18n.t('gen.escaleraPista') + '</p>',
-        leyenda: legendPos(),
-        opciones: buildOptions(correct, [n, correct * 10],
-          function (v) { return number(v); })
+        prompt: App.i18n.t('gen.escaleraEnunciado'),
+        visual: '<div class="expression">' + paintNumber(10) + paintSign('×') +
+          paintNumber(n, { labels: true }) + paintSign('=') +
+          '<span class="num-box empty">?</span></div>' +
+          '<p class="hint">' + App.i18n.t('gen.escaleraPista') + '</p>',
+        legend: legendPos(),
+        options: buildOptions(correct, [n, correct * 10],
+          function (v) { return paintNumber(v); })
       };
     },
 
-    /* Previously this mode was audio-only (without showing the number).
-       Now that the activity has no audio, we show the number with
+    /* Previously this mode was audio-only (without showing the paintNumber).
+       Now that the activity has no audio, we show the paintNumber with
        coloured digits so the person can read it and choose. */
     dictado: function (nv) {
-      var n = ri(11, nv.max);
+      var n = randInt(11, nv.max);
       var candidates = App.utils.shuffle(
         [n - 10, n + 10, n - 1, n + 1, n + 2].filter(function (x) { return x > 0 && x !== n; })
       );
       return {
-        enunciado: App.i18n.t('gen.dictadoEnunciado'),
-        visual: '<div class="visual-num">' + number(n, { labels: true }) + '</div>',
-        opciones: buildOptions(n, candidates, function (v) { return number(v); })
+        prompt: App.i18n.t('gen.dictadoEnunciado'),
+        visual: '<div class="visual-number">' + paintNumber(n, { labels: true }) + '</div>',
+        options: buildOptions(n, candidates, function (v) { return paintNumber(v); })
       };
     }
   };
@@ -524,7 +524,7 @@
     question = fixedQuestion || GENERATORS[level.tipo](level, index);
     fixedQuestion = null;
 
-    promptEl.textContent = question.enunciado;
+    promptEl.textContent = question.prompt;
     visualEl.innerHTML = question.visual || '';
     if (question.visualAria) {
       visualEl.setAttribute('role', 'img');
@@ -533,8 +533,8 @@
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.innerHTML = question.leyenda || '';
-    legendEl.classList.toggle('oculto', !question.leyenda);
+    legendEl.innerHTML = question.legend || '';
+    legendEl.classList.toggle('oculto', !question.legend);
 
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
@@ -543,8 +543,8 @@
     btnNext.classList.add('oculto');
 
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('opciones-fila', !!question.enFila);
-    question.opciones.forEach(function (op) {
+    optionsEl.classList.toggle('opciones-fila', !!question.inline);
+    question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn-opcion';
@@ -567,7 +567,7 @@
   }
 
   function showExplanation(isCorrect) {
-    var correct = question.opciones.filter(function (o) { return o.correct; })[0];
+    var correct = question.options.filter(function (o) { return o.correct; })[0];
     var text = (isCorrect ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
       plainText(correct.html) + '.';
     explanationEl.textContent = text;

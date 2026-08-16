@@ -20,7 +20,7 @@
 
     <section id="screenMenu" class="pila">
       <div class="fila centrado-fila">
-        <p class="instruccion" id="instruction" data-i18n="instructionMenu">Elige una actividad.</p>
+        <p class="instruction" id="instruction" data-i18n="instructionMenu">Elige una actividad.</p>
       </div>
       <div id="activitiesMenu"></div>
     </section>
@@ -28,7 +28,7 @@
     <section id="screenLevels" class="oculto pila">
       <h2 id="activityTitle"></h2>
       <div class="fila centrado-fila">
-        <p class="instruccion" id="activityInstruction"></p>
+        <p class="instruction" id="activityInstruction"></p>
       </div>
       <div class="pila" id="levels"></div>
       <button type="button" class="btn btn-secundario" id="btnBackToMenu" data-i18n="btnBackToMenu">← Otras actividades</button>
@@ -41,7 +41,7 @@
       </div>
 
       <div class="card centrado pila">
-        <p class="enunciado" id="prompt"></p>
+        <p class="prompt" id="prompt"></p>
         <div class="visual" id="visual"></div>
         <p class="leyenda oculto" id="legend"></p>
       </div>
@@ -56,10 +56,10 @@
     </section>
 
     <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
-      <div class="emoji-grande" aria-hidden="true">🎉</div>
+      <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
-      <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
+      <p id="transfer" class="transfer" data-i18n="transferencia"></p>
       <button type="button" class="btn btn-secundario oculto" id="btnHarder"></button>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
       <button type="button" class="btn btn-secundario" id="btnOtherLevel" data-i18n="otherLevel">Elegir otro nivel</button>

@@ -63,7 +63,7 @@
 
   function startRound(n) {
     level = n;
-    groups = App.utils.shuffle(level.grupos).slice(0, bank().perRound);
+    groups = App.utils.shuffle(level.pools).slice(0, bank().perRound);
     index = 0;
     roundCorrect = 0;
     inReinforce = false;

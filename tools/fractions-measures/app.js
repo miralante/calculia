@@ -54,17 +54,17 @@
   /* ---- Utilidades ---- */
 
   /* Takes elements from a list without repeating within the round. */
-  function sacar(clave, lista) {
-    var p = pools[clave];
+  function draw(key, list) {
+    var p = pools[key];
     if (!p || p.i >= p.orden.length) {
-      p = pools[clave] = { orden: App.utils.shuffle(lista), i: 0 };
+      p = pools[key] = { orden: App.utils.shuffle(list), i: 0 };
     }
     return p.orden[p.i++];
   }
 
   function leyendaFrac() {
-    return '<span class="cifra-u">' + App.i18n.t('leyendaPartesPintadasTxt') + '</span> · ' +
-      '<span class="cifra-d">' + App.i18n.t('leyendaPartesTotalTxt') + '</span>';
+    return '<span class="digit-u">' + App.i18n.t('leyendaPartesPintadasTxt') + '</span> · ' +
+      '<span class="digit-d">' + App.i18n.t('leyendaPartesTotalTxt') + '</span>';
   }
 
   /* ---- Fracciones (SVG) ---- */
@@ -101,51 +101,51 @@
   var GENERATORS = {
 
     fracciones: function (nv) {
-      var f = sacar(nv.id, nv.fracs);
+      var f = draw(nv.id, nv.fracs);
       var otros = App.utils.shuffle(nv.fracs.filter(function (o) {
         return o[0] * f[1] !== o[1] * f[0]; /* quitar fracciones equivalentes */
       })).slice(0, 2);
       return {
-        enunciado: App.i18n.t('gen.fraccionesEnunciado'),
+        prompt: App.i18n.t('gen.fraccionesEnunciado'),
         visual: svgFraccion(f[0], f[1], 170),
         visualAria: App.i18n.t('gen.fraccionesVisualAria').replace('{den}', f[1]).replace('{num}', f[0]),
-        leyenda: leyendaFrac(),
-        opciones: App.utils.shuffle(
+        legend: leyendaFrac(),
+        options: App.utils.shuffle(
           [{ html: htmlFraccion(f), aria: App.i18n.t('gen.fraccionAria').replace('{num}', f[0]).replace('{den}', f[1]), correct: true }].concat(
             otros.map(function (o) {
               return { html: htmlFraccion(o), aria: App.i18n.t('gen.fraccionAria').replace('{num}', o[0]).replace('{den}', o[1]), correct: false };
             })
           )),
-        enFila: true
+        inline: true
       };
     },
 
     comparaFrac: function (nv) {
-      var par = App.utils.shuffle(sacar(nv.id, nv.pares));
+      var par = App.utils.shuffle(draw(nv.id, nv.pares));
       var mayor = (par[0][0] / par[0][1] > par[1][0] / par[1][1]) ? par[0] : par[1];
       return {
-        enunciado: App.i18n.t('gen.comparaFracEnunciado'),
+        prompt: App.i18n.t('gen.comparaFracEnunciado'),
         visual: '',
-        opciones: par.map(function (f) {
+        options: par.map(function (f) {
           return {
             html: '<span class="op-frac">' + svgFraccion(f[0], f[1], 120) + htmlFraccion(f) + '</span>',
             aria: App.i18n.t('gen.fraccionAria').replace('{num}', f[0]).replace('{den}', f[1]),
             correct: f === mayor
           };
         }),
-        enFila: true
+        inline: true
       };
     },
 
     medidas: function (nv) {
       var group = DATA.measures[App.i18n.locale()][nv.lista];
-      var item = sacar('med-' + nv.lista, group.items);
-      var ej = item.ej ? '<p class="pista">' + item.ej + '</p>' : '';
+      var item = draw('med-' + nv.lista, group.items);
+      var ej = item.ej ? '<p class="hint">' + item.ej + '</p>' : '';
       return {
-        enunciado: item.pregunta,
+        prompt: item.question,
         visual: '<div class="picto-medida" aria-hidden="true">' + group.picto + '</div>' +
           '<p class="medida-txt">' + item.q + '</p>' + ej,
-        opciones: App.utils.shuffle([{ html: item.r, correct: true }].concat(
+        options: App.utils.shuffle([{ html: item.r, correct: true }].concat(
           item.falsas.map(function (f) { return { html: f, correct: false }; })
         ))
       };
@@ -257,7 +257,7 @@
     attempts = 0;
     question = GENERATORS[level.tipo](level, index);
 
-    promptEl.textContent = question.enunciado;
+    promptEl.textContent = question.prompt;
     visualEl.innerHTML = question.visual || '';
     if (question.visualAria) {
       visualEl.setAttribute('role', 'img');
@@ -266,8 +266,8 @@
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.innerHTML = question.leyenda || '';
-    legendEl.classList.toggle('oculto', !question.leyenda);
+    legendEl.innerHTML = question.legend || '';
+    legendEl.classList.toggle('oculto', !question.legend);
 
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
@@ -276,8 +276,8 @@
     btnNext.classList.add('oculto');
 
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('opciones-fila', !!question.enFila);
-    question.opciones.forEach(function (op) {
+    optionsEl.classList.toggle('opciones-fila', !!question.inline);
+    question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn-opcion';
@@ -300,7 +300,7 @@
   }
 
   function showExplanation(isCorrect) {
-    var correct = question.opciones.filter(function (o) { return o.correct; })[0];
+    var correct = question.options.filter(function (o) { return o.correct; })[0];
     var text = (isCorrect ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
       plainText(correct.html) + '.';
     explanationEl.textContent = text;

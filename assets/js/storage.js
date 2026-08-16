@@ -13,7 +13,7 @@
 
   /* Keys under 'calculia:*' that are NOT an activity's progress:
      'locale' (language) and 'prefs' (font size, sounds — see
-     /settings/). Excluded from totalStars() and listaToolIds(). */
+     /settings/). Excluded from totalStars() and toolIds(). */
   var NON_TOOL_KEYS = ['locale', 'prefs'];
 
   /* Applies right away the font-size preference saved in /settings/
@@ -99,7 +99,7 @@
    * status and for the full reset.
    * @returns {string[]}
    */
-  function listaToolIds() {
+  function toolIds() {
     var out = [];
     try {
       for (var i = 0; i < localStorage.length; i++) {
@@ -117,6 +117,6 @@
     set: set,
     remove: remove,
     totalStars: totalStars,
-    listaToolIds: listaToolIds
+    toolIds: toolIds
   };
 })();

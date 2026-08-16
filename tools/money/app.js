@@ -41,9 +41,9 @@
   var question = null;
   var pools = {};
   /* Refuerzo: ver core en assets/js/feedback.js (App.reinforce).
-     preguntaFija permite reutilizar render() con una pregunta
+     fixedQuestion permite reutilizar render() con una question
      externa (la del refuerzo); si es null, render() genera una
-     nueva como antes. enRefuerzo controla el flujo de la mini-
+     nueva como antes. inReinforce controla el flujo de la mini-
      ronda. */
   var fixedQuestion = null;
   var inReinforce = false;
@@ -56,13 +56,13 @@
 
   /* ---- Utilidades ---- */
 
-  function ri(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  function randInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
   /* Takes elements from a list without repeating within the round. */
-  function sacar(clave, lista) {
-    var p = pools[clave];
+  function draw(key, list) {
+    var p = pools[key];
     if (!p || p.i >= p.orden.length) {
-      p = pools[clave] = { orden: App.utils.shuffle(lista), i: 0 };
+      p = pools[key] = { orden: App.utils.shuffle(list), i: 0 };
     }
     return p.orden[p.i++];
   }
@@ -87,8 +87,8 @@
   }
 
   function legendPrice() {
-    return '<span class="cifra-u">' + App.i18n.t('leyendaEurosTxt') + '</span> · ' +
-      '<span class="cifra-coma">' + App.i18n.t('leyendaComaTxt') + '</span>';
+    return '<span class="digit-u">' + App.i18n.t('leyendaEurosTxt') + '</span> · ' +
+      '<span class="digit-comma">' + App.i18n.t('leyendaComaTxt') + '</span>';
   }
 
   function priceHTML(cent) {
@@ -96,7 +96,7 @@
     var c = cent % 100;
     var cc = (c < 10 ? '0' : '') + c;
     return '<span class="num-color">' + digits(e) +
-      '<span class="cifra-coma">' + decimalSeparator() + '</span><span class="cifra-dec">' + cc + '</span> €</span>';
+      '<span class="digit-comma">' + decimalSeparator() + '</span><span class="digit-dec">' + cc + '</span> €</span>';
   }
 
   function wordsPrice(cent) {
@@ -115,21 +115,21 @@
   var GENERATORS = {
 
     precios: function () {
-      var prod = sacar('prod', DATA.productos);
+      var prod = draw('prod', DATA.productos);
       var nombreProd = App.i18n.t('producto.' + prod.id);
-      var e = ri(1, 9);
-      var c = [5, 10, 25, 50, 75, 90][ri(0, 5)];
+      var e = randInt(1, 9);
+      var c = [5, 10, 25, 50, 75, 90][randInt(0, 5)];
       var cent = e * 100 + c;
       var mal1 = App.i18n.t('precioConCentimos')
         .replace('{euros}', App.i18n.t('euroVarios').replace('{e}', c === e ? e + 1 : c))
         .replace('{c}', c === e ? c : e);
       var mal2 = String(e) + (c < 10 ? '0' : '') + c + ' euros';
       return {
-        enunciado: App.i18n.t('gen.preciosEnunciado'),
+        prompt: App.i18n.t('gen.preciosEnunciado'),
         visual: '<div class="picto-medida" aria-hidden="true">' + prod.picto + '</div>' +
-          '<div class="visual-num">' + priceHTML(cent) + '</div>',
-        leyenda: legendPrice(),
-        opciones: App.utils.shuffle([
+          '<div class="visual-number">' + priceHTML(cent) + '</div>',
+        legend: legendPrice(),
+        options: App.utils.shuffle([
           { html: wordsPrice(cent), correct: true },
           { html: mal1, correct: false },
           { html: mal2, correct: false }
@@ -140,20 +140,20 @@
     comparaPrecios: function () {
       var prods = App.utils.shuffle(DATA.productos).slice(0, 2);
       var nombres = prods.map(function (p) { return App.i18n.t('producto.' + p.id); });
-      var e = ri(1, 4);
+      var e = randInt(1, 4);
       var pares = [
         [e * 100 + 5, e * 100 + 50],
         [e * 100 + 90, (e + 1) * 100 + 10],
         [e * 100, e * 100 + 50],
         [e * 100 + 25, e * 100 + 75]
       ];
-      var par = App.utils.shuffle(pares[ri(0, pares.length - 1)]);
+      var par = App.utils.shuffle(pares[randInt(0, pares.length - 1)]);
       var caro = Math.max(par[0], par[1]);
       return {
-        enunciado: App.i18n.t('gen.comparaPreciosEnunciado'),
+        prompt: App.i18n.t('gen.comparaPreciosEnunciado'),
         visual: '',
-        leyenda: legendPrice(),
-        opciones: prods.map(function (p, i) {
+        legend: legendPrice(),
+        options: prods.map(function (p, i) {
           return {
             html: '<span class="op-precio"><span class="op-picto">' + p.picto + '</span>' +
               '<span>' + nombres[i] + '</span>' + priceHTML(par[i]) + '</span>',
@@ -161,38 +161,38 @@
             correct: par[i] === caro
           };
         }),
-        enFila: true
+        inline: true
       };
     },
 
     llegaUno: function () {
-      var caso = sacar('llegaUno', DATA.llegaUno);
-      var prod = sacar('prodLlegaUno', DATA.productos);
+      var caso = draw('llegaUno', DATA.llegaUno);
+      var prod = draw('prodLlegaUno', DATA.productos);
       var nombreProd = App.i18n.t('producto.' + prod.id);
       var llega = caso.precio <= caso.tiene;
       return {
-        enunciado: App.i18n.t('gen.llegaUnoEnunciado'),
+        prompt: App.i18n.t('gen.llegaUnoEnunciado'),
         visual:
           '<div class="llega-caja"><p class="llega-etq">' + App.i18n.t('gen.etqTienes') + '</p>' + priceHTML(caso.tiene) + '</div>' +
           '<div class="llega-caja"><p class="llega-etq">' + prod.picto + ' ' + nombreProd + ':</p>' +
           priceHTML(caso.precio) + '</div>',
-        leyenda: legendPrice(),
-        opciones: App.utils.shuffle([
+        legend: legendPrice(),
+        options: App.utils.shuffle([
           { html: App.i18n.t('gen.opcionSi'), correct: llega },
           { html: App.i18n.t('gen.opcionNo'), correct: !llega }
         ]),
-        enFila: true
+        inline: true
       };
     },
 
     llegaDos: function () {
-      var caso = sacar('llegaDos', DATA.llegaDos);
+      var caso = draw('llegaDos', DATA.llegaDos);
       var prods = App.utils.shuffle(DATA.productos).slice(0, 2);
       var nombres = prods.map(function (p) { return App.i18n.t('producto.' + p.id); });
       var total = caso.precios[0] + caso.precios[1];
       var llega = total <= caso.tiene;
       return {
-        enunciado: App.i18n.t('gen.llegaDosEnunciado'),
+        prompt: App.i18n.t('gen.llegaDosEnunciado'),
         visual:
           '<div class="llega-caja"><p class="llega-etq">' + App.i18n.t('gen.etqTienes') + '</p>' + priceHTML(caso.tiene) + '</div>' +
           '<div class="llega-fila">' +
@@ -201,30 +201,30 @@
           '<div class="llega-caja"><p class="llega-etq">' + prods[1].picto + ' ' + nombres[1] + ':</p>' +
           priceHTML(caso.precios[1]) + '</div>' +
           '</div>',
-        leyenda: legendPrice(),
-        opciones: App.utils.shuffle([
+        legend: legendPrice(),
+        options: App.utils.shuffle([
           { html: App.i18n.t('gen.opcionSi'), correct: llega },
           { html: App.i18n.t('gen.opcionNo'), correct: !llega }
         ]),
-        enFila: true
+        inline: true
       };
     },
 
     cambio: function (levelArg) {
-      var caso = sacar('cambio-' + levelArg.lista, DATA.cambio[levelArg.lista]);
+      var caso = draw('cambio-' + levelArg.lista, DATA.cambio[levelArg.lista]);
       var vuelta = caso.billete - caso.precio;
       return {
-        enunciado: App.i18n.t('gen.cambioEnunciado'),
+        prompt: App.i18n.t('gen.cambioEnunciado'),
         visual:
           '<div class="llega-caja"><p class="llega-etq">' + App.i18n.t('gen.etqPagas') + '</p>' + priceHTML(caso.billete) + '</div>' +
           '<div class="llega-caja"><p class="llega-etq">' + App.i18n.t('gen.etqCuesta') + '</p>' + priceHTML(caso.precio) + '</div>',
-        leyenda: legendPrice(),
-        opciones: App.utils.shuffle([
+        legend: legendPrice(),
+        options: App.utils.shuffle([
           { html: priceHTML(vuelta), correct: true },
           { html: priceHTML(vuelta + 100), correct: false },
           { html: priceHTML(Math.max(0, vuelta - 100)), correct: false }
         ]),
-        enFila: true
+        inline: true
       };
     }
   };
@@ -322,7 +322,7 @@
     question = fixedQuestion || GENERATORS[level.tipo](level, index);
     fixedQuestion = null;
 
-    promptEl.textContent = question.enunciado;
+    promptEl.textContent = question.prompt;
     visualEl.innerHTML = question.visual || '';
     if (question.visualAria) {
       visualEl.setAttribute('role', 'img');
@@ -331,8 +331,8 @@
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.innerHTML = question.leyenda || '';
-    legendEl.classList.toggle('oculto', !question.leyenda);
+    legendEl.innerHTML = question.legend || '';
+    legendEl.classList.toggle('oculto', !question.legend);
 
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
@@ -341,8 +341,8 @@
     btnNext.classList.add('oculto');
 
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('opciones-fila', !!question.enFila);
-    question.opciones.forEach(function (op) {
+    optionsEl.classList.toggle('opciones-fila', !!question.inline);
+    question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn-opcion';
@@ -365,7 +365,7 @@
   }
 
   function showExplanation(isCorrect) {
-    var correct = question.opciones.filter(function (o) { return o.correct; })[0];
+    var correct = question.options.filter(function (o) { return o.correct; })[0];
     var text = (isCorrect ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
       plainText(correct.html) + '.';
     explanationEl.textContent = text;

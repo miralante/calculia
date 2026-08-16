@@ -6,7 +6,7 @@
   background: var(--mod-razonamiento);
 }
 
-.instruccion { flex: 1; min-width: 200px; }
+.instruction { flex: 1; min-width: 200px; }
 
 .progress-bar { margin-top: var(--espacio); }
 
@@ -22,12 +22,12 @@ main { margin-top: var(--espacio-grande); }
 
 .pregunta { color: var(--color-texto-suave); }
 
-.emoji-grande { font-size: 96px; }
+.emoji-large { font-size: 96px; }
 
-#pantallaFinal { padding-top: 48px; }
+#screenEnd { padding-top: 48px; }
 
-#pantallaFinal .btn { align-self: center; min-width: 280px; 
-#pantallaFinal .transferencia {
+#screenEnd .btn { align-self: center; min-width: 280px; 
+#screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);

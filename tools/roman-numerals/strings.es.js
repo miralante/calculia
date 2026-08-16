@@ -25,11 +25,16 @@
         dentro del mismo grupo sin volver al menú, conservando la
         progresión gradual (regla 13).
 
-   En el test, las opciones son siempre tres: la respuesta
-   correcta, "0" e "∞". Como los números romanos no tienen
-   símbolo para el cero ni para el infinito, la respuesta
-   correcta es la única que tiene un símbolo romano válido: el
-   formato hace evidente cuál es la buena.
+   En el test (y en todos los modos), las opciones son siempre
+   tres: la respuesta correcta y los dos componentes del número
+   romano (sus valores decimales en los modos de respuesta
+   numérica, o sus letras en el modo numberToRoman). Para VI
+   las alternativas son 5 y 1 (los valores de la V y la I); para
+   XI son 10 y 1. Si el número solo tiene una letra distinta
+   (I, V, X, XX…), la segunda alternativa se completa con otro
+   valor de los que enseña la actividad (1, 5, 10). Así, en vez
+   de un "0/∞" fijo, las alternativas son las piezas reales de
+   las que se compone la respuesta.
 
    Cada ronda muestra la mecánica del número paso a paso
    (descomposición) con un color por letra (I→azul, V→verde,
@@ -108,8 +113,7 @@
     "whichRoman": "¿Qué número romano es este?",
     "whichMonarchNumber": "¿Qué número tiene su nombre?",
     "centuryRomanLabel": "Siglo {roman}",
-    "infinityOption": "∞ (infinito)",
-    "correctExplanation": "✅ ¡Correcto! Los números romanos no tienen símbolo para el 0 ni para el infinito, solo letras.",
+    "correctExplanation": "✅ ¡Correcto! Los números romanos se leen letra a letra: cada letra suma (o resta, si va delante de una mayor).",
     "wrongExplanationPrefix": "❌ No es ese. Fíjate en los colores: ",
     "hintHint": "🤔 Pista: ",
     "finalSummary": "Has ganado {n} estrellas. Ahora tienes {total} estrellas.",
@@ -137,11 +141,11 @@
        recordatorio. En IV, la {I} que resta se pinta además en
        rojo. */
     "carousel": {
-      "i": { "label": "I", "caption": "Es el número {i} en números romanos." },
-      "v": { "label": "V", "caption": "Es el número {v} en números romanos." },
-      "x": { "label": "X", "caption": "Es el número {x} en números romanos." },
-      "iv": { "label": "IV", "caption": "Es el número 4 en números romanos. La {V} vale {v} y la {I} vale {i}. Si la {I} va delante, resta: {v} − {i} = {i4}." },
-      "ix": { "label": "IX", "caption": "Es el número 9 en números romanos. La {X} vale {x} y la {I} vale {i}. Si la {I} va delante, resta: {x} − {i} = {i9}." },
+      "i": { "label": "I", "caption": "Es la primera letra del sistema. Su valor se aprende abajo." },
+      "v": { "label": "V", "caption": "Es la letra del cinco. Su valor se aprende abajo." },
+      "x": { "label": "X", "caption": "Es la letra del diez. Su valor se aprende abajo." },
+      "iv": { "label": "IV", "caption": "Es el número 4 en números romanos. La {V} vale {v} y la {I} vale {i}. Si la {I} va delante, resta: {v} − {i}." },
+      "ix": { "label": "IX", "caption": "Es el número 9 en números romanos. La {X} vale {x} y la {I} vale {i}. Si la {I} va delante, resta: {x} − {i}." },
       "vi": { "label": "VI", "caption": "Es el número 6 en números romanos. La {V} vale {v} y la {I} vale {i}. Si la {I} va detrás, suma: {v} + {i} = {i6}." },
       "xi": { "label": "XI", "caption": "Es el número 11 en números romanos. La {X} vale {x} y la {I} vale {i}. Si la {I} va detrás, suma: {x} + {i} = {i11}." }
     },
@@ -152,15 +156,15 @@
        en app.js (formulaColoreada), con cada cifra del color de la
        letra que la aporta. */
     "famous": {
-      "century19": "En el siglo XIX se inventó el teléfono. La {X} vale {x} y la {I} vale {i}. La {I} va delante de la última {X}, así que tengo {x} y se resta {i}: {x}+({x}−{i})={x}+{i9}={i19}.",
+      "century19": "En el siglo XIX se inventó el teléfono. La {X} vale {x} y la {I} vale {i}. La {I} va delante de la última {X}, así que tengo {x} y se resta {i}:",
       "century20": "El siglo pasado, el que vivió la llegada del hombre a la Luna en 1969. La {X} vale {x}, y como las dos {X} van seguidas, suman:",
-      "century21": "El siglo en que vivimos. La {X} vale {x} y la {I} vale {i}. Como hay dos {X} y cada una vale {x} suman {x}+{x}, y la {I} que va detrás suma {i} más: {x}+{x}+{i}.",
+      "century21": "El siglo en que vivimos. La {X} vale {x} y la {I} vale {i}. Como hay dos {X} y cada una vale {x}, suman:",
       "clock11": "En muchos relojes con números romanos, las 11 se marcan como XI. La {X} vale {x} y la {I} vale {i}. Como la {I} va detrás de la {X}, suma:",
-      "clock12": "En muchos relojes con números romanos, las 12 se marcan como XII. La {X} vale {x} y la {I} vale {i}. Como las dos {I} van detrás de la {X}, suman {i} cada una:",
-      "carlos3": "Rey de España. La {I} vale {i} y las tres {I} van seguidas, así que suman {i} cada una:",
-      "isabel2": "Reina de España. La {I} vale {i} y las dos {I} van seguidas, así que suman {i} cada una:",
+      "clock12": "En muchos relojes con números romanos, las 12 se marcan como XII. La {X} vale {x} y la {I} vale {i}. Como las dos {I} van detrás de la {X}, suman:",
+      "carlos3": "Rey de España. La {I} vale {i} y las tres {I} van seguidas, así que suman:",
+      "isabel2": "Reina de España. La {I} vale {i} y las dos {I} van seguidas, así que suman:",
       "felipe6": "Rey de España desde 2014. La {V} vale {v} y la {I} vale {i}. Como la {I} va detrás de la {V}, suma:",
-      "henry8": "Rey de Inglaterra. La {V} vale {v} y la {I} vale {i}. La {I} va detrás de la {V} y suma {i}, y las otras dos {I} también suman {i} cada una:"
+      "henry8": "Rey de Inglaterra. La {V} vale {v} y la {I} vale {i}. Como las {I} van detrás de la {V}, suman:"
     },
     /* Frase hablada (TTS) por cada ejemplo de la pantalla de
        famosos. Es lo que dice el botón de audio: lo que se oye debe

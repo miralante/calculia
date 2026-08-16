@@ -14,7 +14,7 @@
   var $ = App.utils.$;
 
   function renderState() {
-    var ids = App.storage.listaToolIds();
+    var ids = App.storage.toolIds();
     var stars = App.storage.totalStars();
     var languageName = App.i18n.t(App.i18n.locale() === 'en' ? 'languageNameEn' : 'languageNameEs');
     var list = $('#listaEstado');
@@ -79,7 +79,7 @@
   }
 
   function resetApp() {
-    App.storage.listaToolIds().forEach(function (id) {
+    App.storage.toolIds().forEach(function (id) {
       App.storage.remove(id);
     });
     var f = $('#feedbackApp');

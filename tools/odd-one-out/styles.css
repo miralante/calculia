@@ -6,9 +6,9 @@
   background: var(--mod-razonamiento);
 }
 
-.instruccion { font-size: var(--texto-base); }
+.instruction { font-size: var(--texto-base); }
 
-.centrado-fila { justify-content: center; }
+.center-row { justify-content: center; }
 
 .btn-nivel { min-width: 300px; align-self: center; }
 
@@ -30,16 +30,16 @@
   text-align: center;
 }
 
-.emoji-grande { font-size: 96px; }
+.emoji-large { font-size: 96px; }
 
-#pantallaFinal { padding-top: 48px; }
+#screenEnd { padding-top: 48px; }
 
-#pantallaFinal .btn { align-self: center; min-width: 280px; }
+#screenEnd .btn { align-self: center; min-width: 280px; }
 
 @media (max-width: 480px) {
   .picto-grande { font-size: 44px; min-height: 96px; }
 
-#pantallaFinal .transferencia {
+#screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);

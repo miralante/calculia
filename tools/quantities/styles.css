@@ -104,7 +104,7 @@
 
 /* --- Leyenda de posiciones (sólo descomponer) --- */
 
-.leyenda-pos {
+.legend-pos {
   font-size: var(--texto-pequeno);
   font-weight: 700;
   color: var(--color-texto-suave);
@@ -122,15 +122,15 @@
 
 /* --- Color de cifras por posición (réplica local del convenio de numbers) --- */
 
-.cifra-u { color: var(--mod-coordinacion); }    /* azul — unidades */
-.cifra-d { color: var(--mod-secuencia); }       /* verde — decenas */
-.cifra-c { color: var(--mod-emocional); }       /* morado — centenas */
-.cifra-sep { color: var(--color-texto-suave); } /* gris — separador */
-.signo { color: var(--mod-memoria); }           /* naranja — signo menos */
+.digit-u { color: var(--mod-coordinacion); }    /* azul — unidades */
+.digit-d { color: var(--mod-secuencia); }       /* verde — decenas */
+.digit-c { color: var(--mod-emocional); }       /* morado — centenas */
+.digit-sep { color: var(--color-texto-suave); } /* gris — separador */
+.sign { color: var(--mod-memoria); }           /* naranja — signo menos */
 
 /* Las clases con sufijo -mil / -millon / -mil-millones heredan el
    color base; el sufijo permite, si en el futuro se quiere cambiar
-   el color por grupo, hacerlo sin tocar .cifra-u/.cifra-d/.cifra-c. */
+   el color por grupo, hacerlo sin tocar .digit-u/.digit-d/.digit-c. */
 .cifra-mil, .cifra-millon, .cifra-mil-millones { /* placeholder para diferenciación futura */ }
 
 @media (max-width: 480px) {
@@ -142,7 +142,7 @@
   .btn-opcion--digit { font-size: 32px; }
 }
 
-#pantallaFinal .transferencia {
+#screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);

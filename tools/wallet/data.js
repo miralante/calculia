@@ -1,46 +1,46 @@
 /* ============================================================
-   Datos: El Monedero (razonamiento — manejo funcional del dinero).
-   Cinco actividades desde un menú (regla 10), como La Compra:
+   Calculia — The Wallet (reasoning: functional money handling).
+   Five activities from a menu (rule 10), in the same "shop" pattern:
 
-   - '¿Cuánto hay?' (contar): NO tiene casos escritos — cada caso se
-     genera al vuelo en app.js con las denominaciones del nivel
-     (variedad infinita, nada que memorizar). Regla 13: la única
-     variable por nivel son LOS TIPOS DE DINERO (monedas de euro →
-     + billetes → + monedas de céntimos). Ver CONTAR_BASE.
+   - "How much is there?" (count): NO hard-coded cases — each case
+     is generated at runtime in app.js from the level's denominations
+     (infinite variety, nothing to memorise). Rule 13: the only
+     per-level variable is THE MONEY TYPES (euro coins → + banknotes →
+     + cent coins). See COUNT_BASE.
 
-   - 'Paga justo' (pagar): banco ÚNICO de productos (PRODUCTOS).
-     ▶ PARA AÑADIR UN CASO: una línea en PRODUCTOS con
-       { picto, clave, precio } + el nombre en NOMBRES.es y
-       NOMBRES.en. NADA MÁS: el nivel se deduce solo del precio
-       (nivelDePrecio), así es imposible ponerlo en el nivel
-       equivocado o crear un precio impagable.
-     Regla 13: la única variable por nivel es LA FINURA DEL PRECIO
-     (el dinero nuevo viene dado por el precio): N1 enteros →
-     N2 añade ,50 → N3 añade ,10/,20 → N4 añade céntimos de 5.
-     Precios siempre en múltiplos de 5 céntimos (como el redondeo
-     real); no se usan monedas de 1 y 2 céntimos.
+   - "Pay exactly" (pay): a SINGLE product bank (PRODUCTS).
+     ▶ TO ADD A CASE: one line in PRODUCTS with
+       { picto, key, price } + the name in NAMES.es and
+       NAMES.en. NOTHING ELSE: the level is deduced from the price
+       alone (levelFromPrice), so it is impossible to put it in the
+       wrong level or to set an unpayable price.
+     Rule 13: the only per-level variable is THE PRICE FINENESS
+     (the new money is implied by the price): N1 whole euros →
+     N2 adds ,50 → N3 adds ,10/,20 → N4 adds 5-cent pieces.
+     Prices are always multiples of 5 cents (matching real rounding
+     practice); 1- and 2-cent coins are not used.
 
-   - '¿Con qué pago?' (conquepago), '¿Está bien el cambio?' (cambio)
-     y 'La Hucha' (hucha): casos GENERADOS al vuelo en app.js. Las
-     tres comparten la MISMA escalera de niveles (NIVELES_IMPORTE):
-     regla 13, única variable = la finura de los importes
-     (enteros → con ,50 → con décimos). La Hucha reutiliza además
-     el banco PRODUCTOS como objetivos de ahorro — añadir un
-     producto alimenta a la vez 'Paga justo' y 'La Hucha'.
+   - "What do I pay with?" (payWith), "Is the change correct?" (change)
+     and "The Piggy Bank" (piggyBank): cases GENERATED at runtime in
+     app.js. The three share the SAME level ladder (AMOUNT_LEVELS):
+     rule 13, only variable = amount fineness (whole → with ,50 →
+     with tenths). The Piggy Bank also reuses PRODUCTS as savings
+     targets — adding a product feeds both "Pay exactly" and "The
+     Piggy Bank".
 
-   Las actividades tipo quiz corren sobre un runner genérico en
-   app.js (montarQuiz): añadir una actividad de dinero nueva es
-   escribir UN objeto de configuración.
+   Quiz-type activities run on a generic runner in
+   app.js (buildQuiz below): adding a new money activity is just
+   ONE configuration object.
 
-   El catálogo visual del dinero y sus helpers viven en el módulo
-   compartido assets/js/dinero.js (App.dinero). Los importes se
-   trabajan en céntimos (enteros) para evitar errores de coma
-   flotante. app.js usa DATA[App.i18n.locale()] || DATA.es.
+   The visual money catalogue and helpers live in the shared module
+   assets/js/dinero.js (App.dinero). Amounts are kept in cents
+   (integers) to avoid floating-point errors. app.js uses
+   DATA[App.i18n.locale()] || DATA.es.
    ============================================================ */
 
 /* ---- How much is there? — denominations per level (rule 13: each
    level only ADDS money types; the number of pieces doesn't change). */
-const CONTAR_BASE = [
+const COUNT_BASE = [
   { id: 1, cents: [100, 200] },
   { id: 2, cents: [100, 200, 500, 1000] },
   { id: 3, cents: [10, 20, 50, 100, 200, 500, 1000] },
@@ -49,165 +49,166 @@ const CONTAR_BASE = [
 
 /* ---- Amounts ladder shared by "What do I pay with?", "Is the
    change correct?", and The Piggy Bank (rule 13: the only variable
-   is the granularity of the amounts; 'paso' is the multiple in cents
+   is the granularity of the amounts; 'step' is the multiple in cents
    and each level's amounts do NOT fall into the previous level —
-   bucket, like in Paga justo). */
-const NIVELES_IMPORTE = [
-  { id: 1, paso: 100 },
-  { id: 2, paso: 50 },
-  { id: 3, paso: 10 }
+   bucket, like in Pay exactly). */
+const AMOUNT_LEVELS = [
+  { id: 1, step: 100 },
+  { id: 2, step: 50 },
+  { id: 3, step: 10 }
 ];
 
 /* ---- More or less — possible deltas from the target euro
    (rule 13: the only variable is the distance to the euro; level 3
-   introduces ,50 and its "the 50 rounds up" rule). */
-const REDONDEO_BASE = [
+   introduces ,50 and its "50 rounds up" rule). */
+const ROUNDING_BASE = [
   { id: 1, deltas: [10, 20] },
   { id: 2, deltas: [30, 40] },
   { id: 3, deltas: [50] }
 ];
 
-/* ---- Paga justo — dinero disponible por nivel (acumulativo). */
-const PAGAR_CENTS = {
+/* ---- Pay exactly — money available per level (cumulative). */
+const PAY_CENTS = {
   1: [100, 200, 500],
   2: [50, 100, 200, 500],
   3: [10, 20, 50, 100, 200, 500],
   4: [5, 10, 20, 50, 100, 200, 500]
 };
 
-/* El nivel de un producto se deduce SOLO de su precio. */
-function nivelDePrecio(cent) {
-  if (cent % 100 === 0) return 1;   /* euros enteros */
-  if (cent % 50 === 0) return 2;    /* acaba en ,50 */
+/* The level of a product is deduced ONLY from its price. */
+function levelFromPrice(cent) {
+  if (cent % 100 === 0) return 1;   /* whole euros */
+  if (cent % 50 === 0) return 2;    /* ends in ,50 */
   if (cent % 10 === 0) return 3;    /* ends in ,10 … ,90 */
   return 4;                         /* multiples of 5 cents */
 }
 
 /* ▶ Product bank. To add a case: ONE line here
-   (price in euros, multiple of 0.05) + name in NOMBRES.es/en. */
-const PRODUCTOS = [
-  /* Nivel 1 — precios enteros */
-  { picto: '🍞', clave: 'pan', precio: 2 },
-  { picto: '🥛', clave: 'leche', precio: 1 },
-  { picto: '🍎', clave: 'manzanas', precio: 3 },
-  { picto: '🧴', clave: 'champu', precio: 4 },
-  { picto: '🧦', clave: 'calcetines', precio: 5 },
-  { picto: '🥚', clave: 'huevos', precio: 3 },
-  { picto: '📓', clave: 'cuaderno', precio: 2 },
-  { picto: '🧢', clave: 'gorra', precio: 6 },
-  { picto: '⚽', clave: 'balon', precio: 8 },
-  /* Nivel 2 — precios con ,50 */
-  { picto: '🧃', clave: 'zumo', precio: 2.50 },
-  { picto: '🍪', clave: 'galletas', precio: 1.50 },
-  { picto: '🥤', clave: 'refresco', precio: 0.50 },
-  { picto: '🧀', clave: 'queso', precio: 4.50 },
-  { picto: '📖', clave: 'revista', precio: 3.50 },
-  { picto: '🍯', clave: 'miel', precio: 5.50 },
-  { picto: '🥪', clave: 'bocadillo', precio: 2.50 },
-  /* Nivel 3 — precios con ,10 y ,20 */
-  { picto: '🍬', clave: 'caramelos', precio: 0.70 },
-  { picto: '🥖', clave: 'barraPan', precio: 1.20 },
-  { picto: '🍎', clave: 'manzana', precio: 0.90 },
-  { picto: '🥐', clave: 'cruasan', precio: 1.10 },
-  { picto: '🧻', clave: 'panuelos', precio: 2.70 },
-  { picto: '🍫', clave: 'chocolatina', precio: 1.80 },
-  { picto: '🧀', clave: 'trozoQueso', precio: 3.40 },
-  { picto: '🔋', clave: 'pilas', precio: 2.60 },
+   (price in euros, multiple of 0.05) + name in NAMES.es/en. */
+const PRODUCTS = [
+  /* Level 1 — whole euros */
+  { picto: '🍞', key: 'bread', price: 2 },
+  { picto: '🥛', key: 'milk', price: 1 },
+  { picto: '🍎', key: 'apples', price: 3 },
+  { picto: '🧴', key: 'shampoo', price: 4 },
+  { picto: '🧦', key: 'socks', price: 5 },
+  { picto: '🥚', key: 'eggs', price: 3 },
+  { picto: '📓', key: 'notebook', price: 2 },
+  { picto: '🧢', key: 'cap', price: 6 },
+  { picto: '⚽', key: 'ball', price: 8 },
+  /* Level 2 — prices with ,50 */
+  { picto: '🧃', key: 'juice', price: 2.50 },
+  { picto: '🍪', key: 'biscuits', price: 1.50 },
+  { picto: '🥤', key: 'softDrink', price: 0.50 },
+  { picto: '🧀', key: 'cheese', price: 4.50 },
+  { picto: '📖', key: 'magazine', price: 3.50 },
+  { picto: '🍯', key: 'honey', price: 5.50 },
+  { picto: '🥪', key: 'sandwich', price: 2.50 },
+  /* Level 3 — prices with ,10 and ,20 */
+  { picto: '🍬', key: 'sweets', price: 0.70 },
+  { picto: '🥖', key: 'breadLoaf', price: 1.20 },
+  { picto: '🍎', key: 'apple', price: 0.90 },
+  { picto: '🥐', key: 'croissant', price: 1.10 },
+  { picto: '🧻', key: 'tissues', price: 2.70 },
+  { picto: '🍫', key: 'chocolate', price: 1.80 },
+  { picto: '🧀', key: 'cheesePiece', price: 3.40 },
+  { picto: '🔋', key: 'batteries', price: 2.60 },
   /* Level 4 — prices with 5-cent amounts */
-  { picto: '🍬', clave: 'chicle', precio: 0.35 },
-  { picto: '✉️', clave: 'sello', precio: 0.85 },
-  { picto: '⭐', clave: 'pegatinas', precio: 1.15 },
-  { picto: '🖊️', clave: 'lapiz', precio: 0.65 },
-  { picto: '🧽', clave: 'goma', precio: 0.45 },
-  { picto: '🌰', clave: 'castanas', precio: 1.95 },
-  { picto: '🔑', clave: 'llavero', precio: 2.25 },
-  { picto: '🎈', clave: 'globo', precio: 0.15 }
+  { picto: '🍬', key: 'gum', price: 0.35 },
+  { picto: '✉️', key: 'stamp', price: 0.85 },
+  { picto: '⭐', key: 'stickers', price: 1.15 },
+  { picto: '🖊️', key: 'pencil', price: 0.65 },
+  { picto: '🧽', key: 'eraser', price: 0.45 },
+  { picto: '🌰', key: 'chestnuts', price: 1.95 },
+  { picto: '🔑', key: 'keyring', price: 2.25 },
+  { picto: '🎈', key: 'balloon', price: 0.15 }
 ];
 
-/* Nombre de cada producto, por idioma (clave -> nombre). */
-const NOMBRES = {
+/* Name of each product, per language (key -> name). The keys are
+   intentionally language-neutral; the es/en naming is what differs. */
+const NAMES = {
   es: {
-    pan: 'El pan', leche: 'La leche', manzanas: 'Las manzanas', champu: 'El champú',
-    calcetines: 'Los calcetines', huevos: 'Los huevos', cuaderno: 'El cuaderno',
-    gorra: 'La gorra', balon: 'El balón',
-    zumo: 'El zumo', galletas: 'Las galletas', refresco: 'El refresco', queso: 'El queso',
-    revista: 'La revista', miel: 'La miel', bocadillo: 'El bocadillo',
-    caramelos: 'Los caramelos', barraPan: 'La barra de pan', manzana: 'La manzana',
-    cruasan: 'El cruasán', panuelos: 'El paquete de pañuelos', chocolatina: 'La chocolatina',
-    trozoQueso: 'El trozo de queso', pilas: 'Las pilas',
-    chicle: 'El chicle', sello: 'El sello', pegatinas: 'Las pegatinas', lapiz: 'El lápiz',
-    goma: 'La goma', castanas: 'Las castañas', llavero: 'El llavero', globo: 'El globo'
+    bread: 'El pan', milk: 'La leche', apples: 'Las manzanas', shampoo: 'El champú',
+    socks: 'Los calcetines', eggs: 'Los huevos', notebook: 'El cuaderno',
+    cap: 'La gorra', ball: 'El balón',
+    juice: 'El zumo', biscuits: 'Las galletas', softDrink: 'El refresco', cheese: 'El queso',
+    magazine: 'La revista', honey: 'La miel', sandwich: 'El bocadillo',
+    sweets: 'Los caramelos', breadLoaf: 'La barra de pan', apple: 'La manzana',
+    croissant: 'El cruasán', tissues: 'El paquete de pañuelos', chocolate: 'La chocolatina',
+    cheesePiece: 'El trozo de queso', batteries: 'Las pilas',
+    gum: 'El chicle', stamp: 'El sello', stickers: 'Las pegatinas', pencil: 'El lápiz',
+    eraser: 'La goma', chestnuts: 'Las castañas', keyring: 'El llavero', balloon: 'El globo'
   },
   en: {
-    pan: 'The bread', leche: 'The milk', manzanas: 'The apples', champu: 'The shampoo',
-    calcetines: 'The socks', huevos: 'The eggs', cuaderno: 'The notebook',
-    gorra: 'The cap', balon: 'The ball',
-    zumo: 'The juice', galletas: 'The biscuits', refresco: 'The soft drink', queso: 'The cheese',
-    revista: 'The magazine', miel: 'The honey', bocadillo: 'The sandwich',
-    caramelos: 'The sweets', barraPan: 'The loaf of bread', manzana: 'The apple',
-    cruasan: 'The croissant', panuelos: 'The packet of tissues', chocolatina: 'The chocolate bar',
-    trozoQueso: 'The piece of cheese', pilas: 'The batteries',
-    chicle: 'The chewing gum', sello: 'The stamp', pegatinas: 'The stickers', lapiz: 'The pencil',
-    goma: 'The rubber', castanas: 'The chestnuts', llavero: 'The keyring', globo: 'The balloon'
+    bread: 'The bread', milk: 'The milk', apples: 'The apples', shampoo: 'The shampoo',
+    socks: 'The socks', eggs: 'The eggs', notebook: 'The notebook',
+    cap: 'The cap', ball: 'The ball',
+    juice: 'The juice', biscuits: 'The biscuits', softDrink: 'The soft drink', cheese: 'The cheese',
+    magazine: 'The magazine', honey: 'The honey', sandwich: 'The sandwich',
+    sweets: 'The sweets', breadLoaf: 'The loaf of bread', apple: 'The apple',
+    croissant: 'The croissant', tissues: 'The packet of tissues', chocolate: 'The chocolate bar',
+    cheesePiece: 'The piece of cheese', batteries: 'The batteries',
+    gum: 'The chewing gum', stamp: 'The stamp', stickers: 'The stickers', pencil: 'The pencil',
+    eraser: 'The rubber', chestnuts: 'The chestnuts', keyring: 'The keyring', balloon: 'The balloon'
   }
 };
 
 /* Name and description of each level, per language. */
-const NIVELES_TXT = {
+const LEVEL_TXT = {
   es: {
-    contar: { 1: 'Monedas de euro', 2: 'También billetes', 3: 'También céntimos', 4: 'Billetes grandes' },
-    pagar: { 1: 'Precios enteros', 2: 'Con 50 céntimos', 3: 'Con 10 y 20 céntimos', 4: 'Céntimos de cinco' },
-    importe: { 1: 'Importes enteros', 2: 'Con 50 céntimos', 3: 'Con 10 y 20 céntimos' },
-    redondeo: { 1: 'Muy cerca del euro', 2: 'Un poco más lejos', 3: 'Acaba en 50' }
+    count: { 1: 'Monedas de euro', 2: 'También billetes', 3: 'También céntimos', 4: 'Billetes grandes' },
+    pay: { 1: 'Precios enteros', 2: 'Con 50 céntimos', 3: 'Con 10 y 20 céntimos', 4: 'Céntimos de cinco' },
+    amount: { 1: 'Importes enteros', 2: 'Con 50 céntimos', 3: 'Con 10 y 20 céntimos' },
+    rounding: { 1: 'Muy cerca del euro', 2: 'Un poco más lejos', 3: 'Acaba en 50' }
   },
   en: {
-    contar: { 1: 'Euro coins', 2: 'Also banknotes', 3: 'Also cents', 4: 'Big banknotes' },
-    pagar: { 1: 'Whole prices', 2: 'With 50 cents', 3: 'With 10 and 20 cents', 4: 'Five-cent prices' },
-    importe: { 1: 'Whole amounts', 2: 'With 50 cents', 3: 'With 10 and 20 cents' },
-    redondeo: { 1: 'Very close to the euro', 2: 'A little further', 3: 'Ends in 50' }
+    count: { 1: 'Euro coins', 2: 'Also banknotes', 3: 'Also cents', 4: 'Big banknotes' },
+    pay: { 1: 'Whole prices', 2: 'With 50 cents', 3: 'With 10 and 20 cents', 4: 'Five-cent prices' },
+    amount: { 1: 'Whole amounts', 2: 'With 50 cents', 3: 'With 10 and 20 cents' },
+    rounding: { 1: 'Very close to the euro', 2: 'A little further', 3: 'Ends in 50' }
   }
 };
 
-function construirMonedero(loc) {
-  var txt = NIVELES_TXT[loc] || NIVELES_TXT.es;
-  var nombres = NOMBRES[loc] || NOMBRES.es;
+function buildWallet(loc) {
+  var txt = LEVEL_TXT[loc] || LEVEL_TXT.es;
+  var names = NAMES[loc] || NAMES.es;
 
-  var contar = CONTAR_BASE.map(function (n) {
-    return { id: n.id, descripcion: txt.contar[n.id], cents: n.cents };
+  var count = COUNT_BASE.map(function (n) {
+    return { id: n.id, description: txt.count[n.id], cents: n.cents };
   });
 
-  var pagar = Object.keys(PAGAR_CENTS).map(function (idStr) {
+  var pay = Object.keys(PAY_CENTS).map(function (idStr) {
     var id = Number(idStr);
     return {
       id: id,
-      descripcion: txt.pagar[id],
-      cents: PAGAR_CENTS[id],
-      productos: PRODUCTOS.filter(function (p) {
-        return nivelDePrecio(Math.round(p.precio * 100)) === id;
+      description: txt.pay[id],
+      cents: PAY_CENTS[id],
+      products: PRODUCTS.filter(function (p) {
+        return levelFromPrice(Math.round(p.price * 100)) === id;
       }).map(function (p) {
-        return { picto: p.picto, nombre: nombres[p.clave] || p.clave, precioCent: Math.round(p.precio * 100) };
+        return { picto: p.picto, name: names[p.key] || p.key, priceCent: Math.round(p.price * 100) };
       })
     };
   });
 
-  var importe = NIVELES_IMPORTE.map(function (n) {
-    return { id: n.id, descripcion: txt.importe[n.id], paso: n.paso };
+  var amount = AMOUNT_LEVELS.map(function (n) {
+    return { id: n.id, description: txt.amount[n.id], step: n.step };
   });
 
-  var redondeo = REDONDEO_BASE.map(function (n) {
-    return { id: n.id, descripcion: txt.redondeo[n.id], deltas: n.deltas };
+  var rounding = ROUNDING_BASE.map(function (n) {
+    return { id: n.id, description: txt.rounding[n.id], deltas: n.deltas };
   });
 
   return {
-    porRonda: 6,
-    contar: { niveles: contar },
-    pagar: { niveles: pagar },
-    importe: { niveles: importe },
-    redondeo: { niveles: redondeo }
+    perRound: 6,
+    count: { levels: count },
+    pay: { levels: pay },
+    amount: { levels: amount },
+    rounding: { levels: rounding }
   };
 }
 
 const DATA = {
-  es: construirMonedero('es'),
-  en: construirMonedero('en')
+  es: buildWallet('es'),
+  en: buildWallet('en')
 };

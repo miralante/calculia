@@ -125,7 +125,44 @@ function decompose(roman) {
   var soloPar = chunks.length === 1 && chunks[0].pair ? chunks[0] : null;
   var subtract = soloPar ? (ROMAN_VALUES[soloPar.letters[1]] + ' − ' + ROMAN_VALUES[soloPar.letters[0]]) : '';
   var mode = soloPar ? 'subtract' : 'add';
-  return { tokens: tokens, chunks: chunks, sum: sum, subtract: subtract, total: total, mode: mode };
+
+  /* Stepped (acumulada) formula: instead of the direct sum
+     ("10+10+1"), build the school-arithmetic-style chain
+     ("10+10=20, 20+1=21") that walks the reader from the
+     first operand to the total one addend at a time. The
+     chunks array already groups the Roman numeral into
+     ready-to-add units (a single letter, a run of identical
+     letters, or a resolved subtract-add pair like IV/IX), so
+     each chunk becomes exactly one step in the chain. Examples:
+       "III" → chunks [I(1), I(1), I(1)]
+               steppedSum: "1+1=2, 2+1=3"
+       "VII" → chunks [V(5), II(2)]
+               steppedSum: "5+1=6, 6+1=7"
+       "XX"  → chunks [X(10), X(10)]
+               steppedSum: "10+10=20"
+       "XXI" → chunks [X(10), X(10), I(1)]
+               steppedSum: "10+10=20, 20+1=21"
+       "XIV" → chunks [X(10), IV(4)]
+               steppedSum: "10+4=14"
+     The previous "sum" field is kept for callers that still want
+     the direct, one-line form ("10+10+1"); the quiz and the
+     famous/famous captions now read "steppedSum" so the
+     progression step is visible without changing the chunks
+     themselves. */
+  var steppedSum = chunks.reduce(function (acc, chunk, idx) {
+    var partial = acc.value + chunk.value;
+    var left = acc.value === 0 ? String(chunk.value) : acc.value + '+' + chunk.value;
+    var step = left + '=' + partial;
+    acc.steps.push(step);
+    acc.value = partial;
+    return acc;
+  }, { value: 0, steps: [] }).steps.join(', ');
+
+  return {
+    tokens: tokens, chunks: chunks, sum: sum, subtract: subtract,
+    steppedSum: steppedSum,
+    total: total, mode: mode
+  };
 }
 
 var DATA = {
@@ -153,20 +190,16 @@ var DATA = {
      de que quien aprende haya visto siquiera la tabla I/V/X — rompe
      la progresión gradual (regla 13) y la lectura fácil. */
   famousRomans: [
-    /* speak: cómo se pronuncia el número en el TTS del famoso.
-       - 'cardinal' para siglos y el reloj: "Siglo 20", "Siglo 21",
-         "las 12" — se lee como número, no como ordinal.
-       - 'ordinal' para monarcas: "Felipe VI" → "sexto", "Henry VIII"
-         → "octavo" — el numeral forma parte del nombre del rey/reina
+    /* speak: how the number is pronounced in the TTS of the famous.
+       - 'cardinal' for centuries and the clock: "Century 20",
+         "Century 21", "twelve o'clock" — read as a number, not an
+         ordinal.
+       - 'ordinal' for monarchs: "Felipe VI" → "sixth", "Henry VIII"
+         → "eighth" — the numeral is part of the king/queen name.
          y se pronuncia como ordinal.
        Si se omite, por compatibilidad se asume 'ordinal' (el
        comportamiento histórico: cualquier item sin speak se trata
        como si fuera un monarca).
-       showFormula (opcional, default true): si true, paintFamoso
-       concatena la fórmula coloreada ("10+10+1=21") al final de
-       la frase i18n. Si false, la frase ya incluye el cálculo
-       numérico explícito y no se duplica con la fórmula. Se usa
-       en XXI, donde la frase cierra con "20+1=21".
        label: lo que se muestra como número grande en la pantalla
        (encima del refuerzo significativo). Por defecto es el
        propio romano (item.roman), pero aquí lo cambiamos a su
@@ -174,16 +207,20 @@ var DATA = {
        "Siglo XXI" / "Las XII" / "Carlos III" en vez de solo
        "XXI" / "XII" / "III" — el refuerzo de abajo ya no
        necesita repetir el "Siglo XX — " / "Carlos III — " al
-       principio. */
+       principio. La fórmula coloreada en formato acumulado
+       ("10+10=20, 20+1=21") se concatena siempre al final de la
+       frase i18n, generada por app.js (coloredFormula); las
+       frases i18n solo terminan con ":" y la descripción
+       narrativa del paso. */
     { roman: 'XX',   factKey: 'century20', speak: 'cardinal', label: 'Siglo XX' },
-    { roman: 'XXI',  factKey: 'century21', speak: 'cardinal', showFormula: false, label: 'Siglo XXI' },
+    { roman: 'XXI',  factKey: 'century21', speak: 'cardinal', label: 'Siglo XXI' },
     { roman: 'XI',   factKey: 'clock11',   speak: 'cardinal', label: 'Las XI' },
     { roman: 'XII',  factKey: 'clock12',   speak: 'cardinal', label: 'Las XII' },
     { roman: 'III',  factKey: 'carlos3',   locale: 'es', label: 'Carlos III' },
     { roman: 'II',   factKey: 'isabel2',   locale: 'es', label: 'Isabel II' },
     { roman: 'VI',   factKey: 'felipe6',   locale: 'es', label: 'Felipe VI' },
     { roman: 'VIII', factKey: 'henry8',    locale: 'en', label: 'Henry VIII' },
-    { roman: 'XIX',  factKey: 'century19', speak: 'cardinal', showFormula: false, label: 'Siglo XIX' }
+    { roman: 'XIX',  factKey: 'century19', speak: 'cardinal', label: 'Siglo XIX' }
   ],
   monarchs: {
     es: [
