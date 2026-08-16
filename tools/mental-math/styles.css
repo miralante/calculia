@@ -54,20 +54,20 @@
 .num-box.empty { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
 
 /* Dots for counting */
-.puntos { display: flex; align-items: center; justify-content: center; gap: var(--espacio); flex-wrap: wrap; }
-.grupo-puntos { display: grid; grid-template-columns: repeat(5, 18px); gap: 6px; }
-.punto { width: 18px; height: 18px; border-radius: 50%; background: var(--mod-razonamiento); }
-.punto.pa { background: var(--mod-coordinacion); }
-.punto.pb { background: var(--mod-secuencia); }
+.dot-array { display: flex; align-items: center; justify-content: center; gap: var(--espacio); flex-wrap: wrap; }
+.dot-group { display: grid; grid-template-columns: repeat(5, 18px); gap: 6px; }
+.dot { width: 18px; height: 18px; border-radius: 50%; background: var(--mod-razonamiento); }
+.dot.pa { background: var(--mod-coordinacion); }
+.dot.pb { background: var(--mod-secuencia); }
 
 /* Crossed-out dots when subtracting */
-.punto.quitado { background: var(--color-superficie); border: 3px solid var(--mod-memoria); position: relative; }
-.punto.quitado::before, .punto.quitado::after {
+.dot.quitado { background: var(--color-superficie); border: 3px solid var(--mod-memoria); position: relative; }
+.dot.quitado::before, .dot.quitado::after {
   content: ''; position: absolute; top: 50%; left: 10%;
   width: 80%; height: 3px; background: var(--mod-memoria);
 }
-.punto.quitado::before { transform: translateY(-50%) rotate(45deg); }
-.punto.quitado::after { transform: translateY(-50%) rotate(-45deg); }
+.dot.quitado::before { transform: translateY(-50%) rotate(45deg); }
+.dot.quitado::after { transform: translateY(-50%) rotate(-45deg); }
 
 /* Answer options */
 .options .option-btn { text-align: center; font-size: 26px; }

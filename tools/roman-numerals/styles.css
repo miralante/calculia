@@ -139,22 +139,22 @@
    de un Roman numeral completo. font-weight reforzado para que
    el color se lea con peso, no solo con tono (importante para
    usuarios con baja visión de color). */
-.letra-i, .roman-join .ltr-I { color: var(--roman-i); font-weight: 800; }
-.letra-v, .roman-join .ltr-V { color: var(--roman-v); font-weight: 800; }
-.letra-x, .roman-join .ltr-X { color: var(--roman-x); font-weight: 800; }
-.letra-resta            { color: var(--roman-resta); font-weight: 800; }
+.letter-i, .roman-join .ltr-I { color: var(--roman-i); font-weight: 800; }
+.letter-v, .roman-join .ltr-V { color: var(--roman-v); font-weight: 800; }
+.letter-x, .roman-join .ltr-X { color: var(--roman-x); font-weight: 800; }
+.letter-subtract            { color: var(--roman-resta); font-weight: 800; }
 
 /* Same specificity as .roman-join .ltr-X above (two classes), placed
    after it so source order lets "subtracts" win over the letter's
    own color when a token is both (e.g. the I in IV). */
-.roman-join .letra-resta { color: var(--roman-resta); }
+.roman-join .letter-subtract { color: var(--roman-resta); }
 
 /* Cada letra grande con borde + fondo coloreado, útil para la
    row de referencia y para la descomposición. */
-.symbol-chip.letra-i, .deco-token.letra-i { background: var(--roman-i-bg); border-color: var(--roman-i); color: var(--roman-i); }
-.symbol-chip.letra-v, .deco-token.letra-v { background: var(--roman-v-bg); border-color: var(--roman-v); color: var(--roman-v); }
-.symbol-chip.letra-x, .deco-token.letra-x { background: var(--roman-x-bg); border-color: var(--roman-x); color: var(--roman-x); }
-.symbol-chip.letra-resta, .deco-token.letra-resta { background: var(--roman-resta-bg); border-color: var(--roman-resta); color: var(--roman-resta); }
+.symbol-chip.letter-i, .deco-token.letter-i { background: var(--roman-i-bg); border-color: var(--roman-i); color: var(--roman-i); }
+.symbol-chip.letter-v, .deco-token.letter-v { background: var(--roman-v-bg); border-color: var(--roman-v); color: var(--roman-v); }
+.symbol-chip.letter-x, .deco-token.letter-x { background: var(--roman-x-bg); border-color: var(--roman-x); color: var(--roman-x); }
+.symbol-chip.letter-subtract, .deco-token.letter-subtract { background: var(--roman-resta-bg); border-color: var(--roman-resta); color: var(--roman-resta); }
 
 /* ============================================================
    Pantalla 1: introducción
@@ -339,20 +339,20 @@
 }
 
 .symbol-pill .pill-value {
-  /* El color lo pone la clase letra-i / letra-v / letra-x del
+  /* El color lo pone la clase letter-i / letter-v / letter-x del
      pill (mismo color que el símbolo al que pertenece). Se
      re-declara aquí explícitamente (en vez de heredar de
-     .letra-i/.letra-v/.letra-x) para que la especificidad
+     .letter-i/.letter-v/.letter-x) para que la especificidad
      .symbol-pill .pill-value no se quede sin color en
      navegadores que no aplican la cascada esperada. */
   font-size: var(--texto-base);
   font-weight: 700;
   margin: 0 4px;
 }
-.symbol-pill .pill-value.letra-i { color: var(--roman-i); }
-.symbol-pill .pill-value.letra-v { color: var(--roman-v); }
-.symbol-pill .pill-value.letra-x { color: var(--roman-x); }
-.symbol-pill .pill-value.letra-resta { color: var(--roman-resta); }
+.symbol-pill .pill-value.letter-i { color: var(--roman-i); }
+.symbol-pill .pill-value.letter-v { color: var(--roman-v); }
+.symbol-pill .pill-value.letter-x { color: var(--roman-x); }
+.symbol-pill .pill-value.letter-subtract { color: var(--roman-resta); }
 
 .symbol-pill .pill-caption {
   font-size: var(--texto-pequeno);

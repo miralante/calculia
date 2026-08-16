@@ -199,7 +199,7 @@
     return raw.split('').map(function (ch, i, arr) {
       if (ch === 'I' || ch === 'V' || ch === 'X') {
         var subtract = ch === 'I' && i + 1 < arr.length && (arr[i + 1] === 'V' || arr[i + 1] === 'X');
-        var cls = 'letra-' + ch.toLowerCase() + (subtract ? ' letra-resta' : '');
+        var cls = 'letra-' + ch.toLowerCase() + (subtract ? ' letter-subtract' : '');
         return '<span aria-hidden="true" class="' + cls + '">' + ch + '</span>';
       }
       return ch;
@@ -270,13 +270,13 @@
      CSS classes are decorative, not semantic). */
   function applyRomanPlaceholders(raw, isSubtract) {
     if (!raw) return '';
-    var iClass = 'letra-i' + (isSubtract ? ' letra-resta' : '');
+    var iClass = 'letter-i' + (isSubtract ? ' letter-subtract' : '');
     return raw
-      .replace(/\{V\}/g, '<span aria-hidden="true" class="letra-v">V</span>')
-      .replace(/\{X\}/g, '<span aria-hidden="true" class="letra-x">X</span>')
+      .replace(/\{V\}/g, '<span aria-hidden="true" class="letter-v">V</span>')
+      .replace(/\{X\}/g, '<span aria-hidden="true" class="letter-x">X</span>')
       .replace(/\{I\}/g, '<span aria-hidden="true" class="' + iClass + '">I</span>')
-      .replace(/\{v\}/g, '<span aria-hidden="true" class="letra-v">5</span>')
-      .replace(/\{x\}/g, '<span aria-hidden="true" class="letra-x">10</span>')
+      .replace(/\{v\}/g, '<span aria-hidden="true" class="letter-v">5</span>')
+      .replace(/\{x\}/g, '<span aria-hidden="true" class="letter-x">10</span>')
       .replace(/\{i\}/g, '<span aria-hidden="true" class="' + iClass + '">1</span>')
       .replace(/\{i4\}/g, '<span aria-hidden="true" class="' + iClass + '">4</span>')
       .replace(/\{i6\}/g, '<span aria-hidden="true" class="' + iClass + '">6</span>')
@@ -376,7 +376,7 @@
      paintQuizDecomposition (quiz) so all three render the total
      with the same colour rule. */
   function totalColorClass(deco) {
-    if (deco.mode === 'subtract') return 'letra-i letra-resta';
+    if (deco.mode === 'subtract') return 'letter-i letter-subtract';
     return 'letra-' + deco.chunks[0].letters[0].toLowerCase();
   }
 
@@ -388,7 +388,7 @@
      letter. */
   function coloredChunkValue(chunk) {
     var primaryLetter = chunk.letters[chunk.letters.length - 1];
-    var cls = 'letra-' + primaryLetter.toLowerCase() + (chunk.pair ? ' letra-resta' : '');
+    var cls = 'letra-' + primaryLetter.toLowerCase() + (chunk.pair ? ' letter-subtract' : '');
     return '<span class="' + cls + '">' + chunk.value + '</span>';
   }
 
@@ -421,7 +421,7 @@
       var big = deco.chunks[0].letters[1];
       var small = deco.chunks[0].letters[0];
       return '<span class="letra-' + big.toLowerCase() + '">' + ROMAN_VALUES[big] + '</span>' +
-        '−<span class="letra-' + small.toLowerCase() + ' letra-resta">' + ROMAN_VALUES[small] + '</span>' +
+        '−<span class="letra-' + small.toLowerCase() + ' letter-subtract">' + ROMAN_VALUES[small] + '</span>' +
         '=<span aria-hidden="true" class="' + totalCls + '">' + deco.total + '</span>';
     }
     if (deco.chunks.length === 1) {
@@ -602,7 +602,7 @@
     var deco = DATA.decompose(roman);
     deco.tokens.forEach(function (tok) {
       var span = document.createElement('span');
-      span.className = 'ltr ltr-' + tok.letter + (tok.sign === '-' ? ' letra-resta' : '');
+      span.className = 'ltr ltr-' + tok.letter + (tok.sign === '-' ? ' letter-subtract' : '');
       span.textContent = tok.letter;
       el.appendChild(span);
     });
@@ -614,8 +614,8 @@
     DATA.symbols.forEach(function (s) {
       var pill = document.createElement('div');
       pill.className = 'symbol-pill';
-      /* pill-value carries the colour class of the letter (letra-i /
-         letra-v / letra-x) so the decimal value (1, 5, 10) reads
+      /* pill-value carries the colour class of the letter (letter-i /
+         letter-v / letter-x) so the decimal value (1, 5, 10) reads
          in the same colour as the symbol it belongs to. That way
          the I/V/X table is consistent with the rest of the
          activity. */
@@ -639,10 +639,10 @@
       var big = deco.chunks[0].letters[1];
       var small = deco.chunks[0].letters[0];
       /* The total (4 in IV) is originated by the I that subtracts,
-         so it goes in red with class letra-resta. */
+         so it goes in red with class letter-subtract. */
       return ' = <span aria-hidden="true" class="letra-' + big.toLowerCase() + '">' + ROMAN_VALUES[big] + '</span>' +
-        ' − <span aria-hidden="true" class="letra-' + small.toLowerCase() + ' letra-resta">' + ROMAN_VALUES[small] + '</span>' +
-        ' = <span aria-hidden="true" class="letra-' + small.toLowerCase() + ' letra-resta">' + deco.total + '</span>';
+        ' − <span aria-hidden="true" class="letra-' + small.toLowerCase() + ' letter-subtract">' + ROMAN_VALUES[small] + '</span>' +
+        ' = <span aria-hidden="true" class="letra-' + small.toLowerCase() + ' letter-subtract">' + deco.total + '</span>';
     }
     if (deco.chunks.length > 1) {
       var parts = deco.chunks.map(function (chunk) {
@@ -1019,7 +1019,7 @@
       var small = deco.chunks[0].letters[0];
       var totalCls = totalColorClass(deco);
       return '<span class="letra-' + big.toLowerCase() + '">' + ROMAN_VALUES[big] + '</span>' +
-        '−<span class="letra-' + small.toLowerCase() + ' letra-resta">' + ROMAN_VALUES[small] + '</span>' +
+        '−<span class="letra-' + small.toLowerCase() + ' letter-subtract">' + ROMAN_VALUES[small] + '</span>' +
         '=<span aria-hidden="true" class="' + totalCls + '">' + deco.total + '</span>';
     }
     var totalCls = totalColorClass(deco);
@@ -1094,11 +1094,11 @@
       var subtractChip = !piece.pair && piece.sign === '-';
       var lettersHtml = piece.letters.split('').map(function (letter, li) {
         var subtractLetter = piece.pair ? li === 0 : subtractChip;
-        return '<span class="letra-' + letter.toLowerCase() + (subtractLetter ? ' letra-resta' : '') + '">' + letter + '</span>';
+        return '<span class="letra-' + letter.toLowerCase() + (subtractLetter ? ' letter-subtract' : '') + '">' + letter + '</span>';
       }).join('');
       var uniform = piece.letters.split('').every(function (ch) { return ch === piece.letters[0]; });
       var chip = document.createElement('span');
-      chip.className = 'deco-token' + (subtractChip ? ' letra-resta' : (piece.pair ? '' : (uniform ? ' letra-' + piece.letters[0].toLowerCase() : '')));
+      chip.className = 'deco-token' + (subtractChip ? ' letter-subtract' : (piece.pair ? '' : (uniform ? ' letra-' + piece.letters[0].toLowerCase() : '')));
       chip.innerHTML = '<span class="deco-letters">' + lettersHtml + '</span><span class="deco-token-value">' + piece.value + '</span>';
       tokenRow.appendChild(chip);
     });

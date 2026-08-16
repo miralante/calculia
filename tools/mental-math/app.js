@@ -126,17 +126,17 @@
   }
 
   function dotsGroup(n, cls) {
-    return '<span class="grupo-puntos">' + repeat('<span class="punto ' + cls + '"></span>', n) + '</span>';
+    return '<span class="dot-group">' + repeat('<span class="dot ' + cls + '"></span>', n) + '</span>';
   }
 
   /* Dots to subtract: the last "remove" ones get an X. */
   function dotsGroupSubtract(total, remove) {
     var s = '';
     for (var i = 0; i < total; i++) {
-      var cls = i >= (total - remove) ? 'punto quitado' : 'punto';
+      var cls = i >= (total - remove) ? 'dot removed' : 'dot';
       s += '<span class="' + cls + '"></span>';
     }
-    return '<span class="grupo-puntos">' + s + '</span>';
+    return '<span class="dot-group">' + s + '</span>';
   }
 
   /* ============================================================
@@ -155,7 +155,7 @@
         prompt: App.i18n.t('gen.restarEnunciado').replace('{a}', a).replace('{b}', b),
         visual: '<div class="expression">' + paintNumber(a) + paintSign('−') + paintNumber(b) +
           paintSign('=') + '<span class="num-box empty">?</span></div>' +
-          '<div class="puntos" aria-hidden="true">' + dotsGroupSubtract(a, b) + '</div>' +
+          '<div class="dot-array" aria-hidden="true">' + dotsGroupSubtract(a, b) + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.restarPista').replace('{b}', b) + '</p>',
         options: buildOptions(correct, [correct - 1, correct + 1, a],
           function (v) { return paintNumber(v); })
@@ -168,7 +168,7 @@
         prompt: App.i18n.t('gen.doblesEnunciado').replace(/\{a\}/g, a),
         visual: '<div class="expression">' + paintNumber(a) + paintSign('+') + paintNumber(a) +
           paintSign('=') + '<span class="num-box empty">?</span></div>' +
-          '<div class="puntos" aria-hidden="true">' + dotsGroup(a, 'pa') +
+          '<div class="dot-array" aria-hidden="true">' + dotsGroup(a, 'pa') +
           paintSign('+') + dotsGroup(a, 'pb') + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.doblesPista') + '</p>',
         options: buildOptions(2 * a, [2 * a - 1, 2 * a + 2, 2 * a + 1],
