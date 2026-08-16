@@ -51,8 +51,8 @@
   /* ----------- General helpers ----------- */
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function show(el) { el.classList.remove('oculto'); }
-  function hide(el) { el.classList.add('oculto'); }
+  function show(el) { el.classList.remove('hidden'); }
+  function hide(el) { el.classList.add('hidden'); }
 
   function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
@@ -371,13 +371,13 @@
         used.push(candidate);
       }
     }
-    var opciones = App.utils.shuffle([correctDigit].concat(distractors));
+    var options = App.utils.shuffle([correctDigit].concat(distractors));
     return {
       n: n,
       tipo: 'options',
       show: '',
       correct: correctDigit,
-      options: opciones,
+      options: options,
       posAbs: posAbs,
       prompt: App.i18n.t('promptDecompose')
         .replace('{placeLabel}', App.i18n.t(POS_KEYS[posAbs]))
@@ -440,7 +440,7 @@
       case_.options.forEach(function (opcion) {
         var button = document.createElement('button');
         button.type = 'button';
-        button.className = 'btn-opcion btn-opcion--digit';
+        button.className = 'option-btn option-btn--digit';
         button.textContent = String(opcion);
         button.setAttribute('data-value', opcion);
         button.setAttribute('aria-label', opcion);
@@ -468,7 +468,7 @@
     if (practice === 'read' || practice === 'write' || practice === 'points') {
       $('#answerInput').focus();
     } else if (practice === 'decompose') {
-      var firstButton = $('#optionsGrid').querySelector('.btn-opcion');
+      var firstButton = $('#optionsGrid').querySelector('.option-btn');
       if (firstButton) firstButton.focus();
     }
   }
@@ -488,7 +488,7 @@
       /* Socratic lock: block the rest of the options until the
          person confirms "Got it". Consistent with numbers and
          SPEC §6 rule 12. */
-      var buttons = $('#optionsGrid').querySelectorAll('.btn-opcion');
+      var buttons = $('#optionsGrid').querySelectorAll('.option-btn');
       App.feedback.lockUntilAck(buttons, $('#feedback'));
     }
   }
@@ -643,8 +643,8 @@
       btn.className = 'btn btn-practica';
       btn.innerHTML =
         '<div class="practica-icono" aria-hidden="true">' + p.icon + '</div>' +
-        '<div class="practica-nombre">' + App.i18n.t(p.id + 'Name') + '</div>' +
-        '<div class="practica-detalle">' + App.i18n.t(p.id + 'Detail') + '</div>';
+        '<div class="practice-name">' + App.i18n.t(p.id + 'Name') + '</div>' +
+        '<div class="practice-detail">' + App.i18n.t(p.id + 'Detail') + '</div>';
       btn.addEventListener('click', function () { startPractice(p.id); });
       cont.appendChild(btn);
     });

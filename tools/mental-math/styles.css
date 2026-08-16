@@ -3,7 +3,7 @@
    (the cycle repeats every group of 3 digits). Signs are shown in orange. */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
-.btn:not(.btn-secundario):not(.btn-audio) { background: var(--mod-razonamiento); }
+.btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 .center-row { justify-content: center; }
 
@@ -18,10 +18,10 @@
 }
 .btn-actividad:hover { border-color: var(--mod-razonamiento); }
 .btn-actividad .picto { font-size: 48px; }
-.btn-actividad .detalle { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
+.btn-actividad .detail-card { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
-.btn-nivel { min-width: 300px; align-self: center; }
+.btn-level { min-width: 300px; align-self: center; }
 #btnBackToMenu { align-self: center; }
 
 /* Color-coded digits by place value */
@@ -70,9 +70,9 @@
 .punto.quitado::after { transform: translateY(-50%) rotate(-45deg); }
 
 /* Answer options */
-.opciones .btn-opcion { text-align: center; font-size: 26px; }
-.opciones.options-row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
-.opciones.options-row .btn-opcion { width: auto; min-width: 180px; }
+.options .option-btn { text-align: center; font-size: 26px; }
+.options.options-row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+.options.options-row .option-btn { width: auto; min-width: 180px; }
 
 .emoji-large { font-size: 96px; }
 #screenEnd { padding-top: 48px; }

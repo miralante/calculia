@@ -13,8 +13,8 @@
   if (typeof progress.stars !== 'number') progress.stars = 0;
 
   function saveProgress() { App.storage.set(TOOL_ID, progress); }
-  function show(element) { element.classList.remove('oculto'); }
-  function hide(element) { element.classList.add('oculto'); }
+  function show(element) { element.classList.remove('hidden'); }
+  function hide(element) { element.classList.add('hidden'); }
   function randInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
   function fill(key, values) {
@@ -287,7 +287,7 @@
         var item = { a: table, b: value, sym: mode === 'add' ? '+' : '×' };
         var button = document.createElement('button');
         button.type = 'button';
-        button.className = 'btn btn-secundario fact-row';
+        button.className = 'btn btn-secondary fact-row';
         button.textContent = equationText(item, true);
         button.addEventListener('click', function () {
           list.querySelectorAll('.fact-row').forEach(function (row) { row.classList.remove('activa'); });

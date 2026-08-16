@@ -12,7 +12,7 @@
 <body>
   <div class="container">
     <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
-    <header class="tool-header centrado">
+    <header class="tool-header centered">
       <h1 data-i18n="title">🔢 Las Tablas</h1>
       <p id="instruction" data-i18n="instruction">Aprende a contar de cabeza, sumar y multiplicar con puntos de colores.</p>
       <p class="stars" id="stars">⭐ 0</p>
@@ -20,60 +20,60 @@
 
     <main>
       <!-- Choose operation -->
-      <section id="screenMenu" class="pila" aria-labelledby="menuTitle">
+      <section id="screenMenu" class="stack" aria-labelledby="menuTitle">
         <h2 id="menuTitle" data-i18n="chooseOperation">Elige qué quieres practicar.</h2>
         <div class="operation-grid" id="operationGrid"></div>
       </section>
 
       <!-- Choose table -->
-      <section id="screenTables" class="pila oculto" aria-labelledby="tablesTitle">
+      <section id="screenTables" class="stack hidden" aria-labelledby="tablesTitle">
         <h2 id="tablesTitle" data-i18n="chooseTable">Elige una tabla.</h2>
         <div class="table-grid" id="tableGrid"></div>
-        <button type="button" class="btn btn-secundario" id="tablesBack" data-i18n="core.backToMenu">Volver al menú</button>
+        <button type="button" class="btn btn-secondary" id="tablesBack" data-i18n="core.backToMenu">Volver al menú</button>
       </section>
 
       <!-- Learn the table -->
-      <section id="screenLearn" class="pila oculto" aria-labelledby="learnTitle">
+      <section id="screenLearn" class="stack hidden" aria-labelledby="learnTitle">
         <h2 id="learnTitle"></h2>
-        <p id="learnInstruction" data-i18n="learnInstruction">Toca una fila para verla con puntos.</p>
+        <p id="learnInstruction" data-i18n="learnInstruction">Toca una row para verla con puntos.</p>
         <div class="learn-layout">
           <div class="fact-list" id="factList"></div>
           <div class="card visual-card" id="learnVisual" role="img"></div>
         </div>
         <button type="button" class="btn" id="startPractice" data-i18n="practiceTable">Practicar esta tabla</button>
-        <button type="button" class="btn btn-secundario" id="learnBack" data-i18n="backToTables">← Elegir otra tabla</button>
+        <button type="button" class="btn btn-secondary" id="learnBack" data-i18n="backToTables">← Elegir otra tabla</button>
       </section>
 
       <!-- Practice quiz -->
-      <section id="screenQuiz" class="pila oculto" aria-live="polite">
+      <section id="screenQuiz" class="stack hidden" aria-live="polite">
         <div class="progress-bar">
           <div class="progress-fill" id="progressFill"></div>
           <span class="progress-text" id="progressText">0 / 10</span>
         </div>
-        <article class="card task-card pila">
+        <article class="card task-card stack">
           <h2 class="equation" id="quizPrompt"></h2>
           <div class="visual-card" id="quizVisual" role="img"></div>
           <div class="option-row" id="options"></div>
           <p class="feedback" id="feedback" aria-live="polite"></p>
-          <p class="explanation oculto" id="explanation" aria-live="polite"></p>
-          <button type="button" class="btn oculto" id="nextFact" data-i18n="core.next">Siguiente →</button>
+          <p class="explanation hidden" id="explanation" aria-live="polite"></p>
+          <button type="button" class="btn hidden" id="nextFact" data-i18n="core.next">Siguiente →</button>
         </article>
-        <button type="button" class="btn btn-secundario" id="quizBack" data-i18n="backToTables">← Elegir otra tabla</button>
+        <button type="button" class="btn btn-secondary" id="quizBack" data-i18n="backToTables">← Elegir otra tabla</button>
       </section>
 
       <!-- Round finished -->
-      <section id="screenFinish" class="pila oculto centrado">
-        <div class="emoji-grande" aria-hidden="true">🎉</div>
+      <section id="screenFinish" class="stack hidden centered">
+        <div class="emoji-large" aria-hidden="true">🎉</div>
         <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
         <p id="finishText"></p>
         <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
         <button type="button" class="btn" id="playAgain" data-i18n="core.playAgain">Jugar otra vez</button>
-        <button type="button" class="btn btn-secundario" id="anotherTable" data-i18n="chooseAnotherTable">Elegir otra tabla</button>
-        <button type="button" class="btn btn-secundario" id="anotherOperation" data-i18n="changeOperation">Cambiar de actividad</button>
+        <button type="button" class="btn btn-secondary" id="anotherTable" data-i18n="chooseAnotherTable">Elegir otra tabla</button>
+        <button type="button" class="btn btn-secondary" id="anotherOperation" data-i18n="changeOperation">Cambiar de actividad</button>
       </section>
     </main>
     <footer class="pie-app">
-      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Protección de datos</a>
     </footer>
   </div>
 

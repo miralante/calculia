@@ -8,12 +8,12 @@
    Cada letra del número se muestra con su color para asociar
    visualmente el símbolo con su valor decimal. La resta (letra
    menor delante de mayor) se marca en rojo para reforzar la
-   regla. La pista óptico-simbólica sustituye al audio (este
+   regla. La hint óptico-simbólica sustituye al audio (este
    módulo no usa TTS). */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 
-.btn:not(.btn-secundario):not(.btn-audio) {
+.btn:not(.btn-secondary):not(.btn-audio) {
   background: var(--mod-razonamiento);
 }
 
@@ -150,7 +150,7 @@
 .roman-join .letra-resta { color: var(--roman-resta); }
 
 /* Cada letra grande con borde + fondo coloreado, útil para la
-   fila de referencia y para la descomposición. */
+   row de referencia y para la descomposición. */
 .symbol-chip.letra-i, .deco-token.letra-i { background: var(--roman-i-bg); border-color: var(--roman-i); color: var(--roman-i); }
 .symbol-chip.letra-v, .deco-token.letra-v { background: var(--roman-v-bg); border-color: var(--roman-v); color: var(--roman-v); }
 .symbol-chip.letra-x, .deco-token.letra-x { background: var(--roman-x-bg); border-color: var(--roman-x); color: var(--roman-x); }
@@ -239,7 +239,7 @@
 /* Fila que contiene el ejemplo famoso + botón de audio. El flex
    permite que el botón quede a la derecha del romano en pantallas
    anchas y, en pantallas estrechas, que se coloque debajo sin
-   romper el centrado. */
+   romper el centered. */
 .famoso-ejemplo-row {
   display: flex;
   align-items: center;
@@ -256,8 +256,8 @@
   max-width: 460px;
 }
 
-/* Misma idea para el enunciado del quiz: romano/texto + botón
-   de audio en una fila, con el botón a la derecha. */
+/* Misma idea para el prompt del quiz: romano/texto + botón
+   de audio en una row, con el botón a la derecha. */
 .quiz-shown-row {
   display: flex;
   align-items: center;
@@ -274,7 +274,7 @@
   max-width: 460px;
 }
 
-/* Botones de audio compactos para el enunciado (solo emoji, sin
+/* Botones de audio compactos para el prompt (solo emoji, sin
    texto). Mantienen el tamaño mínimo accesible. */
 .btn-quiz-audio,
 .btn-famoso-audio {
@@ -285,7 +285,7 @@
   flex: 0 0 auto;
 }
 
-.famoso-texto {
+.famous-text {
   font-size: var(--texto-base);
   color: var(--color-texto);
   text-align: center;

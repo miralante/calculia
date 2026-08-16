@@ -50,6 +50,7 @@
   var answered = false;
   var attempts = 0;
   var question = null;
+  var resolved = false;
   var pools = {};
 
   function save() { App.storage.set(TOOL_ID, progress); }
@@ -123,7 +124,7 @@
     return n < 0 ? paintSign('−') + paintNumber(Math.abs(n)) : paintNumber(n);
   }
 
-  /* Plain-text floor label (used for 'enunciado', which is set via
+  /* Plain-text floor label (used for 'prompt', which is set via
      textContent, not innerHTML — no markup allowed there). */
   function floorPlain(n) {
     return (n < 0 ? '−' : '') + Math.abs(n);
@@ -146,7 +147,7 @@
     });
     var filas = '';
     for (var n = max; n >= min; n--) {
-      var clases = 'piso-fila';
+      var clases = 'piso-row';
       var contenido = '';
       if (n === 0) {
         clases += ' piso-suelo';
@@ -187,8 +188,8 @@
 
   /* ============================================================
      Question generators (one per level type)
-     Return: enunciado, visual (html), leyenda,
-     opciones[{html, correct, aria?}], pista?, enFila?, visualAria?
+     Return: prompt, visual (html), legend,
+     options[{html, correct, aria?}], hint?, enFila?, visualAria?
      ============================================================ */
 
   var GENERATORS = {
@@ -247,7 +248,7 @@
     },
 
     /* Compare two floors: which is lower/higher. Only 2 real candidates
-       exist, so opciones has 2 (accessibility rule 11 sets a maximum of
+       exist, so options has 2 (accessibility rule 11 sets a maximum of
        3, not a fixed count). */
     ascensorComparar: function (nv) {
       var a = randInt(nv.min, nv.max);
@@ -437,7 +438,7 @@
 
   function show(screen) {
     [screenMenu, screenLevels, screenGame, screenEnd].forEach(function (p) {
-      p.classList.toggle('oculto', p !== screen);
+      p.classList.toggle('hidden', p !== screen);
     });
   }
 
@@ -454,7 +455,7 @@
       btn.className = 'btn-actividad';
       btn.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
         '<span>' + App.i18n.t('activity.' + id + '.name') + '</span>' +
-        '<span class="detalle">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
+        '<span class="detail-card">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
       btn.addEventListener('click', function () { openActivity(id); });
       grid.appendChild(btn);
     });
@@ -472,7 +473,7 @@
     activity.levels.forEach(function (nv) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-nivel';
+      btn.className = 'btn btn-level';
       btn.innerHTML = App.i18n.t('level.' + nv.id);
       btn.addEventListener('click', function () { startRound(nv); });
       cont.appendChild(btn);
@@ -534,20 +535,20 @@
       visualEl.removeAttribute('aria-label');
     }
     legendEl.innerHTML = question.legend || '';
-    legendEl.classList.toggle('oculto', !question.legend);
+    legendEl.classList.toggle('hidden', !question.legend);
 
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('oculto');
+    explanationWrap.classList.add('hidden');
     explanationEl.textContent = '';
-    btnNext.classList.add('oculto');
+    btnNext.classList.add('hidden');
 
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('opciones-fila', !!question.inline);
+    optionsEl.classList.toggle('options-row', !!question.inline);
     question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn-opcion';
+      btn.className = 'option-btn';
       btn.innerHTML = op.html;
       if (op.aria) btn.setAttribute('aria-label', op.aria);
       btn.addEventListener('click', function () { answer(op, btn); });
@@ -571,7 +572,7 @@
     var text = (isCorrect ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
       plainText(correct.html) + '.';
     explanationEl.textContent = text;
-    explanationWrap.classList.remove('oculto');
+    explanationWrap.classList.remove('hidden');
   }
 
   /* Socratic method: on the first mistake the answer isn't given,
@@ -579,8 +580,8 @@
      Only on the second mistake is the correct answer explained
      (showExplanation). */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('pista');
-    explanationWrap.classList.remove('oculto');
+    explanationEl.textContent = App.i18n.t('hint');
+    explanationWrap.classList.remove('hidden');
   }
 
   function answer(op, btn) {
@@ -594,8 +595,8 @@
       roundCorrect += 1;
       save();
       paintStars();
-      App.utils.$$('#opciones .btn-opcion').forEach(function (b) { b.disabled = true; });
-      btnNext.classList.remove('oculto');
+      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
+      btnNext.classList.remove('hidden');
       btnNext.focus();
     } else {
       attempts += 1;
@@ -608,7 +609,7 @@
       btn.classList.add('animo');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#opciones .btn-opcion'), explanationWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
     }
   }
 
@@ -650,11 +651,11 @@
       ? activity.levels[levelIndex + 1] : null;
     var btnHarder = $('#btnHarder');
     if (nextLevel) {
-      btnHarder.textContent = App.i18n.t('btnHarder').replace('{nombre}', App.i18n.t('level.' + nextLevel.id));
-      btnHarder.classList.remove('oculto');
+      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name-card}', App.i18n.t('level.' + nextLevel.id));
+      btnHarder.classList.remove('hidden');
       btnHarder.onclick = function () { startRound(nextLevel); };
     } else {
-      btnHarder.classList.add('oculto');
+      btnHarder.classList.add('hidden');
     }
   }
 

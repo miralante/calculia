@@ -2,7 +2,7 @@
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 
-.btn:not(.btn-secundario):not(.btn-audio) {
+.btn:not(.btn-secondary):not(.btn-audio) {
   background: var(--mod-razonamiento);
 }
 
@@ -12,7 +12,7 @@
 
 main { margin-top: var(--espacio-grande); }
 
-.texto-principal {
+.body-text {
   font-size: var(--texto-grande);
   font-weight: 700;
   margin: 0 auto;
@@ -20,7 +20,7 @@ main { margin-top: var(--espacio-grande); }
 
 .card { border-color: var(--mod-razonamiento-suave); }
 
-.pregunta { color: var(--color-texto-suave); }
+.question { color: var(--color-texto-suave); }
 
 .emoji-large { font-size: 96px; }
 

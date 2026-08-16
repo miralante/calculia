@@ -19,8 +19,8 @@
     </header>
 
     <!-- Screen: 5-activity menu -->
-    <section id="screenMenu" class="pila">
-      <div class="fila center-row">
+    <section id="screenMenu" class="stack">
+      <div class="row center-row">
         <p class="instruction" id="instruction" data-i18n="instruction">Here you practise real money: counting it, paying, checking the change and saving.</p>
       </div>
       <div class="card-grid">
@@ -58,83 +58,83 @@
     </section>
 
     <!-- Levels screen (shared by every activity) -->
-    <section id="screenLevels" class="oculto pila centrado">
-      <div class="fila"><button type="button" class="btn btn-secundario" id="btnBackToMenuLevels" data-i18n="backToMenu">← Menu</button></div>
-      <div class="fila center-row">
+    <section id="screenLevels" class="hidden stack centered">
+      <div class="row"><button type="button" class="btn btn-secondary" id="btnBackToMenuLevels" data-i18n="backToMenu">← Menu</button></div>
+      <div class="row center-row">
         <p class="instruction" id="activityInstruction"></p>
       </div>
       <h2 data-i18n="chooseLevel">Choose a step</h2>
-      <div class="pila" id="levels"></div>
+      <div class="stack" id="levels"></div>
     </section>
 
     <!-- Quiz game screen (shared: count, payWith, change, piggyBank) -->
-    <section id="screenQuizGame" class="oculto pila">
+    <section id="screenQuizGame" class="hidden stack">
       <div class="progress-bar">
         <div class="progress-fill" id="progressQuizFill"></div>
         <span class="progress-text" id="progressQuizText">0 / 6</span>
       </div>
 
-      <div class="fila center-row">
+      <div class="row center-row">
         <p class="prompt" id="quizPrompt"></p>
       </div>
 
-      <div class="money-table oculto" id="moneyTable" role="group" data-i18n-aria="tableAria" aria-label="Money on the table"></div>
+      <div class="money-table hidden" id="moneyTable" role="group" data-i18n-aria="tableAria" aria-label="Money on the table"></div>
 
-      <div class="options pila" id="quizOptions"></div>
+      <div class="options stack" id="quizOptions"></div>
 
       <div class="feedback" id="quizFeedback" aria-live="polite"></div>
-      <div class="fila explanation oculto" id="quizExplanationWrap">
+      <div class="row explanation hidden" id="quizExplanationWrap">
         <p id="quizExplanation" aria-live="polite"></p>
       </div>
-      <button type="button" class="btn oculto" id="btnNextQuiz" data-i18n="core.next">Next →</button>
+      <button type="button" class="btn hidden" id="btnNextQuiz" data-i18n="core.next">Next →</button>
     </section>
 
     <!-- Pay-exactly game screen (interactive, its own) -->
-    <section id="screenPayGame" class="oculto pila">
+    <section id="screenPayGame" class="hidden stack">
       <div class="progress-bar">
         <div class="progress-fill" id="progressPayFill"></div>
         <span class="progress-text" id="progressPayText">0 / 6</span>
       </div>
 
-      <div class="card centrado pila">
+      <div class="card centered stack">
         <div class="product" id="product"></div>
         <p class="price" id="priceText"></p>
       </div>
 
-      <div class="fila center-row">
+      <div class="row center-row">
         <p class="total" id="totalPlaced" aria-live="polite">You have put in: 0,00 €</p>
-        <button type="button" class="btn btn-secundario" id="btnPayHint" data-i18n="btnHint">💡 Help</button>
+        <button type="button" class="btn btn-secondary" id="btnPayHint" data-i18n="btnHint">💡 Help</button>
       </div>
 
-      <div class="pila-monedas" id="money"></div>
+      <div class="stack-monedas" id="money"></div>
 
-      <div class="fila center-row acciones">
-        <button type="button" class="btn btn-secundario" id="btnRemoveLast" data-i18n="removeLast">↩ Remove last</button>
-        <button type="button" class="btn btn-secundario" id="btnClear" data-i18n="clear">🗑 Empty</button>
+      <div class="row center-row acciones">
+        <button type="button" class="btn btn-secondary" id="btnRemoveLast" data-i18n="removeLast">↩ Remove last</button>
+        <button type="button" class="btn btn-secondary" id="btnClear" data-i18n="clear">🗑 Empty</button>
         <button type="button" class="btn" id="btnCheck" data-i18n="check">Check</button>
       </div>
 
-      <div class="fila explanation oculto" id="payHintWrap">
+      <div class="row explanation hidden" id="payHintWrap">
         <p id="payHintText" aria-live="polite"></p>
         <button type="button" class="btn btn-audio" id="btnListenPayHint" data-i18n-aria="listenHintAria" aria-label="Listen to the help">🔊</button>
       </div>
 
       <div class="feedback" id="payFeedback" aria-live="polite"></div>
-      <button type="button" class="btn oculto" id="btnNextPay" data-i18n="core.next">Next →</button>
+      <button type="button" class="btn hidden" id="btnNextPay" data-i18n="core.next">Next →</button>
     </section>
 
     <!-- End screen (shared by every activity) -->
-    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
-      <div class="emoji-grande" aria-hidden="true">🎉</div>
+    <section id="screenEnd" class="hidden centered stack" aria-live="polite">
+      <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">Round complete!</h2>
       <p id="endSummary"></p>
       <p id="transfer" class="transfer" data-i18n="transfer"></p>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Play again</button>
-      <button type="button" class="btn btn-secundario" id="btnAnotherLevelEnd" data-i18n="btnAnotherLevel">Choose another step</button>
-      <button type="button" class="btn btn-secundario" id="btnBackToMenuEnd" data-i18n="backToMenu">← Menu</button>
+      <button type="button" class="btn btn-secondary" id="btnAnotherLevelEnd" data-i18n="btnAnotherLevel">Choose another step</button>
+      <button type="button" class="btn btn-secondary" id="btnBackToMenuEnd" data-i18n="backToMenu">← Menu</button>
     </section>
     <footer class="pie-app">
-      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Data protection</a>
+      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Data protection</a>
     </footer>
   </div>
 

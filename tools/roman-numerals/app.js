@@ -142,7 +142,7 @@
 
   function show(screen) {
     resetAudioUI();
-    SCREENS.forEach(function (s) { s.classList.toggle('oculto', s !== screen); });
+    SCREENS.forEach(function (s) { s.classList.toggle('hidden', s !== screen); });
   }
 
   /* ---------- Screen 1: introduction (symbol carousel) ---------- */
@@ -470,7 +470,7 @@
     paintFamous();
   }
 
-  /* ---------- Audio del enunciado (TTS) ----------
+  /* ---------- Audio del prompt (TTS) ----------
 
 /* The default TTS would read "VI" as "uve-ié" or "XX" as separate
      letters. To make the prompt sound natural, we precompute it
@@ -1075,10 +1075,10 @@
   function paintQuizDecomposition(roman, revealTotal) {
     decompositionEl.innerHTML = '';
     if (!roman) {
-      decompositionEl.classList.add('oculto');
+      decompositionEl.classList.add('hidden');
       return;
     }
-    decompositionEl.classList.remove('oculto');
+    decompositionEl.classList.remove('hidden');
     var deco = DATA.decompose(roman);
     var pieces = decompositionPieces(deco);
 
@@ -1156,14 +1156,14 @@
        separated by the natural space, not as "Carlos "). */
     quizShown.setAttribute('aria-label', round.shown);
     contextText.textContent = round.context;
-    contextText.classList.toggle('oculto', !round.context);
+    contextText.classList.toggle('hidden', !round.context);
     paintQuizDecomposition(round.decoRoman, false);
     questionText.textContent = round.question;
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('oculto');
+    explanationWrap.classList.add('hidden');
     explanationEl.textContent = '';
-    nextBtn.classList.add('oculto');
+    nextBtn.classList.add('hidden');
     optionsEl.innerHTML = '';
     /* Audio is OFF in numberToRoman mode: the visible prompt is
        a decimal number ("9") and the audio would just read it
@@ -1173,12 +1173,12 @@
        (romanToNumber) or a meaningful phrase (centuryToNumber,
        monarchToNumber), so reading it aloud helps without
        spoiling the answer. */
-    btnListenPrompt.classList.toggle('oculto', entry.mode === 'numberToRoman');
+    btnListenPrompt.classList.toggle('hidden', entry.mode === 'numberToRoman');
 
     round.options.forEach(function (opt) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn-opcion' + (opt.kind !== 'correct' ? ' distractor-' + opt.kind : '');
+      btn.className = 'option-btn' + (opt.kind !== 'correct' ? ' distractor-' + opt.kind : '');
       btn.textContent = opt.value;
       btn.addEventListener('click', function () { answer(btn, opt.kind === 'correct', round); });
       optionsEl.appendChild(btn);
@@ -1192,7 +1192,7 @@
     var roman = round.decoRoman || (typeof round.correctValue === 'string' ? round.correctValue : '');
     if (roman) paintQuizDecomposition(roman, true);
     explanationEl.textContent = t('correctExplanation');
-    explanationWrap.classList.remove('oculto');
+    explanationWrap.classList.remove('hidden');
   }
 
   function answer(btn, isCorrect, round) {
@@ -1201,13 +1201,13 @@
       showExplanation(round);
       resolved = true;
       btn.classList.add('correcta');
-      App.utils.$$('#options .btn-opcion').forEach(function (b) { b.disabled = true; });
+      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
       App.feedback.success(feedbackEl);
       progress.stars += 1;
       correctCount += 1;
       save();
       paintStars();
-      nextBtn.classList.remove('oculto');
+      nextBtn.classList.remove('hidden');
       nextBtn.focus();
     } else {
       attempts += 1;
@@ -1223,17 +1223,17 @@
         explanationEl.textContent = t('hintHint') + pickHint(round.hintRoman);
         var romanHint = round.decoRoman || (typeof round.correctValue === 'string' ? round.correctValue : '');
         if (romanHint) paintQuizDecomposition(romanHint, true);
-        explanationWrap.classList.remove('oculto');
+        explanationWrap.classList.remove('hidden');
       } else {
         explanationEl.textContent = t('wrongExplanationPrefix') + round.correctValue;
         var roman = round.decoRoman || (typeof round.correctValue === 'string' ? round.correctValue : '');
         if (roman) paintQuizDecomposition(roman, true);
-        explanationWrap.classList.remove('oculto');
+        explanationWrap.classList.remove('hidden');
       }
       btn.classList.add('animo');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .btn-opcion'), explanationWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
     }
   }
 

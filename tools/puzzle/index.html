@@ -19,53 +19,53 @@
     </header>
 
     <!-- Start screen -->
-    <section id="screenStart" class="pila centrado">
-      <div class="fila centrado-fila">
+    <section id="screenStart" class="stack centered">
+      <div class="row center-row">
         <p class="instruction" id="instruction" data-i18n="instruction">Mira el modelo. Toca una pieza y después toca su sitio en el tablero.</p>
       </div>
       <h2 data-i18n="levelsTitle">Elige una actividad</h2>
-      <div class="pila" id="levels"></div>
+      <div class="stack" id="levels"></div>
     </section>
 
     <!-- Game screen -->
-    <section id="screenGame" class="oculto pila">
+    <section id="screenGame" class="hidden stack">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText"></span>
       </div>
 
-      <p class="imagen-titulo centrado" id="titleImage"></p>
+      <p class="image-title centered" id="titleImage"></p>
 
       <div class="zona-puzzle">
         <div class="bloque-modelo">
-          <p class="etiqueta centrado" data-i18n="modelLabel">Modelo</p>
+          <p class="etiqueta centered" data-i18n="modelLabel">Modelo</p>
           <div class="rejilla-puzzle modelo" id="model"></div>
         </div>
         <div class="bloque-tablero">
-          <p class="etiqueta centrado" data-i18n="boardLabel">Tu tablero</p>
+          <p class="etiqueta centered" data-i18n="boardLabel">Tu tablero</p>
           <div class="rejilla-puzzle" id="board"></div>
         </div>
       </div>
 
-      <p class="etiqueta centrado" data-i18n="piecesLabel">Piezas</p>
-      <div class="pila-piezas" id="pieces"></div>
+      <p class="etiqueta centered" data-i18n="piecesLabel">Piezas</p>
+      <div class="stack-piezas" id="pieces"></div>
 
       <div class="feedback" id="feedback" aria-live="polite"></div>
-      <button type="button" class="btn oculto" id="btnNext" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
     <!-- End screen -->
-    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
+    <section id="screenEnd" class="hidden centered stack" aria-live="polite">
       <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
       <p id="transfer" class="transfer" data-i18n="transferencia"></p>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secundario" id="btnOtherLevel" data-i18n="otherLevel">Elegir otra actividad</button>
-      <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
+      <button type="button" class="btn btn-secondary" id="btnOtherLevel" data-i18n="otherLevel">Elegir otra actividad</button>
+      <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer class="pie-app">
-      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Protección de datos</a>
     </footer>
   </div>
 

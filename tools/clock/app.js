@@ -145,7 +145,7 @@
     DATA.levels.forEach(function (n) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-nivel';
+      btn.className = 'btn btn-level';
       var levelDescription = App.i18n.t('levelDescription.' + n.id);
       btn.innerHTML = levelDescription;
       btn.addEventListener('click', function () { startRound(n); });
@@ -169,9 +169,9 @@
        at the end of the normal round. startReinforce mounts the
        mini-round with those questions. */
     App.reinforce.start(function (fallos) { startReinforce(fallos); });
-    screenStart.classList.add('oculto');
-    screenEnd.classList.add('oculto');
-    screenGame.classList.remove('oculto');
+    screenStart.classList.add('hidden');
+    screenEnd.classList.add('hidden');
+    screenGame.classList.remove('hidden');
     render();
   }
 
@@ -209,9 +209,9 @@
     attempts = 0;
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('oculto');
+    explanationWrap.classList.add('hidden');
     explanationEl.textContent = '';
-    btnNext.classList.add('oculto');
+    btnNext.classList.add('hidden');
     optionsEl.innerHTML = '';
 
     if (p.type === 'read') {
@@ -221,20 +221,20 @@
       readOptions.forEach(function (op) {
         var btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'btn-opcion';
+        btn.className = 'option-btn';
         btn.textContent = op.text;
         btn.addEventListener('click', function () { answer(btn, op.isCorrect, p); });
         optionsEl.appendChild(btn);
       });
     } else {
-      questionZoneEl.innerHTML = '<div class="momento-picto" aria-hidden="true">' + p.moment.picto + '</div>';
+      questionZoneEl.innerHTML = '<div class="moment-picto" aria-hidden="true">' + p.moment.picto + '</div>';
       questionTextEl.textContent = App.i18n.t('moment.' + p.moment.id + '.question');
-      optionsEl.className = 'pila options-clock';
+      optionsEl.className = 'stack options-clock';
       var associateOptions = App.utils.shuffle(p.options);
       associateOptions.forEach(function (op) {
         var btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'btn-opcion option-clock';
+        btn.className = 'option-btn option-clock';
         btn.innerHTML = clockSvg(op.h, op.m);
         btn.setAttribute('aria-label', App.i18n.t('clockAria').replace('{text}', timeText(op.h, op.m)));
         btn.addEventListener('click', function () { answer(btn, op.isCorrect, p); });
@@ -255,7 +255,7 @@
     var text = (isCorrect ? App.i18n.t('correctExplanation') : App.i18n.t('incorrectExplanationA')) +
       correctAnswerText(p) + '.';
     explanationEl.textContent = text;
-    explanationWrap.classList.remove('oculto');
+    explanationWrap.classList.remove('hidden');
   }
 
   /* Socratic method: on the first mistake the answer is not given,
@@ -264,7 +264,7 @@
      (showExplanation). */
   function showHint(p) {
     explanationEl.textContent = App.i18n.t(p.type === 'read' ? 'readHint' : 'associateHint');
-    explanationWrap.classList.remove('oculto');
+    explanationWrap.classList.remove('hidden');
   }
 
   function answer(btn, isCorrect, p) {
@@ -273,13 +273,13 @@
       showExplanation(isCorrect, p);
       answered = true;
       btn.classList.add('correcta');
-      App.utils.$$('#options .btn-opcion').forEach(function (b) { b.disabled = true; });
+      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
       App.feedback.success(feedbackEl);
       progress.stars += 1;
       roundCorrect += 1;
       save();
       paintStars();
-      btnNext.classList.remove('oculto');
+      btnNext.classList.remove('hidden');
       btnNext.focus();
     } else {
       attempts += 1;
@@ -295,7 +295,7 @@
       btn.classList.add('animo');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .btn-opcion'), explanationWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
     }
   }
 
@@ -313,12 +313,12 @@
       }
       currentQ = reinforceList[reinforceIndex];
       paintReinforceProgress();
-      optionsEl.className = 'pila';
+      optionsEl.className = 'stack';
       render();
       return;
     }
     roundIndex += 1;
-    optionsEl.className = 'pila';
+    optionsEl.className = 'stack';
     if (roundIndex >= DATA.perRound) {
       var consume = App.reinforce.consume();
       if (consume.length === 0) endRound();
@@ -330,8 +330,8 @@
 
   function endRound() {
     save();
-    screenGame.classList.add('oculto');
-    screenEnd.classList.remove('oculto');
+    screenGame.classList.add('hidden');
+    screenEnd.classList.remove('hidden');
     $('#endSummary').textContent = App.i18n.t('endSummary')
       .replace('{n}', roundCorrect)
       .replace('{estrellas}', progress.stars);
@@ -342,9 +342,9 @@ $('#transfer').textContent = App.i18n.t('transfer');
   /* Events */
   $('#btnRepeat').addEventListener('click', function () { startRound(level); });
   $('#btnOtherLevel').addEventListener('click', function () {
-    screenEnd.classList.add('oculto');
+    screenEnd.classList.add('hidden');
     paintLevels();
-    screenStart.classList.remove('oculto');
+    screenStart.classList.remove('hidden');
   });
 
   paintLevels();

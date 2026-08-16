@@ -2,7 +2,7 @@
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 
-.btn:not(.btn-secundario):not(.btn-audio) {
+.btn:not(.btn-secondary):not(.btn-audio) {
   background: var(--mod-razonamiento);
 }
 
@@ -10,7 +10,7 @@
 
 .center-row { justify-content: center; }
 
-.btn-nivel { min-width: 300px; align-self: center; }
+.btn-level { min-width: 300px; align-self: center; }
 
 .progress-bar { margin-top: var(--espacio); }
 
@@ -39,7 +39,7 @@
   background: var(--mod-razonamiento-suave);
 }
 
-.pregunta { color: var(--color-texto-suave); }
+.question { color: var(--color-texto-suave); }
 
 .opcion-simbolo {
   text-align: center;

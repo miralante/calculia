@@ -18,8 +18,8 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-    <div class="fila">
-      <p class="instruction" id="instruction" data-i18n="instruction">Lee la adivinanza. Después elige la respuesta.</p>
+    <div class="row">
+      <p class="instruction" id="instruction" data-i18n="instruction">Lee la adivinanza. Después elige la answer.</p>
     </div>
 
     <div class="progress-bar">
@@ -27,29 +27,29 @@
       <span class="progress-text" id="progressText">0 / 10</span>
     </div>
 
-    <main id="screenGame" class="pila">
-      <div class="card centrado pila">
-        <p class="texto-principal" id="textQuestion" data-i18n="core.loading">Cargando…</p>
+    <main id="screenGame" class="stack">
+      <div class="card centered stack">
+        <p class="body-text" id="textQuestion" data-i18n="core.loading">Cargando…</p>
       </div>
-      <h2 class="pregunta centrado" data-i18n="question">¿Qué es?</h2>
-      <div class="pila" id="options"></div>
+      <h2 class="question centered" data-i18n="question">¿Qué es?</h2>
+      <div class="stack" id="options"></div>
       <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="fila explicacion oculto" id="explanationWrap">
+      <div class="row explanation hidden" id="explanationWrap">
         <p id="explanation" aria-live="polite"></p>
       </div>
-      <button type="button" class="btn oculto" id="btnNext" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </main>
 
-    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
+    <section id="screenEnd" class="hidden centered stack" aria-live="polite">
       <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
       <p id="transfer" class="transfer" data-i18n="transferencia"></p>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
-      <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
+      <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer class="pie-app">
-      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Protección de datos</a>
     </footer>
   </div>
 

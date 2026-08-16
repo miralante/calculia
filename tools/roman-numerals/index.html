@@ -19,32 +19,32 @@
     </header>
 
     <!-- Pantalla 1: introducción con carrusel de símbolos -->
-    <section id="introScreen" class="pila">
-      <div class="fila center-row">
+    <section id="introScreen" class="stack">
+      <div class="row center-row">
         <p class="instruction" data-i18n="instruction">Aprende los números romanos y úsalos para reconocer los siglos.</p>
       </div>
-      <div class="card reference-card pila intro-card">
+      <div class="card reference-card stack intro-card">
         <h2 class="reference-title" data-i18n="introTitle">Qué son los números romanos</h2>
         <p class="reference-text" data-i18n="introText">Los números romanos son un sistema antiguo que aún se usa hoy. Los verás en relojes, monumentos y libros.</p>
       </div>
 
-      <div class="card pila carousel-card">
+      <div class="card stack carousel-card">
         <div class="carousel-display" id="carouselDisplay" role="button" tabindex="0"></div>
         <p class="carousel-caption" id="carouselCaption"></p>
         <div class="carousel-controls">
-          <button type="button" class="btn btn-secundario" id="carouselPrev">←</button>
-          <button type="button" class="btn btn-secundario" id="carouselNext">→</button>
+          <button type="button" class="btn btn-secondary" id="carouselPrev">←</button>
+          <button type="button" class="btn btn-secondary" id="carouselNext">→</button>
         </div>
       </div>
 
-      <div class="fila intro-buttons">
+      <div class="row intro-buttons">
         <button type="button" class="btn" id="introNext" data-i18n="introNext">Siguiente →</button>
       </div>
     </section>
 
     <!-- Pantalla 2: números romanos famosos -->
-    <section id="famousScreen" class="oculto pila">
-      <div class="card famosos-card pila" aria-labelledby="famousTitle">
+    <section id="famousScreen" class="hidden stack">
+      <div class="card famosos-card stack" aria-labelledby="famousTitle">
         <h2 class="reference-title" id="famousTitle" data-i18n="introFamousTitle">Un número romano famoso</h2>
         <p class="reference-text" data-i18n="introFamousSubtitle">Fíjate en este ejemplo:</p>
         <div class="famoso-ejemplo-row">
@@ -52,31 +52,31 @@
           <button type="button" class="btn btn-audio btn-famoso-audio" id="btnListenFamous"
                   data-i18n-aria="core.listenText" aria-label="Escuchar el texto">🔊</button>
         </div>
-        <p class="famoso-texto" id="famousText"></p>
+        <p class="famous-text" id="famousText"></p>
         <div class="carousel-controls">
-          <button type="button" class="btn btn-secundario" id="famousPrev2">←</button>
-          <button type="button" class="btn btn-secundario" id="famousNext2">→</button>
+          <button type="button" class="btn btn-secondary" id="famousPrev2">←</button>
+          <button type="button" class="btn btn-secondary" id="famousNext2">→</button>
         </div>
       </div>
 
-      <div class="fila intro-buttons">
-        <button type="button" class="btn btn-secundario" id="famousPrevBtn" data-i18n="famousPrev">← Anterior</button>
+      <div class="row intro-buttons">
+        <button type="button" class="btn btn-secondary" id="famousPrevBtn" data-i18n="famousPrev">← Anterior</button>
         <button type="button" class="btn" id="famousNextBtn" data-i18n="famousNext">Siguiente →</button>
       </div>
     </section>
 
     <!-- Pantalla 3: recordatorio (valor de cada letra, con colores) -->
-    <section id="reminderScreen" class="oculto pila">
-      <div class="fila center-row">
-        <button type="button" class="btn btn-secundario" id="reminderBack" data-i18n="core.back">← Volver</button>
+    <section id="reminderScreen" class="hidden stack">
+      <div class="row center-row">
+        <button type="button" class="btn btn-secondary" id="reminderBack" data-i18n="core.back">← Volver</button>
       </div>
-      <div class="card reference-card pila">
+      <div class="card reference-card stack">
         <h2 class="reference-title" data-i18n="referenceTitle">Recuerda el valor de cada letra</h2>
         <p class="reference-text" data-i18n="referenceText">Cada letra vale siempre lo mismo.</p>
       </div>
 
       <!-- Tabla de referencia con colores por letra -->
-      <div class="card pila symbols-card">
+      <div class="card stack symbols-card">
         <div class="symbols-row" id="symbolsRow"></div>
       </div>
 
@@ -84,10 +84,10 @@
            Dos ejemplos por regla (IV e IX para la resta, VI y XI
            para la suma) para que la persona vea la regla con
            las dos letras mayores disponibles (V y X), no solo
-           con una. Sin recargar la pantalla: los ejemplos
+           con una. Sin recargar la screen: los ejemplos
            viven aquí, no en el carrusel, para que la regla y
            los números que la cumplen se lean juntos. -->
-      <div class="card pila rule-card">
+      <div class="card stack rule-card">
         <p class="rule-title" data-i18n="ruleSubtract">Si una letra menor va DELANTE de una mayor, resta:</p>
         <div class="rule-example">
           <span class="roman-join" id="exampleSubtractRoman"></span>
@@ -108,24 +108,24 @@
         </div>
       </div>
 
-      <div class="fila reminder-buttons">
+      <div class="row reminder-buttons">
         <button type="button" class="btn" id="referenceNext" data-i18n="referenceNext">Empezar a practicar →</button>
       </div>
     </section>
 
     <!-- Pantalla 4: niveles -->
-    <section id="levelsScreen" class="oculto pila">
-      <div class="fila center-row">
-        <button type="button" class="btn btn-secundario" id="levelsBack" data-i18n="core.back">← Volver</button>
+    <section id="levelsScreen" class="hidden stack">
+      <div class="row center-row">
+        <button type="button" class="btn btn-secondary" id="levelsBack" data-i18n="core.back">← Volver</button>
       </div>
-      <h2 class="centrado" data-i18n="levelsTitle">Elige una actividad</h2>
-      <div class="pila" id="levels"></div>
+      <h2 class="centered" data-i18n="levelsTitle">Elige una actividad</h2>
+      <div class="stack" id="levels"></div>
     </section>
 
     <!-- Pantalla de juego -->
-    <section id="quizScreen" class="oculto pila">
-      <div class="fila">
-        <button type="button" class="btn btn-secundario" id="backLevelsBtn" data-i18n="backToLevels">← Volver a niveles</button>
+    <section id="quizScreen" class="hidden stack">
+      <div class="row">
+        <button type="button" class="btn btn-secondary" id="backLevelsBtn" data-i18n="backToLevels">← Volver a niveles</button>
       </div>
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
@@ -134,38 +134,38 @@
       <!-- Cabecera opcional para la mini-ronda de refuerzo de fallos.
            Se muestra solo cuando se entra en ella, para que la persona
            sepa que está repasando lo que falló antes, no una ronda nueva. -->
-      <div class="round-header oculto" id="roundHeader" aria-live="polite"></div>
-      <div class="card centrado pila quiz-card">
+      <div class="round-header hidden" id="roundHeader" aria-live="polite"></div>
+      <div class="card centered stack quiz-card">
         <div class="quiz-shown-row">
           <div class="quiz-shown" id="quizShown"></div>
           <button type="button" class="btn btn-audio btn-quiz-audio" id="btnListenPrompt"
                   data-i18n-aria="core.listenText" aria-label="Escuchar el texto">🔊</button>
         </div>
-        <p class="context-text oculto" id="contextText"></p>
+        <p class="context-text hidden" id="contextText"></p>
         <!-- Descomposición paso a paso con colores -->
-        <div class="decomposition oculto" id="decomposition" aria-live="polite"></div>
+        <div class="decomposition hidden" id="decomposition" aria-live="polite"></div>
       </div>
-      <h2 class="question centrado" id="questionText"></h2>
-      <div class="pila" id="options"></div>
+      <h2 class="question centered" id="questionText"></h2>
+      <div class="stack" id="options"></div>
       <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="explicacion oculto" id="explanationWrap">
+      <div class="explanation hidden" id="explanationWrap">
         <p id="explanation" aria-live="polite"></p>
       </div>
-      <button type="button" class="btn oculto" id="nextBtn" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn hidden" id="nextBtn" data-i18n="core.next">Siguiente →</button>
     </section>
 
     <!-- Pantalla final -->
-    <section id="endScreen" class="oculto centrado pila" aria-live="polite">
+    <section id="endScreen" class="hidden centered stack" aria-live="polite">
       <div class="big-emoji" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="finalSummary"></p>
       <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
       <button type="button" class="btn" id="replayBtn" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secundario" id="otherLevelBtn" data-i18n="chooseAnotherLevel">Elegir otra actividad</button>
-      <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
+      <button type="button" class="btn btn-secondary" id="otherLevelBtn" data-i18n="chooseAnotherLevel">Elegir otra actividad</button>
+      <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer class="pie-app">
-      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Protección de datos</a>
     </footer>
   </div>
 

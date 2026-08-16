@@ -49,7 +49,7 @@
     bank().niveles.forEach(function (n) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-nivel';
+      btn.className = 'btn btn-level';
       btn.innerHTML = n.descripcion;
       btn.addEventListener('click', function () { startRound(n); });
       cont.appendChild(btn);
@@ -61,9 +61,9 @@
     images = App.utils.shuffle(level.imagenes);
     index = 0;
     roundCorrect = 0;
-    screenStart.classList.add('oculto');
-    screenEnd.classList.add('oculto');
-    screenGame.classList.remove('oculto');
+    screenStart.classList.add('hidden');
+    screenEnd.classList.add('hidden');
+    screenGame.classList.remove('hidden');
     render();
   }
 
@@ -78,8 +78,8 @@
     placed = 0;
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
-    btnNext.classList.add('oculto');
-    titleImageEl.textContent = image.nombre;
+    btnNext.classList.add('hidden');
+    titleImageEl.textContent = image.name-card;
 
     var gridStyle = 'repeat(' + level.columnas + ', 1fr)';
     modelEl.style.gridTemplateColumns = gridStyle;
@@ -152,7 +152,7 @@
     roundCorrect += 1;
     save();
     paintStars();
-    btnNext.classList.remove('oculto');
+    btnNext.classList.remove('hidden');
     btnNext.focus();
   }
 
@@ -167,8 +167,8 @@
 
   function endRound() {
     save();
-    screenGame.classList.add('oculto');
-    screenEnd.classList.remove('oculto');
+    screenGame.classList.add('hidden');
+    screenEnd.classList.remove('hidden');
     $('#endSummary').textContent = App.i18n.t('resumenFinal')
       .replace('{n}', roundCorrect).replace('{total}', progress.stars);
 $('#transfer').textContent = App.i18n.t('transferencia');
@@ -179,9 +179,9 @@ $('#transfer').textContent = App.i18n.t('transferencia');
   btnNext.addEventListener('click', next);
   $('#btnRepeat').addEventListener('click', function () { startRound(level); });
   $('#btnOtherLevel').addEventListener('click', function () {
-    screenEnd.classList.add('oculto');
+    screenEnd.classList.add('hidden');
     paintLevels();
-    screenStart.classList.remove('oculto');
+    screenStart.classList.remove('hidden');
   });
 
   paintLevels();

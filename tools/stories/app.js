@@ -47,7 +47,7 @@
     DATA.niveles.forEach(function (n) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-nivel';
+      btn.className = 'btn btn-level';
       var levelDescription = App.i18n.t('nivelDescripcion').replace('{n}', n.historias[0].vinetas.length);
       btn.innerHTML = levelDescription;
       btn.addEventListener('click', function () { startRound(n); });
@@ -60,9 +60,9 @@
     stories = App.utils.shuffle(level.historias).slice(0, DATA.perRound);
     index = 0;
     roundCorrect = 0;
-    screenStart.classList.add('oculto');
-    screenEnd.classList.add('oculto');
-    screenGame.classList.remove('oculto');
+    screenStart.classList.add('hidden');
+    screenEnd.classList.add('hidden');
+    screenGame.classList.remove('hidden');
     render();
   }
 
@@ -77,10 +77,10 @@
     attempts = 0;
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('oculto');
+    explanationWrap.classList.add('hidden');
     explanationEl.textContent = '';
     feedbackEl.className = 'feedback';
-    btnNext.classList.add('oculto');
+    btnNext.classList.add('hidden');
     storyTitleEl.textContent = App.i18n.t('historia.' + story.id);
 
     paintSlots();
@@ -142,12 +142,12 @@
      second mistake → explanation with the correct beginning. */
   function showHint() {
     explanationEl.textContent = App.i18n.t('pista');
-    explanationWrap.classList.remove('oculto');
+    explanationWrap.classList.remove('hidden');
   }
 
   function showExplanation() {
     explanationEl.textContent = App.i18n.t('explicacion');
-    explanationWrap.classList.remove('oculto');
+    explanationWrap.classList.remove('hidden');
   }
 
   function endStory() {
@@ -155,7 +155,7 @@
     roundCorrect += 1;
     save();
     paintStars();
-    btnNext.classList.remove('oculto');
+    btnNext.classList.remove('hidden');
     btnNext.focus();
   }
 
@@ -170,8 +170,8 @@
 
   function endRound() {
     save();
-    screenGame.classList.add('oculto');
-    screenEnd.classList.remove('oculto');
+    screenGame.classList.add('hidden');
+    screenEnd.classList.remove('hidden');
     $('#endSummary').textContent = App.i18n.t('resumenFinal')
       .replace('{n}', roundCorrect)
       .replace('{estrellas}', progress.stars);
@@ -183,9 +183,9 @@ $('#transfer').textContent = App.i18n.t('transferencia');
   btnNext.addEventListener('click', next);
   $('#btnRepeat').addEventListener('click', function () { startRound(level); });
   $('#btnOtherLevel').addEventListener('click', function () {
-    screenEnd.classList.add('oculto');
+    screenEnd.classList.add('hidden');
     paintLevels();
-    screenStart.classList.remove('oculto');
+    screenStart.classList.remove('hidden');
   });
 
   paintLevels();

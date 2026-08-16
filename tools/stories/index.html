@@ -18,46 +18,46 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-    <section id="screenStart" class="pila centrado">
-      <div class="fila centrado-fila">
+    <section id="screenStart" class="stack centered">
+      <div class="row center-row">
         <p class="instruction" id="instruction" data-i18n="instruction">Toca las viñetas en el orden correcto, de primero a último.</p>
       </div>
       <h2 data-i18n="levelsTitle">Elige una actividad</h2>
-      <div class="pila" id="levels"></div>
+      <div class="stack" id="levels"></div>
     </section>
 
-    <section id="screenGame" class="oculto pila">
+    <section id="screenGame" class="hidden stack">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText">0 / 5</span>
       </div>
 
-      <p class="historia-titulo centrado" id="storyTitle"></p>
+      <p class="story-title centered" id="storyTitle"></p>
 
-      <p class="etiqueta centrado" data-i18n="orderLabel">Your order</p>
-      <div class="pila-secuencia" id="sequence"></div>
+      <p class="etiqueta centered" data-i18n="orderLabel">Your order</p>
+      <div class="stack-secuencia" id="sequence"></div>
 
-      <p class="etiqueta centrado" data-i18n="panelsLabel">Panels</p>
-      <div class="pila-disponibles" id="available"></div>
+      <p class="etiqueta centered" data-i18n="panelsLabel">Panels</p>
+      <div class="stack-disponibles" id="available"></div>
 
       <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="explicacion-wrap oculto" id="explanationWrap">
-        <p id="explanation" class="explicacion" aria-live="polite"></p>
+      <div class="explanation-wrap hidden" id="explanationWrap">
+        <p id="explanation" class="explanation" aria-live="polite"></p>
       </div>
-      <button type="button" class="btn oculto" id="btnNext" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
-    <section id="screenEnd" class="oculto centrado pila" aria-live="polite">
+    <section id="screenEnd" class="hidden centered stack" aria-live="polite">
       <div class="emoji-large" aria-hidden="true">�</div>
       <h2 data-i18n="endTitle">¡Ronda completada!</h2>
       <p id="endSummary"></p>
       <p id="transfer" class="transfer" data-i18n="transferencia"></p>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secundario" id="btnOtherLevel" data-i18n="otherLevel">Elegir otra actividad</button>
-      <a href="../../site/index.html" class="btn btn-secundario" data-i18n="core.backToMenu">Volver al menú</a>
+      <button type="button" class="btn btn-secondary" id="btnOtherLevel" data-i18n="otherLevel">Elegir otra actividad</button>
+      <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer class="pie-app">
-      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Protección de datos</a>
     </footer>
   </div>
 

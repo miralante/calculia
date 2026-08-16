@@ -19,7 +19,7 @@
   var optionsEl = $('#options');
   var feedbackEl = $('#feedback');
   var explanationWrap = $('#explanationWrap');
-  var explanationEl = $('#explicacion');
+  var explanationEl = $('#explanation');
   var btnNext = $('#btnNext');
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
@@ -79,8 +79,8 @@
     /* Reinforce: the callback is called with the failed items when
        the normal round ends. startReinforce mounts the mini-round. */
     App.reinforce.start(function (fallos) { startReinforce(fallos); });
-    screenEnd.classList.add('oculto');
-    screenGame.classList.remove('oculto');
+    screenEnd.classList.add('hidden');
+    screenGame.classList.remove('hidden');
     render();
   }
 
@@ -115,9 +115,9 @@
     textEl.textContent = item.text;
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('oculto');
+    explanationWrap.classList.add('hidden');
     explanationEl.textContent = '';
-    btnNext.classList.add('oculto');
+    btnNext.classList.add('hidden');
     optionsEl.innerHTML = '';
 
     var options = App.utils.shuffle(item.options.map(function (opt, i) {
@@ -127,7 +127,7 @@
     options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn-opcion';
+      btn.className = 'option-btn';
       btn.textContent = op.text;
       btn.addEventListener('click', function () {
         answer(btn, op.text, op.isCorrect, item);
@@ -145,7 +145,7 @@
       : App.i18n.t('explicacionIncorrectaA') + optionText +
         App.i18n.t('explicacionIncorrectaB') + item.answer + '.';
     explanationEl.textContent = text;
-    explanationWrap.classList.remove('oculto');
+    explanationWrap.classList.remove('hidden');
   }
 
   /* Socratic method: on the first mistake the answer isn't given,
@@ -154,7 +154,7 @@
      (showExplanation). */
   function showHint(item) {
     explanationEl.textContent = App.i18n.t('pista') + '"' + item.text + '"';
-    explanationWrap.classList.remove('oculto');
+    explanationWrap.classList.remove('hidden');
   }
 
   function answer(btn, optionText, isCorrect, item) {
@@ -163,7 +163,7 @@
       showExplanation(optionText, isCorrect, item);
       resolved = true;
       btn.classList.add('correcta');
-      App.utils.$$('#opciones .btn-opcion').forEach(function (b) {
+      App.utils.$$('#options .option-btn').forEach(function (b) {
         b.disabled = true;
       });
       App.feedback.success(feedbackEl);
@@ -171,7 +171,7 @@
       roundCorrect += 1;
       save();
       paintStars();
-      btnNext.classList.remove('oculto');
+      btnNext.classList.remove('hidden');
       btnNext.focus();
     } else {
       /* Encouragement, never punishment: can try again */
@@ -188,7 +188,7 @@
       btn.classList.add('animo');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#opciones .btn-opcion'), explanationWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
     }
   }
 
@@ -224,8 +224,8 @@
     progress.rondas += 1;
     save();
     paintProgress();
-    screenGame.classList.add('oculto');
-    screenEnd.classList.remove('oculto');
+    screenGame.classList.add('hidden');
+    screenEnd.classList.remove('hidden');
     endSummary.textContent = App.i18n.t('resumenFinal')
       .replace('{n}', roundCorrect)
       .replace('{total}', progress.stars);

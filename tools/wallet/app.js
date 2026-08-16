@@ -36,8 +36,8 @@
   var SCREENS = ['screenMenu', 'screenLevels', 'screenQuizGame',
     'screenPayGame', 'screenEnd'];
   function show(id) {
-    SCREENS.forEach(function (p) { $('#' + p).classList.add('oculto'); });
-    $('#' + id).classList.remove('oculto');
+    SCREENS.forEach(function (p) { $('#' + p).classList.add('hidden'); });
+    $('#' + id).classList.remove('hidden');
   }
 
   /* ============================================================
@@ -54,7 +54,7 @@
   function paintTable(pieces) {
     var tableEl = $('#moneyTable');
     App.dinero.paintTokens(tableEl, pieces);
-    tableEl.classList.toggle('oculto', !pieces || !pieces.length);
+    tableEl.classList.toggle('hidden', !pieces || !pieces.length);
   }
 
   /* ============================================================
@@ -133,7 +133,7 @@
 
   function showQuizText(text) {
     quizExplanationEl.textContent = text;
-    quizExplanationWrap.classList.remove('oculto');
+    quizExplanationWrap.classList.remove('hidden');
   }
 
   function paintQuizProgress() {
@@ -157,9 +157,9 @@
     solvedQ = false;
     quizFeedbackEl.textContent = '';
     quizFeedbackEl.className = 'feedback';
-    quizExplanationWrap.classList.add('oculto');
+    quizExplanationWrap.classList.add('hidden');
     quizExplanationEl.textContent = '';
-    btnNextQuiz.classList.add('oculto');
+    btnNextQuiz.classList.add('hidden');
 
     quizPromptEl.textContent = cfg.prompt(caseQ);
     /* Show the table: the person needs to see the money to count it.
@@ -177,7 +177,7 @@
       } else {
         btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'btn-opcion';
+        btn.className = 'option-btn';
         btn.textContent = op.text;
       }
       btn.addEventListener('click', function () { answerQuiz(btn, op); });
@@ -198,7 +198,7 @@
     });
     showQuizText(cfg.explanation(caseQ, right));
     if (cfg.onResolve) cfg.onResolve(caseQ);
-    btnNextQuiz.classList.remove('oculto');
+    btnNextQuiz.classList.remove('hidden');
     btnNextQuiz.focus();
   }
 
@@ -322,7 +322,7 @@
       },
       prompt: function (c) {
         return c.picto + ' ' + App.i18n.t('payWithPrompt')
-          .replace('{nombre}', c.name)
+          .replace('{name-card}', c.name)
           .replace('{precio}', format(c.price));
       },
       table: function () { return null; },
@@ -408,7 +408,7 @@
       prompt: function (c) {
         var name = c.name.charAt(0).toLowerCase() + c.name.slice(1);
         return c.picto + ' ' + App.i18n.t('piggyBankPrompt')
-          .replace('{nombre}', name)
+          .replace('{name-card}', name)
           .replace('{precio}', format(c.price));
       },
       table: function (c) { return breakdown(c.have); },
@@ -454,7 +454,7 @@
       },
       prompt: function (c) {
         return c.picto + ' ' + App.i18n.t('roundingPrompt')
-          .replace('{nombre}', c.name)
+          .replace('{name-card}', c.name)
           .replace('{precio}', format(c.shown));
       },
       table: function () { return null; },
@@ -503,7 +503,7 @@
     cfg.levels().forEach(function (n) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-nivel';
+      btn.className = 'btn btn-level';
       btn.innerHTML = n.description;
       btn.addEventListener('click', function () {
         if (cfg.isQuiz) startQuizRound(n);
@@ -593,11 +593,11 @@
     placedPieces = [];
     payFeedbackEl.textContent = '';
     payFeedbackEl.className = 'feedback';
-    btnNextPay.classList.add('oculto');
+    btnNextPay.classList.add('hidden');
     btnCheck.disabled = false;
     productEl.textContent = item.picto;
     priceTextEl.textContent = App.i18n.t('costs')
-      .replace('{nombre}', item.name)
+      .replace('{name-card}', item.name)
       .replace('{precio}', format(item.priceCent));
     clearPayHint();
     paintTotal();
@@ -644,7 +644,7 @@
       }
       App.feedback.success(payFeedbackEl);
       btnCheck.disabled = true;
-      btnNextPay.classList.remove('oculto');
+      btnNextPay.classList.remove('hidden');
       btnNextPay.focus();
       return;
     }
@@ -668,7 +668,7 @@
      asks for the largest amount that fits; the 2nd marks it. */
   function clearPayHint() {
     hintStepP = 0;
-    payHintWrap.classList.add('oculto');
+    payHintWrap.classList.add('hidden');
     payHintTextEl.textContent = '';
     Object.keys(moneyButtons).forEach(function (c) {
       moneyButtons[c].classList.remove('sugerida');
@@ -700,7 +700,7 @@
       }
     }
     payHintTextEl.textContent = text;
-    payHintWrap.classList.remove('oculto');
+    payHintWrap.classList.remove('hidden');
   }
 
   function nextPay() {

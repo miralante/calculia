@@ -54,7 +54,7 @@
     bank().niveles.forEach(function (n) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-nivel';
+      btn.className = 'btn btn-level';
       btn.innerHTML = App.i18n.t(n.descKey);
       btn.addEventListener('click', function () { startRound(n); });
       cont.appendChild(btn);
@@ -72,9 +72,9 @@
     reinforceIndex = 0;
     App.reinforce.banner.hide();
     App.reinforce.start(function (fallos) { startReinforce(fallos); });
-    screenStart.classList.add('oculto');
-    screenEnd.classList.add('oculto');
-    screenGame.classList.remove('oculto');
+    screenStart.classList.add('hidden');
+    screenEnd.classList.add('hidden');
+    screenGame.classList.remove('hidden');
     render();
   }
 
@@ -110,9 +110,9 @@
     attempts = 0;
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('oculto');
+    explanationWrap.classList.add('hidden');
     explanationEl.textContent = '';
-    btnNext.classList.add('oculto');
+    btnNext.classList.add('hidden');
     groupEl.innerHTML = '';
 
     var pictos = App.utils.shuffle(
@@ -123,7 +123,7 @@
     pictos.forEach(function (p) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn-opcion picto-grande';
+      btn.className = 'option-btn picto-grande';
       btn.textContent = p.picto;
       btn.setAttribute('aria-label', App.i18n.t('dibujoAria'));
       btn.addEventListener('click', function () { answer(btn, p.isIntruder, grupo); });
@@ -139,7 +139,7 @@
       ? App.i18n.t('explicacionCorrecta')
       : App.i18n.t('explicacionIncorrectaA') + grupo.intruso;
     explanationEl.textContent = text;
-    explanationWrap.classList.remove('oculto');
+    explanationWrap.classList.remove('hidden');
   }
 
   /* Socratic method: on the first mistake the answer isn't given,
@@ -147,7 +147,7 @@
      mistake is the odd one out explained (showExplanation). */
   function showHint() {
     explanationEl.textContent = App.i18n.t('pista');
-    explanationWrap.classList.remove('oculto');
+    explanationWrap.classList.remove('hidden');
   }
 
   function answer(btn, isCorrect, grupo) {
@@ -156,13 +156,13 @@
       showExplanation(isCorrect, grupo);
       resolved = true;
       btn.classList.add('correcta');
-      App.utils.$$('#grupo .btn-opcion').forEach(function (b) { b.disabled = true; });
+      App.utils.$$('#grupo .option-btn').forEach(function (b) { b.disabled = true; });
       App.feedback.success(feedbackEl);
       progress.stars += 1;
       roundCorrect += 1;
       save();
       paintStars();
-      btnNext.classList.remove('oculto');
+      btnNext.classList.remove('hidden');
       btnNext.focus();
     } else {
       attempts += 1;
@@ -175,7 +175,7 @@
       btn.classList.add('animo');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#grupo .btn-opcion'), explanationWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#grupo .option-btn'), explanationWrap);
     }
   }
 
@@ -205,8 +205,8 @@
 
   function endRound() {
     save();
-    screenGame.classList.add('oculto');
-    screenEnd.classList.remove('oculto');
+    screenGame.classList.add('hidden');
+    screenEnd.classList.remove('hidden');
     $('#endSummary').textContent = App.i18n.t('resumenFinal')
       .replace('{n}', roundCorrect).replace('{total}', progress.stars);
 $('#transfer').textContent = App.i18n.t('transferencia');
@@ -217,9 +217,9 @@ $('#transfer').textContent = App.i18n.t('transferencia');
   btnNext.addEventListener('click', next);
   $('#btnRepeat').addEventListener('click', function () { startRound(level); });
   $('#btnOtherLevel').addEventListener('click', function () {
-    screenEnd.classList.add('oculto');
+    screenEnd.classList.add('hidden');
     paintLevels();
-    screenStart.classList.remove('oculto');
+    screenStart.classList.remove('hidden');
   });
 
   paintLevels();

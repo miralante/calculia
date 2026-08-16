@@ -46,7 +46,7 @@
   border: 3px solid var(--mod-razonamiento-suave);
 }
 
-/* --- Input de respuesta (typing) --- */
+/* --- Input de answer (typing) --- */
 
 .answer-input {
   font-size: 32px;
@@ -77,7 +77,7 @@
   width: min(100%, 480px);
 }
 
-.btn-opcion {
+.option-btn {
   min-height: var(--boton-min);
   min-width: var(--boton-min);
   padding: 12px;
@@ -91,16 +91,16 @@
   text-align: center;
 }
 
-.btn-opcion:hover {
+.option-btn:hover {
   border-color: var(--mod-razonamiento);
 }
 
-.btn-opcion.bloqueada {
+.option-btn.bloqueada {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
-.btn-opcion--digit { font-size: 42px; }
+.option-btn--digit { font-size: 42px; }
 
 /* --- Leyenda de posiciones (sólo descomponer) --- */
 
@@ -139,7 +139,7 @@
   .number-shown { min-width: 0; width: 100%; font-size: 40px; }
   .answer-input { min-width: 0; width: 100%; }
   .options-grid { grid-template-columns: repeat(3, 1fr); }
-  .btn-opcion--digit { font-size: 32px; }
+  .option-btn--digit { font-size: 32px; }
 }
 
 #screenEnd .transfer {

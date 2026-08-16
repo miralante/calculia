@@ -12,9 +12,9 @@
 <body>
   <div class="container">
     <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
-    <header class="tool-header centrado">
+    <header class="tool-header centered">
       <h1 data-i18n="title">👀 Cantidades</h1>
-      <div class="fila centrado-fila">
+      <div class="row center-row">
         <p id="instruction" data-i18n="instruction">Lee y escribe números hasta mil millones.</p>
       </div>
       <p class="stars" id="stars">⭐ 0</p>
@@ -22,7 +22,7 @@
 
     <main>
       <!-- Menú principal: 4 prácticas -->
-      <section id="screenMenu" class="pila" aria-labelledby="menuTitle">
+      <section id="screenMenu" class="stack" aria-labelledby="menuTitle">
         <h2 id="menuTitle" data-i18n="choosePractice">Elige qué quieres practicar.</h2>
         <div class="practice-grid" id="practiceGrid"></div>
       </section>
@@ -31,10 +31,10 @@
            Zonas por modo (todas viven aquí, app.js muestra/oculta según el modo):
              - #numberShown: número que se muestra al usuario (leer, puntos).
              - #numberWithSep: número SIN separador (puntos).
-             - #optionsGrid: 3 opciones para descomponer.
+             - #optionsGrid: 3 options para descomponer.
              - #answerInput: input de texto para leer/escribir/puntos.
              - #btnEscuchar: botón de audio (escribir y el refuerzo tras ver). -->
-      <section id="screenTask" class="pila oculto" aria-live="polite">
+      <section id="screenTask" class="stack hidden" aria-live="polite">
         <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
         <p class="progress-text" id="progressText"></p>
         <article class="card task-card">
@@ -52,37 +52,37 @@
           <div class="number-shown number-shown--colored" id="numberColored" aria-live="polite"></div>
 
           <!-- Leyenda de colores, sólo se muestra en descomponer -->
-          <p class="leyenda-pos oculto" id="legend" aria-hidden="true"></p>
+          <p class="legend-pos hidden" id="legend" aria-hidden="true"></p>
 
-          <!-- Input para escribir la respuesta (leer / escribir / puntos) -->
-          <input type="text" id="answerInput" class="answer-input oculto"
+          <!-- Input para escribir la answer (leer / escribir / puntos) -->
+          <input type="text" id="answerInput" class="answer-input hidden"
                  inputmode="numeric" autocomplete="off" autocapitalize="off"
                  autocorrect="off" spellcheck="false"
                  data-i18n-aria="answerInputAria" aria-label="Escribe el número">
 
-          <!-- 3 opciones para descomponer (máx. 3 por SPEC §6 regla 11) -->
-          <div id="optionsGrid" class="options-grid oculto" aria-label="Opciones"></div>
+          <!-- 3 options para descomponer (máx. 3 por SPEC §6 regla 11) -->
+          <div id="optionsGrid" class="options-grid hidden" aria-label="Opciones"></div>
 
-          <button type="button" class="btn btn-audio oculto" id="btnEscuchar"
+          <button type="button" class="btn btn-audio hidden" id="btnEscuchar"
                   data-i18n-aria="audioAria" aria-label="Escuchar el número">🔊</button>
 
           <p class="feedback" id="feedback" aria-live="polite"></p>
           <button type="button" class="btn" id="checkAnswer" data-i18n="check">Comprobar</button>
-          <button type="button" class="btn oculto" id="nextTask" data-i18n="core.next">Siguiente →</button>
+          <button type="button" class="btn hidden" id="nextTask" data-i18n="core.next">Siguiente →</button>
         </article>
-        <button type="button" class="btn btn-secundario" id="backToMenu" data-i18n="core.backToMenu">Volver al menú</button>
+        <button type="button" class="btn btn-secondary" id="backToMenu" data-i18n="core.backToMenu">Volver al menú</button>
       </section>
 
-      <section id="screenFinish" class="pila oculto centrado">
+      <section id="screenFinish" class="stack hidden centered">
         <h2 data-i18n="roundComplete">¡Ronda terminada!</h2>
         <p id="finishText"></p>
         <p id="transfer" class="transfer" data-i18n="transferencia"></p>
         <button type="button" class="btn" id="playAgain" data-i18n="core.playAgain">Jugar otra vez</button>
-        <button type="button" class="btn btn-secundario" id="chooseAnother" data-i18n="chooseAnother">Elegir otra práctica</button>
+        <button type="button" class="btn btn-secondary" id="chooseAnother" data-i18n="chooseAnother">Elegir otra práctica</button>
       </section>
     </main>
     <footer class="pie-app">
-      <a href="../../legal/index.html" class="enlace-legal" data-i18n="core.dataProtection">Protección de datos</a>
+      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Protección de datos</a>
     </footer>
   </div>
 
