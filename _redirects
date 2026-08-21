@@ -16,4 +16,4 @@
 # path serves `404.html` for any unmatched path). This `_redirects`
 # rule covers the legacy Pages path if the project is ever flipped
 # back to classic Pages and the worker-builds path is bypassed.
-/*  /site/index.html  302
+/* /site/index.html 302
