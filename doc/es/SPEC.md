@@ -93,7 +93,9 @@ técnica expresada con dificultad.
 ### 3.5 Accesibilidad universal
 
 - Botones ≥ 64×64 px, separación ≥ 16 px.
-- Contraste WCAG AA mínimo.
+- Alto contraste (WCAG AA mínimo, AAA cuando sea posible) — ver §5
+  para los criterios AAA que este proyecto honra y por qué la
+  conformidad AAA completa no es viable para una aplicación web.
 - Audio **solo cuando el diseño de la actividad lo requiere** (ver §6,
   regla 4) — no es una regla general para cada texto. Las actividades
   centradas en leer símbolos visuales (p. ej. Números Romanos) no
@@ -150,6 +152,111 @@ servicio de la presión**:
    irrecuperable / FOMO ("no pierdas la racha"), dark patterns
    (casillas premarcadas, alertas falsas), o aversión a la pérdida
    explotadora (restar estrellas).
+
+### 3.8 Anatomía socrática completa (pregunta → pista → explicación → transferencia)
+
+Cada actividad de Calculia cierra su ciclo de aprendizaje con la
+misma secuencia de cuatro elementos. Es el contrato de "anatomía
+socrática completa" que toda actividad debe respetar; cualquier
+nueva actividad o actividad modificada debe mantener los cuatro
+pasos, en este orden, y con la misma función pedagógica.
+
+1. **Pregunta** — la actividad formula la pregunta o el reto
+   concreto de la pantalla. Es el primer elemento visible durante
+   la ronda.
+2. **Pista** — cuando se falla la primera vez, la actividad muestra
+   una pista que **no revela la respuesta**. Esta pista es la voz
+   socrática: guía una idea, una pauta o un paso que la persona
+   puede probar antes de volver a intentarlo. La pista se publica
+   en el lugar de la explicación (sustituyéndola) y se desbloquea
+   la explicación completa solo a partir del segundo fallo
+   (regla 12 de §6). La pista nunca se construye como respuesta
+   escondida: no dice "es 7", dice "cuenta otra vez despacio".
+3. **Explicación** — cuando se acierta, o cuando se falla la
+   segunda vez, la actividad publica la explicación de por qué la
+   respuesta correcta es esa: la regla, la operación, la analogía
+   o el detalle que permite entenderla. La explicación se publica
+   en el lugar de la pista tras acierto o segundo fallo, y se
+   mantiene visible hasta la siguiente pregunta.
+4. **Transferencia** — al cerrar la ronda (`screenEnd` /
+   `screenFinish`), la actividad incluye una frase de
+   **transferencia** que conecta lo practicado con la vida real:
+   dónde se usará lo aprendido más allá de la app ("esto te
+   servirá para…"). La transferencia no es opcional: si aporta
+   valor, debe estar; si la actividad no encuentra un caso real,
+   se documenta en `doc/en/technical.md` por qué esa actividad
+   concreta prescinde de ella.
+
+#### Elementos técnicos de la anatomía
+
+- **`contexto`** — clave de `strings.<locale>.js`. Describe la
+  situación de la vida real en la que se enmarca la actividad. Se
+  muestra como primer párrafo del `screenEnd` (cuando la pantalla
+  de cierre existe) justo debajo del resumen de la ronda.
+- **`pista`** — clave de `strings.<locale>.js`. Texto de pista
+  socrática. Una pista por pantalla de ronda, mostrada al primer
+  fallo. En actividades sin pregunta con respuesta correcta/
+  incorrecta (ej. Puzzle, que es puramente espacial), la pista no
+  existe como tal y se sustituye por `contexto` + `explicacion`.
+- **`explicacion`** — clave de `strings.<locale>.js`. Párrafo de
+  cierre de la actividad. Resume qué ha practicado la persona y
+  por qué la mecánica funciona como funciona. Aparece en el
+  `screenEnd` después del `contexto` y antes de la `transferencia`.
+- **`transferencia`** — clave de `strings.<locale>.js`, equivalente
+  inglés `transfer` cuando la actividad original se escribió en
+  inglés. Frase final del `screenEnd` que ancla el aprendizaje a
+  un escenario real ("en la tienda", "en la cocina", "leyendo un
+  precio"). Es la única pieza de la anatomía que la actividad
+  puede declarar no aplicable; en ese caso se documenta, no se
+  omite sin más.
+
+#### Cómo se muestra en el cierre
+
+Toda actividad debe pintar en su `screenEnd` (o equivalente), por
+este orden:
+
+```
+🎉 ¡Ronda completada!
+<resumen de la ronda>
+<contexto>          ← App.i18n.t('contexto')
+<explicacion>       ← App.i18n.t('explicacion')
+<transferencia>     ← App.i18n.t('transferencia') | App.i18n.t('transfer')
+[ Volver a jugar ] [ Otra actividad ] [ Volver al menú ]
+```
+
+#### Cobertura por actividad (estado actual)
+
+Esta tabla la mantiene el agente cuando aplica la anatomía. La
+columna "Cierre" indica si la pantalla final pinta los cuatro
+bloques en el orden correcto:
+
+| Actividad | contexto | pista | explicacion | transferencia | Cierre |
+|---|---|---|---|---|---|
+| clock            | ✅ | ✅ | ✅ | ✅ | ✅ |
+| fractions-measures | ✅ | ✅ | ✅ | ✅ | ✅ |
+| math-tables      | ✅ | ✅ | ✅ | ✅ | ✅ |
+| mental-math      | ✅ | ✅ | ✅ | ✅ | ✅ |
+| money            | ✅ | ✅ | ✅ | ✅ | ✅ |
+| numbers          | ✅ | ✅ | ✅ | ✅ | ✅ |
+| odd-one-out      | ✅ | ✅ | ✅ | ✅ | ✅ |
+| patterns         | ✅ | ✅ | ✅ | ✅ | ✅ |
+| riddles          | ✅ | ✅ | ✅ | ✅ | ✅ |
+| roman-numerals   | ✅ | ✅ | ✅ | ✅ | ✅ |
+| stories          | ✅ | ✅ | ✅ | ✅ | ✅ |
+| temperature      | ✅ | ✅ | ✅ | ✅ | ✅ |
+| wallet           | ✅ | ✅ | ✅ | ✅ | ✅ |
+| puzzle           | — | — | ✅ | ✅ | ✅ |
+| quantities       | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+> El guion largo `—` en Puzzle significa "no aplicable": la
+> actividad es espacial y no tiene pregunta con respuesta correcta
+> / incorrecta, por lo que no hay pista socrática en el sentido de
+> §3.8. En su lugar, `contexto` + `explicacion` cubren la
+> transferencia sin la pista.
+
+Esta tabla es la fuente de verdad para "anatomía socrática
+completa". Si una actividad deja de cumplirla, esta tabla se
+actualiza en el mismo PR que introduce o corrige la regresión.
 
 ## 4. Regla de obligado cumplimiento: cero menciones en el producto
 
@@ -277,6 +384,30 @@ producto.
     nunca castigo (`App.feedback.encourage()` /
     `App.feedback.lockUntilAck()`), reintentos ilimitados.
 13. Progresión gradual: cada nivel cambia solo una variable cada vez.
+
+### 6.1 Baseline WCAG AAA (común a toda la suite)
+
+Este proyecto cumple WCAG 2.1 en **AA mínimo** y adopta los **criterios
+AAA aplicables al público de la suite** cuando es viable. La conformidad
+AAA completa no es factible para toda una aplicación web (el propio W3C
+señala que AAA está pensado para contextos específicos); los criterios
+AAA que sí son aplicables y que este proyecto honra son:
+
+- **1.4.6 Contraste (mejorado)** — contraste de texto ≥ 7:1 (texto
+  grande ≥ 4.5:1). AA (4.5:1) es el suelo legal; AAA es el objetivo
+  de diseño.
+- **3.1.5 Nivel de lectura** — cuando el contenido es para el público
+  general, no exige capacidad lectora avanzada. Ya se cumple a través
+  de UNE 153101 (ver `CLAUDE.md` §"UNE 153101 reference (suite-wide)")
+  y de las pautas europeas de lectura fácil de Inclusion Europe.
+- **1.4.1 Uso del color** — el color nunca es el único medio para
+  transmitir información. Cada estado de feedback (acierto / pista /
+  error / bloqueo) usa también forma, icono, texto o sonido, para no
+  excluir a personas con dificultades de visión cromática.
+
+La lista completa, la justificación y lo que queda explícitamente
+fuera del alcance de una aplicación web general viven en `CLAUDE.md`
+§"WCAG AAA baseline (suite-wide)".
 
 ## 7. Criterios de éxito
 

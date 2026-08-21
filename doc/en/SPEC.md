@@ -91,7 +91,9 @@ difficulty.
 ### 3.5 Universal accessibility
 
 - Buttons ≥ 64×64 px, spacing ≥ 16 px.
-- WCAG AA contrast minimum.
+- High contrast (WCAG AA minimum, AAA whenever possible) — see §5 for
+  the AAA criteria this project honours and why full AAA conformance
+  is not feasible for a web app.
 - Audio **only when the activity design requires it** (see §6, rule
   4) — not a blanket rule for every text. Activities centered on
   reading visual symbols (e.g. Roman Numerals) don't have an audio
@@ -147,6 +149,111 @@ service of pressure**:
    (leaderboards, "others already did it"), sunk-cost / FOMO ("don't
    lose your streak"), dark patterns (pre-checked boxes, fake alerts),
    or exploitative loss aversion (subtracting stars).
+
+### 3.8 Complete Socratic anatomy (question → hint → explanation → transfer)
+
+Every Calculia activity closes its learning cycle with the same
+four-element sequence. This is the "complete Socratic anatomy"
+contract that every activity must respect; any new activity or
+modified activity must keep the four steps, in this order, and
+with the same pedagogical function.
+
+1. **Question** — the activity poses the concrete question or
+   challenge of the screen. It is the first visible element during
+   the round.
+2. **Hint** — when the learner fails the first time, the activity
+   shows a hint that **does not reveal the answer**. This hint is
+   the Socratic voice: it guides one idea, one rule, or one step
+   the learner can try before retrying. The hint is rendered in
+   the explanation slot (replacing the explanation) and the full
+   explanation is unlocked only from the second failure onwards
+   (rule 12 of §6). The hint is never built as a hidden answer:
+   it does not say "it is 7", it says "count again, slowly".
+3. **Explanation** — when the learner answers correctly, or when
+   they fail the second time, the activity publishes the
+   explanation of *why* the correct answer is what it is: the
+   rule, the operation, the analogy, or the detail that makes it
+   understandable. The explanation is rendered in the hint slot
+   after a correct answer or a second failure, and stays visible
+   until the next question.
+4. **Transfer** — when the round ends (`screenEnd` /
+   `screenFinish`), the activity includes a **transfer** sentence
+   that connects what was practised with real life: where the
+   learned skill will be used outside the app ("this will help
+   you…"). Transfer is not optional: when it adds value, it must
+   be present; if the activity cannot find a real-life case, that
+   exception is documented in `doc/en/technical.md`, not silently
+   skipped.
+
+#### Technical elements of the anatomy
+
+- **`contexto`** — `strings.<locale>.js` key. Describes the real
+  life situation the activity is anchored in. Rendered as the
+  first paragraph of `screenEnd` (when the closing screen exists)
+  right below the round summary.
+- **`pista`** — `strings.<locale>.js` key. Socratic hint text. One
+  hint per round screen, shown on the first failure. In activities
+  without a right/wrong question (e.g. Puzzle, which is purely
+  spatial), the hint does not exist as such and is replaced by
+  `contexto` + `explicacion`.
+- **`explicacion`** — `strings.<locale>.js` key. Activity closing
+  paragraph. Summarises what the learner practised and why the
+  mechanic works the way it works. Appears in `screenEnd` after
+  `contexto` and before `transferencia`.
+- **`transferencia`** — `strings.<locale>.js` key, with English
+  equivalent `transfer` when the activity was originally written
+  in English. Final sentence of `screenEnd` that anchors learning
+  to a real-world scenario ("at the shop", "in the kitchen",
+  "reading a price"). It is the only piece of the anatomy that an
+  activity may declare not applicable; in that case the exception
+  is documented, not silently dropped.
+
+#### How it shows in the closing screen
+
+Every activity must render in its `screenEnd` (or equivalent), in
+this order:
+
+```
+🎉 Round complete!
+<round summary>
+<contexto>          ← App.i18n.t('contexto')
+<explicacion>       ← App.i18n.t('explicacion')
+<transferencia>     ← App.i18n.t('transferencia') | App.i18n.t('transfer')
+[ Play again ] [ Another activity ] [ Back to menu ]
+```
+
+#### Per-activity coverage (current state)
+
+This table is kept by the agent when it applies the anatomy. The
+"Closing" column tells whether the closing screen renders the four
+blocks in the right order:
+
+| Activity | contexto | pista | explicacion | transferencia | Closing |
+|---|---|---|---|---|---|
+| clock              | ✅ | ✅ | ✅ | ✅ | ✅ |
+| fractions-measures | ✅ | ✅ | ✅ | ✅ | ✅ |
+| math-tables        | ✅ | ✅ | ✅ | ✅ | ✅ |
+| mental-math        | ✅ | ✅ | ✅ | ✅ | ✅ |
+| money              | ✅ | ✅ | ✅ | ✅ | ✅ |
+| numbers            | ✅ | ✅ | ✅ | ✅ | ✅ |
+| odd-one-out        | ✅ | ✅ | ✅ | ✅ | ✅ |
+| patterns           | ✅ | ✅ | ✅ | ✅ | ✅ |
+| riddles            | ✅ | ✅ | ✅ | ✅ | ✅ |
+| roman-numerals     | ✅ | ✅ | ✅ | ✅ | ✅ |
+| stories            | ✅ | ✅ | ✅ | ✅ | ✅ |
+| temperature        | ✅ | ✅ | ✅ | ✅ | ✅ |
+| wallet             | ✅ | ✅ | ✅ | ✅ | ✅ |
+| puzzle             | — | — | ✅ | ✅ | ✅ |
+| quantities         | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+> The em-dash `—` in Puzzle means "not applicable": the activity
+> is spatial and has no right/wrong question, so there is no
+> Socratic hint in the sense of §3.8. Instead, `contexto` +
+> `explicacion` cover the transfer without the hint.
+
+This table is the source of truth for "complete Socratic anatomy".
+If an activity stops meeting it, the table is updated in the same
+PR that introduces or fixes the regression.
 
 ## 4. Mandatory rule: zero mentions in the user-facing product
 
@@ -269,6 +376,29 @@ with them, the principles win. They are the product's compass.
     never punishment (`App.feedback.encourage()` /
     `App.feedback.lockUntilAck()`), unlimited retries.
 13. Gradual progression: each level changes only one variable at a time.
+
+### 6.1 WCAG AAA baseline (suite-wide)
+
+This project follows WCAG 2.1 at **AA minimum** and adopts the **AAA
+criteria that apply to the suite's audience** whenever feasible. Full
+conformance at AAA is not feasible for a complete web application (the
+W3C itself states AAA is meant for specific contexts); the AAA criteria
+that are applicable and that this project honours are:
+
+- **1.4.6 Contrast (Enhanced)** — text contrast ≥ 7:1 (large text
+  ≥ 4.5:1). AA (4.5:1) is the legal floor; AAA is the design target.
+- **3.1.5 Reading Level** — when content is for the general public it
+  does not require advanced reading ability. Already complied with
+  through UNE 153101 (see `CLAUDE.md` §"UNE 153101 reference (suite-wide)")
+  and Inclusion Europe's easy-read guidelines.
+- **1.4.1 Use of Color** — color is never the only means of conveying
+  information. Every feedback state (success / hint / error / lock)
+  also uses shape, icon, text or sound, so users with color-vision
+  deficiencies are not excluded.
+
+The full list, the rationale and what is explicitly out of scope for a
+general web application live in `CLAUDE.md` §"WCAG AAA baseline
+(suite-wide)".
 
 ## 7. Success criteria
 

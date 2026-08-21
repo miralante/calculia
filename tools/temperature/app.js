@@ -336,7 +336,9 @@
     show(screenEnd);
     $('#endSummary').textContent =
       App.i18n.t('gen.resumenFinal').replace('{estrellas}', progress.stars);
-    transferEl.textContent = App.i18n.t('explicacion');
+    $('#contexto').textContent = App.i18n.t('contexto');
+    $('#explicacion').textContent = App.i18n.t('explicacion');
+    transferEl.textContent = App.i18n.t('transferencia');
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 

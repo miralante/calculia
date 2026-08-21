@@ -519,6 +519,8 @@
     $('#endSummary').textContent = App.i18n.t(cfg.summary)
       .replace('{n}', correct)
       .replace('{t}', localeData().perRound);
+    $('#contexto').textContent = App.i18n.t('contexto');
+    $('#explicacion').textContent = App.i18n.t('explicacion');
     $('#transfer').textContent = App.i18n.t('transfer');
     show('screenEnd');
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));

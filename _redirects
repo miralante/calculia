@@ -1,16 +1,19 @@
-# Cloudflare Pages redirects
+# Cloudflare redirects
 # (https://developers.cloudflare.com/pages/configuration/redirects/).
 #
 # Calculia is a fully static site with no API: activity data ships in
 # `tools/<slug>/data.js`, strings in `tools/<slug>/strings.*.js`, the
 # shared core lives in `assets/js/`, and everything else is HTML/CSS.
 # The site uses a plain folder layout (no client-side router), so the
-# only redirect we actually need is a 404 fallback so a stale path
-# doesn't end up on Cloudflare's default JSON error.
+# only redirect we actually need is a fallback so a stale path
+# doesn't end up on Cloudflare's default JSON error. Cloudflare
+# redirects only support redirect codes (301/302/303/307/308) and
+# proxying (200); it cannot issue a raw `status: 404`, so we route
+# the unknown path back to the landing page.
 #
-# NOTE: 404 handling is also configured in `wrangler.toml` via
-# `not_found_handling = "404-page"` (Workers + static assets path).
-# This `_redirects` rule is the equivalent for the legacy Pages path
-# if the project is ever flipped back to classic Pages.
-/*
-  status: 404
+# NOTE: the canonical 404 handling is configured in `wrangler.toml`
+# via `not_found_handling = "404-page"` (the Workers + static assets
+# path serves `404.html` for any unmatched path). This `_redirects`
+# rule covers the legacy Pages path if the project is ever flipped
+# back to classic Pages and the worker-builds path is bypassed.
+/*  /site/index.html  302

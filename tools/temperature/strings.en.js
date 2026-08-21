@@ -11,6 +11,7 @@
     instructionMenu: 'See what happens to water as the temperature changes.',
     contexto: 'In real life, water freezes, warms up or boils depending on the degrees. Here you see it and play with it.',
     explicacion: '✅ Understanding temperature and negative numbers helps you cook, read the weather, and handle anything that cools down or heats up.',
+    transferencia: 'This will help you read a weather thermometer, follow a recipe or know when something is hot without touching it.',
     btnBackToMenu: '← Other activities',
     otherLevel: 'Choose another mission',
     btnOtherActivity: 'Another activity',

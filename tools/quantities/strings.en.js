@@ -69,9 +69,11 @@
 
     correctFormat: 'It is written: {n}',
 
-    transfer: 'This will help you read prices, news headlines or any large number in daily life.',
+    /* Pedagogical transfer */
+    contexto: 'You read numbers at the shop, in the lift, on money and in the news. Knowing how to read and write large numbers is something you use all the time.',
+    explicacion: '✅ Every digit has a position: ones, tens, hundreds and thousands. If you know each digit\'s place, you can read and write any number, no matter how big.',
+    transferencia: 'This will help you read prices, news headlines or any large number in daily life.',
 
-    hint: '🤔 Read the number aloud and then write it.',
-    transferencia: 'This will help you read prices, news headlines or any large number in daily life.'
+    hint: 'ðŸ¤” Read the number aloud and then write it.'
   }, 'en');
 })();

@@ -83,10 +83,11 @@
     correctFormat: 'Se escribe: {n}',
 
     /* Pedagogical transfer */
-    transfer: 'Esto te servirá para leer precios, noticias o cualquier número grande del día a día.',
+    contexto: 'Lees números en la tienda, en el ascensor, en el dinero y en la prensa. Saber leer y escribir números grandes es algo que se usa a cada rato.',
+    explicacion: '✅ Cada cifra ocupa un lugar: unidades, decenas, centenas y millares. Si conoces el lugar de cada cifra, sabes leer y escribir cualquier número, por muy grande que sea.',
+    transferencia: 'Esto te servirá para leer precios, noticias o cualquier número grande del día a día.',
 
     /* Residual hint (used by round-end fallback) */
-    hint: '🤔 Lee el número en voz alta y luego escríbelo.',
-    transferencia: 'Esto te servirá para leer precios, noticias o cualquier número grande del día a día.'
+    hint: '🤔 Lee el número en voz alta y luego escríbelo.'
   }, 'es');
 })();

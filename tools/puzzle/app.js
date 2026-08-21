@@ -171,7 +171,9 @@
     screenEnd.classList.remove('hidden');
     $('#endSummary').textContent = App.i18n.t('resumenFinal')
       .replace('{n}', roundCorrect).replace('{total}', progress.stars);
-$('#transfer').textContent = App.i18n.t('transferencia');
+    $('#contexto').textContent = App.i18n.t('contexto');
+    $('#explicacion').textContent = App.i18n.t('explicacion');
+    $('#transfer').textContent = App.i18n.t('transferencia');
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
