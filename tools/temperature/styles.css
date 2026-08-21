@@ -1,0 +1,155 @@
+/* Temperature — tool-specific styles.
+   Shared styles live in assets/css/. The thermometer UI reuses the
+   .card and .btn patterns; only the state-aware card tint and the
+   button row are tool-specific. */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+.btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
+.instruction { font-size: var(--texto-base); }
+.center-row { justify-content: center; }
+
+/* Activity menu (same flat grid as other tools). */
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
+.btn-actividad {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  min-height: var(--boton-min); padding: 20px;
+  border: 3px solid var(--color-borde); border-radius: var(--radio);
+  background: var(--color-superficie); color: var(--color-texto);
+  font-size: var(--texto-base); font-weight: 700; text-align: center;
+}
+.btn-actividad:hover { border-color: var(--mod-razonamiento); }
+.btn-actividad .picto { font-size: 48px; }
+.btn-actividad .detail-card { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
+.extra-note { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
+
+#screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
+.btn-level { min-width: 300px; align-self: center; }
+#btnBackToMenu { align-self: center; }
+
+/* ---- Thermometer / mission UI ---- */
+
+/* The goal line stays small and out of the way; it doesn't change
+   as the user manipulates the temperature. */
+.thermo-goal {
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--color-texto-secundario);
+  margin: 0;
+  text-align: center;
+}
+
+/* The card containing the visual. The background tint follows the
+   current state (ice / liquid / steam) so the whole surface feels
+   alive. Tints are subtle so the foreground contrast stays good. */
+.thermo-card {
+  padding: 32px 16px;
+  border-width: 4px;
+  border-style: solid;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.thermo-card.state-ice    { background: #E3F2FD; border-color: #90CAF9; }
+.thermo-card.state-liquid { background: #F0FAFF; border-color: #BBDEFB; }
+.thermo-card.state-steam  { background: #F5F5F5; border-color: #BDBDBD; }
+
+/* The visual stack: emoji + big number + state label. Flex column
+   keeps everything centred without manual margins. */
+.thermo-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio);
+}
+
+/* The state emoji. Sized big so it's the dominant visual cue, but
+   smaller than the number so the temperature is still primary. */
+.thermo-state {
+  font-size: 96px;
+  line-height: 1;
+  /* Subtle wobble when the state changes — see the
+     .state-changed keyframes below. The animation is opt-in via
+     JS in a future pass; keeping the keyframe defined so the
+     design is in one place. */
+}
+@keyframes state-changed {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+/* The big number is the focal point. clamp() keeps it readable on
+   small screens and dramatic on big ones. */
+.thermo-number {
+  font-size: clamp(64px, 14vw, 120px);
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-align: center;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-texto);
+}
+
+/* The state label sits below the number, in a softer colour so it
+   doesn't compete with the digits. */
+.thermo-state-label {
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  color: var(--color-texto-suave);
+  margin: 0;
+}
+
+/* The control row. Same row layout as the numbers counter so the
+   two free-exploration surfaces feel related. */
+.thermo-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio);
+  align-items: center;
+}
+.thermo-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* The step buttons. Slightly bigger than the numbers counter
+   because there are fewer of them and the surface has room. */
+.btn-thermo {
+  min-width: 88px;
+  min-height: 56px;
+  padding: 8px 16px;
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: var(--texto-base);
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-thermo:hover:not(:disabled) { border-color: var(--mod-razonamiento); }
+.btn-thermo:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: var(--color-fondo, #f0f0f0);
+}
+.btn-thermo.btn-thermo-secondary { background: var(--color-fondo, #f0f0f0); }
+.btn-thermo-icon { min-width: 64px; }
+
+/* Hint at the bottom, like the numbers counter. */
+.thermo-hint {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--color-texto-suave);
+}
+
+/* End-of-round. Same look as other tools. */
+.emoji-large { font-size: 96px; }
+#screenEnd { padding-top: 48px; }
+#screenEnd .btn { align-self: center; min-width: 280px; }
+#screenEnd .transfer {
+  margin: 8px auto 24px;
+  font-size: 1.1rem;
+  color: var(--color-texto-secundario, #555);
+  max-width: 480px;
+}

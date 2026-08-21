@@ -32,6 +32,7 @@
       'mental-math': 'Subtraction and Mental Math', 'money': 'Money',
       'quantities': 'Quantities', 'math-tables': 'Math Tables',
       'roman-numerals': 'Roman Numerals', 'riddles': 'Riddles', 'patterns': 'Patterns',
+      'temperature': 'Water Temperature',
       'wallet': 'The Wallet', 'clock': 'The Clock', 'stories': 'Stories',
       'odd-one-out': "What doesn't belong?", 'puzzle': 'Puzzle'
     },

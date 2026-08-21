@@ -5,11 +5,12 @@
 
 ## 1. Qué es Calculia
 
-Una aplicación web gratuita y estática con 14 actividades para practicar
+Una aplicación web gratuita y estática con 15 actividades para practicar
 cálculo y razonamiento lógico:
 
 - **Matemáticas**: Los Números, Fracciones y Medidas, Restar y Cálculo
-  Mental, Dinero, Las Tablas, Cantidades, Números Romanos.
+  Mental, Dinero, Las Tablas, Cantidades, Números Romanos, Temperatura
+  del agua.
 - **Razonamiento y lógica**: Adivinanzas, Patrones, El Monedero, El
   Reloj, Historias, ¿Qué no encaja?, Puzzle.
 
@@ -57,6 +58,12 @@ diaria ni terapia ocupacional.
 - El ritmo lo marca quien aprende.
 
 ### 3.3 Lectura fácil siempre
+
+La accesibilidad cognitiva es un principio rector: todo el contenido
+sigue las pautas de **lectura fácil** y la norma **UNE 153101:2018 EX**
+(estándar español de lectura fácil), alineada con las pautas europeas
+de Inclusion Europe. La comprensión prevalece sobre la precisión
+técnica expresada con dificultad.
 
 - Frases cortas, una idea por frase.
 - **Vocabulario cotidiano, sin tecnicismos** (p. ej. "recuerda el valor
@@ -172,6 +179,50 @@ Dónde se aplica y dónde no:
 Esta regla se comprueba automáticamente: `node scripts/check.js`
 falla si cualquiera de esos términos aparece en los archivos que ve
 quien usa la app.
+
+### 4.1 Eufemismo público: "usuario/a tipo"
+
+Cuando se presenta Calculia de cara al **público general** (prensa,
+charlas, READMEs públicos que cualquiera pueda leer, el portal
+`apptonomia.uk`, notas en redes sociales, marketing), el término
+"discapacidad intelectual" **no debe usarse** para describir la
+audiencia de la app, ni siquiera cuando el texto que lo rodea sería
+público. El eufemismo aceptado en esas superficies para referirse a la
+audiencia es **"usuario/a tipo"** (plural "usuarios/as tipo"),
+entendido como marcador genérico de perfil, no como etiqueta para
+ninguna persona real.
+
+Dónde se aplica y dónde no:
+
+- **Se aplica** a cualquier texto que cualquier persona ajena al
+  proyecto pueda leer sin autenticarse: `README.es.md`, `README.md`,
+  el portal en `apptonomia.uk`, charlas públicas, copy en redes, notas
+  de prensa, material de marketing. En estas superficies se habla de
+  la audiencia como "el/la usuario/a tipo" o "los/las usuarios/as
+  tipo" de la app.
+- **No se aplica** a la documentación interna de este repositorio
+  (`CLAUDE.md`, `doc/es/SPEC.md`, `doc/en/SPEC.md`, `tecnico.md`,
+  [`roles.md`](roles.md), `CONTRIBUTING.es.md`, `CONTRIBUTING.md`) —
+  esos archivos los lee quien mantiene o contribuye al proyecto, y
+  "discapacidad intelectual" sigue siendo allí el término canónico,
+  porque el proyecto necesita explicar sin ambigüedad su objetivo real
+  a quien lo mantiene.
+- **No se aplica** al contenido del proyecto que nombra un concepto
+  clínico por su nombre real (p. ej. una actividad que practica cálculos
+  sobre un trámite administrativo real relacionado con discapacidad):
+  eso es contenido, no etiquetado de la audiencia.
+- **No se aplica** a la UI de la propia app: la regla de §4 sigue
+  prohibiendo **cualquier** mención, incluida "usuario/a tipo", en
+  `site/index.html`, `tools/<slug>/index.html`, `app.js`, `data.js`,
+  `strings.<locale>.js`, `settings/`, `legal/` y cualquier otra
+  superficie visible. El eufemismo es para el exterior, no para lo que
+  lee quien visita la app.
+
+Razón: presentar el objetivo real del proyecto en documentación interna
+es útil y necesario; presentarlo en superficies de marketing o landing
+no es necesario ni respetuoso con la audiencia — "usuario/a tipo"
+permite describir en público para qué sirve la app (qué perfil tiene
+quien la usa) sin nombrar públicamente un grupo clínico.
 
 ## 5. Principios de diseño
 

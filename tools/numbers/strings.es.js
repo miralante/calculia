@@ -57,7 +57,7 @@
       unidades: { name: 'Unidades y decenas', detail: '¿Qué número es?', instruction: 'Cada color ayuda a leer el número. Azul: unidades. Verde: decenas. Morado: centenas.' },
       placevalue: { name: 'Cambiar de posición', detail: '10 pequeños se cambian por 1 grande.', instruction: 'Cuando juntas 10 iguales, forman 1 del grupo siguiente. La cifra se mueve una posición a la izquierda.' }
     },
-    level: { en1: 'Leer el piso', en2: 'Subir y bajar', en3: '¿Cuál está más abajo?', en4: 'Encuentra el piso', u99: 'Hasta 99', u999: 'Hasta 999', umiles: 'Los miles', umillones: 'Millones y billón', udictado: 'Escucha y elige', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
+    level: { en1: 'Leer el piso', en2: 'Subir y bajar', en3: '¿Cuál está más abajo?', en4: 'Encuentra el piso', u99: 'Hasta 99', u999: 'Hasta 999', umiles: 'Los miles', umillones: 'Millones y billón', udictado: 'Escucha y elige', counter: 'Contador libre', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
     gen: {
       ascensorLeerSituacionSuelo: 'Se queda en la planta baja.',
       ascensorLeerSituacionArriba: 'Sube {n} pisos.',
@@ -110,7 +110,21 @@
       ladderPrompt: '¿Cuánto es 10 × este número?',
       ladderHint: 'Por 10: cada cifra se mueve un sitio a la izquierda y se añade un cero.',
       dictadoEnunciado: 'Lee el número. Después, tócalo.',
-      dictationPrompt: 'Lee el número. Después, tócalo.'
+      dictationPrompt: 'Lee el número. Después, tócalo.',
+      counterHint: 'Pulsa para sumar o restar. Mira cómo cambian las cifras y los grupos (unidades, decenas, centenas, miles…).',
+      counterAudioAria: 'Leer el número en voz alta',
+      counterResetLabel: '� Empezar en 0',
+      counterExitLabel: '✅ Salir',
+      counterSepOn: '·1.234',
+      counterSepOff: '1234',
+      counterGroupsLabel: '🎨 Colorear grupos',
+      counterGroupsOn: '🎨 Colorear grupos: sí',
+      counterGroupsOff: '🎨 Colorear grupos: no',
+      counterGroupsAria: 'Colorear cada grupo de 3 cifras',
+      counterWordsOn: '✍️ Ocultar cómo se escribe',
+      counterWordsOff: '✍️ Mostrar cómo se escribe',
+      counterWordsAria: 'Mostrar el número escrito con palabras',
+      counterResumenFinal: 'Has explorado el contador libre. Ahora tienes {estrellas} estrellas.'
     },
     transferencia: 'Esto te servirá para leer números grandes, entender el ascensor de un edificio o saber qué cifra cambia al sumar 100.',
     transfer: 'Esto te servirá para leer números grandes, entender el ascensor de un edificio o saber qué cifra cambia al sumar 100.'

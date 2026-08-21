@@ -29,7 +29,7 @@
 .digit-u { color: var(--mod-coordinacion); }   /* blue — euro units */
 .digit-d { color: var(--mod-secuencia); }      /* green — euro tens */
 .digit-c { color: var(--mod-emocional); }      /* purple — euro hundreds */
-.digit-coma, .digit-dec { color: var(--mod-memoria); } /* orange — comma and cents */
+.digit-comma, .digit-dec { color: var(--mod-memoria); } /* orange — comma and cents */
 
 .card { border-color: var(--mod-razonamiento-suave); }
 .prompt { font-size: var(--texto-grande); font-weight: 700; }
@@ -45,6 +45,7 @@
 }
 .llega-etq { font-weight: 700; margin-bottom: 8px; color: var(--color-texto-suave); }
 .llega-fila { display: flex; gap: var(--espacio); flex-wrap: wrap; justify-content: center; }
+.llega-row { display: flex; gap: var(--espacio); flex-wrap: wrap; justify-content: center; }
 
 /* Reading and comparing prices */
 .measure-picto { font-size: 64px; }

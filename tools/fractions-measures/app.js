@@ -35,6 +35,7 @@
   var index = 0;
   var roundCorrect = 0;
   var answered = false;
+  var resolved = false;
   var attempts = 0;
   var question = null;
   var pools = {};
@@ -139,12 +140,12 @@
 
     medidas: function (nv) {
       var group = DATA.measures[App.i18n.locale()][nv.lista];
-      var item = draw('med-' + nv.lista, group.items);
+      var item = draw('med_' + nv.lista, group.items);
       var ej = item.ej ? '<p class="hint">' + item.ej + '</p>' : '';
       return {
         prompt: item.question,
         visual: '<div class="measure-picto" aria-hidden="true">' + group.picto + '</div>' +
-          '<p class="medida-txt">' + item.q + '</p>' + ej,
+          '<p class="measure-text">' + item.q + '</p>' + ej,
         options: App.utils.shuffle([{ html: item.r, correct: true }].concat(
           item.falsas.map(function (f) { return { html: f, correct: false }; })
         ))

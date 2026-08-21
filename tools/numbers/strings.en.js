@@ -58,7 +58,7 @@
       unidades: { name: 'Ones and tens', detail: 'What number is it?', instruction: 'Each colour helps read the number. Blue: ones. Green: tens. Purple: hundreds.' },
       placevalue: { name: 'Changing position', detail: '10 small ones become 1 big one.', instruction: 'When you put 10 of the same together, they form 1 of the next group. The digit moves one position to the left.' }
     },
-    level: { en1: 'Read the floor', en2: 'Up and down', en3: 'Which is lower?', en4: 'Find the floor', u99: 'Up to 99', u999: 'Up to 999', umiles: 'Thousands', umillones: 'Millions and trillion', udictado: 'Listen and choose', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
+    level: { en1: 'Read the floor', en2: 'Up and down', en3: 'Which is lower?', en4: 'Find the floor', u99: 'Up to 99', u999: 'Up to 999', umiles: 'Thousands', umillones: 'Millions and trillion', udictado: 'Listen and choose', counter: 'Free counter', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
     gen: {
       ascensorLeerSituacionSuelo: 'It stays on the ground floor.',
       ascensorLeerSituacionArriba: 'Go up {n} floors.',
@@ -111,7 +111,21 @@
       ladderPrompt: 'How much is 10 × this number?',
       ladderHint: 'Times 10: each digit moves one place to the left and a zero is added.',
       dictadoEnunciado: 'Read the number. Then, tap it.',
-      dictationPrompt: 'Read the number. Then, tap it.'
+      dictationPrompt: 'Read the number. Then, tap it.',
+      counterHint: 'Tap to add or subtract. Watch how the digits and the groups (ones, tens, hundreds, thousands…) change.',
+      counterAudioAria: 'Read the number aloud',
+      counterResetLabel: '🔄 Start at 0',
+      counterExitLabel: '✅ Exit',
+      counterSepOn: ',1,234',
+      counterSepOff: '1234',
+      counterGroupsLabel: '🎨 Colour groups',
+      counterGroupsOn: '🎨 Colour groups: on',
+      counterGroupsOff: '🎨 Colour groups: off',
+      counterGroupsAria: 'Colour every 3-digit group',
+      counterWordsOn: '✍️ Hide number in words',
+      counterWordsOff: '✍️ Show number in words',
+      counterWordsAria: 'Show the number written in words',
+      counterResumenFinal: 'You explored the free counter. You now have {estrellas} stars.'
     },
     transferencia: 'This will help you read large numbers, understand the elevator of a building, or know which digit changes when you add 100.',
     transfer: 'This will help you read large numbers, understand the elevator of a building, or know which digit changes when you add 100.'

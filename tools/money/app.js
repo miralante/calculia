@@ -211,7 +211,7 @@
     },
 
     cambio: function (levelArg) {
-      var caso = draw('cambio-' + levelArg.lista, DATA.cambio[levelArg.lista]);
+      var caso = draw('cambio_' + levelArg.lista, DATA.cambio[levelArg.lista]);
       var vuelta = caso.billete - caso.precio;
       return {
         prompt: App.i18n.t('gen.cambioEnunciado'),

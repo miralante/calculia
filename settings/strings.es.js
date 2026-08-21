@@ -32,6 +32,7 @@
       'mental-math': 'Restar y Cálculo Mental', 'money': 'Dinero',
       'quantities': 'Cantidades', 'math-tables': 'Las Tablas',
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',
+      'temperature': 'Temperatura del agua',
       'wallet': 'El Monedero', 'clock': 'El Reloj', 'stories': 'Historias',
       'odd-one-out': '¿Qué no encaja?', 'puzzle': 'Puzzle'
     },

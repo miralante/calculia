@@ -131,7 +131,7 @@
       if (g > 0) htmlOut += '<span class="digit-sep">' + sep + '</span>';
       htmlOut += cuerpo;
     }
-    if (n < 0) htmlOut = '<span class="paintSign">−</span>' + htmlOut;
+    if (n < 0) htmlOut = '<span class="sign">−</span>' + htmlOut;
     return htmlOut;
   }
 
@@ -640,9 +640,9 @@
     DATA.practices.forEach(function (p) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-practica';
+      btn.className = 'btn btn-practice';
       btn.innerHTML =
-        '<div class="practica-icono" aria-hidden="true">' + p.icon + '</div>' +
+        '<div class="practice-icon" aria-hidden="true">' + p.icon + '</div>' +
         '<div class="practice-name">' + App.i18n.t(p.id + 'Name') + '</div>' +
         '<div class="practice-detail">' + App.i18n.t(p.id + 'Detail') + '</div>';
       btn.addEventListener('click', function () { startPractice(p.id); });

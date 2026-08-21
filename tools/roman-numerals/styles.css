@@ -450,6 +450,13 @@
   font-size: var(--texto-grande);
   font-weight: 800;
 }
+/* Running partial in a step-by-step decomposition formula
+   (e.g. "1+1=2, 2+1=3" while expanding III). Slightly muted so the
+   current step stands out. */
+.deco-partial {
+  color: var(--color-texto-suave);
+  font-weight: 700;
+}
 
 .deco-token {
   display: inline-flex;

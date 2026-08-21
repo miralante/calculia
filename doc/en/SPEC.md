@@ -5,11 +5,12 @@
 
 ## 1. What Calculia is
 
-A free, static web app with 14 activities for practicing math and
+A free, static web app with 15 activities for practicing math and
 logical reasoning:
 
 - **Math**: Numbers, Fractions and Measures, Subtraction and Mental
-  Math, Money, Math Tables, Quantities, Roman Numerals.
+  Math, Money, Math Tables, Quantities, Roman Numerals, Water
+  Temperature.
 - **Reasoning and logic**: Riddles, Patterns, The Wallet, The Clock,
   Stories, What Doesn't Belong?, Puzzle.
 
@@ -56,6 +57,12 @@ living skills or occupational therapy.
 - The rhythm is set by the learner.
 
 ### 3.3 Easy reading always
+
+Cognitive accessibility is a guiding principle: every piece of content
+follows **easy-read** guidelines and the **UNE 153101:2018 EX**
+(Spanish easy-read standard), aligned with Inclusion Europe's European
+guidelines. Comprehension outweighs technical accuracy expressed with
+difficulty.
 
 - Short sentences, one idea per sentence.
 - **Everyday vocabulary, no technical jargon** (e.g. "remember the
@@ -167,6 +174,50 @@ Where it applies and where it doesn't:
 
 This rule is checked automatically: `node scripts/check.js` fails if
 any of those terms show up in the files the end user sees.
+
+### 4.1 Public-facing wording: "usuario/a tipo" euphemism
+
+When presenting Calculia to **the general public** (press, talks,
+public READMEs that anyone can read, the metaproject landing at
+`apptonomia.uk`, social media copy, marketing material), the term
+**"intellectual disability" / "discapacidad intelectual"** must not be
+used as a way to describe the audience of the app — even when the
+surrounding text would otherwise be public. The accepted euphemism for
+that audience in those surfaces is **"usuario/a tipo"** (plural
+"usuarios/as tipo"), used as a generic profile marker, not as a label
+for any real person.
+
+Where the euphemism applies and where it doesn't:
+
+- **Applies** to any text that anyone outside the project can read
+  without authentication: `README.md`, `README.es.md`, the portal at
+  `apptonomia.uk`, public talks, social media copy, press notes,
+  marketing material. In these surfaces, refer to the audience as
+  "el/la usuario/a tipo" or "usuarios/as tipo" of the app.
+- **Does NOT apply** to this repo's internal documentation
+  (`CLAUDE.md`, `doc/en/SPEC.md`, `doc/es/SPEC.md`, `technical.md`,
+  [`roles.md`](roles.md), `CONTRIBUTING.md`, `CONTRIBUTING.es.md`) —
+  those files are read by maintainers and contributors, and
+  "intellectual disability" / "discapacidad intelectual" remains the
+  canonical term there, because the project needs an explicit,
+  unambiguous explanation of its real objective for whoever maintains
+  it.
+- **Does NOT apply** to project content that names a clinical concept
+  by its real-world name (e.g. an activity that practices calculations
+  on a real bureaucratic procedure related to disability): that is
+  content, not labelling of an audience.
+- **Does NOT apply** to the UI of the app itself: the rule in §4 above
+  continues to forbid **any** mention, including "usuario/a tipo", in
+  `site/index.html`, `tools/<slug>/index.html`, `app.js`, `data.js`,
+  `strings.<locale>.js`, `settings/`, `legal/`, and any other
+  user-facing surface. The euphemism is for the outside world, not
+  for what the visitor reads on the site.
+
+Rationale: presenting the project's real objective in maintainer docs
+is useful and necessary; presenting it in marketing or landing
+surfaces is neither necessary nor respectful of the audience —
+"usuario/a tipo" lets public material describe what the app is for
+(who the typical profile is) without publicly naming a clinical group.
 
 ## 5. Design principles
 

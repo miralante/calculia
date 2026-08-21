@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Calculia is a static, dependency-free web app with 14 activities for
+Calculia is a static, dependency-free web app with 15 activities for
 practicing math and logical reasoning: Numbers, Fractions and Measures,
 Subtraction and Mental Math, Money, Math Tables, Quantities, Roman
-Numerals, Riddles, Patterns, The Wallet, The Clock, Stories,
-What Doesn't Belong?, and Puzzle. See
+Numerals, Water Temperature, Riddles, Patterns, The Wallet, The Clock,
+Stories, What Doesn't Belong?, and Puzzle. See
 [`doc/en/SPEC.md`](doc/en/SPEC.md) (or [`doc/es/SPEC.md`](doc/es/SPEC.md))
 for the full product definition — target audience, accessibility rules,
 and non-negotiable product principles.
@@ -151,3 +151,66 @@ Before finishing:
 A deploy (even to a preview channel) is a network operation: ask before
 running one. Never push or open/close external resources without
 explicit request or authorization.
+
+## UNE 153101 reference (suite-wide)
+
+All seven sibling projects follow **UNE 153101:2018 EX** (Spanish
+easy-read standard) and Inclusion Europe's European easy-read
+guidelines as the normative basis for the cognitive accessibility
+principles that guide content and UI: short sentences, one idea per
+sentence, everyday vocabulary, no clinical or technical jargon in
+what the end user reads. This is the standard each `SPEC.md` cites
+when it states the "easy read always" rule (see `doc/en/SPEC.md` §3.3
+or its mirror in `doc/es/SPEC.md` §3.3). Adding a new language or a
+new piece of UI copy means following UNE 153101 — not paraphrasing
+it.
+
+## Public-facing wording: "usuario/a tipo" euphemism
+
+This directive applies across the entire Miralante suite (Apptonomia,
+Calculia, Memofun, Okeymoney, Sinonimia, Teclatlon, Routime) and the
+metaproject landing at `apptonomia.uk`. The suite's real objective is
+occupational-therapy support for people with intellectual disability, but
+**that framing is not used in public surfaces** — only in internal
+documentation.
+
+### Where each term is allowed
+
+- **"Discapacidad intelectual" / "intellectual disability"** is the
+  canonical term and **may only appear in internal documentation**
+  (`CLAUDE.md`, `doc/<lang>/SPEC.md`, `technical.md` / `tecnico.md`,
+  `roles.md`, `CONTRIBUTING.md`, `CONTRIBUTING.es.md`, tooling files
+  in `scripts/`). It is explicitly **forbidden** in public-facing
+  surfaces, READMEs that anyone can read without authentication, public
+  talks, social media copy, press notes, and marketing material.
+- **"Usuario/a tipo"** (plural "usuarios/as tipo") is the accepted
+  euphemism for the audience in public-facing surfaces. It is used as
+  a generic profile marker, not as a label for any real person.
+  - It applies to `README.md` / `README.es.md`, public talks, social
+    media copy, press notes, marketing material, and any
+    contributor-facing document that also doubles as a public
+    description of the project (e.g. `CONTRIBUTING.md`).
+  - It does **not** apply to the UI of the app itself: the project's
+    "Mandatory rule: zero mentions in the user-facing product" (see
+    `doc/en/SPEC.md` §4 / `doc/es/SPEC.md` §4) continues to forbid
+    **any** mention, including "usuario/a tipo", in `site/index.html`,
+    `tools/<slug>/index.html`, `app.js`, `data.js`, `strings.<locale>.js`,
+    `settings/`, `legal/`, and any other user-facing surface. The
+    euphemism is for the outside world, not for what the visitor reads
+    on the site.
+  - It does **not** apply to project content that names a clinical
+    concept by its real-world name (e.g. an activity that practices
+    calculations on a real bureaucratic procedure): that is content,
+    not labelling of an audience.
+
+### Rationale
+
+Presenting the project's real objective in maintainer docs is useful
+and necessary for whoever maintains and contributes to the suite.
+Presenting it in marketing or landing surfaces is neither necessary nor
+respectful of the audience — "usuario/a tipo" lets public material
+describe what the app is for (who the typical profile is) without
+publicly naming a clinical group. This rule is mirrored in the
+metaproject's `apptonomia/CLAUDE.md` and in every sibling's own
+`CLAUDE.md` and `SPEC.md` so it survives a single project's docs going
+out of sync.

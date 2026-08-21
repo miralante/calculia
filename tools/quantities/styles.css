@@ -11,6 +11,8 @@
 .btn-practice { min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: var(--mod-razonamiento); text-align: center; }
 .practice-icon, .task-icon { font-size: 42px; line-height: 1; }
 .btn-practice small { font-size: var(--texto-pequeno); font-weight: 400; }
+.practice-name { font-weight: 700; }
+.practice-detail { font-size: var(--texto-pequeno); font-weight: 400; opacity: 0.9; }
 
 .task-card { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); text-align: center; border-color: var(--mod-razonamiento-suave); }
 .task-card h2 { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); }

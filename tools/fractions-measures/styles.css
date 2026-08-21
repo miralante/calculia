@@ -40,7 +40,7 @@
 
 /* Measurements */
 .measure-picto { font-size: 64px; }
-.medida-txt { font-size: var(--texto-grande); font-weight: 800; }
+.measure-text { font-size: var(--texto-grande); font-weight: 800; }
 
 /* Answer options */
 .options .option-btn { text-align: center; font-size: 26px; }

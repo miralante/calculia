@@ -28,6 +28,24 @@
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
   var starsEl = $('#stars');
+  var progressBar = $('#progressBar');
+  var quizCard = $('#quizCard');
+  /* Free-exploration counter level (see data.js: 'counter'). These
+     refs are populated for every level; render() hides the whole
+     #counterUI block when the level isn't a counter. */
+  var counterUI = $('#counterUI');
+  var counterNumber = $('#counterNumber');
+  var counterSep = $('#counterSep');
+  var counterSepLabel = $('#counterSepLabel');
+  var counterAudio = $('#counterAudio');
+  var counterReset = $('#counterReset');
+  var counterExit = $('#counterExit');
+  var counterHint = $('#counterHint');
+  var counterGroups = $('#counterGroups');
+  var counterGroupsLabel = $('#counterGroupsLabel');
+  var counterWords = $('#counterWords');
+  var counterWordsLabel = $('#counterWordsLabel');
+  var counterWritten = $('#counterWritten');
 
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
@@ -116,7 +134,7 @@
     return '<span class="num-color">' + digits(n, opts.labels, opts.highlight) + '</span>';
   }
 
-  function paintSign(s) { return '<span class="paintSign">' + s + '</span>'; }
+  function paintSign(s) { return '<span class="sign">' + s + '</span>'; }
 
   /* ---- Elevator (negative numbers) ---- */
 
@@ -147,14 +165,14 @@
     });
     var filas = '';
     for (var n = max; n >= min; n--) {
-      var clases = 'piso-row';
+      var clases = 'floor-row';
       var contenido = '';
       if (n === 0) {
-        clases += ' piso-suelo';
+        clases += ' ground-floor';
         contenido += '<span class="floor-icon">🏠</span>';
       }
       (porPiso[n] || []).forEach(function (m) {
-        clases += ' ' + (m.clase || 'piso-marca');
+        clases += ' ' + (m.clase || 'target-floor');
         contenido += '<span class="floor-icon">' + m.icon + '</span>';
       });
       filas += '<div class="' + clases + '">' + contenido + '</div>';
@@ -211,7 +229,7 @@
       }
       return {
         prompt: App.i18n.t('gen.ascensorLeerEnunciado'),
-        visual: shaftHTML(nv.min, nv.max, [{ floor: floor, icon: '🛗', clase: 'piso-actual' }]),
+        visual: shaftHTML(nv.min, nv.max, [{ floor: floor, icon: '🛗', clase: 'current-floor' }]),
         legend: legendElevator(),
         options: App.utils.shuffle(values).map(function (v) {
           return { html: floorHTML(v), correct: v === floor };
@@ -238,7 +256,7 @@
       }
       return {
         prompt: App.i18n.t(keyPrefix + 'Enunciado').replace('{inicio}', floorPlain(start)).replace('{delta}', delta),
-        visual: shaftHTML(nv.min, nv.max, [{ floor: start, icon: '🛗', clase: 'piso-actual' }]) +
+        visual: shaftHTML(nv.min, nv.max, [{ floor: start, icon: '🛗', clase: 'current-floor' }]) +
           '<p class="hint-arrow" aria-hidden="true">' + (subir ? '⬆️' : '⬇️') + ' ' + delta + '</p>',
         legend: legendElevator(),
         options: App.utils.shuffle(values).map(function (v) {
@@ -260,8 +278,8 @@
       return {
         prompt: App.i18n.t(keyPrefix + 'Enunciado'),
         visual: shaftHTML(nv.min, nv.max, [
-          { floor: a, icon: '🛗', clase: 'piso-actual' },
-          { floor: b, icon: '🚩', clase: 'piso-marca' }
+          { floor: a, icon: '🛗', clase: 'current-floor' },
+          { floor: b, icon: '🚩', clase: 'target-floor' }
         ]),
         legend: legendElevator(),
         options: [
@@ -281,7 +299,7 @@
         .filter(function (v) { return v >= nv.min && v <= nv.max && v !== floor; })).slice(0, 2);
       var letters = ['A', 'B', 'C'];
       var markers = App.utils.shuffle([floor].concat(candidates)).map(function (f, i) {
-        return { floor: f, icon: letters[i], clase: 'piso-opcion' };
+        return { floor: f, icon: letters[i], clase: 'option-floor' };
       });
       return {
         prompt: App.i18n.t('gen.ascensorColocarEnunciado').replace('{piso}', floorPlain(floor)),
@@ -429,6 +447,13 @@
         visual: '<div class="visual-number">' + paintNumber(n, { labels: true }) + '</div>',
         options: buildOptions(n, candidates, function (v) { return paintNumber(v); })
       };
+    },
+
+    /* Free-exploration counter: not a quiz, no prompt/options. Returns
+       a marker that render() detects to switch into the counter UI
+       (see renderCounter below). 'max' bounds the value silently. */
+    counter: function (nv) {
+      return { tipo: 'counter', max: nv.max || 1000000000000 };
     }
   };
 
@@ -524,6 +549,20 @@
     attempts = 0;
     question = fixedQuestion || GENERATORS[level.tipo](level, index);
     fixedQuestion = null;
+
+    /* The 'counter' level isn't a quiz: it returns a marker, not a
+       question, and render() hands off to renderCounter() which
+       hides everything else and shows the free-exploration UI. */
+    if (question.tipo === 'counter') {
+      renderCounter(question);
+      return;
+    }
+
+    /* Quiz mode: show the standard parts, hide the counter UI. */
+    progressBar.classList.remove('hidden');
+    quizCard.classList.remove('hidden');
+    optionsEl.classList.remove('hidden');
+    counterUI.classList.add('hidden');
 
     promptEl.textContent = question.prompt;
     visualEl.innerHTML = question.visual || '';
@@ -639,10 +678,16 @@
   function endRound() {
     save();
     show(screenEnd);
-    $('#endSummary').textContent = App.i18n.t('resumenFinal')
-      .replace('{n}', roundCorrect)
-      .replace('{actividad}', App.i18n.t('activity.' + activity.id + '.name'))
-      .replace('{estrellas}', progress.stars);
+    var summaryEl = $('#endSummary');
+    if (level.tipo === 'counter') {
+      summaryEl.textContent = App.i18n.t('gen.counterResumenFinal')
+        .replace('{estrellas}', progress.stars);
+    } else {
+      summaryEl.textContent = App.i18n.t('resumenFinal')
+        .replace('{n}', roundCorrect)
+        .replace('{actividad}', App.i18n.t('activity.' + activity.id + '.name'))
+        .replace('{estrellas}', progress.stars);
+    }
     $('#transfer').textContent = App.i18n.t('transferencia');
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
@@ -658,6 +703,294 @@
       btnHarder.classList.add('hidden');
     }
   }
+
+  /* ============================================================
+     Free-exploration counter (no quiz)
+     ============================================================ */
+
+  /* Reads the current number aloud using App.tts. For exact powers
+     of ten we use the words already registered in DATA.potencias
+     (same source as the escalera generator); for any other value we
+     fall back to the formatted decimal so the browser's TTS reads
+     it digit-by-digit (e.g. "one million, two hundred thirty four
+     thousand, five hundred sixty seven"). For non-power-of-ten
+     numbers the formatted-with-separator string reads naturally
+     with the thousands separator as a pause marker. */
+  function counterSay(n) {
+    if (!n) { App.tts.speak(App.i18n.locale() === 'en' ? 'zero' : 'cero'); return; }
+    var words = DATA.potencias[App.i18n.locale()];
+    var exp = -1;
+    var v = n;
+    while (v >= 10 && v % 10 === 0) { v = v / 10; exp += 1; }
+    if (v === 1 && exp >= 0 && exp < words.length) {
+      App.tts.speak(words[exp]);
+      return;
+    }
+    /* Not a clean power of ten: read the formatted number. The
+       thousands separator makes it sound natural for place value
+       practice. */
+    var sep = thousandsSeparator();
+    var s = String(n);
+    var out = '';
+    for (var i = 0; i < s.length; i++) {
+      var ch = s[i];
+      if (ch >= '0' && ch <= '9') {
+        out += (App.i18n.locale() === 'en' ? numberNameEn(ch) : numberNameEs(ch));
+      } else if (ch === sep) {
+        out += ', ';
+      } else {
+        out += ch;
+      }
+      if (i < s.length - 1) out += ' ';
+    }
+    App.tts.speak(out);
+  }
+
+  /* Digit names for the fallback TTS path above. Kept local because
+     they're only used by counterSay; the rest of the app uses
+     DATA.potencias + DATA.readings for full number-to-words. */
+  var DIGIT_NAMES_ES = ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
+  var DIGIT_NAMES_EN = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  function numberNameEs(d) { return DIGIT_NAMES_ES[+d]; }
+  function numberNameEn(d) { return DIGIT_NAMES_EN[+d]; }
+
+  /* Per-level state for the counter. Held in a closure so re-entering
+     the level (via Exit → Play again) starts fresh. */
+  var counterValue = 0;
+  var counterMax = 0;
+  var counterShowSep = true;
+  /* When the thousands separator is hidden, this paints each 3-digit
+     group in a distinct background tint, simulating the visual cue of
+     the separator dot. Only meaningful when counterShowSep is false. */
+  var counterColorGroups = false;
+  var counterShowWords = false;
+
+  function renderCounter(q) {
+    counterValue = 0;
+    counterMax = q.max;
+    counterShowSep = true;
+    counterColorGroups = false;
+    counterShowWords = false;
+    counterWords.setAttribute('aria-pressed', 'false');
+    counterWordsLabel.textContent = App.i18n.t('gen.counterWordsOff');
+    counterUI.classList.remove('hidden');
+    counterHint.textContent = App.i18n.t('gen.counterHint');
+    /* The progress bar / quiz card / options belong to the quiz flow;
+       they're hidden while the counter is shown so the screen reads
+       as a free exploration surface, not a question. */
+    progressBar.classList.add('hidden');
+    quizCard.classList.add('hidden');
+    optionsEl.classList.add('hidden');
+    btnNext.classList.add('hidden');
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+    /* progressText stays at 0/6; the bar is hidden, so it isn't read. */
+    progressFill.style.width = '0%';
+    progressText.textContent = '0 / 6';
+    paintCounter();
+    paintCounterToggle();
+    paintStars();
+  }
+
+  function paintCounter() {
+    counterNumber.innerHTML = paintCounterNumber(counterValue);
+    counterWritten.textContent = counterShowWords ? numberToWords(counterValue) : '';
+    counterWritten.classList.toggle('hidden', !counterShowWords);
+    /* Disable "-" buttons at 0; the "−" buttons share the .data-step
+       attribute that starts with "-". */
+    App.utils.$$('#counterUI .btn-counter[data-step]').forEach(function (b) {
+      var step = parseInt(b.getAttribute('data-step'), 10);
+      var wouldBeNeg = (counterValue + step) < 0;
+      var wouldBeOver = (counterValue + step) > counterMax;
+      b.disabled = wouldBeNeg || wouldBeOver;
+    });
+  }
+
+  function paintCounterToggle() {
+    /* The button shows what the current state LOOKS LIKE; clicking
+       it switches to the other state. The label is built from
+       strings.es/en.js so it stays localized. */
+    counterSepLabel.textContent = counterShowSep
+      ? App.i18n.t('gen.counterSepOn')
+      : App.i18n.t('gen.counterSepOff');
+    counterSep.setAttribute('aria-pressed', String(counterShowSep));
+    /* The 'colour groups' toggle is only meaningful when the
+       thousands separator is hidden: with the separator on, the
+       dot/label already does the grouping visually. Hide the
+       button otherwise to keep the surface uncluttered. */
+    if (counterShowSep) {
+      counterGroups.classList.add('hidden');
+    } else {
+      counterGroups.classList.remove('hidden');
+      counterGroupsLabel.textContent = counterColorGroups
+        ? App.i18n.t('gen.counterGroupsOn')
+        : App.i18n.t('gen.counterGroupsOff');
+      counterGroups.setAttribute('aria-pressed', String(counterColorGroups));
+    }
+  }
+
+  /* Three paint variants for the displayed number, chosen from the
+     current toggle state:
+       - showSep              → digit groups with . separator + label
+       - !showSep && colorGroups → digit groups with a coloured background
+                                   per 3-digit chunk (no separator glyph)
+       - !showSep && !colorGroups → one continuous digit string */
+  function paintCounterNumber(n) {
+    if (counterShowSep) return paintNumber(n, { labels: true });
+    var s = String(n);
+    var groups = [];
+    for (var i = s.length; i > 0; i -= 3) groups.unshift(s.slice(Math.max(0, i - 3), i));
+    var html = '<span class="num-color">';
+    for (var g = 0; g < groups.length; g++) {
+      var body = '';
+      for (var j = 0; j < groups[g].length; j++) {
+        var pos = groups[g].length - 1 - j;
+        var posAbs = (groups.length - 1 - g) * 3 + pos;
+        body += '<span class="' + POS_CLASS[pos] + '">' + groups[g][j] + '</span>';
+      }
+      if (counterColorGroups && groups.length > 1) {
+        /* Cycle the tint across groups (g0 leftmost = lowest group).
+           Three hues is enough to tell adjacent groups apart without
+           becoming a rainbow. */
+        html += '<span class="num-group num-group-' + (g % 3) + '">' + body + '</span>';
+      } else {
+        html += body;
+      }
+    }
+    html += '</span>';
+    return html;
+  }
+
+  var SMALL_ES = ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve'];
+  var TENS_ES = ['', '', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+  var HUNDREDS_ES = ['', 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos', 'setecientos', 'ochocientos', 'novecientos'];
+  var SMALL_EN = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+  var TENS_EN = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+  function under100Es(n) {
+    if (n < 20) return SMALL_ES[n];
+    if (n < 30) {
+      var twenties = ['', 'veintiuno', 'veintidós', 'veintitrés', 'veinticuatro', 'veinticinco', 'veintiséis', 'veintisiete', 'veintiocho', 'veintinueve'];
+      return n === 20 ? 'veinte' : twenties[n - 20];
+    }
+    return n % 10 ? TENS_ES[Math.floor(n / 10)] + ' y ' + SMALL_ES[n % 10] : TENS_ES[Math.floor(n / 10)];
+  }
+
+  function under1000Es(n) {
+    if (n < 100) return under100Es(n);
+    if (n === 100) return 'cien';
+    return HUNDREDS_ES[Math.floor(n / 100)] + (n % 100 ? ' ' + under100Es(n % 100) : '');
+  }
+
+  function numberToWordsEs(n) {
+    if (n < 1000) return under1000Es(n);
+    if (n >= 1000000000000) {
+      return n === 1000000000000 ? 'un billón' : under1000Es(Math.floor(n / 1000000000000)) + ' billones';
+    }
+    if (n >= 1000000000) {
+      var millionCount = Math.floor(n / 1000000);
+      var millionRest = n % 1000000;
+      var billionWords = millionCount === 1000 ? 'mil millones' : numberToWordsEs(millionCount) + ' millones';
+      return billionWords + (millionRest ? ' ' + numberToWordsEs(millionRest) : '');
+    }
+    if (n >= 1000000) {
+      var millions = Math.floor(n / 1000000);
+      var millionRest = n % 1000000;
+      return (millions === 1 ? 'un millón' : under1000Es(millions) + ' millones') + (millionRest ? ' ' + numberToWordsEs(millionRest) : '');
+    }
+    var thousands = Math.floor(n / 1000);
+    var thousandRest = n % 1000;
+    return (thousands === 1 ? 'mil' : under1000Es(thousands) + ' mil') + (thousandRest ? ' ' + under1000Es(thousandRest) : '');
+  }
+
+  function under100En(n) {
+    if (n < 20) return SMALL_EN[n];
+    return n % 10 ? TENS_EN[Math.floor(n / 10)] + '-' + SMALL_EN[n % 10] : TENS_EN[Math.floor(n / 10)];
+  }
+
+  function under1000En(n) {
+    if (n < 100) return under100En(n);
+    return SMALL_EN[Math.floor(n / 100)] + ' hundred' + (n % 100 ? ' ' + under100En(n % 100) : '');
+  }
+
+  function numberToWordsEn(n) {
+    if (n < 1000) return under1000En(n);
+    var scales = [[1000000000000, 'trillion'], [1000000000, 'billion'], [1000000, 'million'], [1000, 'thousand']];
+    for (var i = 0; i < scales.length; i++) {
+      if (n >= scales[i][0]) {
+        var count = Math.floor(n / scales[i][0]);
+        var rest = n % scales[i][0];
+        return numberToWordsEn(count) + ' ' + scales[i][1] + (rest ? ' ' + numberToWordsEn(rest) : '');
+      }
+    }
+    return String(n);
+  }
+
+  function numberToWords(n) {
+    return App.i18n.locale() === 'en' ? numberToWordsEn(n) : numberToWordsEs(n);
+  }
+
+  function counterAddStep(step) {
+    var next = counterValue + step;
+    if (next < 0 || next > counterMax) return;
+    counterValue = next;
+    paintCounter();
+  }
+
+  function exitCounter() {
+    progress.stars += 1;
+    save();
+    paintStars();
+    endRound();
+  }
+
+  /* Wire up the counter buttons once (the elements persist). */
+  App.utils.$$('#counterUI .btn-counter[data-step]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var step = parseInt(b.getAttribute('data-step'), 10);
+      counterAddStep(step);
+    });
+  });
+  counterReset.addEventListener('click', function () {
+    counterValue = 0;
+    paintCounter();
+  });
+  counterSep.addEventListener('click', function () {
+    /* Toggle the separator state, then redraw both the toggle label
+       (which button shows, whether the colour-groups toggle is
+       visible, and its label) and the number itself. Turning the
+       separator ON makes the colour-groups cue redundant, so we
+       force it OFF to keep the two toggles mutually consistent. */
+    counterShowSep = !counterShowSep;
+    if (counterShowSep) counterColorGroups = false;
+    paintCounterToggle();
+    paintCounter();
+  });
+  counterGroups.addEventListener('click', function () {
+    if (counterShowSep) return; /* safety: toggle is hidden in this state */
+    counterColorGroups = !counterColorGroups;
+    paintCounterToggle();
+    paintCounter();
+  });
+  counterAudio.addEventListener('click', function () {
+    counterSay(counterValue);
+  });
+  counterExit.addEventListener('click', function () { exitCounter(); });
+  /* Localized aria-label for the audio button. Setting it after the
+     elements are wired keeps the HTML lean (no data-i18n-aria needed)
+     while still going through the i18n table. */
+  counterAudio.setAttribute('aria-label', App.i18n.t('gen.counterAudioAria'));
+  counterReset.textContent = App.i18n.t('gen.counterResetLabel');
+  counterExit.textContent = App.i18n.t('gen.counterExitLabel');
+  counterGroups.setAttribute('aria-label', App.i18n.t('gen.counterGroupsAria'));
+  counterWordsLabel.textContent = App.i18n.t('gen.counterWordsOff');
+  counterWords.setAttribute('aria-label', App.i18n.t('gen.counterWordsAria'));
+  counterWords.addEventListener('click', function () {
+    counterShowWords = !counterShowWords;
+    counterWords.setAttribute('aria-pressed', String(counterShowWords));
+    counterWordsLabel.textContent = App.i18n.t(counterShowWords ? 'gen.counterWordsOn' : 'gen.counterWordsOff');
+    paintCounter();
+  });
 
   /* ---- Events ---- */
 

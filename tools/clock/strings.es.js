@@ -12,6 +12,8 @@
     contexto: 'Estás en un momento del día: el desayuno, el cole, la comida o la cena. En el reloj grande de la cocina ves qué hora es.',
     explicacion: '✅ Lo has hecho muy bien. Saber la hora te ayuda a llegar puntual al cole, a no perderte la merienda y a controlar tu propio tiempo.',
     levelsTitle: 'Elige una actividad',
+    modesTitle: 'Elige una actividad',
+    otherMode: 'Elegir otro modo',
     whatTime: '¿Qué hora es?',
     clockAria: 'Reloj: {texto}',
     endSummary: 'Has ganado {n} estrellas. Ahora tienes {stars} estrellas.',
@@ -24,6 +26,38 @@
     incorrectExplanationA: '❌ No es esa hora. Son las ',
     readHint: '🤔 Prueba otra vez. Mira el reloj con calma.',
     associateHint: '🤔 Prueba otra vez. Piensa en ese momento del día.',
+    setHint: '🤔 Prueba otra vez. Ajusta la hora con los botones.',
+    convertHint: '🤔 Prueba otra vez. Compara el reloj con los números.',
+    convertAnalogToDigital: '¿Qué hora marca este reloj?',
+    convertDigitalToAnalog: 'Toca el reloj que marca esta hora.',
+    setLabel: 'Pon el reloj en esta hora:',
+    setHour: 'Hora',
+    setMinute: 'Minutos',
+    setIncrement: 'Subir',
+    setDecrement: 'Bajar',
+    setConfirm: 'Comprobar',
+    mode: {
+      read: {
+        name: 'Leer el reloj',
+        description: 'Mira el reloj y elige la hora correcta.',
+        question: '¿Qué hora es?'
+      },
+      set: {
+        name: 'Poner el reloj',
+        description: 'Lee la hora y mueve las agujas con los botones.',
+        question: 'Pon las agujas en la hora indicada.'
+      },
+      convert: {
+        name: 'Analógico ↔ Digital',
+        description: 'Empareja el reloj de agujas con los números digitales.',
+        question: 'Empareja el reloj con su hora digital.'
+      },
+      situations: {
+        name: 'Momentos del día',
+        description: 'Elige el reloj que corresponde a cada momento del día.',
+        question: '¿A qué hora pasa esto?'
+      }
+    },
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',

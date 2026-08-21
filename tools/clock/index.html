@@ -18,11 +18,17 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-    <!-- Start screen -->
+    <!-- Start screen: instruction -->
     <section id="screenStart" class="stack centered">
       <div class="row center-row">
         <p class="instruction" id="instruction" data-i18n="instruction">Mira el reloj. Elige la hora correcta.</p>
       </div>
+      <h2 data-i18n="modesTitle">Elige una actividad</h2>
+      <div class="stack" id="modes"></div>
+    </section>
+
+    <!-- Pick level (after a mechanic is chosen on the start screen) -->
+    <section id="screenLevels" class="hidden stack centered">
       <h2 data-i18n="levelsTitle">Elige una actividad</h2>
       <div class="stack" id="levels"></div>
     </section>
@@ -38,6 +44,10 @@
         <div id="questionZone"></div>
       </div>
       <h2 class="question centered" id="questionText" data-i18n="whatTime">¿Qué hora es?</h2>
+      <button type="button" class="btn btn-audio hidden" id="btnListen"
+        data-i18n-aria="core.listenText" aria-label="Escuchar la pregunta">
+        <span data-i18n="core.listen">🔊 Escuchar</span>
+      </button>
       <div class="stack" id="options"></div>
       <div class="feedback" id="feedback" aria-live="polite"></div>
       <div class="row explanation hidden" id="explanationWrap">
@@ -54,6 +64,7 @@
       <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
       <button type="button" class="btn btn-secondary" id="btnOtherLevel" data-i18n="otherLevel">Elegir otra actividad</button>
+      <button type="button" class="btn btn-secondary" id="btnOtherMode" data-i18n="otherMode">Elegir otro modo</button>
       <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer class="pie-app">

@@ -9,7 +9,6 @@
   App.i18n.register({
     "title": "Calculia",
     "saludo": "Hi. What do you want to practice today?",
-    "listenGreeting": "Listen to the greeting",
     "yourStars": "Your stars",
     "idioma": "Choose language",
     "modMates": "🧮 Math",
@@ -22,6 +21,7 @@
     "quantities": { "name": "Quantities", "detail": "Practise little, much and rounding." },
     "mathtables": { "name": "Math Tables", "detail": "Count, add, multiply and divide with colors." },
     "romannumerals": { "name": "Roman Numerals", "detail": "Learn to recognize centuries." },
+    "temperature": { "name": "Water Temperature", "detail": "Raise and lower the degrees. See what happens to the water." },
 
     "riddles": { "name": "Riddles", "detail": "What is it? Think and choose." },
     "patterns": { "name": "Patterns", "detail": "What comes next?" },

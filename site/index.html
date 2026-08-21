@@ -3,11 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculia</title>
-  <meta name="description" content="Actividades de cálculo y razonamiento lógico, a tu ritmo.">
+
+  <!-- ===== SEO: título, descripción, keywords, canonical, robots =====
+       Calculia is one of the six Apptonomia apps; the canonical and
+       JSON-LD parentOrganization point at the suite so search engines
+       and answer engines can group all six under one publisher. -->
+  <title>Calculia — Cálculo y razonamiento lógico a tu ritmo</title>
+  <meta name="description" content="Calculia es una aplicación web gratuita y sin registro con actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles. Parte de la suite Apptonomia.">
+  <meta name="keywords" content="calculia, apptonomia, matemáticas, razonamiento lógico, cálculo, fracciones, números romanos, easy read, lectura fácil, accesibilidad cognitiva, actividades gratuitas sin registro, sumas, restas, tablas de multiplicar">
+  <meta name="author" content="Apptonomia">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://calculia.apptonomia.uk/">
+  <link rel="alternate" hreflang="es" href="https://calculia.apptonomia.uk/?lang=es">
+  <link rel="alternate" hreflang="en" href="https://calculia.apptonomia.uk/?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://calculia.apptonomia.uk/">
+
+  <!-- ===== Open Graph ===== -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Apptonomia">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:title" content="Calculia — Cálculo y razonamiento lógico a tu ritmo">
+  <meta property="og:description" content="Actividades cortas y visuales de cálculo y razonamiento lógico. Gratis y sin registro. Parte de la suite Apptonomia.">
+  <meta property="og:url" content="https://calculia.apptonomia.uk/">
+  <meta property="og:image" content="https://calculia.apptonomia.uk/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Calculia: actividades de cálculo y razonamiento lógico">
+
+  <!-- ===== Twitter Card ===== -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Calculia — Cálculo y razonamiento lógico a tu ritmo">
+  <meta name="twitter:description" content="Actividades cortas y visuales de cálculo y razonamiento lógico. Gratis y sin registro.">
+  <meta name="twitter:image" content="https://calculia.apptonomia.uk/og-image.png">
+
+  <!-- ===== Theme / appearance ===== -->
   <meta name="theme-color" content="#FAF7F2">
+  <meta name="color-scheme" content="light">
+
   <link rel="manifest" href="../manifest.json">
   <link rel="icon" href="../assets/img/icono.svg" type="image/svg+xml">
+
+  <!-- ===== JSON-LD: SoftwareApplication + parentOrganization =====
+       The parentOrganization @id matches the Organization node from
+       apptonomia.uk, so the six apps cluster under one publisher. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://calculia.apptonomia.uk/#app",
+        "name": "Calculia",
+        "url": "https://calculia.apptonomia.uk/",
+        "applicationCategory": "EducationalApplication",
+        "applicationSubCategory": "Matemáticas y razonamiento lógico",
+        "operatingSystem": "Web",
+        "inLanguage": ["es", "en"],
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+        "description": "Actividades cortas y visuales de cálculo y razonamiento lógico para aprender a tu ritmo.",
+        "parentOrganization": { "@id": "https://apptonomia.uk/#org" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Apptonomia", "item": "https://apptonomia.uk/" },
+          { "@type": "ListItem", "position": 2, "name": "Calculia", "item": "https://calculia.apptonomia.uk/" }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <link rel="stylesheet" href="../assets/css/tokens.css">
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/components.css">
@@ -27,7 +95,6 @@
         <h1>Calculia</h1>
         <div class="fila centrado-fila">
           <p class="saludo" id="saludo" data-i18n="saludo">Hola. ¿Qué quieres practicar hoy?</p>
-          <button type="button" class="btn btn-audio" id="btnSaludo" data-i18n-aria="listenGreeting" aria-label="Escuchar el saludo">🔊</button>
         </div>
         <p class="stars" id="totalStars">⭐ 0</p>
       </div>
@@ -78,6 +145,11 @@
             <span class="picto" aria-hidden="true">🏛️</span>
             <span class="nombre" data-i18n="romannumerals.name">Números Romanos</span>
             <span class="detalle" data-i18n="romannumerals.detail">Aprende a reconocer los siglos.</span>
+          </a>
+          <a href="../tools/temperature/index.html" class="tarjeta">
+            <span class="picto" aria-hidden="true">🌡️</span>
+            <span class="nombre" data-i18n="temperature.name">Temperatura del agua</span>
+            <span class="detalle" data-i18n="temperature.detail">Sube y baja los grados. Mira qué pasa con el agua.</span>
           </a>
         </div>
       </section>

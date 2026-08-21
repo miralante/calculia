@@ -49,3 +49,118 @@
   color: var(--color-texto-secundario, #555);
   max-width: 480px;
 }
+
+/* ---- Mode picker (start screen) ---- */
+.btn-mode {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 300px;
+  align-self: center;
+  text-align: left;
+  padding: 16px 20px;
+}
+.btn-mode .mode-desc {
+  font-weight: 400;
+  font-size: var(--texto-base, 1rem);
+  opacity: 0.85;
+}
+
+/* ---- Digital face (LCD-style) ---- */
+.digital-face {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px 28px;
+  background: #1F2933;
+  color: #F9FAFB;
+  border-radius: 12px;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  min-width: 200px;
+  user-select: none;
+}
+.digital-face .dig-pair {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+.digital-face .dig-seg {
+  font-size: 1.5rem;
+  opacity: 0.85;
+  line-height: 1;
+}
+.option-btn .dig-pair {
+  font-size: 1.6rem;
+}
+
+/* ---- Set-the-clock steppers ---- */
+.options-steppers {
+  align-items: center;
+  gap: 12px;
+}
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: 999px;
+  background: #FFFFFF;
+}
+.stepper-label {
+  font-weight: 700;
+  color: var(--color-texto);
+}
+.stepper-value {
+  min-width: 3ch;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+.btn-step {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 2px solid var(--mod-razonamiento);
+  background: var(--mod-razonamiento);
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+/* Same visual as .btn-step — the modifier classes exist so app.js
+   can address each button individually (`.btn-step-down` /
+   `.btn-step-up`) for its click handler. */
+.btn-step-down,
+.btn-step-up { /* same look as .btn-step — see above */ }
+.btn-step:focus-visible {
+  outline: 3px solid var(--color-foco, #2563EB);
+  outline-offset: 2px;
+}
+.btn-confirm {
+  align-self: center;
+  min-width: 240px;
+  margin-top: 8px;
+}
+
+/* ---- Set mode target label ---- */
+.set-target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.set-target .set-label {
+  font-size: 1rem;
+  color: var(--color-texto-secundario, #555);
+}
+.set-target .set-time {
+  font-size: 1.6rem;
+  font-weight: 700;
+}

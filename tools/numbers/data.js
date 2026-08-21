@@ -1,20 +1,20 @@
 /* ============================================================
-   Calculia — Los Números — datos
-   Formato:
-   - DATA.activities[id]: picto y niveles[]. Cada nivel: { id, tipo,
-     ...config }. El tipo elige el generador de preguntas en app.js.
-     Object.keys(DATA.activities) fija el orden del menú.
-   - DATA.readings: números grandes con su lectura en palabras, por
-     idioma (DATA.readings[locale][lista]). OJO: la escala numérica
-     cambia entre idiomas (1.000.000.000 es "mil millones" en español
-     pero "one billion" en inglés; 10^12 es "un billón" en español
-      pero "one trillion" en inglés). Ver I18N.md §2.
-   Los nombres de actividades y niveles NO están aquí: son texto y
-   viven en strings.js, indexados por 'id': App.i18n.t('actividad.<id>.nombre'),
-   App.i18n.t('actividad.<id>.detalle'), App.i18n.t('actividad.<id>.instruccion'),
-   App.i18n.t('nivel.<id>').
-   Para ampliar: añadir un nivel nuevo con un id, y sus textos a
-   strings.js (es y en).
+   Calculia — Numbers — data
+   Schema:
+   - DATA.activities[id]: picto and levels[]. Each level: { id, tipo,
+     ...config }. The 'tipo' chooses the question generator in app.js.
+     Object.keys(DATA.activities) fixes the menu order.
+   - DATA.readings: large numbers with their reading in words, per
+     locale (DATA.readings[locale][lista]). NOTE: the numeric scale
+     differs between locales (10^9 is "mil millones" in Spanish but
+     "one billion" in English; 10^12 is "un billón" in Spanish but
+     "one trillion" in English). See I18N.md §2.
+   Activity and level names do NOT live here: they are UI text and
+   live in strings.js, keyed by 'id': App.i18n.t('activity.<id>.name'),
+   App.i18n.t('activity.<id>.detail'), App.i18n.t('activity.<id>.instruction'),
+   App.i18n.t('level.<id>').
+   To extend: add a new level with an id, and its text to
+   strings.js (es and en).
    ============================================================ */
 var DATA = {
   porRonda: 6,
@@ -44,14 +44,22 @@ var DATA = {
          a single thing. u999→udictado only changes 'tipo' (the
          range stays at 999). udictado→umiles changes 'tipo' with
          a minimal magnitude jump (999→thousands, the next natural
-         scale). umiles→umillones only changes 'lista'. */
+         scale). umiles→umillones only changes 'lista'.
+         umillones→counter introduces a different *mode* (free
+         exploration up to 10^12 with ±1/±10/±100/±1000 buttons
+         instead of a quiz): the consolidation step after the
+         reading rounds, where the person uses everything they
+         just saw to navigate the full range. The 'max' field
+         here is the upper bound (inclusive); 10^12 = un billón
+         (es) / one trillion (en). */
       picto: '🧱',
       levels: [
         { id: 'u99', tipo: 'bloques', max: 99 },
         { id: 'u999', tipo: 'bloques', max: 999 },
         { id: 'udictado', tipo: 'dictado', max: 999 },
         { id: 'umiles', tipo: 'lectura', lista: 'miles' },
-        { id: 'umillones', tipo: 'lectura', lista: 'millones' }
+        { id: 'umillones', tipo: 'lectura', lista: 'millones' },
+        { id: 'counter', tipo: 'counter', max: 1000000000000 }
       ]
     },
 

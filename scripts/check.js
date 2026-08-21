@@ -30,6 +30,16 @@
       strings.<locale>.js files against each other, so a key that is
       used on the page but never registered in EITHER language would
       pass silently there; this point closes that gap.
+   9. CSS class coverage in tools/<slug>/: every class token emitted
+      from app.js (literal in class="…" / className='…', or
+      concatenated prefix of the shape '<name>-' + …) must resolve
+      to a selector that exists in some .css in the repo. Closes the
+      gap that hid the elevator visual in tools/numbers/ on
+      2026-08-20 (app.js was emitting `piso-row` / `piso-actual`
+      while styles.css had long been renamed to `floor-row` /
+      `current-floor`). Scope: tools/<slug>/{app.js} only — the
+      core stylesheets in assets/css/ are pooled on the CSS side so
+      legitimate shared classes do not trip the check.
    Output: list of failures with the exact file. Exit code 1 if there
    are any, "OK (N checks)" otherwise.
    ============================================================ */
@@ -39,6 +49,7 @@ var fs = require('fs');
 var path = require('path');
 var vm = require('vm');
 var execFileSync = require('child_process').execFileSync;
+var execFile = require('child_process').execFile;
 
 var ROOT = path.join(__dirname, '..');
 var failures = [];
@@ -73,15 +84,28 @@ var jsFiles = []
   .concat(listJs(path.join(ROOT, 'legal')))
   .concat(listJs(path.join(ROOT, 'assets', 'js')));
 
-jsFiles.forEach(function (archivo) {
-  checks += 1;
-  try {
-    execFileSync(process.execPath, ['--check', archivo], { stdio: 'pipe' });
-  } catch (e) {
-    failures.push(rel(archivo) + ': no parsea (node --check) — ' +
-      (e.stderr ? e.stderr.toString().trim().split('\n')[0] : e.message));
-  }
-});
+/* `node --check` is run in parallel across all JS files: each spawn
+   takes ~3 s on Windows due to process startup overhead, so the
+   sequential pass adds up to ~3 min on a repo with many files.
+   Promise.all + execFile keeps the work bounded by the slowest
+   individual check rather than the sum. The handle is saved so
+   step "Result" can wait for the parse jobs before exiting. */
+var parseJobs = Promise.all(jsFiles.map(function (archivo) {
+  return new Promise(function (resolve) {
+    checks += 1;
+    execFile(process.execPath, ['--check', archivo], function (err, stdout, stderr) {
+      if (err) {
+        failures.push(rel(archivo) + ': no parsea (node --check) — ' +
+          (stderr ? stderr.toString().trim().split('\n')[0] : err.message));
+      }
+      resolve();
+    });
+  });
+}));
+/* Run subsequent checks synchronously while the parallel parse
+   jobs settle: their results are independent of step 1, so ordering
+   does not matter as long as `process.exitCode` is set after all
+   of them finish. */
 
 /* --- 2. Standard anatomy of tools/<slug>/ --- */
 var CANONICAL_BASE = ['index.html', 'app.js', 'data.js', 'styles.css'];
@@ -277,9 +301,13 @@ var FORBIDDEN_TERMS = [
   { term: 'menor de edad', match: 'substring' },
   { term: 'menores de edad', match: 'substring' },
   { term: 'personas menores', match: 'substring' },
+  { term: 'menor que', match: 'substring' },
+  { term: 'menores que', match: 'substring' },
   { term: 'minor', match: 'word' },
   { term: 'underage', match: 'word' },
-  { term: 'children', match: 'word' }
+  { term: 'children', match: 'word' },
+  { term: 'paciente', match: 'word' },
+  { term: 'patient', match: 'word' }
 ];
 function isUserFile(archivo) {
   var name = path.basename(archivo).toLowerCase();
@@ -434,11 +462,153 @@ checkUsageVsRegistration(path.join(ROOT, 'site'), 'site/');
 checkUsageVsRegistration(path.join(ROOT, 'settings'), 'settings/');
 checkUsageVsRegistration(path.join(ROOT, 'legal'), 'legal/');
 
-/* --- Result --- */
-if (failures.length) {
-  console.log('FALLOS (' + failures.length + '):');
-  failures.forEach(function (f) { console.log('  - ' + f); });
-  process.exitCode = 1;
-} else {
-  console.log('OK (' + checks + ' checks)');
+/* --- 9. CSS class coverage in tools/<slug>/ ---
+   The repo is mid-rename (apptonomia → calculia, plus the Spanish →
+   English token pass documented in doc/en/RENAME_MAP.md). Rename
+   scripts touch both JS and CSS in lockstep most of the time, but
+   class names injected dynamically from app.js (`class="…"` or
+   `className='…'`, plus `'prefix-' + variable` concatenations) are
+   easy to miss: nothing in the JS or HTML reads the resulting DOM
+   selector, so a typo'd or stale class name is only visible at
+   runtime. This was the exact shape of the bug that hid the
+   elevator visual in tools/numbers/ on 2026-08-20: `piso-row` /
+   `piso-actual` etc. were still being emitted from app.js while
+   styles.css had long been renamed to `floor-row` / `current-floor`.
+
+   Scope: only tools/<slug>/{app.js,styles.css} is cross-checked.
+   site/, settings/ and legal/ are out of scope on purpose — they
+   have little dynamic class emission and a lot of static HTML, so
+   the false-positive rate would be high. The CSS side pools every
+   .css file in the repo (the shared assets/css/*.css sheets count)
+   so tokens that legitimately come from the core stylesheet do not
+   trip the check.
+
+   Two flavours are checked:
+     - Literal classes: any single token in a `class="…"` /
+       `className='…'` literal. Must appear as a top-level
+       selector `.foo` (not as `.foo:hover`, not as a compound
+       `.foo.bar`) in some .css.
+     - Dynamic prefixes: any literal of the shape `'foo-'` that is
+       concatenated with `+` (the typical `'<prefix>-' + counter`
+       pattern). Valid if at least one CSS selector starts with
+       `<prefix>-` in some .css.
+*/
+checks += 1;
+function listCssFiles() {
+  var out = [];
+  function walk(dir) {
+    if (!fs.existsSync(dir)) return;
+    fs.readdirSync(dir, { withFileTypes: true }).forEach(function (entry) {
+      var p = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(p);
+      else if (entry.isFile() && p.endsWith('.css')) out.push(p);
+    });
+  }
+  walk(path.join(ROOT, 'tools'));
+  walk(path.join(ROOT, 'assets', 'css'));
+  walk(path.join(ROOT, 'site'));
+  walk(path.join(ROOT, 'settings'));
+  walk(path.join(ROOT, 'legal'));
+  return out;
 }
+/* Index every class name that appears in any selector across all
+   .css files. Every segment between dots is a class — so
+   `.foo.bar` registers both `foo` and `bar`, `.option-btn.animo`
+   registers both. A name is cut off before any `:`, `[`, or other
+   selector syntax, which keeps pseudo-classes (`.foo:hover`) and
+   attribute filters (`.foo[disabled]`) from counting the suffix
+   as part of the class name. */
+function indexCssSelectors(cssFiles) {
+  var literals = new Set();
+  var prefixes = new Set();
+  /* `\.([A-Za-z][\w-]*)` followed by anything that is NOT a class
+     character (word char or `-`) — i.e. `:`, `[`, `,`, ` `, `>`,
+     `+`, `~`, `{`, end of selector, etc. */
+  var classRe = /\.([A-Za-z][\w-]*)(?=[^\w-]|$)/g;
+  cssFiles.forEach(function (f) {
+    var c = fs.readFileSync(f, 'utf8');
+    var m; classRe.lastIndex = 0;
+    while ((m = classRe.exec(c)) !== null) {
+      var name = m[1];
+      literals.add(name);
+      if (name.indexOf('-') !== -1) prefixes.add(name);
+    }
+  });
+  return { literals: literals, prefixes: prefixes };
+}
+/* From app.js, collect:
+     - literal classes (full tokens inside class="…" / className='…')
+     - dynamic prefixes (string literals of the shape 'foo-' used in
+       a + concatenation, plus the `class="foo "` style tail — same
+       patterns are emitted via `clases += ' foo-marca'` and friends).
+   Only tokens matching the CSS-class shape ([A-Za-z][\w-]*) are
+   considered; anything else (emoji, punctuation, dots in numeric
+   values) is filtered out so the check never reports unrelated
+   string content. */
+function extractDynamicClasses(jsContent) {
+  var literalClasses = new Set();
+  /* `class="…"` / `className='…'` — full tokens. */
+  var reClass = /\b(?:class|className)\s*=\s*['"]([^'"]+)['"]/g;
+  var m;
+  while ((m = reClass.exec(jsContent)) !== null) {
+    m[1].split(/\s+/).forEach(function (t) {
+      if (/^[A-Za-z][\w-]*$/.test(t)) literalClasses.add(t);
+    });
+  }
+  /* Dynamic prefixes of the shape 'foo-' + … used in string
+     concatenation (e.g. `'num-group-' + i`). The trailing dash is
+     required so we do not catch unrelated string literals like
+     `'level-'` that are actually a full token. */
+  var prefixes = new Set();
+  var rePrefix = /'([A-Za-z][\w-]*-)'\s*\+/g;
+  while ((m = rePrefix.exec(jsContent)) !== null) prefixes.add(m[1]);
+  return { literals: literalClasses, prefixes: prefixes };
+}
+var cssIndex = indexCssSelectors(listCssFiles());
+slugs.forEach(function (slug) {
+  var appJs = path.join(toolsDir, slug, 'app.js');
+  if (!fs.existsSync(appJs)) return;
+  var content = fs.readFileSync(appJs, 'utf8');
+  var emitted = extractDynamicClasses(content);
+  var orphanLiterals = [];
+  var orphanPrefixes = [];
+  emitted.literals.forEach(function (cls) {
+    /* A token ending in '-' inside a `class="…"` literal is really
+       a prefix concatenated with the next attribute (e.g. the
+       `class="num-group num-group-…"` pattern), not a full class
+       name. Validate those against the prefix set instead. */
+    if (cls.charAt(cls.length - 1) === '-') {
+      var matchedPrefix = false;
+      cssIndex.prefixes.forEach(function (cssSel) {
+        if (cssSel.indexOf(cls) === 0) matchedPrefix = true;
+      });
+      if (!matchedPrefix) orphanPrefixes.push(cls);
+    } else if (!cssIndex.literals.has(cls)) {
+      orphanLiterals.push(cls);
+    }
+  });
+  emitted.prefixes.forEach(function (p) {
+    var matched = false;
+    cssIndex.prefixes.forEach(function (cssSel) {
+      if (cssSel.indexOf(p) === 0) matched = true;
+    });
+    if (!matched) orphanPrefixes.push(p);
+  });
+  if (orphanLiterals.length || orphanPrefixes.length) {
+    var parts = [];
+    if (orphanLiterals.length) parts.push('clases: ' + orphanLiterals.sort().join(', '));
+    if (orphanPrefixes.length) parts.push('prefijos: ' + orphanPrefixes.sort().join(', '));
+    failures.push('tools/' + slug + '/app.js: clase(s) emitida(s) sin selector CSS correspondiente (' + parts.join('; ') + ')');
+  }
+});
+
+/* --- Result --- */
+parseJobs.then(function () {
+  if (failures.length) {
+    console.log('FALLOS (' + failures.length + '):');
+    failures.forEach(function (f) { console.log('  - ' + f); });
+    process.exitCode = 1;
+  } else {
+    console.log('OK (' + checks + ' checks)');
+  }
+});

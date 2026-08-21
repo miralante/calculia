@@ -99,7 +99,7 @@
     return '<span class="num-color">' + digits(n, opts.highlight) + '</span>';
   }
 
-  function paintSign(s) { return '<span class="paintSign">' + s + '</span>'; }
+  function paintSign(s) { return '<span class="sign">' + s + '</span>'; }
 
   /* ---- Numeric options (3, unique, shuffled) ---- */
 

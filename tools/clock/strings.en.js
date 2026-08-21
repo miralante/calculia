@@ -12,6 +12,8 @@
     contexto: 'It is a moment of the day: breakfast, school, lunch or dinner. On the big kitchen clock you can see what time it is.',
     explicacion: '✅ Well done. Telling the time helps you arrive at school on time, not miss snack time and manage your own time.',
     levelsTitle: 'Choose an activity',
+    modesTitle: 'Choose an activity',
+    otherMode: 'Choose another mechanic',
     whatTime: 'What time is it?',
     clockAria: 'Clock: {texto}',
     endSummary: 'You won {n} stars. Now you have {stars} stars.',
@@ -24,6 +26,38 @@
     incorrectExplanationA: "❌ That is not the time. It's ",
     readHint: '🤔 Try again. Look calmly at the clock.',
     associateHint: '🤔 Try again. Think about that time of day.',
+    setHint: '🤔 Try again. Adjust the time with the buttons.',
+    convertHint: '🤔 Try again. Compare the clock face with the numbers.',
+    convertAnalogToDigital: 'What time does this clock show?',
+    convertDigitalToAnalog: 'Tap the clock that matches this time.',
+    setLabel: 'Set the clock to:',
+    setHour: 'Hour',
+    setMinute: 'Minutes',
+    setIncrement: 'Increment',
+    setDecrement: 'Decrement',
+    setConfirm: 'Check',
+    mode: {
+      read: {
+        name: 'Read the clock',
+        description: 'Look at the clock and pick the right time.',
+        question: 'What time is it?'
+      },
+      set: {
+        name: 'Set the clock',
+        description: 'Read the time and move the hands with the buttons.',
+        question: 'Move the hands to the right time.'
+      },
+      convert: {
+        name: 'Analog ↔ Digital',
+        description: 'Match the analog clock with its digital twin.',
+        question: 'Match the clock with its digital time.'
+      },
+      situations: {
+        name: 'Moments of the day',
+        description: 'Pick the clock that matches each moment of the day.',
+        question: 'What time is this?'
+      }
+    },
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",

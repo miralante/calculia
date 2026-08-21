@@ -32,7 +32,7 @@
 .digit-c { color: var(--mod-emocional); }      /* purple — hundreds */
 .digit-sep { color: var(--color-texto-suave); }
 .digit-pos { color: var(--mod-secuencia); }    /* green — positive scale (above 0) */
-.digit-coma, .digit-dec, .sign { color: var(--mod-memoria); } /* orange — negative scale (below 0) */
+.digit-comma, .digit-dec, .sign { color: var(--mod-memoria); } /* orange — negative scale (below 0) */
 .highlight { text-decoration: underline; text-underline-offset: 6px; }
 .group { display: inline-flex; flex-direction: column; align-items: center; }
 .group-label { font-size: 14px; font-weight: 700; color: var(--color-texto-suave); letter-spacing: 0; }
@@ -122,3 +122,63 @@
   color: var(--color-texto-secundario, #555);
   max-width: 480px;
 }
+
+/* ============================================================
+   Free-exploration counter (numbers/unidades/counter level)
+   ============================================================ */
+.counter-card { padding: 32px 16px; }
+.counter-number {
+  font-size: clamp(48px, 10vw, 96px);
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-align: center;
+  line-height: 1.1;
+  word-break: break-all;
+}
+.counter-controls {
+  display: flex; flex-direction: column; gap: var(--espacio);
+  align-items: center;
+}
+.counter-row {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+}
+.btn-counter {
+  min-width: 88px; min-height: 56px;
+  padding: 8px 16px;
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: var(--texto-base); font-weight: 700;
+  cursor: pointer;
+}
+.btn-counter:hover:not(:disabled) { border-color: var(--mod-razonamiento); }
+.btn-counter:disabled {
+  opacity: 0.4; cursor: not-allowed;
+  background: var(--color-fondo, #f0f0f0);
+}
+.btn-counter.btn-secondary { background: var(--color-fondo, #f0f0f0); }
+.btn-counter-icon { min-width: 64px; }
+.counter-hint {
+  text-align: center; max-width: 560px; margin: 0 auto;
+  color: var(--color-texto-suave);
+}
+.counter-written {
+  max-width: 760px;
+  margin: 0 auto;
+  color: var(--mod-razonamiento);
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Three tints cycle through the digit groups (leftmost = lowest
+   group = tint 0). Soft backgrounds preserve digit contrast while
+   making group boundaries obvious when the separator glyph is hidden.
+   The hues reuse the project's module palette so they harmonize with
+   units/tens/hundreds colours used elsewhere in the activity. */
+.num-group { padding: 0 4px; border-radius: 4px; display: inline-block; }
+.num-group-0 { background: rgba(255, 213, 79, 0.25); }   /* warm yellow */
+.num-group-1 { background: rgba(129, 199, 132, 0.25); }  /* soft green */
+.num-group-2 { background: rgba(179, 157, 219, 0.30); }  /* soft purple */
+

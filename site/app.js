@@ -23,10 +23,6 @@
     '⭐ ' + App.storage.totalStars();
   document.getElementById('totalStars').title = App.i18n.t('yourStars');
 
-  document.getElementById('btnSaludo').addEventListener('click', function () {
-    App.tts.speak(App.i18n.t('saludo'));
-  });
-
   App.i18n.SUPPORTED.forEach(function (loc) {
     var id = LOCALE_BUTTONS[loc];
     var btn = id && document.getElementById(id);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Numbers | Calculia</title>
+  <title>Water Temperature | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
@@ -14,13 +14,13 @@
   <div class="container">
     <header class="tool-header">
       <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
-      <h1 data-i18n="title">🧮 Los Números</h1>
+      <h1 data-i18n="title">🌡️ Temperatura del agua</h1>
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
     <section id="screenMenu" class="stack">
       <div class="row center-row">
-        <p class="instruction" id="instruction" data-i18n="instructionMenu">Elige una actividad.</p>
+        <p class="instruction" id="instruction" data-i18n="instructionMenu">Aprende qué pasa con el agua cuando cambia la temperatura.</p>
       </div>
       <div id="activitiesMenu"></div>
       <p class="extra-note" id="noteExtra"></p>
@@ -36,18 +36,23 @@
     </section>
 
     <section id="screenGame" class="hidden stack">
-      <div class="progress-bar" id="progressBar">
+      <!-- The quiz card / progress bar / options belong to the
+           classic quiz flow; they stay in the DOM but are hidden
+           when a temperature mission is active (free-exploration
+           mode, no question to ask). The thermometer UI replaces
+           them visually. -->
+      <div class="progress-bar hidden" id="progressBar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText">0 / 6</span>
       </div>
 
-      <div class="card centered stack" id="quizCard">
+      <div class="card centered stack hidden" id="quizCard">
         <p class="prompt" id="prompt"></p>
         <div class="visual" id="visual"></div>
         <p class="legend hidden" id="legend"></p>
       </div>
 
-      <div class="stack options" id="options"></div>
+      <div class="stack options hidden" id="options"></div>
 
       <div class="feedback" id="feedback" aria-live="polite"></div>
       <div class="row explanation hidden" id="explanationWrap">
@@ -55,36 +60,32 @@
       </div>
       <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
 
-      <!-- Free-exploration counter level. Shown only when level.tipo === 'counter'.
-           The quiz card, progress bar, options and feedback are hidden by app.js
-           in this mode. No question is asked; the person moves the number with
-           the buttons and exits when ready (+1 star). -->
-      <div id="counterUI" class="hidden stack">
-        <div class="card centered counter-card">
-          <div id="counterNumber" class="counter-number" aria-live="polite"></div>
-        </div>
-        <div class="counter-controls">
-          <div class="counter-row">
-            <button type="button" class="btn-counter" data-step="-1000">−1000</button>
-            <button type="button" class="btn-counter" data-step="-100">−100</button>
-            <button type="button" class="btn-counter" data-step="-10">−10</button>
-            <button type="button" class="btn-counter" data-step="-1">−1</button>
-            <button type="button" class="btn-counter btn-counter-icon" id="counterAudio" aria-label="Read the number aloud">🔊</button>
-            <button type="button" class="btn-counter btn-secondary" id="counterReset">🔄 Start at 0</button>
-          </div>
-          <div class="counter-row">
-            <button type="button" class="btn-counter" data-step="1">+1</button>
-            <button type="button" class="btn-counter" data-step="10">+10</button>
-            <button type="button" class="btn-counter" data-step="100">+100</button>
-            <button type="button" class="btn-counter" data-step="1000">+1000</button>
-            <button type="button" class="btn-counter btn-secondary" id="counterSep"><span id="counterSepLabel">,1,234</span></button>
-            <button type="button" class="btn-counter btn-secondary hidden" id="counterGroups"><span id="counterGroupsLabel">🎨 Colour groups</span></button>
-            <button type="button" class="btn-counter btn-secondary" id="counterWords" aria-pressed="false"><span id="counterWordsLabel">✍️ Show number in words</span></button>
-            <button type="button" class="btn-counter" id="counterExit">✅ Exit</button>
+      <!-- Thermometer + water visual + controls. Visible whenever
+           a temperature mission level is active (tipo
+           'misionEstado' or 'misionExacta'). The big number IS the
+           current temperature; the emoji below it shows the
+           physical state (ice / liquid / steam). -->
+      <div id="thermoUI" class="hidden stack">
+        <div class="card centered thermo-card">
+          <p class="thermo-goal" id="thermoGoal"></p>
+          <div class="thermo-visual">
+            <div id="thermoState" class="thermo-state" aria-hidden="true">💧</div>
+            <div id="thermoNumber" class="thermo-number" aria-live="polite"></div>
+            <p class="thermo-state-label" id="thermoStateLabel"></p>
           </div>
         </div>
-        <p class="counter-written hidden" id="counterWritten" aria-live="polite"></p>
-        <p class="instruction counter-hint" id="counterHint" data-i18n="gen.counterHint"></p>
+        <div class="thermo-controls">
+          <div class="thermo-row">
+            <button type="button" class="btn-thermo" data-step="-10">−10</button>
+            <button type="button" class="btn-thermo" data-step="-1">−1</button>
+            <button type="button" class="btn-thermo btn-thermo-icon" id="thermoAudio" aria-label="Hear the temperature">🔊</button>
+            <button type="button" class="btn-thermo btn-thermo-secondary" id="thermoReset">↺ 0</button>
+            <button type="button" class="btn-thermo" data-step="1">+1</button>
+            <button type="button" class="btn-thermo" data-step="10">+10</button>
+            <button type="button" class="btn-thermo" id="thermoExit">✅ Salir</button>
+          </div>
+        </div>
+        <p class="instruction thermo-hint" id="thermoHint" data-i18n="gen.hint"></p>
       </div>
     </section>
 
@@ -92,10 +93,10 @@
       <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
-      <p id="transfer" class="transfer" data-i18n="transferencia"></p>
+      <p id="transfer" class="transfer" data-i18n="explicacion"></p>
       <button type="button" class="btn btn-secondary hidden" id="btnHarder"></button>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secondary" id="btnOtherLevel" data-i18n="otherLevel">Elegir otro paso</button>
+      <button type="button" class="btn btn-secondary" id="btnOtherLevel" data-i18n="otherLevel">Elegir otro nivel</button>
       <button type="button" class="btn btn-secondary" id="btnOtherActivity" data-i18n="btnOtherActivity">Otra actividad</button>
       <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
