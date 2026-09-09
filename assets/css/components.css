@@ -371,9 +371,11 @@ button.dinero:disabled { cursor: default; }
   .container {
     padding-left: var(--espacio);
     padding-right: var(--espacio);
+    padding-top: var(--espacio);
   }
+  .tarjeta { margin-block: 8px; }
+  .opciones, .stack { gap: 8px; }
   .btn { padding: 10px 20px; }
-  .tarjeta { padding: var(--espacio); }
 }
 
 /* ---- Responsive: tablet (641px–1023px) ----
