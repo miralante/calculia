@@ -49,6 +49,8 @@
       successSteam:   '♨️ It boiled! The water became steam.',
       successBalance: '🌡️ Exactly 20 °C! Room temperature.',
       hint: 'Press + or − to change the temperature. Watch the water transform.',
+      temperatureSuggestionUp: '💡 Suggestion: go up to {temp} °C.',
+      temperatureSuggestionDown: '💡 Suggestion: go down to {temp} °C.',
       resumenFinal: 'Mission complete. You now have {estrellas} stars.',
       endSummary: 'Mission complete. You now have {estrellas} stars.',
       ttsTemp:   '{temp} degrees',

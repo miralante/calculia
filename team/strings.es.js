@@ -1,0 +1,225 @@
+/* ============================================================
+   Calculia — Textos de la Guía del equipo de apoyo (ES)
+   Language-specific file. Loaded conditionally from index.html
+   based on App.i18n.locale().
+   ============================================================ */
+(function () {
+  'use strict';
+
+  App.i18n.register({
+    "pageTitle": 'Guía para el equipo de apoyo',
+    "routeNotice": 'Página para el equipo de apoyo. No aparece en el menú de la aplicación: solo se llega escribiendo esta dirección.',
+    "title": 'Calculia — Guía para el equipo de apoyo',
+    "intro1": 'Información para ',
+    "introStrong": 'familias, terapeutas ocupacionales, logopedas y profesorado de apoyo',
+    "intro2": ' sobre los objetivos del proyecto, las áreas que se trabajan y el propósito de cada actividad. Incluye una nota técnica para el agente de inteligencia artificial que mantiene el código.',
+    "navProject": 'El proyecto',
+    "navDesign": 'Cómo está diseñada',
+    "navAreas": 'Áreas y actividades',
+    "navProgress": 'Progreso y privacidad',
+    "navSupport": 'Cómo acompañar',
+    "navExceptions": 'Habilidad pura',
+    "navAgentAI": 'Nota técnica (IA)',
+    "projectTitle": 'El proyecto',
+    "projectP1a": 'Calculia es una aplicación web de ',
+    "projectP1Strong1": 'cálculo y razonamiento lógico',
+    "projectP1b": ' pensada para personas con discapacidad intelectual. Su objetivo es ofrecer actividades cortas y visuales de ',
+    "projectP1Strong2": 'matemáticas del día a día',
+    "projectP1c": ' (sumar, restar, manejar dinero, leer la hora, contar, comparar) que la persona pueda hacer de forma autónoma, sin un profesional al lado.',
+    "projectLi1Label": 'Autonomía',
+    "projectLi1Text": 'todo se entiende y se usa sin ayuda. Funciona sin conexión (se puede instalar como aplicación), sin registro y sin coste.',
+    "projectLi2Label": 'Funcional, no académico',
+    "projectLi2Text": 'las actividades entrenan habilidades prácticas — contar el cambio, leer la hora, distinguir monedas, comparar precios — más que el cálculo abstracto.',
+    "projectLi3Label": 'Razonamiento y lógica',
+    "projectLi3Text": 'series, patrones, acertijos, qué sobra y puzzles, con dificultad graduada y sin presión.',
+    "projectP2a": 'En la interfaz que ve la persona usuaria ',
+    "projectP2Strong": 'nunca',
+    "projectP2b": ' se usa lenguaje clínico ("paciente", "terapia", "discapacidad"). Esta página es la única con ese vocabulario, porque va dirigida al equipo de apoyo.',
+    "designTitle": 'Cómo está diseñada',
+    "designIntro": 'Todas las pantallas cumplen estos principios. Si observáis algo que no los cumple, es un error que hay que corregir.',
+    "designLi1Label": 'Lectura Fácil',
+    "designLi1Text": 'frases cortas, una idea por frase, sin metáforas ni ironía.',
+    "designLi2Label": 'Sin presión',
+    "designLi2Text": 'no hay cronómetros visibles, ni puntuación negativa, ni "game over". El error se responde con ánimo ("Casi. ¡Inténtalo otra vez!"), nunca con castigo.',
+    "designLi3Label": 'Refuerzo positivo',
+    "designLi3Text": 'inmediato y breve al acertar. Las estrellas ⭐ solo suman.',
+    "designLi4Label": 'Sin comparación entre personas',
+    "designLi4Text": 'no hay rankings ni competición.',
+    "designLi5Label": 'Accesibilidad',
+    "designLi5Text": 'botones grandes (mínimo 64 píxeles), texto grande, alto contraste, audio 🔊 solo cuando la gamificación o el diseño de la actividad lo requiera (p. ej. escuchar el enunciado de un acertijo), navegable con teclado, animaciones que se desactivan si el sistema lo pide.',
+    "designLi6Label": 'Pocas opciones a la vez',
+    "designLi6Text": 'máximo 4–6 opciones visibles y una acción principal por pantalla.',
+    "areasTitle": 'Las áreas de trabajo y sus actividades',
+    "areasIntro": 'El menú principal agrupa las actividades en dos módulos (🧮 Matemáticas y 🧩 Razonamiento y lógica), cada uno con su color. Aquí se indica qué trabaja cada actividad desde el punto de vista del cálculo funcional y el razonamiento.',
+    "colActivity": 'Actividad',
+    "colDoes": 'Qué hace la persona',
+    "colWorks": 'Qué se trabaja',
+    "colDaily": 'En el día a día',
+    "module1Title": '🧮 Matemáticas',
+    "module1Intro": 'Números, cantidades, cálculo mental, fracciones, medidas, dinero, reloj y números romanos.',
+    "module2Title": '🧩 Razonamiento y lógica',
+    "module2Intro": 'Series, patrones, acertijos, qué sobra, historias y puzzles de encaje.',
+    activity: {
+      "numbers": {
+        "name": 'Los Números',
+        "does": 'Lee, ordena y compara números; cuenta hacia delante y hacia atrás; identifica la posición (anterior, siguiente, entre dos).',
+        "works": 'Sentido numérico, conteo, orden, comparación y correspondencia uno-a-uno.',
+        "daily": 'Contad juntos en casa: "hay 4 platos en la mesa", "el 3 está entre el 2 y el 4". Jugad a las cartas que tengan número mayor.'
+      },
+      "quantities": {
+        "name": 'Cantidades',
+        "does": 'Compara conjuntos ("¿dónde hay más?"), mide pesos y longitudes y elige la cantidad que corresponde a una pregunta.',
+        "works": 'Comparación de cantidades, primeras medidas, vocabulario más/menos/igual/mucho/poco.',
+        "daily": 'En la compra, preguntadle "¿cuántas manzanas cogemos? ¿y si cogemos 2 más?". Pesad juntos la fruta.'
+      },
+      "math-tables": {
+        "name": 'Tablas de Multiplicar',
+        "does": 'Practica las tablas del 2 al 10 con tres niveles: elige respuesta entre opciones, completa el resultado y escribe el resultado tecleando.',
+        "works": 'Memoria de las tablas, automatización del cálculo, asociación número×número con su resultado.',
+        "daily": 'Llevad las tablas a la vida real: 3 bandejas con 4 pasteles son 12, 4 coches con 2 ruedas son 8.'
+      },
+      "mental-math": {
+        "name": 'Suma y Resta Mental',
+        "does": 'Resuelve sumas y restas cada vez más largas (de 1 a 3 cifras), con y sin llevada, eligiendo la respuesta correcta.',
+        "works": 'Cálculo mental, estrategias de descomposición (10 + n), automatización de las operaciones básicas.',
+        "daily": 'Calculad juntos sin papel: "¿cuánto es 23 + 14? ¿y si añadimos 2 más?". Sumad los precios antes de pagar.'
+      },
+      "fractions-measures": {
+        "name": 'Fracciones y Medidas',
+        "does": 'Reconoce medios, cuartos y tercios; mide longitudes y pesos eligiendo la unidad (cm, m, g, kg) y compara dos medidas.',
+        "works": 'Fracciones como reparto, conversión entre unidades, vocabulario de medida (más largo, más pesado).',
+        "daily": 'Partid una pizza o un bizcocho en mitades y cuartos. Al cocinar, medid con tazas y cucharas ("medio kilo de harina").'
+      },
+      "money": {
+        "name": 'El Dinero',
+        "does": 'Reconoce monedas y billetes (céntimos y euros), cuenta un conjunto de dinero y decide si le llega para comprar algo.',
+        "works": 'Reconocimiento de monedas y billetes, suma mental con decimales, sentido del valor.',
+        "daily": 'Pagad juntos en la tienda: que entregue el dinero, cuente el cambio y compruebe que está bien.'
+      },
+      "wallet": {
+        "name": 'El Monedero',
+        "does": 'Usa el dinero como en la vida real: cuenta un monedero, paga justo, paga de más, comprueba el cambio y calcula cuánto le falta para comprar algo (la hucha).',
+        "works": 'Operaciones reales con dinero, sentido del cambio, ahorro y comparación de precios.',
+        "daily": 'Dadle un presupuesto pequeño real y acompañadle a gastarlo: que decida, pague y compruebe el cambio él mismo.'
+      },
+      "temperature": {
+        "name": 'Temperatura del Agua',
+        "does": 'Lee el termómetro del agua (fría, tibia, caliente, quemando), asocia cada valor a una situación cotidiana y elige la temperatura correcta para cada tarea.',
+        "works": 'Lectura del termómetro, vocabulario de temperatura, seguridad en la cocina y el baño.',
+        "daily": 'Antes de un baño o de abrir el grifo, decidid juntos: "el agua tiene que estar tibia, no quemando".'
+      },
+      "riddles": {
+        "name": 'Acertijos',
+        "does": 'Lee o escucha un acertijo corto y elige entre 3 opciones cuál es la respuesta.',
+        "works": 'Comprensión lectora, deducción, atención al detalle y vocabulario.',
+        "daily": 'Contad acertijos en familia, sin prisa. Si se atasca, dejad que piense; la pista enseña la estrategia.'
+      },
+      "patterns": {
+        "name": 'Patrones',
+        "does": 'Completa una serie visual o numérica (colores, formas, números) eligiendo la pieza que sigue.',
+        "works": 'Reconocimiento de regularidades, anticipación, razonamiento inductivo.',
+        "daily": 'Buscad patrones en casa: las baldosas, los números de los portales, los días de la semana.'
+      },
+      "odd-one-out": {
+        "name": '¿Qué No Encaja?',
+        "does": 'Mira un grupo de 4 imágenes o palabras y elige la que no pertenece a la categoría.',
+        "works": 'Categorización semántica, razonamiento por descarte, vocabulario.',
+        "daily": 'En la compra, jugad a "¿cuál de estos no es una fruta?" o "¿cuál no va con los demás?".'
+      },
+      "stories": {
+        "name": 'Historias',
+        "does": 'Lee un pequeño relato cotidiano (comprar, ir al médico, esperar el autobús) y responde a preguntas de comprensión (quién, qué, dónde, por qué).',
+        "works": 'Comprensión lectora, vocabulario cotidiano, secuencia narrativa, inferencia básica.',
+        "daily": 'Leed juntos una receta, una carta o un cartel. Preguntadle quién aparece, qué pasa primero y qué después.'
+      },
+      "roman-numerals": {
+        "name": 'Números Romanos',
+        "does": 'Aprende los símbolos (I, V, X, L, C, D, M) y los combina para leer números romanos del 1 al 1000, con y sin sustraer.',
+        "works": 'Reglas del sistema romano, equivalencia con el sistema decimal, atención a las reglas de sustracción.',
+        "daily": 'Buscad números romanos en la calle: en los relojes antiguos, en los nombres de reyes, en las fachadas de edificios.'
+      },
+      "clock": {
+        "name": 'El Reloj',
+        "does": 'Lee la hora en un reloj analógico, digital o de palabras; pone las agujas a una hora; empareja el reloj analógico con su hora digital; y asocia cada momento del día (desayuno, comida, cena…) con la hora correcta.',
+        "works": 'Orientación temporal, comprensión del formato analógico y digital, vocabulario del tiempo (en punto, y cuarto, y media, menos cuarto).',
+        "daily": 'Preguntadle la hora que marca el reloj de casa o del cole y comprobad juntos si la sabe decir.'
+      },
+      "puzzle": {
+        "name": 'Puzzle',
+        "does": 'Encaja piezas de un puzzle eligiendo la pieza correcta entre varias (por color, forma o cantidad de elementos).',
+        "works": 'Atención al detalle, percepción visual, discriminación por colores y formas, planificación espacial.',
+        "daily": 'Haced puzzles reales juntos, empezando por pocos piezas (4, 6, 12) y subiendo según vaya cogiendo soltura.'
+      }
+    },
+    "scopeNote1": 'Fuera del alcance',
+    "scopeNote2": ' de una web autónoma: álgebra, ecuaciones y fracciones complejas (mejor con papel y un profesional), estadística y probabilidad (requieren conceptos abstractos) y cálculo escrito largo (mejor con papel y un método explicado en clase).',
+    "progressTitle": 'Progreso y privacidad',
+    "progressLi1a": 'El progreso (estrellas, niveles completados, ajustes de texto) se guarda ',
+    "progressLi1Strong": 'solo en el navegador del dispositivo',
+    "progressLi1b": ' (localStorage, con el prefijo "calculia:"). No sale de ahí.',
+    "progressLi2Strong": 'No se piden ni almacenan datos personales',
+    "progressLi2b": '. No hay cuentas, cookies ni analítica. La única preferencia guardada es el tamaño de letra elegido en Ajustes.',
+    "progressLi3": 'Consecuencia práctica: si se cambia de dispositivo o de navegador, o se borran los datos de navegación, el progreso empieza de cero. Para hacer seguimiento, usad siempre el mismo dispositivo y navegador.',
+    "progressLi4a": 'Para borrar el idioma y el tamaño de letra (o restablecer la aplicación entera), hay una',
+    "progressLi4Link": 'página de ajustes',
+    "progressLi4b": 'que, como esta guía, no aparece en el menú de la aplicación.',
+    "progressLi5": 'Las estrellas ⭐ del menú principal suman las de todas las actividades: son un refuerzo, no una evaluación.',
+    "supportTitle": 'Cómo acompañar sin quitar autonomía',
+    "supportLi1a": 'La app está pensada para usarse ',
+    "supportLi1Strong": 'sin ayuda',
+    "supportLi1b": '. Si la persona pide apoyo, acompañad la primera vez y retiraos progresivamente.',
+    "supportLi2": 'Dejad que elija la actividad. El orden del menú no es un itinerario obligatorio.',
+    "supportLi3": 'No corrijáis el error antes que la app: el mensaje de ánimo y el reintento forman parte del entrenamiento.',
+    "supportLi4": 'Cada actividad tiene niveles: empezad por el más fácil aunque parezca sencillo; terminar con éxito refuerza más que "estar a la altura".',
+    "supportLi5": 'Si la persona se atasca, dejad que pruebe otra vez o que cambie a otra actividad. Volver más tarde con la cabeza descansada suele funcionar mejor que forzar.',
+    "exceptionsTitle": 'Habilidad pura: decisión de diseño priorizada',
+    "exceptionsIntro": 'La mayoría de actividades de Calculia siguen el contrato de cálculo funcional: una escena reconocible (una tienda, un termómetro, un reloj), una pregunta clara, feedback socrático y cierre con transferencia a la vida real. Las siguientes actividades son una excepción documentada: son ejercicios perceptivos o de razonamiento puro donde convertir el enunciado en una escena cotidiana confundía el objetivo didáctico. Mantienen el resto de principios del producto (sin presión, sin castigo, con refuerzo positivo), pero no exponen la transferencia explícita a la vida real en cada ronda.',
+    "exceptionRiddles": 'Acertijos · comprensión lectora y deducción a partir de un texto fijo.',
+    "exceptionPatterns": 'Patrones · reconocimiento de regularidades visuales o numéricas.',
+    "exceptionOddOneOut": 'Qué no encaja · categorización por descarte, sin escena.',
+    "exceptionStories": 'Historias · comprensión lectora sobre relatos cortos.',
+    "exceptionPuzzle": 'Puzzle · percepción visual y encaje de piezas, sin cálculo.',
+    "exceptionRomanNumerals": 'Números romanos · aprendizaje de un sistema simbólico, no cálculo funcional.',
+    "exceptionsNote": 'La regla general sigue siendo el cálculo funcional: cualquier actividad nueva que represente un cálculo o razonamiento aplicado a una situación cotidiana debe incorporar el contrato completo. Esta lista se revisa y actualiza junto con el repositorio (git log contiene el histórico de cada inclusión y exclusión).',
+    "agentTitle": 'Nota técnica para el agente de IA que programa la app',
+    "agentP1a": 'Si eres un agente de codificación trabajando en este repositorio, las fuentes de verdad son',
+    "agentP1code": 'CLAUDE.md',
+    "agentP1b": '(flujo operativo para agentes IA) y el',
+    "agentP1Link": 'mapa de documentación',
+    "agentP1c": 'de',
+    "agentP1code2": 'doc/',
+    "agentP1d": '. Resumen no negociable:',
+    "agentLi1": 'HTML + CSS + JavaScript vanilla. Sin frameworks, sin build, sin backend, sin dependencias de ejecución. Persistencia solo en localStorage con prefijo "calculia:".',
+    "agentLi2": 'Interfaz de usuario en español de España e inglés, en Lectura Fácil, sin lenguaje clínico y sin mecánicas de presión o competición. Las 10 reglas de accesibilidad de CLAUDE.md son obligatorias.',
+    "agentLi3a": 'Cada actividad vive en',
+    "agentLi3code1": 'tools/<slug>/',
+    "agentLi3b": 'con',
+    "agentLi3code2": 'index.html',
+    "agentLi3c": ',',
+    "agentLi3code3": 'app.js',
+    "agentLi3code4": '(lógica),',
+    "agentLi3code5": 'data.js',
+    "agentLi3code6": '(datos) y',
+    "agentLi3code7": 'styles.css',
+    "agentLi3code8": '; usa los módulos compartidos',
+    "agentLi3code9": 'window.App.*',
+    "agentLi3code10": 'de',
+    "agentLi3code11": 'assets/js/',
+    "agentLi3code12": '.',
+    "agentLi4a": 'Al añadir o tocar archivos: actualizar la lista de caché y la versión de',
+    "agentLi4code": 'sw.js',
+    "agentLi4b": '.',
+    "agentLi5a": 'Esta página (',
+    "agentLi5code1": 'team/',
+    "agentLi5b": ') es deliberadamente',
+    "agentLi5Strong": 'una ruta oculta',
+    "agentLi5c": ', igual que',
+    "agentLi5code2": 'settings/',
+    "agentLi5d": '(ver/borrar',
+    "agentLi5code3": 'localStorage',
+    "agentLi5e": '): no las enlaces desde',
+    "agentLi5code4": 'site/index.html',
+    "agentLi5f": 'ni desde ninguna actividad. Mantén esta guía actualizada cuando se añadan actividades nuevas.',
+    "footerActivities": 'Ir a las actividades'
+  }, 'es');
+})();

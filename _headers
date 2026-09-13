@@ -103,7 +103,7 @@
   Cache-Control: public, max-age=0, must-revalidate
 /site/index.html
   Cache-Control: public, max-age=0, must-revalidate
-/settings/index.html
+/config/index.html
   Cache-Control: public, max-age=0, must-revalidate
 /legal/index.html
   Cache-Control: public, max-age=0, must-revalidate
@@ -126,11 +126,11 @@
 /site/strings.*
   Cache-Control: public, max-age=31536000, immutable
 
-/settings/styles.css
+/config/styles.css
   Cache-Control: public, max-age=300
-/settings/app.js
+/config/app.js
   Cache-Control: public, max-age=300
-/settings/strings.*
+/config/strings.*
   Cache-Control: public, max-age=31536000, immutable
 
 /legal/styles.css

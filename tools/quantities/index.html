@@ -62,10 +62,6 @@
 
           <!-- 3 options para descomponer (máx. 3 por SPEC §6 regla 11) -->
           <div id="optionsGrid" class="options-grid hidden" aria-label="Opciones"></div>
-
-          <button type="button" class="btn btn-audio hidden" id="btnEscuchar"
-                  data-i18n-aria="audioAria" aria-label="Escuchar el número">🔊</button>
-
           <p class="feedback" id="feedback" aria-live="polite"></p>
           <button type="button" class="btn" id="checkAnswer" data-i18n="check">Comprobar</button>
           <button type="button" class="btn hidden" id="nextTask" data-i18n="core.next">Siguiente →</button>
@@ -83,14 +79,11 @@
         <button type="button" class="btn btn-secondary" id="chooseAnother" data-i18n="chooseAnother">Elegir otra práctica</button>
       </section>
     </main>
-    <footer class="pie-app">
-      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Protección de datos</a>
-    </footer>
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
 
   <script src="../../assets/js/utils.js"></script>
   <script src="../../assets/js/i18n.js"></script>
-  <script src="../../assets/js/tts.js"></script>
   <script src="../../assets/js/storage.js"></script>
   <script src="../../assets/js/feedback.js"></script>
   <script src="strings.es.js"></script>

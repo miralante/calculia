@@ -13,6 +13,15 @@ node_modules/
 /_tmp_*.txt
 /scripts/_tmp_*.js
 /scripts/_tmp_*.txt
+# one-shot Spanish→English rename helpers (migration already applied)
+/scripts/apply-rename-block.js
+/scripts/rename-app.js
+/scripts/rename-html-css.js
+/scripts/rename-shape.js
+/scripts/final-pass.js
+# old backup of scripts/check.js kept after the rename rewrite
+/scripts/_check_orig.js
+/scripts/check.out
 /diff-fm.txt
 .playwright-mcp/
 

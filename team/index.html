@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="pageTitle">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía para el equipo de apoyo | Calculia</title>
+  <!-- Hidden route: not linked from the main menu and should not be indexed.
+       Aimed at families, therapists, teachers, and the AI agent that codes the app. -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container guia">
+    <header class="cabecera-guia">
+      <div class="idioma-selector" role="group" aria-label="Elegir idioma">
+        <button type="button" class="btn-idioma" id="btnIdiomaEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
+        <button type="button" class="btn-idioma" id="btnIdiomaEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
+      </div>
+      <p class="aviso-ruta" data-i18n="routeNotice">Página para el equipo de apoyo. No aparece en el menú de la aplicación:
+        solo se llega escribiendo esta dirección.</p>
+      <h1 data-i18n="title">Calculia — Guía para el equipo de apoyo</h1>
+      <p class="entradilla"><span data-i18n="intro1">Información para </span><strong data-i18n="introStrong">familias, terapeutas ocupacionales, logopedas y profesorado de apoyo</strong><span data-i18n="intro2">
+        sobre los objetivos del proyecto, las áreas que se trabajan y el propósito de cada actividad. Incluye una nota técnica para el agente de inteligencia artificial que mantiene el código.</span></p>
+      <nav class="indice" aria-label="Índice de la guía">
+        <a href="#proyecto" data-i18n="navProject">El proyecto</a>
+        <a href="#diseno" data-i18n="navDesign">Cómo está diseñada</a>
+        <a href="#areas" data-i18n="navAreas">Áreas y actividades</a>
+        <a href="#progreso" data-i18n="navProgress">Progreso y privacidad</a>
+        <a href="#acompanar" data-i18n="navSupport">Cómo acompañar</a>
+        <a href="#excepciones" data-i18n="navExceptions">Habilidad pura</a>
+        <a href="#agente-ia" data-i18n="navAgentAI">Nota técnica (IA)</a>
+      </nav>
+    </header>
+
+    <main class="pila">
+
+      <section id="proyecto" class="card">
+        <h2 data-i18n="projectTitle">El proyecto</h2>
+        <p><span data-i18n="projectP1a">Calculia es una aplicación web de </span><strong data-i18n="projectP1Strong1">cálculo y razonamiento lógico</strong><span data-i18n="projectP1b"> pensada para personas con
+          discapacidad intelectual. Su objetivo es ofrecer actividades cortas y visuales de </span><strong data-i18n="projectP1Strong2">matemáticas del día a día</strong><span data-i18n="projectP1c">
+          (sumar, restar, manejar dinero, leer la hora, contar, comparar) que la persona pueda hacer de forma autónoma, sin un profesional al lado.</span></p>
+        <ul>
+          <li><strong data-i18n="projectLi1Label">Autonomía</strong>: <span data-i18n="projectLi1Text">todo se entiende y se usa sin ayuda. Funciona sin conexión
+            (se puede instalar como aplicación), sin registro y sin coste.</span></li>
+          <li><strong data-i18n="projectLi2Label">Funcional, no académico</strong>: <span data-i18n="projectLi2Text">las actividades entrenan habilidades prácticas — contar el cambio, leer la hora, distinguir monedas, comparar precios — más que el cálculo abstracto.</span></li>
+          <li><strong data-i18n="projectLi3Label">Razonamiento y lógica</strong>: <span data-i18n="projectLi3Text">series, patrones, acertijos, qué sobra y puzzles, con dificultad graduada y sin presión.</span></li>
+        </ul>
+        <p><span data-i18n="projectP2a">En la interfaz que ve la persona usuaria </span><strong data-i18n="projectP2Strong">nunca</strong><span data-i18n="projectP2b"> se usa lenguaje clínico
+          ("paciente", "terapia", "discapacidad"). Esta página es la única con ese vocabulario,
+          porque va dirigida al equipo de apoyo.</span></p>
+      </section>
+
+      <section id="diseno" class="card">
+        <h2 data-i18n="designTitle">Cómo está diseñada</h2>
+        <p data-i18n="designIntro">Todas las pantallas cumplen estos principios. Si observáis algo que no los cumple,
+          es un error que hay que corregir.</p>
+        <ul>
+          <li><strong data-i18n="designLi1Label">Lectura Fácil</strong>: <span data-i18n="designLi1Text">frases cortas, una idea por frase, sin metáforas ni ironía.</span></li>
+          <li><strong data-i18n="designLi2Label">Sin presión</strong>: <span data-i18n="designLi2Text">no hay cronómetros visibles, ni puntuación negativa, ni "game over".
+            El error se responde con ánimo ("Casi. ¡Inténtalo otra vez!"), nunca con castigo.</span></li>
+          <li><strong data-i18n="designLi3Label">Refuerzo positivo</strong> <span data-i18n="designLi3Text">inmediato y breve al acertar. Las estrellas ⭐ solo suman.</span></li>
+          <li><strong data-i18n="designLi4Label">Sin comparación entre personas</strong>: <span data-i18n="designLi4Text">no hay rankings ni competición.</span></li>
+          <li><strong data-i18n="designLi5Label">Accesibilidad</strong>: <span data-i18n="designLi5Text">botones grandes (mínimo 64 píxeles), texto grande, alto
+            contraste, audio 🔊 solo cuando la gamificación o el diseño de la actividad lo requiera
+            (p. ej. escuchar el enunciado de un acertijo), navegable con teclado,
+            animaciones que se desactivan si el sistema lo pide.</span></li>
+          <li><strong data-i18n="designLi6Label">Pocas opciones a la vez</strong>: <span data-i18n="designLi6Text">máximo 4–6 opciones visibles y una acción
+            principal por pantalla.</span></li>
+        </ul>
+      </section>
+
+      <section id="areas" class="pila">
+        <h2 data-i18n="areasTitle">Las áreas de trabajo y sus actividades</h2>
+        <p data-i18n="areasIntro">El menú principal agrupa las actividades en dos módulos (🧮 Matemáticas y 🧩 Razonamiento y lógica), cada uno con su color.
+          Aquí se indica qué trabaja cada actividad desde el punto de vista del cálculo funcional y el razonamiento.</p>
+
+        <article class="card modulo-guia" style="--acento: var(--mod-razonamiento);">
+          <h3 data-i18n="module1Title">🧮 Matemáticas</h3>
+          <p data-i18n="module1Intro">Números, cantidades, cálculo mental, fracciones, medidas, dinero, reloj y números romanos.</p>
+          <table>
+            <thead><tr><th data-i18n="colActivity">Actividad</th><th data-i18n="colDoes">Qué hace la persona</th><th data-i18n="colWorks">Qué se trabaja</th><th data-i18n="colDaily">En el día a día</th></tr></thead>
+            <tbody>
+              <tr><td data-i18n="activity.numbers.name">Los Números</td><td data-i18n="activity.numbers.does">Lee, ordena y compara números; cuenta hacia delante y hacia atrás; identifica la posición (anterior, siguiente, entre dos).</td>
+                <td data-i18n="activity.numbers.works">Sentido numérico, conteo, orden, comparación y correspondencia uno-a-uno.</td>
+                <td data-i18n="activity.numbers.daily">Contad juntos en casa: "hay 4 platos en la mesa", "el 3 está entre el 2 y el 4". Jugad a las cartas que tengan número mayor.</td></tr>
+              <tr><td data-i18n="activity.quantities.name">Cantidades</td><td data-i18n="activity.quantities.does">Compara conjuntos ("¿dónde hay más?"), mide pesos y longitudes y elige la cantidad que corresponde a una pregunta.</td>
+                <td data-i18n="activity.quantities.works">Comparación de cantidades, primeras medidas, vocabulario más/menos/igual/mucho/poco.</td>
+                <td data-i18n="activity.quantities.daily">En la compra, preguntadle "¿cuántas manzanas cogemos? ¿y si cogemos 2 más?". Pesad juntos la fruta.</td></tr>
+              <tr><td data-i18n="activity.math-tables.name">Tablas de Multiplicar</td><td data-i18n="activity.math-tables.does">Practica las tablas del 2 al 10 con tres niveles: elige respuesta entre opciones, completa el resultado y escribe el resultado tecleando.</td>
+                <td data-i18n="activity.math-tables.works">Memoria de las tablas, automatización del cálculo, asociación número×número con su resultado.</td>
+                <td data-i18n="activity.math-tables.daily">Llevad las tablas a la vida real: 3 bandejas con 4 pasteles son 12, 4 coches con 2 ruedas son 8.</td></tr>
+              <tr><td data-i18n="activity.mental-math.name">Suma y Resta Mental</td><td data-i18n="activity.mental-math.does">Resuelve sumas y restas cada vez más largas (de 1 a 3 cifras), con y sin llevada, eligiendo la respuesta correcta.</td>
+                <td data-i18n="activity.mental-math.works">Cálculo mental, estrategias de descomposición (10 + n), automatización de las operaciones básicas.</td>
+                <td data-i18n="activity.mental-math.daily">Calculad juntos sin papel: "¿cuánto es 23 + 14? ¿y si añadimos 2 más?". Sumad los precios antes de pagar.</td></tr>
+              <tr><td data-i18n="activity.fractions-measures.name">Fracciones y Medidas</td><td data-i18n="activity.fractions-measures.does">Reconoce medios, cuartos y tercios; mide longitudes y pesos eligiendo la unidad (cm, m, g, kg) y compara dos medidas.</td>
+                <td data-i18n="activity.fractions-measures.works">Fracciones como reparto, conversión entre unidades, vocabulario de medida (más largo, más pesado).</td>
+                <td data-i18n="activity.fractions-measures.daily">Partid una pizza o un bizcocho en mitades y cuartos. Al cocinar, medid con tazas y cucharas ("medio kilo de harina").</td></tr>
+              <tr><td data-i18n="activity.money.name">El Dinero</td><td data-i18n="activity.money.does">Reconoce monedas y billetes (céntimos y euros), cuenta un conjunto de dinero y decide si le llega para comprar algo.</td>
+                <td data-i18n="activity.money.works">Reconocimiento de monedas y billetes, suma mental con decimales, sentido del valor.</td>
+                <td data-i18n="activity.money.daily">Pagad juntos en la tienda: que entregue el dinero, cuente el cambio y compruebe que está bien.</td></tr>
+              <tr><td data-i18n="activity.wallet.name">El Monedero</td><td data-i18n="activity.wallet.does">Usa el dinero como en la vida real: cuenta un monedero, paga justo, paga de más, comprueba el cambio y calcula cuánto le falta para comprar algo (la hucha).</td>
+                <td data-i18n="activity.wallet.works">Operaciones reales con dinero, sentido del cambio, ahorro y comparación de precios.</td>
+                <td data-i18n="activity.wallet.daily">Dadle un presupuesto pequeño real y acompañadle a gastarlo: que decida, pague y compruebe el cambio él mismo.</td></tr>
+              <tr><td data-i18n="activity.temperature.name">Temperatura del Agua</td><td data-i18n="activity.temperature.does">Lee el termómetro del agua (fría, tibia, caliente, quemando), asocia cada valor a una situación cotidiana y elige la temperatura correcta para cada tarea.</td>
+                <td data-i18n="activity.temperature.works">Lectura del termómetro, vocabulario de temperatura, seguridad en la cocina y el baño.</td>
+                <td data-i18n="activity.temperature.daily">Antes de un baño o de abrir el grifo, decidid juntos: "el agua tiene que estar tibia, no quemando".</td></tr>
+              <tr><td data-i18n="activity.roman-numerals.name">Números Romanos</td><td data-i18n="activity.roman-numerals.does">Aprende los símbolos (I, V, X, L, C, D, M) y los combina para leer números romanos del 1 al 1000, con y sin sustraer.</td>
+                <td data-i18n="activity.roman-numerals.works">Reglas del sistema romano, equivalencia con el sistema decimal, atención a las reglas de sustracción.</td>
+                <td data-i18n="activity.roman-numerals.daily">Buscad números romanos en la calle: en los relojes antiguos, en los nombres de reyes, en las fachadas de edificios.</td></tr>
+              <tr><td data-i18n="activity.clock.name">El Reloj</td><td data-i18n="activity.clock.does">Lee la hora en un reloj analógico, digital o de palabras; pone las agujas a una hora; empareja el reloj analógico con su hora digital; y asocia cada momento del día (desayuno, comida, cena…) con la hora correcta.</td>
+                <td data-i18n="activity.clock.works">Orientación temporal, comprensión del formato analógico y digital, vocabulario del tiempo (en punto, y cuarto, y media, menos cuarto).</td>
+                <td data-i18n="activity.clock.daily">Preguntadle la hora que marca el reloj de casa o del cole y comprobad juntos si la sabe decir.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card modulo-guia" style="--acento: var(--mod-memoria);">
+          <h3 data-i18n="module2Title">🧩 Razonamiento y lógica</h3>
+          <p data-i18n="module2Intro">Series, patrones, acertijos, qué sobra, historias y puzzles de encaje.</p>
+          <table>
+            <thead><tr><th data-i18n="colActivity">Actividad</th><th data-i18n="colDoes">Qué hace la persona</th><th data-i18n="colWorks">Qué se trabaja</th><th data-i18n="colDaily">En el día a día</th></tr></thead>
+            <tbody>
+              <tr><td data-i18n="activity.riddles.name">Acertijos</td><td data-i18n="activity.riddles.does">Lee o escucha un acertijo corto y elige entre 3 opciones cuál es la respuesta.</td>
+                <td data-i18n="activity.riddles.works">Comprensión lectora, deducción, atención al detalle y vocabulario.</td>
+                <td data-i18n="activity.riddles.daily">Contad acertijos en familia, sin prisa. Si se atasca, dejad que piense; la pista enseña la estrategia.</td></tr>
+              <tr><td data-i18n="activity.patterns.name">Patrones</td><td data-i18n="activity.patterns.does">Completa una serie visual o numérica (colores, formas, números) eligiendo la pieza que sigue.</td>
+                <td data-i18n="activity.patterns.works">Reconocimiento de regularidades, anticipación, razonamiento inductivo.</td>
+                <td data-i18n="activity.patterns.daily">Buscad patrones en casa: las baldosas, los números de los portales, los días de la semana.</td></tr>
+              <tr><td data-i18n="activity.odd-one-out.name">¿Qué No Encaja?</td><td data-i18n="activity.odd-one-out.does">Mira un grupo de 4 imágenes o palabras y elige la que no pertenece a la categoría.</td>
+                <td data-i18n="activity.odd-one-out.works">Categorización semántica, razonamiento por descarte, vocabulario.</td>
+                <td data-i18n="activity.odd-one-out.daily">En la compra, jugad a "¿cuál de estos no es una fruta?" o "¿cuál no va con los demás?".</td></tr>
+              <tr><td data-i18n="activity.stories.name">Historias</td><td data-i18n="activity.stories.does">Lee un pequeño relato cotidiano (comprar, ir al médico, esperar el autobús) y responde a preguntas de comprensión (quién, qué, dónde, por qué).</td>
+                <td data-i18n="activity.stories.works">Comprensión lectora, vocabulario cotidiano, secuencia narrativa, inferencia básica.</td>
+                <td data-i18n="activity.stories.daily">Leed juntos una receta, una carta o un cartel. Preguntadle quién aparece, qué pasa primero y qué después.</td></tr>
+              <tr><td data-i18n="activity.puzzle.name">Puzzle</td><td data-i18n="activity.puzzle.does">Encaja piezas de un puzzle eligiendo la pieza correcta entre varias (por color, forma o cantidad de elementos).</td>
+                <td data-i18n="activity.puzzle.works">Atención al detalle, percepción visual, discriminación por colores y formas, planificación espacial.</td>
+                <td data-i18n="activity.puzzle.daily">Haced puzzles reales juntos, empezando por pocos piezas (4, 6, 12) y subiendo según vaya cogiendo soltura.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <p class="nota-alcance"><strong data-i18n="scopeNote1">Fuera del alcance</strong><span data-i18n="scopeNote2"> de una web autónoma: álgebra, ecuaciones y fracciones complejas (mejor con papel y un profesional), estadística y probabilidad (requieren conceptos abstractos) y cálculo escrito largo (mejor con papel y un método explicado en clase).</span></p>
+      </section>
+
+      <section id="progreso" class="card">
+        <h2 data-i18n="progressTitle">Progreso y privacidad</h2>
+        <ul>
+          <li><span data-i18n="progressLi1a">El progreso (estrellas, niveles completados, ajustes de texto) se guarda
+            </span><strong data-i18n="progressLi1Strong">solo en el navegador del dispositivo</strong><span data-i18n="progressLi1b"> (localStorage, con el prefijo "calculia:"). No sale de ahí.</span></li>
+          <li><strong data-i18n="progressLi2Strong">No se piden ni almacenan datos personales</strong><span data-i18n="progressLi2b">. No hay cuentas, cookies ni analítica.
+            La única preferencia guardada es el tamaño de letra elegido en Ajustes.</span></li>
+          <li data-i18n="progressLi3">Consecuencia práctica: si se cambia de dispositivo o de navegador, o se borran los datos
+            de navegación, el progreso empieza de cero. Para hacer seguimiento, usad siempre el mismo
+            dispositivo y navegador.</li>
+          <li><span data-i18n="progressLi4a">Para borrar el idioma y el tamaño de letra (o restablecer la aplicación entera), hay
+            una</span> <a href="../settings/index.html" data-i18n="progressLi4Link">página de ajustes</a>
+            <span data-i18n="progressLi4b">que, como esta guía, no aparece en el menú de la aplicación.</span></li>
+          <li data-i18n="progressLi5">Las estrellas ⭐ del menú principal suman las de todas las actividades: son un refuerzo,
+            no una evaluación.</li>
+        </ul>
+      </section>
+
+      <section id="acompanar" class="card">
+        <h2 data-i18n="supportTitle">Cómo acompañar sin quitar autonomía</h2>
+        <ul>
+          <li><span data-i18n="supportLi1a">La app está pensada para usarse </span><strong data-i18n="supportLi1Strong">sin ayuda</strong><span data-i18n="supportLi1b">. Si la persona pide apoyo,
+            acompañad la primera vez y retiraos progresivamente.</span></li>
+          <li data-i18n="supportLi2">Dejad que elija la actividad. El orden del menú no es un itinerario obligatorio.</li>
+          <li data-i18n="supportLi3">No corrijáis el error antes que la app: el mensaje de ánimo y el reintento forman parte
+            del entrenamiento.</li>
+          <li data-i18n="supportLi4">Cada actividad tiene niveles: empezad por el más fácil aunque parezca sencillo;
+            terminar con éxito refuerza más que "estar a la altura".</li>
+          <li data-i18n="supportLi5">Si la persona se atasca, dejad que pruebe otra vez o que cambie a otra actividad. Volver
+            más tarde con la cabeza descansada suele funcionar mejor que forzar.</li>
+        </ul>
+      </section>
+
+      <section id="excepciones" class="card">
+        <h2 data-i18n="exceptionsTitle">Habilidad pura: decisión de diseño priorizada</h2>
+        <p data-i18n="exceptionsIntro">La mayoría de actividades de Calculia siguen el contrato de cálculo funcional: una escena reconocible (una tienda, un termómetro, un reloj), una pregunta clara, feedback socrático y cierre con transferencia a la vida real. Las siguientes actividades son una excepción documentada: son ejercicios perceptivos o de razonamiento puro donde convertir el enunciado en una escena cotidiana confundía el objetivo didáctico. Mantienen el resto de principios del producto (sin presión, sin castigo, con refuerzo positivo), pero no exponen la transferencia explícita a la vida real en cada ronda.</p>
+        <ul class="lista-excepciones">
+          <li data-i18n="exceptionRiddles"><strong>Acertijos</strong> · comprensión lectora y deducción a partir de un texto fijo.</li>
+          <li data-i18n="exceptionPatterns"><strong>Patrones</strong> · reconocimiento de regularidades visuales o numéricas.</li>
+          <li data-i18n="exceptionOddOneOut"><strong>Qué no encaja</strong> · categorización por descarte, sin escena.</li>
+          <li data-i18n="exceptionStories"><strong>Historias</strong> · comprensión lectora sobre relatos cortos.</li>
+          <li data-i18n="exceptionPuzzle"><strong>Puzzle</strong> · percepción visual y encaje de piezas, sin cálculo.</li>
+          <li data-i18n="exceptionRomanNumerals"><strong>Números romanos</strong> · aprendizaje de un sistema simbólico, no cálculo funcional.</li>
+        </ul>
+        <p data-i18n="exceptionsNote">La regla general sigue siendo el cálculo funcional: cualquier actividad nueva que represente un cálculo o razonamiento aplicado a una situación cotidiana debe incorporar el contrato completo. Esta lista se revisa y actualiza junto con el repositorio (git log contiene el histórico de cada inclusión y exclusión).</p>
+      </section>
+
+      <section id="agente-ia" class="card">
+        <h2 data-i18n="agentTitle">Nota técnica para el agente de IA que programa la app</h2>
+        <p><span data-i18n="agentP1a">Si eres un agente de codificación trabajando en este repositorio, las fuentes de verdad son</span>
+          <code data-i18n="agentP1code">CLAUDE.md</code> <span data-i18n="agentP1b">(flujo operativo para agentes IA) y el</span>
+          <a href="../doc/es/indice.md" id="enlaceMapaDocs" data-i18n="agentP1Link">mapa de documentación</a> <span data-i18n="agentP1c">de</span>
+          <code data-i18n="agentP1code2">doc/</code><span data-i18n="agentP1d">. Resumen no negociable:</span></p>
+        <ul>
+          <li data-i18n="agentLi1">HTML + CSS + JavaScript vanilla. Sin frameworks, sin build, sin backend, sin dependencias
+            de ejecución. Persistencia solo en localStorage con prefijo "calculia:".</li>
+          <li data-i18n="agentLi2">Interfaz de usuario en español de España e inglés, en Lectura Fácil, sin lenguaje clínico y sin
+            mecánicas de presión o competición. Las 10 reglas de accesibilidad de CLAUDE.md son obligatorias.</li>
+          <li><span data-i18n="agentLi3a">Cada actividad vive en</span> <code data-i18n="agentLi3code1">tools/&lt;slug&gt;/</code> <span data-i18n="agentLi3b">con</span> <code data-i18n="agentLi3code2">index.html</code><span data-i18n="agentLi3c">,</span>
+            <code data-i18n="agentLi3code3">app.js</code> <span data-i18n="agentLi3code4">(lógica),</span>
+            <code data-i18n="agentLi3code5">data.js</code> <span data-i18n="agentLi3code6">(datos) y</span>
+            <code data-i18n="agentLi3code7">styles.css</code><span data-i18n="agentLi3code8">; usa los módulos compartidos</span> <code data-i18n="agentLi3code9">window.App.*</code> <span data-i18n="agentLi3code10">de</span> <code data-i18n="agentLi3code11">assets/js/</code><span data-i18n="agentLi3code12">.</span></li>
+          <li><span data-i18n="agentLi4a">Al añadir o tocar archivos: actualizar la lista de caché y la versión de</span> <code data-i18n="agentLi4code">sw.js</code><span data-i18n="agentLi4b">.</span></li>
+          <li><span data-i18n="agentLi5a">Esta página (</span><code data-i18n="agentLi5code1">team/</code><span data-i18n="agentLi5b">) es deliberadamente</span>
+            <strong data-i18n="agentLi5Strong">una ruta oculta</strong><span data-i18n="agentLi5c">, igual que</span> <code data-i18n="agentLi5code2">settings/</code>
+            <span data-i18n="agentLi5d">(ver/borrar</span> <code data-i18n="agentLi5code3">localStorage</code><span data-i18n="agentLi5e">): no las enlaces desde</span>
+            <code data-i18n="agentLi5code4">site/index.html</code> <span data-i18n="agentLi5f">ni desde ninguna actividad. Mantén esta guía
+            actualizada cuando se añadan actividades nuevas.</span></li>
+        </ul>
+      </section>
+
+      <footer class="pie-guia">
+        <a class="btn btn-secundario" href="../site/index.html" data-i18n="footerActivities">Ir a las actividades</a>
+        <a class="btn btn-secundario" href="../legal/index.html" data-i18n="progressLi4Link">Protección de datos</a>
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      function paintLanguageSelector() {
+        var active = App.i18n.locale();
+        document.getElementById('btnIdiomaEs').setAttribute('aria-pressed', String(active === 'es'));
+        document.getElementById('btnIdiomaEn').setAttribute('aria-pressed', String(active === 'en'));
+      }
+      document.getElementById('btnIdiomaEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
+      document.getElementById('btnIdiomaEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
+      paintLanguageSelector();
+      /* The AI-agent documentation map link points to the localized doc/ index. */
+      var docLink = document.getElementById('enlaceMapaDocs');
+      if (docLink) {
+        docLink.setAttribute('href', App.i18n.locale() === 'en' ? '../doc/en/index.md' : '../doc/es/indice.md');
+      }
+    })();
+  </script>
+  <script>
+    /* Register the SW from this entry point so it is active for any later
+       navigation, matching what the tools and site/ pages already do. */
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../sw.js').catch(function () {});
+    }
+  </script>
+</body>
+</html>

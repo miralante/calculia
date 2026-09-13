@@ -1,0 +1,31 @@
+# Calculia — Actividades de cálculo y razonamiento lógico
+
+> Aplicación web gratuita y sin registro con quince actividades cortas y visuales de cálculo y razonamiento lógico.
+
+## What it is
+
+- Quince actividades breves y visuales, agrupadas en Matemáticas y Razonamiento lógico.
+- Pensada para practicar a tu ritmo, sin presión de tiempo y sin puntuación competitiva.
+- Diseñada con lectura fácil y contraste alto para ser accesible desde el primer intento.
+- Gratuita, sin registro y con el progreso guardado en el navegador.
+
+## What it is not
+
+- No es una app de evaluación ni un examen: no puntúa, no clasifica, no suspende.
+- No usa IA generativa en tiempo de ejecución: ninguna página llama a una API externa.
+- No envía datos a un servidor: todo el progreso vive en el navegador de quien la usa.
+- No sustituye la práctica con un profesional: es un complemento para repasar entre sesiones.
+
+## Resources
+
+- [Portal Apptonomia](https://apptonomia.uk/) — Página de inicio de la suite.
+- [Calculia](https://calculia.apptonomia.uk/) — Esta aplicación.
+- [Routime](https://routime.apptonomia.uk/) — Actividades cotidianas.
+- [Okeymoney](https://okeymoney.apptonomia.uk/) — Dinero del día a día.
+- [Sinonimia](https://sinonimia.apptonomia.uk/) — Diccionario en lectura fácil.
+- [Memofun](https://memofun.apptonomia.uk/) — Tarjetas de estudio.
+- [Teclatlon](https://teclatlon.apptonomia.uk/) — Mecanografía con el teclado del ordenador.
+
+## License
+
+MIT (código). Las actividades y enunciados son contenido propio bajo CC BY 4.0.

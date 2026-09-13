@@ -46,6 +46,22 @@
   var counterWords = $('#counterWords');
   var counterWordsLabel = $('#counterWordsLabel');
   var counterWritten = $('#counterWritten');
+  /* Free-exploration elevator level (see data.js: 'ascensorLibre' /
+     'ascensorMeta'). Same mechanic as the water-temperature tool:
+     −10/−1/+1/+10 buttons, the visual reacts on every step. */
+  var elevatorUI = $('#elevatorUI');
+  var elevatorGoal = $('#elevatorGoal');
+  var elevatorShaft = $('#elevatorShaft');
+  var elevatorNumber = $('#elevatorNumber');
+  var elevatorStateLabel = $('#elevatorStateLabel');
+  var elevatorAudio = $('#elevatorAudio');
+  var elevatorReset = $('#elevatorReset');
+  var elevatorExit = $('#elevatorExit');
+  var elevatorHint = $('#elevatorHint');
+  /* Random exploration suggestion. Painted by paintElevatorSuggestion
+     on every render (entry, reset, "play again"). Same pattern as
+     the temperature tool's #thermoSuggestion. */
+  var elevatorSuggestion = $('#elevatorSuggestion');
 
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
@@ -77,6 +93,20 @@
   /* ---- Utilidades ---- */
 
   function randInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+
+  /* Pick a random integer in [min, max] inclusive, avoiding
+     `avoid`. Used by paintElevatorSuggestion to pick a starting
+     floor that is not where the elevator already is. Up to 8
+     attempts so a near-full range still finds a different value. */
+  function pickRandomInt(min, max, avoid) {
+    if (max <= min) return min;
+    var range = max - min + 1;
+    for (var i = 0; i < 8; i++) {
+      var v = min + Math.floor(Math.random() * range);
+      if (v !== avoid) return v;
+    }
+    return min;
+  }
 
   /* Takes elements from a list without repeating within the round. */
   function draw(key, list) {
@@ -136,50 +166,6 @@
 
   function paintSign(s) { return '<span class="sign">' + s + '</span>'; }
 
-  /* ---- Elevator (negative numbers) ---- */
-
-  function floorHTML(n) {
-    return n < 0 ? paintSign('−') + paintNumber(Math.abs(n)) : paintNumber(n);
-  }
-
-  /* Plain-text floor label (used for 'prompt', which is set via
-     textContent, not innerHTML — no markup allowed there). */
-  function floorPlain(n) {
-    return (n < 0 ? '−' : '') + Math.abs(n);
-  }
-
-  function legendElevator() {
-    return '<span class="digit-u">' + App.i18n.t('leyendaPlantaBajaTxt') + '</span> · ' +
-      '<span class="digit-pos">' + App.i18n.t('leyendaEscalaPositivaTxt') + '</span> · ' +
-      '<span class="digit-comma">' + App.i18n.t('leyendaEscalaNegativaTxt') + '</span>';
-  }
-
-  /* Vertical shaft visual (decorative, aria-hidden — the accessible
-     description lives in 'visualAria', not here, same as the dot
-     visuals below). markers: [{ floor, icon, clase }], one row per
-     floor. */
-  function shaftHTML(min, max, markers) {
-    var porPiso = {};
-    markers.forEach(function (m) {
-      (porPiso[m.floor] = porPiso[m.floor] || []).push(m);
-    });
-    var filas = '';
-    for (var n = max; n >= min; n--) {
-      var clases = 'floor-row';
-      var contenido = '';
-      if (n === 0) {
-        clases += ' ground-floor';
-        contenido += '<span class="floor-icon">🏠</span>';
-      }
-      (porPiso[n] || []).forEach(function (m) {
-        clases += ' ' + (m.clase || 'target-floor');
-        contenido += '<span class="floor-icon">' + m.icon + '</span>';
-      });
-      filas += '<div class="' + clases + '">' + contenido + '</div>';
-    }
-    return '<div class="elevator-shaft" aria-hidden="true">' + filas + '</div>';
-  }
-
   /* ---- Numeric options (3, unique, shuffled) ---- */
 
   function buildOptions(correct, distractors, format) {
@@ -212,106 +198,25 @@
 
   var GENERATORS = {
 
-    /* Read the elevator's floor, including floors below ground (negative
-       numbers). The visual (shaft) is decorative; 'visualAria' states
-       the same fact in words ("N floors up/down from the ground floor")
-       so the question is answerable without seeing the shaft. */
-    ascensorLeer: function (nv) {
-      var floor = randInt(nv.min, nv.max);
-      var situacion = floor === 0 ? App.i18n.t('gen.ascensorLeerSituacionSuelo') :
-        (floor > 0 ? App.i18n.t('gen.ascensorLeerSituacionArriba').replace('{n}', floor) :
-          App.i18n.t('gen.ascensorLeerSituacionAbajo').replace('{n}', Math.abs(floor)));
-      var candidates = App.utils.shuffle([floor - 1, floor + 1, floor - 2, floor + 2]
-        .filter(function (v) { return v !== floor; }));
-      var values = [floor];
-      for (var i = 0; i < candidates.length && values.length < 3; i++) {
-        if (values.indexOf(candidates[i]) === -1) values.push(candidates[i]);
-      }
-      return {
-        prompt: App.i18n.t('gen.ascensorLeerEnunciado'),
-        visual: shaftHTML(nv.min, nv.max, [{ floor: floor, icon: '🛗', clase: 'current-floor' }]),
-        legend: legendElevator(),
-        options: App.utils.shuffle(values).map(function (v) {
-          return { html: floorHTML(v), correct: v === floor };
-        })
-      };
+    /* Free-exploration elevator missions (positivos-y-negativos).
+       Not a quiz, no prompt/options. Each generator returns a marker
+       that render() detects to switch into the elevator UI
+       (renderElevator). 'libre' has no target — exit when ready
+       (+1 star). 'meta' has a target floor (level.meta); a
+       celebration message plays once the user lands on it, then
+       exit still grants the star. Same shape as the 'counter'
+       generator and the water-temperature missions. */
+    ascensorLibre: function (nv) {
+      return { tipo: 'elevator', mode: 'libre', min: nv.min, max: nv.max };
     },
-
-    /* Start floor + move up/down N floors = end floor. 'inicio' is kept
-       away from both edges so there's always room to move in either
-       direction (rule 13: only 'delta'/direction vary per question,
-       not the range). */
-    ascensorMover: function (nv) {
-      var start = randInt(nv.min + 1, nv.max - 1);
-      var subir = Math.random() < 0.5;
-      var available = subir ? (nv.max - start) : (start - nv.min);
-      var delta = randInt(1, Math.max(1, Math.min(4, available)));
-      var end = subir ? start + delta : start - delta;
-      var keyPrefix = subir ? 'gen.ascensorMoverSube' : 'gen.ascensorMoverBaja';
-      var candidates = App.utils.shuffle([end - 1, end + 1, start]
-        .filter(function (v) { return v !== end; }));
-      var values = [end];
-      for (var i = 0; i < candidates.length && values.length < 3; i++) {
-        if (values.indexOf(candidates[i]) === -1) values.push(candidates[i]);
-      }
+    ascensorMeta: function (nv) {
       return {
-        prompt: App.i18n.t(keyPrefix + 'Enunciado').replace('{inicio}', floorPlain(start)).replace('{delta}', delta),
-        visual: shaftHTML(nv.min, nv.max, [{ floor: start, icon: '🛗', clase: 'current-floor' }]) +
-          '<p class="hint-arrow" aria-hidden="true">' + (subir ? '⬆️' : '⬇️') + ' ' + delta + '</p>',
-        legend: legendElevator(),
-        options: App.utils.shuffle(values).map(function (v) {
-          return { html: floorHTML(v), correct: v === end };
-        })
-      };
-    },
-
-    /* Compare two floors: which is lower/higher. Only 2 real candidates
-       exist, so options has 2 (accessibility rule 11 sets a maximum of
-       3, not a fixed count). */
-    ascensorComparar: function (nv) {
-      var a = randInt(nv.min, nv.max);
-      var b;
-      do { b = randInt(nv.min, nv.max); } while (b === a);
-      var abajo = Math.random() < 0.5;
-      var correct = abajo ? Math.min(a, b) : Math.max(a, b);
-      var keyPrefix = abajo ? 'gen.ascensorCompararAbajo' : 'gen.ascensorCompararArriba';
-      return {
-        prompt: App.i18n.t(keyPrefix + 'Enunciado'),
-        visual: shaftHTML(nv.min, nv.max, [
-          { floor: a, icon: '🛗', clase: 'current-floor' },
-          { floor: b, icon: '🚩', clase: 'target-floor' }
-        ]),
-        legend: legendElevator(),
-        options: [
-          { html: floorHTML(a), correct: a === correct },
-          { html: floorHTML(b), correct: b === correct }
-        ]
-      };
-    },
-
-    /* "Place it in its spot": given a floor NUMBER, find which lettered
-       spot on the shaft matches it, among 2 nearby decoys. This is the
-       inverse of ascensorLeer (there the shaft is given and the paintNumber
-       is guessed; here the paintNumber is given and the spot is guessed). */
-    ascensorColocar: function (nv) {
-      var floor = randInt(nv.min, nv.max);
-      var candidates = App.utils.shuffle([floor - 2, floor - 1, floor + 1, floor + 2]
-        .filter(function (v) { return v >= nv.min && v <= nv.max && v !== floor; })).slice(0, 2);
-      var letters = ['A', 'B', 'C'];
-      var markers = App.utils.shuffle([floor].concat(candidates)).map(function (f, i) {
-        return { floor: f, icon: letters[i], clase: 'option-floor' };
-      });
-      return {
-        prompt: App.i18n.t('gen.ascensorColocarEnunciado').replace('{piso}', floorPlain(floor)),
-        visual: shaftHTML(nv.min, nv.max, markers),
-        legend: legendElevator(),
-        options: markers.map(function (m) {
-          return {
-            html: m.icon,
-            aria: App.i18n.t('gen.ascensorColocarOpcionAria').replace('{l}', m.icon),
-            correct: m.floor === floor
-          };
-        })
+        tipo: 'elevator',
+        mode: 'meta',
+        min: nv.min,
+        max: nv.max,
+        target: nv.meta,
+        inicio: (typeof nv.inicio === 'number') ? nv.inicio : 0
       };
     },
 
@@ -491,8 +396,8 @@
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    $('#activityTitle').textContent = activity.picto + ' ' + App.i18n.t('activity.' + id + '.name');
-    $('#activityInstruction').textContent = App.i18n.t('activity.' + id + '.instruction');
+    $('#activityTitle').textContent.textContent = '';
+    $('#activityInstruction').textContent.textContent = '';
     var cont = $('#levels');
     cont.innerHTML = '';
     activity.levels.forEach(function (nv) {
@@ -541,7 +446,7 @@
 
   function paintReinforceProgress() {
     progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
-    progressText.textContent = (reinforceIndex + 1) + ' / ' + reinforceTotal;
+    progressText.textContent = '';
   }
 
   function render() {
@@ -558,11 +463,21 @@
       return;
     }
 
+    /* The 'elevator' missions ('ascensorLibre', 'ascensorMeta') are
+       also not a quiz: the generator returns a marker, and
+       render() hands off to renderElevator() which hides the quiz
+       parts and shows the free-exploration UI. */
+    if (question.tipo === 'elevator') {
+      renderElevator(question);
+      return;
+    }
+
     /* Quiz mode: show the standard parts, hide the counter UI. */
     progressBar.classList.remove('hidden');
     quizCard.classList.remove('hidden');
     optionsEl.classList.remove('hidden');
     counterUI.classList.add('hidden');
+    elevatorUI.classList.add('hidden');
 
     promptEl.textContent = question.prompt;
     visualEl.innerHTML = question.visual || '';
@@ -595,7 +510,7 @@
     });
 
     progressFill.style.width = ((index / DATA.perRound) * 100) + '%';
-    progressText.textContent = index + ' / ' + DATA.perRound;
+    progressText.textContent = '';
     paintStars();
   }
 
@@ -680,15 +595,19 @@
     show(screenEnd);
     var summaryEl = $('#endSummary');
     if (level.tipo === 'counter') {
-      summaryEl.textContent = App.i18n.t('gen.counterResumenFinal')
-        .replace('{estrellas}', progress.stars);
+      summaryEl.textContent = '';
+    } else if (level.tipo === 'ascensorLibre' || level.tipo === 'ascensorMeta') {
+      /* Free-exploration elevator: no question count, only a star
+         tally. Different from the counter summary to keep each
+         tool's closing line distinct. */
+      summaryEl.textContent = '';
     } else {
       summaryEl.textContent = App.i18n.t('resumenFinal')
         .replace('{n}', roundCorrect)
         .replace('{actividad}', App.i18n.t('activity.' + activity.id + '.name'))
         .replace('{estrellas}', progress.stars);
     }
-    $('#transfer').textContent = App.i18n.t('transferencia');
+    $('#transfer').textContent.textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
     var levelIndex = activity.levels.indexOf(level);
@@ -717,13 +636,13 @@
      numbers the formatted-with-separator string reads naturally
      with the thousands separator as a pause marker. */
   function counterSay(n) {
-    if (!n) { App.tts.speak(App.i18n.locale() === 'en' ? 'zero' : 'cero'); return; }
+    if (!n) { if (false && App.tts && App.tts.speak) App.tts.speak(App.i18n.locale() === 'en' ? 'zero' : 'cero'); return; }
     var words = DATA.potencias[App.i18n.locale()];
     var exp = -1;
     var v = n;
     while (v >= 10 && v % 10 === 0) { v = v / 10; exp += 1; }
     if (v === 1 && exp >= 0 && exp < words.length) {
-      App.tts.speak(words[exp]);
+      if (false && App.tts && App.tts.speak) App.tts.speak(words[exp]);
       return;
     }
     /* Not a clean power of ten: read the formatted number. The
@@ -743,7 +662,7 @@
       }
       if (i < s.length - 1) out += ' ';
     }
-    App.tts.speak(out);
+    if (false && App.tts && App.tts.speak) App.tts.speak(out);
   }
 
   /* Digit names for the fallback TTS path above. Kept local because
@@ -774,6 +693,7 @@
     counterWords.setAttribute('aria-pressed', 'false');
     counterWordsLabel.textContent = App.i18n.t('gen.counterWordsOff');
     counterUI.classList.remove('hidden');
+    elevatorUI.classList.add('hidden');
     counterHint.textContent = App.i18n.t('gen.counterHint');
     /* The progress bar / quiz card / options belong to the quiz flow;
        they're hidden while the counter is shown so the screen reads
@@ -786,7 +706,7 @@
     feedbackEl.className = 'feedback';
     /* progressText stays at 0/6; the bar is hidden, so it isn't read. */
     progressFill.style.width = '0%';
-    progressText.textContent = '0 / 6';
+    progressText.textContent = '';
     paintCounter();
     paintCounterToggle();
     paintStars();
@@ -804,6 +724,192 @@
       var wouldBeOver = (counterValue + step) > counterMax;
       b.disabled = wouldBeNeg || wouldBeOver;
     });
+  }
+
+  /* ============================================================
+     Free-exploration elevator (no quiz)
+     Sibling of the water-temperature tool: −10/−1/+1/+10 buttons,
+     the visual reacts on every step. The big number reads with a
+     sign; the shaft shows the elevator emoji on the current floor,
+     with the ground floor (0) always highlighted as the boundary
+     between positive and negative. Same storage shape as the
+     counter — progress.stars increments on exit.
+     ============================================================ */
+
+  /* Per-mission state. Held in closures so re-entering the level
+     (Exit → Play again) starts fresh. */
+  var elevatorValue = 0;
+  var elevatorMin = 0;
+  var elevatorMax = 0;
+  var elevatorMode = 'libre';
+  var elevatorTarget = 0;
+  /* Set to the celebration key once a 'meta' mission lands on the
+     target, so we don't replay the same celebration on every
+     subsequent step. Reset on exit/re-enter. */
+  var elevatorCelebrated = false;
+
+  function renderElevator(q) {
+    elevatorValue = (q.mode === 'meta' && typeof q.inicio === 'number')
+      ? q.inicio : 0;
+    elevatorMin = (typeof q.min === 'number') ? q.min : DATA.elevador.min;
+    elevatorMax = (typeof q.max === 'number') ? q.max : DATA.elevador.max;
+    elevatorMode = q.mode || 'libre';
+    elevatorTarget = (typeof q.target === 'number') ? q.target : 0;
+    elevatorCelebrated = false;
+    elevatorUI.classList.remove('hidden');
+    counterUI.classList.add('hidden');
+    elevatorHint.textContent = App.i18n.t(
+      elevatorMode === 'meta' ? 'gen.elevatorHintMeta' : 'gen.elevatorHintLibre'
+    );
+    /* The progress bar / quiz card / options belong to the quiz
+       flow; they're hidden while the elevator is shown so the
+       screen reads as a free exploration surface, not a question. */
+    progressBar.classList.add('hidden');
+    quizCard.classList.add('hidden');
+    optionsEl.classList.add('hidden');
+    btnNext.classList.add('hidden');
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+    /* progressText stays at 0/6; the bar is hidden, so it isn't read. */
+    progressFill.style.width = '0%';
+    progressText.textContent = '';
+    paintElevatorGoal();
+    paintElevatorSuggestion();
+    paintElevator();
+    paintStars();
+  }
+
+  /* Show the goal line. For 'libre' missions the goal is empty
+     (no target, just explore). For 'meta' missions the goal reads
+     the target floor with its sign. */
+  function paintElevatorGoal() {
+    if (elevatorMode !== 'meta') {
+      elevatorGoal.textContent = '';
+      return;
+    }
+    var t = elevatorTarget;
+    var key = 'gen.elevatorGoalMeta';
+    elevatorGoal.textContent = App.i18n.t(key).replace(
+      '{piso}', (t < 0 ? '−' : '') + Math.abs(t)
+    );
+  }
+
+  /* Pick a random floor in [elevatorMin, elevatorMax] inclusive,
+     avoiding the level's starting floor and 0. Same helper used
+     by the temperature tool; kept local because both tools share
+     the exact same mechanic. Avoids 0 because 0 is the ground
+     floor — saying "go to floor 0" while the elevator is already
+     there adds noise rather than direction. */
+  function pickElevatorSuggestion() {
+    var start = (elevatorMode === 'meta' && typeof level.inicio === 'number')
+      ? level.inicio : 0;
+    var v = pickRandomInt(elevatorMin, elevatorMax, start);
+    while (v === 0) v = pickRandomInt(elevatorMin, elevatorMax, start);
+    return v;
+  }
+
+  /* Paint the suggestion line. For 'ascensorMeta' the goal line
+     already names the target floor, so showing ANOTHER random
+     floor would conflict — hide the suggestion. For 'ascensorLibre'
+     the goal line is empty, so the suggestion adds a concrete
+     starting floor to the open-ended mission. */
+  function paintElevatorSuggestion() {
+    if (elevatorMode === 'meta') {
+      elevatorSuggestion.textContent = '';
+      elevatorSuggestion.classList.add('hidden');
+      return;
+    }
+    var v = pickElevatorSuggestion();
+    var sign = v < 0 ? '−' : '+';
+    var key = v < 0 ? 'gen.elevatorSuggestionDown'
+      : 'gen.elevatorSuggestionUp';
+    elevatorSuggestion.textContent = App.i18n.t(key)
+      .replace('{piso}', sign + Math.abs(v));
+    elevatorSuggestion.classList.remove('hidden');
+  }
+
+  /* Main render: number, state label, accessibility text, button
+     enable/disable, live shaft. Called on every value change. */
+  function paintElevator() {
+    var n = elevatorValue;
+    /* Big floor number. The sign is part of the text so screen
+       readers say "menos cinco" naturally. */
+    elevatorNumber.textContent = (n < 0 ? '−' : '') + Math.abs(n);
+    elevatorNumber.setAttribute(
+      'aria-label',
+      App.i18n.t('gen.elevatorReadoutAria')
+        .replace('{piso}', (n < 0 ? '−' : '') + Math.abs(n))
+    );
+    /* State label: above / on / below ground. Same vocabulary as
+       the activity instruction so the user sees the same words in
+       three places (instruction, hint, label). */
+    var labelKey = n > 0 ? 'gen.elevatorStateAbove'
+      : n < 0 ? 'gen.elevatorStateBelow'
+      : 'gen.elevatorStateGround';
+    elevatorStateLabel.textContent = App.i18n.t(labelKey);
+    /* Disable "+" / "−" buttons when the next step would exceed
+       elevatorMin / elevatorMax. The buttons share the .data-step
+       attribute that starts with "-" or "+", so a single loop
+       covers all four step buttons. */
+    App.utils.$$('#elevatorUI .btn-elevator[data-step]').forEach(function (b) {
+      var step = parseInt(b.getAttribute('data-step'), 10);
+      var wouldBe = elevatorValue + step;
+      b.disabled = (wouldBe < elevatorMin) || (wouldBe > elevatorMax);
+    });
+    /* Live shaft. */
+    paintElevatorShaft();
+    celebrateIfElevatorGoalReached();
+  }
+
+  /* Render the shaft. Same shape as the old quiz-style
+     shaftHTML(min, max, markers) but with a single marker — the
+     elevator emoji on the current floor — and the ground floor
+     always tinted with the project reasoning colour. Floors are
+     listed top-to-bottom (max first) so floor +10 sits at the top
+     and floor −10 at the bottom, matching the building
+     convention. */
+  function paintElevatorShaft() {
+    var html = '';
+    for (var f = elevatorMax; f >= elevatorMin; f--) {
+      var clases = 'floor-row';
+      var contenido = '';
+      if (f === 0) {
+        clases += ' ground-floor';
+        contenido += '<span class="floor-icon">🏠</span>';
+      }
+      if (f === elevatorValue) {
+        clases += ' current-floor';
+        contenido += '<span class="floor-icon">🛗</span>';
+      }
+      contenido = '<span class="floor-label">' + (f > 0 ? '+' + f : (f < 0 ? '−' + Math.abs(f) : '0')) + '</span>' + contenido;
+      html += '<div class="' + clases + '">' + contenido + '</div>';
+    }
+    elevatorShaft.innerHTML = html;
+  }
+
+  /* For 'meta' missions, when the user lands on the target floor
+     (within DATA.elevador.tolerancia), show the celebration once.
+     'libre' missions have no target, so no celebration fires. */
+  function celebrateIfElevatorGoalReached() {
+    if (elevatorCelebrated) return;
+    if (elevatorMode !== 'meta') return;
+    var diff = Math.abs(elevatorValue - elevatorTarget);
+    if (diff > DATA.elevador.tolerancia) return;
+    var t = elevatorTarget;
+    var key = 'gen.elevatorSuccess';
+    feedbackEl.textContent = App.i18n.t(key).replace(
+      '{piso}', (t < 0 ? '−' : '') + Math.abs(t)
+    );
+    /* Set 'feedback' first so the bare class literal the CSS
+       coverage check scans for matches a real selector. The
+       'success' modifier is added with classList.add afterwards.
+       Same intent as the temperature tool: App.feedback.success()
+       would overwrite the celebration text with a generic
+       "⭐ Fantastic!" pick, which doesn't fit here — the message
+       has to identify the floor the user just reached. */
+    feedbackEl.className = 'feedback';
+    feedbackEl.classList.add('success');
+    elevatorCelebrated = true;
   }
 
   function paintCounterToggle() {
@@ -937,6 +1043,37 @@
     paintCounter();
   }
 
+  /* Elevator step handler: clamps the new value within the mission
+     range and redraws. Same pattern as counterAddStep — the
+     button enable/disable state is recomputed inside paintElevator
+     so the next click will reflect the updated bounds. */
+  function elevatorAddStep(step) {
+    var next = elevatorValue + step;
+    if (next < elevatorMin || next > elevatorMax) return;
+    elevatorValue = next;
+    paintElevator();
+  }
+
+  /* Reads the current floor aloud with the matching above/on/
+     below-ground line. Same wording as the state label so the
+     audio and the visible label stay in sync. */
+  function elevatorSay() {
+    var n = elevatorValue;
+    var main = App.i18n.t('gen.elevatorTtsFloor')
+      .replace('{piso}', (n < 0 ? '−' : '') + Math.abs(n));
+    var labelKey = n > 0 ? 'gen.elevatorTtsAbove'
+      : n < 0 ? 'gen.elevatorTtsBelow'
+      : 'gen.elevatorTtsGround';
+    if (false && App.tts && App.tts.speak) App.tts.speak(main + '. ' + App.i18n.t(labelKey));
+  }
+
+  function exitElevator() {
+    progress.stars += 1;
+    save();
+    paintStars();
+    endRound();
+  }
+
   function exitCounter() {
     progress.stars += 1;
     save();
@@ -991,6 +1128,33 @@
     counterWordsLabel.textContent = App.i18n.t(counterShowWords ? 'gen.counterWordsOn' : 'gen.counterWordsOff');
     paintCounter();
   });
+
+  /* Wire up the elevator buttons once (the elements persist). Same
+     pattern as the counter wire-up: step buttons share .data-step,
+     the reset button takes the user back to the mission's actual
+     starting point (0 for libre, the per-level 'inicio' for meta). */
+  App.utils.$$('#elevatorUI .btn-elevator[data-step]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      elevatorAddStep(parseInt(b.getAttribute('data-step'), 10));
+    });
+  });
+  elevatorReset.addEventListener('click', function () {
+    elevatorValue = (elevatorMode === 'meta')
+      ? ((typeof level.inicio === 'number') ? level.inicio : 0)
+      : 0;
+    elevatorCelebrated = false;
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+    paintElevatorSuggestion();
+    paintElevator();
+  });
+  elevatorAudio.addEventListener('click', elevatorSay);
+  elevatorExit.addEventListener('click', function () { exitElevator(); });
+  /* Localized labels for the elevator icon buttons (kept out of the
+     HTML to avoid duplicating strings per locale). */
+  elevatorAudio.setAttribute('aria-label', App.i18n.t('gen.elevatorBtnAudio'));
+  elevatorReset.textContent = App.i18n.t('gen.elevatorBtnReset');
+  elevatorExit.textContent = App.i18n.t('gen.elevatorBtnExit');
 
   /* ---- Events ---- */
 

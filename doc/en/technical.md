@@ -152,8 +152,8 @@ Multi-file pattern, **designed for more than two languages** since
 the first commit (the architecture comes from Apptonomia's mature
 i18n). Currently ships Spanish (`es`, default) and English (`en`);
 adding a third locale follows the recipe in
-[`doc/en/I18N.md`](I18N.md) (and its Spanish mirror
-[`doc/es/I18N.md`](../es/I18N.md)).
+[`doc/en/i18n.md`](I18N.md) (and its Spanish mirror
+[`doc/es/i18n.md`](../es/I18N.md)).
 
 Short version: `strings.<locale>.js` per activity/landing each
 register one language via `App.i18n.register(dict, '<locale>')`;
@@ -702,3 +702,13 @@ in one repo, mirror it across the others in the same PR.
 ---
 
 
+
+## Compact application header
+
+The main header follows Memofun: a 44px app icon (32px below 650px),
+a Nunito brand title at 28px (22px on mobile), suite attribution and aligned
+utility controls. It uses an 8px vertical inset and a 6px row gap. Supporting
+copy uses regular weight; any star counter stays compact. Header language buttons, where present,
+show full names on desktop and ES/EN on mobile, with full accessible names.
+Teclatlon keeps its keyboard controls and settings; Enroca keeps its navigation
+and settings. These header styles do not change activity controls.

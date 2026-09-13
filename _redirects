@@ -1,0 +1,4 @@
+# Send only the root entry to the catalogue.
+# Worker static assets serve 404.html for unknown paths via wrangler.toml.
+# A wildcard redirect would also match its destination and create a loop.
+/ /site/ 302

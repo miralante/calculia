@@ -49,6 +49,8 @@
       successSteam:   '♨️ ¡Ha hervido! El agua se ha vuelto vapor.',
       successBalance: '🌡️ ¡20 °C exactos! Temperatura ambiente.',
       hint: 'Pulsa + o − para cambiar la temperatura. Mira cómo se transforma el agua.',
+      temperatureSuggestionUp: '💡 Sugerencia: sube hasta {temp} °C.',
+      temperatureSuggestionDown: '💡 Sugerencia: baja hasta {temp} °C.',
       resumenFinal: 'Has completado el reto. Ahora tienes {estrellas} estrellas.',
       endSummary: 'Has completado el reto. Ahora tienes {estrellas} estrellas.',
       ttsTemp:   '{temp} grados',

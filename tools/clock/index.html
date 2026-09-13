@@ -43,12 +43,7 @@
       <div class="card centered stack">
         <div id="questionZone"></div>
       </div>
-      <h2 class="question centered" id="questionText" data-i18n="whatTime">¿Qué hora es?</h2>
-      <button type="button" class="btn btn-audio hidden" id="btnListen"
-        data-i18n-aria="core.listenText" aria-label="Escuchar la pregunta">
-        <span data-i18n="core.listen">🔊 Escuchar</span>
-      </button>
-      <div class="stack" id="options"></div>
+      <h2 class="question centered" id="questionText" data-i18n="whatTime">¿Qué hora es?</h2>      <div class="stack" id="options"></div>
       <div class="feedback" id="feedback" aria-live="polite"></div>
       <div class="row explanation hidden" id="explanationWrap">
         <p id="explanation" aria-live="polite"></p>
@@ -67,14 +62,11 @@
       <button type="button" class="btn btn-secondary" id="btnOtherMode" data-i18n="otherMode">Elegir otro modo</button>
       <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
-    <footer class="pie-app">
-      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Protección de datos</a>
-    </footer>
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
 
   <script src="../../assets/js/utils.js"></script>
   <script src="../../assets/js/i18n.js"></script>
-  <script src="../../assets/js/tts.js"></script>
   <script src="../../assets/js/storage.js"></script>
   <script src="../../assets/js/feedback.js"></script>
   <script src="strings.es.js"></script>

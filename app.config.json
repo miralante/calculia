@@ -1,0 +1,71 @@
+{
+  "name": "Calculia",
+  "domain": "calculia.apptonomia.uk",
+  "title": "Calculia — Cálculo y razonamiento lógico a tu ritmo",
+  "description": "Calculia es una aplicación web gratuita y sin registro con actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles. Parte de la suite Apptonomia.",
+  "keywords": "calculia, apptonomia, matemáticas, razonamiento lógico, cálculo, fracciones, números romanos, easy read, lectura fácil, accesibilidad cognitiva, actividades gratuitas sin registro, sumas, restas, tablas de multiplicar",
+  "author": "Apptonomia",
+  "ogSiteName": "Apptonomia",
+  "ogDescription": "Actividades cortas y visuales de cálculo y razonamiento lógico. Gratis y sin registro. Parte de la suite Apptonomia.",
+  "twitterDescription": "Actividades cortas y visuales de cálculo y razonamiento lógico. Gratis y sin registro.",
+  "ogImageAlt": "Calculia: actividades de cálculo y razonamiento lógico",
+  "ogAccent": "#1B6CA8",
+  "ogAccentInk": "#FFFFFF",
+  "ogTagline": "Cálculo y razonamiento lógico",
+  "themeColor": "#FAF7F2",
+  "colorScheme": "light",
+  "ogImageAsset": "../og-image.svg",
+  "iconAsset": "../assets/img/icono.svg",
+  "manifest": "../manifest.json",
+  "hasItemList": false,
+  "dcCreator": "Calculia (parte de la suite Apptonomia)",
+  "dcSubject": "Actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles.",
+  "dcRights": "MIT (código). Las actividades (datos y enunciados) son contenido propio bajo CC BY 4.0.",
+  "dcType": "InteractiveResource",
+  "faq": [
+    {
+      "question": "¿Qué es Calculia?",
+      "answer": "Calculia es una aplicación web gratuita y sin registro con quince actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones, el monedero, el reloj, cuentos, ¿qué sobra? y puzzle."
+    },
+    {
+      "question": "¿Cuántas actividades tiene Calculia?",
+      "answer": "Quince, agrupadas en dos secciones: Matemáticas (números, fracciones, sumas y restas, dinero, tablas, cantidades, números romanos y temperatura del agua) y Razonamiento lógico (acertijos, patrones, el monedero, el reloj, cuentos, ¿qué sobra? y puzzle)."
+    },
+    {
+      "question": "¿Calculia necesita conexión a internet?",
+      "answer": "Solo para la primera visita. Después puede instalarse como aplicación web progresiva y seguir funcionando sin conexión. El progreso se guarda en el navegador."
+    },
+    {
+      "question": "¿Cómo se guarda mi progreso?",
+      "answer": "En el almacenamiento local del navegador, con el prefijo 'calculia:'. No se envía a ningún servidor. Puedes verlo y borrarlo desde la ruta de Ajustes dentro de la propia aplicación."
+    },
+    {
+      "question": "¿Calculia es gratis y sin registro?",
+      "answer": "Sí. Calculia es gratuita, sin anuncios, sin cuentas, sin correo electrónico y sin cookies de seguimiento."
+    }
+  ],
+  "llmsTitle": "Calculia — Actividades de cálculo y razonamiento lógico",
+  "llmsSummary": "Aplicación web gratuita y sin registro con quince actividades cortas y visuales de cálculo y razonamiento lógico.",
+  "llmsWhatItIs": [
+    "Quince actividades breves y visuales, agrupadas en Matemáticas y Razonamiento lógico.",
+    "Pensada para practicar a tu ritmo, sin presión de tiempo y sin puntuación competitiva.",
+    "Diseñada con lectura fácil y contraste alto para ser accesible desde el primer intento.",
+    "Gratuita, sin registro y con el progreso guardado en el navegador."
+  ],
+  "llmsWhatItIsNot": [
+    "No es una app de evaluación ni un examen: no puntúa, no clasifica, no suspende.",
+    "No usa IA generativa en tiempo de ejecución: ninguna página llama a una API externa.",
+    "No envía datos a un servidor: todo el progreso vive en el navegador de quien la usa.",
+    "No sustituye la práctica con un profesional: es un complemento para repasar entre sesiones."
+  ],
+  "llmsResources": [
+    { "name": "Portal Apptonomia", "url": "https://apptonomia.uk/", "description": "Página de inicio de la suite." },
+    { "name": "Calculia", "url": "https://calculia.apptonomia.uk/", "description": "Esta aplicación." },
+    { "name": "Routime", "url": "https://routime.apptonomia.uk/", "description": "Actividades cotidianas." },
+    { "name": "Okeymoney", "url": "https://okeymoney.apptonomia.uk/", "description": "Dinero del día a día." },
+    { "name": "Sinonimia", "url": "https://sinonimia.apptonomia.uk/", "description": "Diccionario en lectura fácil." },
+    { "name": "Memofun", "url": "https://memofun.apptonomia.uk/", "description": "Tarjetas de estudio." },
+    { "name": "Teclatlon", "url": "https://teclatlon.apptonomia.uk/", "description": "Mecanografía con el teclado del ordenador." }
+  ],
+  "llmsLicense": "MIT (código). Las actividades y enunciados son contenido propio bajo CC BY 4.0."
+}

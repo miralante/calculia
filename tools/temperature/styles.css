@@ -143,6 +143,26 @@
   color: var(--color-texto-suave);
 }
 
+/* Random exploration suggestion. Sits between the thermometer
+   card and the controls; the same pattern is used by the elevator
+   tool so the two activities feel like siblings. Hidden via
+   .hidden when the suggestion equals the starting temperature
+   (nothing to suggest) or when the mission is a 'balance' (the
+   goal line already gives the target, adding a random idea would
+   be confusing). */
+.thermo-suggestion {
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--mod-razonamiento);
+  text-align: center;
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 8px 12px;
+  border: 2px dashed var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+
 /* End-of-round. Same look as other tools. */
 .emoji-large { font-size: 96px; }
 #screenEnd { padding-top: 48px; }

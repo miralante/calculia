@@ -56,6 +56,11 @@
   var thermoReset = $('#thermoReset');
   var thermoExit = $('#thermoExit');
   var thermoHint = $('#thermoHint');
+  /* Random exploration suggestion. Painted by paintThermoSuggestion
+     on every render (entry, reset, "play again"). Not a goal: it's
+     just a starting idea so the user doesn't have to pick a
+     temperature themselves. */
+  var thermoSuggestion = $('#thermoSuggestion');
 
   /* Persistent progress. Same shape as every other tool: an object
      with a `stars` counter. */
@@ -81,6 +86,63 @@
   /* ============================================================
      Screen flow
      ============================================================ */
+
+  /* Pick a random integer in [min, max] inclusive, avoiding
+     `avoid` (the level's starting temperature). Shared helper so
+     the temperature tool and the elevator tool use the same logic. */
+  function pickRandomInt(min, max, avoid) {
+    if (max <= min) return min;
+    var range = max - min + 1;
+    /* Try up to 8 times to avoid the starting value; if every
+       value in the range equals `avoid` (degenerate input) just
+       return min. */
+    for (var i = 0; i < 8; i++) {
+      var v = min + Math.floor(Math.random() * range);
+      if (v !== avoid) return v;
+    }
+    return min;
+  }
+
+  /* Pick a random temperature to suggest for the current level.
+     Avoids the starting temperature and biases toward values
+     that produce a clear state change (anything < 0 or > 100 is
+     a strong suggestion because it changes the water visibly;
+     0 is skipped because it's the same as ground-floor "nothing
+     happens" and would confuse with the goal line). The chosen
+     value is stored in `thermoSuggestionValue` so paintThermoGoal
+     can reuse it without a second random call. */
+  var thermoSuggestionValue = 0;
+  function pickThermoSuggestion() {
+    var start = (level && typeof level.inicioC === 'number') ? level.inicioC : DATA.inicioC;
+    var v = pickRandomInt(DATA.minC, DATA.maxC, start);
+    /* Skip 0: it overlaps with the goal line wording and doesn't
+       change the water visually, so it adds noise rather than
+       useful direction. */
+    while (v === 0) v = pickRandomInt(DATA.minC, DATA.maxC, start);
+    thermoSuggestionValue = v;
+    return v;
+  }
+
+  /* Paint the suggestion line. For 'misionEstado' (freeze/heat)
+     missions the goal line above already names the state, so the
+     suggestion adds a SPECIFIC number to aim for; showing it
+     reinforces both. For 'misionExacta' (balance) the goal is
+     already an exact value (20 °C ± 2), so showing ANOTHER
+     random value would conflict with the goal — hide it. */
+  function paintThermoSuggestion() {
+    if (level.tipo === 'misionExacta') {
+      thermoSuggestion.textContent = '';
+      thermoSuggestion.classList.add('hidden');
+      return;
+    }
+    var v = pickThermoSuggestion();
+    var sign = v < 0 ? '−' : '+';
+    var key = v < 0 ? 'gen.temperatureSuggestionDown'
+      : 'gen.temperatureSuggestionUp';
+    thermoSuggestion.textContent = App.i18n.t(key)
+      .replace('{temp}', sign + Math.abs(v));
+    thermoSuggestion.classList.remove('hidden');
+  }
 
   function show(screen) {
     [screenMenu, screenLevels, screenGame, screenEnd].forEach(function (p) {
@@ -112,8 +174,8 @@
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    $('#activityTitle').textContent = activity.picto + ' ' + App.i18n.t('activity.' + id + '.name');
-    $('#activityInstruction').textContent = App.i18n.t('activity.' + id + '.instruction');
+    $('#activityTitle').textContent.textContent = '';
+    $('#activityInstruction').textContent.textContent = '';
     var cont = $('#levels');
     cont.innerHTML = '';
     activity.levels.forEach(function (nv) {
@@ -155,6 +217,7 @@
     thermoCelebrated = false;
     thermoUI.classList.remove('hidden');
     paintThermoGoal();
+    paintThermoSuggestion();
     paintThermo();
     paintStars();
   }
@@ -253,7 +316,7 @@
       var ttsKey = state === 'ice' ? 'gen.ttsIce'
         : state === 'steam' ? 'gen.ttsSteam'
         : 'gen.ttsLiquid';
-      App.tts.speak(App.i18n.t(ttsKey));
+      if (false && App.tts && App.tts.speak) App.tts.speak(App.i18n.t(ttsKey));
     }
 
     celebrateIfGoalReached();
@@ -318,7 +381,7 @@
       : state === 'steam' ? 'gen.ttsSteam'
       : 'gen.ttsLiquid'
     );
-    App.tts.speak(main + '. ' + stateLine);
+    if (false && App.tts && App.tts.speak) App.tts.speak(main + '. ' + stateLine);
   }
 
   function exitThermo() {
@@ -334,10 +397,9 @@
 
   function endRound() {
     show(screenEnd);
-    $('#endSummary').textContent =
-      App.i18n.t('gen.resumenFinal').replace('{estrellas}', progress.stars);
-    $('#contexto').textContent = App.i18n.t('contexto');
-    $('#explicacion').textContent = App.i18n.t('explicacion');
+    $('#endSummary').textContent.textContent = '';
+    $('#contexto').textContent.textContent = '';
+    $('#explicacion').textContent.textContent = '';
     transferEl.textContent = App.i18n.t('transferencia');
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
@@ -362,6 +424,7 @@
     thermoCelebrated = false;
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
+    paintThermoSuggestion();
     paintThermo();
   });
   thermoAudio.addEventListener('click', thermoSay);

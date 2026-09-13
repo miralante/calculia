@@ -3,7 +3,7 @@
    Single-language file. Same keys as strings.es.js.
    Loaded conditionally from index.html based on App.i18n.locale().
    ============================================================
-   4-screen flow (see doc/en/SPEC.md §3.6, rule 13):
+   4-screen flow (see doc/en/spec.md §3.6, rule 13):
      1. introScreen — what Roman numerals are and why they are
         still used. A click-to-advance carousel of the 5 core
         symbols/combinations (I, V, X, IV, VI).
@@ -70,9 +70,9 @@
     "referenceTitle": "Remember the value of each letter",
     "referenceText": "Each letter is always worth the same. Letters add together in order, unless a smaller letter comes before a larger one: then it subtracts.",
     "referenceNext": "Start practising →",
-    "symbol{I}": "I is worth 1 (adds)",
-    "symbol{V}": "V is worth 5 (adds)",
-    "symbol{X}": "X is worth 10 (adds)",
+    "symbol{I}": "I is worth 1",
+    "symbol{V}": "V is worth 5",
+    "symbol{X}": "X is worth 10",
     "ruleSubtract": "If a smaller letter comes BEFORE a larger one, it subtracts:",
     "ruleAdd": "If it comes AFTER, it adds:",
     "exampleSubtract": "IV = 1 − 5 = 4",
@@ -137,9 +137,9 @@
        big symbol above and the reminder's formula. In IV,
        the {I} that subtracts is also colored red. */
     "carousel": {
-      "i": { "label": "I", "caption": "It's the first letter of the system. Its value is taught below." },
-      "v": { "label": "V", "caption": "It's the letter for five. Its value is taught below." },
-      "x": { "label": "X", "caption": "It's the letter for ten. Its value is taught below." },
+      "i": { "label": "I", "caption": "It's the number 1 in Roman numerals. The letter {I} is worth {i}:" },
+      "v": { "label": "V", "caption": "It's the number 5 in Roman numerals. The letter {V} is worth {v}:" },
+      "x": { "label": "X", "caption": "It's the number 10 in Roman numerals. The letter {X} is worth {x}:" },
       "iv": { "label": "IV", "caption": "It's the number 4 in Roman numerals. {V} is worth {v} and {I} is worth {i}. If {I} comes before, it subtracts: {v} − {i}." },
       "ix": { "label": "IX", "caption": "It's the number 9 in Roman numerals. {X} is worth {x} and {I} is worth {i}. If {I} comes before, it subtracts: {x} − {i}." },
       "vi": { "label": "VI", "caption": "It's the number 6 in Roman numerals. {V} is worth {v} and {I} is worth {i}. If {I} comes after, it adds: {v} + {i} = {i6}." },

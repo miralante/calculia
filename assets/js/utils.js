@@ -70,11 +70,47 @@
     });
   }
 
+  /* ---------------------------------------------------------------
+    * Shared footer injector.
+    *
+    * Replaces the 15+ hand-maintained <footer class="pie-app">
+    * copies in tools/<slug>/index.html + site/index.html with a
+    * single canonical source. Reads <footer data-pie-app> markers
+    * and fills them in at load time using App.i18n.t() for the
+    * text. Marker attributes mirror the routime convention:
+    *   data-pie-base            base path for relative links
+    *   data-pie-include-config  if 'true', prepends a Configuración link
+    *   data-pie-class           extra class added to the <footer> element
+    * Idempotent: a footer that already has children is skipped.
+    * --------------------------------------------------------------- */
+  function inyectarPie() {
+    if (!window.App || !window.App.i18n) return;
+    var pies = document.querySelectorAll('footer[data-pie-app]');
+    for (var i = 0; i < pies.length; i++) {
+      var pie = pies[i];
+      if (pie.childNodes && pie.childNodes.length > 0) continue;
+      var base = pie.getAttribute('data-pie-base') || '../../';
+      var includeConfig = pie.getAttribute('data-pie-include-config') === 'true';
+      var extraClass = pie.getAttribute('data-pie-class');
+      if (extraClass) pie.className = (pie.className ? pie.className + ' ' : '') + extraClass;
+      var html = '';
+      if (includeConfig) {
+        html += '<a href="' + base + 'config/" class="legal-link" data-i18n="core.config"></a>';
+      }
+      html += '<a href="' + base + 'legal/index.html" class="legal-link" data-i18n="core.dataProtection"></a>';
+      pie.innerHTML = html;
+      if (typeof window.App.i18n.apply === 'function') {
+        window.App.i18n.apply(pie);
+      }
+    }
+  }
+
   window.App.utils = {
     shuffle: shuffle,
     $: $,
     $$: $$,
     today: today,
-    reducedMotion: reducedMotion
+    reducedMotion: reducedMotion,
+    inyectarPie: inyectarPie
   };
 })();

@@ -4,17 +4,17 @@
    Structural check with no dependencies (plain Node only).
    Usage: node scripts/check.js
    Checks:
-   1. That every .js file in tools/, site/, settings/, legal/ and
+   1. That every .js file in tools/, site/, config/, legal/ and
       assets/js/ parses (equivalent to `node --check`).
    2. That every tools/<slug>/ has the canonical files:
       index.html, app.js, data.js, strings.es.js, strings.en.js, styles.css.
    3. sw.js <-> disk parity: every ARCHIVOS path exists, and every
       tool file is listed in ARCHIVOS.
    4. es/en key parity between strings.es.js and strings.en.js
-      (tools/, site/, settings/, legal/).
+      (tools/, site/, config/, legal/).
    5. Catalog parity lock: the set of activity slugs must match between
       tools/ folders on disk, the landing cards in site/index.html, the
-      progress rows in settings/index.html, and sw.js's ARCHIVOS.
+      progress rows in config/index.html, and sw.js's ARCHIVOS.
    6. Mandatory rule: zero mentions of disability, occupational therapy
       or minors in user-facing files (see doc/<locale>/SPEC.md §4).
    7. _headers: every quoted Content-Security-Policy source expression
@@ -40,6 +40,28 @@
       `current-floor`). Scope: tools/<slug>/{app.js} only — the
       core stylesheets in assets/css/ are pooled on the CSS side so
       legitimate shared classes do not trip the check.
+  10. _redirects stays within Cloudflare's per-file limits
+      (https://developers.cloudflare.com/pages/configuration/redirects/):
+      a maximum of 2 000 static redirects and 100 dynamic
+      (placeholder) redirects per file — 2 100 in total. If the file
+      is absent (the common case for projects that have no redirects)
+      the check is skipped: zero is valid.
+  11. _headers stays within Cloudflare's per-file limit of 100
+      header rules per file
+      (https://developers.cloudflare.com/pages/configuration/headers/).
+      A "rule" is one path-glob block (the glob line followed by
+      indented header lines), so the wildcards of `/assets/*` plus
+      its two Cache-Control lines count as one rule each, not three.
+      If the file is absent the check is skipped.
+  12. No shipped file exceeds Cloudflare Pages' 25 MB per-file
+      limit. Recursively walks the repo, excluding `.git/`,
+      `node_modules/`, `.claude/` (graphify skill + agent settings,
+      never uploaded), and `graphify-out*` (build artifacts). Warns
+      at 20 MB (still legal but worth a nudge) and fails at 25 MB
+      (Cloudflare will reject the deploy). This is the load-bearing
+      check of the three: the other two only bite if someone
+      hand-curates a giant _redirects/_headers, but any single image
+      or video edit can silently push a shipping asset past 25 MB.
    Output: list of failures with the exact file. Exit code 1 if there
    are any, "OK (N checks)" otherwise.
    ============================================================ */
@@ -53,6 +75,7 @@ var execFile = require('child_process').execFile;
 
 var ROOT = path.join(__dirname, '..');
 var failures = [];
+var largeFileWarnings = [];
 var checks = 0;
 
 function rel(p) {
@@ -76,12 +99,16 @@ function listJs(dir) {
   return result;
 }
 
-/* --- 1. node --check on tools/, site/, settings/, legal/, assets/js/ --- */
+/* --- 1. node --check on tools/, site/, config/, legal/, team/, assets/js/ ---
+   team/ is the guide for the support team (the hidden route that mirrors
+   the same shape in routime); it carries its own strings.<locale>.js
+   pair and must be checked for syntax. */
 var jsFiles = []
   .concat(listJs(path.join(ROOT, 'tools')))
   .concat(listJs(path.join(ROOT, 'site')))
-  .concat(listJs(path.join(ROOT, 'settings')))
+  .concat(listJs(path.join(ROOT, 'config')))
   .concat(listJs(path.join(ROOT, 'legal')))
+  .concat(listJs(path.join(ROOT, 'team')))
   .concat(listJs(path.join(ROOT, 'assets', 'js')));
 
 /* `node --check` is run in parallel across all JS files: each spawn
@@ -184,6 +211,29 @@ function extractDictFromStrings(archivo) {
   return captured;
 }
 
+function compareEsEnPair(dir, label) {
+  var esFile = path.join(dir, 'strings.es.js');
+  var enFile = path.join(dir, 'strings.en.js');
+  if (!fs.existsSync(esFile) || !fs.existsSync(enFile)) return;
+  checks += 1;
+  var dictEs = extractDictFromStrings(esFile);
+  var dictEn = extractDictFromStrings(enFile);
+  if (!dictEs || !dictEn) {
+    failures.push(label + ': no se han podido extraer los dicts es/en');
+    return;
+  }
+  var keysEs = flatKeys(dictEs, '').sort();
+  var keysEn = flatKeys(dictEn, '').sort();
+  var onlyEs = keysEs.filter(function (c) { return keysEn.indexOf(c) === -1; });
+  var onlyEn = keysEn.filter(function (c) { return keysEs.indexOf(c) === -1; });
+  if (onlyEs.length || onlyEn.length) {
+    var detail = [];
+    if (onlyEs.length) detail.push('solo en es: ' + onlyEs.join(', '));
+    if (onlyEn.length) detail.push('solo en en: ' + onlyEn.join(', '));
+    failures.push(label + ': ' + detail.join('; '));
+  }
+}
+
 function flatKeys(obj, prefix) {
   var result = [];
   Object.keys(obj || {}).forEach(function (k) {
@@ -223,14 +273,22 @@ function compareEsEn(dir, label) {
 
 slugs.forEach(function (slug) { compareEsEn(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
 compareEsEn(path.join(ROOT, 'site'), 'site/');
-compareEsEn(path.join(ROOT, 'settings'), 'settings/');
+compareEsEn(path.join(ROOT, 'config'), 'config/');
 compareEsEn(path.join(ROOT, 'legal'), 'legal/');
+/* Hidden routes with their own strings.<locale>.js pair (about/, team/):
+   each is a standalone guide aimed at families/therapists/agents, not
+   linked from the main menu, and must keep the same es/en key parity
+   as everything else the user can reach. The function definition sits
+   next to extractDictFromStrings above; calling it for a missing
+   directory is a no-op (it bails on the first fs.existsSync check). */
+if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'), 'about/');
+if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
 /* --- 5. Catalog parity lock ---
    The set of activity slugs must match between:
      - tools/ folders on disk (source of truth)
      - the landing cards (<a href="../tools/...">) in site/index.html
-     - the progress rows (data-tool="<slug>") in settings/index.html
+     - the progress rows (data-tool="<slug>") in config/index.html
      - the assets listed for tools in sw.js ARCHIVOS
 */
 checks += 1;
@@ -252,7 +310,7 @@ function parseSlugsFromSw() {
   return set;
 }
 function parseDataToolInSettings() {
-  var html = fs.readFileSync(path.join(ROOT, 'settings', 'index.html'), 'utf8');
+  var html = fs.readFileSync(path.join(ROOT, 'config', 'index.html'), 'utf8');
   var re = /data-tool="([^"]+)"/g;
   var set = new Set();
   var m;
@@ -324,7 +382,7 @@ function listDir(dir) {
 }
 var userTargets = []
   .concat(listDir(path.join(ROOT, 'site')))
-  .concat(listDir(path.join(ROOT, 'settings')))
+  .concat(listDir(path.join(ROOT, 'config')))
   .concat(listDir(path.join(ROOT, 'legal')));
 slugs.forEach(function (slug) {
   userTargets = userTargets.concat(listDir(path.join(toolsDir, slug)));
@@ -340,7 +398,7 @@ userTargets.forEach(function (archivo) {
       found = content.indexOf(term.toLowerCase()) !== -1;
     }
     if (found) {
-      failures.push(rel(archivo) + ': contiene "' + term + '" — ninguna página visible puede mencionar discapacidad, terapia ocupacional o menores (ver doc/es/SPEC.md §4)');
+      failures.push(rel(archivo) + ': contiene "' + term + '" — ninguna página visible puede mencionar discapacidad, terapia ocupacional o menores (ver doc/es/spec.md §4)');
     }
   });
 });
@@ -374,7 +432,7 @@ headersContent.split('\n').filter(function (line) {
    registered in either language file: browser fallback then renders
    the literal key name on the page. This section cross-references
    actual usage sites against the registered keys, per unit
-   (tools/<slug>/, site/, settings/, legal/) and per language.
+   (tools/<slug>/, site/, config/, legal/) and per language.
 */
 /* Each usage entry is { key, prefix }: prefix=false means the call
    passed a complete literal key (App.i18n.t('yourStars')) and must
@@ -459,12 +517,12 @@ function checkUsageVsRegistration(dir, label) {
 
 slugs.forEach(function (slug) { checkUsageVsRegistration(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
 checkUsageVsRegistration(path.join(ROOT, 'site'), 'site/');
-checkUsageVsRegistration(path.join(ROOT, 'settings'), 'settings/');
+checkUsageVsRegistration(path.join(ROOT, 'config'), 'config/');
 checkUsageVsRegistration(path.join(ROOT, 'legal'), 'legal/');
 
 /* --- 9. CSS class coverage in tools/<slug>/ ---
    The repo is mid-rename (apptonomia → calculia, plus the Spanish →
-   English token pass documented in doc/en/RENAME_MAP.md). Rename
+   English token pass documented in doc/en/rename_map.md). Rename
    scripts touch both JS and CSS in lockstep most of the time, but
    class names injected dynamically from app.js (`class="…"` or
    `className='…'`, plus `'prefix-' + variable` concatenations) are
@@ -476,7 +534,7 @@ checkUsageVsRegistration(path.join(ROOT, 'legal'), 'legal/');
    styles.css had long been renamed to `floor-row` / `current-floor`.
 
    Scope: only tools/<slug>/{app.js,styles.css} is cross-checked.
-   site/, settings/ and legal/ are out of scope on purpose — they
+   site/, config/ and legal/ are out of scope on purpose — they
    have little dynamic class emission and a lot of static HTML, so
    the false-positive rate would be high. The CSS side pools every
    .css file in the repo (the shared assets/css/*.css sheets count)
@@ -507,7 +565,7 @@ function listCssFiles() {
   walk(path.join(ROOT, 'tools'));
   walk(path.join(ROOT, 'assets', 'css'));
   walk(path.join(ROOT, 'site'));
-  walk(path.join(ROOT, 'settings'));
+  walk(path.join(ROOT, 'config'));
   walk(path.join(ROOT, 'legal'));
   return out;
 }
@@ -602,8 +660,170 @@ slugs.forEach(function (slug) {
   }
 });
 
+/* --- 10. _redirects stays within Cloudflare's per-file limits
+   (https://developers.cloudflare.com/pages/configuration/redirects/):
+   a maximum of 2 000 static redirects and 100 dynamic (placeholder)
+   redirects per file — 2 100 in total. If the file is absent (the
+   common case for projects that have no redirects at all) the check
+   is skipped: zero is valid. Cloudflare parses the file line-by-line
+   and counts entries, not bytes, so the check counts entries.
+
+   - Static: a non-comment, non-blank line with a redirect code
+     (301/302/303/307/308) at the end OR a proxy entry (`200`). The
+     `301`/`302`/`303`/`307`/`308` codes all sit at the end of the
+     line in Cloudflare's syntax (`/from /to 301`).
+   - Dynamic: a redirect line containing a `:placeholder$` token
+     (e.g. `/news/:slug$ /blog/:slug 301`), per the Cloudflare docs'
+     "Dynamic redirects" section. Plain colons are not placeholders;
+     only the `:name$` syntax counts. */
+var REDIRECTS_FILE = path.join(ROOT, '_redirects');
+if (fs.existsSync(REDIRECTS_FILE)) {
+  checks += 1;
+  var redirLines = fs.readFileSync(REDIRECTS_FILE, 'utf8').split('\n');
+  var staticCount = 0;
+  var dynamicCount = 0;
+  redirLines.forEach(function (line) {
+    var trimmed = line.trim();
+    if (!trimmed || trimmed.charAt(0) === '#') return;
+    var isStatic = /\s(?:200|301|302|303|307|308)\s*$/.test(trimmed) && !/:\w+\$/.test(trimmed);
+    var isDynamic = /:\w+\$/.test(trimmed);
+    if (isStatic) staticCount += 1;
+    else if (isDynamic) dynamicCount += 1;
+  });
+  var REDIR_STATIC_LIMIT = 2000;
+  var REDIR_DYNAMIC_LIMIT = 100;
+  if (staticCount > REDIR_STATIC_LIMIT) {
+    failures.push('_redirects: ' + staticCount + ' static redirects, maximo es ' + REDIR_STATIC_LIMIT +
+      ' (Cloudflare Pages rechaza el archivo)');
+  }
+  if (dynamicCount > REDIR_DYNAMIC_LIMIT) {
+    failures.push('_redirects: ' + dynamicCount + ' dynamic redirects, maximo es ' + REDIR_DYNAMIC_LIMIT +
+      ' (Cloudflare Pages rechaza el archivo)');
+  }
+}
+
+/* --- 11. _headers stays within Cloudflare's per-file limit of 100
+   header rules per file
+   (https://developers.cloudflare.com/pages/configuration/headers/).
+   A "rule" is one path-glob block: the glob line plus the indented
+   header lines that follow it (e.g. `Cache-Control: …`,
+   `X-Frame-Options: …`, a `Content-Security-Policy:` line). The
+   wildcards `/assets/*` plus its two Cache-Control lines therefore
+   count as one rule, not three.
+
+   Detection: a block starts at a line whose first non-blank
+   character is `/` (a path glob) followed by `:` for header content
+   on subsequent indented lines. The CSS / `_redirects` regex
+   trick doesn't apply: this format is a sequence of "glob + key:
+   value" pairs, not a list of files. We count both the path-glob
+   line AND any `Key: value` lines that follow at indent ≥ 2 spaces
+   until the next path-glob or end of file.
+
+   If the file is absent the check is skipped: every project
+   shipping a PWA without custom headers is valid. */
+var HEADERS_FILE = path.join(ROOT, '_headers');
+if (fs.existsSync(HEADERS_FILE)) {
+  checks += 1;
+  var headersLines = fs.readFileSync(HEADERS_FILE, 'utf8').split('\n');
+  var ruleCount = 0;
+  for (var i = 0; i < headersLines.length; i++) {
+    var hLine = headersLines[i];
+    var hTrim = hLine.trim();
+    if (!hTrim || hTrim.charAt(0) === '#') continue;
+    // A path-glob rule starts at any line whose first non-blank char
+    // is `/` and that is NOT a `Key: value` line (no colon before the
+    // first non-whitespace run). Headers like `Cache-Control: …` start
+    // with a letter, never a slash.
+    if (hLine.charAt(0) === '/' && !/^\/.*:/.test(hLine)) {
+      ruleCount += 1;
+      continue;
+    }
+    // The body lines of a header rule: any line whose first
+    // non-whitespace is a letter/dash and contains a colon. These
+    // lines belong to the previously-counted glob; we count them
+    // individually too because Cloudflare's published limit of 100
+    // applies to the total number of header lines (path-glob +
+    // header lines), not just to the globs. The 7 currently
+    // shipped suites all stay well under 100 either way; this
+    // matches Cloudflare's wording in
+    // https://developers.cloudflare.com/pages/configuration/headers/.
+    if (/^[A-Za-z][\w-]*:\s/.test(hLine)) ruleCount += 1;
+  }
+  var HEADERS_RULE_LIMIT = 100;
+  if (ruleCount > HEADERS_RULE_LIMIT) {
+    failures.push('_headers: ' + ruleCount + ' lineas de regla (path-globs + headers), maximo es ' +
+      HEADERS_RULE_LIMIT + ' (Cloudflare Pages rechaza el archivo)');
+  }
+}
+
+/* --- 12. No shipped file exceeds Cloudflare Pages' 25 MB per-file
+   limit (https://developers.cloudflare.com/pages/limits/). Warns at
+   20 MB (legal but worth a nudge before the next content commit
+   pushes it over) and fails at 25 MB (Cloudflare will reject the
+   deploy). Only walks files that actually deploy: `.git/` (version
+   control metadata), `node_modules/` (none today, but kept for
+   safety), `.claude/` (graphify skill + agent settings, never
+   uploaded), and `graphify-out*` (build artifacts) are excluded.
+   `scripts/ingest/` and similar non-shipping helper directories are
+   also excluded — this check cares about what Cloudflare serves,
+   not about the maintainer's working area. */
+var FILE_SIZE_WARN_MB = 20;
+var FILE_SIZE_FAIL_MB = 25;
+var fileSizeExcluded = ['.git', 'node_modules', '.claude', 'graphify-out', 'graphify-out-meta'];
+(function walkForLargeFiles(dir) {
+  if (!fs.existsSync(dir)) return;
+  fs.readdirSync(dir, { withFileTypes: true }).forEach(function (entry) {
+    if (fileSizeExcluded.indexOf(entry.name) !== -1) return;
+    var full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkForLargeFiles(full);
+    } else if (entry.isFile()) {
+      checks += 1;
+      var size = fs.statSync(full).size;
+      var sizeMb = size / (1024 * 1024);
+      if (sizeMb >= FILE_SIZE_FAIL_MB) {
+        failures.push(rel(full) + ': pesa ' + sizeMb.toFixed(2) + ' MB, maximo por archivo es ' +
+          FILE_SIZE_FAIL_MB + ' MB (Cloudflare Pages rechaza el deploy)');
+      } else if (sizeMb >= FILE_SIZE_WARN_MB) {
+        // Non-blocking warning — emitted later via a per-project
+        // array collected during the walk (kept here to keep the
+        // walk single-pass).
+        largeFileWarnings.push(rel(full) + ': pesa ' + sizeMb.toFixed(2) + ' MB, maximo por archivo es ' +
+          FILE_SIZE_FAIL_MB + ' MB (aviso: todavia legal, acercarse al limite)');
+      }
+    }
+  });
+})(ROOT);
+
+/* --- 13. Shared footer marker: every tools/<slug>/index.html and
+    site/index.html must declare the canonical <footer data-pie-app>
+    marker (no hand-written children). The injector in
+    assets/js/utils.js -> App.utils.inyectarPie() fills it in at
+    load time. --- */
+checks += 1;
+var CANONICAL_PIE_PATHS = [path.join('site', 'index.html')].concat(
+  slugs.map(function (s) { return path.join('tools', s, 'index.html'); })
+);
+CANONICAL_PIE_PATHS.forEach(function (relPath) {
+  var absPath = path.join(ROOT, relPath);
+  if (!fs.existsSync(absPath)) return;
+  var html = fs.readFileSync(absPath, 'utf8');
+  if (!/<footer\s+data-pie-app[^>]*><\/footer>/.test(html)) {
+    failures.push(relPath + ': falta el marcador <footer data-pie-app> canónico.');
+    return;
+  }
+  if (/<footer\s+class="pie-app/.test(html)) {
+    failures.push(relPath + ': hay un <footer class="pie-app..."> manual además del marcador canónico; quítalo.');
+  }
+});
+
 /* --- Result --- */
 parseJobs.then(function () {
+  if (largeFileWarnings.length) {
+    console.log('WARNINGS (' + largeFileWarnings.length + ') \u2014 non-blocking, ver https://developers.cloudflare.com/pages/limits/ (limite 25 MB por archivo):');
+    largeFileWarnings.forEach(function (w) { console.log('  - ' + w); });
+    console.log('');
+  }
   if (failures.length) {
     console.log('FALLOS (' + failures.length + '):');
     failures.forEach(function (f) { console.log('  - ' + f); });

@@ -86,6 +86,47 @@
         <p class="counter-written hidden" id="counterWritten" aria-live="polite"></p>
         <p class="instruction counter-hint" id="counterHint" data-i18n="gen.counterHint"></p>
       </div>
+
+      <!-- Free-exploration elevator ('positivos-y-negativos'). Shown only
+           when level.tipo is 'ascensorLibre' or 'ascensorMeta'. Same
+           mechanic as the water-temperature tool: −10/−1/+1/+10
+           buttons, the visual reacts on every step (the elevator emoji
+           moves up and down the shaft), the floor number reads aloud
+           with the matching sign. No quiz, no wrong-answer feedback;
+           for 'ascensorMeta' a celebration message appears once the
+           target floor is reached. The shaft is decorative
+           (aria-hidden); the accessible reading lives in the live
+           region #elevatorNumber. -->
+      <div id="elevatorUI" class="hidden stack">
+        <div class="card centered elevator-card">
+          <p class="elevator-goal" id="elevatorGoal"></p>
+          <div class="elevator-visual">
+            <div id="elevatorShaft" class="elevator-shaft-dynamic" aria-hidden="true"></div>
+            <div id="elevatorNumber" class="elevator-number" aria-live="polite"></div>
+            <p class="elevator-state-label" id="elevatorStateLabel"></p>
+          </div>
+        </div>
+        <!-- Random exploration suggestion. Same pattern as the
+             temperature tool: a starting idea the user can ignore
+             or take. For 'ascensorMeta' the goal line above names
+             the target, so the random suggestion is hidden to
+             avoid sending contradictory directions. For
+             'ascensorLibre' it adds a concrete starting floor to
+             the open-ended mission. -->
+        <p class="elevator-suggestion hidden" id="elevatorSuggestion" aria-live="polite"></p>
+        <div class="elevator-controls">
+          <div class="elevator-row">
+            <button type="button" class="btn-elevator" data-step="-10">−10</button>
+            <button type="button" class="btn-elevator" data-step="-1">−1</button>
+            <button type="button" class="btn-elevator btn-elevator-icon" id="elevatorAudio" aria-label="Hear the floor">🔊</button>
+            <button type="button" class="btn-elevator btn-elevator-secondary" id="elevatorReset">🔄 Start at 0</button>
+            <button type="button" class="btn-elevator" data-step="1">+1</button>
+            <button type="button" class="btn-elevator" data-step="10">+10</button>
+            <button type="button" class="btn-elevator" id="elevatorExit">✅ Exit</button>
+          </div>
+        </div>
+        <p class="instruction elevator-hint" id="elevatorHint" data-i18n="gen.elevatorHint"></p>
+      </div>
     </section>
 
     <section id="screenEnd" class="hidden centered stack" aria-live="polite">
@@ -99,14 +140,11 @@
       <button type="button" class="btn btn-secondary" id="btnOtherActivity" data-i18n="btnOtherActivity">Otra actividad</button>
       <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
-    <footer class="pie-app">
-      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Protección de datos</a>
-    </footer>
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
 
   <script src="../../assets/js/utils.js"></script>
   <script src="../../assets/js/i18n.js"></script>
-  <script src="../../assets/js/tts.js"></script>
   <script src="../../assets/js/storage.js"></script>
   <script src="../../assets/js/feedback.js"></script>
   <script src="strings.es.js"></script>

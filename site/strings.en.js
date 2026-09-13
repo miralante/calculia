@@ -7,6 +7,7 @@
   'use strict';
 
   App.i18n.register({
+    suiteBy: 'An app by',
     "title": "Calculia",
     "saludo": "Hi. What do you want to practice today?",
     "yourStars": "Your stars",

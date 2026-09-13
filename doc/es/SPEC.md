@@ -14,15 +14,16 @@ cálculo y razonamiento lógico:
 - **Razonamiento y lógica**: Adivinanzas, Patrones, El Monedero, El
   Reloj, Historias, ¿Qué no encaja?, Puzzle.
 
-Calculia es un proyecto hermano de Apptonomia, una suite más amplia de
-actividades de terapia ocupacional: el alcance de Calculia es cálculo y
-razonamiento específicamente, no los 6 juegos de mesa clásicos (ajedrez,
-damas, dominó, tres en raya, sudoku visual, conecta 4) que forman parte
-del catálogo de actividades de Apptonomia. Comparte el lenguaje de
-diseño centrado en accesibilidad de Apptonomia (lectura fácil, sin
-presión, alto contraste, objetivos táctiles grandes) porque ese diseño
-sirve a cualquiera que practique matemáticas o lógica, no solo a la
-audiencia para la que se construyó Apptonomia originalmente.
+Calculia es una de las apps de la suite Miralante, junto a Apptonomia
+(la suite original, más amplia, de actividades de terapia ocupacional
+de la que se escindieron las demás): el alcance de Calculia es cálculo
+y razonamiento específicamente, no los 6 juegos de mesa clásicos
+(ajedrez, damas, dominó, tres en raya, sudoku visual, conecta 4) que
+forman parte del catálogo de actividades de Apptonomia. Comparte el
+lenguaje de diseño centrado en accesibilidad de Apptonomia (lectura
+fácil, sin presión, alto contraste, objetivos táctiles grandes) porque
+ese diseño sirve a cualquiera que practique matemáticas o lógica, no
+solo a la audiencia para la que se construyó Apptonomia originalmente.
 
 ## 2. Audiencia
 
@@ -31,17 +32,17 @@ estudiantes y, en particular, personas que se benefician de la lectura
 fácil, un ritmo sin presión y pantallas predecibles y sin ruido visual.
 Usable de forma **autónoma**, sin que un profesor o familiar tenga que
 estar al lado de quien aprende. Funciona igual en escritorio y en
-móvil/tablet — sin restricción de dispositivo, a diferencia del proyecto
-hermano Teclatlon (solo teclado de ordenador).
+móvil/tablet — sin restricción de dispositivo, a diferencia de la app
+de la suite Teclatlon (solo teclado de ordenador).
 
 ## 3. Restricciones no negociables (de producto)
 
 Estas restricciones vienen del **producto**, no son técnicas. Son las
 "leyes" que nunca se rompen porque definen qué tipo de experiencia
-ofrece Calculia. Calculia comparte esta constitución con su proyecto
-hermano Apptonomia (ver el `SPEC.md` de Apptonomia) — están adaptadas a
-que Calculia practica cálculo y razonamiento, no habilidades de vida
-diaria ni terapia ocupacional.
+ofrece Calculia. Calculia comparte esta constitución con la otra app
+de la suite Apptonomia (ver el `SPEC.md` de Apptonomia) — están
+adaptadas a que Calculia practica cálculo y razonamiento, no
+habilidades de vida diaria ni terapia ocupacional.
 
 ### 3.1 El error nunca castiga
 
@@ -187,42 +188,15 @@ pasos, en este orden, y con la misma función pedagógica.
    se documenta en `doc/en/technical.md` por qué esa actividad
    concreta prescinde de ella.
 
-#### Elementos técnicos de la anatomía
+#### Contenido del cierre
 
-- **`contexto`** — clave de `strings.<locale>.js`. Describe la
-  situación de la vida real en la que se enmarca la actividad. Se
-  muestra como primer párrafo del `screenEnd` (cuando la pantalla
-  de cierre existe) justo debajo del resumen de la ronda.
-- **`pista`** — clave de `strings.<locale>.js`. Texto de pista
-  socrática. Una pista por pantalla de ronda, mostrada al primer
-  fallo. En actividades sin pregunta con respuesta correcta/
-  incorrecta (ej. Puzzle, que es puramente espacial), la pista no
-  existe como tal y se sustituye por `contexto` + `explicacion`.
-- **`explicacion`** — clave de `strings.<locale>.js`. Párrafo de
-  cierre de la actividad. Resume qué ha practicado la persona y
-  por qué la mecánica funciona como funciona. Aparece en el
-  `screenEnd` después del `contexto` y antes de la `transferencia`.
-- **`transferencia`** — clave de `strings.<locale>.js`, equivalente
-  inglés `transfer` cuando la actividad original se escribió en
-  inglés. Frase final del `screenEnd` que ancla el aprendizaje a
-  un escenario real ("en la tienda", "en la cocina", "leyendo un
-  precio"). Es la única pieza de la anatomía que la actividad
-  puede declarar no aplicable; en ese caso se documenta, no se
-  omite sin más.
+El cierre de cada actividad muestra, en este orden, el resumen de la ronda,
+la explicación de lo practicado y una frase de transferencia que conecta el
+aprendizaje con una situación real. La transferencia puede no aplicarse solo
+cuando no aporta valor; la razón debe quedar documentada.
 
-#### Cómo se muestra en el cierre
-
-Toda actividad debe pintar en su `screenEnd` (o equivalente), por
-este orden:
-
-```
-🎉 ¡Ronda completada!
-<resumen de la ronda>
-<contexto>          ← App.i18n.t('contexto')
-<explicacion>       ← App.i18n.t('explicacion')
-<transferencia>     ← App.i18n.t('transferencia') | App.i18n.t('transfer')
-[ Volver a jugar ] [ Otra actividad ] [ Volver al menú ]
-```
+La forma técnica de implementar esta anatomía, sus claves de contenido y su
+cobertura por actividad están en [`tecnico.md`](tecnico.md).
 
 #### Cobertura por actividad (estado actual)
 
@@ -287,7 +261,7 @@ Esta regla se comprueba automáticamente: `node scripts/check.js`
 falla si cualquiera de esos términos aparece en los archivos que ve
 quien usa la app.
 
-### 4.1 Eufemismo público: "usuario/a tipo"
+### 4.1 Eufemismo público: "persona tipo"
 
 Cuando se presenta Calculia de cara al **público general** (prensa,
 charlas, READMEs públicos que cualquiera pueda leer, el portal
@@ -295,7 +269,7 @@ charlas, READMEs públicos que cualquiera pueda leer, el portal
 "discapacidad intelectual" **no debe usarse** para describir la
 audiencia de la app, ni siquiera cuando el texto que lo rodea sería
 público. El eufemismo aceptado en esas superficies para referirse a la
-audiencia es **"usuario/a tipo"** (plural "usuarios/as tipo"),
+audiencia es **"persona tipo"** (plural "personas tipo"),
 entendido como marcador genérico de perfil, no como etiqueta para
 ninguna persona real.
 
@@ -305,10 +279,10 @@ Dónde se aplica y dónde no:
   proyecto pueda leer sin autenticarse: `README.es.md`, `README.md`,
   el portal en `apptonomia.uk`, charlas públicas, copy en redes, notas
   de prensa, material de marketing. En estas superficies se habla de
-  la audiencia como "el/la usuario/a tipo" o "los/las usuarios/as
-  tipo" de la app.
+  la audiencia como "la persona tipo" o "las personas tipo"
+  de la app.
 - **No se aplica** a la documentación interna de este repositorio
-  (`CLAUDE.md`, `doc/es/SPEC.md`, `doc/en/SPEC.md`, `tecnico.md`,
+  (`CLAUDE.md`, `doc/es/spec.md`, `doc/en/spec.md`, `tecnico.md`,
   [`roles.md`](roles.md), `CONTRIBUTING.es.md`, `CONTRIBUTING.md`) —
   esos archivos los lee quien mantiene o contribuye al proyecto, y
   "discapacidad intelectual" sigue siendo allí el término canónico,
@@ -319,7 +293,7 @@ Dónde se aplica y dónde no:
   sobre un trámite administrativo real relacionado con discapacidad):
   eso es contenido, no etiquetado de la audiencia.
 - **No se aplica** a la UI de la propia app: la regla de §4 sigue
-  prohibiendo **cualquier** mención, incluida "usuario/a tipo", en
+  prohibiendo **cualquier** mención, incluida "persona tipo", en
   `site/index.html`, `tools/<slug>/index.html`, `app.js`, `data.js`,
   `strings.<locale>.js`, `settings/`, `legal/` y cualquier otra
   superficie visible. El eufemismo es para el exterior, no para lo que
@@ -327,7 +301,7 @@ Dónde se aplica y dónde no:
 
 Razón: presentar el objetivo real del proyecto en documentación interna
 es útil y necesario; presentarlo en superficies de marketing o landing
-no es necesario ni respetuoso con la audiencia — "usuario/a tipo"
+no es necesario ni respetuoso con la audiencia — "persona tipo"
 permite describir en público para qué sirve la app (qué perfil tiene
 quien la usa) sin nombrar públicamente un grupo clínico.
 
@@ -365,6 +339,15 @@ producto.
 12. **Tecnología sobria**: HTML5 + CSS3 + JavaScript vanilla, sin
     frameworks, sin paso de build, sin dependencias npm, PWA
     offline-first.
+
+### Indicador de progreso
+
+La barra de progreso de las actividades se diseña como una cápsula
+horizontal compacta: el avance se muestra mediante el relleno de la
+barra y el contador breve (`actual / total`) aparece centrado dentro de
+ella, superpuesto al relleno. No se utiliza una frase separada del tipo
+«X de Y», para reservar espacio visual a la actividad. El contador sigue
+siendo dinámico y accesible para tecnologías de asistencia.
 
 ## 6. Reglas de accesibilidad (obligatorias en cualquier cambio de UI)
 

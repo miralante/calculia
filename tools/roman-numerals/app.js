@@ -398,25 +398,34 @@
      Instead of the one-line "10+10+1=21", the formula walks the
      reader from the first chunk to the total one chunk at a
      time, like school arithmetic:
-       XX  → "10+10=20"
-       XXI → "10+10=20, 20+1=21"
-       VI  → "5+1=6"
-       VII → "5+1=6, 6+1=7"
-       III → "1+1=2, 2+1=3"
-       IV  → "5−1=4"
-       IX  → "10−1=9"
-     Subtract pairs (IV/IX) stay as one atomic step: there's
-     nothing else to chain them with, and the subtract rule is
-     the lesson. Everything else walks chunks one at a time so
-     each new sum builds on the previous partial, which makes
-     the progression explicit instead of collapsed. Steps are
-     joined by ", " so the formula reads as a chain rather than
-     a single expression. The very last "= N" appears once at
-     the end of the chain (so the final partial IS the total);
-     intermediate steps end in their running partial too. */
+       XX   → "10+10=20"
+       XXI  → "10+10=20, 20+1=21"
+       VI   → "5+1=6"
+       VII  → "5+1=6, 6+1=7"
+       III  → "1+1=2, 2+1=3"
+       IV   → "5−1=4"
+       IX   → "10−1=9"
+       XIV  → "5−1=4, 10+4=14"      (subtract pair, then add)
+       XIX  → "10−1=9, 10+9=19"     (subtract pair, then add)
+       XXIV → "5−1=4, 10+10=20, 20+4=24"  (three chunks, pair in the middle)
+     Subtract pairs (IV/IX) are always rendered as their own
+     atomic step ("big−small=value") so the subtract rule is the
+     lesson — never collapsed into "value" alone, because that
+     would skip the operation that justifies the pair's spelling.
+     When the numeral mixes a subtract pair with other chunks
+     (XIV, XIX, XXIV…) the pair's step appears first and the
+     running partial afterwards carries that value into the next
+     sum. Everything else walks chunks one at a time so each new
+     sum builds on the previous partial, which makes the
+     progression explicit instead of collapsed. Steps are joined
+     by ", " so the formula reads as a chain rather than a single
+     expression. */
   function coloredFormula(roman) {
     var deco = DATA.decompose(roman);
     var totalCls = totalColorClass(deco);
+    /* Single-chunk subtract (IV, IX) — the subtract rule's
+       textbook example. The pair is the entire numeral so its
+       resolution IS the total. */
     if (deco.mode === 'subtract') {
       var big = deco.chunks[0].letters[1];
       var small = deco.chunks[0].letters[0];
@@ -426,12 +435,15 @@
     }
     if (deco.chunks.length === 1) {
       /* Single chunk that's a run of identical letters (XX, III,
-         VIII → "5+1+1+1"): expand letter-by-letter so the
-         formula reads as an accumulated sum like "10+10=20"
-         or "1+1=2, 2+1=3" instead of the odd "20=20" / "3=3".
-         Single letters (X, V, I) don't reach here because the
-         famous screen and the quiz both suppress the formula
-         for them (no operation to show). */
+         VIII → "5+1+1+1"): render every letter with its own
+         "+" and "=" chained, so the formula reads as an
+         accumulated walk rather than the odd "20=20" / "3=3"
+         you'd get by emitting the chunk's pre-summed value as
+         both sides of "=". Steps are joined by ", " so each
+         finished sum sits on its own in the chain
+         ("1+1=2, 2+1=3", "10+10=20"). Single letters (X, V, I)
+         don't reach here because they have no operation to
+         show. */
       var letters = deco.chunks[0].letters.split('');
       var partial = 0;
       var steps = letters.map(function (letter, idx) {
@@ -447,20 +459,74 @@
       return steps.join(', ');
     }
     /* Walk chunks one at a time, accumulating the partial so far.
-       The first step is just the first chunk's value: there's no
-       running partial yet. Every step after that is
-       "<previous partial>+<next chunk>=<new partial>". Steps are
-       joined by ", " so the chain reads naturally on one line. */
+       The first step is the first chunk's value (suspended — see
+       post-processing below).
+
+       Subtract pairs (chunk.pair === true) are rendered as a
+       standalone "<big>−<small>=<value>" step BEFORE their sum
+       step, so the formula never hides the subtraction that
+       explains why the pair is spelled IV/IX rather than IIII/
+       VIIII/etc. Example for XIV (chunks [X(10), IV(4 pair)]):
+         step 0:  "<10>"               ← suspended (first operand alone)
+         pair step: "5−1=4"             ← resolves the IV pair
+         sum step: "<10>+<4>=<14>"     ← adds the resolved pair
+       Discarding the suspended step and joining the rest with
+       ", " gives "5−1=4, 10+4=14". The pair's resolved value
+       (4) is reused as the second addend so the chain still
+       traces the running total. */
+    var steps = [];
     var partial = 0;
-    var steps = deco.chunks.map(function (chunk, idx) {
-      if (idx === 0) {
+    for (var idx = 0; idx < deco.chunks.length; idx++) {
+      var chunk = deco.chunks[idx];
+      if (chunk.pair) {
+        /* Standalone subtract step: "<big>−<small>=<value>". The
+           pair's components get their own colours (big in its
+           letter colour, small in red). */
+        var bigL = chunk.letters[1];
+        var smallL = chunk.letters[0];
+        steps.push(
+          '<span class="letter-' + bigL.toLowerCase() + '">' + ROMAN_VALUES[bigL] + '</span>' +
+          '−<span class="letter-' + smallL.toLowerCase() + ' letter-subtract">' + ROMAN_VALUES[smallL] + '</span>' +
+          '=<span aria-hidden="true" class="letter-' + smallL.toLowerCase() + ' letter-subtract">' + chunk.value + '</span>'
+        );
+        /* Sum step that carries the pair's resolved value into
+           the running partial. */
+        if (partial > 0) {
+          steps.push(
+            '<span class="deco-partial">' + partial + '</span>+' + coloredChunkValue(chunk) +
+            '=<span aria-hidden="true" class="' + totalCls + '">' + (partial + chunk.value) + '</span>'
+          );
+        }
+        partial += chunk.value;
+      } else if (idx === 0) {
+        /* First chunk, not a pair: leave it suspended. The next
+           step (or the discard-if-last pass below) drops it so
+           the chain doesn't read "<first operand>, <first
+           operand>+...". */
+        steps.push(coloredChunkValue(chunk));
         partial = chunk.value;
-        return coloredChunkValue(chunk);
+      } else {
+        /* Subsequent regular chunk: "<prev partial>+<this
+           chunk>=<new partial>". */
+        var left = '<span class="deco-partial">' + partial + '</span>+' + coloredChunkValue(chunk);
+        partial += chunk.value;
+        steps.push(left + '=<span aria-hidden="true" class="' + totalCls + '">' + partial + '</span>');
       }
-      var left = '<span class="deco-partial">' + partial + '</span>+' + coloredChunkValue(chunk);
-      partial += chunk.value;
-      return left + '=<span aria-hidden="true" class="' + totalCls + '">' + partial + '</span>';
-    });
+    }
+    /* If the last chunk was a pair with no sum following it
+       (e.g. XIX with chunks [X(10), IX(9)]: the pair renders
+       "10−1=9" and the sum step adds it onto 10), the sum step
+       above was already added before the partial bump. If it
+       wasn't (e.g. pure pair as the only chunk) we already
+       handled it in the deco.mode === 'subtract' branch above.
+       If the very first step is the suspended first operand and
+       the whole formula only has that one step (a 2-chunk numeral
+       where neither chunk is a pair), drop it so the chain reads
+       "5+1=6" instead of "5, 5+1=6". */
+    var hasSuspendedFirst = deco.chunks[0] && !deco.chunks[0].pair;
+    if (hasSuspendedFirst) {
+      steps.shift();
+    }
     return steps.join(', ');
   }
 
@@ -572,7 +638,6 @@
   function speakWithButton(btn, text) {
     if (!text) return;
     if (btn.getAttribute('aria-pressed') === 'true') {
-      App.tts.stop();
       btn.removeAttribute('aria-pressed');
       btn.classList.remove('hablando');
       return;
@@ -581,10 +646,9 @@
       b.removeAttribute('aria-pressed');
       b.classList.remove('hablando');
     });
-    App.tts.stop();
     btn.setAttribute('aria-pressed', 'true');
     btn.classList.add('hablando');
-    App.tts.speak(text, function () {
+    if (false && App.tts && App.tts.speak) App.tts.speak(text, function () {
       btn.removeAttribute('aria-pressed');
       btn.classList.remove('hablando');
     });
@@ -814,7 +878,6 @@
      pressed state after moving to another screen without its
      onend having been called. */
   function resetAudioUI() {
-    App.tts.stop();
     document.querySelectorAll('.btn-audio.hablando').forEach(function (b) {
       b.removeAttribute('aria-pressed');
       b.classList.remove('hablando');
@@ -824,7 +887,7 @@
   function paintProgress() {
     var total = items.length;
     progressFill.style.width = ((idx / total) * 100) + '%';
-    progressText.textContent = idx + ' / ' + total;
+    progressText.textContent = '';
   }
 
   /* Looks up a real-life support sentence (century fact or monarch
@@ -1014,6 +1077,11 @@
      helper shares its core logic with coloredFormula so the
      two screens never drift apart. */
   function decompositionFormula(deco) {
+    /* Mirror of coloredFormula — the quiz renders the same
+       arithmetic chain as the famous screen, so teacher and
+       practice agree on the visible operation (and the subtract
+       pair is never collapsed into its resolved value). See
+       coloredFormula for the full rationale. */
     if (deco.mode === 'subtract') {
       var big = deco.chunks[0].letters[1];
       var small = deco.chunks[0].letters[0];
@@ -1046,16 +1114,42 @@
       });
       return steps.join(', ');
     }
+    /* Walk chunks, mirroring coloredFormula: subtract pairs
+       become standalone "<big>−<small>=<value>" steps followed
+       by their sum step onto the running partial; the first
+       non-pair chunk is suspended and dropped so the chain
+       doesn't read "5, 5+1=6". */
+    var steps = [];
     var partial = 0;
-    var steps = deco.chunks.map(function (chunk, idx) {
-      if (idx === 0) {
+    for (var idx = 0; idx < deco.chunks.length; idx++) {
+      var chunk = deco.chunks[idx];
+      if (chunk.pair) {
+        var bigL = chunk.letters[1];
+        var smallL = chunk.letters[0];
+        steps.push(
+          '<span class="letter-' + bigL.toLowerCase() + '">' + ROMAN_VALUES[bigL] + '</span>' +
+          '−<span class="letter-' + smallL.toLowerCase() + ' letter-subtract">' + ROMAN_VALUES[smallL] + '</span>' +
+          '=<span aria-hidden="true" class="letter-' + smallL.toLowerCase() + ' letter-subtract">' + chunk.value + '</span>'
+        );
+        if (partial > 0) {
+          steps.push(
+            '<span class="deco-partial">' + partial + '</span>+' + coloredChunkValue(chunk) +
+            '=<span aria-hidden="true" class="' + totalCls + '">' + (partial + chunk.value) + '</span>'
+          );
+        }
+        partial += chunk.value;
+      } else if (idx === 0) {
+        steps.push(coloredChunkValue(chunk));
         partial = chunk.value;
-        return coloredChunkValue(chunk);
+      } else {
+        var left = '<span class="deco-partial">' + partial + '</span>+' + coloredChunkValue(chunk);
+        partial += chunk.value;
+        steps.push(left + '=<span aria-hidden="true" class="' + totalCls + '">' + partial + '</span>');
       }
-      var left = '<span class="deco-partial">' + partial + '</span>+' + coloredChunkValue(chunk);
-      partial += chunk.value;
-      return left + '=<span aria-hidden="true" class="' + totalCls + '">' + partial + '</span>';
-    });
+    }
+    if (deco.chunks[0] && !deco.chunks[0].pair) {
+      steps.shift();
+    }
     return steps.join(', ');
   }
 
@@ -1260,9 +1354,8 @@
       return;
     }
     show(endScreen);
-    $('#finalSummary').textContent = t('finalSummary')
-      .replace('{n}', correctCount).replace('{total}', progress.stars);
-    $('#transfer').textContent = t('transferencia');
+    $('#finalSummary').textContent.textContent = '';
+    $('#transfer').textContent.textContent = '';
     App.feedback.celebrate(t('core.roundComplete'));
   }
 

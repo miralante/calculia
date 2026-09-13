@@ -14,10 +14,11 @@ logical reasoning:
 - **Reasoning and logic**: Riddles, Patterns, The Wallet, The Clock,
   Stories, What Doesn't Belong?, Puzzle.
 
-Calculia is a sibling project to Apptonomia, a broader
-occupational-therapy activity suite: Calculia's scope is calculation and
-reasoning specifically, not the 6 classic board games (chess, checkers,
-dominoes, tic-tac-toe, visual sudoku, connect four) that are part of
+Calculia is one of the apps of the Miralante suite, alongside Apptonomia
+(the original, broader occupational-therapy activity suite that the
+others were spun out of): Calculia's scope is calculation and reasoning
+specifically, not the 6 classic board games (chess, checkers, dominoes,
+tic-tac-toe, visual sudoku, connect four) that are part of
 Apptonomia's activity catalog instead. It shares Apptonomia's
 accessibility-first design language (Easy Reading, no pressure, high
 contrast, large touch targets) because that design serves anyone
@@ -30,17 +31,17 @@ Anyone practicing math or logical reasoning: students, and in particular
 people who benefit from Easy Reading, no-pressure pacing, and
 predictable, uncluttered screens. Usable **autonomously**, without a
 teacher or family member sitting next to the learner. Works on desktop
-and mobile/tablet alike — no device restriction, unlike the sibling
-project Teclatlon (computer keyboard only).
+and mobile/tablet alike — no device restriction, unlike the app of
+the suite Teclatlon (computer keyboard only).
 
 ## 3. Non-negotiable constraints (product)
 
 These constraints come from the **product**, not technical. They are the
 "laws" that are never broken, because they define what kind of
-experience Calculia offers. Calculia shares this constitution with its
-sibling project Apptonomia (see Apptonomia's `SPEC.md`) — adapted to
-the fact that Calculia practices calculation and reasoning, not daily
-living skills or occupational therapy.
+experience Calculia offers. Calculia shares this constitution with the
+other app of the suite Apptonomia (see Apptonomia's `SPEC.md`) —
+adapted to the fact that Calculia practices calculation and reasoning,
+not daily living skills or occupational therapy.
 
 ### 3.1 Error never punishes
 
@@ -185,42 +186,15 @@ with the same pedagogical function.
    exception is documented in `doc/en/technical.md`, not silently
    skipped.
 
-#### Technical elements of the anatomy
+#### Closing content
 
-- **`contexto`** — `strings.<locale>.js` key. Describes the real
-  life situation the activity is anchored in. Rendered as the
-  first paragraph of `screenEnd` (when the closing screen exists)
-  right below the round summary.
-- **`pista`** — `strings.<locale>.js` key. Socratic hint text. One
-  hint per round screen, shown on the first failure. In activities
-  without a right/wrong question (e.g. Puzzle, which is purely
-  spatial), the hint does not exist as such and is replaced by
-  `contexto` + `explicacion`.
-- **`explicacion`** — `strings.<locale>.js` key. Activity closing
-  paragraph. Summarises what the learner practised and why the
-  mechanic works the way it works. Appears in `screenEnd` after
-  `contexto` and before `transferencia`.
-- **`transferencia`** — `strings.<locale>.js` key, with English
-  equivalent `transfer` when the activity was originally written
-  in English. Final sentence of `screenEnd` that anchors learning
-  to a real-world scenario ("at the shop", "in the kitchen",
-  "reading a price"). It is the only piece of the anatomy that an
-  activity may declare not applicable; in that case the exception
-  is documented, not silently dropped.
+Each activity’s closing view shows, in this order, the round summary, an
+explanation of what was practised and a transfer sentence connecting the
+learning to a real situation. Transfer may be omitted only when it adds no
+value; the reason must be documented.
 
-#### How it shows in the closing screen
-
-Every activity must render in its `screenEnd` (or equivalent), in
-this order:
-
-```
-🎉 Round complete!
-<round summary>
-<contexto>          ← App.i18n.t('contexto')
-<explicacion>       ← App.i18n.t('explicacion')
-<transferencia>     ← App.i18n.t('transferencia') | App.i18n.t('transfer')
-[ Play again ] [ Another activity ] [ Back to menu ]
-```
+The technical implementation of this anatomy, its content keys and its
+per-activity coverage live in [`technical.md`](technical.md).
 
 #### Per-activity coverage (current state)
 
@@ -282,7 +256,7 @@ Where it applies and where it doesn't:
 This rule is checked automatically: `node scripts/check.js` fails if
 any of those terms show up in the files the end user sees.
 
-### 4.1 Public-facing wording: "usuario/a tipo" euphemism
+### 4.1 Public-facing wording: "persona tipo" euphemism
 
 When presenting Calculia to **the general public** (press, talks,
 public READMEs that anyone can read, the metaproject landing at
@@ -290,8 +264,8 @@ public READMEs that anyone can read, the metaproject landing at
 **"intellectual disability" / "discapacidad intelectual"** must not be
 used as a way to describe the audience of the app — even when the
 surrounding text would otherwise be public. The accepted euphemism for
-that audience in those surfaces is **"usuario/a tipo"** (plural
-"usuarios/as tipo"), used as a generic profile marker, not as a label
+that audience in those surfaces is **"persona tipo"** (plural
+"personas tipo"), used as a generic profile marker, not as a label
 for any real person.
 
 Where the euphemism applies and where it doesn't:
@@ -300,9 +274,9 @@ Where the euphemism applies and where it doesn't:
   without authentication: `README.md`, `README.es.md`, the portal at
   `apptonomia.uk`, public talks, social media copy, press notes,
   marketing material. In these surfaces, refer to the audience as
-  "el/la usuario/a tipo" or "usuarios/as tipo" of the app.
+  "la persona tipo" or "las personas tipo" of the app.
 - **Does NOT apply** to this repo's internal documentation
-  (`CLAUDE.md`, `doc/en/SPEC.md`, `doc/es/SPEC.md`, `technical.md`,
+  (`CLAUDE.md`, `doc/en/spec.md`, `doc/es/spec.md`, `technical.md`,
   [`roles.md`](roles.md), `CONTRIBUTING.md`, `CONTRIBUTING.es.md`) —
   those files are read by maintainers and contributors, and
   "intellectual disability" / "discapacidad intelectual" remains the
@@ -314,7 +288,7 @@ Where the euphemism applies and where it doesn't:
   on a real bureaucratic procedure related to disability): that is
   content, not labelling of an audience.
 - **Does NOT apply** to the UI of the app itself: the rule in §4 above
-  continues to forbid **any** mention, including "usuario/a tipo", in
+  continues to forbid **any** mention, including "persona tipo", in
   `site/index.html`, `tools/<slug>/index.html`, `app.js`, `data.js`,
   `strings.<locale>.js`, `settings/`, `legal/`, and any other
   user-facing surface. The euphemism is for the outside world, not
@@ -323,7 +297,7 @@ Where the euphemism applies and where it doesn't:
 Rationale: presenting the project's real objective in maintainer docs
 is useful and necessary; presenting it in marketing or landing
 surfaces is neither necessary nor respectful of the audience —
-"usuario/a tipo" lets public material describe what the app is for
+"persona tipo" lets public material describe what the app is for
 (who the typical profile is) without publicly naming a clinical group.
 
 ## 5. Design principles
@@ -357,6 +331,14 @@ with them, the principles win. They are the product's compass.
     the activity is engaging, not because they're being pushed.
 12. **Sober technology**: HTML5 + CSS3 + vanilla JavaScript, no
     frameworks, no build step, no npm dependencies, offline-first PWA.
+
+### Progress indicator
+
+Activity progress uses a compact horizontal capsule: advancement is
+shown by the bar fill and a short counter (`current / total`) is centered
+inside it, layered over the fill. A separate sentence such as “X of Y”
+is not used, leaving more visual space for the activity. The counter
+remains dynamic and accessible to assistive technologies.
 
 ## 6. Accessibility rules (mandatory for any UI change)
 

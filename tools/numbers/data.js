@@ -23,19 +23,21 @@ var DATA = {
     "positivos-y-negativos": {
       /* Positive and negative numbers via an elevator (floors below ground
          = negative, floors above ground = positive, ground floor = 0).
-         Progression (rule 13): en1→en2 keeps the same reading skill and
-         adds movement (only variable: gains a start+delta instead of a
-         fixed floor). en2→en3 introduces comparing two floors instead of
-         one. en3→en4 introduces locating a GIVEN floor number among
-         candidate spots (the "place it in its spot" skill) instead of
-         reading one shown floor. The range (min/max) stays fixed across
-         all 4 levels so the only real change each step is the skill. */
+         Free-exploration mode: same mechanic as the water-temperature
+         tool (−10/−1/+1/+10 buttons, the visual reacts on every step).
+         The person drives the elevator from the ground floor to the
+         basement and back, watching the floor number change. Two
+         missions (rule 13, only one variable changes between them):
+         libre  → meta. libre has no target, just explore. meta adds a
+         single target floor (the elevator starts somewhere else and
+         has to be navigated to the goal). Range (−10/+10) reaches
+         both clearly negative and clearly positive territory while
+         staying tight enough that a +10 click from 0 lands on ±10,
+         so the buttons +1 / −1 / +10 / −10 cover every useful step. */
       picto: '🛗',
       levels: [
-        { id: 'en1', tipo: 'ascensorLeer', min: -5, max: 5 },
-        { id: 'en2', tipo: 'ascensorMover', min: -5, max: 5 },
-        { id: 'en3', tipo: 'ascensorComparar', min: -5, max: 5 },
-        { id: 'en4', tipo: 'ascensorColocar', min: -5, max: 5 }
+        { id: 'libre', tipo: 'ascensorLibre', min: -10, max: 10 },
+        { id: 'meta',  tipo: 'ascensorMeta',  min: -10, max: 10, meta: 0, inicio: 5 }
       ]
     },
 
@@ -153,5 +155,21 @@ var DATA = {
     en: ['one', 'ten', 'one hundred', 'one thousand', 'ten thousand',
       'one hundred thousand', 'one million', 'ten million', 'one hundred million',
       'one billion', 'ten billion', 'one hundred billion', 'one trillion']
+  },
+
+  /* Shared config for the elevator free-exploration missions
+     ('positivos-y-negativos'). Centralised here so the visual range
+     and the tolerance for 'ascensorMeta' stay in lockstep across
+     levels. */
+  elevador: {
+    /* Inclusive range the user can move within. ±10 covers both
+       clearly negative and clearly positive territory; the +10 /
+       −10 step buttons reach both edges in a single click from 0. */
+    min: -10,
+    max: 10,
+    /* Tolerance for 'ascensorMeta' (a ±tolerance band around the
+     target floor counts as a hit). 0 means "land exactly on the
+     floor" — the user must stop the right number of times. */
+    tolerancia: 0
   }
 };

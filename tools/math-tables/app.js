@@ -279,7 +279,7 @@
   /* ---- Learn screen (add/multiply tables only) ---- */
 
   function renderLearn() {
-    $('#learnTitle').textContent = fill(mode === 'add' ? 'tableTitleAdd' : 'tableTitleMultiply', { n: table });
+    $('#learnTitle').textContent.textContent = '';
     var list = $('#factList');
     list.innerHTML = '';
     for (var n = 1; n <= DATA.factsPerTable; n += 1) {
@@ -326,11 +326,11 @@
     var item = round[index];
     attempts = 0;
     $('#progressFill').style.width = ((index / round.length) * 100) + '%';
-    $('#progressText').textContent = fill('progress', { current: index + 1, total: round.length });
-    $('#quizPrompt').textContent = mode === 'parity' ? fill('parityPrompt', itemValues(item)) : equationText(item, false) + ' = ?';
+    $('#progressText').textContent.textContent = '';
+    $('#quizPrompt').textContent.textContent = '';
     renderVisual($('#quizVisual'), item, false);
-    $('#feedback').textContent = '';
-    $('#explanation').textContent = '';
+    $('#feedback').textContent.textContent = '';
+    $('#explanation').textContent.textContent = '';
     hide($('#explanation'));
     hide($('#nextFact'));
     var options = $('#options');
@@ -361,10 +361,10 @@
     }
     progress.stars += 1;
     saveProgress();
-    $('#stars').textContent = '⭐ ' + progress.stars;
+    $('#stars').textContent.textContent = '';
     App.feedback.success(feedback);
     renderVisual($('#quizVisual'), item, true);
-    $('#explanation').textContent = fill('explain' + keySuffix(item), itemValues(item));
+    $('#explanation').textContent.textContent = '';
     show($('#explanation'));
     $('#options').querySelectorAll('button').forEach(function (option) { option.disabled = true; });
     show($('#nextFact'));
@@ -385,9 +385,9 @@
       show(pickAnother);
       pickAnother.textContent = App.i18n.t(mode === 'steps' ? 'chooseAnotherLevel' : 'chooseAnotherTable');
     }
-    $('#finishText').textContent = fill('roundSummary', { count: round.length, stars: progress.stars });
+    $('#finishText').textContent.textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
-$('#transfer').textContent = App.i18n.t('transferencia');
+$('#transfer').textContent.textContent = '';
   }
 
   /* ---- Navigation ---- */
@@ -406,7 +406,7 @@ $('#transfer').textContent = App.i18n.t('transferencia');
     else if (mode === 'parity') round = parityRound();
     else round = tablesRound();
     if (mode === 'decompose' || mode === 'divide' || mode === 'parity') {
-      $('#quizBack').textContent = App.i18n.t('core.backToMenu');
+      $('#quizBack').textContent.textContent = '';
     }
     index = 0;
     showOnly('#screenQuiz');
@@ -424,8 +424,8 @@ $('#transfer').textContent = App.i18n.t('transferencia');
     var grid = $('#tableGrid');
     grid.innerHTML = '';
     var steps = mode === 'steps';
-    $('#tablesTitle').textContent = App.i18n.t(steps ? 'chooseLevel' : 'chooseTable');
-    $('#quizBack').textContent = App.i18n.t(steps ? 'backToLevels' : 'backToTables');
+    $('#tablesTitle').textContent.textContent = '';
+    $('#quizBack').textContent.textContent = '';
     var values = steps ? DATA.stepLevels : DATA.tables;
     values.forEach(function (value) {
       var button = document.createElement('button');
@@ -462,7 +462,7 @@ $('#transfer').textContent = App.i18n.t('transferencia');
 
   function init() {
     App.i18n.apply();
-    $('#stars').textContent = '⭐ ' + progress.stars;
+    $('#stars').textContent.textContent = '';
     renderModeMenu();
     $('#tablesBack').addEventListener('click', function () { showOnly('#screenMenu'); });
     $('#learnBack').addEventListener('click', function () { showOnly('#screenTables'); });

@@ -95,7 +95,7 @@
 
   /**
    * Ids of every tool with something saved (without the prefix,
-   * and without the NON_TOOL_KEYS keys). Used by /settings/ to show
+   * and without the NON_TOOL_KEYS keys). Used by /config/ to show
    * status and for the full reset.
    * @returns {string[]}
    */

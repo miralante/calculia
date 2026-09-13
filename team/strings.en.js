@@ -1,0 +1,225 @@
+/* ============================================================
+   Calculia — Support team guide text (EN)
+   Language-specific file. Loaded conditionally from index.html
+   based on App.i18n.locale().
+   ============================================================ */
+(function () {
+  'use strict';
+
+  App.i18n.register({
+    "pageTitle": 'Guide for the support team',
+    "routeNotice": 'Page for the support team. It does not appear in the app menu: the only way here is typing this address.',
+    "title": 'Calculia — Guide for the support team',
+    "intro1": 'Information for ',
+    "introStrong": 'families, occupational therapists, speech therapists and support teachers',
+    "intro2": ' about the project’s goals, the areas it works on, and the educational purpose of each activity. It includes a technical note for the AI agent that maintains the code.',
+    "navProject": 'The project',
+    "navDesign": 'How it is designed',
+    "navAreas": 'Areas and activities',
+    "navProgress": 'Progress and privacy',
+    "navSupport": 'How to support without taking over',
+    "navExceptions": 'Pure-skill training',
+    "navAgentAI": 'Technical note (AI)',
+    "projectTitle": 'The project',
+    "projectP1a": 'Calculia is a ',
+    "projectP1Strong1": 'math and logical reasoning',
+    "projectP1b": ' web app for people with intellectual disabilities. Its goal is to offer short, visual activities on ',
+    "projectP1Strong2": 'everyday math',
+    "projectP1c": ' (adding, subtracting, handling money, reading the time, counting, comparing) that the person can do on their own, without a professional beside them.',
+    "projectLi1Label": 'Autonomy',
+    "projectLi1Text": 'everything is understood and used without help. Works offline (can be installed as an app), no sign-up and no cost.',
+    "projectLi2Label": 'Functional, not academic',
+    "projectLi2Text": 'the activities train practical skills — counting change, reading the time, telling coins apart, comparing prices — over abstract calculation.',
+    "projectLi3Label": 'Reasoning and logic',
+    "projectLi3Text": 'series, patterns, riddles, odd-one-out and puzzles, with graded difficulty and no pressure.',
+    "projectP2a": 'The interface the person using the app sees ',
+    "projectP2Strong": 'never',
+    "projectP2b": ' uses clinical language ("patient", "therapy", "disability"). This page is the only one with that vocabulary, because it is written for the support team.',
+    "designTitle": 'How it is designed',
+    "designIntro": 'Every screen follows these principles. If you notice something that does not, that is a bug to fix.',
+    "designLi1Label": 'Plain Language',
+    "designLi1Text": 'short sentences, one idea per sentence, no metaphors or irony.',
+    "designLi2Label": 'No pressure',
+    "designLi2Text": 'no visible timers, no negative scoring, no "game over". Mistakes get encouragement ("Almost. Try again!"), never punishment.',
+    "designLi3Label": 'Positive reinforcement',
+    "designLi3Text": 'immediate and brief when the person gets it right. Stars ⭐ only ever add up.',
+    "designLi4Label": 'No comparing people',
+    "designLi4Text": 'no rankings and no competition.',
+    "designLi5Label": 'Accessibility',
+    "designLi5Text": 'large buttons (64 pixels minimum), large text, high contrast, audio 🔊 only when gamification or the activity design requires it (e.g. hearing a riddle read aloud), full keyboard navigation, and animations that turn off if the system asks for it.',
+    "designLi6Label": 'Few options at once',
+    "designLi6Text": 'a maximum of 4–6 visible options and one main action per screen.',
+    "areasTitle": 'The areas of work and their activities',
+    "areasIntro": 'The main menu groups activities into two modules (🧮 Math and 🧩 Reasoning and logic), each with its own color. Here you can see what each activity works on from a functional math and reasoning point of view.',
+    "colActivity": 'Activity',
+    "colDoes": 'What the person does',
+    "colWorks": 'What it works on',
+    "colDaily": 'In daily life',
+    "module1Title": '🧮 Math',
+    "module1Intro": 'Numbers, quantities, mental arithmetic, fractions, measures, money, the clock and Roman numerals.',
+    "module2Title": '🧩 Reasoning and logic',
+    "module2Intro": 'Series, patterns, riddles, odd-one-out, stories and shape puzzles.',
+    activity: {
+      "numbers": {
+        "name": 'Numbers',
+        "does": 'Reads, orders and compares numbers; counts forward and backward; identifies the position (before, after, between).',
+        "works": 'Number sense, counting, ordering, comparison and one-to-one matching.',
+        "daily": 'Count together at home: "there are 4 plates on the table", "3 is between 2 and 4". Play cards by who has the higher number.'
+      },
+      "quantities": {
+        "name": 'Quantities',
+        "does": 'Compares sets ("where are there more?"), measures weights and lengths, and picks the amount that answers a question.',
+        "works": 'Comparing quantities, first measures, vocabulary more/less/same/a lot/a little.',
+        "daily": 'At the shop, ask "how many apples do we take? What if we take 2 more?" Weigh fruit together.'
+      },
+      "math-tables": {
+        "name": 'Times Tables',
+        "does": 'Practices the 2 to 10 tables in three levels: pick the answer from options, complete the result, and type the result in.',
+        "works": 'Memorising the tables, automating basic calculation, associating n×n with the result.',
+        "daily": 'Take the tables into real life: 3 trays with 4 biscuits each is 12; 4 cars with 2 wheels each is 8.'
+      },
+      "mental-math": {
+        "name": 'Mental Addition and Subtraction',
+        "does": 'Solves addition and subtraction with increasingly large numbers (1 to 3 digits), with and without carrying, choosing the right answer.',
+        "works": 'Mental calculation, decomposition strategies (10 + n), automating basic operations.',
+        "daily": 'Calculate together without paper: "what is 23 + 14? And if we add 2 more?" Add the prices before paying.'
+      },
+      "fractions-measures": {
+        "name": 'Fractions and Measures',
+        "does": 'Recognises halves, quarters and thirds; measures lengths and weights by picking the right unit (cm, m, g, kg); compares two measures.',
+        "works": 'Fractions as sharing, unit conversion, measure vocabulary (longer, heavier).',
+        "daily": 'Share a pizza or a sponge cake into halves and quarters. While cooking, measure with cups and spoons ("half a kilo of flour").'
+      },
+      "money": {
+        "name": 'Money',
+        "does": 'Recognises coins and notes (cents and euros), counts a set of money, and decides whether there is enough to buy something.',
+        "works": 'Recognising coins and notes, mental addition with decimals, sense of value.',
+        "daily": 'Pay together at the shop: hand the money over, count the change, and check that it is right.'
+      },
+      "wallet": {
+        "name": 'The Coin Purse',
+        "does": 'Uses money like in real life: counts a purse, pays exactly, pays too much, checks the change, and works out how much is missing to buy something (the piggy bank).',
+        "works": 'Real operations with money, sense of change, saving, price comparison.',
+        "daily": 'Give them a small real budget and go with them to spend it: let them decide, pay and check the change themselves.'
+      },
+      "temperature": {
+        "name": 'Water Temperature',
+        "does": 'Reads the water thermometer (cold, warm, hot, scalding), matches each value to an everyday situation, and picks the right temperature for each task.',
+        "works": 'Reading a thermometer, temperature vocabulary, safety in the kitchen and bathroom.',
+        "daily": 'Before a bath or turning the tap, decide together: "the water should be warm, not scalding."'
+      },
+      "riddles": {
+        "name": 'Riddles',
+        "does": 'Reads or hears a short riddle and picks the right answer from 3 options.',
+        "works": 'Reading comprehension, deduction, attention to detail and vocabulary.',
+        "daily": 'Tell riddles as a family, no rush. If they get stuck, let them think; the hint teaches the strategy.'
+      },
+      "patterns": {
+        "name": 'Patterns',
+        "does": 'Completes a visual or numerical series (colors, shapes, numbers) by picking the next piece.',
+        "works": 'Spotting regularities, anticipation, inductive reasoning.',
+        "daily": 'Look for patterns at home: tiles, house numbers, days of the week.'
+      },
+      "odd-one-out": {
+        "name": 'Odd One Out',
+        "does": 'Looks at a group of 4 images or words and picks the one that does not belong to the category.',
+        "works": 'Semantic categorisation, reasoning by elimination, vocabulary.',
+        "daily": 'At the shop, play "which of these is not a fruit?" or "which one does not fit with the others?"'
+      },
+      "stories": {
+        "name": 'Stories',
+        "does": 'Reads a small everyday story (shopping, going to the doctor, waiting for the bus) and answers comprehension questions (who, what, where, why).',
+        "works": 'Reading comprehension, everyday vocabulary, narrative sequence, basic inference.',
+        "daily": 'Read a recipe, a letter or a sign together. Ask who appears, what happens first and what happens next.'
+      },
+      "roman-numerals": {
+        "name": 'Roman Numerals',
+        "does": 'Learns the symbols (I, V, X, L, C, D, M) and combines them to read Roman numerals from 1 to 1000, with and without subtraction.',
+        "works": 'Rules of the Roman system, equivalence with the decimal system, attention to the subtraction rules.',
+        "daily": 'Look for Roman numerals in the street: old clocks, king names, building façades.'
+      },
+      "clock": {
+        "name": 'The Clock',
+        "does": 'Reads the time on an analog, digital or word clock; sets the hands to a given time; pairs the analog clock with its digital twin; and matches each moment of the day (breakfast, lunch, dinner…) with the right time.',
+        "works": 'Time orientation, understanding of analog and digital formats, time vocabulary (o’clock, quarter past, half past, quarter to).',
+        "daily": 'Ask them what time the kitchen or school clock shows and check together if they can read it.'
+      },
+      "puzzle": {
+        "name": 'Puzzle',
+        "does": 'Fits puzzle pieces by picking the right one from several (by color, shape or element count).',
+        "works": 'Attention to detail, visual perception, discrimination by colors and shapes, spatial planning.',
+        "daily": 'Do real puzzles together, starting with a few pieces (4, 6, 12) and adding more as they get the hang of it.'
+      }
+    },
+    "scopeNote1": 'Out of scope',
+    "scopeNote2": ' for a self-guided website: algebra, equations and complex fractions (better on paper with a professional), statistics and probability (need abstract concepts) and long written calculation (better on paper with a method explained in class).',
+    "progressTitle": 'Progress and privacy',
+    "progressLi1a": 'Progress (stars, completed levels, text size) is saved ',
+    "progressLi1Strong": 'only in the device’s browser',
+    "progressLi1b": ' (localStorage, under the "calculia:" prefix). It never leaves it.',
+    "progressLi2Strong": 'No personal data is requested or stored',
+    "progressLi2b": '. No accounts, cookies or analytics. The only preference saved is the text size chosen in Settings.',
+    "progressLi3": 'Practical consequence: switching device or browser, or clearing browsing data, resets progress to zero. To track progress over time, always use the same device and browser.',
+    "progressLi4a": 'To delete the saved language and text size (or reset the whole app), there is a',
+    "progressLi4Link": 'settings page',
+    "progressLi4b": 'that, like this guide, does not appear in the app menu.',
+    "progressLi5": 'The stars ⭐ in the main menu add up those from every activity: they are encouragement, not an assessment.',
+    "supportTitle": 'How to support without taking over autonomy',
+    "supportLi1a": 'The app is meant to be used ',
+    "supportLi1Strong": 'without help',
+    "supportLi1b": '. If the person asks for support, help them the first time and step back gradually after that.',
+    "supportLi2": 'Let them choose the activity. The menu order is not a mandatory route.',
+    "supportLi3": 'Do not correct the mistake before the app does: the encouragement message and the retry are part of the training.',
+    "supportLi4": 'Every activity has levels: start with the easiest one even if it looks simple; finishing successfully builds more confidence than "living up to" a harder level.',
+    "supportLi5": 'If they get stuck, let them try again or switch to another activity. Coming back later with a rested head usually works better than pushing through.',
+    "exceptionsTitle": 'Pure-skill training: prioritised design decision',
+    "exceptionsIntro": 'Most Calculia activities follow the functional math contract: a recognisable scene (a shop, a thermometer, a clock), a clear question, Socratic feedback and a closing transfer to real life. The activities below are a documented exception: they are perceptual or pure-reasoning exercises where turning the prompt into an everyday scene would confuse the educational goal. They keep the rest of the product principles (no pressure, no punishment, positive reinforcement), but they do not expose the explicit real-life transfer on every round.',
+    "exceptionRiddles": 'Riddles · reading comprehension and deduction from a fixed text.',
+    "exceptionPatterns": 'Patterns · spotting visual or numerical regularities.',
+    "exceptionOddOneOut": 'Odd One Out · categorisation by elimination, with no scene.',
+    "exceptionStories": 'Stories · reading comprehension over short narratives.',
+    "exceptionPuzzle": 'Puzzle · visual perception and piece fitting, with no calculation.',
+    "exceptionRomanNumerals": 'Roman Numerals · learning a symbolic system, not functional math.',
+    "exceptionsNote": 'The general rule is still functional math: any new activity that represents a calculation or reasoning applied to an everyday situation must include the full contract. This list is reviewed and updated alongside the repository (git log keeps the history of every inclusion and exclusion).',
+    "agentTitle": 'Technical note for the AI agent that codes the app',
+    "agentP1a": 'If you are a coding agent working in this repository, the sources of truth are',
+    "agentP1code": 'CLAUDE.md',
+    "agentP1b": '(operating workflow for AI agents) and the',
+    "agentP1Link": 'documentation map',
+    "agentP1c": 'in',
+    "agentP1code2": 'doc/',
+    "agentP1d": '. Non-negotiable summary:',
+    "agentLi1": 'HTML + CSS + vanilla JavaScript. No frameworks, no build step, no backend, no runtime dependencies. Persistence only in localStorage with the "calculia:" prefix.',
+    "agentLi2": 'User interface in Spanish (Spain) and English, in Plain Language, with no clinical language and no pressure or competition mechanics. CLAUDE.md’s 10 accessibility rules are mandatory.',
+    "agentLi3a": 'Each activity lives in',
+    "agentLi3code1": 'tools/<slug>/',
+    "agentLi3b": 'with',
+    "agentLi3code2": 'index.html',
+    "agentLi3c": ',',
+    "agentLi3code3": 'app.js',
+    "agentLi3code4": '(logic),',
+    "agentLi3code5": 'data.js',
+    "agentLi3code6": '(data) and',
+    "agentLi3code7": 'styles.css',
+    "agentLi3code8": '; it uses the shared',
+    "agentLi3code9": 'window.App.*',
+    "agentLi3code10": 'modules from',
+    "agentLi3code11": 'assets/js/',
+    "agentLi3code12": '.',
+    "agentLi4a": 'When adding or touching files: update the cache list and version in',
+    "agentLi4code": 'sw.js',
+    "agentLi4b": '.',
+    "agentLi5a": 'This page (',
+    "agentLi5code1": 'team/',
+    "agentLi5b": ') is deliberately',
+    "agentLi5Strong": 'a hidden route',
+    "agentLi5c": ', just like',
+    "agentLi5code2": 'settings/',
+    "agentLi5d": '(view/delete',
+    "agentLi5code3": 'localStorage',
+    "agentLi5e": '): never link to them from',
+    "agentLi5code4": 'site/index.html',
+    "agentLi5f": 'or from any activity. Keep this guide up to date whenever new activities are added.',
+    "footerActivities": 'Go to the activities'
+  }, 'en');
+})();

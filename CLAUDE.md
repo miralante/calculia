@@ -19,6 +19,15 @@ reasoning specifically, not the 6 classic board games (chess, checkers,
 dominoes, tic-tac-toe, visual sudoku, connect four) that are part of
 Apptonomia's activity catalog instead.
 
+## Responsive design contract
+
+Follow the Apptonomia suite standard: real mobile viewport, fluid container
+padding, no horizontal overflow, and flexible grids that collapse to one
+column when cards no longer have comfortable reading width. Controls must
+fit the viewport, preserve usable touch targets, and avoid fixed heights or
+large empty vertical zones. Check 320px, 375px, 768px and desktop before
+shipping a layout change.
+
 ## Commands
 
 There is no build step, no package.json, and no test framework — it's plain

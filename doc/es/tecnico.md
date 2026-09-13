@@ -162,8 +162,8 @@ Patrón multi-archivo, **diseñado para más de dos idiomas** desde el
 primer commit (la arquitectura viene del i18n maduro de Apptonomia).
 Hoy se distribuye en español (`es`, por defecto) e inglés (`en`); para
 añadir un tercer locale se sigue la receta de
-[`doc/es/I18N.md`](I18N.md) (y su espejo en inglés
-[`doc/en/I18N.md`](../en/I18N.md)).
+[`doc/es/i18n.md`](I18N.md) (y su espejo en inglés
+[`doc/en/i18n.md`](../en/I18N.md)).
 
 Resumen: `strings.<locale>.js` por actividad/landing registra cada
 uno un idioma con `App.i18n.register(dict, '<locale>')`; ambos
@@ -739,3 +739,14 @@ demás en el mismo PR.
 ---
 
 
+
+## Cabecera compacta de la aplicación
+
+La cabecera principal sigue el modelo de Memofun: icono de 44px (32px por
+debajo de 650px), título Nunito de 28px (22px en móvil), atribución a la suite
+y controles alineados. Usa un margen interior vertical de 8px y separa las
+filas 6px. El texto secundario tiene peso normal y el contador de estrellas
+es compacto. Los botones de idioma de la cabecera muestran nombres completos en escritorio
+y ES/EN en móvil, con nombres accesibles completos. Teclatlon conserva sus
+controles de teclado y ajustes; Enroca conserva navegación y ajustes. Estos
+estilos de cabecera no cambian los controles de las actividades.

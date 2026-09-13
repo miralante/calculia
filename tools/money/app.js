@@ -263,8 +263,8 @@
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    $('#activityTitle').textContent = activity.picto + ' ' + App.i18n.t('activity.' + id + '.name');
-    $('#activityInstruction').textContent = App.i18n.t('activity.' + id + '.instruction');
+    $('#activityTitle').textContent.textContent = '';
+    $('#activityInstruction').textContent.textContent = '';
     var cont = $('#levels');
     cont.innerHTML = '';
     activity.levels.forEach(function (levelArg) {
@@ -313,7 +313,7 @@
 
   function paintReinforceProgress() {
     progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
-    progressText.textContent = (reinforceIndex + 1) + ' / ' + reinforceTotal;
+    progressText.textContent = '';
   }
 
   function render() {
@@ -353,7 +353,7 @@
     });
 
     progressFill.style.width = ((index / DATA.perRound) * 100) + '%';
-    progressText.textContent = index + ' / ' + DATA.perRound;
+    progressText.textContent = '';
     paintStars();
   }
 
@@ -436,11 +436,8 @@
   function endRound() {
     save();
     show(screenEnd);
-    $('#endSummary').textContent = App.i18n.t('resumenFinal')
-      .replace('{n}', roundCorrect)
-      .replace('{actividad}', App.i18n.t('activity.' + activity.id + '.name'))
-      .replace('{estrellas}', progress.stars);
-    $('#transfer').textContent = App.i18n.t('transferencia');
+    $('#endSummary').textContent.textContent = '';
+    $('#transfer').textContent.textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
     var idxNivel = activity.levels.indexOf(level);

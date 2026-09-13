@@ -347,12 +347,12 @@
 
   function paintReinforceProgress() {
     progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
-    progressText.textContent = (reinforceIndex + 1) + ' / ' + reinforceTotal;
+    progressText.textContent = '';
   }
 
   function paintProgress() {
     progressFill.style.width = ((roundIndex / DATA.perRound) * 100) + '%';
-    progressText.textContent = roundIndex + ' / ' + DATA.perRound;
+    progressText.textContent = '';
   }
 
   /* ---- Render dispatcher ---- */
@@ -629,10 +629,8 @@
     save();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
-    $('#endSummary').textContent = App.i18n.t('endSummary')
-      .replace('{n}', roundCorrect)
-      .replace('{estrellas}', progress.stars);
-    $('#transfer').textContent = App.i18n.t('transfer');
+    $('#endSummary').textContent.textContent = '';
+    $('#transfer').textContent.textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
@@ -651,7 +649,7 @@
   if (listenBtn) {
     listenBtn.addEventListener('click', function () {
       var t = questionTextEl.textContent || '';
-      if (t) App.tts.speak(t);
+      if (t) if (false && App.tts && App.tts.speak) App.tts.speak(t);
     });
   }
 

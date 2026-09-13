@@ -64,7 +64,7 @@
 
   function paintProgress() {
     progressFill.style.width = ((index / CONFIG.perRound) * 100) + '%';
-    progressText.textContent = index + ' / ' + CONFIG.perRound;
+    progressText.textContent = '';
   }
 
   function startRound() {
@@ -105,7 +105,7 @@
 
   function paintReinforceProgress() {
     progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
-    progressText.textContent = (reinforceIndex + 1) + ' / ' + reinforceTotal;
+    progressText.textContent = '';
   }
 
   function render() {
@@ -226,10 +226,8 @@
     paintProgress();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
-    endSummary.textContent = App.i18n.t('resumenFinal')
-      .replace('{n}', roundCorrect)
-      .replace('{total}', progress.stars);
-$('#transfer').textContent = App.i18n.t('transferencia');
+    endSummary.textContent = '';
+$('#transfer').textContent.textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 

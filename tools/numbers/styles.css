@@ -182,3 +182,157 @@
 .num-group-1 { background: rgba(129, 199, 132, 0.25); }  /* soft green */
 .num-group-2 { background: rgba(179, 157, 219, 0.30); }  /* soft purple */
 
+/* ============================================================
+   Free-exploration elevator (numbers/positivos-y-negativos)
+   Sibling of the water-temperature tool: same mechanic (−10/−1/
+   +1/+10 buttons, the visual reacts on every step), but the
+   visual is a shaft with the elevator emoji on the current floor
+   and the ground floor always highlighted as 0. Reuses the same
+   .btn-counter visual vocabulary as the existing counter so the
+   two free-exploration surfaces feel related.
+   ============================================================ */
+.elevator-card {
+  padding: 32px 16px;
+  border-color: var(--mod-razonamiento);
+}
+.elevator-goal {
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--color-texto-secundario);
+  margin: 0;
+  text-align: center;
+}
+.elevator-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio);
+}
+
+/* The live shaft: rows go from the top floor (max) down to the
+   bottom floor (min), matching the order they are built in app.js
+   (descending so floor +10 sits at the top and floor −10 at the
+   bottom). The current-floor row gets the .current-floor class
+   so the elevator emoji is highlighted with the project's
+   "memoria" tint. The ground floor row (0) is permanently
+   tinted with the project reasoning tint so the user always
+   sees the boundary between negative and positive. */
+.elevator-shaft-dynamic {
+  display: flex;
+  flex-direction: column;
+  width: 110px;
+  margin: 0 auto;
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  overflow: hidden;
+}
+.elevator-shaft-dynamic .floor-row {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid var(--color-borde);
+  font-size: 18px;
+}
+.elevator-shaft-dynamic .floor-row:first-child { border-top: none; }
+.elevator-shaft-dynamic .ground-floor {
+  background: var(--mod-razonamiento-suave);
+  border-top: 3px solid var(--mod-razonamiento);
+  border-bottom: 3px solid var(--mod-razonamiento);
+}
+.elevator-shaft-dynamic .current-floor {
+  background: var(--mod-memoria-suave);
+  font-weight: 800;
+}
+.elevator-shaft-dynamic .floor-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--color-texto);
+  margin-right: 6px;
+}
+.elevator-shaft-dynamic .floor-icon {
+  font-size: 22px;
+}
+
+/* The big floor number reads with a sign so screen readers say
+   "menos cinco" naturally. clamp() keeps it readable on small
+   screens and dramatic on big ones. */
+.elevator-number {
+  font-size: clamp(64px, 14vw, 120px);
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-align: center;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-texto);
+}
+
+/* Soft label below the number: "above ground" / "on ground
+   floor" / "below ground" — keeps the user oriented about
+   whether the value is positive, zero, or negative. */
+.elevator-state-label {
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  color: var(--color-texto-suave);
+  margin: 0;
+  text-align: center;
+}
+
+/* Same control row layout as the counter so the two
+   free-exploration surfaces feel like siblings. */
+.elevator-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio);
+  align-items: center;
+}
+.elevator-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.btn-elevator {
+  min-width: 88px;
+  min-height: 56px;
+  padding: 8px 16px;
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: var(--texto-base);
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-elevator:hover:not(:disabled) { border-color: var(--mod-razonamiento); }
+.btn-elevator:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: var(--color-fondo, #f0f0f0);
+}
+.btn-elevator.btn-elevator-secondary { background: var(--color-fondo, #f0f0f0); }
+.btn-elevator-icon { min-width: 64px; }
+.elevator-hint {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--color-texto-suave);
+}
+
+/* Random exploration suggestion. Same look as the temperature
+   tool's .thermo-suggestion so the two activities feel like
+   siblings. Hidden when the mission has its own goal line
+   ('ascensorMeta') to avoid giving two contradictory directions. */
+.elevator-suggestion {
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--mod-razonamiento);
+  text-align: center;
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 8px 12px;
+  border: 2px dashed var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+

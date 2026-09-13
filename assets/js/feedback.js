@@ -16,7 +16,7 @@
   }
 
   /* Soft sound with Web Audio (no audio files). Fails silently.
-     Honors the "Sounds" preference from /settings/ (on by default:
+     Honors the "Sounds" preference from /config/ (on by default:
      only muted if someone has explicitly turned it off). */
   var audioCtx = null;
 

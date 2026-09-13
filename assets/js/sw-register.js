@@ -1,6 +1,6 @@
 /* ==========================================================================
    Calculia — Service worker registration.
-   Shared by every entry point (root, 404, site/, settings/, legal/,
+   Shared by every entry point (root, 404, site/, config/, legal/,
    tools/<slug>/) so it can run as an external file: the CSP in
    `_headers` is `script-src 'self'` with no `unsafe-inline`, so an
    inline <script> here would be silently blocked by the browser.

@@ -115,9 +115,7 @@
       </div>
 
       <div class="row explanation hidden" id="payHintWrap">
-        <p id="payHintText" aria-live="polite"></p>
-        <button type="button" class="btn btn-audio" id="btnListenPayHint" data-i18n-aria="listenHintAria" aria-label="Listen to the help">🔊</button>
-      </div>
+        <p id="payHintText" aria-live="polite"></p>      </div>
 
       <div class="feedback" id="payFeedback" aria-live="polite"></div>
       <button type="button" class="btn hidden" id="btnNextPay" data-i18n="core.next">Next →</button>
@@ -135,14 +133,11 @@
       <button type="button" class="btn btn-secondary" id="btnAnotherLevelEnd" data-i18n="btnAnotherLevel">Choose another step</button>
       <button type="button" class="btn btn-secondary" id="btnBackToMenuEnd" data-i18n="backToMenu">← Menu</button>
     </section>
-    <footer class="pie-app">
-      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Data protection</a>
-    </footer>
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
 
   <script src="../../assets/js/utils.js"></script>
   <script src="../../assets/js/i18n.js"></script>
-  <script src="../../assets/js/tts.js"></script>
   <script src="../../assets/js/storage.js"></script>
   <script src="../../assets/js/feedback.js"></script>
   <script src="../../assets/js/dinero.js"></script>

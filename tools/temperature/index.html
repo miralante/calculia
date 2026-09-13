@@ -74,6 +74,13 @@
             <p class="thermo-state-label" id="thermoStateLabel"></p>
           </div>
         </div>
+        <!-- Random exploration suggestion. Refreshed every time
+             render() runs (entry, reset, "play again"). Not a goal:
+             it's just a starting idea so the user doesn't have to
+             pick a temperature themselves. Hidden when the chosen
+             value is the same as the starting temperature (no
+             point showing "stay where you are"). -->
+        <p class="thermo-suggestion hidden" id="thermoSuggestion" aria-live="polite"></p>
         <div class="thermo-controls">
           <div class="thermo-row">
             <button type="button" class="btn-thermo" data-step="-10">−10</button>
@@ -102,14 +109,11 @@
       <button type="button" class="btn btn-secondary" id="btnOtherActivity" data-i18n="btnOtherActivity">Otra actividad</button>
       <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
-    <footer class="pie-app">
-      <a href="../../legal/index.html" class="legal-link" data-i18n="core.dataProtection">Protección de datos</a>
-    </footer>
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
 
   <script src="../../assets/js/utils.js"></script>
   <script src="../../assets/js/i18n.js"></script>
-  <script src="../../assets/js/tts.js"></script>
   <script src="../../assets/js/storage.js"></script>
   <script src="../../assets/js/feedback.js"></script>
   <script src="strings.es.js"></script>

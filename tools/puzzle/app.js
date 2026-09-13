@@ -69,7 +69,7 @@
 
   function paintProgress() {
     progressFill.style.width = ((index / images.length) * 100) + '%';
-    progressText.textContent = index + ' / ' + images.length;
+    progressText.textContent = '';
   }
 
   function render() {
@@ -169,11 +169,10 @@
     save();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
-    $('#endSummary').textContent = App.i18n.t('resumenFinal')
-      .replace('{n}', roundCorrect).replace('{total}', progress.stars);
-    $('#contexto').textContent = App.i18n.t('contexto');
-    $('#explicacion').textContent = App.i18n.t('explicacion');
-    $('#transfer').textContent = App.i18n.t('transferencia');
+    $('#endSummary').textContent.textContent = '';
+    $('#contexto').textContent.textContent = '';
+    $('#explicacion').textContent.textContent = '';
+    $('#transfer').textContent.textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 

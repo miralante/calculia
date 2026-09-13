@@ -417,8 +417,8 @@
     hideAllZones();
     var promptEl = $('#prompt');
     promptEl.textContent = case_.prompt;
-    $('#taskDetail').textContent = case_.detail;
-    $('#taskIcon').textContent = DATA.practices.filter(function (p) { return p.id === practice; })[0].icon;
+    $('#taskDetail').textContent.textContent = '';
+    $('#taskIcon').textContent.textContent = ''; })[0].icon;
 
     if (practice === 'read') {
       $('#numberShown').innerHTML = coloredDigits(case_.n);
@@ -428,7 +428,7 @@
       show($('#answerInput'));
       show($('#btnEscuchar'));
     } else if (practice === 'points') {
-      $('#numberWithSep').textContent = case_.show;
+      $('#numberWithSep').textContent.textContent = '';
       show($('#numberWithSep'));
       show($('#answerInput'));
     } else if (practice === 'decompose') {
@@ -451,8 +451,8 @@
     }
 
     $('#progressFill').style.width = ((index / round.length) * 100) + '%';
-    $('#progressText').textContent = App.i18n.t('progress').replace('{current}', index + 1).replace('{total}', round.length);
-    $('#feedback').textContent = '';
+    $('#progressText').textContent.textContent = '';
+    $('#feedback').textContent.textContent = '';
     show($('#checkAnswer'));
     hide($('#nextTask'));
     attempts = 0;
@@ -462,7 +462,7 @@
        number without having to press 🔊. reducedMotion does not
        affect audio. */
     if (practice === 'write' && case_.audio) {
-      App.tts.speak(case_.audio);
+      if (false && App.tts && App.tts.speak) App.tts.speak(case_.audio);
     }
     /* Focus: input if typing, first button if options. */
     if (practice === 'read' || practice === 'write' || practice === 'points') {
@@ -525,7 +525,7 @@
   function correct() {
     progress.stars += 1;
     save();
-    $('#stars').textContent = '⭐ ' + progress.stars;
+    $('#stars').textContent.textContent = '';
     App.feedback.success($('#feedback'));
     /* In typing, show the correct form as reinforcement. */
     if (case_.tipo === 'typing') {
@@ -574,12 +574,10 @@
   function closeRound() {
     hide($('#screenTask'));
     show($('#screenFinish'));
-    $('#finishText').textContent = App.i18n.t('roundSummary')
-      .replace('{count}', round.length)
-      .replace('{stars}', progress.stars);
-    $('#contexto').textContent = App.i18n.t('contexto');
-    $('#explicacion').textContent = App.i18n.t('explicacion');
-    $('#transfer').textContent = App.i18n.t('transferencia');
+    $('#finishText').textContent.textContent = '';
+    $('#contexto').textContent.textContent = '';
+    $('#explicacion').textContent.textContent = '';
+    $('#transfer').textContent.textContent = '';
     App.feedback.celebrate(App.i18n.t('roundComplete'));
   }
 
@@ -659,7 +657,7 @@
   });
   $('#nextTask').addEventListener('click', goNext);
   $('#btnEscuchar').addEventListener('click', function () {
-    if (case_ && case_.audio) App.tts.speak(case_.audio);
+    if (case_ && case_.audio) if (false && App.tts && App.tts.speak) App.tts.speak(case_.audio);
   });
   $('#playAgain').addEventListener('click', function () { startPractice(practice); });
   $('#chooseAnother').addEventListener('click', function () {

@@ -3,7 +3,7 @@
    Archivo específico del idioma. Mismas claves que strings.en.js.
    Se carga condicionalmente desde index.html según App.i18n.locale().
    ============================================================
-   Flujo en 4 pantallas (ver doc/es/SPEC.md §3.6, regla 13):
+   Flujo en 4 pantallas (ver doc/es/spec.md §3.6, regla 13):
      1. introScreen — qué son los números romanos y para qué se
         siguen usando. Carrusel de los 5 símbolos/combinaciones
         básicos (I, V, X, IV, VI) que el usuario va tocando para
@@ -73,9 +73,9 @@
     "referenceTitle": "Recuerda el valor de cada letra",
     "referenceText": "Cada letra vale siempre lo mismo. Se suman en orden, salvo si una letra menor va delante de una mayor: entonces resta.",
     "referenceNext": "Empezar a practicar →",
-    "symbol{I}": "I vale 1 (se suma)",
-    "symbol{V}": "V vale 5 (se suma)",
-    "symbol{X}": "X vale 10 (se suma)",
+    "symbol{I}": "I vale 1",
+    "symbol{V}": "V vale 5",
+    "symbol{X}": "X vale 10",
     "ruleSubtract": "Si una letra menor va DELANTE de una mayor, resta:",
     "ruleAdd": "Si va DETRÁS, suma:",
     "exampleSubtract": "IV = 1 − 5 = 4",
@@ -141,9 +141,9 @@
        recordatorio. En IV, la {I} que resta se pinta además en
        rojo. */
     "carousel": {
-      "i": { "label": "I", "caption": "Es la primera letra del sistema. Su valor se aprende abajo." },
-      "v": { "label": "V", "caption": "Es la letra del cinco. Su valor se aprende abajo." },
-      "x": { "label": "X", "caption": "Es la letra del diez. Su valor se aprende abajo." },
+      "i": { "label": "I", "caption": "Es el número 1 en números romanos. La letra {I} vale {i}:" },
+      "v": { "label": "V", "caption": "Es el número 5 en números romanos. La letra {V} vale {v}:" },
+      "x": { "label": "X", "caption": "Es el número 10 en números romanos. La letra {X} vale {x}:" },
       "iv": { "label": "IV", "caption": "Es el número 4 en números romanos. La {V} vale {v} y la {I} vale {i}. Si la {I} va delante, resta: {v} − {i}." },
       "ix": { "label": "IX", "caption": "Es el número 9 en números romanos. La {X} vale {x} y la {I} vale {i}. Si la {I} va delante, resta: {x} − {i}." },
       "vi": { "label": "VI", "caption": "Es el número 6 en números romanos. La {V} vale {v} y la {I} vale {i}. Si la {I} va detrás, suma: {v} + {i} = {i6}." },

@@ -139,7 +139,7 @@
   function paintQuizProgress() {
     var total = localeData().perRound;
     $('#progressQuizFill').style.width = (idxQ / total * 100) + '%';
-    $('#progressQuizText').textContent = idxQ + ' / ' + total;
+    $('#progressQuizText').textContent.textContent = '';
   }
 
   function startQuizRound(level) {
@@ -232,7 +232,6 @@
 
   function nextQuiz() {
     idxQ += 1;
-    App.tts.stop();
     if (idxQ >= localeData().perRound) endRound(correctQ);
     else renderQuiz();
   }
@@ -491,7 +490,7 @@
   function openActivity(id) {
     currentActivity = id;
     var cfg = currentConfig();
-    $('#activityInstruction').textContent = App.i18n.t(cfg.instruction);
+    $('#activityInstruction').textContent.textContent = '';
     paintLevels();
     show('screenLevels');
   }
@@ -516,12 +515,10 @@
   function endRound(correct) {
     var cfg = currentConfig();
     save();
-    $('#endSummary').textContent = App.i18n.t(cfg.summary)
-      .replace('{n}', correct)
-      .replace('{t}', localeData().perRound);
-    $('#contexto').textContent = App.i18n.t('contexto');
-    $('#explicacion').textContent = App.i18n.t('explicacion');
-    $('#transfer').textContent = App.i18n.t('transfer');
+    $('#endSummary').textContent.textContent = '';
+    $('#contexto').textContent.textContent = '';
+    $('#explicacion').textContent.textContent = '';
+    $('#transfer').textContent.textContent = '';
     show('screenEnd');
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
@@ -585,7 +582,7 @@
   function paintPayProgress() {
     var total = localeData().perRound;
     $('#progressPayFill').style.width = (idxP / total * 100) + '%';
-    $('#progressPayText').textContent = idxP + ' / ' + total;
+    $('#progressPayText').textContent = '';
   }
 
   function renderPay() {
@@ -707,7 +704,6 @@
 
   function nextPay() {
     idxP += 1;
-    App.tts.stop();
     if (idxP >= localeData().perRound) endRound(correctP);
     else renderPay();
   }

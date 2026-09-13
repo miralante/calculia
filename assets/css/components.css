@@ -8,8 +8,11 @@
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding: var(--espacio-grande) var(--espacio);
+  padding: clamp(12px, 2.5vw, var(--espacio-grande)) clamp(12px, 3vw, var(--espacio));
 }
+
+body { overflow-x: clip; }
+img, svg, canvas, input, select, textarea, button { max-width: 100%; }
 
 /* Reduce padding vertical del container en escritorios altos para
    aprovechar mejor la pantalla sin afectar al padding horizontal
@@ -151,6 +154,8 @@
 }
 
 .progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
   height: 100%;
   width: 0%;
   background: var(--color-acierto);
@@ -158,8 +163,11 @@
   transition: width 0.4s ease;
 }
 
+/* Ocultar números (estilo runtime: barra limpia sin presión) */
 .progress-text {
   display: none;
+  line-height: 1;
+  pointer-events: none;
 }
 
 /* ---- Stars ---- */

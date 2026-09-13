@@ -21,12 +21,12 @@
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://calculia.pages.dev/doc/en/SPEC.md</loc>
+    <loc>https://calculia.pages.dev/doc/en/spec.md</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://calculia.pages.dev/doc/es/SPEC.md</loc>
+    <loc>https://calculia.pages.dev/doc/es/spec.md</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

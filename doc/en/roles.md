@@ -1,7 +1,7 @@
 # Project roles
 
 Calculia has **three differentiated roles**, same as the rest of the
-sibling family (Apptonomia, Memofun, Okeymoney, Sinonimia, Teclatlon):
+apps of the Miralante suite (Apptonomia, Memofun, Okeymoney, Sinonimia, Teclatlon):
 
 | Role | Who they are | How they participate | Where they look first |
 |---|---|---|---|

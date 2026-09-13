@@ -36,6 +36,7 @@
         roundComplete: '¡Ronda completada!',
         rest: '¡Llevas un buen rato! Puedes descansar si quieres.',
         dataProtection: 'Calculia no recolecta datos',
+        config: 'Configuración',
         offline: 'Sin conexión',
         offlineMessage: 'No hemos podido cargar esta página. Comprueba tu conexión a Internet y vuelve a intentarlo.',
         offlineBack: 'Volver a la portada'
@@ -59,6 +60,7 @@
         roundComplete: 'Round complete!',
         rest: 'You have been playing a while! You can rest if you want.',
         dataProtection: 'Calculia does not collect data',
+        config: 'Settings',
         offline: 'Offline',
         offlineMessage: 'We could not load this page. Check your Internet connection and try again.',
         offlineBack: 'Back to the home page'
@@ -305,6 +307,12 @@
   function init() {
     document.documentElement.lang = locale();
     apply(document);
+    /* Inject the shared footer into every <footer data-pie-app>
+       marker on the page. App.utils.inyectarPie is defined in
+       utils.js, which loads before i18n.js per the standard order. */
+    if (window.App && window.App.utils && typeof window.App.utils.inyectarPie === 'function') {
+      window.App.utils.inyectarPie();
+    }
   }
 
   if (document.readyState === 'loading') {

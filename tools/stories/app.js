@@ -68,7 +68,7 @@
 
   function paintProgress() {
     progressFill.style.width = ((index / DATA.perRound) * 100) + '%';
-    progressText.textContent = index + ' / ' + DATA.perRound;
+    progressText.textContent = '';
   }
 
   function render() {
@@ -172,10 +172,8 @@
     save();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
-    $('#endSummary').textContent = App.i18n.t('resumenFinal')
-      .replace('{n}', roundCorrect)
-      .replace('{estrellas}', progress.stars);
-$('#transfer').textContent = App.i18n.t('transferencia');
+    $('#endSummary').textContent.textContent = '';
+$('#transfer').textContent.textContent = '';
     App.feedback.celebrate(App.i18n.t('finalTitulo'));
   }
 
