@@ -30,6 +30,7 @@
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
   /* Round state */
   var activity = null;
@@ -38,6 +39,7 @@
   var roundCorrect = 0;
   var answered = false;
   var attempts = 0;
+  var resolved = false;
   var question = null;
   var pools = {};
   /* Refuerzo: ver core en assets/js/feedback.js (App.reinforce).
@@ -71,7 +73,7 @@
      el separador entre idiomas es obligatorio (ver I18N.md §2). */
   function decimalSeparator() { return App.i18n.locale() === 'en' ? '.' : ','; }
 
-  var POS_CLASS = ['cifra-u', 'cifra-d', 'cifra-c'];
+  var POS_CLASS = ['digit-u', 'digit-d', 'digit-c'];
 
   /* Color-coded digits by place value, same convention as the euro/units
      legend below (blue units, green tens, purple hundreds). */
@@ -80,7 +82,7 @@
     var html = '';
     for (var j = 0; j < s.length; j++) {
       var pos = s.length - 1 - j;
-      var clase = POS_CLASS[pos] || 'cifra-c';
+      var clase = POS_CLASS[pos] || 'digit-c';
       html += '<span class="' + clase + '">' + s[j] + '</span>';
     }
     return html;
@@ -234,7 +236,7 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenLevels, screenGame, screenEnd].forEach(function (p) {
+    [screenMenu, screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -259,26 +261,22 @@
     cont.appendChild(grid);
   }
 
-  /* ---- Levels of an activity ---- */
+  /* ---- Levels of an activity (now automatic via levelFromProgress) ---- */
+
+  /* ---- Game ---- */
+  /* The level rises one step per completed round, capped at the last
+     one, so a person who comes back continues where they were. */
+  function levelFromProgress() {
+    var levels = activity.levels;
+    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
+  }
+
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    $('#activityTitle').textContent.textContent = '';
-    $('#activityInstruction').textContent.textContent = '';
-    var cont = $('#levels');
-    cont.innerHTML = '';
-    activity.levels.forEach(function (levelArg) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      btn.innerHTML = App.i18n.t('level.' + levelArg.id);
-      btn.addEventListener('click', function () { startRound(levelArg); });
-      cont.appendChild(btn);
-    });
-    show(screenLevels);
+    startRound(levelFromProgress());
   }
 
-  /* ---- Game ---- */
   function startRound(levelArg) {
     level = levelArg;
     index = 0;
@@ -386,7 +384,7 @@
     if (op.correct) {
       showExplanation(op.correct);
       resolved = true;
-      btn.classList.add('correcta');
+      btn.classList.add('correct');
       App.feedback.success(feedbackEl);
       progress.stars += 1;
       roundCorrect += 1;
@@ -403,7 +401,7 @@
       } else {
         showExplanation(op.correct);
       }
-      btn.classList.add('animo');
+      btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
@@ -434,15 +432,16 @@
   }
 
   function endRound() {
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
     show(screenEnd);
-    $('#endSummary').textContent.textContent = '';
-    $('#transfer').textContent.textContent = '';
+    $('#endSummary').textContent = '';
+    $('#transfer').textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
-    var idxNivel = activity.levels.indexOf(level);
-    var nextLevel = (roundCorrect === DATA.perRound && idxNivel !== -1 && idxNivel + 1 < activity.levels.length)
-      ? activity.levels[idxNivel + 1] : null;
+    var idxN = activity.levels.indexOf(level);
+    var nextLevel = (roundCorrect === DATA.perRound && idxN !== -1 && idxN + 1 < activity.levels.length)
+      ? activity.levels[idxN + 1] : null;
     var btnHarder = $('#btnHarder');
     if (nextLevel) {
       btnHarder.textContent = App.i18n.t('btnHarder').replace('{name-card}', App.i18n.t('level.' + nextLevel.id));
@@ -455,9 +454,11 @@
 
   /* ---- Eventos ---- */
 
-  $('#btnBackToMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
-  $('#btnOtherLevel').addEventListener('click', function () { openActivity(activity.id); });
+  var elBtnBackToMenu = $('#btnBackToMenu');
+  if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
+  $('#btnNext').addEventListener('click', next);
+  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
   $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
 
   $('#noteExtra').innerHTML = App.i18n.t('notaMonedero')

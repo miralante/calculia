@@ -31,7 +31,7 @@
   /* Persistent progress (kept across browser closes) */
   var progress = App.storage.get(CONFIG.toolId);
   if (typeof progress.stars !== 'number') progress.stars = 0;
-  if (typeof progress.rondas !== 'number') progress.rondas = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = progress.rondas || 0;
 
   /* Current round state */
   var items = [];
@@ -39,6 +39,7 @@
   var roundCorrect = 0;
   var answered = false;
   var attempts = 0;
+  var resolved = false;
   /* Reinforce: failed items are replayed at the end. inReinforce
      prevents the mini-round from chaining with another mini-round.
      Original items of the normal round are NOT modified (they are
@@ -162,7 +163,7 @@
     if (isCorrect) {
       showExplanation(optionText, isCorrect, item);
       resolved = true;
-      btn.classList.add('correcta');
+      btn.classList.add('correct');
       App.utils.$$('#options .option-btn').forEach(function (b) {
         b.disabled = true;
       });
@@ -185,7 +186,7 @@
       } else {
         showExplanation(optionText, isCorrect, item);
       }
-      btn.classList.add('animo');
+      btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
@@ -221,17 +222,18 @@
   }
 
   function endRound() {
-    progress.rondas += 1;
+    progress.completedRounds += 1;
     save();
     paintProgress();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
     endSummary.textContent = '';
-$('#transfer').textContent.textContent = '';
+    $('#transfer').textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
   /* Events */
-  $('#btnRepetir').addEventListener('click', startRound);
+  var elRepeatBtn = $('#repeatBtn');
+  if (elRepeatBtn) elRepeatBtn.addEventListener('click', startRound);
 })();
 

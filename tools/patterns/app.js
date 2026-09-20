@@ -1,6 +1,6 @@
 /* ============================================================
    Calculia — Patterns (reasoning)
-   Data in data.js (DATA.niveles). Shared modules in assets/js/.
+   Data in data.js (DATA.levels). Shared modules in assets/js/.
    Mechanic: a series is shown with a blank and 3 options.
    Round of 8 series per level. Errors are never punished.
    ============================================================ */
@@ -51,10 +51,10 @@
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
   var starsEl = $('#stars');
-
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
   /* Round state */
   var level = null;
@@ -63,6 +63,7 @@
   var roundCorrect = 0;
   var answered = false;
   var attempts = 0;
+  var resolved = false;
   /* Refuerzo: ver core en assets/js/feedback.js (App.reinforce).
      currentItem permite reutilizar render() con un item externo
      (el del refuerzo); si es null, render() toma items[idx]. */
@@ -76,31 +77,24 @@
 
   function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
-  function readableText(simbolo) {
+  function readableText(symbol) {
     var loc = App.i18n.locale();
     var names = NOMBRES[loc] || NOMBRES.es;
-    return names[simbolo] || simbolo;
+    return names[symbol] || symbol;
   }
 
-  function seriesText(patron) {
-    return patron.map(function (s) {
+  function seriesText(pattern) {
+    return pattern.map(function (s) {
       return s === '❓' ? App.i18n.t('queSigueAudio') : readableText(s);
     }).join(', ');
   }
 
   /* ---- Initial screen ---- */
-  function paintLevels() {
-    var cont = $('#levels');
-    cont.innerHTML = '';
+  /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
+  function levelFromProgress() {
     var data = DATA[App.i18n.locale()] || DATA.es;
-    data.levels.forEach(function (n) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      btn.innerHTML = n.descripcion;
-      btn.addEventListener('click', function () { startRound(n); });
-      cont.appendChild(btn);
-    });
+    var idxN = Math.min(progress.completedRounds || 0, data.levels.length - 1);
+    return data.levels[idxN];
   }
 
   function startRound(n) {
@@ -113,15 +107,15 @@
     reinforceList = [];
     reinforceIndex = 0;
     App.reinforce.banner.hide();
-    App.reinforce.start(function (fallos) { startReinforce(fallos); });
+    App.reinforce.start(function (failures) { startReinforce(failures); });
     screenStart.classList.add('hidden');
     screenEnd.classList.add('hidden');
     screenGame.classList.remove('hidden');
     render();
   }
 
-  function startReinforce(fallos) {
-    reinforceList = fallos.map(function (f) { return f.payload; });
+  function startReinforce(failures) {
+    reinforceList = failures.map(function (f) { return f.payload; });
     reinforceTotal = reinforceList.length;
     reinforceIndex = 0;
     inReinforce = true;
@@ -157,10 +151,10 @@
     optionsEl.innerHTML = '';
 
     seriesEl.innerHTML = '';
-    item.patron.forEach(function (simbolo) {
+    item.pattern.forEach(function (symbol) {
       var span = document.createElement('span');
-      span.className = 'simbolo' + (simbolo === '❓' ? ' hueco' : '');
-      span.textContent = simbolo;
+      span.className = 'symbol' + (symbol === '❓' ? ' empty' : '');
+      span.textContent = symbol;
       seriesEl.appendChild(span);
     });
 
@@ -171,7 +165,7 @@
     options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'option-btn opcion-simbolo';
+      btn.className = 'option-btn option-symbol';
       btn.textContent = op.text;
       btn.addEventListener('click', function () {
         answer(btn, op.isCorrect, item);
@@ -206,7 +200,7 @@
     if (isCorrect) {
       showExplanation(isCorrect, item);
       resolved = true;
-      btn.classList.add('correcta');
+      btn.classList.add('correct');
       App.utils.$$('#options .option-btn').forEach(function (b) {
         b.disabled = true;
       });
@@ -225,7 +219,7 @@
       } else {
         showExplanation(isCorrect, item);
       }
-      btn.classList.add('animo');
+      btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
@@ -257,23 +251,23 @@
   }
 
   function endRound() {
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
-    $('#endSummary').textContent.textContent = '';
-$('#transfer').textContent.textContent = '';
+    $('#endSummary').textContent = '';
+    $('#explanation').textContent = '';
+    $('#transfer').textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
   /* Events */
-  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
-  $('#btnOtherLevel').addEventListener('click', function () {
+  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnMenu').addEventListener('click', function () {
     screenEnd.classList.add('hidden');
-    paintLevels();
     screenStart.classList.remove('hidden');
   });
 
-  paintLevels();
   paintStars();
 })();
 
