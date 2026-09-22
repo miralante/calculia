@@ -66,6 +66,7 @@
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
   /* Reinforce: see core in assets/js/feedback.js (App.reinforce).
      fixedQuestion allows reusing render() with an external question
@@ -112,14 +113,24 @@
   function draw(key, list) {
     var p = pools[key];
     if (!p || p.i >= p.orden.length) {
-      p = pools[key] = { orden: App.utils.shuffle(list), i: 0 };
+      var fresh = App.utils.shuffle(list);
+      /* When the bag is refilled, its first item must not be the one just
+         handed out: two identical questions in a row read as a "Siguiente"
+         button that does nothing. */
+      if (p && fresh.length > 1 && fresh[0] === p.last) {
+        var swap = fresh[1];
+        fresh[1] = fresh[0];
+        fresh[0] = swap;
+      }
+      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
     }
+    p.last = p.orden[p.i];
     return p.orden[p.i++];
   }
 
   /* ---- Color-coded digits by place value ---- */
 
-  var POS_CLASS = ['cifra-u', 'cifra-d', 'cifra-c'];
+  var POS_CLASS = ['digit-u', 'digit-d', 'digit-c'];
 
   /* Thousands separator ('.' is / ',' in) and decimal (',' is / '.' in).
      Not only styling: switching the separator between locales is
@@ -145,7 +156,7 @@
         var pos = groups[g].length - 1 - j;
         var posAbs = (groups.length - 1 - g) * 3 + pos;
         var cls = POS_CLASS[pos];
-        if (highlight === posAbs) cls += ' destacada';
+        if (highlight === posAbs) cls += ' highlight';
         body += '<span class="' + cls + '">' + groups[g][j] + '</span>';
       }
       if (g > 0) html += '<span class="digit-sep">' + thousandsSeparator() + '</span>';
@@ -190,6 +201,15 @@
     return s;
   }
 
+  /* n drawn with this tool's own place-value blocks (hundred squares, ten
+     bars, single units), so two quantities can be compared by looking
+     before they are compared as digits. */
+  function numberAsBlocks(n) {
+    return repeat('<span class="block-100">100</span>', Math.floor(n / 100)) +
+      repeat('<span class="block-10">10</span>', Math.floor((n % 100) / 10)) +
+      repeat('<span class="block-1"></span>', n % 10);
+  }
+
   /* ============================================================
      Question generators (one per level type)
      Return: prompt, visual (html), legend,
@@ -217,6 +237,160 @@
         max: nv.max,
         target: nv.meta,
         inicio: (typeof nv.inicio === 'number') ? nv.inicio : 0
+      };
+    },
+
+    /* Ordinal numbers on a queue. The flag at the front settles which end
+       counts as first, so the only thing being asked is the ordinal
+       itself. `ask: 'position'` points at someone and asks which place
+       that is; `ask: 'member'` names a place and asks who is standing
+       there. */
+    ordinal: function (nv) {
+      var row = App.utils.shuffle(DATA.queueMembers.slice()).slice(0, nv.items);
+      var target = randInt(1, nv.items);
+      var askingPosition = nv.ask === 'position';
+
+      /* Off-by-one is the real mistake here (counting from the wrong end,
+         or starting at zero), so the alternatives are the neighbouring
+         places rather than random ones. */
+      var nearby = [target - 1, target + 1, target + 2, target - 2]
+        .filter(function (p) { return p >= 1 && p <= nv.items && p !== target; })
+        .slice(0, 2);
+
+      var pointerRow = '';
+      if (askingPosition) {
+        pointerRow = '<div class="queue-row queue-pointers" aria-hidden="true">' +
+          '<span class="queue-start-spacer"></span>' +
+          row.map(function (_, idx) {
+            return '<span class="queue-pointer">' + (idx + 1 === target ? '⬇️' : '') + '</span>';
+          }).join('') + '</div>';
+      }
+
+      var queue = '<div class="queue-row" aria-hidden="true">' +
+        '<span class="queue-start">🏁</span>' +
+        row.map(function (m) { return '<span class="queue-member">' + m + '</span>'; }).join('') +
+        '</div>';
+
+      var visual = pointerRow + queue +
+        '<p class="hint">' + App.i18n.t('gen.ordinalHint') + '</p>';
+
+      if (askingPosition) {
+        return {
+          prompt: App.i18n.t('gen.ordinalPositionPrompt'),
+          visual: visual,
+          visualAria: App.i18n.t('gen.ordinalVisualAria')
+            .replace('{n}', nv.items).replace('{pos}', target),
+          options: App.utils.shuffle(
+            [{ html: App.i18n.t('ordinal.' + target), correct: true }].concat(
+              nearby.map(function (p) {
+                return { html: App.i18n.t('ordinal.' + p), correct: false };
+              })
+            ))
+        };
+      }
+      return {
+        prompt: App.i18n.t('gen.ordinalMemberPrompt')
+          .replace('{place}', App.i18n.t('ordinalPlace.' + target)),
+        visual: visual,
+        visualAria: App.i18n.t('gen.ordinalVisualAria')
+          .replace('{n}', nv.items).replace('{pos}', target),
+        options: App.utils.shuffle(
+          [{ html: '<span class="queue-member">' + row[target - 1] + '</span>', correct: true }].concat(
+            nearby.map(function (p) {
+              return { html: '<span class="queue-member">' + row[p - 1] + '</span>', correct: false };
+            })
+          )),
+        inline: true
+      };
+    },
+
+    /* The number line: a mark sits between two labelled
+       ticks and the question is which number it is. `sparse` hides the
+       intermediate ticks so the answer has to be worked out from the
+       labelled ones instead of counting every notch. */
+    numberLine: function (nv) {
+      var span = nv.max - nv.min;
+      function isLabelled(v) { return (v - nv.min) % nv.label === 0; }
+
+      /* Candidates are the inner notches. Once the labels thin out, a
+         labelled notch is excluded: reading its number off the line would
+         be the answer rather than a count. */
+      var candidates = [];
+      for (var v = nv.min + nv.tick; v < nv.max; v += nv.tick) {
+        if (nv.label === nv.tick || !isLabelled(v)) candidates.push(v);
+      }
+      /* Drawn from the no-repeat bag, not at random: with only eight
+         notches to choose from, pure chance hands out the same notch
+         twice in a row often enough to read as a dead "Siguiente". */
+      var target = draw(nv.id, candidates);
+
+      var ticks = '';
+      for (var w = nv.min; w <= nv.max; w += nv.tick) {
+        ticks += '<span class="line-tick" style="left:' +
+          (((w - nv.min) / span) * 100).toFixed(2) + '%">' +
+          (isLabelled(w) ? '<span class="line-label">' + w + '</span>' : '') +
+          '</span>';
+      }
+      var mark = '<span class="line-mark" style="left:' +
+        (((target - nv.min) / span) * 100).toFixed(2) + '%">▼</span>';
+
+      return {
+        prompt: App.i18n.t('gen.numberLinePrompt'),
+        visual: '<div class="number-line" aria-hidden="true">' +
+          '<span class="line-rule"></span>' + ticks + mark + '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.numberLineHint') + '</p>',
+        visualAria: App.i18n.t('gen.numberLineAria')
+          .replace('{min}', nv.min).replace('{max}', nv.max),
+        /* Landing on the neighbouring notch is the real mistake (one notch
+           miscounted), so those are the alternatives. */
+        options: buildOptions(target,
+          [target - nv.tick, target + nv.tick, target + nv.tick * 2],
+          function (x) { return paintNumber(x); })
+      };
+    },
+
+    /* The signs <, > and =. The relation is picked FIRST
+       and the pair built to match it, so the three signs come up equally
+       often and the answer can never be guessed by always choosing one.
+       The rule taught is checkable rather than a mnemonic: the sign opens
+       towards the bigger number. */
+    comparar: function (nv) {
+      var relations = ['lt', 'gt', 'eq'];
+      var rel = relations[randInt(0, 2)];
+      var a = randInt(nv.min, nv.max);
+      var b;
+      if (rel === 'eq') {
+        b = a;
+      } else {
+        do { b = randInt(nv.min, nv.max); } while (b === a);
+        /* Swap so the pair actually shows the relation that was drawn. */
+        if ((rel === 'lt') !== (a < b)) { var swap = a; a = b; b = swap; }
+      }
+      var sign = rel === 'eq' ? '=' : (a < b ? '<' : '>');
+
+      var blocksHtml = '';
+      if (nv.blocks) {
+        blocksHtml = '<div class="blocks compare-blocks">' +
+          '<span class="blocks-group">' + numberAsBlocks(a) + '</span>' +
+          '<span class="blocks-group">' + numberAsBlocks(b) + '</span>' +
+          '</div>';
+      }
+
+      return {
+        prompt: App.i18n.t('gen.compararEnunciado'),
+        visual: '<div class="compare-row">' +
+          '<span class="compare-side">' + paintNumber(a) + '</span>' +
+          '<span class="compare-gap">?</span>' +
+          '<span class="compare-side">' + paintNumber(b) + '</span>' +
+          '</div>' + blocksHtml +
+          '<p class="hint">' + App.i18n.t('gen.compararPista') + '</p>',
+        visualAria: App.i18n.t('gen.compararAria').replace('{a}', a).replace('{b}', b),
+        options: App.utils.shuffle([
+          { html: '<span class="compare-sign">&lt;</span>', aria: App.i18n.t('gen.signLess'), correct: sign === '<' },
+          { html: '<span class="compare-sign">&gt;</span>', aria: App.i18n.t('gen.signGreater'), correct: sign === '>' },
+          { html: '<span class="compare-sign">=</span>', aria: App.i18n.t('gen.signEqual'), correct: sign === '=' }
+        ]),
+        inline: true
       };
     },
 
@@ -249,7 +423,7 @@
     },
 
     lectura: function (nv, i) {
-      var list = DATA.lecturas[App.i18n.locale()][nv.lista];
+      var list = DATA.readings[App.i18n.locale()][nv.lista];
       var item = draw(nv.lista, list);
       var others = App.utils.shuffle(list.filter(function (o) { return o.n !== item.n; })).slice(0, 2);
       var note = item.nota ? '<p class="hint">' + item.nota + '</p>' : '';
@@ -259,15 +433,15 @@
           prompt: App.i18n.t('gen.lecturaEnunciadoNumASim'),
           visual: '<div class="visual-number">' + paintNumber(item.n, { labels: true }) + '</div>' + note,
           legend: legendPos(),
-          options: App.utils.shuffle([{ html: item.palabras, correct: true }].concat(
-            others.map(function (o) { return { html: o.palabras, correct: false }; })
+          options: App.utils.shuffle([{ html: item.words, correct: true }].concat(
+            others.map(function (o) { return { html: o.words, correct: false }; })
           ))
         };
       }
       /* words → paintNumber */
       return {
         prompt: App.i18n.t('gen.lecturaEnunciadoSimANum'),
-        visual: '<p class="words-number">' + item.palabras + '</p>' + note,
+        visual: '<p class="words-number">' + item.words + '</p>' + note,
         legend: legendPos(),
         options: App.utils.shuffle([{ html: paintNumber(item.n), correct: true }].concat(
           others.map(function (o) { return { html: paintNumber(o.n), correct: false }; })
@@ -367,7 +541,7 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenLevels, screenGame, screenEnd].forEach(function (p) {
+    [screenMenu, screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -392,26 +566,22 @@
     cont.appendChild(grid);
   }
 
-  /* ---- Levels of an activity ---- */
+  /* ---- Levels of an activity (now automatic via levelFromProgress) ---- */
+
+  /* ---- Game ---- */
+  /* The level rises one step per completed round, capped at the last
+     one, so a person who comes back continues where they were. */
+  function levelFromProgress() {
+    var levels = activity.levels;
+    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
+  }
+
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    $('#activityTitle').textContent.textContent = '';
-    $('#activityInstruction').textContent.textContent = '';
-    var cont = $('#levels');
-    cont.innerHTML = '';
-    activity.levels.forEach(function (nv) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      btn.innerHTML = App.i18n.t('level.' + nv.id);
-      btn.addEventListener('click', function () { startRound(nv); });
-      cont.appendChild(btn);
-    });
-    show(screenLevels);
+    startRound(levelFromProgress());
   }
 
-  /* ---- Game ---- */
   function startRound(nv) {
     level = nv;
     index = 0;
@@ -543,7 +713,7 @@
     if (op.correct) {
       showExplanation(op.correct);
       resolved = true;
-      btn.classList.add('correcta');
+      btn.classList.add('correct');
       App.feedback.success(feedbackEl);
       progress.stars += 1;
       roundCorrect += 1;
@@ -560,7 +730,7 @@
       } else {
         showExplanation(op.correct);
       }
-      btn.classList.add('animo');
+      btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
@@ -591,23 +761,29 @@
   }
 
   function endRound() {
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
     show(screenEnd);
     var summaryEl = $('#endSummary');
     if (level.tipo === 'counter') {
-      summaryEl.textContent = '';
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
+        .replace('{stars}', progress.stars);
+    }
     } else if (level.tipo === 'ascensorLibre' || level.tipo === 'ascensorMeta') {
       /* Free-exploration elevator: no question count, only a star
          tally. Different from the counter summary to keep each
          tool's closing line distinct. */
       summaryEl.textContent = '';
     } else {
-      summaryEl.textContent = App.i18n.t('resumenFinal')
+      summaryEl.textContent = App.i18n.t('endSummary')
         .replace('{n}', roundCorrect)
-        .replace('{actividad}', App.i18n.t('activity.' + activity.id + '.name'))
-        .replace('{estrellas}', progress.stars);
+        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
+        .replace('{stars}', progress.stars);
     }
-    $('#transfer').textContent.textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
     var levelIndex = activity.levels.indexOf(level);
@@ -615,7 +791,7 @@
       ? activity.levels[levelIndex + 1] : null;
     var btnHarder = $('#btnHarder');
     if (nextLevel) {
-      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name-card}', App.i18n.t('level.' + nextLevel.id));
+      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name}', App.i18n.t('level.' + nextLevel.id));
       btnHarder.classList.remove('hidden');
       btnHarder.onclick = function () { startRound(nextLevel); };
     } else {
@@ -847,10 +1023,10 @@
       : n < 0 ? 'gen.elevatorStateBelow'
       : 'gen.elevatorStateGround';
     elevatorStateLabel.textContent = App.i18n.t(labelKey);
-    /* Disable "+" / "−" buttons when the next step would exceed
-       elevatorMin / elevatorMax. The buttons share the .data-step
-       attribute that starts with "-" or "+", so a single loop
-       covers all four step buttons. */
+    /* Disable "+" / "−" at the true edges of the building (±3) so the
+       elevator cannot be sent past the top or bottom floor. With a
+       ±3 range and single-floor steps this is a rare, honest edge
+       case — not a stand-in for a range the buttons don't fit. */
     App.utils.$$('#elevatorUI .btn-elevator[data-step]').forEach(function (b) {
       var step = parseInt(b.getAttribute('data-step'), 10);
       var wouldBe = elevatorValue + step;
@@ -1158,9 +1334,11 @@
 
   /* ---- Events ---- */
 
-  $('#btnBackToMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
-  $('#btnOtherLevel').addEventListener('click', function () { openActivity(activity.id); });
+  var elBtnBackToMenu = $('#btnBackToMenu');
+  if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
+  $('#btnNext').addEventListener('click', next);
+  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
   $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
 
   $('#noteExtra').innerHTML = App.i18n.t('notaTablas')

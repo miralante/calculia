@@ -26,14 +26,7 @@
       <p class="extra-note" id="noteExtra"></p>
     </section>
 
-    <section id="screenLevels" class="hidden stack">
-      <h2 id="activityTitle"></h2>
-      <div class="row center-row">
-        <p class="instruction" id="activityInstruction"></p>
-      </div>
-      <div class="stack" id="levels"></div>
-      <button type="button" class="btn btn-secondary" id="btnBackToMenu" data-i18n="btnBackToMenu">← Otras actividades</button>
-    </section>
+    
 
     <section id="screenGame" class="hidden stack">
       <!-- The quiz card / progress bar / options belong to the
@@ -44,6 +37,7 @@
       <div class="progress-bar hidden" id="progressBar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText">0 / 6</span>
+        <span class="difficulty" id="difficulty"></span>
       </div>
 
       <div class="card centered stack hidden" id="quizCard">
@@ -101,11 +95,11 @@
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
       <p id="contexto" class="contexto"></p>
-      <p id="explicacion" class="explicacion"></p>
-      <p id="transfer" class="transfer" data-i18n="transferencia"></p>
+      <p id="explanation" class="explanation"></p>
+      <p id="transfer" class="transfer" data-i18n="transfer"></p>
       <button type="button" class="btn btn-secondary hidden" id="btnHarder"></button>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secondary" id="btnOtherLevel" data-i18n="otherLevel">Elegir otro nivel</button>
+      <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
       <button type="button" class="btn btn-secondary" id="btnOtherActivity" data-i18n="btnOtherActivity">Otra actividad</button>
       <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>

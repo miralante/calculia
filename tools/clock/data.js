@@ -35,8 +35,15 @@ var DATA = {
     { id: 'read',       stars: 1 }, // see the clock → write the time
     { id: 'set',        stars: 2 }, // read the time → set the hands
     { id: 'convert',    stars: 3 }, // analog ↔ digital pairing
-    { id: 'situations', stars: 2 }  // moment of the day → analog time
+    { id: 'situations', stars: 2 }, // moment of the day → analog time
+    { id: 'elapsed',    stars: 3 }  // two clocks → how long in between
   ],
+
+  /* Gaps for the 'elapsed' mode, in minutes. Only gaps that can be said
+     in plain words ("media hora", "dos horas y media"), because the
+     answer is a phrase and not a number of minutes. Their names live in
+     strings.<locale>.js under 'gap.<minutes>'. */
+  gaps: [30, 60, 90, 120, 150, 180],
   levels: [
     { id: 1, stars: 1, minutes: [0] },
     { id: 2, stars: 2, minutes: [0, 30] },

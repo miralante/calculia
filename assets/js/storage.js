@@ -39,7 +39,15 @@
   function get(toolId) {
     try {
       var raw = localStorage.getItem(PREFIX + toolId);
-      return raw ? JSON.parse(raw) : {};
+      var data = raw ? JSON.parse(raw) : {};
+      /* Migrate 'estrellas' → 'stars' (Apr 2025 rename). Read both keys so
+         existing users keep their progress; prefer 'stars' if both are present. */
+      if ('estrellas' in data && !('stars' in data)) {
+        data.stars = data.estrellas;
+        delete data.estrellas;
+        try { localStorage.setItem(PREFIX + toolId, JSON.stringify(data)); } catch (e2) { /* tolerated */ }
+      }
+      return data;
     } catch (e) {
       return {};
     }
@@ -87,6 +95,8 @@
         var data = JSON.parse(localStorage.getItem(key) || '{}');
         if (data && typeof data.stars === 'number') {
           total += data.stars;
+        } else if (data && typeof data.estrellas === 'number') {
+          total += data.estrellas;
         }
       } catch (e) { /* individual key corrupt or non-JSON: keep going with the rest */ }
     }

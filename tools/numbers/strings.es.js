@@ -16,10 +16,10 @@
     notaTablasLink: 'Tablas',
     noteTablesLink: 'Tablas',
     btnBackToMenu: '← Otras actividades',
+    btnMenu: 'Volver al inicio',
     otherLevel: 'Elegir otro nivel',
-    resumenFinal: 'Has resuelto {n} preguntas de {actividad}. Ahora tienes {stars} estrellas.',
-    endSummary: 'Has resuelto {n} preguntas de {actividad}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{nombre}»?',
+    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
+    btnHarder: '¿Quieres probar «{name}»?',
     btnOtherActivity: 'Otra actividad',
     explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
@@ -49,10 +49,28 @@
     activity: {
       'positivos-y-negativos': { name: 'Positivos y negativos', detail: 'Sube y baja del ascensor.', instruction: 'Tienes un ascensor. Empieza en la planta baja (0). Pulsa + para subir a pisos de arriba (números positivos: +1, +2, +3…). Pulsa − para bajar a pisos de abajo (números negativos: −1, −2, −3…). La planta baja es el cero (0): no es positivo ni negativo.' },
       unidades: { name: 'Unidades y decenas', detail: '¿Qué número es?', instruction: 'Cada color ayuda a leer el número. Azul: unidades. Verde: decenas. Morado: centenas.' },
-      placevalue: { name: 'Cambiar de posición', detail: '10 pequeños se cambian por 1 grande.', instruction: 'Cuando juntas 10 iguales, forman 1 del grupo siguiente. La cifra se mueve una posición a la izquierda.' }
+      placevalue: { name: 'Cambiar de posición', detail: '10 pequeños se cambian por 1 grande.', instruction: 'Cuando juntas 10 iguales, forman 1 del grupo siguiente. La cifra se mueve una posición a la izquierda.' },
+      ordinales: { name: 'El lugar en la fila', detail: 'Primero, segundo, tercero…', instruction: 'Los números ordinales dicen qué lugar ocupa cada uno. La fila empieza en la bandera 🏁. El de al lado de la bandera es el primero.' },
+      recta: { name: 'La recta de los números', detail: '¿Qué número señala la flecha?', instruction: 'Los números van en fila y en orden. La recta los coloca de menor a mayor. Cuenta desde la marca más cercana para saber cuál señala la flecha.' },
+      comparar: { name: 'Mayor, menor o igual', detail: 'Los signos <, > y =.', instruction: 'Mira los dos números. El signo se abre hacia el número más grande. Si los dos son iguales, el signo es =.' }
     },
-    level: { libre: '🛗 Ascensor libre', meta: '� Llegar a un piso', u99: 'Hasta 99', u999: 'Hasta 999', umiles: 'Los miles', umillones: 'Millones y billón', udictado: 'Escucha y elige', counter: 'Contador libre', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
+    ordinal: { 1: 'primero', 2: 'segundo', 3: 'tercero', 4: 'cuarto', 5: 'quinto' },
+    ordinalPlace: { 1: 'el primer lugar', 2: 'el segundo lugar', 3: 'el tercer lugar', 4: 'el cuarto lugar', 5: 'el quinto lugar' },
+    level: { n1: 'Hasta 10', n2: 'Hasta 20', n3: 'Hasta 100', n4: 'Hasta 100, con menos marcas', c1: 'Hasta 9, con bloques', c2: 'Hasta 99, con bloques', c3: 'Hasta 99, sin bloques', c4: 'Hasta 999', c5: 'Hasta 9.999', o1: 'Fila de 3', o2: 'Fila de 5', o3: 'Buscar un lugar', libre: '🛗 Ascensor libre', meta: '🎯 Llegar a un piso', u99: 'Hasta 99', u999: 'Hasta 999', umiles: 'Los miles', umillones: 'Millones y billón', udictado: 'Escucha y elige', counter: 'Contador libre', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
     gen: {
+      numberLinePrompt: '¿Qué número señala la flecha?',
+      numberLineHint: 'Cuenta desde el número escrito más cercano.',
+      numberLineAria: 'Recta numérica de {min} a {max}.',
+      compararEnunciado: '¿Qué signo falta?',
+      compararPista: 'El signo se abre hacia el número más grande.',
+      compararAria: 'Compara {a} y {b}.',
+      signLess: 'es más pequeño que',
+      signGreater: 'es más grande que',
+      signEqual: 'es igual a',
+      ordinalPositionPrompt: '¿Qué lugar señala la flecha?',
+      ordinalMemberPrompt: '¿Quién está en {place}?',
+      ordinalHint: 'Cuenta desde la bandera 🏁.',
+      ordinalVisualAria: 'Fila de {n}. La flecha señala el lugar {pos}.',
       bloquesEnunciado: '¿Qué número forman los bloques?',
       bloquesVisualAria: 'Bloques: {texto}',
       blocksPrompt: '¿Qué número forman los bloques?',
@@ -102,7 +120,7 @@
       counterWordsOn: '✍️ Ocultar cómo se escribe',
       counterWordsOff: '✍️ Mostrar cómo se escribe',
       counterWordsAria: 'Mostrar el número escrito con palabras',
-      counterResumenFinal: 'Has explorado el contador libre. Ahora tienes {estrellas} estrellas.',
+      counterResumenFinal: 'Has explorado el contador libre. Ahora tienes {stars} estrellas.',
       elevatorHint: 'Pulsa + o − para mover el ascensor. Mira cómo cambia el piso y si sube o baja.',
       elevatorHintLibre: 'Pulsa + o − para mover el ascensor. Mira cómo cambia el piso y si sube o baja.',
       elevatorHintMeta: 'Pulsa + o − hasta llegar al piso objetivo. Tienes que acertar el piso exacto.',
@@ -121,9 +139,8 @@
       elevatorTtsAbove: 'Piso de arriba.',
       elevatorTtsBelow: 'Piso de abajo.',
       elevatorTtsGround: 'Planta baja.',
-      elevatorResumenFinal: 'Has explorado el ascensor. Ahora tienes {estrellas} estrellas.'
+      elevatorResumenFinal: 'Has explorado el ascensor. Ahora tienes {stars} estrellas.'
     },
-    transferencia: 'Esto te servirá para leer números grandes, entender el ascensor de un edificio o saber qué cifra cambia al sumar 100.',
     transfer: 'Esto te servirá para leer números grandes, entender el ascensor de un edificio o saber qué cifra cambia al sumar 100.'
   }, 'es');
 })();

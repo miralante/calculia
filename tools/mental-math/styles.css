@@ -1,4 +1,4 @@
-/* Mental Math — tool-specific styles. Shared styles live in assets/css/.
+/* Mental Math â€” tool-specific styles. Shared styles live in assets/css/.
    Colors by place value: blue units, green tens, purple hundreds
    (the cycle repeats every group of 3 digits). Signs are shown in orange. */
 
@@ -6,6 +6,11 @@
 .btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 .center-row { justify-content: center; }
+
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario, #666);
+}
 
 /* Activity menu */
 .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
@@ -21,14 +26,13 @@
 .btn-actividad .detail-card { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
-.btn-level { min-width: 300px; align-self: center; }
 #btnBackToMenu { align-self: center; }
 
 /* Color-coded digits by place value */
 .num-color { font-weight: 800; letter-spacing: 2px; }
-.digit-u { color: var(--mod-coordinacion); }   /* blue — units */
-.digit-d { color: var(--mod-secuencia); }      /* green — tens */
-.digit-c { color: var(--mod-emocional); }      /* purple — hundreds */
+.digit-u { color: var(--mod-coordinacion); }   /* blue â€” units */
+.digit-d { color: var(--mod-secuencia); }      /* green â€” tens */
+.digit-c { color: var(--mod-emocional); }      /* purple â€” hundreds */
 .digit-sep { color: var(--color-texto-suave); }
 .sign { color: var(--mod-memoria); }          /* orange */
 .highlight { text-decoration: underline; text-underline-offset: 6px; }
@@ -61,13 +65,13 @@
 .dot.pb { background: var(--mod-secuencia); }
 
 /* Crossed-out dots when subtracting */
-.dot.quitado { background: var(--color-superficie); border: 3px solid var(--mod-memoria); position: relative; }
-.dot.quitado::before, .dot.quitado::after {
+.dot.removed { background: var(--color-superficie); border: 3px solid var(--mod-memoria); position: relative; }
+.dot.removed::before, .dot.removed::after {
   content: ''; position: absolute; top: 50%; left: 10%;
   width: 80%; height: 3px; background: var(--mod-memoria);
 }
-.dot.quitado::before { transform: translateY(-50%) rotate(45deg); }
-.dot.quitado::after { transform: translateY(-50%) rotate(-45deg); }
+.dot.removed::before { transform: translateY(-50%) rotate(45deg); }
+.dot.removed::after { transform: translateY(-50%) rotate(-45deg); }
 
 /* Answer options */
 .options .option-btn { text-align: center; font-size: 26px; }
@@ -82,4 +86,25 @@
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);
   max-width: 480px;
+}
+
+/* ---- Base-ten pictures: one bar is ten, a loose dot is one ----
+   The bar is boxed and laid out 5 + 5 so ten reads as two hands
+   rather than a row that has to be counted one by one. */
+.ten-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 18px);
+  gap: 6px;
+  padding: 6px;
+  border: 3px solid var(--color-borde);
+  border-radius: 10px;
+  background: var(--color-superficie);
+}
+.unit-group {
+  display: grid;
+  grid-template-columns: repeat(5, 18px);
+  gap: 6px;
+  padding: 6px;
+  border: 3px dashed var(--color-borde);
+  border-radius: 10px;
 }

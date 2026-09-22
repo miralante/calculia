@@ -69,7 +69,7 @@ const DATA = {
     {
         text: "Cuanto más le quitas, más grande es. ¿Qué es?",
         answer: "El agujero",
-        options: ["El agujero", "El globo", "La burbuja"],
+        options: ["El agujero", "El globo", "La bubble"],
         correct: 0
     },
     {

@@ -96,12 +96,12 @@ img, svg, canvas, input, select, textarea, button { max-width: 100%; }
 
 .option-btn:hover { border-color: var(--mod-coordinacion); }
 
-.option-btn.correcta {
+.option-btn.correct {
   border-color: var(--color-acierto);
   background: var(--color-acierto-suave);
 }
 
-.option-btn.animo {
+.option-btn.encourage {
   border-color: var(--color-animo);
   background: var(--color-animo-suave);
 }
@@ -143,13 +143,13 @@ img, svg, canvas, input, select, textarea, button { max-width: 100%; }
   .card { padding: 12px var(--espacio); }
 }
 
-/* ---- Progress bar (no pressure: informational only) ---- */
+/* Ludia's compact progress track: informational, never a touch target. */
 .progress-bar {
   position: relative;
-  height: 28px;
-  background: var(--color-superficie);
-  border: 2px solid var(--color-borde);
-  border-radius: 14px;
+  height: 6px;
+  background: #ddd9eb;
+  border: 0;
+  border-radius: 4px;
   overflow: hidden;
 }
 
@@ -158,8 +158,8 @@ img, svg, canvas, input, select, textarea, button { max-width: 100%; }
   inset: 0 auto 0 0;
   height: 100%;
   width: 0%;
-  background: var(--color-acierto);
-  border-radius: 14px;
+  background: #7462bb;
+  border-radius: 4px;
   transition: width 0.4s ease;
 }
 
@@ -192,8 +192,8 @@ img, svg, canvas, input, select, textarea, button { max-width: 100%; }
   text-align: center;
 }
 
-.feedback.acierto { color: var(--color-acierto); }
-.feedback.animo { color: var(--color-animo); }
+.feedback.success { color: var(--color-acierto); }
+.feedback.encourage { color: var(--color-animo); }
 
 /* ---- Explanation of why an answer is right/wrong (quiz) ---- */
 .explanation {
@@ -210,12 +210,12 @@ img, svg, canvas, input, select, textarea, button { max-width: 100%; }
 .explanation p { margin: 0; flex: 1; }
 
 /* ---- "Entendido" gate: reading pause after a wrong answer (rule 12) ---- */
-.btn-entendido {
+.btn-understood {
   margin-left: auto;
   white-space: nowrap;
 }
 
-button.bloqueada {
+button.locked {
   opacity: 0.6;
 }
 
@@ -300,7 +300,7 @@ button.bloqueada {
 .row { display: flex; align-items: center; gap: var(--espacio); flex-wrap: wrap; }
 
 /* ---- Visual money (euros drawn with CSS; logic in assets/js/dinero.js) ---- */
-.dinero {
+.money {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -312,7 +312,7 @@ button.bloqueada {
 }
 
 /* Coins: round, >= 64 px (rule 2) */
-.dinero.moneda {
+.money.coin {
   width: 68px;
   height: 68px;
   border-radius: 50%;
@@ -326,10 +326,10 @@ button.bloqueada {
 /* Number must be readable inside the coin so users can sum the
    table by eye in "How much is there?". Coins are 68 px wide;
    22 px gives a clear number without clipping. */
-.dinero.moneda { font-size: 22px; }
+.money.coin { font-size: 22px; }
 
 /* Banknotes: rectangular with the real colors */
-.dinero.billete {
+.money.banknote {
   min-width: 112px;
   height: 64px;
   border-radius: 8px;
@@ -341,19 +341,19 @@ button.bloqueada {
 .b20e { background: #AFC8E8; border: 4px solid #6D8FBC; }   /* blue */
 .b50e { background: #F2C08A; border: 4px solid #C98B3F; }   /* orange */
 
-button.dinero { cursor: pointer; }
-button.dinero:hover { transform: scale(1.05); }
-button.dinero:disabled { cursor: default; }
+button.money { cursor: pointer; }
+button.money:hover { transform: scale(1.05); }
+button.money:disabled { cursor: default; }
 
-.dinero.correcta {
+.money.correct {
   outline: 4px solid var(--color-acierto);
   outline-offset: 3px;
 }
 
-.dinero.animo { opacity: 0.45; }
+.money.encourage { opacity: 0.45; }
 
 /* Table where the money is displayed */
-.mesa-dinero {
+.money-table {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -366,7 +366,7 @@ button.dinero:disabled { cursor: default; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  button.dinero:hover { transform: none; }
+  button.money:hover { transform: none; }
 }
 
 /* ---- Responsive: móvil (≤ 640px) ----
@@ -402,8 +402,4 @@ button.dinero:disabled { cursor: default; }
   .tarjeta { padding: calc(var(--espacio) * 1.5); }
   .tool-header h1 { font-size: 2.25rem; }
 }
-.progress-text { display: none; }
-.progress-bar { height: 76px !important; border: 4px solid var(--color-borde, #d8d6cf) !important; border-radius: 40px !important; }
-.progress-fill { background: var(--color-acierto, #159b8c) !important; border-radius: 40px !important; }
-.progress-text { display: none !important; }
 

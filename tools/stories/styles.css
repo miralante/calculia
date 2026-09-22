@@ -1,4 +1,4 @@
-/* Stories — tool-specific styles. Shared styles live in assets/css/. */
+/* Stories â€” tool-specific styles. Shared styles live in assets/css/. */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 
@@ -10,7 +10,10 @@
 
 .center-row { justify-content: center; }
 
-.btn-level { min-width: 300px; align-self: center; }
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario, #666);
+}
 
 .progress-bar { margin-top: var(--espacio); }
 
@@ -26,7 +29,7 @@
   margin-top: var(--espacio);
 }
 
-.pila-secuencia, .pila-disponibles {
+.stack-secuencia, .stack-disponibles {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

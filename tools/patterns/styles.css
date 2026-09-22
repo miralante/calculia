@@ -1,4 +1,4 @@
-/* Patterns — tool-specific styles. Shared styles live in assets/css/. */
+/* Patterns â€” tool-specific styles. Shared styles live in assets/css/. */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 
@@ -10,7 +10,10 @@
 
 .center-row { justify-content: center; }
 
-.btn-level { min-width: 300px; align-self: center; }
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario, #666);
+}
 
 .progress-bar { margin-top: var(--espacio); }
 
@@ -23,7 +26,7 @@
   gap: var(--espacio);
 }
 
-.simbolo {
+.symbol {
   font-size: 48px;
   line-height: 1;
   min-width: 64px;
@@ -33,7 +36,7 @@
   justify-content: center;
 }
 
-.simbolo.empty {
+.symbol.empty {
   border: 3px dashed var(--mod-razonamiento);
   border-radius: var(--radio);
   background: var(--mod-razonamiento-suave);
@@ -41,7 +44,7 @@
 
 .question { color: var(--color-texto-suave); }
 
-.opcion-simbolo {
+.option-symbol {
   text-align: center;
   font-size: 32px;
 }

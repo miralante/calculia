@@ -17,7 +17,19 @@
     whatTime: '¿Qué hora es?',
     clockAria: 'Reloj: {texto}',
     endSummary: 'Has ganado {n} estrellas. Ahora tienes {stars} estrellas.',
+    btnMenu: 'Volver al inicio',
+    proximoNivel: 'Siguiente paso: {n}',
     otherLevel: 'Elegir otra actividad',
+    learnTitle: 'Cómo se lee el reloj',
+    learnIntro: 'El reloj tiene dos agujas. Cada aguja dice una cosa.',
+    learnHourHand: 'La aguja corta marca la hora.',
+    learnMinuteHand: 'La aguja larga marca los minutos.',
+    learnRuleOClock: 'Si la aguja larga está en el 12, la hora es en punto.',
+    learnRuleHalf: 'Si la aguja larga está en el 6, es y media.',
+    learnExample: 'En este reloj son las {t}.',
+    learnStart: 'Empezar a practicar →',
+    learnOpen: 'Ver cómo se lee',
+    learnBack: '← Volver a la pregunta',
     oClock: '{h} en punto',
     quarterPast: '{h} y cuarto',
     halfPast: '{h} y media',
@@ -36,7 +48,22 @@
     setIncrement: 'Subir',
     setDecrement: 'Bajar',
     setConfirm: 'Comprobar',
+    elapsedFrom: 'Antes',
+    elapsedTo: 'Después',
+    gap: {
+      '30': 'media hora',
+      '60': '1 hora',
+      '90': 'una hora y media',
+      '120': '2 horas',
+      '150': 'dos horas y media',
+      '180': '3 horas'
+    },
     mode: {
+      elapsed: {
+        name: 'Cuánto tiempo pasa',
+        description: 'Mira los dos relojes y di cuánto tiempo hay entre uno y otro.',
+        question: '¿Cuánto tiempo pasa entre los dos relojes?'
+      },
       read: {
         name: 'Leer el reloj',
         description: 'Mira el reloj y elige la hora correcta.',
@@ -71,6 +98,5 @@
       dormir: { name: 'dormir', question: '¿A qué hora te vas a dormir?' }
     },
     transfer: 'Esto te servirá para leer la hora en el reloj de la cocina, en el del cole o en tu propia muñeca, sin tener que preguntar a cada momento.',
-    transferencia: 'Esto te servirá para leer la hora en el reloj de la cocina, en el del cole o en tu propia muñeca, sin tener que preguntar a cada momento.'
   }, 'es');
 })();

@@ -14,8 +14,8 @@
     otherLevel: 'Choose another activity',
     pictureAria: 'Picture',
     dibujoAria: 'Picture',
-    resumenFinal: 'You won {n} stars. You now have {total} stars.',
-    endSummary: 'You won {n} stars. You now have {total} stars.',
+    btnMenu: 'Back to start',
+    endSummary: 'You won {n} stars. You now have {stars} stars.',
     level1Desc: 'Very different groups',
     level2Desc: 'Similar groups',
     level3Desc: 'Groups with a fine relationship',
@@ -26,6 +26,6 @@
     refuerzoTitulo: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",
-    transferencia: 'This will help you spot similarities and differences in real life: at the shop (\"does this go with this?\"), sorting laundry or arranging cutlery.'
+    transfer: 'This will help you spot similarities and differences in real life: at the shop (\"does this go with this?\"), sorting laundry or arranging cutlery.'
   }, 'en');
 })();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fractions and Measures | Calculia</title>
+  <title>Fractions | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
@@ -14,7 +14,7 @@
   <div class="container">
     <header class="tool-header">
       <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
-      <h1 data-i18n="title">🍕 Fracciones y Medidas</h1>
+      <h1 data-i18n="title">🍕 Fracciones</h1>
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
@@ -25,19 +25,13 @@
       <div id="activitiesMenu"></div>
     </section>
 
-    <section id="screenLevels" class="hidden stack">
-      <h2 id="activityTitle"></h2>
-      <div class="row center-row">
-        <p class="instruction" id="activityInstruction"></p>
-      </div>
-      <div class="stack" id="levels"></div>
-      <button type="button" class="btn btn-secondary" id="btnBackToMenu" data-i18n="btnBackToMenu">← Otras actividades</button>
-    </section>
+    
 
     <section id="screenGame" class="hidden stack">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText">0 / 6</span>
+        <span class="difficulty" id="difficulty"></span>
       </div>
 
       <div class="card centered stack">
@@ -56,13 +50,13 @@
     </section>
 
     <section id="screenEnd" class="hidden centered stack" aria-live="polite">
-      <div class="emoji-large" aria-hidden="true">�</div>
+      <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
-      <p id="transfer" class="transfer" data-i18n="transferencia"></p>
+      <p id="transfer" class="transfer" data-i18n="transfer"></p>
       <button type="button" class="btn btn-secondary hidden" id="btnHarder"></button>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secondary" id="btnOtherLevel" data-i18n="otherLevel">Elegir otro nivel</button>
+      <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
       <button type="button" class="btn btn-secondary" id="btnOtherActivity" data-i18n="btnOtherActivity">Otra actividad</button>
       <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>

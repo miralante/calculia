@@ -30,7 +30,7 @@
     practiceTable: 'Practise this table',
     backToTables: '← Choose another table',
     backToLevels: '← Choose another step',
-    progress: '{current} of {total}',
+    progress: '{current} of {stars}',
     hintAdd: 'Hint: count all the dots, one by one.',
     hintMultiply: 'Hint: there are {b} groups of {a} dots. Count group by group.',
     hintStepsAdd: 'Hint: start at {a} and count {b} more, one at a time.',
@@ -65,6 +65,6 @@
     "contexto": "You are doing sums in your head. You will add, subtract, multiply or divide with visual help.",
     "pista": "🤔 Count the dots slowly. How many are there in total?",
     "explicacion": "✅ That is how to count in your head. Next time you add or subtract, try with fingers or dots.",
-    "transferencia": "This will help you with everyday sums: at the shop, sharing things out, counting change or at school."
+    "transfer": "This will help you with everyday sums: at the shop, sharing things out, counting change or at school."
   }, 'en');
 })();

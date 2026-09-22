@@ -10,6 +10,7 @@
 [![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8.svg)](manifest.json)
 [![i18n](https://img.shields.io/badge/i18n-es%20%7C%20en-yellow.svg)](#-project-documentation-bilingual)
 [![CI](https://img.shields.io/badge/CI-node%20scripts%2Fcheck.js-blue.svg)](.github/workflows/validate.yml)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 A free, static, dependency-free web app with 11 activities for practicing
 **math and logical reasoning**: Numbers, Quantities, Math Tables, Roman
@@ -21,8 +22,7 @@ everything runs in the browser and progress is saved only in
 - 🌐 **App**: [calculia.apptonomia.uk](https://calculia.apptonomia.uk/)
 - 📦 **Repository**: [github.com/miralante/calculia](https://github.com/miralante/calculia)
 - 💻 **Run locally**: open `site/index.html` directly in a browser, or
-  serve the folder with any static server (
-npx serve .` /
+  serve the folder with any static server (`npx serve .` /
   `python -m http.server 8080`) for the full offline-capable PWA
   experience.
 
@@ -97,6 +97,7 @@ By role and profile, the most relevant docs are:
 | Document | Audience |
 |---|---|
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Anyone who wants to contribute (family, therapists, devs) |
+| [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) | Contributor covenant (Contributor Covenant 2.1) |
 | `CLAUDE.md` | AI agents: operational workflow, coordination and approvals |
 | [`CLOUDFLARE.md`](CLOUDFLARE.md) | Canonical Cloudflare Workers deploy guide for the suite (Calculia + Apptonomia + Memofun, Okeymoney, Sinonimia, Teclatlon) |
 | Project history | Lives in `git log`; no external roadmap is maintained |
@@ -186,6 +187,15 @@ MIT — see [`LICENSE`](LICENSE).
 
 ---
 
+## Contributing
+
+Issues and pull requests are welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md)
+for the workflow (and [`CONTRIBUTING.es.md`](CONTRIBUTING.es.md) for the
+Spanish version). All participants are expected to follow
+[`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
+
+---
+
 ## 🧹 Housekeeping
 
 There is no 
@@ -201,16 +211,6 @@ rm -rf site/.cache tools/.cache assets/.cache  # only if present
 
 The `scripts/check.js` script is the only "test" step and the only
 script that needs to run locally.
-
----
-
-## 🙏 Credits
-
-Calculia was split out of another app of the suite (Apptonomia, a broader
-occupational-therapy activity suite) and keeps the same accessibility-
-first / no-backend / easy-read language philosophy. The shared core
-(`assets/js/`) is ported from Apptonomia with only the storage prefix
-rebranded (`apptonomia:` → `calculia:`).
 
 ---
 

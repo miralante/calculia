@@ -1,4 +1,4 @@
-/* The Clock — tool-specific styles. Shared styles live in assets/css/. */
+/* The Clock â€” tool-specific styles. Shared styles live in assets/css/. */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 
@@ -10,7 +10,10 @@
 
 .center-row { justify-content: center; }
 
-.btn-level { min-width: 300px; align-self: center; }
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario, #666);
+}
 
 .progress-bar { margin-top: var(--espacio); }
 
@@ -133,11 +136,11 @@
   line-height: 1;
   cursor: pointer;
 }
-/* Same visual as .btn-step — the modifier classes exist so app.js
+/* Same visual as .btn-step â€” the modifier classes exist so app.js
    can address each button individually (`.btn-step-down` /
    `.btn-step-up`) for its click handler. */
 .btn-step-down,
-.btn-step-up { /* same look as .btn-step — see above */ }
+.btn-step-up { /* same look as .btn-step â€” see above */ }
 .btn-step:focus-visible {
   outline: 3px solid var(--color-foco, #2563EB);
   outline-offset: 2px;
@@ -162,5 +165,83 @@
 }
 .set-target .set-time {
   font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* ---- Reference screen: how the two hands are read ---- */
+.reference-card {
+  background: var(--color-superficie);
+}
+.reference-title {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+}
+.reference-text {
+  margin: 0;
+  color: var(--color-texto-suave);
+}
+.learn-example-card {
+  gap: 8px;
+}
+.learn-example {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.learn-legend {
+  gap: 10px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  text-align: left;
+}
+.legend-swatch {
+  flex: 0 0 auto;
+  border-radius: 4px;
+}
+/* The swatch mirrors the hand it names: short and thick for the hour,
+   long and thin for the minutes, so the shape carries the meaning
+   even without colour (WCAG 1.4.1). */
+.swatch-hour {
+  width: 22px;
+  height: 8px;
+  background: var(--color-foco);
+}
+.swatch-minute {
+  width: 34px;
+  height: 5px;
+  background: var(--color-animo);
+}
+.learn-rules {
+  gap: 8px;
+}
+.learn-rule {
+  margin: 0;
+  text-align: left;
+}
+
+/* Two clocks side by side: the gap is read off both, not remembered. */
+.elapsed-pair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+.elapsed-one {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.elapsed-label {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.elapsed-arrow {
+  font-size: 1.8rem;
   font-weight: 700;
 }

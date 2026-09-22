@@ -21,7 +21,7 @@
 .dot-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .dot { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; }
 .dot-removed { opacity: 0.4; position: relative; }
-.dot-removed::after { content: '✕'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--color-texto); font-size: 15px; font-weight: 700; }
+.dot-removed::after { content: 'âœ•'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--color-texto); font-size: 15px; font-weight: 700; }
 .ten-frame { padding: 6px; border: 3px solid var(--mod-razonamiento); border-radius: var(--radio); background: var(--mod-razonamiento-suave); }
 .visual-sign { font-size: var(--texto-grande); font-weight: 700; color: var(--color-texto-suave); }
 
@@ -34,7 +34,7 @@
 .explanation { margin: 0; color: var(--color-texto-suave); }
 #nextFact { align-self: center; }
 
-#pantallaFinal .transferencia {
+#pantallaFinalScreen .transferencia {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);

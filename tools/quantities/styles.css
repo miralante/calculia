@@ -97,7 +97,7 @@
   border-color: var(--mod-razonamiento);
 }
 
-.option-btn.bloqueada {
+.option-btn.locked {
   opacity: 0.55;
   cursor: not-allowed;
 }
@@ -116,7 +116,7 @@
 
 /* --- Botón de audio --- */
 
-#btnEscuchar {
+#btnEscucharBtn {
   font-size: 28px;
   min-width: var(--boton-min);
   min-height: var(--boton-min);

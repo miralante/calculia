@@ -20,8 +20,8 @@
   <div class="container about">
     <header class="cabecera-about">
       <div class="idioma-selector" role="group" aria-label="Elegir idioma">
-        <button type="button" class="btn-idioma" id="btnIdiomaEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
-        <button type="button" class="btn-idioma" id="btnIdiomaEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
+        <button type="button" class="btn-lang" id="btnLangEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
+        <button type="button" class="btn-lang" id="btnLangEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
       </div>
       <p class="aviso-ruta" data-i18n="routeNotice">Esta página no se enlaza desde la aplicación. Solo se llega
         escribiendo la dirección.</p>
@@ -42,7 +42,7 @@
       </nav>
     </header>
 
-    <main class="pila">
+    <main class="stack">
 
       <section id="origen" class="card">
         <h2 data-i18n="originTitle">El origen</h2>
@@ -57,7 +57,7 @@
           propio ritmo.</p>
       </section>
 
-      <section id="principios" class="pila">
+      <section id="principios" class="stack">
         <h2 data-i18n="principlesTitle">Los principios que no negociamos</h2>
         <p data-i18n="principlesIntro">Estas ideas están escritas primero en el código y después en los textos. Si una
           decisión las rompe, esa decisión está mal.</p>
@@ -144,14 +144,32 @@
 
           <article class="area" style="--acento: var(--mod-secuencia);">
             <h3 data-i18n="areaOperationsTitle">➕ Cálculo mental y tablas</h3>
-            <p data-i18n="areaOperationsText">Sumas, restas, multiplicaciones, divisiones y tablas.</p>
-            <p class="area-cifra" data-i18n="areaOperationsCount">3 actividades</p>
+            <p data-i18n="areaOperationsText">Sumas, restas, tablas, y cómo partir una cuenta grande.</p>
+            <p class="area-cifra" data-i18n="areaOperationsCount">5 actividades</p>
           </article>
 
           <article class="area" style="--acento: var(--mod-memoria);">
             <h3 data-i18n="areaMeasuresTitle">📏 Fracciones y medidas</h3>
             <p data-i18n="areaMeasuresText">Fracciones, medidas (longitud, peso) y temperatura.</p>
-            <p class="area-cifra" data-i18n="areaMeasuresCount">2 actividades</p>
+            <p class="area-cifra" data-i18n="areaMeasuresCount">3 actividades</p>
+          </article>
+
+          <article class="area" style="--acento: var(--mod-coordinacion);">
+            <h3 data-i18n="areaShapesTitle">🔷 Formas, sitios y tamaños</h3>
+            <p data-i18n="areaShapesText">Reconocer formas y cuerpos, situarse en el espacio, comparar tamaños.</p>
+            <p class="area-cifra" data-i18n="areaShapesCount">4 actividades</p>
+          </article>
+
+          <article class="area" style="--acento: var(--mod-secuencia);">
+            <h3 data-i18n="areaProblemsTitle">🤔 Problemas</h3>
+            <p data-i18n="areaProblemsText">Entender lo que se cuenta y decidir qué hay que hacer.</p>
+            <p class="area-cifra" data-i18n="areaProblemsCount">1 actividad</p>
+          </article>
+
+          <article class="area" style="--acento: var(--mod-memoria);">
+            <h3 data-i18n="areaChartsTitle">📊 Datos y gráficos</h3>
+            <p data-i18n="areaChartsText">Leer gráficos y tablas, repartir a partes iguales, el azar.</p>
+            <p class="area-cifra" data-i18n="areaChartsCount">2 actividades</p>
           </article>
 
           <article class="area" style="--acento: var(--mod-razonamiento);">
@@ -163,13 +181,13 @@
           <article class="area" style="--acento: var(--mod-lenguaje);">
             <h3 data-i18n="areaMoneyTitle">💶 Dinero y monedero</h3>
             <p data-i18n="areaMoneyText">Reconocer monedas y billetes, contar vueltas, manejar el monedero.</p>
-            <p class="area-cifra" data-i18n="areaMoneyCount">2 actividades</p>
+            <p class="area-cifra" data-i18n="areaMoneyCount">3 actividades</p>
           </article>
 
           <article class="area" style="--acento: var(--mod-emocional);">
-            <h3 data-i18n="areaClockTitle">⏰ El reloj y los números romanos</h3>
+            <h3 data-i18n="areaClockTitle">⏰ El tiempo y los números romanos</h3>
             <p data-i18n="areaClockText">Leer la hora en analógico y digital, y reconocer números romanos.</p>
-            <p class="area-cifra" data-i18n="areaClockCount">2 actividades</p>
+            <p class="area-cifra" data-i18n="areaClockCount">3 actividades</p>
           </article>
         </div>
 
@@ -187,7 +205,7 @@
           <a class="sibling" href="https://routime.miralante.workers.dev" target="_blank" rel="noopener noreferrer">
             <span class="picto" aria-hidden="true">🌿</span>
             <span class="sibling-texto">
-              <span class="nombre" data-i18n="siblingRoutimeName">Routime</span>
+              <span class="name" data-i18n="siblingRoutimeName">Routime</span>
               <span class="detalle" data-i18n="siblingRoutimeText">Rutinas y autonomía del día a día.</span>
             </span>
             <span class="flecha-externa" aria-hidden="true">↗</span>
@@ -196,7 +214,7 @@
           <a class="sibling" href="https://memofun.miralante.workers.dev" target="_blank" rel="noopener noreferrer">
             <span class="picto" aria-hidden="true">🧠</span>
             <span class="sibling-texto">
-              <span class="nombre" data-i18n="siblingMemofunName">Memofun</span>
+              <span class="name" data-i18n="siblingMemofunName">Memofun</span>
               <span class="detalle" data-i18n="siblingMemofunText">Memoria y atención.</span>
             </span>
             <span class="flecha-externa" aria-hidden="true">↗</span>
@@ -205,7 +223,7 @@
           <a class="sibling" href="https://okeymoney.miralante.workers.dev" target="_blank" rel="noopener noreferrer">
             <span class="picto" aria-hidden="true">💶</span>
             <span class="sibling-texto">
-              <span class="nombre" data-i18n="siblingOkeymoneyName">Okeymoney</span>
+              <span class="name" data-i18n="siblingOkeymoneyName">Okeymoney</span>
               <span class="detalle" data-i18n="siblingOkeymoneyText">Finanzas personales y autonomía cotidiana.</span>
             </span>
             <span class="flecha-externa" aria-hidden="true">↗</span>
@@ -214,7 +232,7 @@
           <a class="sibling" href="https://sinonimia.miralante.workers.dev" target="_blank" rel="noopener noreferrer">
             <span class="picto" aria-hidden="true">📖</span>
             <span class="sibling-texto">
-              <span class="nombre" data-i18n="siblingSinonimiaName">Sinonimia</span>
+              <span class="name" data-i18n="siblingSinonimiaName">Sinonimia</span>
               <span class="detalle" data-i18n="siblingSinonimiaText">Diccionario en lectura fácil.</span>
             </span>
             <span class="flecha-externa" aria-hidden="true">↗</span>
@@ -223,7 +241,7 @@
           <a class="sibling" href="https://teclatlon.miralante.workers.dev" target="_blank" rel="noopener noreferrer">
             <span class="picto" aria-hidden="true">⌨️</span>
             <span class="sibling-texto">
-              <span class="nombre" data-i18n="siblingTeclatlonName">Teclatlon</span>
+              <span class="name" data-i18n="siblingTeclatlonName">Teclatlon</span>
               <span class="detalle" data-i18n="siblingTeclatlonText">Mecanografía con el teclado físico.</span>
             </span>
             <span class="flecha-externa" aria-hidden="true">↗</span>
@@ -276,8 +294,8 @@
     </main>
 
     <footer class="pie-about">
-      <a class="btn btn-secundario" href="../site/index.html" data-i18n="footerActivities">Ir a las actividades</a>
-      <a class="btn btn-secundario" href="../legal/index.html" data-i18n="core.dataProtection">Protección de datos</a>
+      <a class="btn btn-secondary" href="../site/index.html" data-i18n="footerActivities">Ir a las actividades</a>
+      <a class="btn btn-secondary" href="../legal/index.html" data-i18n="core.dataProtection">Protección de datos</a>
     </footer>
   </div>
 
@@ -290,11 +308,11 @@
       'use strict';
       function paintLanguageSelector() {
         var active = App.i18n.locale();
-        document.getElementById('btnIdiomaEs').setAttribute('aria-pressed', String(active === 'es'));
-        document.getElementById('btnIdiomaEn').setAttribute('aria-pressed', String(active === 'en'));
+        document.getElementById('btnLangEs').setAttribute('aria-pressed', String(active === 'es'));
+        document.getElementById('btnLangEn').setAttribute('aria-pressed', String(active === 'en'));
       }
-      document.getElementById('btnIdiomaEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
-      document.getElementById('btnIdiomaEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
+      document.getElementById('btnLangEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
+      document.getElementById('btnLangEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
       paintLanguageSelector();
     })();
   </script>

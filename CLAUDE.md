@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Calculia is a static, dependency-free web app with 15 activities for
-practicing math and logical reasoning: Numbers, Fractions and Measures,
-Subtraction and Mental Math, Money, Math Tables, Quantities, Roman
-Numerals, Water Temperature, Riddles, Patterns, The Wallet, The Clock,
-Stories, What Doesn't Belong?, and Puzzle. See
+Calculia is a static, dependency-free web app with 27 activities for
+practicing math and logical reasoning: Places and sizes, Numbers, Shapes, Geometry, Same shapes, Fractions, Measures,
+Subtraction and Mental Math, Money, Percentages, Math Tables, Exact groups, Big sums, Quantities, Roman
+Numerals, Problems, Water Temperature, The balance, Data and charts, The Calendar, Riddles, Patterns,
+The Wallet, The Clock, Stories, What Doesn't Belong?, and Puzzle. See
 [`doc/en/SPEC.md`](doc/en/SPEC.md) (or [`doc/es/SPEC.md`](doc/es/SPEC.md))
 for the full product definition — target audience, accessibility rules,
 and non-negotiable product principles.
@@ -70,7 +70,7 @@ is also called out in `doc/en/technical.md` § 4 and in
 reference** — the file-by-file breakdown, the shared-core API, and the
 activity anatomy. It follows the same three-level architecture as
 Apptonomia (shared core in `assets/`, one folder per activity in
-`tools/<slug>/`, a landing in `site/`), just scoped to 11 activities
+`tools/<slug>/`, a landing in `site/`), just scoped to 27 activities
 grouped into two sections (Math, Reasoning and logic) instead of
 Apptonomia's 7 therapeutic modules.
 
@@ -88,7 +88,7 @@ checking every `tools/<slug>/app.js` for a caller first.
 
 `settings/` is trimmed relative to Apptonomia's: no backup export/import,
 no font-size/sound preferences, no personal-data form (none of Calculia's
-11 activities store a name or other personal field) — just progress
+27 activities store a name or other personal field) — just progress
 view and the two reset actions. There is no `/team/` or `/about/` hidden
 route (those are Apptonomia-specific, aimed at its full multi-audience
 product story); `/settings/` and `/legal/` cover what a smaller,
@@ -151,11 +151,13 @@ not a copy in this file. Keep changes minimal and on-target.
 
 Before finishing:
 1. Run `node scripts/check.js`.
-2. If you add or rename an activity: create `tools/<slug>/` with the 6
+2. Before pushing, run `npm run test:ui`, `node scripts/smoke-sw.js`,
+   and `node scripts/check-version-bump.js`; do not push if any fails.
+3. If you add or rename an activity: create `tools/<slug>/` with the 6
    canonical files, add its card to `site/index.html` (+ `site/strings.*.js`),
    its progress row to `settings/index.html` (+ `settings/strings.*.js`),
    and its 6 files to `sw.js`'s `ARCHIVOS` — then bump `VERSION` in `sw.js`.
-3. Report only verifications you actually ran; flag remaining manual tests.
+4. Report only verifications you actually ran; flag remaining manual tests.
 
 A deploy (even to a preview channel) is a network operation: ask before
 running one. Never push or open/close external resources without

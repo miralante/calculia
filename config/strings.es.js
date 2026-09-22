@@ -28,12 +28,12 @@
     module2: '🧩 Razonamiento y lógica',
 
     activity: {
-      'numbers': 'Los Números', 'fractions-measures': 'Fracciones y Medidas',
-      'mental-math': 'Restar y Cálculo Mental', 'money': 'Dinero',
-      'quantities': 'Cantidades', 'math-tables': 'Las Tablas',
+      'places': 'Sitios y tamaños', 'shapes': 'Formas', 'geometry': 'Geometría', 'similar': 'Formas parecidas', 'numbers': 'Los Números', 'fractions-measures': 'Fracciones', 'measures': 'Medidas',
+      'mental-math': 'Restar y Cálculo Mental', 'percent': 'Porcentajes', 'money': 'Dinero',
+      'divisibility': 'Grupos exactos', 'operations': 'Cuentas grandes', 'quantities': 'Cantidades', 'math-tables': 'Las Tablas',
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',
-      'temperature': 'Temperatura del agua',
-      'wallet': 'El Monedero', 'clock': 'El Reloj', 'stories': 'Historias',
+      'problems': 'Problemas', 'temperature': 'Temperatura del agua',
+      'wallet': 'El Monedero', 'algebra': 'La balanza', 'charts': 'Datos y gráficos', 'calendar': 'El Calendario', 'clock': 'El Reloj', 'stories': 'Historias',
       'odd-one-out': '¿Qué no encaja?', 'puzzle': 'Puzzle'
     },
 

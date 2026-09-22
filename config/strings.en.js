@@ -28,12 +28,12 @@
     module2: '🧩 Reasoning and logic',
 
     activity: {
-      'numbers': 'Numbers', 'fractions-measures': 'Fractions and Measures',
-      'mental-math': 'Subtraction and Mental Math', 'money': 'Money',
-      'quantities': 'Quantities', 'math-tables': 'Math Tables',
+      'places': 'Places and sizes', 'shapes': 'Shapes', 'geometry': 'Geometry', 'similar': 'Same shapes', 'numbers': 'Numbers', 'fractions-measures': 'Fractions', 'measures': 'Measures',
+      'mental-math': 'Subtraction and Mental Math', 'percent': 'Percentages', 'money': 'Money',
+      'divisibility': 'Exact groups', 'operations': 'Big sums', 'quantities': 'Quantities', 'math-tables': 'Math Tables',
       'roman-numerals': 'Roman Numerals', 'riddles': 'Riddles', 'patterns': 'Patterns',
-      'temperature': 'Water Temperature',
-      'wallet': 'The Wallet', 'clock': 'The Clock', 'stories': 'Stories',
+      'problems': 'Problems', 'temperature': 'Water Temperature',
+      'wallet': 'The Wallet', 'algebra': 'The balance', 'charts': 'Data and charts', 'calendar': 'The Calendar', 'clock': 'The Clock', 'stories': 'Stories',
       'odd-one-out': "What doesn't belong?", 'puzzle': 'Puzzle'
     },
 

@@ -23,6 +23,7 @@
   var $ = App.utils.$;
 
   var starsEl = $('#stars');
+  var dificultadEl = $('#difficulty');
 
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
@@ -33,7 +34,7 @@
   function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
 
   /* ---- Screens ---- */
-  var SCREENS = ['screenMenu', 'screenLevels', 'screenQuizGame',
+  var SCREENS = ['screenMenu', 'screenQuizGame',
     'screenPayGame', 'screenEnd'];
   function show(id) {
     SCREENS.forEach(function (p) { $('#' + p).classList.add('hidden'); });
@@ -139,7 +140,7 @@
   function paintQuizProgress() {
     var total = localeData().perRound;
     $('#progressQuizFill').style.width = (idxQ / total * 100) + '%';
-    $('#progressQuizText').textContent.textContent = '';
+    $('#progressQuizText').textContent = '';
   }
 
   function startQuizRound(level) {
@@ -194,7 +195,7 @@
     solvedQ = true;
     optionButtons.forEach(function (pair) {
       pair.btn.disabled = true;
-      if (pair.op.correct) pair.btn.classList.add('correcta');
+      if (pair.op.correct) pair.btn.classList.add('correct');
     });
     showQuizText(cfg.explanation(caseQ, right));
     if (cfg.onResolve) cfg.onResolve(caseQ);
@@ -216,7 +217,7 @@
       return;
     }
     attemptsQ += 1;
-    btn.classList.add('animo');
+    btn.classList.add('encourage');
     btn.disabled = true;
     App.feedback.encourage(quizFeedbackEl);
     if (attemptsQ === 1) {
@@ -321,7 +322,7 @@
       },
       prompt: function (c) {
         return c.picto + ' ' + App.i18n.t('payWithPrompt')
-          .replace('{name-card}', c.name)
+          .replace('{name}', c.name)
           .replace('{precio}', format(c.price));
       },
       table: function () { return null; },
@@ -407,7 +408,7 @@
       prompt: function (c) {
         var name = c.name.charAt(0).toLowerCase() + c.name.slice(1);
         return c.picto + ' ' + App.i18n.t('piggyBankPrompt')
-          .replace('{name-card}', name)
+          .replace('{name}', name)
           .replace('{precio}', format(c.price));
       },
       table: function (c) { return breakdown(c.have); },
@@ -453,7 +454,7 @@
       },
       prompt: function (c) {
         return c.picto + ' ' + App.i18n.t('roundingPrompt')
-          .replace('{name-card}', c.name)
+          .replace('{name}', c.name)
           .replace('{precio}', format(c.shown));
       },
       table: function () { return null; },
@@ -487,38 +488,33 @@
   /* ============================================================
      Menu and levels (shared)
      ============================================================ */
+  /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
+  function levelFromProgress() {
+    var cfg = currentConfig();
+    var rounds = progress.completedRounds || 0;
+    var idxN = Math.min(rounds, cfg.levels().length - 1);
+    return cfg.levels()[idxN];
+  }
+
   function openActivity(id) {
     currentActivity = id;
     var cfg = currentConfig();
-    $('#activityInstruction').textContent.textContent = '';
-    paintLevels();
-    show('screenLevels');
-  }
-
-  function paintLevels() {
-    var cfg = currentConfig();
-    var cont = $('#levels');
-    cont.innerHTML = '';
-    cfg.levels().forEach(function (n) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      btn.innerHTML = n.description;
-      btn.addEventListener('click', function () {
-        if (cfg.isQuiz) startQuizRound(n);
-        else startPayRound(n);
-      });
-      cont.appendChild(btn);
-    });
+    if (cfg.isQuiz) startQuizRound(levelFromProgress());
+    else startPayRound(levelFromProgress());
   }
 
   function endRound(correct) {
     var cfg = currentConfig();
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
-    $('#endSummary').textContent.textContent = '';
-    $('#contexto').textContent.textContent = '';
-    $('#explicacion').textContent.textContent = '';
-    $('#transfer').textContent.textContent = '';
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t(cfg.summary)
+        .replace('{n}', correct)
+        .replace('{t}', localeData().perRound);
+    }
+    $('#contexto').textContent = '';
+    $('#explanation').textContent = '';
     show('screenEnd');
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
@@ -596,7 +592,7 @@
     btnCheck.disabled = false;
     productEl.textContent = item.picto;
     priceTextEl.textContent = App.i18n.t('costs')
-      .replace('{name-card}', item.name)
+      .replace('{name}', item.name)
       .replace('{precio}', format(item.priceCent));
     clearPayHint();
     paintTotal();
@@ -659,7 +655,7 @@
         .replace('{dif}', spoken(diff));
     }
     payFeedbackEl.textContent = text;
-    payFeedbackEl.className = 'feedback animo';
+    payFeedbackEl.className = 'feedback encourage';
   }
 
   /* ---- 💡 On-demand hint (two-step Socratic method) ----
@@ -712,7 +708,8 @@
   App.utils.$$('.activity-card').forEach(function (btn) {
     btn.addEventListener('click', function () { openActivity(btn.getAttribute('data-activity')); });
   });
-  $('#btnBackToMenuLevels').addEventListener('click', function () { show('screenMenu'); });
+  var elBtnBackToMenuLevels = $('#btnBackToMenuLevels');
+  if (elBtnBackToMenuLevels) elBtnBackToMenuLevels.addEventListener('click', function () { show('screenMenu'); });
   $('#btnBackToMenuEnd').addEventListener('click', function () { show('screenMenu'); });
 
   btnNextQuiz.addEventListener('click', nextQuiz);
@@ -725,7 +722,9 @@
     if (currentConfig().isQuiz) startQuizRound(levelQ);
     else startPayRound(levelP);
   });
-  $('#btnAnotherLevelEnd').addEventListener('click', function () { openActivity(currentActivity); });
+  var elBtnAnotherLevelEnd = $('#btnAnotherLevelEnd');
+  if (elBtnAnotherLevelEnd) elBtnAnotherLevelEnd.addEventListener('click', function () { openActivity(currentActivity); });
+  $('#btnMenu').addEventListener('click', function () { show('screenMenu'); });
 
   paintStars();
 })();

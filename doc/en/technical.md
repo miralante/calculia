@@ -86,12 +86,12 @@ calculia/
 └── _headers                # Cloudflare Pages cache and security headers
 ```
 
-Same three-level architecture as Apptonomia, scoped to 15 activities
+Same three-level architecture as Apptonomia, scoped to 27 activities
 grouped in two sections instead of 7 therapeutic modules: `site/index.html`
-has a "🧮 Math" section (Numbers, Fractions and Measures, Subtraction
-and Mental Math, Money, Math Tables, Quantities, Roman Numerals, Water
-Temperature) and a "🧩 Reasoning and logic" section (Riddles, Patterns, The Wallet, The
-Clock, Stories, What Doesn't Belong?, Puzzle).
+has a "🧮 Math" section (Places and sizes, Numbers, Shapes, Geometry, Same shapes, Fractions, Measures,
+Subtraction and Mental Math, Money, Percentages, Math Tables, Exact groups, Big sums, Quantities, Roman
+Numerals, Problems, Water Temperature) and a "🧩 Reasoning and logic" section (Riddles, Patterns, The Wallet, The balance, Data and
+charts, The Calendar, The Clock, Stories, What Doesn't Belong?, Puzzle).
 
 ### 2.1 `assets/` — shared core, kept whole
 
@@ -133,7 +133,7 @@ header comment for its specific data format.
 Two actions, same two-step-confirmation pattern as Apptonomia:
 
 - **Reset person data**: removes the language preference only. None of
-  Calculia's 15 activities store a name or other personal field, so
+  Calculia's 27 activities store a name or other personal field, so
   there is no `TOOLS_WITH_NAME` list here (Apptonomia's settings/app.js
   has one, for Piano).
 - **Reset entire app**: deletes every `calculia:*` key.

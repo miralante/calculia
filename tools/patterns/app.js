@@ -255,9 +255,13 @@
     save();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
-    $('#endSummary').textContent = '';
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{stars}', progress.stars);
+    }
     $('#explanation').textContent = '';
-    $('#transfer').textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 

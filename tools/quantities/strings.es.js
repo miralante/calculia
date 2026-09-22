@@ -10,6 +10,8 @@
     title: '👀 Cantidades',
     instruction: 'Lee y escribe números hasta mil millones.',
     choosePractice: 'Elige qué quieres practicar.',
+    btnMenu: 'Volver al inicio',
+    proximoNivel: 'Siguiente paso: {n}',
 
     /* Names and descriptions of the menu (one entry per practice).
        Keys follow the '<id>Name' / '<id>Detail' pattern so the
@@ -72,7 +74,7 @@
     chooseAnother: 'Elegir otra práctica',
     roundComplete: '¡Ronda terminada!',
     roundSummary: 'Has resuelto {count} ejercicios. Ahora tienes {stars} estrellas.',
-    progress: '{current} de {total}',
+    progress: '{current} de {stars}',
 
     /* Aria-labels */
     audioAria: 'Escuchar el número',
@@ -85,7 +87,7 @@
     /* Pedagogical transfer */
     contexto: 'Lees números en la tienda, en el ascensor, en el dinero y en la prensa. Saber leer y escribir números grandes es algo que se usa a cada rato.',
     explicacion: '✅ Cada cifra ocupa un lugar: unidades, decenas, centenas y millares. Si conoces el lugar de cada cifra, sabes leer y escribir cualquier número, por muy grande que sea.',
-    transferencia: 'Esto te servirá para leer precios, noticias o cualquier número grande del día a día.',
+    transfer: 'Esto te servirá para leer precios, noticias o cualquier número grande del día a día.',
 
     /* Residual hint (used by round-end fallback) */
     hint: '🤔 Lee el número en voz alta y luego escríbelo.'

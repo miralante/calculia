@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Fractions and Measures
+   Calculia — Fractions
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -28,6 +28,7 @@
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
   /* Round state */
   var activity = null;
@@ -58,8 +59,18 @@
   function draw(key, list) {
     var p = pools[key];
     if (!p || p.i >= p.orden.length) {
-      p = pools[key] = { orden: App.utils.shuffle(list), i: 0 };
+      var fresh = App.utils.shuffle(list);
+      /* When the bag is refilled, its first item must not be the one just
+         handed out: two identical questions in a row read as a "Siguiente"
+         button that does nothing. */
+      if (p && fresh.length > 1 && fresh[0] === p.last) {
+        var swap = fresh[1];
+        fresh[1] = fresh[0];
+        fresh[0] = swap;
+      }
+      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
     }
+    p.last = p.orden[p.i];
     return p.orden[p.i++];
   }
 
@@ -93,18 +104,341 @@
       '</span><span class="frac-den">' + f[1] + '</span></span>';
   }
 
+  /* An answer option showing the pie and the notation together, so the
+     amount can be judged by looking and not only by reading digits. */
+  function fracOption(f) {
+    return '<span class="op-frac">' + svgFraccion(f[0], f[1], 120) + htmlFraccion(f) + '</span>';
+  }
+
+  function fracAria(f) {
+    return App.i18n.t('gen.fraccionAria').replace('{num}', f[0]).replace('{den}', f[1]);
+  }
+
+  /* Two fractions are the same amount when a/b == c/d, compared by
+     cross-multiplying so no rounding is involved. */
+  function sameAmount(a, b) {
+    return a[0] * b[1] === b[0] * a[1];
+  }
+
+  /* Spanish writes 0,5 and English 0.5. Same per-tool convention as
+     thousandsSeparator() in tools/numbers and DECIMAL_SEP in
+     assets/js/dinero.js (see doc/es/i18n.md §4). */
+  function decimalSeparator() {
+    return App.i18n.locale() === 'en' ? '.' : ',';
+  }
+
+  /* A fraction written as a decimal. The number of decimal places comes
+     from the denominator, so the text is always exact: tenths (and
+     halves, fifths) need one place, quarters need two. */
+  function decimalText(f) {
+    var places = (10 % f[1] === 0) ? 1 : 2;
+    return (f[0] / f[1]).toFixed(places).replace('.', decimalSeparator());
+  }
+
   /* ============================================================
      Question generators (one per level type)
      Return: prompt, visual (html), legend,
      options[{html, correcta, aria?}], hint?, enFila?, visualAria?
      ============================================================ */
 
+  /* Three distinct number options: the right one first, then the given
+     confusions, and finally neighbours to pad if any of them collided with
+     the answer. Two buttons showing the same number would make one of them
+     wrong for no reason the person could see. */
+  function threeOf(correct, candidates) {
+    var seen = {};
+    var list = [correct];
+    seen[correct] = true;
+    candidates.concat([correct + 1, correct - 1, correct + 2]).forEach(function (v) {
+      if (v > 0 && !seen[v] && list.length < 3) { seen[v] = true; list.push(v); }
+    });
+    return list.map(function (v) {
+      return { html: String(v), correct: v === correct };
+    });
+  }
+
+  /* ---- Data invariants, loud at start-up ----
+     A fraction that did not come out in whole tenths could not be drawn
+     next to a decimal and added to it, and two amounts that were equal
+     would leave "which is more" with no answer. */
+  Object.keys(DATA.activities).forEach(function (actId) {
+    DATA.activities[actId].levels.forEach(function (nv) {
+      if (nv.tipo !== 'mixedOp' && nv.tipo !== 'fracOrDecimal') return;
+      nv.casos.forEach(function (item) {
+        var frac = item[0];
+        var tenths = item[1];
+        if ((frac[0] * 10) % frac[1] !== 0) {
+          throw new Error('fractions: ' + nv.id + ' has ' + frac.join('/') +
+            ', which is not a whole number of tenths');
+        }
+        var fracTenths = (frac[0] * 10) / frac[1];
+        if (tenths < 1 || tenths > 10 || fracTenths < 1 || fracTenths > 10) {
+          throw new Error('fractions: ' + nv.id + ' goes outside one whole pie');
+        }
+        if (nv.tipo === 'fracOrDecimal') {
+          if (fracTenths === tenths) {
+            throw new Error('fractions: ' + nv.id + ' compares two equal amounts');
+          }
+          return;
+        }
+        var result = nv.op === 'add' ? fracTenths + tenths : fracTenths - tenths;
+        if (result < 1 || result > 10) {
+          throw new Error('fractions: ' + nv.id + ' gives ' + result +
+            ' tenths, which is outside one pie');
+        }
+      });
+    });
+  });
+
+  /* The comparison levels shuffle each pair before showing it, so the
+     order stored is not part of the question: two pairs holding the same
+     two fractions would be the same question twice, and drawing them one
+     after the other reads as a "Next" button that did nothing. Equal
+     fractions would leave the question with no greater one at all. */
+  Object.keys(DATA.activities).forEach(function (actId) {
+    DATA.activities[actId].levels.forEach(function (nv) {
+      if (nv.tipo !== 'comparaFrac') return;
+      var seen = {};
+      nv.pares.forEach(function (par) {
+        if (par[0][0] * par[1][1] === par[1][0] * par[0][1]) {
+          throw new Error('fractions: ' + nv.id + ' compares two equal fractions');
+        }
+        var key = [par[0], par[1]].map(function (f) { return f.join('/'); })
+          .sort().join(' ');
+        if (seen[key]) {
+          throw new Error('fractions: ' + nv.id + ' repeats the pair ' + key);
+        }
+        seen[key] = true;
+      });
+    });
+  });
+
+  /* Three distinct answers in tenths, all inside one pie. The given
+     confusions come first; the padding after them only runs when one of
+     them collapsed onto the answer or fell outside the pie, which is what
+     used to leave a question with two buttons instead of three. */
+  function tenthOptions(resultTenths, candidates) {
+    var seen = {};
+    var list = [resultTenths];
+    seen[resultTenths] = true;
+    candidates.concat([resultTenths + 1, resultTenths - 1,
+      resultTenths + 2, resultTenths - 2]).forEach(function (v) {
+      if (v >= 1 && v <= 10 && !seen[v] && list.length < 3) {
+        seen[v] = true;
+        list.push(v);
+      }
+    });
+    if (list.length < 3) {
+      throw new Error('fractions: only ' + list.length + ' answers fit in one pie');
+    }
+    return App.utils.shuffle(list).map(function (v) {
+      var text = decimalText([v, 10]);
+      return {
+        html: '<span class="decimal-value">' + text + '</span>',
+        aria: text,
+        correct: v === resultTenths
+      };
+    });
+  }
+
   var GENERATORS = {
+
+    /* Adding and subtracting fractions whose slices are NOT the same size.
+       The trick is always the same one: the bigger slices are cut so both
+       fractions are counted in the same slices. Both pies stay on screen,
+       so what changes is visible rather than asserted.
+       `casos` is [denA, numA, denB, numB] with denB a multiple of denA. */
+    mixFrac: function (nv) {
+      var item = draw(nv.id, nv.casos);
+      var a = [item[1], item[0]];
+      var b = [item[3], item[2]];
+      /* The common slice is the bigger denominator, because the other one
+         divides it: no new idea beyond "cut the big slices". */
+      var den = Math.max(a[1], b[1]);
+      var aIn = a[0] * (den / a[1]);
+      var bIn = b[0] * (den / b[1]);
+      var adding = nv.op === 'add';
+      var resultNum = adding ? aIn + bIn : aIn - bIn;
+      var result = [resultNum, den];
+
+      /* Adding the tops and the bottoms straight across is THE mistake
+         here, so it is offered with its own pie. */
+      var naive = [a[0] + b[0], a[1] + b[1]];
+      var offBy = [resultNum + (resultNum + 1 <= den ? 1 : -1), den];
+      var wrong = [naive, offBy].filter(function (f) {
+        return f[0] > 0 && f[1] > 0 && !sameAmount(f, result);
+      });
+
+      return {
+        prompt: App.i18n.t(adding ? 'gen.mixFracAdd' : 'gen.mixFracSub'),
+        visual: '<div class="frac-expression">' +
+            htmlFraccion(a) +
+            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            htmlFraccion(b) +
+            '<span class="frac-sign">=</span>' +
+            '<span class="frac-gap">?</span>' +
+          '</div>' +
+          '<div class="frac-visual-row">' +
+            svgFraccion(a[0], a[1], 110) +
+            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            svgFraccion(b[0], b[1], 110) +
+          '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.mixFracHint')
+            .replace(/\{den\}/g, den) + '</p>',
+        visualAria: App.i18n.t('gen.mixFracAria')
+          .replace('{na}', a[0]).replace('{da}', a[1])
+          .replace('{nb}', b[0]).replace('{db}', b[1]),
+        options: App.utils.shuffle(
+          [{ html: fracOption(result), aria: fracAria(result), correct: true }].concat(
+            wrong.map(function (f) {
+              return { html: fracOption(f), aria: fracAria(f), correct: false };
+            })
+          )),
+        inline: true
+      };
+    },
+
+    /* A fraction OF an amount, which is how fractions are actually used:
+       half of eight sweets, a quarter of twelve. The amount is drawn in
+       groups, one of them marked, so the answer is counted.
+       `casos` is [den, total]; the total is always a multiple of den. */
+    fracOf: function (nv) {
+      var item = draw(nv.id, nv.casos);
+      var den = item[0];
+      var total = item[1];
+      var each = total / den;
+      var thing = draw(nv.id + 'thing', nv.things);
+
+      var groups = '';
+      for (var g = 0; g < den; g++) {
+        groups += '<span class="frac-group' + (g === 0 ? ' is-taken' : '') + '">';
+        for (var i = 0; i < each; i++) {
+          groups += '<span class="frac-token">' + thing.picto + '</span>';
+        }
+        groups += '</span>';
+      }
+
+      return {
+        prompt: App.i18n.t('gen.fracOfPrompt')
+          .replace(/\{total\}/g, total)
+          .replace(/\{thing\}/g, App.i18n.t('thing.' + thing.id))
+          .replace(/\{part\}/g, App.i18n.t('part.' + den)),
+        visual: '<div class="frac-groups">' + groups + '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.fracOfHint')
+            .replace(/\{den\}/g, den) + '</p>',
+        visualAria: App.i18n.t('gen.fracOfAria')
+          .replace(/\{den\}/g, den).replace(/\{each\}/g, each),
+        /* Answering with the whole amount, or with the number of groups,
+           are the two real confusions. When one of those happens to equal
+           the answer (a quarter of 16 is 4, and there are 4 groups), the
+           list is padded so there are always three buttons to choose
+           between. */
+        options: App.utils.shuffle(threeOf(each, [total, den]))
+      };
+    },
+
+    /* Adding and taking away decimals, on the same pies as the fractions.
+       Only tenths, so every step is one slice and the notation is the only
+       thing that is new. `casos` is [tenthsA, tenthsB]. */
+    /* A fraction and a decimal in the same sum. Both are drawn as pies, so
+       the point lands by itself: they are the same kind of number, only
+       written two ways, and once they are in tenths they simply add up. */
+    mixedOp: function (nv) {
+      var item = draw(nv.id, nv.casos);
+      var frac = item[0];
+      var tenths = item[1];
+      var fracTenths = (frac[0] * 10) / frac[1];
+      var adding = nv.op === 'add';
+      var resultTenths = adding ? fracTenths + tenths : fracTenths - tenths;
+      var result = [resultTenths, 10];
+      /* Doing the other operation, and being one tenth out, are the two
+         mistakes a mixed expression actually produces. */
+      var otherWay = adding ? fracTenths - tenths : fracTenths + tenths;
+      return {
+        prompt: App.i18n.t(adding ? 'gen.mixedAdd' : 'gen.mixedSub')
+          .replace('{a}', htmlFraccion(frac))
+          .replace('{b}', decimalText([tenths, 10])),
+        visual: '<div class="frac-visual-row">' +
+            svgFraccion(frac[0], frac[1], 110) +
+            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            svgFraccion(tenths, 10, 110) +
+          '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.mixedOpHint') + '</p>',
+        visualAria: App.i18n.t('gen.mixedOpAria')
+          .replace('{a}', App.i18n.t('gen.fraccionAria')
+            .replace('{num}', frac[0]).replace('{den}', frac[1]))
+          .replace('{b}', decimalText([tenths, 10])),
+        options: tenthOptions(resultTenths, [otherWay, resultTenths + 1]),
+        inline: true
+      };
+    },
+
+    /* Which is more, the fraction or the decimal? Both pies are on screen,
+       so the two ways of writing a number are compared as what they are:
+       two amounts of the same thing. */
+    fracOrDecimal: function (nv) {
+      var item = draw(nv.id, nv.casos);
+      var frac = item[0];
+      var tenths = item[1];
+      var fracTenths = (frac[0] * 10) / frac[1];
+      var fracWins = fracTenths > tenths;
+      return {
+        prompt: App.i18n.t('gen.whichIsMore'),
+        visual: '<p class="hint">' + App.i18n.t('gen.mixedCompareHint') + '</p>',
+        legend: '',
+        options: App.utils.shuffle([
+          {
+            html: '<span class="op-frac">' + svgFraccion(frac[0], frac[1], 120) +
+              htmlFraccion(frac) + '</span>',
+            aria: App.i18n.t('gen.fraccionAria')
+              .replace('{num}', frac[0]).replace('{den}', frac[1]),
+            correct: fracWins
+          },
+          {
+            html: '<span class="op-frac">' + svgFraccion(tenths, 10, 120) +
+              '<span class="decimal-value">' + decimalText([tenths, 10]) + '</span></span>',
+            aria: decimalText([tenths, 10]),
+            correct: !fracWins
+          }
+        ]),
+        inline: true
+      };
+    },
+
+    decimalOp: function (nv) {
+      var item = draw(nv.id, nv.casos);
+      var x = item[0];
+      var y = item[1];
+      var adding = nv.op === 'add';
+      var resultTenths = adding ? x + y : x - y;
+      var result = [resultTenths, 10];
+      /* Doing the other operation is the mistake decimals actually
+         produce. The shared helper pads when it collapses onto the answer
+         or falls outside the pie, so the question never ends up with two
+         buttons instead of three. */
+      var otherWay = adding ? Math.abs(x - y) : x + y;
+
+      return {
+        prompt: App.i18n.t(adding ? 'gen.decimalAdd' : 'gen.decimalSub')
+          .replace('{a}', decimalText([x, 10])).replace('{b}', decimalText([y, 10])),
+        visual: '<div class="frac-visual-row">' +
+            svgFraccion(x, 10, 110) +
+            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            svgFraccion(y, 10, 110) +
+          '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.decimalOpHint') + '</p>',
+        visualAria: App.i18n.t('gen.decimalOpAria')
+          .replace('{a}', decimalText([x, 10])).replace('{b}', decimalText([y, 10])),
+        options: tenthOptions(resultTenths, [otherWay, resultTenths + 1]),
+        inline: true
+      };
+    },
+
 
     fracciones: function (nv) {
       var f = draw(nv.id, nv.fracs);
       var otros = App.utils.shuffle(nv.fracs.filter(function (o) {
-        return o[0] * f[1] !== o[1] * f[0]; /* quitar fracciones equivalentes */
+        return o[0] * f[1] !== o[1] * f[0]; /* remove fracciones equivalentes */
       })).slice(0, 2);
       return {
         prompt: App.i18n.t('gen.fraccionesEnunciado'),
@@ -123,32 +457,141 @@
 
     comparaFrac: function (nv) {
       var par = App.utils.shuffle(draw(nv.id, nv.pares));
-      var mayor = (par[0][0] / par[0][1] > par[1][0] / par[1][1]) ? par[0] : par[1];
+      var greater = (par[0][0] / par[0][1] > par[1][0] / par[1][1]) ? par[0] : par[1];
       return {
         prompt: App.i18n.t('gen.comparaFracEnunciado'),
         visual: '',
         options: par.map(function (f) {
-          return {
-            html: '<span class="op-frac">' + svgFraccion(f[0], f[1], 120) + htmlFraccion(f) + '</span>',
-            aria: App.i18n.t('gen.fraccionAria').replace('{num}', f[0]).replace('{den}', f[1]),
-            correct: f === mayor
-          };
+          return { html: fracOption(f), aria: fracAria(f), correct: f === greater };
         }),
         inline: true
       };
     },
 
-    medidas: function (nv) {
-      var group = DATA.measures[App.i18n.locale()][nv.lista];
-      var item = draw('med_' + nv.lista, group.items);
-      var ej = item.ej ? '<p class="hint">' + item.ej + '</p>' : '';
+    /* Equivalent fractions: different numbers, the same
+       amount. Two pies side by side make that visible, which IS the
+       insight — the notation on its own hides it. */
+    equivalentes: function (nv) {
+      var pair = draw(nv.id, nv.pares);
+      var base = pair[0];
+      var answer = pair[1];
+      /* Alternatives must NOT be equivalent to the answer, or there would
+         be two right choices. */
+      var wrong = App.utils.shuffle(nv.distractores.filter(function (f) {
+        return !sameAmount(f, answer);
+      })).slice(0, 2);
       return {
-        prompt: item.question,
-        visual: '<div class="measure-picto" aria-hidden="true">' + group.picto + '</div>' +
-          '<p class="measure-text">' + item.q + '</p>' + ej,
-        options: App.utils.shuffle([{ html: item.r, correct: true }].concat(
-          item.falsas.map(function (f) { return { html: f, correct: false }; })
-        ))
+        prompt: App.i18n.t('gen.equivalentesEnunciado'),
+        visual: '<div class="frac-ref">' + svgFraccion(base[0], base[1], 150) +
+          htmlFraccion(base) + '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.equivalentesPista') + '</p>',
+        visualAria: fracAria(base),
+        legend: leyendaFrac(),
+        options: App.utils.shuffle(
+          [{ html: fracOption(answer), aria: fracAria(answer), correct: true }].concat(
+            wrong.map(function (f) {
+              return { html: fracOption(f), aria: fracAria(f), correct: false };
+            })
+          )),
+        inline: true
+      };
+    },
+
+    /* Adding and subtracting fractions with the same denominator
+       The slices are already the same size, so the
+       denominator never changes — only the count of slices does. */
+    sumaFrac: function (nv) {
+      var item = draw(nv.id, nv.casos);
+      var den = item[0];
+      var x = item[1];
+      var y = item[2];
+      var adding = nv.op === 'add';
+      var resultNum = adding ? x + y : x - y;
+      var result = [resultNum, den];
+
+      /* The classic mistake is adding the bottom numbers too, which makes
+         the slices smaller. Offering it (with its pie) shows why it is
+         wrong instead of just marking it wrong. */
+      var addedDenominators = [resultNum, den + den];
+      var offByOneNum = resultNum + (resultNum + 1 <= den ? 1 : -1);
+      var wrong = [addedDenominators, [offByOneNum, den]].filter(function (f) {
+        return f[0] > 0 && f[1] > 0 && !sameAmount(f, result);
+      });
+
+      return {
+        prompt: App.i18n.t(adding ? 'gen.sumaFracEnunciado' : 'gen.restaFracEnunciado'),
+        visual: '<div class="frac-expression">' +
+            htmlFraccion([x, den]) +
+            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            htmlFraccion([y, den]) +
+            '<span class="frac-sign">=</span>' +
+            '<span class="frac-gap">?</span>' +
+          '</div>' +
+          '<div class="frac-visual-row">' +
+            svgFraccion(x, den, 110) +
+            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            svgFraccion(y, den, 110) +
+          '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.sumaFracPista') + '</p>',
+        /* {den} appears twice, so it needs a global replace — a plain
+           string replace would leave the second one in the spoken text. */
+        visualAria: App.i18n.t(adding ? 'gen.sumaFracAria' : 'gen.restaFracAria')
+          .replace('{x}', x).replace('{y}', y).replace(/\{den\}/g, den),
+        options: App.utils.shuffle(
+          [{ html: fracOption(result), aria: fracAria(result), correct: true }].concat(
+            wrong.map(function (f) {
+              return { html: fracOption(f), aria: fracAria(f), correct: false };
+            })
+          )),
+        inline: true
+      };
+    },
+
+    /* Decimal numbers, taught as another way of writing the fractions
+       already learned —
+       same pies, new notation. `dir` picks the direction: read the
+       picture and name the decimal, or read the decimal and find the
+       picture. The everyday anchor (prices, litres) lives in the
+       activity instruction, not in every question. */
+    decimalPie: function (nv) {
+      var f = draw(nv.id, nv.fracs);
+      var others = App.utils.shuffle(nv.fracs.filter(function (o) {
+        return !sameAmount(o, f);
+      })).slice(0, 2);
+      /* Tenths get the "each part is 0,1" rule; halves and quarters get
+         the "look at how much is painted" one, because counting ten
+         slices is not what those levels are about. */
+      var hint = App.i18n.t(f[1] === 10 ? 'gen.decimalHintTenths' : 'gen.decimalHintParts');
+
+      if (nv.dir === 'toPicture') {
+        return {
+          prompt: App.i18n.t('gen.decimalToPicturePrompt'),
+          visual: '<div class="frac-ref"><span class="decimal-value">' +
+            decimalText(f) + '</span></div>' +
+            '<p class="hint">' + hint + '</p>',
+          visualAria: decimalText(f),
+          options: App.utils.shuffle(
+            [{ html: fracOption(f), aria: fracAria(f), correct: true }].concat(
+              others.map(function (o) {
+                return { html: fracOption(o), aria: fracAria(o), correct: false };
+              })
+            )),
+          inline: true
+        };
+      }
+      return {
+        prompt: App.i18n.t('gen.decimalToNumberPrompt'),
+        visual: '<div class="frac-ref">' + svgFraccion(f[0], f[1], 150) + '</div>' +
+          '<p class="hint">' + hint + '</p>',
+        visualAria: fracAria(f),
+        legend: leyendaFrac(),
+        options: App.utils.shuffle(
+          [{ html: '<span class="decimal-value">' + decimalText(f) + '</span>', correct: true }].concat(
+            others.map(function (o) {
+              return { html: '<span class="decimal-value">' + decimalText(o) + '</span>', correct: false };
+            })
+          )),
+        inline: true
       };
     }
   };
@@ -158,7 +601,7 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenLevels, screenGame, screenEnd].forEach(function (p) {
+    [screenMenu, screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -183,80 +626,55 @@
     cont.appendChild(grid);
   }
 
-  /* ---- Levels of an activity ---- */
+  /* The level rises one step per completed round, capped at the last
+     one, so a person who comes back continues where they were. */
+  function levelFromProgress() {
+    var levels = activity.levels;
+    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
+  }
+
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    $('#activityTitle').textContent.textContent = '';
-    $('#activityInstruction').textContent.textContent = '';
-    var cont = $('#levels');
-    cont.innerHTML = '';
-    activity.levels.forEach(function (nv) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      btn.innerHTML = App.i18n.t('level.' + nv.id);
-      btn.addEventListener('click', function () { startRound(nv); });
-      cont.appendChild(btn);
-    });
-    show(screenLevels);
+    startRound(levelFromProgress());
   }
 
   /* ---- Game ---- */
+
   function startRound(nv) {
     level = nv;
     index = 0;
     roundCorrect = 0;
     pools = {};
-    inReinforce = false;
-    fixedQuestion = null;
     reinforceList = [];
     reinforceIndex = 0;
+    inReinforce = false;
     App.reinforce.banner.hide();
-    /* Reinforcement: the callback is called with the failed questions
-       when the normal round ends. startReinforce mounts the mini-
-       round with the failed questions.
-       If fixedQuestion is set (reinforcement case), we use that one;
-       otherwise we generate a new one with Math.random as usual.
-       fixedQuestion is cleared at the end of the reinforcement. */
-    question = fixedQuestion || GENERATORS[level.tipo](level, index);
-    fixedQuestion = null;
+    /* Registers the callback that runs when the normal round ends with
+       pending failures; it mounts the mini-round with just those. */
     App.reinforce.start(function (fallos) { startReinforce(fallos); });
     show(screenGame);
     render();
   }
 
-  /* Launches the mini-round with the failed questions. The bar
-     shows the progress inside the reinforcement. */
   function startReinforce(fallos) {
     reinforceList = fallos.map(function (f) { return f.payload; });
-    reinforceTotal = reinforceList.length;
     reinforceIndex = 0;
     inReinforce = true;
+    attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('refuerzoTitulo') + ' — ' +
-      App.i18n.t('refuerzoIntro').replace('{n}', reinforceTotal)
+      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
   }
 
-  /* Renders a fixed question (from the reinforcement queue) using
-     the same visual flow as render() but without regenerating it
-     with Math.random. The progress bar uses reinforceIndex+1/total. */
-  function showReinforceQuestion(p) {
-    fixedQuestion = p;
-    render();
-  }
-
-  function paintReinforceProgress() {
-    progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
-    progressText.textContent = '';
-  }
-
-  function render() {
-    resolved = false;
+  /* Paints one question. `fixed` replays a question from the reinforce
+     queue; without it a new one is generated for the current level. */
+  function paintQuestion(fixed) {
+    question = fixed || GENERATORS[level.tipo](level, index);
+    answered = false;
     attempts = 0;
-    question = GENERATORS[level.tipo](level, index);
 
     promptEl.textContent = question.prompt;
     visualEl.innerHTML = question.visual || '';
@@ -288,12 +706,18 @@
       optionsEl.appendChild(btn);
     });
 
-    progressFill.style.width = ((index / DATA.perRound) * 100) + '%';
+    progressFill.style.width = (inReinforce
+      ? ((reinforceIndex + 1) / reinforceList.length)
+      : (index / DATA.perRound)) * 100 + '%';
     progressText.textContent = '';
     paintStars();
   }
 
-  /* Extracts the visible text from an option.html (may contain inner <span>) */
+  function showReinforceQuestion(p) { paintQuestion(p); }
+
+  function render() { paintQuestion(null); }
+
+  /* Visible text of an option (its html may wrap spans). */
   function plainText(html) {
     var div = document.createElement('div');
     div.innerHTML = html;
@@ -302,27 +726,25 @@
 
   function showExplanation(isCorrect) {
     var correct = question.options.filter(function (o) { return o.correct; })[0];
-    var text = (isCorrect ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
+    explanationEl.textContent =
+      (isCorrect ? App.i18n.t('correctExplanation') : App.i18n.t('incorrectExplanationA')) +
       plainText(correct.html) + '.';
-    explanationEl.textContent = text;
     explanationWrap.classList.remove('hidden');
   }
 
-  /* Socratic method: on the first mistake the answer isn't given,
-     the person is encouraged to look at the question/visual again.
-     Only on the second mistake is the correct answer explained
-     (showExplanation). */
+  /* Socratic method: the first mistake does not give the answer away,
+     it invites another look. Only the second one explains it. */
   function showHint() {
     explanationEl.textContent = App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 
   function answer(op, btn) {
-    if (resolved) return;
+    if (answered) return;
     if (op.correct) {
-      showExplanation(op.correct);
-      resolved = true;
-      btn.classList.add('correcta');
+      showExplanation(true);
+      answered = true;
+      btn.classList.add('correct');
       App.feedback.success(feedbackEl);
       progress.stars += 1;
       roundCorrect += 1;
@@ -333,16 +755,10 @@
       btnNext.focus();
     } else {
       attempts += 1;
-      /* Reinforcement: registers the first miss of the question. The
-         question is the global `question` that render() just assigned
-         (fixed or regenerated). */
-      if (attempts === 1) App.reinforce.add(level.id + ':' + index, question);
-      if (attempts === 1) {
-        showHint();
-      } else {
-        showExplanation(op.correct);
-      }
-      btn.classList.add('animo');
+      App.reinforce.add(level.id + ':' + index, question);
+      if (attempts === 1) showHint();
+      else showExplanation(false);
+      btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
@@ -350,48 +766,50 @@
   }
 
   function next() {
-    /* Mini-round: go to the next item or close. */
     if (inReinforce) {
       reinforceIndex += 1;
-      if (reinforceIndex >= reinforceTotal) {
+      if (reinforceIndex >= reinforceList.length) {
         inReinforce = false;
         App.reinforce.clear();
         App.reinforce.banner.hide();
         endRound();
-        return;
+      } else {
+        showReinforceQuestion(reinforceList[reinforceIndex]);
       }
-      showReinforceQuestion(reinforceList[reinforceIndex]);
-      paintReinforceProgress();
       return;
     }
     index += 1;
     if (index >= DATA.perRound) {
-      var consume = App.reinforce.consume();
-      if (consume.length === 0) endRound();
-      return;
+      /* consume() returns [] when nothing was failed; otherwise it fires
+         the callback that mounts the mini-round, which ends the round
+         itself, so endRound must not also run here. */
+      if (App.reinforce.consume().length === 0) endRound();
+    } else {
+      render();
     }
-}
-
-  /* Socratic method: on the first mistake the answer isn't given,
-     the person is encouraged to look at the question/visual again.
-     Only on the second mistake is the correct answer explained
-     (showExplanation). */
+  }
 
   function endRound() {
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
     show(screenEnd);
-    $('#endSummary').textContent.textContent = '';
-    $('#transfer').textContent.textContent = '';
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
+        .replace('{stars}', progress.stars);
+    }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
-    var idxNivel = activity.levels.indexOf(level);
-    var siguienteNivel = (roundCorrect === DATA.perRound && idxNivel !== -1 && idxNivel + 1 < activity.levels.length)
-      ? activity.levels[idxNivel + 1] : null;
+    var idxN = activity.levels.indexOf(level);
+    var nextLevel = (roundCorrect === DATA.perRound && idxN !== -1 && idxN + 1 < activity.levels.length)
+      ? activity.levels[idxN + 1] : null;
     var btnHarder = $('#btnHarder');
-    if (siguienteNivel) {
-      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name-card}', App.i18n.t('level.' + siguienteNivel.id));
+    if (nextLevel) {
+      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name}', App.i18n.t('level.' + nextLevel.id));
       btnHarder.classList.remove('hidden');
-      btnHarder.onclick = function () { startRound(siguienteNivel); };
+      btnHarder.onclick = function () { startRound(nextLevel); };
     } else {
       btnHarder.classList.add('hidden');
     }
@@ -399,9 +817,11 @@
 
   /* ---- Events ---- */
 
-  $('#btnBackToMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
-  $('#btnOtherLevel').addEventListener('click', function () { openActivity(activity.id); });
+  var elBtnBackToMenu = $('#btnBackToMenu');
+  if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
+  $('#btnNext').addEventListener('click', next);
+  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
   $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
 
   paintMenu();

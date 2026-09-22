@@ -17,8 +17,8 @@
   <div class="container guia">
     <header class="cabecera-guia">
       <div class="idioma-selector" role="group" aria-label="Elegir idioma">
-        <button type="button" class="btn-idioma" id="btnIdiomaEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
-        <button type="button" class="btn-idioma" id="btnIdiomaEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
+        <button type="button" class="btn-lang" id="btnLangEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
+        <button type="button" class="btn-lang" id="btnLangEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
       </div>
       <p class="aviso-ruta" data-i18n="routeNotice">Página para el equipo de apoyo. No aparece en el menú de la aplicación:
         solo se llega escribiendo esta dirección.</p>
@@ -36,7 +36,7 @@
       </nav>
     </header>
 
-    <main class="pila">
+    <main class="stack">
 
       <section id="proyecto" class="card">
         <h2 data-i18n="projectTitle">El proyecto</h2>
@@ -73,7 +73,7 @@
         </ul>
       </section>
 
-      <section id="areas" class="pila">
+      <section id="areas" class="stack">
         <h2 data-i18n="areasTitle">Las áreas de trabajo y sus actividades</h2>
         <p data-i18n="areasIntro">El menú principal agrupa las actividades en dos módulos (🧮 Matemáticas y 🧩 Razonamiento y lógica), cada uno con su color.
           Aquí se indica qué trabaja cada actividad desde el punto de vista del cálculo funcional y el razonamiento.</p>
@@ -93,24 +93,60 @@
               <tr><td data-i18n="activity.math-tables.name">Tablas de Multiplicar</td><td data-i18n="activity.math-tables.does">Practica las tablas del 2 al 10 con tres niveles: elige respuesta entre opciones, completa el resultado y escribe el resultado tecleando.</td>
                 <td data-i18n="activity.math-tables.works">Memoria de las tablas, automatización del cálculo, asociación número×número con su resultado.</td>
                 <td data-i18n="activity.math-tables.daily">Llevad las tablas a la vida real: 3 bandejas con 4 pasteles son 12, 4 coches con 2 ruedas son 8.</td></tr>
+              <tr><td data-i18n="activity.divisibility.name">Grupos exactos</td><td data-i18n="activity.divisibility.does">Pone los puntos en filas para ver si un número se reparte exacto, aprende las reglas rápidas (entre 2, entre 5, entre 10 y entre 3), prueba si un número es primo, busca cuándo coinciden dos cosas que se repiten y cuánto mide el lado de un cuadrado.</td>
+                <td data-i18n="activity.divisibility.works">La idea de reparto exacto frente a "sobra algo", el vocabulario de múltiplo, divisor y primo, y la potencia vista como un cuadrado que se puede contar.</td>
+                <td data-i18n="activity.divisibility.daily">Al repartir cartas o caramelos, mirad si sale exacto o sobra. Si dos autobuses pasan cada 10 y cada 15 minutos, calculad juntos cuándo vuelven a coincidir.</td></tr>
+              <tr><td data-i18n="activity.operations.name">Cuentas grandes</td><td data-i18n="activity.operations.does">Ve que 3 por 4 y 4 por 3 son los mismos puntos girados. Parte una multiplicación difícil en dos fáciles (6 por 7 son 6 por 5 y 6 por 2) y así multiplica también por números de dos cifras. Reparte en montones y cuenta cuántos salen. Y decide qué se hace primero cuando hay paréntesis.</td>
+                <td data-i18n="activity.operations.works">La idea de que una cuenta grande se resuelve partiendo, no memorizando; las dos maneras de dividir que se usan al hablar; y para qué sirven los paréntesis.</td>
+                <td data-i18n="activity.operations.daily">Al repartir algo entre varios, dejadle decir cuántos le tocan a cada uno. En la compra, partid un precio: "12 euros cada uno son 10 y 2 más, por tres personas".</td></tr>
               <tr><td data-i18n="activity.mental-math.name">Suma y Resta Mental</td><td data-i18n="activity.mental-math.does">Resuelve sumas y restas cada vez más largas (de 1 a 3 cifras), con y sin llevada, eligiendo la respuesta correcta.</td>
                 <td data-i18n="activity.mental-math.works">Cálculo mental, estrategias de descomposición (10 + n), automatización de las operaciones básicas.</td>
                 <td data-i18n="activity.mental-math.daily">Calculad juntos sin papel: "¿cuánto es 23 + 14? ¿y si añadimos 2 más?". Sumad los precios antes de pagar.</td></tr>
-              <tr><td data-i18n="activity.fractions-measures.name">Fracciones y Medidas</td><td data-i18n="activity.fractions-measures.does">Reconoce medios, cuartos y tercios; mide longitudes y pesos eligiendo la unidad (cm, m, g, kg) y compara dos medidas.</td>
-                <td data-i18n="activity.fractions-measures.works">Fracciones como reparto, conversión entre unidades, vocabulario de medida (más largo, más pesado).</td>
-                <td data-i18n="activity.fractions-measures.daily">Partid una pizza o un bizcocho en mitades y cuartos. Al cocinar, medid con tazas y cucharas ("medio kilo de harina").</td></tr>
+              <tr><td data-i18n="activity.places.name">Sitios y tamaños</td><td data-i18n="activity.places.does">Mira un dibujo y dice si la cosa está dentro o fuera de la caja, encima o debajo de la silla, a la izquierda o a la derecha del árbol. También compara dos cosas reales: cuál es más larga, cuál pesa más y en cuál cabe más.</td>
+                <td data-i18n="activity.places.works">Vocabulario de posición y de tamaño, orientación en el espacio, y comparar sin medir ni contar.</td>
+                <td data-i18n="activity.places.daily">Pedidle cosas diciendo dónde están: "el vaso que está dentro del armario". Al cargar la compra, preguntadle qué bolsa pesa más antes de cogerla.</td></tr>
+              <tr><td data-i18n="activity.shapes.name">Formas</td><td data-i18n="activity.shapes.does">Reconoce formas planas (círculo, cuadrado, triángulo, rectángulo, pentágono, hexágono) y cuerpos (cubo, esfera, cilindro) a través de objetos reales, y cuenta los lados y las esquinas de cada figura.</td>
+                <td data-i18n="activity.shapes.works">Vocabulario geométrico, atención al detalle del dibujo, y la idea de que una forma se reconoce por cómo es, no por para qué sirve.</td>
+                <td data-i18n="activity.shapes.daily">Buscad formas por la calle: las señales triangulares, las ventanas cuadradas, las latas cilíndricas. Contad juntos los lados de una baldosa.</td></tr>
+              <tr><td data-i18n="activity.geometry.name">Geometría</td><td data-i18n="activity.geometry.does">Compara una esquina con la de una hoja de papel para decir si el ángulo es recto, agudo u obtuso. Cuenta cuántos cuadraditos mide el borde de una figura y cuántos cuadrados caben dentro. Y dobla figuras por la mitad para ver si los dos lados coinciden.</td>
+                <td data-i18n="activity.geometry.works">Vocabulario geométrico con su significado (ángulo, borde, simétrico), y la idea de que el perímetro y el área se pueden contar, no hace falta ninguna fórmula.</td>
+                <td data-i18n="activity.geometry.daily">Doblad un papel por la mitad y mirad si coincide. Al poner un mantel o una alfombra, contad juntos cuántas baldosas ocupa.</td></tr>
+              <tr><td data-i18n="activity.similar.name">Formas parecidas</td><td data-i18n="activity.similar.does">Compara dos figuras y dice si son la misma forma a otro tamaño, contando los cuadraditos de ancho y de alto. Cuenta los cuadrados dibujados sobre los lados de un triángulo con una esquina recta. Y mira dos rampas para decir cuál sube más.</td>
+                <td data-i18n="activity.similar.works">La idea de escala (la misma forma más grande), la relación entre los lados de un triángulo recto contada en cuadraditos, y la pendiente como «cuánto sube por lo que avanza».</td>
+                <td data-i18n="activity.similar.daily">Mirad una foto ampliada y otra estirada: ¿cuál es la misma forma? Al subir una cuesta, comentad si esta sube más que aquella.</td></tr>
+              <tr><td data-i18n="activity.fractions-measures.name">Fracciones</td><td data-i18n="activity.fractions-measures.does">Reconoce medios, cuartos y tercios, decide cuándo dos fracciones valen lo mismo, suma y resta partes del mismo tamaño y lee la parte escrita con coma (0,5).</td>
+                <td data-i18n="activity.fractions-measures.works">La fracción como reparto, la equivalencia entre formas distintas de decir lo mismo, y el paso de la fracción al decimal.</td>
+                <td data-i18n="activity.fractions-measures.daily">Partid una pizza o un bizcocho en mitades y cuartos. Al leer un precio con coma, decid en voz alta cuánto es "y medio".</td></tr>
+              <tr><td data-i18n="activity.measures.name">Medidas</td><td data-i18n="activity.measures.does">Elige la unidad que corresponde a cada cosa (cm, m, g, kg, ml, l) y estima cuánto mide, cuánto pesa o cuánto cabe.</td>
+                <td data-i18n="activity.measures.works">Vocabulario de medida (más largo, más pesado, cabe más), y la idea de que cada cosa se mide con la unidad de su tamaño.</td>
+                <td data-i18n="activity.measures.daily">Al cocinar, medid con tazas y cucharas ("medio kilo de harina"). En la compra, mirad juntos el peso en la etiqueta.</td></tr>
+              <tr><td data-i18n="activity.percent.name">Porcentajes</td><td data-i18n="activity.percent.does">Cuenta los cuadraditos pintados de una cuadrícula de cien para decir el porcentaje. Calcula cuánto se descuenta y cuánto queda por pagar, con las monedas delante. Hace crecer una receta sin romper la proporción. Y lee en un plano cuántos metros son de verdad.</td>
+                <td data-i18n="activity.percent.works">La idea de que "por ciento" es "de cada cien", el porcentaje aplicado al dinero de verdad, la proporción de una receta y la lectura de un plano a escala.</td>
+                <td data-i18n="activity.percent.daily">En las rebajas, mirad juntos el cartel y calculad cuánto se queda el precio. Al cocinar para el doble de gente, doblad los dos ingredientes en voz alta.</td></tr>
               <tr><td data-i18n="activity.money.name">El Dinero</td><td data-i18n="activity.money.does">Reconoce monedas y billetes (céntimos y euros), cuenta un conjunto de dinero y decide si le llega para comprar algo.</td>
                 <td data-i18n="activity.money.works">Reconocimiento de monedas y billetes, suma mental con decimales, sentido del valor.</td>
                 <td data-i18n="activity.money.daily">Pagad juntos en la tienda: que entregue el dinero, cuente el cambio y compruebe que está bien.</td></tr>
               <tr><td data-i18n="activity.wallet.name">El Monedero</td><td data-i18n="activity.wallet.does">Usa el dinero como en la vida real: cuenta un monedero, paga justo, paga de más, comprueba el cambio y calcula cuánto le falta para comprar algo (la hucha).</td>
                 <td data-i18n="activity.wallet.works">Operaciones reales con dinero, sentido del cambio, ahorro y comparación de precios.</td>
                 <td data-i18n="activity.wallet.daily">Dadle un presupuesto pequeño real y acompañadle a gastarlo: que decida, pague y compruebe el cambio él mismo.</td></tr>
+              <tr><td data-i18n="activity.problems.name">Problemas</td><td data-i18n="activity.problems.does">Lee un problema corto y decide primero qué hay que hacer (sumar o restar), sin calcular. Después resuelve cuántos son, con el dibujo delante para poder contar.</td>
+                <td data-i18n="activity.problems.works">Comprensión del enunciado, la diferencia entre entender el problema y hacer la cuenta, y el vocabulario de juntar y quitar.</td>
+                <td data-i18n="activity.problems.daily">Contadle problemas de casa en voz alta: "hay 4 platos y traigo 2 más". Dejad que diga primero si hay que sumar o quitar, antes de decir el número.</td></tr>
               <tr><td data-i18n="activity.temperature.name">Temperatura del Agua</td><td data-i18n="activity.temperature.does">Lee el termómetro del agua (fría, tibia, caliente, quemando), asocia cada valor a una situación cotidiana y elige la temperatura correcta para cada tarea.</td>
                 <td data-i18n="activity.temperature.works">Lectura del termómetro, vocabulario de temperatura, seguridad en la cocina y el baño.</td>
                 <td data-i18n="activity.temperature.daily">Antes de un baño o de abrir el grifo, decidid juntos: "el agua tiene que estar tibia, no quemando".</td></tr>
               <tr><td data-i18n="activity.roman-numerals.name">Números Romanos</td><td data-i18n="activity.roman-numerals.does">Aprende los símbolos (I, V, X, L, C, D, M) y los combina para leer números romanos del 1 al 1000, con y sin sustraer.</td>
                 <td data-i18n="activity.roman-numerals.works">Reglas del sistema romano, equivalencia con el sistema decimal, atención a las reglas de sustracción.</td>
                 <td data-i18n="activity.roman-numerals.daily">Buscad números romanos en la calle: en los relojes antiguos, en los nombres de reyes, en las fachadas de edificios.</td></tr>
+              <tr><td data-i18n="activity.algebra.name">La balanza</td><td data-i18n="activity.algebra.does">Mira una balanza con pesas de un kilo y una bolsa de peso desconocido, y dice cuánto pesa la bolsa para que los dos platos queden iguales. Ve que una letra es el nombre de un número que aún no se sabe. Y lee en una gráfica de barras si algo sube, baja o se queda igual.</td>
+                <td data-i18n="activity.algebra.works">La idea de incógnita sin manipular símbolos, el equilibrio como forma de razonar, y la lectura de una gráfica de verdad.</td>
+                <td data-i18n="activity.algebra.daily">Mirad juntos la gráfica de la batería del móvil: ¿sube o baja? Al repartir la compra en dos bolsas, buscad que pesen parecido y decidlo en voz alta.</td></tr>
+              <tr><td data-i18n="activity.charts.name">Datos y gráficos</td><td data-i18n="activity.charts.does">Cuenta los dibujos de un pictograma, lee la altura de una barra sobre su escala y busca un dato en una tabla. También reparte a partes iguales (la media) y decide si sacar algo de una bolsa es seguro, puede ser o imposible.</td>
+                <td data-i18n="activity.charts.works">Lectura de gráficos, comparar cantidades representadas, y las primeras ideas de estadística y azar sin fórmulas.</td>
+                <td data-i18n="activity.charts.daily">Mirad juntos un gráfico del periódico o del móvil: ¿qué barra es la más alta? Al repartir algo en casa, decid en voz alta cuántos le tocan a cada uno.</td></tr>
+              <tr><td data-i18n="activity.calendar.name">El Calendario</td><td data-i18n="activity.calendar.does">Recorre los días de la semana y los meses del año hacia delante y hacia atrás, rellena el que falta y agrupa los meses en sus cuatro estaciones.</td>
+                <td data-i18n="activity.calendar.works">Orientación en el tiempo, el orden de los ciclos que se repiten, y el vocabulario de los días, los meses y las estaciones.</td>
+                <td data-i18n="activity.calendar.daily">Mirad juntos el calendario de la cocina cada mañana: qué día es hoy, qué día será mañana, cuántos días faltan para algo que espera.</td></tr>
               <tr><td data-i18n="activity.clock.name">El Reloj</td><td data-i18n="activity.clock.does">Lee la hora en un reloj analógico, digital o de palabras; pone las agujas a una hora; empareja el reloj analógico con su hora digital; y asocia cada momento del día (desayuno, comida, cena…) con la hora correcta.</td>
                 <td data-i18n="activity.clock.works">Orientación temporal, comprensión del formato analógico y digital, vocabulario del tiempo (en punto, y cuarto, y media, menos cuarto).</td>
                 <td data-i18n="activity.clock.daily">Preguntadle la hora que marca el reloj de casa o del cole y comprobad juntos si la sabe decir.</td></tr>
@@ -146,7 +182,7 @@
         <p class="nota-alcance"><strong data-i18n="scopeNote1">Fuera del alcance</strong><span data-i18n="scopeNote2"> de una web autónoma: álgebra, ecuaciones y fracciones complejas (mejor con papel y un profesional), estadística y probabilidad (requieren conceptos abstractos) y cálculo escrito largo (mejor con papel y un método explicado en clase).</span></p>
       </section>
 
-      <section id="progreso" class="card">
+      <section id="progress" class="card">
         <h2 data-i18n="progressTitle">Progreso y privacidad</h2>
         <ul>
           <li><span data-i18n="progressLi1a">El progreso (estrellas, niveles completados, ajustes de texto) se guarda
@@ -218,8 +254,8 @@
       </section>
 
       <footer class="pie-guia">
-        <a class="btn btn-secundario" href="../site/index.html" data-i18n="footerActivities">Ir a las actividades</a>
-        <a class="btn btn-secundario" href="../legal/index.html" data-i18n="progressLi4Link">Protección de datos</a>
+        <a class="btn btn-secondary" href="../site/index.html" data-i18n="footerActivities">Ir a las actividades</a>
+        <a class="btn btn-secondary" href="../legal/index.html" data-i18n="progressLi4Link">Protección de datos</a>
       </footer>
 
     </main>
@@ -234,11 +270,11 @@
       'use strict';
       function paintLanguageSelector() {
         var active = App.i18n.locale();
-        document.getElementById('btnIdiomaEs').setAttribute('aria-pressed', String(active === 'es'));
-        document.getElementById('btnIdiomaEn').setAttribute('aria-pressed', String(active === 'en'));
+        document.getElementById('btnLangEs').setAttribute('aria-pressed', String(active === 'es'));
+        document.getElementById('btnLangEn').setAttribute('aria-pressed', String(active === 'en'));
       }
-      document.getElementById('btnIdiomaEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
-      document.getElementById('btnIdiomaEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
+      document.getElementById('btnLangEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
+      document.getElementById('btnLangEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
       paintLanguageSelector();
       /* The AI-agent documentation map link points to the localized doc/ index. */
       var docLink = document.getElementById('enlaceMapaDocs');

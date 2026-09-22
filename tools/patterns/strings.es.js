@@ -13,8 +13,8 @@
     chooseLevel: 'Elige una actividad',
     whatNext: '¿Qué sigue?',
     queSigueAudio: '¿Qué sigue?',
-    resumenFinal: 'Has ganado {n} estrellas. Ahora tienes {total} estrellas.',
-    endSummary: 'Has ganado {n} estrellas. Ahora tienes {total} estrellas.',
+    btnMenu: 'Volver al inicio',
+    endSummary: 'Has ganado {n} estrellas. Ahora tienes {stars} estrellas.',
     chooseOtherLevel: 'Elegir otra actividad',
     explicacionCorrecta: '✅ ¡Correcto! Después de la serie viene: ',
     explicacionIncorrectaA: '❌ Eso no sigue el patrón. Lo que sigue es: ',
@@ -22,6 +22,6 @@
     refuerzoTitulo: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
-    transferencia: 'Esto te servirá para reconocer patrones del día a día: los días de la semana, el orden de la rutina, las rayas del pijama o los azulejos del baño.'
+    transfer: 'Esto te servirá para reconocer patrones del día a día: los días de la semana, el orden de la rutina, las rayas del pijama o los azulejos del baño.'
   }, 'es');
 })();

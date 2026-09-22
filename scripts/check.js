@@ -8,15 +8,22 @@
       assets/js/ parses (equivalent to `node --check`).
    2. That every tools/<slug>/ has the canonical files:
       index.html, app.js, data.js, strings.es.js, strings.en.js, styles.css.
-   3. sw.js <-> disk parity: every ARCHIVOS path exists, and every
-      tool file is listed in ARCHIVOS.
+   3. sw.js <-> disk parity: every FILES path exists, and every
+      tool file is listed in FILES.
    4. es/en key parity between strings.es.js and strings.en.js
       (tools/, site/, config/, legal/).
    5. Catalog parity lock: the set of activity slugs must match between
       tools/ folders on disk, the landing cards in site/index.html, the
-      progress rows in config/index.html, and sw.js's ARCHIVOS.
+      progress rows in config/index.html, and sw.js's FILES.
    6. Mandatory rule: zero mentions of disability, occupational therapy
       or minors in user-facing files (see doc/<locale>/SPEC.md §4).
+ 6.1 Zero school-year / syllabus labels in anything served to the
+      browser (same scope as 6, comments included). The curriculum
+      decides the order activities are built and shown in, but the
+      person must never meet it: telling an adult that a screen is
+      "2º de Primaria" says they are doing a child's exercise. The
+      reasoning belongs in TODO.md and doc/<locale>/spec.md, which are
+      not served. See doc/es/spec.md §8.1.
    7. _headers: every quoted Content-Security-Policy source expression
       (e.g. 'self') has exactly one leading and one trailing quote —
       catches malformed quoting like ''self'' that browsers silently
@@ -165,7 +172,7 @@ slugs.forEach(function (slug) {
 /* --- 3. sw.js <-> disk parity --- */
 checks += 1;
 var swContent = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-var archMatch = swContent.match(/var ARCHIVOS = \[([\s\S]*?)\];/);
+var archMatch = swContent.match(/var FILES = \[([\s\S]*?)\];/);
 var swPaths = [];
 if (archMatch) {
   var re = /'([^']+)'/g;
@@ -174,13 +181,13 @@ if (archMatch) {
     swPaths.push(m[1]);
   }
 } else {
-  failures.push('sw.js: no se ha encontrado el array ARCHIVOS');
+  failures.push('sw.js: no se ha encontrado el array FILES');
 }
 
 swPaths.forEach(function (entry) {
   var filePath = path.join(ROOT, entry.replace(/^\.\//, ''));
   if (!fs.existsSync(filePath)) {
-    failures.push('sw.js: ARCHIVOS incluye ' + entry + ' pero no existe en disco');
+    failures.push('sw.js: FILES incluye ' + entry + ' pero no existe en disco');
   }
 });
 
@@ -189,7 +196,7 @@ slugs.forEach(function (slug) {
     .forEach(function (archivo) {
       var ruta = './tools/' + slug + '/' + archivo;
       if (swPaths.indexOf(ruta) === -1) {
-        failures.push('sw.js: falta ' + ruta + ' en ARCHIVOS');
+        failures.push('sw.js: falta ' + ruta + ' en FILES');
       }
     });
 });
@@ -289,7 +296,7 @@ if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'),
      - tools/ folders on disk (source of truth)
      - the landing cards (<a href="../tools/...">) in site/index.html
      - the progress rows (data-tool="<slug>") in config/index.html
-     - the assets listed for tools in sw.js ARCHIVOS
+     - the assets listed for tools in sw.js FILES
 */
 checks += 1;
 var siteHtml = fs.readFileSync(path.join(ROOT, 'site', 'index.html'), 'utf8');
@@ -399,6 +406,47 @@ userTargets.forEach(function (archivo) {
     }
     if (found) {
       failures.push(rel(archivo) + ': contiene "' + term + '" — ninguna página visible puede mencionar discapacidad, terapia ocupacional o menores (ver doc/es/spec.md §4)');
+    }
+  });
+});
+
+/* --- 6.1 Zero school-year / syllabus labels in what ships ---
+   The curriculum drives the order in which activities are built and
+   arranged, but the person using the app must never meet it: labelling
+   content by school year tells an adult that they are doing a child's
+   exercise. The reasoning lives in TODO.md and doc/<locale>/spec.md,
+   neither of which is served to the browser.
+   Scope is the same shipped surface as check 6, and comments count: a
+   served file is readable through "view source".
+   "eso" is deliberately NOT in this list — it is an extremely common
+   Spanish pronoun, so matching it would be all false positives. */
+checks += 1;
+var SCHOOL_TERMS = [
+  { term: 'primaria', match: 'substring' },
+  { term: 'secundaria', match: 'substring' },
+  { term: 'bachillerato', match: 'substring' },
+  { term: 'temario', match: 'substring' },
+  { term: 'currículo', match: 'substring' },
+  { term: 'curriculum', match: 'substring' },
+  { term: '1º', match: 'substring' },
+  { term: '2º', match: 'substring' },
+  { term: '3º', match: 'substring' },
+  { term: '4º', match: 'substring' },
+  { term: '5º', match: 'substring' },
+  { term: '6º', match: 'substring' },
+  { term: 'school year', match: 'substring' },
+  { term: 'grade level', match: 'substring' }
+];
+userTargets.forEach(function (archivo) {
+  var content = fs.readFileSync(archivo, 'utf8').toLowerCase();
+  SCHOOL_TERMS.forEach(function (entry) {
+    var term = entry.term.toLowerCase();
+    var found = entry.match === 'word'
+      ? new RegExp('\\b' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(content)
+      : content.indexOf(term) !== -1;
+    if (found) {
+      failures.push(rel(archivo) + ': contiene "' + entry.term +
+        '" — lo que se sirve al navegador no puede etiquetar el contenido por curso ni nombrar el temario (ver doc/es/spec.md §8.1)');
     }
   });
 });

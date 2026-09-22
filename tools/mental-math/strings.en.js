@@ -12,10 +12,10 @@
     contexto: 'Someone asks you how much is left or how much something is, without using paper. Learn to subtract and calculate in your head with simple tricks.',
     explicacion: '✅ Subtracting and calculating in your head helps you not depend on a calculator all the time.',
     btnBackToMenu: '← Other activities',
+    btnMenu: 'Back to start',
     otherLevel: 'Choose another level',
-    resumenFinal: 'You solved {n} questions of {actividad}. You now have {stars} stars.',
-    endSummary: 'You solved {n} questions of {actividad}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{nombre}»?',
+    endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
+    btnHarder: 'Want to try «{name}»?',
     btnOtherActivity: 'Another activity',
     explicacionCorrecta: '✅ Correct! The answer is: ',
     correctExplanation: '✅ Correct! The answer is: ',
@@ -35,11 +35,25 @@
     leyendaCentenasTxt: 'hundreds',
     legendHundredsTxt: 'hundreds',
     activity: {
+      anchors: { name: 'Add and take away 1, 5 and 10', detail: 'Start with the easiest.', instruction: 'Look at the picture. A bar is 10. A loose dot is 1.' },
       restar: { name: 'Subtract', detail: 'Take away and count what is left.', instruction: 'Subtracting is taking away. Count the dots that do not have a cross.' },
       cabeza: { name: 'Mental math', detail: 'Calculate without paper.', instruction: 'Think of the result in your head. Look at the digit that changes.' }
     },
-    level: { r10: 'Subtract up to 10', r20: 'Subtract up to 20', k1: 'Doubles', k2: 'Add 10', k3: 'Add 100', k4: 'Add 1,000', k5: 'Subtract 10', k6: 'Subtract 100', k7: 'Subtract 1,000', k8: 'Multiply by 10', k9: 'Multiply by 100' },
+    level: { a1: 'Add 1', a2: 'Take away 1', a3: 'Add 10', a4: 'Take away 10', a5: 'Add 5', a6: 'Take away 5', a7: 'Join tens and units', a8: 'Take the units off', a9: 'Add and make a new ten', a10: 'Subtract by breaking a ten', r10: 'Subtract up to 10', r20: 'Subtract up to 20', k1: 'Doubles', k2: 'Add 10', k3: 'Add 100', k4: 'Add 1,000', k5: 'Subtract 10', k6: 'Subtract 100', k7: 'Subtract 1,000', k8: 'Multiply by 10', k9: 'Multiply by 100' },
     gen: {
+      anchorAddPrompt: 'How much is {a} + {step}?',
+      anchorSubtractPrompt: 'How much is {a} − {step}?',
+      anchorHintOne: 'Adding 1 is the next number. Taking away 1 is the one before.',
+      anchorHintFive: '5 is half a bar. Count the dots in fives.',
+      anchorHintTen: 'A whole bar is 10. Only the tens change.',
+      placeValueAddPrompt: 'How much is {a} + {b}?',
+      placeValueAddHint: 'Put the bars and the loose dots together. The tens do not change.',
+      placeValueSubtractPrompt: 'How much is {a} − {b}?',
+      placeValueSubtractHint: 'Take the loose dots away. Only the bars are left.',
+      carryAddPrompt: 'How much is {a} + {b}?',
+      carryAddHint: 'Count the loose dots. If they reach 10, they form a new bar.',
+      borrowSubtractPrompt: 'How much is {a} − {b}?',
+      borrowSubtractHint: "There aren't enough loose dots. Break a bar into 10 dots and take away {b}.",
       restarEnunciado: 'How much is {a} − {b}?',
       subtractPrompt: 'How much is {a} − {b}?',
       restarPista: 'Take {b} away. Count the dots that are left.',
@@ -68,7 +82,6 @@
       oneZero: 'one zero',
       twoZeros: 'two zeros'
     },
-    transferencia: 'This helps you know how much you have left, how much is missing or calculate a large amount without a calculator.',
     transfer: 'This helps you know how much you have left, how much is missing or calculate a large amount without a calculator.'
   }, 'en');
 })();

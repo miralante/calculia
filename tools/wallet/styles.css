@@ -1,4 +1,4 @@
-/* The Wallet — tool-specific styles. Shared styles live in assets/css/.
+/* The Wallet â€” tool-specific styles. Shared styles live in assets/css/.
    Reasoning-module accent (teal --mod-razonamiento).
    Money is drawn with CSS (no images): round coins in the real euro
    colours and rectangular banknotes. */
@@ -13,7 +13,10 @@
 
 .center-row { justify-content: center; }
 
-.btn-level { min-width: 300px; align-self: center; }
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario, #666);
+}
 
 .progress-bar { margin-top: var(--espacio); }
 
@@ -30,14 +33,14 @@
 .activity-card .name { font-weight: 800; font-size: var(--texto-base); }
 .activity-card .detail { font-size: var(--texto-pequeno); color: var(--color-texto-suave); text-align: center; }
 
-/* Visual money (.dinero, .m5c….b50e, .money-table) is shared:
+/* Visual money (.money, .m5câ€¦.b50e, .money-table) is shared:
    lives in assets/css/components.css + assets/js/dinero.js. Here we
    only override tool-specific tweaks. */
 
 /* The table with the Reasoning-module tint */
 .money-table { background: var(--mod-razonamiento-suave); }
 
-/* Money marked by the 💡 hint (2nd tap) */
+/* Money marked by the ðŸ’¡ hint (2nd tap) */
 .sugerida {
   outline: 4px solid var(--mod-razonamiento);
   outline-offset: 3px;
@@ -51,7 +54,7 @@
 }
 
 /* Money token used as a quiz option ("What do I pay with?") */
-.options .dinero { align-self: center; }
+.options .money { align-self: center; }
 
 /* ---- Quiz compartido ---- */
 .prompt {

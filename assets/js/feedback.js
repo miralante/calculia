@@ -137,31 +137,31 @@
    * "Entendido" button inside `zone`, focuses it; clicking it re-enables
    * the buttons this call locked. Retries stay unlimited.
    * @param {Element[]|NodeList} buttons - option buttons of the current round
-   * @param {Element} zone - wrap holding the pista/explicacion (or consejo) text
+   * @param {Element} zone - wrap holding the pista/explanation (or consejo) text
    * @param {function} [onConfirm] - called after the person taps Entendido
    */
   function lockUntilAck(buttons, zone, onConfirm) {
     var pending = Array.prototype.filter.call(buttons || [], function (b) { return !b.disabled; });
     pending.forEach(function (b) {
       b.disabled = true;
-      b.classList.add('bloqueada');
+      b.classList.add('locked');
     });
     if (!zone) return;
-    var button = zone.querySelector('.btn-entendido');
+    var button = zone.querySelector('.btn-understood');
     if (!button) {
       button = document.createElement('button');
       button.type = 'button';
-      button.className = 'btn btn-entendido';
+      button.className = 'btn btn-understood';
       zone.appendChild(button);
     }
     button.textContent = understoodText();
-    button.classList.remove('oculto');
+    button.classList.remove('hidden');
     button.onclick = function () {
       pending.forEach(function (b) {
         b.disabled = false;
-        b.classList.remove('bloqueada');
+        b.classList.remove('locked');
       });
-      button.classList.add('oculto');
+      button.classList.add('hidden');
       if (onConfirm) onConfirm();
     };
     button.focus();

@@ -17,10 +17,10 @@
     notaTablas: '🔢 To count, add and multiply, go to {link}.',
     noteTables: '🔢 To count, add and multiply, go to {link}.',
     btnBackToMenu: '← Other activities',
+    btnMenu: 'Back to start',
     otherLevel: 'Choose another level',
-    resumenFinal: 'You solved {n} questions of {actividad}. You now have {stars} stars.',
-    endSummary: 'You solved {n} questions of {actividad}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{nombre}»?',
+    endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
+    btnHarder: 'Want to try «{name}»?',
     btnOtherActivity: 'Another activity',
     explicacionCorrecta: '✅ Correct! The answer is: ',
     correctExplanation: '✅ Correct! The answer is: ',
@@ -51,10 +51,28 @@
     activity: {
       'positivos-y-negativos': { name: 'Positives and negatives', detail: 'Go up and down in the elevator.', instruction: 'You have an elevator. Start at the ground floor (0). Press + to go up to upper floors (positive numbers: +1, +2, +3…). Press − to go down to lower floors (negative numbers: −1, −2, −3…). The ground floor is zero (0): not positive, not negative.' },
       unidades: { name: 'Ones and tens', detail: 'What number is it?', instruction: 'Each colour helps read the number. Blue: ones. Green: tens. Purple: hundreds.' },
-      placevalue: { name: 'Changing position', detail: '10 small ones become 1 big one.', instruction: 'When you put 10 of the same together, they form 1 of the next group. The digit moves one position to the left.' }
+      placevalue: { name: 'Changing position', detail: '10 small ones become 1 big one.', instruction: 'When you put 10 of the same together, they form 1 of the next group. The digit moves one position to the left.' },
+      ordinales: { name: 'Your place in the queue', detail: 'First, second, third…', instruction: 'Ordinal numbers say which place each one is in. The queue starts at the flag 🏁. The one next to the flag is first.' },
+      recta: { name: 'The number line', detail: 'Which number is the arrow pointing at?', instruction: 'Numbers go in a row, in order. The line puts them from smallest to biggest. Count from the nearest mark to find the one the arrow points at.' },
+      comparar: { name: 'Greater, smaller or equal', detail: 'The signs <, > and =.', instruction: 'Look at the two numbers. The sign opens towards the bigger number. If both are the same, the sign is =.' }
     },
-    level: { libre: '🛗 Free elevator', meta: '🎯 Reach a floor', u99: 'Up to 99', u999: 'Up to 999', umiles: 'Thousands', umillones: 'Millions and trillion', udictado: 'Listen and choose', counter: 'Free counter', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
+    ordinal: { 1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth' },
+    ordinalPlace: { 1: 'first place', 2: 'second place', 3: 'third place', 4: 'fourth place', 5: 'fifth place' },
+    level: { n1: 'Up to 10', n2: 'Up to 20', n3: 'Up to 100', n4: 'Up to 100, fewer marks', c1: 'Up to 9, with blocks', c2: 'Up to 99, with blocks', c3: 'Up to 99, no blocks', c4: 'Up to 999', c5: 'Up to 9,999', o1: 'Queue of 3', o2: 'Queue of 5', o3: 'Find a place', libre: '🛗 Free elevator', meta: '🎯 Reach a floor', u99: 'Up to 99', u999: 'Up to 999', umiles: 'Thousands', umillones: 'Millions and trillion', udictado: 'Listen and choose', counter: 'Free counter', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
     gen: {
+      numberLinePrompt: 'Which number is the arrow pointing at?',
+      numberLineHint: 'Count from the nearest written number.',
+      numberLineAria: 'Number line from {min} to {max}.',
+      compararEnunciado: 'Which sign is missing?',
+      compararPista: 'The sign opens towards the bigger number.',
+      compararAria: 'Compare {a} and {b}.',
+      signLess: 'is smaller than',
+      signGreater: 'is bigger than',
+      signEqual: 'is equal to',
+      ordinalPositionPrompt: 'Which place is the arrow pointing at?',
+      ordinalMemberPrompt: 'Who is in {place}?',
+      ordinalHint: 'Count from the flag 🏁.',
+      ordinalVisualAria: 'Queue of {n}. The arrow points at place {pos}.',
       bloquesEnunciado: 'What number do the blocks make?',
       bloquesVisualAria: 'Blocks: {texto}',
       blocksPrompt: 'What number do the blocks make?',
@@ -104,7 +122,7 @@
       counterWordsOn: '✍️ Hide number in words',
       counterWordsOff: '✍️ Show number in words',
       counterWordsAria: 'Show the number written in words',
-      counterResumenFinal: 'You explored the free counter. You now have {estrellas} stars.',
+      counterResumenFinal: 'You explored the free counter. You now have {stars} stars.',
       elevatorHint: 'Press + or − to move the elevator. Watch the floor change and whether it goes up or down.',
       elevatorHintLibre: 'Press + or − to move the elevator. Watch the floor change and whether it goes up or down.',
       elevatorHintMeta: 'Press + or − until you reach the target floor. You must land on the exact floor.',
@@ -123,9 +141,8 @@
       elevatorTtsAbove: 'Upper floor.',
       elevatorTtsBelow: 'Lower floor.',
       elevatorTtsGround: 'Ground floor.',
-      elevatorResumenFinal: 'You explored the elevator. You now have {estrellas} stars.'
+      elevatorResumenFinal: 'You explored the elevator. You now have {stars} stars.'
     },
-    transferencia: 'This will help you read large numbers, understand the elevator of a building, or know which digit changes when you add 100.',
     transfer: 'This will help you read large numbers, understand the elevator of a building, or know which digit changes when you add 100.'
   }, 'en');
 })();

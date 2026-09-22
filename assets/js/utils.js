@@ -83,7 +83,7 @@
     *   data-pie-class           extra class added to the <footer> element
     * Idempotent: a footer that already has children is skipped.
     * --------------------------------------------------------------- */
-  function inyectarPie() {
+  function injectFooter() {
     if (!window.App || !window.App.i18n) return;
     var pies = document.querySelectorAll('footer[data-pie-app]');
     for (var i = 0; i < pies.length; i++) {
@@ -111,6 +111,6 @@
     $$: $$,
     today: today,
     reducedMotion: reducedMotion,
-    inyectarPie: inyectarPie
+    injectFooter: injectFooter
   };
 })();

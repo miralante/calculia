@@ -48,22 +48,34 @@ questions:
 | **Numbers** | Number recognition, counting. |
 | **Quantities** | Comparing, "more / less / equal". |
 | **Mental math** | Simple additions and subtractions. |
+| **Places and sizes** | Where things are, which is bigger. |
 | **Temperature** | Reading a thermometer. |
+| **Shapes** | Recognising shapes, counting sides and corners. |
+| **Geometry** | Angles, edges, area and symmetry. |
+| **Same shapes** | Scale, the three squares, slopes. |
 
 #### For intermediate users
 
 | Activity | Skill worked |
 |----------|--------------|
 | **Math tables** | Multiplication facts. |
-| **Fractions and measures** | Fractions, units of measure. |
+| **Big sums** | Cutting a sum into easy parts, sharing out. |
+| **Exact groups** | Multiples, primes, squares. |
+| **Fractions** | Fractions and decimals. |
+| **Measures** | Units of measure, estimating. |
 | **Money** | Counting coins and banknotes. |
-| **Stories** | Extracting data from a short problem. |
+| **Percentages** | Discounts, proportion, reading a plan. |
+| **Problems** | Deciding what to do, then working it out. |
+| **Stories** | Putting events in the order they happened. |
 
 #### For advanced users
 
 | Activity | Skill worked |
 |----------|--------------|
 | **Wallet** | Change, budgeting. |
+| **Data and charts** | Reading a chart, sharing equally, what is likely. |
+| **The balance** | Unknowns, letters, reading a graph. |
+| **Calendar** | Days, months and seasons. |
 | **Clock** | Reading the time and durations. |
 | **Riddles** | Verbal reasoning. |
 | **Patterns** | Detecting rules in a sequence. |

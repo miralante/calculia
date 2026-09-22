@@ -78,17 +78,65 @@
         "works": 'Memorising the tables, automating basic calculation, associating n×n with the result.',
         "daily": 'Take the tables into real life: 3 trays with 4 biscuits each is 12; 4 cars with 2 wheels each is 8.'
       },
+      "divisibility": {
+        "name": 'Exact groups',
+        "does": 'Puts dots in rows to see whether a number shares out exactly, learns the quick rules (by 2, by 5, by 10 and by 3), tests whether a number is prime, finds when two repeating things meet, and works out how long the side of a square is.',
+        "works": 'The idea of an exact share against \"something is left over\", the vocabulary of multiple, divisor and prime, and a power seen as a square you can count.',
+        "daily": 'When dealing out cards or sweets, see whether it comes out exactly or something is left. If two buses come every 10 and every 15 minutes, work out together when they next come together.'
+      },
+      "operations": {
+        "name": 'Big sums',
+        "does": 'Sees that 3 times 4 and 4 times 3 are the same dots turned round. Cuts a hard multiplication into two easy ones (6 times 7 is 6 times 5 and 6 times 2) and so multiplies by two-digit numbers too. Shares into piles and counts how many come out. And decides what is done first when there are brackets.',
+        "works": 'The idea that a big sum is solved by cutting it up, not by memorising; the two ways of dividing that people actually use when speaking; and what brackets are for.',
+        "daily": 'When sharing something between several people, let them say how many each one gets. When shopping, cut a price up: \"12 euros each is 10 and 2 more, for three people\".'
+      },
       "mental-math": {
         "name": 'Mental Addition and Subtraction',
         "does": 'Solves addition and subtraction with increasingly large numbers (1 to 3 digits), with and without carrying, choosing the right answer.',
         "works": 'Mental calculation, decomposition strategies (10 + n), automating basic operations.',
         "daily": 'Calculate together without paper: "what is 23 + 14? And if we add 2 more?" Add the prices before paying.'
       },
+      "places": {
+        "name": 'Places and sizes',
+        "does": 'Looks at a picture and says whether the thing is inside or outside the box, on top of or underneath the chair, on the left or on the right of the tree. Also compares two real things: which is longer, which weighs more and which holds more.',
+        "works": 'Vocabulary of position and size, orientation in space, and comparing without measuring or counting.',
+        "daily": 'Ask for things by saying where they are: \"the glass that is inside the cupboard\". When carrying the shopping, ask which bag weighs more before picking it up.'
+      },
+      "shapes": {
+        "name": 'Shapes',
+        "does": 'Recognises flat shapes (circle, square, triangle, rectangle, pentagon, hexagon) and solids (cube, sphere, cylinder) through real objects, and counts the sides and corners of each figure.',
+        "works": 'Geometric vocabulary, attention to detail in a drawing, and the idea that a shape is recognised by what it is like, not by what it is for.',
+        "daily": 'Look for shapes out in the street: triangular road signs, square windows, cylindrical tins. Count the sides of a floor tile together.'
+      },
+      "geometry": {
+        "name": 'Geometry',
+        "does": 'Compares a corner with the corner of a sheet of paper to say whether the angle is right, acute or obtuse. Counts how many squares long the edge of a figure is and how many squares fit inside. And folds figures in half to see whether the two sides match.',
+        "works": 'Geometric vocabulary with its meaning (angle, edge, symmetrical), and the idea that perimeter and area can be counted, with no formula needed.',
+        "daily": 'Fold a piece of paper in half and see whether it matches. When putting down a mat or a rug, count together how many tiles it covers.'
+      },
+      "similar": {
+        "name": 'Same shapes',
+        "does": 'Compares two figures and says whether they are the same shape at another size, counting the little squares across and down. Counts the squares drawn on the sides of a triangle with a right corner. And looks at two ramps to say which one climbs more.',
+        "works": 'The idea of scale (the same shape, bigger), the relation between the sides of a right triangle counted in little squares, and slope as \"how much it climbs for how far it goes\".',
+        "daily": 'Look at an enlarged photo and a stretched one: which is the same shape? Going up a hill, talk about whether this one climbs more than that one.'
+      },
       "fractions-measures": {
-        "name": 'Fractions and Measures',
-        "does": 'Recognises halves, quarters and thirds; measures lengths and weights by picking the right unit (cm, m, g, kg); compares two measures.',
-        "works": 'Fractions as sharing, unit conversion, measure vocabulary (longer, heavier).',
-        "daily": 'Share a pizza or a sponge cake into halves and quarters. While cooking, measure with cups and spoons ("half a kilo of flour").'
+        "name": 'Fractions',
+        "does": 'Recognises halves, quarters and thirds, decides when two fractions are worth the same, adds and subtracts parts of the same size, and reads a part written with a point (0.5).',
+        "works": 'The fraction as sharing, the equivalence between different ways of saying the same amount, and the step from a fraction to a decimal.',
+        "daily": 'Share a pizza or a sponge cake into halves and quarters. When you read a price with a point, say out loud how much "and a half" is.'
+      },
+      "measures": {
+        "name": 'Measures',
+        "does": 'Picks the unit that fits each thing (cm, m, g, kg, ml, l) and estimates how long, how heavy or how much it holds.',
+        "works": 'Measure vocabulary (longer, heavier, holds more), and the idea that each thing is measured with a unit its own size.',
+        "daily": 'While cooking, measure with cups and spoons ("half a kilo of flour"). When shopping, look at the weight on the label together.'
+      },
+      "percent": {
+        "name": 'Percentages',
+        "does": 'Counts the coloured squares of a hundred grid to say the percentage. Works out how much is taken off and how much is left to pay, with the coins in front of them. Grows a recipe without breaking its proportion. And reads off a plan how many real metres something is.',
+        "works": 'The idea that \"per cent\" means \"out of a hundred\", the percentage applied to real money, the proportion of a recipe, and reading a plan to scale.',
+        "daily": 'In the sales, look at the sign together and work out what the price comes down to. When cooking for twice as many people, double both ingredients out loud.'
       },
       "money": {
         "name": 'Money',
@@ -101,6 +149,12 @@
         "does": 'Uses money like in real life: counts a purse, pays exactly, pays too much, checks the change, and works out how much is missing to buy something (the piggy bank).',
         "works": 'Real operations with money, sense of change, saving, price comparison.',
         "daily": 'Give them a small real budget and go with them to spend it: let them decide, pay and check the change themselves.'
+      },
+      "problems": {
+        "name": 'Problems',
+        "does": 'Reads a short problem and first decides what needs doing (add or take away), without working anything out. Then solves how many there are, with the picture in front of them to count.',
+        "works": 'Understanding the wording, the difference between understanding a problem and doing the sum, and the vocabulary of joining and taking away.',
+        "daily": 'Tell them problems from around the house out loud: \"there are 4 plates and I am bringing 2 more\". Let them say first whether to add or take away, before saying the number.'
       },
       "temperature": {
         "name": 'Water Temperature',
@@ -137,6 +191,24 @@
         "does": 'Learns the symbols (I, V, X, L, C, D, M) and combines them to read Roman numerals from 1 to 1000, with and without subtraction.',
         "works": 'Rules of the Roman system, equivalence with the decimal system, attention to the subtraction rules.',
         "daily": 'Look for Roman numerals in the street: old clocks, king names, building façades.'
+      },
+      "algebra": {
+        "name": 'The balance',
+        "does": 'Looks at a balance with one-kilo weights and a bag of unknown weight, and says how much the bag weighs so both pans come out level. Sees that a letter is the name of a number not known yet. And reads off a bar graph whether something goes up, goes down or stays the same.',
+        "works": 'The idea of an unknown without moving symbols about, balance as a way of reasoning, and reading a real graph.',
+        "daily": 'Look at the phone battery graph together: is it going up or down? When splitting the shopping into two bags, aim for them to weigh about the same and say so out loud.'
+      },
+      "charts": {
+        "name": 'Data and charts',
+        "does": 'Counts the pictures in a pictogram, reads the length of a bar against its scale, and finds a figure in a table. Also shares out equally (the average) and decides whether taking something out of a bag is certain, possible or impossible.',
+        "works": 'Reading charts, comparing amounts shown as pictures, and the first ideas of statistics and chance without formulas.',
+        "daily": 'Look at a chart in the newspaper or on the phone together: which bar is the tallest? When sharing something out at home, say out loud how many each one gets.'
+      },
+      "calendar": {
+        "name": 'The Calendar',
+        "does": 'Walks through the days of the week and the months of the year forwards and backwards, fills in the missing one, and groups the months into their four seasons.',
+        "works": 'Orientation in time, the order of cycles that come round again, and the vocabulary of days, months and seasons.',
+        "daily": 'Look at the kitchen calendar together each morning: what day it is today, what day it will be tomorrow, how many days are left until something they are waiting for.'
       },
       "clock": {
         "name": 'The Clock',

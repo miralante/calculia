@@ -10,8 +10,9 @@
     title: '🧩 Adivinanzas',
     instruction: 'Lee la adivinanza. Después elige la respuesta.',
     question: '¿Qué es?',
-    resumenFinal: 'Has ganado {n} estrellas. Ahora tienes {total} estrellas.',
-    endSummary: 'Has ganado {n} estrellas. Ahora tienes {total} estrellas.',
+    btnMenu: 'Volver al inicio',
+    proximoNivel: 'Siguiente paso: {n}',
+    endSummary: 'Has ganado {n} estrellas. Ahora tienes {stars} estrellas.',
     explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ ',
     explicacionIncorrectaB: ' no es correcto. La respuesta correcta es: ',
@@ -19,6 +20,6 @@
     refuerzoTitulo: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
-    transferencia: 'Esto te servirá para pensar con ingenio en la vida de cada día: cuando un problema tenga una solución sencilla que no esperabas.'
+    transfer: 'Esto te servirá para pensar con ingenio en la vida de cada día: cuando un problema tenga una solución sencilla que no esperabas.'
   }, 'es');
 })();

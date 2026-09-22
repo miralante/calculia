@@ -27,10 +27,38 @@
       <div class="stack" id="modes"></div>
     </section>
 
-    <!-- Pick level (after a mechanic is chosen on the start screen) -->
-    <section id="screenLevels" class="hidden stack centered">
-      <h2 data-i18n="levelsTitle">Elige una actividad</h2>
-      <div class="stack" id="levels"></div>
+    <!-- Reference screen: how the two hands are read. Shown before the
+         first round and reachable from the game, so the rule stays
+         consultable instead of having to be remembered. -->
+    <section id="screenLearn" class="hidden stack">
+      <div class="card reference-card stack">
+        <h2 class="reference-title" data-i18n="learnTitle">Cómo se lee el reloj</h2>
+        <p class="reference-text" data-i18n="learnIntro">El reloj tiene dos agujas. Cada aguja dice una cosa.</p>
+      </div>
+
+      <div class="card stack centered learn-example-card">
+        <div id="learnClock"></div>
+        <p class="learn-example" id="learnExample"></p>
+      </div>
+
+      <div class="card stack learn-legend">
+        <p class="legend-item">
+          <span class="legend-swatch swatch-hour" aria-hidden="true"></span>
+          <span data-i18n="learnHourHand">La aguja corta marca la hora.</span>
+        </p>
+        <p class="legend-item">
+          <span class="legend-swatch swatch-minute" aria-hidden="true"></span>
+          <span data-i18n="learnMinuteHand">La aguja larga marca los minutos.</span>
+        </p>
+      </div>
+
+      <div class="card stack learn-rules">
+        <p class="learn-rule" data-i18n="learnRuleOClock">Si la aguja larga está en el 12, la hora es en punto.</p>
+        <p class="learn-rule" data-i18n="learnRuleHalf">Si la aguja larga está en el 6, es y media.</p>
+      </div>
+
+      <button type="button" class="btn" id="learnStart" data-i18n="learnStart">Empezar a practicar →</button>
+      <button type="button" class="btn btn-secondary hidden" id="learnBack" data-i18n="learnBack">← Volver a la pregunta</button>
     </section>
 
     <!-- Game screen -->
@@ -38,6 +66,7 @@
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText">0 / 8</span>
+        <span class="difficulty" id="difficulty"></span>
       </div>
 
       <div class="card centered stack">
@@ -49,6 +78,7 @@
         <p id="explanation" aria-live="polite"></p>
       </div>
       <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn btn-secondary" id="btnLearn" data-i18n="learnOpen">Ver cómo se lee</button>
     </section>
 
     <!-- End screen -->
@@ -56,9 +86,9 @@
       <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
-      <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
+      <p id="transfer" class="transfer" data-i18n="transfer"></p>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secondary" id="btnOtherLevel" data-i18n="otherLevel">Elegir otra actividad</button>
+      <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
       <button type="button" class="btn btn-secondary" id="btnOtherMode" data-i18n="otherMode">Elegir otro modo</button>
       <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>

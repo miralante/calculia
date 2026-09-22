@@ -36,7 +36,7 @@
      cell already exists in the HTML with data-tool="<slug>"; this
      only fills in the text. */
   function renderActivityProgress() {
-    App.utils.$$('#progreso-actividades [data-tool]').forEach(function (cell) {
+    App.utils.$$('#progress-actividades [data-tool]').forEach(function (cell) {
       var data = App.storage.get(cell.dataset.tool);
       var stars = typeof data.stars === 'number' ? data.stars : 0;
       cell.textContent = stars > 0 ? '⭐ ' + stars : App.i18n.t('notStarted');

@@ -1,6 +1,6 @@
 /* ============================================================
-   Calculia — Stories (reasoning: order in time)
-   Data in data.js (DATA.niveles). Shared modules in assets/js/.
+   Calculia â€” Stories (reasoning: order in time)
+   Data in data.js (DATA.levels). Shared modules in assets/js/.
    Mechanic: tap the captions in the correct order. A tap out of
    order does not penalize: it just encourages trying again.
    ============================================================ */
@@ -27,6 +27,7 @@
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
   /* Round state */
   var level = null;
@@ -39,25 +40,17 @@
 
   function save() { App.storage.set(TOOL_ID, progress); }
 
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
-  function paintLevels() {
-    var cont = $('#levels');
-    cont.innerHTML = '';
-    DATA.niveles.forEach(function (n) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      var levelDescription = App.i18n.t('nivelDescripcion').replace('{n}', n.historias[0].vinetas.length);
-      btn.innerHTML = levelDescription;
-      btn.addEventListener('click', function () { startRound(n); });
-      cont.appendChild(btn);
-    });
+  /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
+  function levelFromProgress() {
+    var idxN = Math.min(progress.completedRounds || 0, DATA.levels.length - 1);
+    return DATA.levels[idxN];
   }
 
   function startRound(n) {
     level = n;
-    stories = App.utils.shuffle(level.historias).slice(0, DATA.perRound);
+    stories = App.utils.shuffle(level.stories).slice(0, DATA.perRound);
     index = 0;
     roundCorrect = 0;
     screenStart.classList.add('hidden');
@@ -86,15 +79,15 @@
     paintSlots();
 
     availableEl.innerHTML = '';
-    App.utils.shuffle(story.vinetas.map(function (picto, orden) {
-      return { picto: picto, orden: orden };
+    App.utils.shuffle(story.panels.map(function (picto, order) {
+      return { picto: picto, order: order };
     })).forEach(function (v) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn vineta';
       btn.textContent = v.picto;
       btn.setAttribute('aria-label', App.i18n.t('vinetaAria'));
-      btn.addEventListener('click', function () { tap(v.orden, btn); });
+      btn.addEventListener('click', function () { tap(v.order, btn); });
       availableEl.appendChild(btn);
     });
 
@@ -112,16 +105,16 @@
     });
   }
 
-  function tap(orden, btn) {
+  function tap(order, btn) {
     var story = stories[index];
-    if (orden === nextExpected) {
-      slots[orden] = story.vinetas[orden];
+    if (order === nextExpected) {
+      slots[order] = story.panels[order];
       paintSlots();
       btn.disabled = true;
       btn.classList.add('colocada');
       App.feedback.success(feedbackEl);
       nextExpected += 1;
-      if (nextExpected >= story.vinetas.length) {
+      if (nextExpected >= story.panels.length) {
         endStory();
       }
     } else {
@@ -132,21 +125,21 @@
         showExplanation();
       }
       btn.disabled = true;
-      btn.classList.add('animo');
+      btn.classList.add('encourage');
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(App.utils.$$('.vineta', availableEl), explanationWrap);
     }
   }
 
-  /* Socratic method (rule 12). First mistake → hint (no answer);
-     second mistake → explanation with the correct beginning. */
+  /* Socratic method (rule 12). First mistake â†’ hint (no answer);
+     second mistake â†’ explanation with the correct beginning. */
   function showHint() {
     explanationEl.textContent = App.i18n.t('pista');
     explanationWrap.classList.remove('hidden');
   }
 
   function showExplanation() {
-    explanationEl.textContent = App.i18n.t('explicacion');
+    explanationEl.textContent = App.i18n.t('explanation');
     explanationWrap.classList.remove('hidden');
   }
 
@@ -169,24 +162,27 @@
   }
 
   function endRound() {
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
-    $('#endSummary').textContent.textContent = '';
-$('#transfer').textContent.textContent = '';
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{stars}', progress.stars);
+    }
     App.feedback.celebrate(App.i18n.t('finalTitulo'));
   }
 
   /* Events */
   btnNext.addEventListener('click', next);
-  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
-  $('#btnOtherLevel').addEventListener('click', function () {
+  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnMenu').addEventListener('click', function () {
     screenEnd.classList.add('hidden');
-    paintLevels();
     screenStart.classList.remove('hidden');
   });
 
-  paintLevels();
   paintStars();
 })();
 

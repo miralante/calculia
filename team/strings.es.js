@@ -78,17 +78,65 @@
         "works": 'Memoria de las tablas, automatización del cálculo, asociación número×número con su resultado.',
         "daily": 'Llevad las tablas a la vida real: 3 bandejas con 4 pasteles son 12, 4 coches con 2 ruedas son 8.'
       },
+      "divisibility": {
+        "name": 'Grupos exactos',
+        "does": 'Pone los puntos en filas para ver si un número se reparte exacto, aprende las reglas rápidas (entre 2, entre 5, entre 10 y entre 3), prueba si un número es primo, busca cuándo coinciden dos cosas que se repiten y cuánto mide el lado de un cuadrado.',
+        "works": 'La idea de reparto exacto frente a "sobra algo", el vocabulario de múltiplo, divisor y primo, y la potencia vista como un cuadrado que se puede contar.',
+        "daily": 'Al repartir cartas o caramelos, mirad si sale exacto o sobra. Si dos autobuses pasan cada 10 y cada 15 minutos, calculad juntos cuándo vuelven a coincidir.'
+      },
+      "operations": {
+        "name": 'Cuentas grandes',
+        "does": 'Ve que 3 por 4 y 4 por 3 son los mismos puntos girados. Parte una multiplicación difícil en dos fáciles (6 por 7 son 6 por 5 y 6 por 2) y así multiplica también por números de dos cifras. Reparte en montones y cuenta cuántos salen. Y decide qué se hace primero cuando hay paréntesis.',
+        "works": 'La idea de que una cuenta grande se resuelve partiendo, no memorizando; las dos maneras de dividir que se usan al hablar; y para qué sirven los paréntesis.',
+        "daily": 'Al repartir algo entre varios, dejadle decir cuántos le tocan a cada uno. En la compra, partid un precio: "12 euros cada uno son 10 y 2 más, por tres personas".'
+      },
       "mental-math": {
         "name": 'Suma y Resta Mental',
         "does": 'Resuelve sumas y restas cada vez más largas (de 1 a 3 cifras), con y sin llevada, eligiendo la respuesta correcta.',
         "works": 'Cálculo mental, estrategias de descomposición (10 + n), automatización de las operaciones básicas.',
         "daily": 'Calculad juntos sin papel: "¿cuánto es 23 + 14? ¿y si añadimos 2 más?". Sumad los precios antes de pagar.'
       },
+      "places": {
+        "name": 'Sitios y tamaños',
+        "does": 'Mira un dibujo y dice si la cosa está dentro o fuera de la caja, encima o debajo de la silla, a la izquierda o a la derecha del árbol. También compara dos cosas reales: cuál es más larga, cuál pesa más y en cuál cabe más.',
+        "works": 'Vocabulario de posición y de tamaño, orientación en el espacio, y comparar sin medir ni contar.',
+        "daily": 'Pedidle cosas diciendo dónde están: "el vaso que está dentro del armario". Al cargar la compra, preguntadle qué bolsa pesa más antes de cogerla.'
+      },
+      "shapes": {
+        "name": 'Formas',
+        "does": 'Reconoce formas planas (círculo, cuadrado, triángulo, rectángulo, pentágono, hexágono) y cuerpos (cubo, esfera, cilindro) a través de objetos reales, y cuenta los lados y las esquinas de cada figura.',
+        "works": 'Vocabulario geométrico, atención al detalle del dibujo, y la idea de que una forma se reconoce por cómo es, no por para qué sirve.',
+        "daily": 'Buscad formas por la calle: las señales triangulares, las ventanas cuadradas, las latas cilíndricas. Contad juntos los lados de una baldosa.'
+      },
+      "geometry": {
+        "name": 'Geometría',
+        "does": 'Compara una esquina con la de una hoja de papel para decir si el ángulo es recto, agudo u obtuso. Cuenta cuántos cuadraditos mide el borde de una figura y cuántos cuadrados caben dentro. Y dobla figuras por la mitad para ver si los dos lados coinciden.',
+        "works": 'Vocabulario geométrico con su significado (ángulo, borde, simétrico), y la idea de que el perímetro y el área se pueden contar, no hace falta ninguna fórmula.',
+        "daily": 'Doblad un papel por la mitad y mirad si coincide. Al poner un mantel o una alfombra, contad juntos cuántas baldosas ocupa.'
+      },
+      "similar": {
+        "name": 'Formas parecidas',
+        "does": 'Compara dos figuras y dice si son la misma forma a otro tamaño, contando los cuadraditos de ancho y de alto. Cuenta los cuadrados dibujados sobre los lados de un triángulo con una esquina recta. Y mira dos rampas para decir cuál sube más.',
+        "works": 'La idea de escala (la misma forma más grande), la relación entre los lados de un triángulo recto contada en cuadraditos, y la pendiente como «cuánto sube por lo que avanza».',
+        "daily": 'Mirad una foto ampliada y otra estirada: ¿cuál es la misma forma? Al subir una cuesta, comentad si esta sube más que aquella.'
+      },
       "fractions-measures": {
-        "name": 'Fracciones y Medidas',
-        "does": 'Reconoce medios, cuartos y tercios; mide longitudes y pesos eligiendo la unidad (cm, m, g, kg) y compara dos medidas.',
-        "works": 'Fracciones como reparto, conversión entre unidades, vocabulario de medida (más largo, más pesado).',
-        "daily": 'Partid una pizza o un bizcocho en mitades y cuartos. Al cocinar, medid con tazas y cucharas ("medio kilo de harina").'
+        "name": 'Fracciones',
+        "does": 'Reconoce medios, cuartos y tercios, decide cuándo dos fracciones valen lo mismo, suma y resta partes del mismo tamaño y lee la parte escrita con coma (0,5).',
+        "works": 'La fracción como reparto, la equivalencia entre formas distintas de decir lo mismo, y el paso de la fracción al decimal.',
+        "daily": 'Partid una pizza o un bizcocho en mitades y cuartos. Al leer un precio con coma, decid en voz alta cuánto es "y medio".'
+      },
+      "measures": {
+        "name": 'Medidas',
+        "does": 'Elige la unidad que corresponde a cada cosa (cm, m, g, kg, ml, l) y estima cuánto mide, cuánto pesa o cuánto cabe.',
+        "works": 'Vocabulario de medida (más largo, más pesado, cabe más), y la idea de que cada cosa se mide con la unidad de su tamaño.',
+        "daily": 'Al cocinar, medid con tazas y cucharas ("medio kilo de harina"). En la compra, mirad juntos el peso en la etiqueta.'
+      },
+      "percent": {
+        "name": 'Porcentajes',
+        "does": 'Cuenta los cuadraditos pintados de una cuadrícula de cien para decir el porcentaje. Calcula cuánto se descuenta y cuánto queda por pagar, con las monedas delante. Hace crecer una receta sin romper la proporción. Y lee en un plano cuántos metros son de verdad.',
+        "works": 'La idea de que "por ciento" es "de cada cien", el porcentaje aplicado al dinero de verdad, la proporción de una receta y la lectura de un plano a escala.',
+        "daily": 'En las rebajas, mirad juntos el cartel y calculad cuánto se queda el precio. Al cocinar para el doble de gente, doblad los dos ingredientes en voz alta.'
       },
       "money": {
         "name": 'El Dinero',
@@ -101,6 +149,12 @@
         "does": 'Usa el dinero como en la vida real: cuenta un monedero, paga justo, paga de más, comprueba el cambio y calcula cuánto le falta para comprar algo (la hucha).',
         "works": 'Operaciones reales con dinero, sentido del cambio, ahorro y comparación de precios.',
         "daily": 'Dadle un presupuesto pequeño real y acompañadle a gastarlo: que decida, pague y compruebe el cambio él mismo.'
+      },
+      "problems": {
+        "name": 'Problemas',
+        "does": 'Lee un problema corto y decide primero qué hay que hacer (sumar o restar), sin calcular. Después resuelve cuántos son, con el dibujo delante para poder contar.',
+        "works": 'Comprensión del enunciado, la diferencia entre entender el problema y hacer la cuenta, y el vocabulario de juntar y quitar.',
+        "daily": 'Contadle problemas de casa en voz alta: "hay 4 platos y traigo 2 más". Dejad que diga primero si hay que sumar o quitar, antes de decir el número.'
       },
       "temperature": {
         "name": 'Temperatura del Agua',
@@ -137,6 +191,24 @@
         "does": 'Aprende los símbolos (I, V, X, L, C, D, M) y los combina para leer números romanos del 1 al 1000, con y sin sustraer.',
         "works": 'Reglas del sistema romano, equivalencia con el sistema decimal, atención a las reglas de sustracción.',
         "daily": 'Buscad números romanos en la calle: en los relojes antiguos, en los nombres de reyes, en las fachadas de edificios.'
+      },
+      "algebra": {
+        "name": 'La balanza',
+        "does": 'Mira una balanza con pesas de un kilo y una bolsa de peso desconocido, y dice cuánto pesa la bolsa para que los dos platos queden iguales. Ve que una letra es el nombre de un número que aún no se sabe. Y lee en una gráfica de barras si algo sube, baja o se queda igual.',
+        "works": 'La idea de incógnita sin manipular símbolos, el equilibrio como forma de razonar, y la lectura de una gráfica de verdad.',
+        "daily": 'Mirad juntos la gráfica de la batería del móvil: ¿sube o baja? Al repartir la compra en dos bolsas, buscad que pesen parecido y decidlo en voz alta.'
+      },
+      "charts": {
+        "name": 'Datos y gráficos',
+        "does": 'Cuenta los dibujos de un pictograma, lee la altura de una barra sobre su escala y busca un dato en una tabla. También reparte a partes iguales (la media) y decide si sacar algo de una bolsa es seguro, puede ser o imposible.',
+        "works": 'Lectura de gráficos, comparar cantidades representadas, y las primeras ideas de estadística y azar sin fórmulas.',
+        "daily": 'Mirad juntos un gráfico del periódico o del móvil: ¿qué barra es la más alta? Al repartir algo en casa, decid en voz alta cuántos le tocan a cada uno.'
+      },
+      "calendar": {
+        "name": 'El Calendario',
+        "does": 'Recorre los días de la semana y los meses del año hacia delante y hacia atrás, rellena el que falta y agrupa los meses en sus cuatro estaciones.',
+        "works": 'Orientación en el tiempo, el orden de los ciclos que se repiten, y el vocabulario de los días, los meses y las estaciones.',
+        "daily": 'Mirad juntos el calendario de la cocina cada mañana: qué día es hoy, qué día será mañana, cuántos días faltan para algo que espera.'
       },
       "clock": {
         "name": 'El Reloj',

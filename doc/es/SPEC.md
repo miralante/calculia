@@ -5,14 +5,15 @@
 
 ## 1. Qué es Calculia
 
-Una aplicación web gratuita y estática con 15 actividades para practicar
+Una aplicación web gratuita y estática con 27 actividades para practicar
 cálculo y razonamiento lógico:
 
-- **Matemáticas**: Los Números, Fracciones y Medidas, Restar y Cálculo
-  Mental, Dinero, Las Tablas, Cantidades, Números Romanos, Temperatura
-  del agua.
-- **Razonamiento y lógica**: Adivinanzas, Patrones, El Monedero, El
-  Reloj, Historias, ¿Qué no encaja?, Puzzle.
+- **Matemáticas**: Sitios y tamaños, Los Números, Formas, Geometría, Formas parecidas, Fracciones, Medidas, Restar y
+  Cálculo Mental, Dinero, Porcentajes, Las Tablas, Grupos exactos, Cuentas grandes,
+  Cantidades, Números Romanos,
+  Problemas, Temperatura del agua.
+- **Razonamiento y lógica**: Adivinanzas, Patrones, El Monedero, La balanza, Datos
+  y gráficos, El Calendario, El Reloj, Historias, ¿Qué no encaja?, Puzzle.
 
 Calculia es una de las apps de la suite Miralante, junto a Apptonomia
 (la suite original, más amplia, de actividades de terapia ocupacional
@@ -127,6 +128,33 @@ practicado con la vida fuera de la app. En concreto:
   todavía no ha explicado (p. ej. mostrar "MCMLXXXIX" antes de que se
   haya enseñado la tabla I/V/X) deja de ser significativo y pasa a ser
   confuso — rompe la progresión gradual (regla 13 de §6).
+
+#### Enseñar antes de preguntar
+
+Una actividad que solo pregunta **evalúa, no enseña**. Quien ya sabe la
+respuesta acierta; quien no la sabe falla y sigue sin saberla. Por eso
+una actividad debería ofrecer, antes de la primera pregunta:
+
+1. **Para qué sirve** esto fuera de la app (una frase, clave
+   `contexto`).
+2. **La regla o la referencia**, en una pantalla propia: la tabla, el
+   esquema o el ejemplo resuelto del que sale la respuesta.
+3. **La práctica**, solo después.
+
+La pantalla de referencia **no desaparece al empezar**: se puede volver
+a abrir durante la ronda, y volver de ella no reinicia la partida.
+Sostener la regla a la vista no es hacer trampa — memorizarla no es el
+objetivo, usarla sí.
+
+Referencias en el código: Números Romanos (`introScreen` →
+`famousScreen` → `reminderScreen` → quiz, con la tabla I/V/X como pista
+permanente), El Reloj (`screenLearn`, con cada aguja de un color y su
+etiqueta) y Las Tablas (`screenLearn`, la tabla con puntos antes de
+practicarla).
+
+Cuando el color codifique la referencia (una aguja, una letra, una
+cifra), nunca puede ser la única pista: la forma, la longitud o el texto
+deben decir lo mismo (regla 1.4.1, ver §6.1).
 
 ### 3.7 Comunicación persuasiva al servicio del aprendizaje
 
@@ -434,6 +462,102 @@ Decisiones explícitas que pueden sorprender — están aquí para que no se
 | No usa dark patterns (registros forzados, casillas premarcadas, costes ocultos, alertas falsas) | Confianza y accesibilidad; choca con `§3.4` y `§3.7` |
 | No resta estrellas ni progreso como castigo | El producto solo suma, nunca resta (`§3.1`, principio 6) |
 | No usa ejemplos "significativos" con símbolos o reglas que la actividad todavía no ha enseñado | Rompe la progresión gradual (`§6`, regla 13) y la lectura fácil (`§3.3`) |
+| No exige pericia de resolución simbólica en los contenidos avanzados de la ESO (álgebra, trigonometría, funciones, geometría analítica...) | Esos contenidos se presentan como concepto aplicado, no como destreza a dominar — ver `§8.1` |
+
+### 8.1 Alcance curricular: el currículo completo, con distinta ambición según el nivel
+
+**El punto de partida es un derecho, no una concesión.** Lo que busca
+Calculia es la **igualdad de oportunidades y el mismo derecho a adquirir
+conocimiento** que tiene cualquier persona sin dificultades de
+aprendizaje. Que la usuaria o el usuario tipo tenga discapacidad
+intelectual no es motivo para ofrecerle un currículo recortado: es
+motivo para diseñar con más cuidado cómo se le presenta ese currículo
+completo. El repositorio guarda el temario de referencia de Matemáticas
+de 1º de Primaria a 4º de ESO en [`curriculum/`](../../curriculum/);
+Calculia se compromete a cubrirlo entero, tarde o temprano. El listado
+concreto de qué está hecho y qué falta vive en [`TODO.md`](../../TODO.md)
+(raíz del repositorio) y se mantiene al día conforme se implementan
+actividades.
+
+**Pero cubrir el currículo no significa exigir pericia en todo él.**
+Para esta audiencia, no tiene sentido pretender que alguien domine
+ecuaciones de segundo grado o funciones logarítmicas del mismo modo que
+domina sumar. Lo que Calculia promete varía según el contenido, en dos
+niveles de ambición:
+
+1. **Cimientos** — aritmética básica: contar, sumar y restar, valor
+   posicional, los números ancla (1, 5, 10), resolución de problemas
+   sencillos con apoyo visual. Aquí el objetivo **sí es el dominio**:
+   práctica progresiva, paciente, hasta que la persona lo hace con
+   soltura. Es la base sin la cual nada más tiene sentido.
+2. **Conceptos** — todo lo demás: geometría, fracciones y decimales más
+   allá de lo básico, estadística, probabilidad, proporcionalidad, y
+   los contenidos abstractos de la ESO (álgebra, trigonometría,
+   funciones, geometría analítica, combinatoria...). Aquí el objetivo
+   **no es el dominio, es la exposición accesible**: presentar qué es
+   la idea y, siempre que sea posible, para qué sirve, en lectura
+   fácil, sin exigir manejo simbólico ni procedimientos de cálculo.
+   Trigonometría se presenta como "¿qué rampa está más inclinada?" con
+   una comparación visual, nunca como calcular un seno o un coseno;
+   álgebra se presenta como una balanza que hay que mantener
+   equilibrada, nunca como manipular símbolos.
+
+**"Cimientos primero" describe el orden de trabajo, no el alcance.** No
+tiene sentido avanzar en el temario mientras el cálculo básico no esté
+asentado — por eso las actividades de cimientos se implementan primero
+— pero eso ya no significa que el resto quede fuera del compromiso:
+significa que le llega después, y con la ambición de "concepto" en vez
+de "dominio".
+
+**Cada paso con apoyo visual.** La cantidad se dibuja, no solo se
+escribe: una barra de diez puntos es una decena, un punto suelto es una
+unidad, y lo que se quita lleva una cruz. Ver la cantidad es parte de la
+explicación, no un adorno. Referencia en el código: `tools/mental-math/`
+(actividad `anchors`).
+
+**Cada actividad tiene un trabajo, y solo uno.** La escalera aritmética
+de cimientos pertenece a las **actividades de aritmética**
+(`tools/mental-math/`, `tools/math-tables/`); no se reparte por el resto
+del catálogo. Meter cuentas en una actividad que no va de cuentas le
+quita sitio a lo que sí enseña y añade una dificultad que no venía al
+caso.
+
+El caso claro es el **ascensor** (actividad `positivos-y-negativos` en
+`tools/numbers/`): está ahí para **entender los números positivos y
+negativos**, y nada más. Las plantas bajo el suelo son negativas, la
+planta baja es el 0, las de arriba positivas; la persona sube y baja y
+ve cómo cambia el número al cruzar el cero. **No plantea operaciones ni
+preguntas de opción múltiple**, y no debe hacerlo: su valor está en que
+el número negativo se vuelva un sitio al que se puede ir, no un símbolo
+que hay que calcular.
+
+**Nunca una llevada antes de tiempo.** En los niveles de ancla, los
+números se eligen para que la operación no cruce la decena: al sumar,
+las unidades tienen sitio; al restar, hay bastante que quitar. Así el
+único cambio entre un nivel y el siguiente es el ancla (regla 13).
+
+Un contenido en nivel "concepto" sigue estando sujeto a todas las
+demás reglas de este documento — lectura fácil (`§3.3`), progresión
+gradual (`§6`, regla 13), método socrático (`§3.8`) — solo cambia lo que
+se espera que la persona sea capaz de hacer al final: reconocer y
+relacionar la idea, no ejecutar el procedimiento formal.
+
+**Nada de esto se le nombra a quien usa la app.** El currículo decide en
+qué orden se construyen y se muestran las actividades, pero la persona no
+debe encontrárselo nunca: decirle que una pantalla es "2º de Primaria" le
+está diciendo que hace un ejercicio de niño, y eso sobra. En lo que se
+sirve al navegador no aparecen etapas, cursos ni nombres de tema —
+tampoco en los comentarios del código, que se leen con "ver código
+fuente". La trazabilidad vive en [`TODO.md`](../../TODO.md) y en este
+documento, que no se sirven. `scripts/check.js` (punto 6.1) lo comprueba
+en cada cambio.
+
+Los niveles se nombran por lo que se hace en ellos ("Hasta 10", "Sumar
+5", "Con menos marcas"), nunca por el curso al que pertenecen.
+
+Cuando una actividad cubra un contenido curricular, conviene que su
+documentación lo diga, para que el hueco de cobertura sea visible sin
+tener que leer el código.
 
 ## 9. Política de idioma
 

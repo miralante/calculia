@@ -21,13 +21,18 @@
  *     color 1 is the part that completes ten and color 2 the rest.
  */
 var DATA = {
+  /* Menu order goes from the most concrete to the most abstract:
+     counting, then adding, then the two ideas that build on adding
+     (bridging ten, odd/even), then the times tables, and dividing last.
+     The reference behind this order is in TODO.md, which is not served to
+     the browser. Keep this order when adding a mode. */
   modes: [
     { id: 'steps', icon: '🔼' },
     { id: 'add', icon: '➕' },
     { id: 'decompose', icon: '🔟' },
+    { id: 'parity', icon: '🟦' },
     { id: 'multiply', icon: '✖️' },
-    { id: 'divide', icon: '➗' },
-    { id: 'parity', icon: '🟦' }
+    { id: 'divide', icon: '➗' }
   ],
   stepLevels: [1, 2, 3, 5, 10],
   stepBaseMax: 12,

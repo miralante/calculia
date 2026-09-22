@@ -21,6 +21,11 @@
 
 .center-row { justify-content: center; }
 
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario, #666);
+}
+
 /* Cabecera de la mini-ronda de refuerzo de fallos. Solo se muestra
    cuando enRefuerzo=true (app.js). Borde y fondo suaves con el
    color del módulo para que sea visible pero sin parecer una
@@ -67,15 +72,6 @@
   color: var(--color-texto-suave);
   text-align: center;
   margin: 0;
-}
-
-.btn-level { min-width: 300px; align-self: center; }
-
-.level-info {
-  display: block;
-  font-weight: 400;
-  font-size: var(--texto-pequeno);
-  opacity: 0.9;
 }
 
 .progress-bar { margin-top: var(--espacio); }

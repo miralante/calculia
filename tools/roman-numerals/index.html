@@ -111,13 +111,7 @@
     </section>
 
     <!-- Pantalla 4: niveles -->
-    <section id="levelsScreen" class="hidden stack">
-      <div class="row center-row">
-        <button type="button" class="btn btn-secondary" id="levelsBack" data-i18n="core.back">← Volver</button>
-      </div>
-      <h2 class="centered" data-i18n="levelsTitle">Elige una actividad</h2>
-      <div class="stack" id="levels"></div>
-    </section>
+    
 
     <!-- Pantalla de juego -->
     <section id="quizScreen" class="hidden stack">
@@ -127,6 +121,7 @@
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText">0 / 8</span>
+        <span class="difficulty" id="difficulty"></span>
       </div>
       <!-- Cabecera opcional para la mini-ronda de refuerzo de fallos.
            Se muestra solo cuando se entra en ella, para que la persona
@@ -153,9 +148,9 @@
       <div class="big-emoji" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="finalSummary"></p>
-      <p id="transfer" class="transferencia" data-i18n="transferencia"></p>
+      <p id="transfer" class="transfer" data-i18n="transfer"></p>
       <button type="button" class="btn" id="replayBtn" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secondary" id="otherLevelBtn" data-i18n="chooseAnotherLevel">Elegir otra actividad</button>
+      <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
       <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>

@@ -7,6 +7,11 @@
 .instruction { font-size: var(--texto-base); }
 .center-row { justify-content: center; }
 
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario, #666);
+}
+
 /* Activity menu */
 .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
 .btn-actividad {
@@ -22,7 +27,6 @@
 .extra-note { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
-.btn-level { min-width: 300px; align-self: center; }
 #btnBackToMenu { align-self: center; }
 
 /* Color-coded digits by place value */
@@ -336,3 +340,117 @@
   background: var(--color-superficie);
 }
 
+
+/* ---- Ordinal numbers: the queue ----
+   The flag column and the arrow column use the same track width as the
+   members so the arrow always lands exactly over the one it points at. */
+.queue-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.queue-member,
+.queue-start,
+.queue-pointer,
+.queue-start-spacer {
+  flex: 0 0 auto;
+  width: 44px;
+  text-align: center;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+.queue-start {
+  font-size: 1.6rem;
+}
+/* The pointer row is only a position marker, so it must not add height
+   when no arrow is shown. */
+.queue-pointers {
+  min-height: 2.2rem;
+}
+.queue-pointer {
+  font-size: 1.5rem;
+}
+
+/* ---- Comparison: two numbers and the missing sign ---- */
+.compare-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.compare-side {
+  font-size: 2rem;
+  font-weight: 700;
+}
+/* The gap is drawn as an empty slot so it reads as "something goes here",
+   not as a character that is already part of the comparison. */
+.compare-gap {
+  min-width: 2.6rem;
+  padding: 2px 8px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-texto-suave);
+  border: 3px dashed var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+/* Two stacked rows of blocks, one per side, so the amounts line up
+   vertically and can be compared by length. */
+.compare-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+.compare-sign {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+/* ---- The number line ----
+   Ticks and the mark are positioned along the rule by percentage, so the
+   line keeps its proportions at any width (down to a 320px phone). */
+.number-line {
+  position: relative;
+  height: 76px;
+  margin: 18px 10px 6px;
+}
+.line-rule {
+  position: absolute;
+  top: 34px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-texto);
+}
+.line-tick {
+  position: absolute;
+  top: 28px;
+  width: 0;
+  border-left: 3px solid var(--color-texto);
+  height: 16px;
+  transform: translateX(-50%);
+}
+.line-label {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+/* The mark sits above the rule so it never covers a label. */
+.line-mark {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--color-foco);
+}

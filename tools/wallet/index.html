@@ -13,9 +13,9 @@
 <body>
   <div class="container">
     <header class="tool-header">
-      <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Back</a>
-      <h1 data-i18n="title">💶 The Wallet</h1>
-      <span class="stars" id="stars">⭐ 0</span>
+      <a href="../../site/index.html" class="back-link" data-i18n="core.back">â† Back</a>
+      <h1 data-i18n="title">ðŸ’¶ The Wallet</h1>
+      <span class="stars" id="stars">â­ 0</span>
     </header>
 
     <!-- Screen: 5-activity menu -->
@@ -25,32 +25,32 @@
       </div>
       <div class="card-grid">
         <button type="button" class="activity-card" data-activity="count">
-          <span class="picto" aria-hidden="true">🪙</span>
+          <span class="picto" aria-hidden="true">ðŸª™</span>
           <span class="name" data-i18n="menuCount">How much is there?</span>
           <span class="detail" data-i18n="menuCountDetail">Look at the money and choose the total.</span>
         </button>
         <button type="button" class="activity-card" data-activity="pay">
-          <span class="picto" aria-hidden="true">🛒</span>
+          <span class="picto" aria-hidden="true">ðŸ›’</span>
           <span class="name" data-i18n="menuPay">Pay the exact price</span>
           <span class="detail" data-i18n="menuPayDetail">Touch the money up to the exact price.</span>
         </button>
         <button type="button" class="activity-card" data-activity="payWith">
-          <span class="picto" aria-hidden="true">💵</span>
+          <span class="picto" aria-hidden="true">ðŸ’µ</span>
           <span class="name" data-i18n="menuPayWith">What do I pay with?</span>
           <span class="detail" data-i18n="menuPayWithDetail">Choose the money that is enough.</span>
         </button>
         <button type="button" class="activity-card" data-activity="change">
-          <span class="picto" aria-hidden="true">🔍</span>
+          <span class="picto" aria-hidden="true">ðŸ”</span>
           <span class="name" data-i18n="menuCheckChange">Is the change right?</span>
           <span class="detail" data-i18n="menuCheckChangeDetail">Count the change and decide.</span>
         </button>
         <button type="button" class="activity-card" data-activity="piggyBank">
-          <span class="picto" aria-hidden="true">🐷</span>
+          <span class="picto" aria-hidden="true">ðŸ·</span>
           <span class="name" data-i18n="menuPiggyBank">The Piggy Bank</span>
           <span class="detail" data-i18n="menuPiggyBankDetail">How much is missing to buy it?</span>
         </button>
         <button type="button" class="activity-card" data-activity="rounding">
-          <span class="picto" aria-hidden="true">🎯</span>
+          <span class="picto" aria-hidden="true">ðŸŽ¯</span>
           <span class="name" data-i18n="menuRounding">More or less</span>
           <span class="detail" data-i18n="menuRoundingDetail">How much is it, without counting cents?</span>
         </button>
@@ -58,20 +58,14 @@
     </section>
 
     <!-- Levels screen (shared by every activity) -->
-    <section id="screenLevels" class="hidden stack centered">
-      <div class="row"><button type="button" class="btn btn-secondary" id="btnBackToMenuLevels" data-i18n="backToMenu">← Menu</button></div>
-      <div class="row center-row">
-        <p class="instruction" id="activityInstruction"></p>
-      </div>
-      <h2 data-i18n="chooseLevel">Choose a step</h2>
-      <div class="stack" id="levels"></div>
-    </section>
+    
 
     <!-- Quiz game screen (shared: count, payWith, change, piggyBank) -->
     <section id="screenQuizGame" class="hidden stack">
       <div class="progress-bar">
         <div class="progress-fill" id="progressQuizFill"></div>
         <span class="progress-text" id="progressQuizText">0 / 6</span>
+        <span class="difficulty" id="difficulty"></span>
       </div>
 
       <div class="row center-row">
@@ -86,7 +80,7 @@
       <div class="row explanation hidden" id="quizExplanationWrap">
         <p id="quizExplanation" aria-live="polite"></p>
       </div>
-      <button type="button" class="btn hidden" id="btnNextQuiz" data-i18n="core.next">Next →</button>
+      <button type="button" class="btn hidden" id="btnNextQuiz" data-i18n="core.next">Next â†’</button>
     </section>
 
     <!-- Pay-exactly game screen (interactive, its own) -->
@@ -94,6 +88,7 @@
       <div class="progress-bar">
         <div class="progress-fill" id="progressPayFill"></div>
         <span class="progress-text" id="progressPayText">0 / 6</span>
+        <span class="difficulty" id="difficulty"></span>
       </div>
 
       <div class="card centered stack">
@@ -102,15 +97,15 @@
       </div>
 
       <div class="row center-row">
-        <p class="total" id="totalPlaced" aria-live="polite">You have put in: 0,00 €</p>
-        <button type="button" class="btn btn-secondary" id="btnPayHint" data-i18n="btnHint">💡 Help</button>
+        <p class="total" id="totalPlaced" aria-live="polite">You have put in: 0,00 â‚¬</p>
+        <button type="button" class="btn btn-secondary" id="btnPayHint" data-i18n="btnHint">ðŸ’¡ Help</button>
       </div>
 
       <div class="stack-monedas" id="money"></div>
 
-      <div class="row center-row acciones">
-        <button type="button" class="btn btn-secondary" id="btnRemoveLast" data-i18n="removeLast">↩ Remove last</button>
-        <button type="button" class="btn btn-secondary" id="btnClear" data-i18n="clear">🗑 Empty</button>
+      <div class="row center-row actions">
+        <button type="button" class="btn btn-secondary" id="btnRemoveLast" data-i18n="removeLast">â†© Remove last</button>
+        <button type="button" class="btn btn-secondary" id="btnClear" data-i18n="clear">ðŸ—‘ Empty</button>
         <button type="button" class="btn" id="btnCheck" data-i18n="check">Check</button>
       </div>
 
@@ -118,20 +113,20 @@
         <p id="payHintText" aria-live="polite"></p>      </div>
 
       <div class="feedback" id="payFeedback" aria-live="polite"></div>
-      <button type="button" class="btn hidden" id="btnNextPay" data-i18n="core.next">Next →</button>
+      <button type="button" class="btn hidden" id="btnNextPay" data-i18n="core.next">Next â†’</button>
     </section>
 
     <!-- End screen (shared by every activity) -->
     <section id="screenEnd" class="hidden centered stack" aria-live="polite">
-      <div class="emoji-large" aria-hidden="true">🎉</div>
+      <div class="emoji-large" aria-hidden="true">ðŸŽ‰</div>
       <h2 data-i18n="core.roundComplete">Round complete!</h2>
       <p id="endSummary"></p>
       <p id="contexto" class="contexto"></p>
-      <p id="explicacion" class="explicacion"></p>
+      <p id="explanation" class="explanation"></p>
       <p id="transfer" class="transfer" data-i18n="transfer"></p>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Play again</button>
-      <button type="button" class="btn btn-secondary" id="btnAnotherLevelEnd" data-i18n="btnAnotherLevel">Choose another step</button>
-      <button type="button" class="btn btn-secondary" id="btnBackToMenuEnd" data-i18n="backToMenu">← Menu</button>
+      <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
+      <button type="button" class="btn btn-secondary" id="btnBackToMenuEnd" data-i18n="backToMenu">â† Menu</button>
     </section>
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>

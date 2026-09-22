@@ -10,6 +10,8 @@
     title: '👀 Quantities',
     instruction: 'Read and write numbers up to one billion.',
     choosePractice: 'Choose what you want to practise.',
+    btnMenu: 'Back to start',
+    proximoNivel: 'Next step: {n}',
 
     readName: 'Read numbers',
     readDetail: 'Look at the number and type it.',
@@ -39,7 +41,7 @@
     reinforceDone: "Reinforcement done! You've got them all.",
 
     hintRead: 'Count the digits. If there are four or more, group them in threes from the right.',
-    hintWrite: 'Press � and write what you hear.',
+    hintWrite: 'Press 🔊 and write what you hear.',
     hintPoints: 'The comma goes every three digits, starting from the right.',
     hintDecompose: 'Look at the colour of the digit being asked.',
 
@@ -61,7 +63,7 @@
     chooseAnother: 'Choose another practice',
     roundComplete: 'Round complete!',
     roundSummary: 'You solved {count} exercises. Now you have {stars} stars.',
-    progress: '{current} of {total}',
+    progress: '{current} of {stars}',
 
     audioAria: 'Listen to the number',
     answerInputAria: 'Type the number',
@@ -72,8 +74,8 @@
     /* Pedagogical transfer */
     contexto: 'You read numbers at the shop, in the lift, on money and in the news. Knowing how to read and write large numbers is something you use all the time.',
     explicacion: '✅ Every digit has a position: ones, tens, hundreds and thousands. If you know each digit\'s place, you can read and write any number, no matter how big.',
-    transferencia: 'This will help you read prices, news headlines or any large number in daily life.',
+    transfer: 'This will help you read prices, news headlines or any large number in daily life.',
 
-    hint: 'ðŸ¤” Read the number aloud and then write it.'
+    hint: '🤔 Read the number aloud and then write it.'
   }, 'en');
 })();

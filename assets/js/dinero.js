@@ -2,7 +2,7 @@
    Calculia — Shared visual money (euros drawn with CSS)
    Exposes window.App.dinero: the coin/banknote catalog and the
    format/speech helpers used by the money tools (El Monedero, La
-   Tienda). CSS classes (.dinero, .m5c … .b50e, .mesa-dinero) live in
+   Tienda). CSS classes (.money, .m5c … .b50e, .money-table) live in
    assets/css/components.css.
    Amounts are ALWAYS in cents (integers): avoids floating-point
    errors. Requires i18n.js (load after feedback.js, before the
@@ -112,7 +112,7 @@
     var d = info(cent);
     var el = document.createElement(interactive ? 'button' : 'span');
     if (interactive) el.type = 'button';
-    el.className = 'dinero ' + d.type + ' ' + d.css;
+    el.className = 'money ' + d.type + ' ' + d.css;
     el.textContent = label(cent);
     return el;
   }

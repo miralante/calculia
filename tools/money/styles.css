@@ -1,10 +1,15 @@
-/* Money — tool-specific styles. Shared styles live in assets/css/.
+/* Money â€” tool-specific styles. Shared styles live in assets/css/.
    Euros in the base text color; the comma and cents are shown in orange. */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 .btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 .center-row { justify-content: center; }
+
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario, #666);
+}
 
 /* Activity menu */
 .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
@@ -21,15 +26,14 @@
 .extra-note { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
-.btn-level { min-width: 300px; align-self: center; }
 #btnBackToMenu { align-self: center; }
 
 /* Prices */
 .num-color { font-weight: 800; letter-spacing: 2px; }
-.digit-u { color: var(--mod-coordinacion); }   /* blue — euro units */
-.digit-d { color: var(--mod-secuencia); }      /* green — euro tens */
-.digit-c { color: var(--mod-emocional); }      /* purple — euro hundreds */
-.digit-comma, .digit-dec { color: var(--mod-memoria); } /* orange — comma and cents */
+.digit-u { color: var(--mod-coordinacion); }   /* blue â€” euro units */
+.digit-d { color: var(--mod-secuencia); }      /* green â€” euro tens */
+.digit-c { color: var(--mod-emocional); }      /* purple â€” euro hundreds */
+.digit-comma, .digit-dec { color: var(--mod-memoria); } /* orange â€” comma and cents */
 
 .card { border-color: var(--mod-razonamiento-suave); }
 .prompt { font-size: var(--texto-grande); font-weight: 700; }

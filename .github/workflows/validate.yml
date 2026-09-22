@@ -1,19 +1,31 @@
-name: Validate
-
-# Runs the project's structural and i18n check on every push and pull
-# request. Deploy to Cloudflare Pages is handled by the Cloudflare Git
-# connector reading _headers from the repo root — this workflow does
-# not deploy.
+# Canonical CI gate for the Miralante suite — Calculia flavour.
 #
-# scripts/check.js requires no npm dependencies: it runs with plain
-# node and only uses stdlib modules (fs, path, vm, child_process).
-# The repo has no package.json — nothing to install.
+# Runs the project's structural and i18n checks plus the sw.js
+# VERSION bump gate on every push and PR against master. Deploy is
+# handled by the Cloudflare Git connector reading _headers from the
+# repo root; this workflow does not deploy.
+#
+# Structural checks run with plain node and stdlib modules. The UI
+# smoke job installs the package's Playwright dev dependency and
+# Chromium separately.
+#
+# Job list:
+#   1. check      — runs scripts/check.js (structural + i18n).
+#   2. cache-bump — runs scripts/check-version-bump.js. Fails the
+#                    PR if a sw.js-cached file changed but VERSION
+#                    was not bumped (see CLAUDE.md §B.1).
+name: Validate
 
 on:
   push:
     branches: [master]
   pull_request:
     branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check:
@@ -22,11 +34,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          # Full history: scripts/check-version-bump.js diffs against the
-          # previous commit / PR base to catch a cached file changing
-          # without VERSION being bumped in sw.js.
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -36,7 +43,65 @@ jobs:
       - name: Run structural and i18n checks
         run: node scripts/check.js
 
-      - name: Check sw.js VERSION bump
+  cache-bump:
+    name: sw.js VERSION bump check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Need enough history to diff against the parent of the
+          # current HEAD — the script uses HEAD~1 (or DIFF_BASE) as
+          # the diff base.
+          fetch-depth: 2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Verify VERSION was bumped when a cached file changed
+        # DIFF_BASE matches the script's documented contract — see
+        # the header comment in scripts/check-version-bump.js.
+        #
+        # Special cases handled in two layers:
+        #  1. On a PR, use the PR's base SHA (always a real commit,
+        #     no zero-SHA case possible).
+        #  2. On a push:
+        #     - If event.before is the zero SHA ("0000…0"), which
+        #       only happens on a first-ever push to a brand-new
+        #       branch (e.g. a restored branch or a tag), fall back
+        #       to HEAD~1 — there is always at least one parent in
+        #       the line of history this CI runs over.
+        #     - Otherwise use event.before normally.
+        # `git diff` against the zero SHA lists *every* file in the
+        # repo as added, which falsely flags every sw.js-cached
+        # file as "changed without a bump" — the fix exists to
+        # avoid that false positive.
         env:
-          DIFF_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          DIFF_BASE: ${{ github.event.pull_request.base.sha || (github.event.before == '0000000000000000000000000000000000000000' && 'HEAD~1') || github.event.before }}
         run: node scripts/check-version-bump.js
+
+  ui-smoke:
+    name: Playwright UI and service-worker smoke
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install UI test dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright UI smoke
+        run: npm run test:ui
+
+      - name: Run service-worker smoke
+        run: npm run test:sw

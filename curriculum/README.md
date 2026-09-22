@@ -1,8 +1,8 @@
 # Índices de contenido — Matemáticas, Primaria a ESO
 
 Esta carpeta es un **temario de referencia**, no un punto de ingesta:
-a diferencia de la carpeta homónima en la app Memofun de la suite,
-aquí ningún agente de IA lee estos archivos para generar contenido
+a diferencia de la carpeta `content-indices` en la app Memofun de la
+suite, aquí ningún agente de IA lee estos archivos para generar contenido
 automáticamente. Calculia no tiene una tubería de generación — sus 14
 actividades (`tools/`) están programadas a mano, cada una con su
 propia mecánica.

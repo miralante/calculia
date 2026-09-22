@@ -10,6 +10,7 @@
 [![PWA](https://img.shields.io/badge/PWA-instalable-5A0FC8.svg)](manifest.json)
 [![i18n](https://img.shields.io/badge/i18n-es%20%7C%20en-yellow.svg)](#-documentaci%C3%B3n-del-proyecto-biling%C3%BCe)
 [![CI](https://img.shields.io/badge/CI-node%20scripts%2Fcheck.js-blue.svg)](.github/workflows/validate.yml)
+[![Pacto del colaborador](https://img.shields.io/badge/Pacto%20del%20colaborador-2.1-4baaaa.svg)](CODE_OF_CONDUCT.es.md)
 
 Una aplicación web gratuita, estática y sin dependencias con 11
 actividades para practicar **cálculo y razonamiento lógico**: Los
@@ -69,8 +70,7 @@ portada en `site/`), más una página de ajustes para ver el progreso.
 |---|---|---|---|
 | 👤 **Persona usuaria** (persona tipo) | Practica actividades de cálculo y razonamiento | Abre la app en un navegador; no lee ni escribe código | La aplicación — no hace falta leer nada más |
 | ❤️ **Apoyo / familia / docente** | Acompaña a la persona usuaria o usa Calculia con un grupo | Elige actividades que encajen con un objetivo de aprendizaje; supervisa el progreso por las estrellas ⭐ | [`CONTRIBUTING.es.md`](CONTRIBUTING.es.md) (la sección "Apoyo") |
-| 💻 **Construcción / desarrollador/a** | Mantiene el catálogo, el core compartido y el CI | Implementa actividades en `tools/<slug>/`, ejecuta 
-ode scripts/check.js`, despliega | [`CLAUDE.md`](CLAUDE.md) |
+| 💻 **Construcción / desarrollador/a** | Mantiene el catálogo, el núcleo compartido y el CI | Implementa actividades en `tools/<slug>/`, ejecuta `node scripts/check.js`, despliega | [`CLAUDE.md`](CLAUDE.md) |
 
 Ver [`doc/es/roles.md`](doc/es/roles.md) para la descripción completa
 de los roles y los patrones trio/par/único en el conjunto de la suite.
@@ -194,6 +194,15 @@ MIT — ver [`LICENSE`](LICENSE).
 
 ---
 
+## Contribuir
+
+Issues y pull requests son bienvenidos. Ver [`CONTRIBUTING.es.md`](CONTRIBUTING.es.md)
+para el flujo de trabajo (y [`CONTRIBUTING.md`](CONTRIBUTING.md) para la versión en inglés).
+Todas las personas participantes deben seguir
+[`CODE_OF_CONDUCT.es.md`](CODE_OF_CONDUCT.es.md).
+
+---
+
 ## 🧹 Mantenimiento
 
 Este repo no tiene 
@@ -209,16 +218,6 @@ rm -rf site/.cache tools/.cache assets/.cache  # solo si están presentes
 
 El script `scripts/check.js` es el único paso de "test" y el único
 script que necesita correr en local.
-
----
-
-## 🙏 Créditos
-
-Calculia salió de la app Apptonomia de la suite (que fue el origen del
-grupo con una suite más amplia de actividades de terapia ocupacional)
-y mantiene la misma filosofía de accesibilidad sin backend y lectura
-fácil. El core compartido (`assets/js/`) se portó desde Apptonomia con
-solo el prefijo de storage rebrandead (`apptonomia:` → `calculia:`).
 
 ---
 

@@ -12,10 +12,10 @@
     contexto: 'Alguien te pregunta cuánto queda o cuánto es sin usar papel. Aprende a restar y a calcular de cabeza con trucos sencillos.',
     explicacion: '✅ Restar y calcular de cabeza te sirve para no depender siempre de una calculadora.',
     btnBackToMenu: '← Otras actividades',
+    btnMenu: 'Volver al inicio',
     otherLevel: 'Elegir otro nivel',
-    resumenFinal: 'Has resuelto {n} preguntas de {actividad}. Ahora tienes {stars} estrellas.',
-    endSummary: 'Has resuelto {n} preguntas de {actividad}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{nombre}»?',
+    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
+    btnHarder: '¿Quieres probar «{name}»?',
     btnOtherActivity: 'Otra actividad',
     explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
@@ -35,11 +35,25 @@
     leyendaCentenasTxt: 'centenas',
     legendHundredsTxt: 'centenas',
     activity: {
+      anchors: { name: 'Sumar y restar 1, 5 y 10', detail: 'Empieza por lo más fácil.', instruction: 'Mira el dibujo. Una barra es 10. Un punto suelto es 1.' },
       restar: { name: 'Restar', detail: 'Quitar y contar lo que queda.', instruction: 'Restar es quitar. Cuenta los puntos que no tienen una cruz.' },
       cabeza: { name: 'De cabeza', detail: 'Calcula sin papel.', instruction: 'Piensa el resultado de cabeza. Fíjate en la cifra que cambia.' }
     },
-    level: { r10: 'Restas hasta 10', r20: 'Restas hasta 20', k1: 'Dobles', k2: 'Sumar 10', k3: 'Sumar 100', k4: 'Sumar 1.000', k5: 'Restar 10', k6: 'Restar 100', k7: 'Restar 1.000', k8: 'Multiplicar x10', k9: 'Multiplicar x100' },
+    level: { a1: 'Sumar 1', a2: 'Restar 1', a3: 'Sumar 10', a4: 'Restar 10', a5: 'Sumar 5', a6: 'Restar 5', a7: 'Juntar decenas y unidades', a8: 'Quitar las unidades', a9: 'Sumar formando una decena nueva', a10: 'Restar rompiendo una decena', r10: 'Restas hasta 10', r20: 'Restas hasta 20', k1: 'Dobles', k2: 'Sumar 10', k3: 'Sumar 100', k4: 'Sumar 1.000', k5: 'Restar 10', k6: 'Restar 100', k7: 'Restar 1.000', k8: 'Multiplicar x10', k9: 'Multiplicar x100' },
     gen: {
+      anchorAddPrompt: '¿Cuánto es {a} + {step}?',
+      anchorSubtractPrompt: '¿Cuánto es {a} − {step}?',
+      anchorHintOne: 'Sumar 1 es el número siguiente. Restar 1 es el anterior.',
+      anchorHintFive: '5 es media barra. Cuenta los puntos de cinco en cinco.',
+      anchorHintTen: 'Una barra entera es 10. Solo cambian las decenas.',
+      placeValueAddPrompt: '¿Cuánto es {a} + {b}?',
+      placeValueAddHint: 'Junta las barras y los puntos sueltos. Las decenas no cambian.',
+      placeValueSubtractPrompt: '¿Cuánto es {a} − {b}?',
+      placeValueSubtractHint: 'Quita los puntos sueltos. Quedan solo las barras.',
+      carryAddPrompt: '¿Cuánto es {a} + {b}?',
+      carryAddHint: 'Cuenta los puntos sueltos. Si llegan a 10, forman una barra nueva.',
+      borrowSubtractPrompt: '¿Cuánto es {a} − {b}?',
+      borrowSubtractHint: 'No hay puntos sueltos suficientes. Rompe una barra en 10 puntos y quita {b}.',
       restarEnunciado: '¿Cuánto es {a} − {b}?',
       subtractPrompt: '¿Cuánto es {a} − {b}?',
       restarPista: 'Quita {b}. Cuenta los puntos que quedan.',
@@ -68,7 +82,6 @@
       oneZero: 'un cero',
       twoZeros: 'dos ceros'
     },
-    transferencia: 'Esto te servirá para saber cuánto te queda, cuánto falta o calcular una cantidad grande sin usar la calculadora.',
     transfer: 'Esto te servirá para saber cuánto te queda, cuánto falta o calcular una cantidad grande sin usar la calculadora.'
   }, 'es');
 })();

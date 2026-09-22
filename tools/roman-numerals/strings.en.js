@@ -85,6 +85,8 @@
        progression (rule 13): each sub-level still changes only one
        variable at a time. */
     "levelsTitle": "Choose an activity",
+  btnMenu: "Back to start",
+  proximoNivel: "Next step: {n}",
     "test": "Test",
     "testInfo": "Mixes the 4 activities in random order",
     "level1": "Symbols I, V, X",
@@ -113,7 +115,7 @@
     "correctExplanation": "✅ Correct! Roman numerals are read letter by letter: each letter adds (or subtracts, if it sits before a larger one).",
     "wrongExplanationPrefix": "❌ That's not it. Look at the colors: ",
     "hintHint": "🤔 Hint: ",
-    "finalSummary": "You earned {n} stars. Now you have {total} stars.",
+    "finalSummary": "You earned {n} stars. Now you have {stars} stars.",
     /* Header and ending of the failed-question reinforcement: after
        the normal round ends, the items the user got wrong are
        replayed in a mini-round until every one is answered right.
@@ -122,11 +124,11 @@
     "reinforceIntro": "Repeat these {n} until you get them all right.",
     "reinforceDone": "Reinforcement done! You've mastered those numbers.",
     "contexto": "You are reading Roman numerals. You will see them in real places: books, monuments or clocks.",
-    "transferencia": "This will help you read real Roman numerals: on a plaque, in a book or on the century of a painting.",
+    "transfer": "This will help you read real Roman numerals: on a plaque, in a book or on the century of a painting.",
 
     /* Template for the final equals sign of a single-chunk example
-       (see formatEquals in app.js): {total} = result. */
-    "decompositionEquals": " = {total}",
+       (see formatEquals in app.js): {stars} = result. */
+    "decompositionEquals": " = {stars}",
 
     /* Carousel: each letter with its role and a usage example.
        Letter mentions inside the caption use the {I}, {V} and

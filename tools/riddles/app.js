@@ -227,8 +227,12 @@
     paintProgress();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
-    endSummary.textContent = '';
-    $('#transfer').textContent = '';
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{stars}', progress.stars);
+    }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 

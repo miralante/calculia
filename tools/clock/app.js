@@ -20,7 +20,7 @@
   var $ = App.utils.$;
 
   var screenStart = $('#screenStart');
-  var screenLevels = $('#screenLevels');
+  var screenLearn = $('#screenLearn');
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
   var questionZoneEl = $('#questionZone');
@@ -33,11 +33,13 @@
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
   var starsEl = $('#stars');
+  var dificultadEl = $('#difficulty');
   var listenBtn = $('#btnListen');
 
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
   /* Round state */
   var mode = null;     // { id, stars }   chosen mechanic
@@ -58,6 +60,9 @@
   /* set-mode scratch state (built per question by render()). */
   var setDraftHour = null;
   var setDraftMinute = null;
+
+  /* true when the reference screen was opened from inside a round. */
+  var learnFromGame = false;
 
   function save() { App.storage.set(TOOL_ID, progress); }
 
@@ -102,6 +107,33 @@
       '<line x1="50" y1="50" x2="50" y2="28" stroke="var(--color-texto)" stroke-width="5" ' +
       'stroke-linecap="round" transform="rotate(' + hourAngle + ' 50 50)"/>' +
       '<line x1="50" y1="50" x2="50" y2="18" stroke="var(--color-texto)" stroke-width="3.5" ' +
+      'stroke-linecap="round" transform="rotate(' + minuteAngle + ' 50 50)"/>' +
+      '<circle cx="50" cy="50" r="3" fill="var(--color-texto)"/>' +
+      '</svg>';
+  }
+
+  /* Same face as clockSvg, but each hand keeps its own colour so the
+     reference screen can name it. Colour is never the only cue: the
+     legend also states which hand is short and which is long. */
+  function referenceClockSvg(h, minute) {
+    var hourAngle = ((h % 12) + minute / 60) * 30;
+    var minuteAngle = minute * 6;
+    var numbers = [
+      { n: 12, x: 50, y: 20 },
+      { n: 3,  x: 80, y: 52 },
+      { n: 6,  x: 50, y: 84 },
+      { n: 9,  x: 20, y: 52 }
+    ].map(function (p) {
+      return '<text x="' + p.x + '" y="' + p.y + '" text-anchor="middle" ' +
+        'font-size="12" font-weight="700" fill="var(--color-texto)" ' +
+        'style="font-family:var(--fuente)">' + p.n + '</text>';
+    }).join('');
+    return '<svg viewBox="0 0 100 100" width="150" height="150" role="img" aria-hidden="true">' +
+      '<circle cx="50" cy="50" r="45" fill="#FFFFFF" stroke="var(--color-texto)" stroke-width="4"/>' +
+      numbers +
+      '<line x1="50" y1="50" x2="50" y2="28" stroke="var(--color-foco)" stroke-width="6" ' +
+      'stroke-linecap="round" transform="rotate(' + hourAngle + ' 50 50)"/>' +
+      '<line x1="50" y1="50" x2="50" y2="18" stroke="var(--color-animo)" stroke-width="3.5" ' +
       'stroke-linecap="round" transform="rotate(' + minuteAngle + ' 50 50)"/>' +
       '<circle cx="50" cy="50" r="3" fill="var(--color-texto)"/>' +
       '</svg>';
@@ -193,52 +225,28 @@
     return { type: 'convert', hour: h, minute: m, options: options };
   }
 
-  function makeSituationQuestion() {
-    var moment = DATA.moments[Math.floor(Math.random() * DATA.moments.length)];
-    var h = hour12(moment.hora);
-    var m = randomMinute();
-    var used = [{ h: h, m: m }];
-    var options = [{ h: h, m: m, isCorrect: true }];
-    while (options.length < 3) {
-      var d = differentCombination(used);
-      used.push(d);
-      options.push({ h: d.h, m: d.m, isCorrect: false });
-    }
-    return { type: 'situations', moment: moment, options: options };
-  }
-
-  function makeReadQuestion() {
-    var h = randomHour();
-    var m = randomMinute();
-    var used = [{ h: h, m: m }];
-    var options = [{ text: timeText(h, m), isCorrect: true }];
-    while (options.length < 3) {
-      var d = differentCombination(used);
-      used.push(d);
-      var text = timeText(d.h, d.m);
-      if (options.some(function (o) { return o.text === text; })) continue;
-      options.push({ text: text, isCorrect: false });
-    }
-    return { type: 'read', hour: h, minute: m, options: options };
-  }
-
-  function makeSetQuestion() {
-    var h = randomHour();
-    var m = randomMinute();
-    return { type: 'set', hour: h, minute: m };
-  }
-
-  function makeConvertQuestion() {
-    var h = randomHour();
-    var m = randomMinute();
-    var used = [{ h: h, m: m }];
-    var options = [{ h: h, m: m, isCorrect: true }];
-    while (options.length < 3) {
-      var d = differentCombination(used);
-      used.push(d);
-      options.push({ h: d.h, m: d.m, isCorrect: false });
-    }
-    return { type: 'convert', hour: h, minute: m, options: options };
+  /* How long between two clocks. Both clocks stay on screen, so the gap
+     can be worked out by looking at the two rather than held in mind. */
+  function makeElapsedQuestion() {
+    var gap = DATA.gaps[Math.floor(Math.random() * DATA.gaps.length)];
+    var startM = randomMinute();
+    /* Kept inside the 12 hours the face shows: a gap that wrapped past 12
+       would need a second idea (morning and afternoon) to be read. */
+    var maxStart = 12 - Math.ceil((gap + startM) / 60);
+    var startH = 1 + Math.floor(Math.random() * Math.max(1, maxStart));
+    var total = startH * 60 + startM + gap;
+    var options = [{ gap: gap, isCorrect: true }];
+    var others = DATA.gaps.filter(function (g) { return g !== gap; });
+    App.utils.shuffle(others).slice(0, 2).forEach(function (g) {
+      options.push({ gap: g, isCorrect: false });
+    });
+    return {
+      type: 'elapsed',
+      hour: startH, minute: startM,
+      endHour: Math.floor(total / 60), endMinute: total % 60,
+      gap: gap,
+      options: options
+    };
   }
 
   function makeSituationQuestion() {
@@ -278,21 +286,36 @@
   function chooseMode(m) {
     mode = m;
     screenStart.classList.add('hidden');
-    screenLevels.classList.remove('hidden');
-    paintLevels();
+    showLearn(false);
   }
 
-  function paintLevels() {
-    var cont = $('#levels');
-    cont.innerHTML = '';
-    DATA.levels.forEach(function (n) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      btn.innerHTML = App.i18n.t('levelDescription.' + n.id);
-      btn.addEventListener('click', function () { startRound(n); });
-      cont.appendChild(btn);
-    });
+  /* The reference is shown before the first question and can be
+     reopened mid-round: the rule stays consultable instead of having
+     to be held in memory. `fromGame` swaps the footer button so
+     reopening it never restarts the round. */
+  function showLearn(fromGame) {
+    learnFromGame = !!fromGame;
+    paintLearn();
+    screenStart.classList.add('hidden');
+    screenGame.classList.add('hidden');
+    screenEnd.classList.add('hidden');
+    screenLearn.classList.remove('hidden');
+    $('#learnStart').classList.toggle('hidden', learnFromGame);
+    $('#learnBack').classList.toggle('hidden', !learnFromGame);
+  }
+
+  /* 3 o'clock: the long hand sits on the 12, which is the first rule
+     the screen states, so example and rule agree. */
+  function paintLearn() {
+    $('#learnClock').innerHTML = referenceClockSvg(3, 0);
+    $('#learnExample').textContent =
+      App.i18n.t('learnExample').replace('{t}', timeText(3, 0));
+  }
+
+  /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
+  function levelFromProgress() {
+    var idxN = Math.min(progress.completedRounds || 0, DATA.levels.length - 1);
+    return DATA.levels[idxN];
   }
 
   function startRound(n) {
@@ -301,7 +324,8 @@
       read: makeReadQuestion,
       set: makeSetQuestion,
       convert: makeConvertQuestion,
-      situations: makeSituationQuestion
+      situations: makeSituationQuestion,
+      elapsed: makeElapsedQuestion
     };
     questions = [];
     for (var i = 0; i < DATA.perRound; i++) {
@@ -321,7 +345,7 @@
     App.reinforce.banner.hide();
     App.reinforce.start(function (fallos) { startReinforce(fallos); });
     screenStart.classList.add('hidden');
-    screenLevels.classList.add('hidden');
+    screenLearn.classList.add('hidden');
     screenEnd.classList.add('hidden');
     screenGame.classList.remove('hidden');
     render();
@@ -381,6 +405,7 @@
     else if (p.type === 'set')        renderSet(p);
     else if (p.type === 'convert')    renderConvert(p);
     else if (p.type === 'situations') renderSituation(p);
+    else if (p.type === 'elapsed')    renderElapsed(p);
 
     paintProgress();
     paintStars();
@@ -508,6 +533,25 @@
     }
   }
 
+  function renderElapsed(p) {
+    questionZoneEl.innerHTML = '<div class="elapsed-pair">' +
+      '<span class="elapsed-one"><span class="elapsed-label" data-when="from">' +
+      App.i18n.t('elapsedFrom') + '</span>' + clockSvg(p.hour, p.minute) + '</span>' +
+      '<span class="elapsed-arrow" aria-hidden="true">→</span>' +
+      '<span class="elapsed-one"><span class="elapsed-label" data-when="to">' +
+      App.i18n.t('elapsedTo') + '</span>' + clockSvg(p.endHour, p.endMinute) + '</span>' +
+      '</div>';
+    questionTextEl.textContent = App.i18n.t('mode.elapsed.question');
+    App.utils.shuffle(p.options).forEach(function (op) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'option-btn';
+      btn.textContent = App.i18n.t('gap.' + op.gap);
+      btn.addEventListener('click', function () { answer(btn, op.isCorrect, p); });
+      optionsEl.appendChild(btn);
+    });
+  }
+
   function renderSituation(p) {
     questionZoneEl.innerHTML = '<div class="moment-picto" aria-hidden="true">' +
       p.moment.picto + '</div>';
@@ -570,7 +614,7 @@
     if (isCorrect) {
       showExplanation(isCorrect, p);
       answered = true;
-      btn.classList.add('correcta');
+      btn.classList.add('correct');
       App.utils.$$('#options .option-btn, #options .btn-step, #btnConfirmSet')
         .forEach(function (b) { b.disabled = true; });
       App.feedback.success(feedbackEl);
@@ -588,7 +632,7 @@
       } else {
         showExplanation(isCorrect, p);
       }
-      btn.classList.add('animo');
+      btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(
@@ -626,25 +670,39 @@
   }
 
   function endRound() {
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
-    $('#endSummary').textContent.textContent = '';
-    $('#transfer').textContent.textContent = '';
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{stars}', progress.stars);
+    }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
   /* ---- Events ---- */
   $('#btnNext').addEventListener('click', goNext);
-  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
-  $('#btnOtherLevel').addEventListener('click', function () {
+  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnMenu').addEventListener('click', function () {
     screenEnd.classList.add('hidden');
-    screenLevels.classList.remove('hidden');
+    screenStart.classList.remove('hidden');
   });
   $('#btnOtherMode').addEventListener('click', function () {
     screenEnd.classList.add('hidden');
-    screenLevels.classList.add('hidden');
+    screenLearn.classList.add('hidden');
     screenStart.classList.remove('hidden');
+  });
+  $('#btnLearn').addEventListener('click', function () { showLearn(true); });
+  $('#learnStart').addEventListener('click', function () {
+    screenLearn.classList.add('hidden');
+    startRound(levelFromProgress());
+  });
+  $('#learnBack').addEventListener('click', function () {
+    screenLearn.classList.add('hidden');
+    screenGame.classList.remove('hidden');
   });
   if (listenBtn) {
     listenBtn.addEventListener('click', function () {

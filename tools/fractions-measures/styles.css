@@ -1,9 +1,14 @@
-/* Fractions and Measures — tool-specific styles. Shared styles live in assets/css/. */
+/* Fractions â€” tool-specific styles. Shared styles live in assets/css/. */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 .btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 .center-row { justify-content: center; }
+
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario, #666);
+}
 
 /* Activity menu */
 .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
@@ -19,7 +24,6 @@
 .btn-actividad .detail-card { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
-.btn-level { min-width: 300px; align-self: center; }
 #btnBackToMenu { align-self: center; }
 
 /* Color-coded legend text (parts painted / parts total) */
@@ -55,4 +59,85 @@
   font-size: 1.1rem;
   color: var(--color-texto-secundario, #555);
   max-width: 480px;
+}
+
+/* ---- Equivalent fractions: the reference amount ---- */
+.frac-ref {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ---- Adding and subtracting fractions ----
+   The notation row states the sum; the pie row underneath shows the same
+   thing as amounts, so the person can check the rule by looking. */
+.frac-expression {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.frac-visual-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.frac-sign {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--mod-coordinacion, var(--color-texto));
+}
+/* Empty slot for the answer: reads as "something goes here". */
+.frac-gap {
+  min-width: 2.4rem;
+  padding: 2px 10px;
+  font-size: 1.7rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-texto-suave);
+  border: 3px dashed var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+
+/* ---- Decimals: the number itself is the content, so it is set large ---- */
+.decimal-value {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* A fraction OF an amount: equal piles, one of them taken. */
+.frac-groups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.frac-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem;
+  max-width: 7rem;
+  padding: 0.35rem;
+  border: 2px solid var(--color-borde);
+  border-radius: 10px;
+  background: var(--color-superficie);
+}
+/* The pile being taken is dashed and thicker, never colour alone. */
+.is-taken {
+  border-style: dashed;
+  border-width: 3px;
+  border-color: var(--color-texto);
+}
+.frac-token {
+  font-size: 1.4rem;
+  line-height: 1.1;
 }

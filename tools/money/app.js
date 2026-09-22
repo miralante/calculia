@@ -64,8 +64,18 @@
   function draw(key, list) {
     var p = pools[key];
     if (!p || p.i >= p.orden.length) {
-      p = pools[key] = { orden: App.utils.shuffle(list), i: 0 };
+      var fresh = App.utils.shuffle(list);
+      /* When the bag is refilled, its first item must not be the one just
+         handed out: two identical questions in a row read as a "Siguiente"
+         button that does nothing. */
+      if (p && fresh.length > 1 && fresh[0] === p.last) {
+        var swap = fresh[1];
+        fresh[1] = fresh[0];
+        fresh[0] = swap;
+      }
+      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
     }
+    p.last = p.orden[p.i];
     return p.orden[p.i++];
   }
 
@@ -435,8 +445,13 @@
     progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
     show(screenEnd);
-    $('#endSummary').textContent = '';
-    $('#transfer').textContent = '';
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
+        .replace('{stars}', progress.stars);
+    }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
     var idxN = activity.levels.indexOf(level);
@@ -444,7 +459,7 @@
       ? activity.levels[idxN + 1] : null;
     var btnHarder = $('#btnHarder');
     if (nextLevel) {
-      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name-card}', App.i18n.t('level.' + nextLevel.id));
+      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name}', App.i18n.t('level.' + nextLevel.id));
       btnHarder.classList.remove('hidden');
       btnHarder.onclick = function () { startRound(nextLevel); };
     } else {

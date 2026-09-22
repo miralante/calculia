@@ -5,13 +5,15 @@
 
 ## 1. What Calculia is
 
-A free, static web app with 15 activities for practicing math and
+A free, static web app with 27 activities for practicing math and
 logical reasoning:
 
-- **Math**: Numbers, Fractions and Measures, Subtraction and Mental
-  Math, Money, Math Tables, Quantities, Roman Numerals, Water
-  Temperature.
-- **Reasoning and logic**: Riddles, Patterns, The Wallet, The Clock,
+- **Math**: Places and sizes, Numbers, Shapes, Geometry, Same shapes, Fractions, Measures, Subtraction and
+  Mental Math, Money, Percentages, Math Tables, Exact groups, Big sums, Quantities, Roman Numerals,
+  Problems, Water Temperature.
+- **Reasoning and logic**: Riddles, Patterns, The Wallet, The balance, Data and
+  charts, The Calendar,
+  The Clock,
   Stories, What Doesn't Belong?, Puzzle.
 
 Calculia is one of the apps of the Miralante suite, alongside Apptonomia
@@ -125,6 +127,32 @@ life outside the app. Concretely:
   showing "MCMLXXXIX" before the I/V/X table has been taught) stops
   being meaningful and becomes confusing instead — it breaks gradual
   progression (rule 13 of §6).
+
+#### Teach before asking
+
+An activity that only asks questions **assesses, it does not teach**.
+Someone who already knows the answer gets it right; someone who does not
+gets it wrong and still does not know. So an activity should offer,
+before its first question:
+
+1. **What this is for** outside the app (one sentence, key `contexto`).
+2. **The rule or the reference**, on a screen of its own: the table, the
+   diagram or the worked example the answer comes from.
+3. **The practice**, only after that.
+
+The reference screen **does not disappear once practice starts**: it can
+be reopened during the round, and coming back from it does not restart
+the round. Keeping the rule in view is not cheating — memorising it is
+not the goal, using it is.
+
+References in the code: Roman Numerals (`introScreen` → `famousScreen` →
+`reminderScreen` → quiz, with the I/V/X table as a permanent hint), The
+Clock (`screenLearn`, each hand in its own colour with a label) and Math
+Tables (`screenLearn`, the table with dots before practising it).
+
+When colour encodes the reference (a hand, a letter, a digit), it can
+never be the only cue: shape, length or text must say the same thing
+(criterion 1.4.1, see §6.1).
 
 ### 3.7 Persuasive communication in service of learning
 
@@ -423,6 +451,97 @@ Explicit decisions that may surprise — they're here so they aren't
 | Use dark patterns (forced signups, pre-checked boxes, hidden costs, fake alerts) | Trust and accessibility; clashes with `§3.4` and `§3.7` |
 | Subtract stars or progress as punishment | The product only adds, never subtracts (`§3.1`, principle 6) |
 | Use "meaningful" examples with symbols or rules the activity hasn't taught yet | Breaks gradual progression (`§6`, rule 13) and easy reading (`§3.3`) |
+| Require symbolic problem-solving skill on advanced ESO content (algebra, trigonometry, functions, analytic geometry...) | That content is presented as an applied concept, not a skill to master — see `§8.1` |
+
+### 8.1 Curriculum scope: the full curriculum, at a different ambition per level
+
+**The starting point is a right, not a concession.** What Calculia is
+after is **equal opportunity and the same right to acquire knowledge**
+that anyone without learning difficulties has. That the typical user has
+an intellectual disability is not a reason to hand them a trimmed-down
+curriculum: it's a reason to design more carefully how that full
+curriculum is presented to them. The repository keeps the reference
+Maths syllabus covering Spanish school years 1 of Primaria to 4 of ESO
+(ages 6 to 16) in [`curriculum/`](../../curriculum/); Calculia commits to
+covering all of it, eventually. The concrete list of what's built and
+what's missing lives in [`TODO.md`](../../TODO.md) (repo root) and is
+kept current as activities are implemented.
+
+**But covering the curriculum doesn't mean requiring mastery of all of
+it.** For this audience, expecting someone to master quadratic equations
+or logarithmic functions the way they master addition makes no sense.
+What Calculia promises varies by content, across two tiers of ambition:
+
+1. **Foundations** — basic arithmetic: counting, adding and subtracting,
+   place value, the anchor numbers (1, 5, 10), simple word problems with
+   visual support. Here the goal **is mastery**: patient, progressive
+   practice until the person does it with ease. It's the base without
+   which nothing else makes sense.
+2. **Concepts** — everything past that: geometry, fractions and decimals
+   beyond the basics, statistics, probability, proportionality, and the
+   abstract ESO content (algebra, trigonometry, functions, analytic
+   geometry, combinatorics...). Here the goal **is not mastery, it's
+   accessible exposure**: presenting what the idea is and, wherever
+   possible, what it's for, in easy read, without requiring symbolic
+   handling or calculation procedures. Trigonometry is presented as
+   "which ramp is steeper?" with a visual comparison, never as computing
+   a sine or cosine; algebra is presented as a balance scale that has to
+   stay level, never as symbol manipulation.
+
+**"Foundations first" describes the order of work, not the scope.**
+There's no point moving through the syllabus while basic calculation
+isn't secure — that's why the foundations activities are built first —
+but that no longer means the rest is out of the commitment: it means it
+comes later, and at the "concept" ambition instead of "mastery".
+
+**Every step with visual support.** The quantity is drawn, not only
+written: a bar of ten dots is a ten, a loose dot is a unit, and whatever
+is taken away is crossed out. Seeing the quantity is part of the
+explanation, not decoration. Reference in the code: `tools/mental-math/`
+(the `anchors` activity).
+
+**Each activity has one job, and only one.** The foundations arithmetic
+ladder belongs to the **arithmetic activities** (`tools/mental-math/`,
+`tools/math-tables/`); it is not spread across the rest of the catalogue.
+Putting sums into an activity that is not about sums crowds out what it
+does teach and adds a difficulty that was never the point.
+
+The clear case is the **elevator** (the `positivos-y-negativos` activity
+in `tools/numbers/`): it is there to **understand positive and negative
+numbers**, and nothing else. Floors below ground are negative, the ground
+floor is 0, the ones above are positive; the person goes up and down and
+watches the number change as it crosses zero. **It poses no operations
+and no multiple-choice questions**, and it must not: its value is that a
+negative number becomes a place you can travel to, rather than a symbol
+you have to compute with.
+
+**Never a carry before its time.** In the anchor levels the numbers are
+chosen so the operation does not cross a ten: when adding, the units
+have room; when taking away, there is enough to take. That way the only
+thing that changes between one level and the next is the anchor itself
+(rule 13).
+
+A "concept"-tier topic is still bound by every other rule in this
+document — easy read (`§3.3`), gradual progression (`§6`, rule 13), the
+Socratic method (`§3.8`) — only what the person is expected to walk away
+able to do changes: recognise and relate the idea, not execute the
+formal procedure.
+
+**None of this is ever named to the person using the app.** The
+curriculum decides the order in which activities are built and shown, but
+the person must never meet it: telling someone a screen is "year 2" tells
+them they are doing a child's exercise, and that has no place here.
+Nothing served to the browser names a stage, a school year or a syllabus
+topic — not even in code comments, which are readable through "view
+source". The traceability lives in [`TODO.md`](../../TODO.md) and in this
+document, neither of which is served. `scripts/check.js` (check 6.1)
+enforces it on every change.
+
+Levels are named after what you do in them ("Up to 10", "Add 5", "Fewer
+marks"), never after the year they belong to.
+
+When an activity covers a curriculum topic, its documentation should say
+so, so that coverage gaps stay visible without reading the code.
 
 ## 9. Language policy
 

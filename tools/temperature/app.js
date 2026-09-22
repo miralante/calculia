@@ -27,6 +27,7 @@
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
   var starsEl = $('#stars');
+  var dificultadEl = $('#difficulty');
   var noteExtra = $('#noteExtra');
   var transferEl = $('#transfer');
 
@@ -66,6 +67,7 @@
      with a `stars` counter. */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
   /* Round state. */
   var activity = null;
@@ -145,7 +147,7 @@
   }
 
   function show(screen) {
-    [screenMenu, screenLevels, screenGame, screenEnd].forEach(function (p) {
+    [screenMenu, screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -171,22 +173,17 @@
     cont.appendChild(grid);
   }
 
+  /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
+  function levelFromProgress() {
+    var rounds = progress.completedRounds || 0;
+    var idxN = Math.min(rounds, activity.levels.length - 1);
+    return activity.levels[idxN];
+  }
+
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    $('#activityTitle').textContent.textContent = '';
-    $('#activityInstruction').textContent.textContent = '';
-    var cont = $('#levels');
-    cont.innerHTML = '';
-    activity.levels.forEach(function (nv) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      btn.innerHTML = App.i18n.t('level.' + nv.id);
-      btn.addEventListener('click', function () { startRound(nv); });
-      cont.appendChild(btn);
-    });
-    show(screenLevels);
+    startRound(levelFromProgress());
   }
 
   function startRound(nv) {
@@ -396,11 +393,15 @@
      ============================================================ */
 
   function endRound() {
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
+    save();
     show(screenEnd);
-    $('#endSummary').textContent.textContent = '';
-    $('#contexto').textContent.textContent = '';
-    $('#explicacion').textContent.textContent = '';
-    transferEl.textContent = App.i18n.t('transferencia');
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('gen.endSummary').replace('{stars}', progress.stars);
+    }
+    $('#contexto').textContent = '';
+    $('#explanation').textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
@@ -438,13 +439,14 @@
 
   /* "Repeat" / "Other level" / "Other activity" wired up to the
      standard end-of-round actions. */
-  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
-  $('#btnOtherLevel').addEventListener('click', function () { openActivity(activity.id); });
+  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
   $('#btnOtherActivity').addEventListener('click', function () {
     show(screenMenu);
     paintMenu();
   });
-  $('#btnBackToMenu').addEventListener('click', function () { show(screenMenu); paintMenu(); });
+  var elBtnBackToMenu = $('#btnBackToMenu');
+  if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); paintMenu(); });
 
   /* Initial paint. */
   paintStars();

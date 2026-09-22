@@ -30,7 +30,7 @@
     practiceTable: 'Practicar esta tabla',
     backToTables: '← Elegir otra tabla',
     backToLevels: '← Elegir otro paso',
-    progress: '{current} de {total}',
+    progress: '{current} de {stars}',
     hintAdd: 'Pista: cuenta todos los puntos, uno a uno.',
     hintMultiply: 'Pista: son {b} grupos de {a} puntos. Cuenta grupo a grupo.',
     hintStepsAdd: 'Pista: empieza en {a} y cuenta {b} más, de uno en uno.',
@@ -65,6 +65,6 @@
     "contexto": "Estás haciendo cuentas de cabeza. Vas a sumar, restar, multiplicar o dividir con ayuda visual.",
     "pista": "🤔 Cuenta los puntos despacio. ¿Cuántos hay en total?",
     "explicacion": "✅ Así se cuenta de cabeza. La próxima vez que sumes o restes, prueba con los dedos o con puntos.",
-    "transferencia": "Esto te servirá para las cuentas del día a día: en la compra, al repartir, al contar el cambio o en el cole."
+    "transfer": "Esto te servirá para las cuentas del día a día: en la compra, al repartir, al contar el cambio o en el cole."
   }, 'es');
 })();

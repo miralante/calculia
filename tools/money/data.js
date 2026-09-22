@@ -1,20 +1,20 @@
 /* ============================================================
    Calculia — Dinero — datos
    Formato:
-   - DATA.activities[id]: picto y niveles[]. Cada nivel: { id, tipo,
+   - DATA.activities[id]: picto y levels[]. Cada nivel: { id, tipo,
      ...config }. El tipo elige el generador de preguntas en app.js.
      Object.keys(DATA.activities) fija el orden del menú.
    - DATA.llegaUno / DATA.llegaDos / DATA.cambio: solo importes en
      céntimos (independientes del idioma).
    - DATA.productos: productos cotidianos para los precios (solo
-     picto e id; el nombre está en strings.js).
-   Los nombres de actividades y niveles NO están aquí: son texto y
-   viven en strings.js, indexados por 'id': App.i18n.t('actividad.<id>.nombre'),
-   App.i18n.t('actividad.<id>.detalle'), App.i18n.t('actividad.<id>.instruccion'),
+     picto e id; el name está en strings.js).
+   Los nombres de actividades y levels NO están aquí: son texto y
+   viven en strings.js, indexados por 'id': App.i18n.t('actividad.<id>.name'),
+   App.i18n.t('actividad.<id>.detalle'), App.i18n.t('actividad.<id>.instruction'),
    App.i18n.t('nivel.<id>'), App.i18n.t('producto.<id>').
    ============================================================ */
 var DATA = {
-  porRonda: 6,
+  perRound: 6,
 
   activities: {
     llega: {

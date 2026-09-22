@@ -2,8 +2,8 @@
   "name": "Calculia",
   "domain": "calculia.apptonomia.uk",
   "title": "Calculia — Cálculo y razonamiento lógico a tu ritmo",
-  "description": "Calculia es una aplicación web gratuita y sin registro con actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles. Parte de la suite Apptonomia.",
-  "keywords": "calculia, apptonomia, matemáticas, razonamiento lógico, cálculo, fracciones, números romanos, easy read, lectura fácil, accesibilidad cognitiva, actividades gratuitas sin registro, sumas, restas, tablas de multiplicar",
+  "description": "Calculia es una aplicación web gratuita y sin registro con actividades cortas y visuales de cálculo y razonamiento lógico: números, formas, fracciones, medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones, el calendario y puzzles. Parte de la suite Apptonomia.",
+  "keywords": "calculia, apptonomia, matemáticas, razonamiento lógico, cálculo, fracciones, medidas, números romanos, easy read, lectura fácil, accesibilidad cognitiva, actividades gratuitas sin registro, sumas, restas, tablas de multiplicar",
   "author": "Apptonomia",
   "ogSiteName": "Apptonomia",
   "ogDescription": "Actividades cortas y visuales de cálculo y razonamiento lógico. Gratis y sin registro. Parte de la suite Apptonomia.",
@@ -19,17 +19,17 @@
   "manifest": "../manifest.json",
   "hasItemList": false,
   "dcCreator": "Calculia (parte de la suite Apptonomia)",
-  "dcSubject": "Actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles.",
+  "dcSubject": "Actividades cortas y visuales de cálculo y razonamiento lógico: números, formas, fracciones, medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones, el calendario y puzzles.",
   "dcRights": "MIT (código). Las actividades (datos y enunciados) son contenido propio bajo CC BY 4.0.",
   "dcType": "InteractiveResource",
   "faq": [
     {
       "question": "¿Qué es Calculia?",
-      "answer": "Calculia es una aplicación web gratuita y sin registro con quince actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones, el monedero, el reloj, cuentos, ¿qué sobra? y puzzle."
+      "answer": "Calculia es una aplicación web gratuita y sin registro con veintisiete actividades cortas y visuales de cálculo y razonamiento lógico: números, formas, fracciones, medidas, suma y resta, dinero, tablas, cantidades, números romanos, temperatura del agua, acertijos, patrones, el monedero, el calendario, el reloj, cuentos, ¿qué sobra? y puzzle."
     },
     {
       "question": "¿Cuántas actividades tiene Calculia?",
-      "answer": "Quince, agrupadas en dos secciones: Matemáticas (números, fracciones, sumas y restas, dinero, tablas, cantidades, números romanos y temperatura del agua) y Razonamiento lógico (acertijos, patrones, el monedero, el reloj, cuentos, ¿qué sobra? y puzzle)."
+      "answer": "Veintisiete, agrupadas en dos secciones: Matemáticas (números, formas, fracciones, medidas, sumas y restas, dinero, tablas, cantidades, números romanos y temperatura del agua) y Razonamiento lógico (acertijos, patrones, el monedero, el calendario, el reloj, cuentos, ¿qué sobra? y puzzle)."
     },
     {
       "question": "¿Calculia necesita conexión a internet?",
@@ -45,9 +45,9 @@
     }
   ],
   "llmsTitle": "Calculia — Actividades de cálculo y razonamiento lógico",
-  "llmsSummary": "Aplicación web gratuita y sin registro con quince actividades cortas y visuales de cálculo y razonamiento lógico.",
+  "llmsSummary": "Aplicación web gratuita y sin registro con veintisiete actividades cortas y visuales de cálculo y razonamiento lógico.",
   "llmsWhatItIs": [
-    "Quince actividades breves y visuales, agrupadas en Matemáticas y Razonamiento lógico.",
+    "Veintisiete actividades breves y visuales, agrupadas en Matemáticas y Razonamiento lógico.",
     "Pensada para practicar a tu ritmo, sin presión de tiempo y sin puntuación competitiva.",
     "Diseñada con lectura fácil y contraste alto para ser accesible desde el primer intento.",
     "Gratuita, sin registro y con el progreso guardado en el navegador."

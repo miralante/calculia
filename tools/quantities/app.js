@@ -51,8 +51,8 @@
   /* ----------- General helpers ----------- */
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function show(el) { el.classList.remove('hidden'); }
-  function hide(el) { el.classList.add('hidden'); }
+  function show(el) { if (el) el.classList.remove('hidden'); }
+  function hide(el) { if (el) el.classList.add('hidden'); }
 
   function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
@@ -106,10 +106,10 @@
   /* CSS colour per absolute position (same convention as numbers:
      units blue, tens green, hundreds purple). For thousands
      groups the colours repeat. */
-  var POS_CLASS = ['cifra-u', 'cifra-d', 'cifra-c',
-    'cifra-u cifra-mil', 'cifra-d cifra-mil', 'cifra-c cifra-mil',
-    'cifra-u cifra-millon', 'cifra-d cifra-millon', 'cifra-c cifra-millon',
-    'cifra-u cifra-mil-millones'];
+  var POS_CLASS = ['digit-u', 'digit-d', 'digit-c',
+    'digit-u cifra-mil', 'digit-d cifra-mil', 'digit-c cifra-mil',
+    'digit-u cifra-millon', 'digit-d cifra-millon', 'digit-c cifra-millon',
+    'digit-u cifra-mil-millones'];
 
   function digitAtPosition(n, pos) {
     return Math.floor(Math.abs(n) / Math.pow(10, pos)) % 10;
@@ -125,7 +125,7 @@
       var cuerpo = '';
       for (var j = 0; j < groups[g].length; j++) {
         var posAbs = (groups.length - 1 - g) * 3 + (groups[g].length - 1 - j);
-        var clase = POS_CLASS[posAbs] || 'cifra-u';
+        var clase = POS_CLASS[posAbs] || 'digit-u';
         cuerpo += '<span class="' + clase + '">' + groups[g][j] + '</span>';
       }
       if (g > 0) htmlOut += '<span class="digit-sep">' + sep + '</span>';
@@ -402,7 +402,7 @@
     hide($('#numberColored'));
     hide($('#answerInput'));
     hide($('#optionsGrid'));
-    hide($('#btnEscuchar'));
+    hide($('#listenBtn'));
     hide($('#legend'));
     $('#optionsGrid').innerHTML = '';
     $('#answerInput').value = '';
@@ -417,8 +417,8 @@
     hideAllZones();
     var promptEl = $('#prompt');
     promptEl.textContent = case_.prompt;
-    $('#taskDetail').textContent.textContent = '';
-    $('#taskIcon').textContent.textContent = ''; })[0].icon;
+    $('#taskDetail').textContent = '';
+    $('#taskIcon').textContent = '';
 
     if (practice === 'read') {
       $('#numberShown').innerHTML = coloredDigits(case_.n);
@@ -426,9 +426,9 @@
       show($('#answerInput'));
     } else if (practice === 'write') {
       show($('#answerInput'));
-      show($('#btnEscuchar'));
+      show($('#listenBtn'));
     } else if (practice === 'points') {
-      $('#numberWithSep').textContent.textContent = '';
+      $('#numberWithSep').textContent = '';
       show($('#numberWithSep'));
       show($('#answerInput'));
     } else if (practice === 'decompose') {
@@ -437,22 +437,22 @@
       show($('#legend'));
       $('#legend').innerHTML = legendHTML();
       var grid = $('#optionsGrid');
-      case_.options.forEach(function (opcion) {
+      case_.options.forEach(function (option) {
         var button = document.createElement('button');
         button.type = 'button';
         button.className = 'option-btn option-btn--digit';
-        button.textContent = String(opcion);
-        button.setAttribute('data-value', opcion);
-        button.setAttribute('aria-label', opcion);
-        button.addEventListener('click', function () { clickOption(button, opcion); });
+        button.textContent = String(option);
+        button.setAttribute('data-value', option);
+        button.setAttribute('aria-label', option);
+        button.addEventListener('click', function () { clickOption(button, option); });
         grid.appendChild(button);
       });
       show(grid);
     }
 
     $('#progressFill').style.width = ((index / round.length) * 100) + '%';
-    $('#progressText').textContent.textContent = '';
-    $('#feedback').textContent.textContent = '';
+    $('#progressText').textContent = '';
+    $('#feedback').textContent = '';
     show($('#checkAnswer'));
     hide($('#nextTask'));
     attempts = 0;
@@ -525,7 +525,7 @@
   function correct() {
     progress.stars += 1;
     save();
-    $('#stars').textContent.textContent = '';
+    $('#stars').textContent = '';
     App.feedback.success($('#feedback'));
     /* In typing, show the correct form as reinforcement. */
     if (case_.tipo === 'typing') {
@@ -574,10 +574,11 @@
   function closeRound() {
     hide($('#screenTask'));
     show($('#screenFinish'));
-    $('#finishText').textContent.textContent = '';
-    $('#contexto').textContent.textContent = '';
-    $('#explicacion').textContent.textContent = '';
-    $('#transfer').textContent.textContent = '';
+    $('#finishText').textContent = App.i18n.t('roundSummary')
+      .replace('{count}', round.length)
+      .replace('{stars}', progress.stars);
+    $('#contexto').textContent = '';
+    $('#explanation').textContent = '';
     App.feedback.celebrate(App.i18n.t('roundComplete'));
   }
 
@@ -656,7 +657,8 @@
     if (e.key === 'Enter') check();
   });
   $('#nextTask').addEventListener('click', goNext);
-  $('#btnEscuchar').addEventListener('click', function () {
+  var elListenBtn = $('#listenBtn');
+  if (elListenBtn) elListenBtn.addEventListener('click', function () {
     if (case_ && case_.audio) if (false && App.tts && App.tts.speak) App.tts.speak(case_.audio);
   });
   $('#playAgain').addEventListener('click', function () { startPractice(practice); });

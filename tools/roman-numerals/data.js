@@ -17,17 +17,17 @@
      ("Isabel I fue Reina de Castilla...") vive en
      strings.<locale>.js bajo monarchContext.<id>.
    DATA.famousRomans = [{ roman, factKey }] — números romanos
-     reales (siglos, reyes, años, eventos) usados en la pantalla
+     reales (siglos, reyes, años, eventos) used en la pantalla
      de introducción para dar aprendizaje significativo. La frase
      "Siglo XX — el que vivió la llegada a la Luna" vive en
      strings.<locale>.js bajo famous.<factKey>.
    DATA.perRound = tamaño de cada ronda de test.
-   DATA.levels = [{ id, pool, min, max, mode, estrellas, sublevels? }]
+   DATA.levels = [{ id, pool, min, max, mode, stars, sublevels? }]
      - pool 'numbers' (por defecto): la ronda sale de DATA.numbers
        filtrado por min/max. pool 'monarchs': la ronda sale de
        DATA.monarchs[locale actual]. pool 'random': cada item se
        elige al azar de cualquiera de las otras pools. pool 'group':
-       el botón representa un grupo de sub-niveles encadenados
+       el botón representa un grupo de sub-levels encadenados
        (sublevels: [...]).
      - mode 'romanToNumber': se ve el número romano, se elige el
        número normal (1-10 en nivel 1, 11-21 en nivel 2).
@@ -39,29 +39,29 @@
      - mode 'numberToRoman': se ve un número normal (sin "Siglo",
        para no sugerir que un siglo se escribe con su número
        decimal), se elige el número romano correcto para ese número.
-     - mode 'monarchToNumber': se ve el nombre real de un rey o
+     - mode 'monarchToNumber': se ve el name real de un rey o
        reina (p. ej. "Felipe VI"), se elige el número que representa
        su numeral romano.
      - sublevels (opcional): si está presente, el botón del menú
-       representa un GRUPO de niveles encadenados. Al terminar cada
-       sub-nivel la actividad pasa automáticamente al siguiente
+       representa un GRUPO de levels encadenados. Al terminar cada
+       sub-nivel la actividad pasa automáticamente al next
        dentro del mismo grupo, sin volver al menú — reduce la
        "fatiga de elección" mostrando solo 3 opciones en el menú en
        lugar de 6, mientras se conserva la progresión gradual (regla
        13) dentro del grupo: cada sub-nivel sigue cambiando solo una
        variable cada vez.
      Progresión gradual (regla 13): dentro de cada grupo, cada
-     sub-nivel cambia una sola variable — primero el rango (nivel
+     sub-nivel cambia una sola variable — first el rango (nivel
      1→2: 1-10 a 11-21), luego el contexto de "siglo" (nivel 3),
-     luego la dirección de la pregunta (nivel 4), luego la fuente
+     luego la dirección de la question (nivel 4), luego la fuente
      pasa de siglos a reyes/reinas reales (nivel 5). pool 'random'
      mezcla los 5 modos base para que el usuario no memorice el
      orden.
    app.js filtra DATA.numbers por nivel.min/max (o usa
    DATA.monarchs para pool 'monarchs') para generar cada ronda; las
-   opciones incorrectas salen de otros elementos del mismo grupo,
+   opciones incorrect salen de otros elementos del mismo grupo,
    nunca inventadas. Cada ronda se reordena al iniciar y, en modo
-   'random', los items también se mezclan entre niveles.
+   'random', los items también se mezclan entre levels.
    Algunos siglos notables (5, 15, 18, 19, 20, 21 — mismas claves en
    ambos idiomas, solo cambia el dato) tienen además un dato real en
    strings.<locale>.js bajo centuryContext.<n>, mostrado en pantalla
@@ -87,7 +87,7 @@
      "XIV"  → chunks: X(10) IV(4, par resta-suma)
                sum:      "10 + 4"
                total:    14
-               mode:     "add" (el par IV ya aporta su valor resuelto
+               mode:     "add" (el par IV ya aporta su valor solved
                  como un sumando más; no hace falta un tercer modo)
    Esta función es la base de la "explicación con colores" del
    recordatorio (tokens, letra a letra) y de la fórmula agrupada
@@ -203,7 +203,7 @@ var DATA = {
        label: lo que se muestra como número grande en la pantalla
        (encima del refuerzo significativo). Por defecto es el
        propio romano (item.roman), pero aquí lo cambiamos a su
-       forma en contexto para que el lector vea directamente
+       shape en contexto para que el lector vea directamente
        "Siglo XXI" / "Las XII" / "Carlos III" en vez de solo
        "XXI" / "XII" / "III" — el refuerzo de abajo ya no
        necesita repetir el "Siglo XX — " / "Carlos III — " al
@@ -211,7 +211,7 @@ var DATA = {
        ("10+10=20, 20+1=21") se concatena siempre al final de la
        frase i18n, generada por app.js (coloredFormula); las
        frases i18n solo terminan con ":" y la descripción
-       narrativa del paso. */
+       narrativa del step. */
     { roman: 'XX',   factKey: 'century20', speak: 'cardinal', label: 'Siglo XX' },
     { roman: 'XXI',  factKey: 'century21', speak: 'cardinal', label: 'Siglo XXI' },
     { roman: 'XI',   factKey: 'clock11',   speak: 'cardinal', label: 'Las XI' },
@@ -264,21 +264,21 @@ var DATA = {
      - random = mezcla los 5 modos base en orden aleatorio */
   levels: [
     {
-      id: 'read', pool: 'group', estrellas: 1,
+      id: 'read', pool: 'group', stars: 1,
       sublevels: [
-        { id: 'level1', pool: 'numbers', min: 1, max: 10, mode: 'romanToNumber', estrellas: 1 },
-        { id: 'level2', pool: 'numbers', min: 11, max: 21, mode: 'romanToNumber', estrellas: 2 }
+        { id: 'level1', pool: 'numbers', min: 1, max: 10, mode: 'romanToNumber', stars: 1 },
+        { id: 'level2', pool: 'numbers', min: 11, max: 21, mode: 'romanToNumber', stars: 2 }
       ]
     },
     {
-      id: 'apply', pool: 'group', estrellas: 3,
+      id: 'apply', pool: 'group', stars: 3,
       sublevels: [
-        { id: 'level3', pool: 'numbers', min: 1, max: 21, mode: 'centuryToNumber', estrellas: 2 },
-        { id: 'level4', pool: 'numbers', min: 1, max: 21, mode: 'numberToRoman', estrellas: 3 },
-        { id: 'level5', pool: 'monarchs', mode: 'monarchToNumber', estrellas: 3 }
+        { id: 'level3', pool: 'numbers', min: 1, max: 21, mode: 'centuryToNumber', stars: 2 },
+        { id: 'level4', pool: 'numbers', min: 1, max: 21, mode: 'numberToRoman', stars: 3 },
+        { id: 'level5', pool: 'monarchs', mode: 'monarchToNumber', stars: 3 }
       ]
     },
-    { id: 'test', pool: 'random', mode: 'random', estrellas: 2 }
+    { id: 'test', pool: 'random', mode: 'random', stars: 2 }
   ],
   decompose: decompose
 };

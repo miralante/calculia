@@ -1,8 +1,8 @@
 /* ============================================================
    Datos: Puzzle (razonamiento — recomponer una imagen).
-   Formato: DATA[locale].niveles = [{ id, descripcion, estrellas,
-     filas, columnas, images: [{ nombre, cells: string[] }] }]
-   'celdas' tiene tantos pictos como filas x columnas, en el orden
+   Formato: DATA[locale].levels = [{ id, description, stars,
+     rows, cols, images: [{ name, cells: string[] }] }]
+   'cells' tiene tantos pictos como rows x cols, en el orden
    correcto (fila a fila). Los pictos son iconos y no cambian entre
    idiomas; solo se traducen los nombres visibles. Para ampliar:
    añadir imágenes al nivel del idioma correspondiente.
@@ -13,41 +13,41 @@ const DATA = {
     levels: [
       {
         id: 1,
-        descripcion: '4 piezas',
-        estrellas: 1,
-        filas: 2,
-        columnas: 2,
+        description: '4 piezas',
+        stars: 1,
+        rows: 2,
+        cols: 2,
         images: [
-          { nombre: 'Paisaje', cells: ['☀️', '☁️', '🌳', '🌸'] },
-          { nombre: 'Frutas', cells: ['🍎', '🍌', '🍇', '🍊'] },
-          { nombre: 'Animales', cells: ['🐶', '🐱', '🐰', '🐻'] },
-          { nombre: 'Caras', cells: ['😀', '😺', '🐵', '🐸'] }
+          { name: 'Paisaje', cells: ['☀️', '☁️', '🌳', '🌸'] },
+          { name: 'Frutas', cells: ['🍎', '🍌', '🍇', '🍊'] },
+          { name: 'Animales', cells: ['🐶', '🐱', '🐰', '🐻'] },
+          { name: 'Caras', cells: ['😀', '😺', '🐵', '🐸'] }
         ]
       },
       {
         id: 2,
-        descripcion: '6 piezas',
-        estrellas: 2,
-        filas: 2,
-        columnas: 3,
+        description: '6 piezas',
+        stars: 2,
+        rows: 2,
+        cols: 3,
         images: [
-          { nombre: 'Cocina', cells: ['🍎', '🍌', '🍞', '🧀', '🥕', '🥛'] },
-          { nombre: 'Selva', cells: ['🐒', '🦁', '🐘', '🐍', '🦜', '🐆'] },
-          { nombre: 'Cielo', cells: ['☀️', '🌙', '⭐', '☁️', '🌈', '⚡'] },
-          { nombre: 'Mar', cells: ['🐟', '🐙', '🦀', '🐠', '🐬', '🦈'] }
+          { name: 'Cocina', cells: ['🍎', '🍌', '🍞', '🧀', '🥕', '🥛'] },
+          { name: 'Selva', cells: ['🐒', '🦁', '🐘', '🐍', '🦜', '🐆'] },
+          { name: 'Cielo', cells: ['☀️', '🌙', '⭐', '☁️', '🌈', '⚡'] },
+          { name: 'Mar', cells: ['🐟', '🐙', '🦀', '🐠', '🐬', '🦈'] }
         ]
       },
       {
         id: 3,
-        descripcion: '9 piezas',
-        estrellas: 3,
-        filas: 3,
-        columnas: 3,
+        description: '9 piezas',
+        stars: 3,
+        rows: 3,
+        cols: 3,
         images: [
-          { nombre: 'Granja', cells: ['🐮', '🐷', '🐔', '🐑', '🐴', '🐓', '🐐', '🦆', '🐕'] },
-          { nombre: 'Frutas variadas', cells: ['🍎', '🍌', '🍇', '🍊', '🍉', '🍓', '🍑', '🍒', '🥝'] },
-          { nombre: 'Espacio', cells: ['🌍', '🌙', '⭐', '🚀', '☄️', '🪐', '👽', '🛰️', '🌟'] },
-          { nombre: 'Ciudad', cells: ['🏠', '🏢', '🚗', '🚌', '🚦', '🌳', '🏪', '🚲', '👥'] }
+          { name: 'Granja', cells: ['🐮', '🐷', '🐔', '🐑', '🐴', '🐓', '🐐', '🦆', '🐕'] },
+          { name: 'Frutas variadas', cells: ['🍎', '🍌', '🍇', '🍊', '🍉', '🍓', '🍑', '🍒', '🥝'] },
+          { name: 'Espacio', cells: ['🌍', '🌙', '⭐', '🚀', '☄️', '🪐', '👽', '🛰️', '🌟'] },
+          { name: 'Ciudad', cells: ['🏠', '🏢', '🚗', '🚌', '🚦', '🌳', '🏪', '🚲', '👥'] }
         ]
       }
     ]
@@ -56,41 +56,41 @@ const DATA = {
     levels: [
       {
         id: 1,
-        descripcion: '4 pieces',
-        estrellas: 1,
-        filas: 2,
-        columnas: 2,
+        description: '4 pieces',
+        stars: 1,
+        rows: 2,
+        cols: 2,
         images: [
-          { nombre: 'Landscape', cells: ['☀️', '☁️', '🌳', '🌸'] },
-          { nombre: 'Fruits', cells: ['🍎', '🍌', '🍇', '🍊'] },
-          { nombre: 'Animals', cells: ['🐶', '🐱', '🐰', '🐻'] },
-          { nombre: 'Faces', cells: ['😀', '😺', '🐵', '🐸'] }
+          { name: 'Landscape', cells: ['☀️', '☁️', '🌳', '🌸'] },
+          { name: 'Fruits', cells: ['🍎', '🍌', '🍇', '🍊'] },
+          { name: 'Animals', cells: ['🐶', '🐱', '🐰', '🐻'] },
+          { name: 'Faces', cells: ['😀', '😺', '🐵', '🐸'] }
         ]
       },
       {
         id: 2,
-        descripcion: '6 pieces',
-        estrellas: 2,
-        filas: 2,
-        columnas: 3,
+        description: '6 pieces',
+        stars: 2,
+        rows: 2,
+        cols: 3,
         images: [
-          { nombre: 'Kitchen', cells: ['🍎', '🍌', '🍞', '🧀', '🥕', '🥛'] },
-          { nombre: 'Jungle', cells: ['🐒', '🦁', '🐘', '🐍', '🦜', '🐆'] },
-          { nombre: 'Sky', cells: ['☀️', '🌙', '⭐', '☁️', '🌈', '⚡'] },
-          { nombre: 'Sea', cells: ['🐟', '🐙', '🦀', '🐠', '🐬', '🦈'] }
+          { name: 'Kitchen', cells: ['🍎', '🍌', '🍞', '🧀', '🥕', '🥛'] },
+          { name: 'Jungle', cells: ['🐒', '🦁', '🐘', '🐍', '🦜', '🐆'] },
+          { name: 'Sky', cells: ['☀️', '🌙', '⭐', '☁️', '🌈', '⚡'] },
+          { name: 'Sea', cells: ['🐟', '🐙', '🦀', '🐠', '🐬', '🦈'] }
         ]
       },
       {
         id: 3,
-        descripcion: '9 pieces',
-        estrellas: 3,
-        filas: 3,
-        columnas: 3,
+        description: '9 pieces',
+        stars: 3,
+        rows: 3,
+        cols: 3,
         images: [
-          { nombre: 'Farm', cells: ['🐮', '🐷', '🐔', '🐑', '🐴', '🐓', '🐐', '🦆', '🐕'] },
-          { nombre: 'Mixed fruits', cells: ['🍎', '🍌', '🍇', '🍊', '🍉', '🍓', '🍑', '🍒', '🥝'] },
-          { nombre: 'Space', cells: ['🌍', '🌙', '⭐', '🚀', '☄️', '🪐', '👽', '🛰️', '🌟'] },
-          { nombre: 'City', cells: ['🏠', '🏢', '🚗', '🚌', '🚦', '🌳', '🏪', '🚲', '👥'] }
+          { name: 'Farm', cells: ['🐮', '🐷', '🐔', '🐑', '🐴', '🐓', '🐐', '🦆', '🐕'] },
+          { name: 'Mixed fruits', cells: ['🍎', '🍌', '🍇', '🍊', '🍉', '🍓', '🍑', '🍒', '🥝'] },
+          { name: 'Space', cells: ['🌍', '🌙', '⭐', '🚀', '☄️', '🪐', '👽', '🛰️', '🌟'] },
+          { name: 'City', cells: ['🏠', '🏢', '🚗', '🚌', '🚦', '🌳', '🏪', '🚲', '👥'] }
         ]
       }
     ]

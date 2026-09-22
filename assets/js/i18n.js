@@ -308,10 +308,10 @@
     document.documentElement.lang = locale();
     apply(document);
     /* Inject the shared footer into every <footer data-pie-app>
-       marker on the page. App.utils.inyectarPie is defined in
+       marker on the page. App.utils.injectFooter is defined in
        utils.js, which loads before i18n.js per the standard order. */
-    if (window.App && window.App.utils && typeof window.App.utils.inyectarPie === 'function') {
-      window.App.utils.inyectarPie();
+    if (window.App && window.App.utils && typeof window.App.utils.injectFooter === 'function') {
+      window.App.utils.injectFooter();
     }
   }
 

@@ -7,7 +7,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '� Dinero',
+    title: '💰 Dinero',
     instructionMenu: 'Elige una actividad.',
     contexto: 'Estás en una tienda. Tienes un dinero, ves un precio y pagas con un billete. ¿Te llega? ¿Cuánto te devuelven?',
     explicacion: '✅ Con estas cuentas sabes si te llega el dinero y controlas el cambio que te devuelven.',
@@ -16,10 +16,10 @@
     notaMonederoLink: 'El Monedero',
     noteWalletLink: 'El Monedero',
     btnBackToMenu: '← Otras actividades',
+    btnMenu: 'Volver al inicio',
     otherLevel: 'Elegir otro nivel',
-    resumenFinal: 'Has resuelto {n} preguntas de {actividad}. Ahora tienes {stars} estrellas.',
-    endSummary: 'Has resuelto {n} preguntas de {actividad}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{nombre}»?',
+    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
+    btnHarder: '¿Quieres probar «{name}»?',
     btnOtherActivity: 'Otra actividad',
     explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
@@ -72,7 +72,6 @@
       etqCuesta: 'Cuesta:',
       itCosts: 'Cuesta:'
     },
-    transferencia: 'Esto te servirá para manejarte con el dinero del día a día: saber si te llega, contar el cambio o leer un precio.',
     transfer: 'Esto te servirá para manejarte con el dinero del día a día: saber si te llega, contar el cambio o leer un precio.'
   }, 'es');
 })();

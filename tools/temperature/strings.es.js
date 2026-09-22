@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    Calculia — Water Temperature — texts (ES)
    Locale-specific file. Loaded conditionally from index.html
    according to App.i18n.locale().
@@ -11,8 +11,9 @@
     instructionMenu: 'Aprende qué pasa con el agua cuando cambia la temperatura.',
     contexto: 'En la vida real, el agua se congela, se calienta o hierve según los grados. Aquí lo ves y lo tocas.',
     explicacion: '✅ Entender la temperatura y los números negativos te sirve para cocinar, para el tiempo del día y para cualquier cosa que se enfría o se calienta.',
-    transferencia: 'Esto te servirá para leer el termómetro del tiempo, entender una receta o saber cuándo algo está caliente sin tocarlo.',
+    transfer: 'Esto te servirá para leer el termómetro del tiempo, entender una receta o saber cuándo algo está caliente sin tocarlo.',
     btnBackToMenu: '← Otras actividades',
+    btnMenu: 'Volver al inicio',
     otherLevel: 'Elegir otro reto',
     btnOtherActivity: 'Otra actividad',
 
@@ -51,8 +52,7 @@
       hint: 'Pulsa + o − para cambiar la temperatura. Mira cómo se transforma el agua.',
       temperatureSuggestionUp: '💡 Sugerencia: sube hasta {temp} °C.',
       temperatureSuggestionDown: '💡 Sugerencia: baja hasta {temp} °C.',
-      resumenFinal: 'Has completado el reto. Ahora tienes {estrellas} estrellas.',
-      endSummary: 'Has completado el reto. Ahora tienes {estrellas} estrellas.',
+      endSummary: 'Has completado el reto. Ahora tienes {stars} estrellas.',
       ttsTemp:   '{temp} grados',
       ttsIce:    'El agua está congelada. Hielo.',
       ttsLiquid: 'El agua está líquida.',

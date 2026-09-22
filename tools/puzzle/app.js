@@ -1,6 +1,6 @@
 /* ============================================================
    Calculia — Puzzle (reasoning: spatial orientation)
-   Data in data.js (DATA.niveles). Shared modules in assets/js/.
+   Data in data.js (DATA.levels). Shared modules in assets/js/.
    Mechanic: tap a piece and then its correct spot on the board,
    looking at the model. If the spot is wrong, the piece returns
    to the tray: it is never lost or punished.
@@ -23,10 +23,10 @@
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
   var starsEl = $('#stars');
-
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
   /* Round state */
   var level = null;
@@ -43,22 +43,15 @@
 
   function bank() { return DATA[App.i18n.locale()] || DATA.es; }
 
-  function paintLevels() {
-    var cont = $('#levels');
-    cont.innerHTML = '';
-    bank().niveles.forEach(function (n) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      btn.innerHTML = n.descripcion;
-      btn.addEventListener('click', function () { startRound(n); });
-      cont.appendChild(btn);
-    });
+  /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
+  function levelFromProgress() {
+    var idxN = Math.min(progress.completedRounds || 0, bank().levels.length - 1);
+    return bank().levels[idxN];
   }
 
   function startRound(n) {
     level = n;
-    images = App.utils.shuffle(level.imagenes);
+    images = App.utils.shuffle(level.images);
     index = 0;
     roundCorrect = 0;
     screenStart.classList.add('hidden');
@@ -79,25 +72,25 @@
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
     btnNext.classList.add('hidden');
-    titleImageEl.textContent = image.name-card;
+    titleImageEl.textContent = image.name;
 
-    var gridStyle = 'repeat(' + level.columnas + ', 1fr)';
+    var gridStyle = 'repeat(' + level.cols + ', 1fr)';
     modelEl.style.gridTemplateColumns = gridStyle;
     boardEl.style.gridTemplateColumns = gridStyle;
 
     modelEl.innerHTML = '';
-    image.celdas.forEach(function (picto) {
+    image.cells.forEach(function (picto) {
       var div = document.createElement('div');
-      div.className = 'celda-modelo';
+      div.className = 'model-cell';
       div.textContent = picto;
       modelEl.appendChild(div);
     });
 
     boardEl.innerHTML = '';
     slotsEl = [];
-    image.celdas.forEach(function (picto, i) {
+    image.cells.forEach(function (picto, i) {
       var div = document.createElement('div');
-      div.className = 'slot-puzzle';
+      div.className = 'puzzle-slot';
       div.dataset.index = i;
       div.addEventListener('click', function () { placeIn(div, i); });
       boardEl.appendChild(div);
@@ -105,14 +98,14 @@
     });
 
     piecesEl.innerHTML = '';
-    App.utils.shuffle(image.celdas.map(function (picto, i) {
+    App.utils.shuffle(image.cells.map(function (picto, i) {
       return { picto: picto, correctIndex: i };
     })).forEach(function (p) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'pieza';
+      btn.className = 'piece';
       btn.textContent = p.picto;
-      btn.setAttribute('aria-label', App.i18n.t('piezaAria'));
+      btn.setAttribute('aria-label', App.i18n.t('pieceAria'));
       btn.addEventListener('click', function () { select(btn, p.correctIndex); });
       piecesEl.appendChild(btn);
     });
@@ -122,17 +115,17 @@
   }
 
   function select(btn, correctIndex) {
-    App.utils.$$('.pieza').forEach(function (b) { b.classList.remove('seleccionada'); });
-    btn.classList.add('seleccionada');
+    App.utils.$$('.piece').forEach(function (b) { b.classList.remove('selected'); });
+    btn.classList.add('selected');
     selectedPiece = { btn: btn, correctIndex: correctIndex };
   }
 
   function placeIn(slot, index) {
-    if (!selectedPiece || slot.classList.contains('llena')) return;
+    if (!selectedPiece || slot.classList.contains('filled')) return;
 
     if (index === selectedPiece.correctIndex) {
       slot.textContent = selectedPiece.btn.textContent;
-      slot.classList.add('llena');
+      slot.classList.add('filled');
       selectedPiece.btn.remove();
       selectedPiece = null;
       placed += 1;
@@ -141,7 +134,7 @@
         endImage();
       }
     } else {
-      App.utils.$$('.pieza').forEach(function (b) { b.classList.remove('seleccionada'); });
+      App.utils.$$('.piece').forEach(function (b) { b.classList.remove('selected'); });
       selectedPiece = null;
       App.feedback.encourage(feedbackEl);
     }
@@ -166,26 +159,29 @@
   }
 
   function endRound() {
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
     screenGame.classList.add('hidden');
     screenEnd.classList.remove('hidden');
-    $('#endSummary').textContent.textContent = '';
-    $('#contexto').textContent.textContent = '';
-    $('#explicacion').textContent.textContent = '';
-    $('#transfer').textContent.textContent = '';
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{stars}', progress.stars);
+    }
+    $('#contexto').textContent = '';
+    $('#explanation').textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
   /* Events */
   btnNext.addEventListener('click', next);
-  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
-  $('#btnOtherLevel').addEventListener('click', function () {
+  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnMenu').addEventListener('click', function () {
     screenEnd.classList.add('hidden');
-    paintLevels();
     screenStart.classList.remove('hidden');
   });
 
-  paintLevels();
   paintStars();
 })();
 

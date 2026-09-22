@@ -30,6 +30,7 @@
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
   /* Round state */
   var activity = null;
@@ -59,7 +60,7 @@
 
   /* ---- Color-coded digits by place value ---- */
 
-  var POS_CLASS = ['cifra-u', 'cifra-d', 'cifra-c'];
+  var POS_CLASS = ['digit-u', 'digit-d', 'digit-c'];
 
   /* Thousands separator ('.' is / ',' in). Not only styling: switching
      the separator between locales is mandatory (see I18N.md §2). */
@@ -85,7 +86,7 @@
         var pos = groups[g].length - 1 - j;
         var posAbs = (groups.length - 1 - g) * 3 + pos;
         var cls = POS_CLASS[pos];
-        if (highlight === posAbs) cls += ' destacada';
+        if (highlight === posAbs) cls += ' highlight';
         body += '<span class="' + cls + '">' + groups[g][j] + '</span>';
       }
       if (g > 0) html += '<span class="digit-sep">' + thousandsSeparator() + '</span>';
@@ -139,6 +140,103 @@
     return '<span class="dot-group">' + s + '</span>';
   }
 
+  /* ---- Base-ten pictures ----
+     A ten is one bar of ten dots, a unit is a loose dot, so "one bar and
+     four dots" can be read as 14 without counting one by one. */
+  function unitDots(n, cls) {
+    return repeat('<span class="dot ' + (cls || '') + '"></span>', n);
+  }
+
+  /* n as bars plus loose dots. `remove` marks that many of the rightmost
+     pieces as taken away — a whole bar when the amount is a ten. */
+  function baseTen(n, remove) {
+    var bars = Math.floor(n / 10);
+    var units = n % 10;
+    var removedBars = 0, removedUnits = 0;
+    if (remove) {
+      if (remove % 10 === 0) removedBars = remove / 10;
+      else removedUnits = remove;
+    }
+    var html = '';
+    for (var b = 0; b < bars; b++) {
+      var barCls = (b >= bars - removedBars) ? 'removed' : '';
+      html += '<span class="ten-bar">' + unitDots(10, barCls) + '</span>';
+    }
+    if (units) {
+      var u = '';
+      for (var i = 0; i < units; i++) {
+        u += '<span class="dot ' + (i >= units - removedUnits ? 'removed' : '') + '"></span>';
+      }
+      html += '<span class="unit-group">' + u + '</span>';
+    }
+    return html;
+  }
+
+  /* The amount being added, drawn in the second colour so it reads as
+     "what arrives" rather than part of what was already there. */
+  function addedPieces(step) {
+    if (step === 10) return '<span class="ten-bar">' + unitDots(10, 'pb') + '</span>';
+    return '<span class="unit-group">' + unitDots(step, 'pb') + '</span>';
+  }
+
+  /* Start value chosen so the step never needs a carry or a borrow: the
+     units digit is left with room to grow, or with enough to take away. */
+  function anchorStart(nv) {
+    var step = nv.step;
+    var adding = nv.op === 'add';
+    var tens = randInt(0, Math.floor(nv.max / 10));
+    var units;
+    if (step === 10) {
+      units = randInt(0, 9);
+      if (!adding && tens === 0) tens = 1;
+    } else if (adding) {
+      units = randInt(0, 9 - step);
+    } else {
+      units = randInt(step, 9);
+    }
+    var a = tens * 10 + units;
+    return a === 0 ? step : a;
+  }
+
+  /* Same picture as baseTen, but for a subtraction that needs a borrow:
+     one whole bar is broken into ten loose dots so there are enough
+     units to take `remove` away (remove > n % 10). The broken group is
+     drawn with the same dashed style as `unit-group` so it visually
+     reads as "not a solid ten anymore". */
+  function baseTenBorrow(n, remove) {
+    var bars = Math.floor(n / 10) - 1;
+    var brokenUnits = (n % 10) + 10;
+    var html = '';
+    for (var b = 0; b < bars; b++) {
+      html += '<span class="ten-bar">' + unitDots(10, '') + '</span>';
+    }
+    var u = '';
+    for (var i = 0; i < brokenUnits; i++) {
+      u += '<span class="dot ' + (i >= brokenUnits - remove ? 'removed' : '') + '"></span>';
+    }
+    html += '<span class="unit-group">' + u + '</span>';
+    return html;
+  }
+
+  /* Two-digit start with enough room in the units for `b` to push past
+     ten: tens stays below 9 so the carried result never spills into a
+     third digit. */
+  function carryStart() {
+    var tens = randInt(1, 8);
+    var units = randInt(5, 9);
+    var b = randInt(Math.max(1, 10 - units), 9);
+    return { a: tens * 10 + units, b: b };
+  }
+
+  /* Two-digit start whose units are too small for `b`, forcing a
+     borrow: at least one whole ten stays intact after breaking one. */
+  function borrowStart() {
+    var tens = randInt(2, 8);
+    var units = randInt(0, 4);
+    var b = randInt(units + 1, 9);
+    return { a: tens * 10 + units, b: b };
+  }
+
   /* ============================================================
      Question generators (one per level type)
      Return: prompt, visual (html), legend,
@@ -146,6 +244,113 @@
      ============================================================ */
 
   var GENERATORS = {
+
+    /* +1 / -1, +10 / -10, +5 / -5 on a base-ten picture. */
+    anchor: function (nv) {
+      var step = nv.step;
+      var adding = nv.op === 'add';
+      var a = anchorStart(nv);
+      var correct = adding ? a + step : a - step;
+      var hintKey = step === 1 ? 'anchorHintOne' : (step === 5 ? 'anchorHintFive' : 'anchorHintTen');
+      return {
+        prompt: App.i18n.t(adding ? 'gen.anchorAddPrompt' : 'gen.anchorSubtractPrompt')
+          .replace('{a}', a).replace('{step}', step),
+        visual: '<div class="expression">' + paintNumber(a) +
+          paintSign(adding ? '+' : '−') + paintNumber(step) + paintSign('=') +
+          '<span class="num-box empty">?</span></div>' +
+          '<div class="dot-array" aria-hidden="true">' +
+            baseTen(a, adding ? 0 : step) +
+            (adding ? paintSign('+') + addedPieces(step) : '') +
+          '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.' + hintKey) + '</p>',
+        options: buildOptions(correct,
+          /* Near misses that a real mistake would produce: moving by one
+             instead of by the anchor, or by the anchor twice. */
+          [adding ? a + 1 : a - 1, adding ? correct + step : correct - step, a],
+          function (v) { return paintNumber(v); })
+      };
+    },
+
+    /* Loose units joined to whole tens (30 + 4), or taken off again
+       (47 - 7). Nothing crosses a ten, so the tens bar never changes. */
+    placeValue: function (nv) {
+      var adding = nv.op === 'add';
+      var tens = randInt(1, 6);
+      var units = randInt(1, 9);
+      var whole = tens * 10;
+      if (adding) {
+        var sum = whole + units;
+        return {
+          prompt: App.i18n.t('gen.placeValueAddPrompt').replace('{a}', whole).replace('{b}', units),
+          visual: '<div class="expression">' + paintNumber(whole) + paintSign('+') +
+            paintNumber(units) + paintSign('=') + '<span class="num-box empty">?</span></div>' +
+            '<div class="dot-array" aria-hidden="true">' + baseTen(whole) +
+            paintSign('+') + '<span class="unit-group">' + unitDots(units, 'pb') + '</span></div>' +
+            '<p class="hint">' + App.i18n.t('gen.placeValueAddHint') + '</p>',
+          legend: legendPos(),
+          /* tens + units is the classic slip: adding the digits instead
+             of joining tens and units. */
+          options: buildOptions(sum, [tens + units, sum + 1, whole],
+            function (v) { return paintNumber(v); })
+        };
+      }
+      var start = whole + units;
+      return {
+        prompt: App.i18n.t('gen.placeValueSubtractPrompt').replace('{a}', start).replace('{b}', units),
+        visual: '<div class="expression">' + paintNumber(start) + paintSign('−') +
+          paintNumber(units) + paintSign('=') + '<span class="num-box empty">?</span></div>' +
+          '<div class="dot-array" aria-hidden="true">' + baseTen(start, units) + '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.placeValueSubtractHint') + '</p>',
+        legend: legendPos(),
+        options: buildOptions(whole, [start, whole - units, whole + units],
+          function (v) { return paintNumber(v); })
+      };
+    },
+
+    /* Addition that crosses a ten: ten loose units regroup into a new
+       bar. The only new idea versus placeValue is the crossing itself —
+       the picture still shows bars + loose dots, nothing new to read. */
+    carry: function () {
+      var start = carryStart();
+      var a = start.a, b = start.b;
+      var correct = a + b;
+      var unitsA = a % 10;
+      /* Classic slip: write (unitsA + b) % 10 in the units place but
+         forget to carry the extra ten into the tens place. */
+      var forgotCarry = Math.floor(a / 10) * 10 + (unitsA + b) % 10;
+      return {
+        prompt: App.i18n.t('gen.carryAddPrompt').replace('{a}', a).replace('{b}', b),
+        visual: '<div class="expression">' + paintNumber(a) + paintSign('+') +
+          paintNumber(b) + paintSign('=') + '<span class="num-box empty">?</span></div>' +
+          '<div class="dot-array" aria-hidden="true">' + baseTen(a) +
+          paintSign('+') + '<span class="unit-group">' + unitDots(b, 'pb') + '</span></div>' +
+          '<p class="hint">' + App.i18n.t('gen.carryAddHint') + '</p>',
+        options: buildOptions(correct, [forgotCarry, correct + 10, a],
+          function (v) { return paintNumber(v); })
+      };
+    },
+
+    /* Subtraction that needs a borrow: one bar breaks into ten loose
+       dots so there is enough to take away. Same picture family as
+       placeValue's removal, just with the broken bar shown up front. */
+    borrow: function () {
+      var start = borrowStart();
+      var a = start.a, b = start.b;
+      var correct = a - b;
+      var unitsA = a % 10;
+      /* Classic slip: subtract the smaller digit from the larger one
+         regardless of order, leaving the tens untouched. */
+      var flipped = Math.floor(a / 10) * 10 + Math.abs(unitsA - b);
+      return {
+        prompt: App.i18n.t('gen.borrowSubtractPrompt').replace('{a}', a).replace('{b}', b),
+        visual: '<div class="expression">' + paintNumber(a) + paintSign('−') +
+          paintNumber(b) + paintSign('=') + '<span class="num-box empty">?</span></div>' +
+          '<div class="dot-array" aria-hidden="true">' + baseTenBorrow(a, b) + '</div>' +
+          '<p class="hint">' + App.i18n.t('gen.borrowSubtractHint').replace('{b}', b) + '</p>',
+        options: buildOptions(correct, [flipped, correct - 10, a],
+          function (v) { return paintNumber(v); })
+      };
+    },
 
     restar: function (nv) {
       var a = randInt(nv.a[0], nv.a[1]);
@@ -259,7 +464,7 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenLevels, screenGame, screenEnd].forEach(function (p) {
+    [screenMenu, screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -285,25 +490,22 @@
   }
 
   /* ---- Levels for an activity ---- */
+  /* (openActivity now auto via levelFromProgress) */
+
+  /* ---- Game ---- */
+  /* The level rises one step per completed round, capped at the last
+     one, so a person who comes back continues where they were. */
+  function levelFromProgress() {
+    var levels = activity.levels;
+    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
+  }
+
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    $('#activityTitle').textContent.textContent = '';
-    $('#activityInstruction').textContent.textContent = '';
-    var cont = $('#levels');
-    cont.innerHTML = '';
-    activity.levels.forEach(function (nv) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      btn.innerHTML = App.i18n.t('level.' + nv.id);
-      btn.addEventListener('click', function () { startRound(nv); });
-      cont.appendChild(btn);
-    });
-    show(screenLevels);
+    startRound(levelFromProgress());
   }
 
-  /* ---- Game ---- */
   function startRound(nv) {
     level = nv;
     idx = 0;
@@ -447,7 +649,7 @@
     if (op.correct) {
       showExplanation(op.correct);
       answered = true;
-      btn.classList.add('correcta');
+      btn.classList.add('correct');
       App.feedback.success(feedbackEl);
       progress.stars += 1;
       roundCorrect += 1;
@@ -468,7 +670,7 @@
       } else {
         showExplanation(op.correct);
       }
-      btn.classList.add('animo');
+      btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
@@ -507,20 +709,26 @@
   }
 
   function endRound() {
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
     show(screenEnd);
-    $('#endSummary').textContent.textContent = '';
-    $('#transfer').textContent.textContent = '';
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
+        .replace('{stars}', progress.stars);
+    }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
-    var idxNivel = activity.levels.indexOf(level);
-    var siguienteNivel = (roundCorrect === DATA.perRound && idxNivel !== -1 && idxNivel + 1 < activity.levels.length)
-      ? activity.levels[idxNivel + 1] : null;
+    var idxN = activity.levels.indexOf(level);
+    var nextLevel = (roundCorrect === DATA.perRound && idxN !== -1 && idxN + 1 < activity.levels.length)
+      ? activity.levels[idxN + 1] : null;
     var btnHarder = $('#btnHarder');
-    if (siguienteNivel) {
-      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name-card}', App.i18n.t('level.' + siguienteNivel.id));
+    if (nextLevel) {
+      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name}', App.i18n.t('level.' + nextLevel.id));
       btnHarder.classList.remove('hidden');
-      btnHarder.onclick = function () { startRound(siguienteNivel); };
+      btnHarder.onclick = function () { startRound(nextLevel); };
     } else {
       btnHarder.classList.add('hidden');
     }
@@ -528,9 +736,11 @@
 
   /* ---- Events ---- */
 
-  $('#btnBackToMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnRepeat').addEventListener('click', function () { startRound(level); });
-  $('#btnOtherLevel').addEventListener('click', function () { openActivity(activity.id); });
+  var elBtnBackToMenu = $('#btnBackToMenu');
+  if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
+  $('#btnNext').addEventListener('click', next);
+  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
   $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
 
   paintMenu();

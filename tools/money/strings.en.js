@@ -17,10 +17,10 @@
     noteWallet: '💶 To pay with real coins, go to {link}.',
     noteWalletLink: 'The Wallet',
     btnBackToMenu: '← Other activities',
+    btnMenu: 'Back to start',
     otherLevel: 'Choose another level',
-    resumenFinal: 'You solved {n} questions of {actividad}. You now have {stars} stars.',
-    endSummary: 'You solved {n} questions of {actividad}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{nombre}»?',
+    endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
+    btnHarder: 'Want to try «{name}»?',
     btnOtherActivity: 'Another activity',
     explicacionCorrecta: '✅ Correct! The answer is: ',
     correctExplanation: '✅ Correct! The answer is: ',
@@ -73,7 +73,6 @@
       etqCuesta: 'It costs:',
       itCosts: 'It costs:'
     },
-    transferencia: 'This will help you handle money in daily life: knowing if you have enough, counting change or reading a price.',
     transfer: 'This will help you handle money in daily life: knowing if you have enough, counting change or reading a price.'
   }, 'en');
 })();

@@ -32,16 +32,17 @@
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText"></span>
+        <span class="difficulty" id="difficulty"></span>
       </div>
 
       <p class="image-title centered" id="titleImage"></p>
 
       <div class="zona-puzzle">
-        <div class="bloque-modelo">
+        <div class="block-model">
           <p class="etiqueta centered" data-i18n="modelLabel">Modelo</p>
-          <div class="rejilla-puzzle modelo" id="model"></div>
+          <div class="rejilla-puzzle model" id="model"></div>
         </div>
-        <div class="bloque-tablero">
+        <div class="block-tablero">
           <p class="etiqueta centered" data-i18n="boardLabel">Tu tablero</p>
           <div class="rejilla-puzzle" id="board"></div>
         </div>
@@ -60,10 +61,10 @@
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
       <p id="contexto" class="contexto"></p>
-      <p id="explicacion" class="explicacion"></p>
-      <p id="transfer" class="transfer" data-i18n="transferencia"></p>
+      <p id="explanation" class="explanation"></p>
+      <p id="transfer" class="transfer" data-i18n="transfer"></p>
       <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
-      <button type="button" class="btn btn-secondary" id="btnOtherLevel" data-i18n="otherLevel">Elegir otra actividad</button>
+      <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
       <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>

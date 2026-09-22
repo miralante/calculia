@@ -88,6 +88,8 @@
        automáticamente, conservando la progresión gradual (regla
        13): cada sub-nivel cambia solo una variable. */
     "levelsTitle": "Elige una actividad",
+  btnMenu: "Volver al inicio",
+  proximoNivel: "Siguiente paso: {n}",
     "test": "Test",
     "testInfo": "Mezcla las 4 actividades en orden aleatorio",
     "level1": "Símbolos I, V, X",
@@ -116,7 +118,7 @@
     "correctExplanation": "✅ ¡Correcto! Los números romanos se leen letra a letra: cada letra suma (o resta, si va delante de una mayor).",
     "wrongExplanationPrefix": "❌ No es ese. Fíjate en los colores: ",
     "hintHint": "🤔 Pista: ",
-    "finalSummary": "Has ganado {n} estrellas. Ahora tienes {total} estrellas.",
+    "finalSummary": "Has ganado {n} estrellas. Ahora tienes {stars} estrellas.",
     /* Cabecera y fin del refuerzo de fallos: al terminar la ronda
        normal, los items fallados se vuelven a presentar en una
        mini-ronda hasta acertarlos todos. Las estrellas ya sumadas
@@ -125,11 +127,11 @@
     "reinforceIntro": "Repite estos {n} hasta acertarlos todos.",
     "reinforceDone": "¡Refuerzo terminado! Ya dominas esos números.",
     "contexto": "Estás leyendo números romanos. Los verás en sitios reales: libros, monumentos o relojes.",
-    "transferencia": "Esto te servirá para leer números romanos de verdad: en una placa, en un libro o en el siglo de un cuadro.",
+    "transfer": "Esto te servirá para leer números romanos de verdad: en una placa, en un libro o en el siglo de un cuadro.",
 
     /* Plantilla para la igualdad final de un ejemplo de solo un
-       chunk (ver formatEquals en app.js): {total} = resultado. */
-    "decompositionEquals": " = {total}",
+       chunk (ver formatEquals en app.js): {stars} = resultado. */
+    "decompositionEquals": " = {stars}",
 
     /* Carrusel: cada letra con su rol y un ejemplo de uso.
        Las menciones de letras dentro del caption usan los

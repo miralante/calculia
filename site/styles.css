@@ -15,7 +15,7 @@
   justify-content: center;
 }
 
-.btn-idioma {
+.btn-lang {
   min-height: 44px;
   min-width: 64px;
   padding: 0 12px;
@@ -31,12 +31,12 @@
 
 @media (max-width: 719px) {
   /* En móvil/tablet táctil los botones cumplen la regla 2 (>= 64px). */
-  .btn-idioma { min-height: var(--boton-min); }
+  .btn-lang { min-height: var(--boton-min); }
 }
 
-.btn-idioma:hover { border-color: var(--color-foco); }
+.btn-lang:hover { border-color: var(--color-foco); }
 
-.btn-idioma[aria-pressed="true"] {
+.btn-lang[aria-pressed="true"] {
   border-color: var(--color-foco);
   background: var(--mod-razonamiento-suave);
 }

@@ -13,7 +13,9 @@
       learning before moving on to the reminder.
    3) reminderScreen — the reminder: I/V/X table with colours and
       the subtract/add rule with two examples (IV, VI).
-   4) levelsScreen — the 5 levels + random round.
+   4) quizScreen — the rounds themselves; the level is derived from
+      the stored progress (levelFromProgress), not chosen on a
+      separate levels screen.
 
    Quiz engine with 3 options where the correct answer is always
    evident: the two distractors are the components of the Roman
@@ -70,13 +72,12 @@
   var introScreen = $('#introScreen');
   var famousScreen = $('#famousScreen');
   var reminderScreen = $('#reminderScreen');
-  var levelsScreen = $('#levelsScreen');
   var quizScreen = $('#quizScreen');
   var endScreen = $('#endScreen');
-  var SCREENS = [introScreen, famousScreen, reminderScreen, levelsScreen, quizScreen, endScreen];
+  var SCREENS = [introScreen, famousScreen, reminderScreen, quizScreen, endScreen];
 
-  var levelsEl = $('#levels');
   var starsEl = $('#stars');
+  var dificultadEl = $('#difficulty');
 
   /* ---------- Screen 1: introduction (symbol carousel) ---------- */
   var carouselDisplay = $('#carouselDisplay');
@@ -114,9 +115,6 @@
   var exampleAddEquals2 = $('#exampleAddEquals2');
   var referenceNext = $('#referenceNext');
 
-  /* ---------- Screen 4: levels ---------- */
-  var levelsBack = $('#levelsBack');
-
   /* ---------- Game screen ---------- */
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
@@ -134,6 +132,7 @@
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
   if (!progress.completed) progress.completed = {};
 
   function save() { App.storage.set(TOOL_ID, progress); }
@@ -760,20 +759,10 @@
     return group.sublevels.every(function (sn) { return progress.completed[sn.id]; });
   }
 
-  function paintLevels() {
-    levelsEl.innerHTML = '';
-    DATA.levels.forEach(function (level) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-level';
-      var done = level.sublevels
-        ? (groupCompleted(level.id) ? ' ' + t('done') : '')
-        : (progress.completed[level.id] ? ' ' + t('done') : '');
-      btn.innerHTML = t(level.id) + done +
-        '<span class="level-info">' + t(level.id + 'Info') + '</span>';
-      btn.addEventListener('click', function () { startLevel(level); });
-      levelsEl.appendChild(btn);
-    });
+  /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
+  function levelFromProgress() {
+    var idxN = Math.min(progress.completedRounds || 0, DATA.levels.length - 1);
+    return DATA.levels[idxN];
   }
 
   /* ---------- Quiz round ---------- */
@@ -828,14 +817,67 @@
      repeat them exactly `DATA.repetitions` times, in mixed order,
      so each number is seen 2 times before moving on: enough to
      settle the mechanic without making the round too long. */
+  /* Identity of a round entry: the same number (or monarch) asked in the
+     same mode is the same question on screen. */
+  function entryKey(entry) {
+    var item = entry.item || {};
+    return (item.id || item.n) + '|' + entry.mode;
+  }
+
+  function hasAdjacentRepeat(list) {
+    for (var i = 1; i < list.length; i++) {
+      if (entryKey(list[i]) === entryKey(list[i - 1])) return true;
+    }
+    return false;
+  }
+
+  /* Two identical questions in a row make "Siguiente" look broken: the
+     button works, but the screen does not change, so it reads as a dead
+     control. The repetition itself is deliberate (DATA.repetitions: each
+     number is meant to come up twice), so keep it and spread it out.
+     Reshuffle a few times; if luck is against us, fall back to filling
+     even positions and then odd ones, where two copies of the same entry
+     cannot end up side by side. */
+  function spreadRepeats(list) {
+    for (var attempt = 0; attempt < 20; attempt++) {
+      var shuffled = App.utils.shuffle(list);
+      if (!hasAdjacentRepeat(shuffled)) return shuffled;
+    }
+    var byKey = {};
+    list.forEach(function (e) {
+      var k = entryKey(e);
+      (byKey[k] = byKey[k] || []).push(e);
+    });
+    var flat = [];
+    Object.keys(byKey)
+      .sort(function (a, b) { return byKey[b].length - byKey[a].length; })
+      .forEach(function (k) { flat = flat.concat(byKey[k]); });
+    var out = new Array(flat.length);
+    var slot = 0;
+    for (var i = 0; i < flat.length; i++) {
+      out[slot] = flat[i];
+      slot += 2;
+      if (slot >= flat.length) slot = 1;
+    }
+    return out;
+  }
+
   function itemsForLevel(level) {
     if (level.pool === 'random' || level.mode === 'random') {
       var modes = baseLevels();
       var out = [];
       for (var i = 0; i < DATA.perRound; i++) {
-        var baseLevel = modes[Math.floor(Math.random() * modes.length)];
-        var basePool = sourcePool(baseLevel);
-        out.push({ item: App.utils.shuffle(basePool)[0], mode: baseLevel.mode });
+        /* Redraw if the pick repeats the previous question, for the same
+           reason as spreadRepeats above. */
+        var entry, tries = 0;
+        do {
+          var baseLevel = modes[Math.floor(Math.random() * modes.length)];
+          var basePool = sourcePool(baseLevel);
+          entry = { item: App.utils.shuffle(basePool)[0], mode: baseLevel.mode };
+          tries += 1;
+        } while (out.length && tries < 10 &&
+                 entryKey(entry) === entryKey(out[out.length - 1]));
+        out.push(entry);
       }
       return out;
     }
@@ -848,7 +890,7 @@
     for (var r = 0; r < reps; r++) {
       repeated = repeated.concat(picked);
     }
-    return App.utils.shuffle(repeated);
+    return spreadRepeats(repeated);
   }
 
   /* Starts a round. If 'level' is a group (pool 'group'), starts
@@ -1267,7 +1309,7 @@
        (romanToNumber) or a meaningful phrase (centuryToNumber,
        monarchToNumber), so reading it aloud helps without
        spoiling the answer. */
-    btnListenPrompt.classList.toggle('hidden', entry.mode === 'numberToRoman');
+    if (btnListenPrompt) btnListenPrompt.classList.toggle('hidden', entry.mode === 'numberToRoman');
 
     round.options.forEach(function (opt) {
       var btn = document.createElement('button');
@@ -1294,7 +1336,7 @@
     if (isCorrect) {
       showExplanation(round);
       resolved = true;
-      btn.classList.add('correcta');
+      btn.classList.add('correct');
       App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
       App.feedback.success(feedbackEl);
       progress.stars += 1;
@@ -1324,7 +1366,7 @@
         if (roman) paintQuizDecomposition(roman, true);
         explanationWrap.classList.remove('hidden');
       }
-      btn.classList.add('animo');
+      btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
@@ -1354,8 +1396,9 @@
       return;
     }
     show(endScreen);
-    $('#finalSummary').textContent.textContent = '';
-    $('#transfer').textContent.textContent = '';
+    $('#finalSummary').textContent = t('finalSummary')
+      .replace('{n}', correctCount)
+      .replace('{stars}', progress.stars);
     App.feedback.celebrate(t('core.roundComplete'));
   }
 
@@ -1372,9 +1415,11 @@
   carouselNext.addEventListener('click', function () { carouselStep(1); });
   famousPrev2.addEventListener('click', function () { famousStep(-1); });
   famousNext2.addEventListener('click', function () { famousStep(1); });
-  btnListenFamous.addEventListener('click', function () {
-    speakWithButton(btnListenFamous, speakForFamous());
-  });
+  if (btnListenFamous) {
+    btnListenFamous.addEventListener('click', function () {
+      speakWithButton(btnListenFamous, speakForFamous());
+    });
+  }
   introNext.addEventListener('click', function () { show(famousScreen); });
 
   famousPrevBtn.addEventListener('click', function () { show(introScreen); });
@@ -1382,25 +1427,20 @@
 
   reminderBack.addEventListener('click', function () { show(famousScreen); });
   referenceNext.addEventListener('click', function () {
-    paintLevels();
-    show(levelsScreen);
+    startLevel(levelFromProgress());
   });
-
-  levelsBack.addEventListener('click', function () { show(reminderScreen); });
 
   $('#backLevelsBtn').addEventListener('click', function () {
-    paintLevels();
-    show(levelsScreen);
+    startLevel(levelFromProgress());
   });
   nextBtn.addEventListener('click', next);
-  btnListenPrompt.addEventListener('click', function () {
-    speakWithButton(btnListenPrompt, speakForQuiz(currentEntry));
-  });
+  if (btnListenPrompt) {
+    btnListenPrompt.addEventListener('click', function () {
+      speakWithButton(btnListenPrompt, speakForQuiz(currentEntry));
+    });
+  }
   $('#replayBtn').addEventListener('click', function () { startLevel(currentLevel); });
-  $('#otherLevelBtn').addEventListener('click', function () {
-    paintLevels();
-    show(levelsScreen);
-  });
+  $('#btnMenu').addEventListener('click', function () { show(introScreen); });
 
   function init() {
     App.i18n.apply();
@@ -1409,7 +1449,6 @@
     paintFamous();
     paintSymbols();
     paintRuleExamples();
-    paintLevels();
     show(introScreen);
   }
 

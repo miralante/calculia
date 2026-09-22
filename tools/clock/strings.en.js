@@ -17,7 +17,19 @@
     whatTime: 'What time is it?',
     clockAria: 'Clock: {texto}',
     endSummary: 'You won {n} stars. Now you have {stars} stars.',
+    btnMenu: 'Back to start',
+    proximoNivel: 'Next step: {n}',
     otherLevel: 'Choose another activity',
+    learnTitle: 'How to read the clock',
+    learnIntro: 'The clock has two hands. Each hand tells you one thing.',
+    learnHourHand: 'The short hand shows the hour.',
+    learnMinuteHand: 'The long hand shows the minutes.',
+    learnRuleOClock: "If the long hand is on the 12, the time is o'clock.",
+    learnRuleHalf: 'If the long hand is on the 6, it is half past.',
+    learnExample: 'This clock shows {t}.',
+    learnStart: 'Start practising →',
+    learnOpen: 'See how to read it',
+    learnBack: '← Back to the question',
     oClock: "{h} o'clock",
     quarterPast: 'quarter past {h}',
     halfPast: 'half past {h}',
@@ -36,7 +48,22 @@
     setIncrement: 'Increment',
     setDecrement: 'Decrement',
     setConfirm: 'Check',
+    elapsedFrom: 'Before',
+    elapsedTo: 'After',
+    gap: {
+      '30': 'half an hour',
+      '60': '1 hour',
+      '90': 'an hour and a half',
+      '120': '2 hours',
+      '150': 'two and a half hours',
+      '180': '3 hours'
+    },
     mode: {
+      elapsed: {
+        name: 'How long in between',
+        description: 'Look at the two clocks and say how much time there is between them.',
+        question: 'How much time passes between the two clocks?'
+      },
       read: {
         name: 'Read the clock',
         description: 'Look at the clock and pick the right time.',
@@ -71,6 +98,5 @@
       dormir: { name: 'bedtime', question: 'What time do you go to bed?' }
     },
     transfer: 'This will help you read the time on the kitchen clock, at school or on your own watch, without having to keep asking.',
-    transferencia: 'This will help you read the time on the kitchen clock, at school or on your own watch, without having to keep asking.'
   }, 'en');
 })();

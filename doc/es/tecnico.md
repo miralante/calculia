@@ -92,13 +92,14 @@ calculia/
 └── _headers                # Cabeceras de caché y seguridad de Cloudflare Pages
 ```
 
-Misma arquitectura de tres niveles que Apptonomia, acotada a 14
+Misma arquitectura de tres niveles que Apptonomia, acotada a 17
 actividades agrupadas en dos bloques en vez de 7 módulos terapéuticos:
-`site/index.html` tiene un bloque "🧮 Matemáticas" (Los Números,
-Fracciones y Medidas, Restar y Cálculo Mental, Dinero, Las Tablas,
-Cantidades, Números Romanos) y un bloque "🧩 Razonamiento y lógica"
-(Adivinanzas, Patrones, El Monedero, El Reloj, Historias, ¿Qué no
-encaja?, Puzzle).
+`site/index.html` tiene un bloque "🧮 Matemáticas" (Sitios y tamaños, Los Números, Geometría, Formas parecidas,
+Formas, Fracciones, Medidas, Restar y Cálculo Mental, Dinero, Porcentajes,
+Las Tablas, Grupos exactos, Cuentas grandes, Cantidades, Números Romanos, Problemas, Temperatura del agua) y un bloque "🧩 Razonamiento y lógica"
+(Adivinanzas, Patrones, El Monedero, La balanza, Datos y gráficos, El Calendario,
+El Reloj,
+Historias, ¿Qué no encaja?, Puzzle).
 
 ### 2.1 `assets/` — núcleo compartido, conservado entero
 

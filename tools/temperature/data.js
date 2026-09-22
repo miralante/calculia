@@ -29,7 +29,7 @@
    generator function in app.js matching 'tipo'.
    ============================================================ */
 var DATA = {
-  porRonda: 6,
+  perRound: 6,
 
   activities: {
     /* "Mission" mechanics: not a quiz. The user manipulates the

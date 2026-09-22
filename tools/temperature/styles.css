@@ -1,4 +1,4 @@
-/* Temperature — tool-specific styles.
+/* Temperature â€” tool-specific styles.
    Shared styles live in assets/css/. The thermometer UI reuses the
    .card and .btn patterns; only the state-aware card tint and the
    button row are tool-specific. */
@@ -7,6 +7,11 @@
 .btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 .center-row { justify-content: center; }
+
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-secundario, #666);
+}
 
 /* Activity menu (same flat grid as other tools). */
 .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
@@ -23,7 +28,6 @@
 .extra-note { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
-.btn-level { min-width: 300px; align-self: center; }
 #btnBackToMenu { align-self: center; }
 
 /* ---- Thermometer / mission UI ---- */
@@ -65,7 +69,7 @@
 .thermo-state {
   font-size: 96px;
   line-height: 1;
-  /* Subtle wobble when the state changes — see the
+  /* Subtle wobble when the state changes â€” see the
      .state-changed keyframes below. The animation is opt-in via
      JS in a future pass; keeping the keyframe defined so the
      design is in one place. */

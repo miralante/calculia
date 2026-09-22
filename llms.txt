@@ -1,10 +1,10 @@
 # Calculia — Actividades de cálculo y razonamiento lógico
 
-> Aplicación web gratuita y sin registro con quince actividades cortas y visuales de cálculo y razonamiento lógico.
+> Aplicación web gratuita y sin registro con veintisiete actividades cortas y visuales de cálculo y razonamiento lógico.
 
 ## What it is
 
-- Quince actividades breves y visuales, agrupadas en Matemáticas y Razonamiento lógico.
+- Veintisiete actividades breves y visuales, agrupadas en Matemáticas y Razonamiento lógico.
 - Pensada para practicar a tu ritmo, sin presión de tiempo y sin puntuación competitiva.
 - Diseñada con lectura fácil y contraste alto para ser accesible desde el primer intento.
 - Gratuita, sin registro y con el progreso guardado en el navegador.
