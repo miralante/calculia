@@ -10,8 +10,8 @@
            Do NOT edit the block between build:head:start and build:head:end
            by hand -- it will be overwritten. Edit the config and re-run. -->
       <title>Calculia — Cálculo y razonamiento lógico a tu ritmo</title>
-      <meta name="description" content="Calculia es una aplicación web gratuita y sin registro con actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles. Parte de la suite Apptonomia.">
-      <meta name="keywords" content="calculia, apptonomia, matemáticas, razonamiento lógico, cálculo, fracciones, números romanos, easy read, lectura fácil, accesibilidad cognitiva, actividades gratuitas sin registro, sumas, restas, tablas de multiplicar">
+      <meta name="description" content="Calculia es una aplicación web gratuita y sin registro con actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones, medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles. Parte de la suite Apptonomia.">
+      <meta name="keywords" content="calculia, apptonomia, matemáticas, razonamiento lógico, cálculo, fracciones, medidas, números romanos, easy read, lectura fácil, accesibilidad cognitiva, actividades gratuitas sin registro, sumas, restas, tablas de multiplicar">
       <meta name="author" content="Apptonomia">
       <meta name="robots" content="index,follow,max-image-preview:large">
       <link rel="canonical" href="https://calculia.apptonomia.uk/">
@@ -24,9 +24,9 @@
            app.config.json > dc*. Edit the config and re-run; do not
            hand-edit -- the next build will overwrite them. -->
       <meta name="DC.creator" content="Calculia (parte de la suite Apptonomia)">
-      <meta name="DC.subject" content="Actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles.">
+      <meta name="DC.subject" content="Actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones, medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles.">
       <meta name="DC.type" content="InteractiveResource">
-      <meta name="DC.description" content="Calculia es una aplicación web gratuita y sin registro con actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles. Parte de la suite Apptonomia.">
+      <meta name="DC.description" content="Calculia es una aplicación web gratuita y sin registro con actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones, medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones y puzzles. Parte de la suite Apptonomia.">
       <meta name="DC.rights" content="MIT (código). Las actividades (datos y enunciados) son contenido propio bajo CC BY 4.0.">
       <meta name="DC.language" content="es">
       <meta name="DC.language" content="en">
@@ -116,7 +116,7 @@
           "name": "¿Qué es Calculia?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Calculia es una aplicación web gratuita y sin registro con quince actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones y medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones, el monedero, el reloj, cuentos, ¿qué sobra? y puzzle."
+            "text": "Calculia es una aplicación web gratuita y sin registro con veintisiete actividades cortas y visuales de cálculo y razonamiento lógico: números, fracciones, medidas, suma y resta, dinero, tablas, cantidades, números romanos, temperatura del agua, acertijos, patrones, el monedero, el reloj, cuentos, ¿qué sobra? y puzzle."
           }
         },
         {
@@ -124,7 +124,7 @@
           "name": "¿Cuántas actividades tiene Calculia?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Quince, agrupadas en dos secciones: Matemáticas (números, fracciones, sumas y restas, dinero, tablas, cantidades, números romanos y temperatura del agua) y Razonamiento lógico (acertijos, patrones, el monedero, el reloj, cuentos, ¿qué sobra? y puzzle)."
+            "text": "Veintisiete, agrupadas en dos secciones: Matemáticas (números, fracciones, medidas, sumas y restas, dinero, tablas, cantidades, números romanos y temperatura del agua) y Razonamiento lógico (acertijos, patrones, el monedero, el reloj, cuentos, ¿qué sobra? y puzzle)."
           }
         },
         {
@@ -161,10 +161,11 @@
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="../manifest.json">
 </head>
 <body>
   <div class="container suite-home">
-    <header class="cabecera centrado suite-header">
+    <header class="cabecera centered suite-header">
       <div class="suite-brand">
         <img src="../assets/img/icono.svg" alt="" width="44" height="44" class="logo">
         <div class="suite-brand-copy">
@@ -173,11 +174,11 @@
         </div>
       </div>
       <div class="suite-controls"><div class="idioma-selector" role="group" aria-label="Elegir idioma">
-          <button type="button" class="btn-idioma" id="btnIdiomaEs" data-locale="es" aria-pressed="false" aria-label="Español"><span class="locale-full" aria-hidden="true">🇪🇸 Español</span><span class="locale-short" aria-hidden="true">ES</span></button>
-          <button type="button" class="btn-idioma" id="btnIdiomaEn" data-locale="en" aria-pressed="false" aria-label="English"><span class="locale-full" aria-hidden="true">🇬🇧 English</span><span class="locale-short" aria-hidden="true">EN</span></button>
+          <button type="button" class="btn-lang" id="btnLangEs" data-locale="es" aria-pressed="false" aria-label="Español"><span class="locale-full" aria-hidden="true">🇪🇸 Español</span><span class="locale-short" aria-hidden="true">ES</span></button>
+          <button type="button" class="btn-lang" id="btnLangEn" data-locale="en" aria-pressed="false" aria-label="English"><span class="locale-full" aria-hidden="true">🇬🇧 English</span><span class="locale-short" aria-hidden="true">EN</span></button>
         </div></div>
       <div class="suite-details">
-        <div class="fila centrado-fila">
+        <div class="fila centered-fila">
           <p class="saludo" id="saludo" data-i18n="saludo">Hola. ¿Qué quieres practicar hoy?</p>
         </div>
         <p class="stars" id="totalStars">⭐ 0</p>
@@ -189,50 +190,100 @@
       <a href="#mod-logica" class="ancla-modulo" style="--acento: var(--mod-memoria);"><span data-i18n="modLogica">🧩 Razonamiento y lógica</span></a>
     </nav>
 
-    <main class="pila modulos">
+    <main class="stack modulos">
 
-      <!-- Bloque: Matemáticas -->
+      <!-- Bloque: Matemáticas. Las cards van de lo más sencillo a lo más
+           avanzado: quien empieza por la primera encuentra siempre algo
+           que ya puede hacer. El criterio exacto y la tabla completa están
+           en TODO.md (no se sirve al navegador); aquí no se nombran
+           niveles ni etapas, porque nada de eso debe llegar a quien usa
+           la app. Mantener este orden al añadir o mover una card. -->
       <section class="modulo" id="mod-mates" style="--acento: var(--mod-razonamiento); --acento-suave: var(--mod-razonamiento-suave);">
         <h2><span aria-hidden="true" data-i18n="modMates">🧮 Matemáticas</span></h2>
-        <div class="grid-tarjetas">
-          <a href="../tools/numbers/index.html" class="tarjeta">
+        <div class="grid-cards">
+          <a href="../tools/places/index.html" class="card">
+            <span class="picto" aria-hidden="true">🧭</span>
+            <span class="name" data-i18n="places.name">Sitios y tamaños</span>
+            <span class="detalle" data-i18n="places.detail">Dentro, fuera, más largo.</span>
+          </a>
+          <a href="../tools/shapes/index.html" class="card">
+            <span class="picto" aria-hidden="true">🔷</span>
+            <span class="name" data-i18n="shapes.name">Formas</span>
+            <span class="detalle" data-i18n="shapes.detail">Círculos, cuadrados y cuerpos.</span>
+          </a>
+          <a href="../tools/geometry/index.html" class="card">
+            <span class="picto" aria-hidden="true">📐</span>
+            <span class="name" data-i18n="geometry.name">Geometría</span>
+            <span class="detalle" data-i18n="geometry.detail">Ángulos, bordes y mitades.</span>
+          </a>
+          <a href="../tools/numbers/index.html" class="card">
             <span class="picto" aria-hidden="true">🧮</span>
-            <span class="nombre" data-i18n="numbers.name">Los Números</span>
+            <span class="name" data-i18n="numbers.name">Los Números</span>
             <span class="detalle" data-i18n="numbers.detail">Lee, ordena y compara números.</span>
           </a>
-          <a href="../tools/quantities/index.html" class="tarjeta">
+          <a href="../tools/divisibility/index.html" class="card">
+            <span class="picto" aria-hidden="true">✖️</span>
+            <span class="name" data-i18n="divisibility.name">Grupos exactos</span>
+            <span class="detalle" data-i18n="divisibility.detail">Múltiplos, primos y cuadrados.</span>
+          </a>
+          <a href="../tools/operations/index.html" class="card">
+            <span class="picto" aria-hidden="true">➗</span>
+            <span class="name" data-i18n="operations.name">Cuentas grandes</span>
+            <span class="detalle" data-i18n="operations.detail">Partir, repartir y el orden.</span>
+          </a>
+          <a href="../tools/quantities/index.html" class="card">
             <span class="picto" aria-hidden="true">↔️</span>
-            <span class="nombre" data-i18n="quantities.name">Cantidades</span>
+            <span class="name" data-i18n="quantities.name">Cantidades</span>
             <span class="detalle" data-i18n="quantities.detail">Practica poco, mucho y aproximar.</span>
           </a>
-          <a href="../tools/mental-math/index.html" class="tarjeta">
+          <a href="../tools/mental-math/index.html" class="card">
             <span class="picto" aria-hidden="true">🧠</span>
-            <span class="nombre" data-i18n="mentalmath.name">Restar y Cálculo Mental</span>
+            <span class="name" data-i18n="mentalmath.name">Restar y Cálculo Mental</span>
             <span class="detalle" data-i18n="mentalmath.detail">Resta y calcula de cabeza.</span>
           </a>
-          <a href="../tools/math-tables/index.html" class="tarjeta">
-            <span class="picto" aria-hidden="true">🔢</span>
-            <span class="nombre" data-i18n="mathtables.name">Las Tablas</span>
-            <span class="detalle" data-i18n="mathtables.detail">Cuenta, suma, multiplica y divide con colores.</span>
+          <a href="../tools/percent/index.html" class="card">
+            <span class="picto" aria-hidden="true">💯</span>
+            <span class="name" data-i18n="percent.name">Porcentajes</span>
+            <span class="detalle" data-i18n="percent.detail">Rebajas, recetas y planos.</span>
           </a>
-          <a href="../tools/fractions-measures/index.html" class="tarjeta">
-            <span class="picto" aria-hidden="true">🍕</span>
-            <span class="nombre" data-i18n="fractionsmeasures.name">Fracciones y Medidas</span>
-            <span class="detalle" data-i18n="fractionsmeasures.detail">Partes, mitades y unidades.</span>
-          </a>
-          <a href="../tools/money/index.html" class="tarjeta">
+          <a href="../tools/money/index.html" class="card">
             <span class="picto" aria-hidden="true">💰</span>
-            <span class="nombre" data-i18n="money.name">Dinero</span>
+            <span class="name" data-i18n="money.name">Dinero</span>
             <span class="detalle" data-i18n="money.detail">Cuenta, paga y calcula el cambio.</span>
           </a>
-          <a href="../tools/roman-numerals/index.html" class="tarjeta">
+          <a href="../tools/math-tables/index.html" class="card">
+            <span class="picto" aria-hidden="true">🔢</span>
+            <span class="name" data-i18n="mathtables.name">Las Tablas</span>
+            <span class="detalle" data-i18n="mathtables.detail">Cuenta, suma, multiplica y divide con colores.</span>
+          </a>
+          <a href="../tools/measures/index.html" class="card">
+            <span class="picto" aria-hidden="true">📏</span>
+            <span class="name" data-i18n="measures.name">Medidas</span>
+            <span class="detalle" data-i18n="measures.detail">Metros, kilos y litros.</span>
+          </a>
+          <a href="../tools/similar/index.html" class="card">
+            <span class="picto" aria-hidden="true">🔍</span>
+            <span class="name" data-i18n="similar.name">Formas parecidas</span>
+            <span class="detalle" data-i18n="similar.detail">Tamaños, cuadrados y rampas.</span>
+          </a>
+          <a href="../tools/fractions-measures/index.html" class="card">
+            <span class="picto" aria-hidden="true">🍕</span>
+            <span class="name" data-i18n="fractionsmeasures.name">Fracciones</span>
+            <span class="detalle" data-i18n="fractionsmeasures.detail">Partes, mitades y decimales.</span>
+          </a>
+          <a href="../tools/roman-numerals/index.html" class="card">
             <span class="picto" aria-hidden="true">🏛️</span>
-            <span class="nombre" data-i18n="romannumerals.name">Números Romanos</span>
+            <span class="name" data-i18n="romannumerals.name">Números Romanos</span>
             <span class="detalle" data-i18n="romannumerals.detail">Aprende a reconocer los siglos.</span>
           </a>
-          <a href="../tools/temperature/index.html" class="tarjeta">
+          <a href="../tools/problems/index.html" class="card">
+            <span class="picto" aria-hidden="true">🤔</span>
+            <span class="name" data-i18n="problems.name">Problemas</span>
+            <span class="detalle" data-i18n="problems.detail">Entender y resolver.</span>
+          </a>
+          <a href="../tools/temperature/index.html" class="card">
             <span class="picto" aria-hidden="true">🌡️</span>
-            <span class="nombre" data-i18n="temperature.name">Temperatura del agua</span>
+            <span class="name" data-i18n="temperature.name">Temperatura del agua</span>
             <span class="detalle" data-i18n="temperature.detail">Sube y baja los grados. Mira qué pasa con el agua.</span>
           </a>
         </div>
@@ -241,40 +292,55 @@
       <!-- Bloque: Razonamiento y lógica -->
       <section class="modulo" id="mod-logica" style="--acento: var(--mod-memoria); --acento-suave: var(--mod-memoria-suave);">
         <h2><span aria-hidden="true" data-i18n="modLogica">🧩 Razonamiento y lógica</span></h2>
-        <div class="grid-tarjetas">
-          <a href="../tools/riddles/index.html" class="tarjeta">
+        <div class="grid-cards">
+          <a href="../tools/riddles/index.html" class="card">
             <span class="picto" aria-hidden="true">🧩</span>
-            <span class="nombre" data-i18n="riddles.name">Adivinanzas</span>
+            <span class="name" data-i18n="riddles.name">Adivinanzas</span>
             <span class="detalle" data-i18n="riddles.detail">¿Qué es? Piensa y elige.</span>
           </a>
-          <a href="../tools/patterns/index.html" class="tarjeta">
+          <a href="../tools/patterns/index.html" class="card">
             <span class="picto" aria-hidden="true">🔵</span>
-            <span class="nombre" data-i18n="patterns.name">Patrones</span>
+            <span class="name" data-i18n="patterns.name">Patrones</span>
             <span class="detalle" data-i18n="patterns.detail">¿Qué sigue ahora?</span>
           </a>
-          <a href="../tools/wallet/index.html" class="tarjeta">
+          <a href="../tools/wallet/index.html" class="card">
             <span class="picto" aria-hidden="true">💶</span>
-            <span class="nombre" data-i18n="wallet.name">El Monedero</span>
+            <span class="name" data-i18n="wallet.name">El Monedero</span>
             <span class="detalle" data-i18n="wallet.detail">Paga el precio justo.</span>
           </a>
-          <a href="../tools/clock/index.html" class="tarjeta">
+          <a href="../tools/algebra/index.html" class="card">
+            <span class="picto" aria-hidden="true">⚖️</span>
+            <span class="name" data-i18n="algebra.name">La balanza</span>
+            <span class="detalle" data-i18n="algebra.detail">Letras, balanzas y gráficas.</span>
+          </a>
+          <a href="../tools/charts/index.html" class="card">
+            <span class="picto" aria-hidden="true">📊</span>
+            <span class="name" data-i18n="charts.name">Datos y gráficos</span>
+            <span class="detalle" data-i18n="charts.detail">Leer lo que cuenta un gráfico.</span>
+          </a>
+          <a href="../tools/calendar/index.html" class="card">
+            <span class="picto" aria-hidden="true">📅</span>
+            <span class="name" data-i18n="calendar.name">El Calendario</span>
+            <span class="detalle" data-i18n="calendar.detail">Días, meses y estaciones.</span>
+          </a>
+          <a href="../tools/clock/index.html" class="card">
             <span class="picto" aria-hidden="true">🕐</span>
-            <span class="nombre" data-i18n="clock.name">El Reloj</span>
+            <span class="name" data-i18n="clock.name">El Reloj</span>
             <span class="detalle" data-i18n="clock.detail">¿Qué hora es?</span>
           </a>
-          <a href="../tools/stories/index.html" class="tarjeta">
+          <a href="../tools/stories/index.html" class="card">
             <span class="picto" aria-hidden="true">📖</span>
-            <span class="nombre" data-i18n="stories.name">Historias</span>
+            <span class="name" data-i18n="stories.name">Historias</span>
             <span class="detalle" data-i18n="stories.detail">Ordena lo que pasó primero.</span>
           </a>
-          <a href="../tools/odd-one-out/index.html" class="tarjeta">
+          <a href="../tools/odd-one-out/index.html" class="card">
             <span class="picto" aria-hidden="true">🔎</span>
-            <span class="nombre" data-i18n="oddoneout.name">¿Qué no encaja?</span>
+            <span class="name" data-i18n="oddoneout.name">¿Qué no encaja?</span>
             <span class="detalle" data-i18n="oddoneout.detail">Encuentra el que sobra.</span>
           </a>
-          <a href="../tools/puzzle/index.html" class="tarjeta">
+          <a href="../tools/puzzle/index.html" class="card">
             <span class="picto" aria-hidden="true">🧩</span>
-            <span class="nombre" data-i18n="puzzle.name">Puzzle</span>
+            <span class="name" data-i18n="puzzle.name">Puzzle</span>
             <span class="detalle" data-i18n="puzzle.detail">Coloca cada pieza en su sitio.</span>
           </a>
         </div>

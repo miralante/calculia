@@ -1,0 +1,104 @@
+/* Same shapes — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { font-size: 1.4rem; }
+
+/* ---- Rectangles drawn square by square, so "the same shape" can be
+   checked by counting rather than measured by eye ---- */
+.shape-pair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  min-height: 150px;
+}
+.shape-svg { overflow: visible; }
+.shape-cell {
+  fill: var(--mod-razonamiento, var(--color-superficie));
+  stroke: var(--color-texto);
+  stroke-width: 1.5;
+}
+
+/* ---- The three squares of a right triangle ---- */
+.tri-stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 150px;
+}
+.tri-part {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+.tri-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.tri-plus {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.sq-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sq-row { display: flex; gap: 2px; }
+.sq-cell {
+  display: block;
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--color-texto);
+  background: var(--mod-secuencia, var(--color-superficie));
+}
+/* The square to work out is drawn as a dashed box with a question mark,
+   so it reads as "this one is missing" and not as an empty square. */
+.tri-unknown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  border: 3px dashed var(--color-texto);
+  border-radius: 6px;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* ---- Ramps ---- */
+.ramp-stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1.4rem;
+  min-height: 150px;
+}
+.ramp-one {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+.ramp-svg { overflow: visible; }
+.ramp-shape {
+  fill: var(--mod-secuencia, var(--color-superficie));
+  stroke: var(--color-texto);
+  stroke-width: 3;
+}
+/* The numbers are written under each ramp, so the comparison never
+   depends on judging two slopes by eye alone. */
+.ramp-key {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.ramp-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.answer-name { display: block; }

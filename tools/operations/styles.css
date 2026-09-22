@@ -1,0 +1,130 @@
+/* Big sums — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { font-size: 1.45rem; }
+
+/* ---- The stage ----
+   Two blocks side by side with a sign between them. It wraps at narrow
+   widths so a 13 × 4 never pushes the page sideways. */
+.calc-stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 140px;
+}
+.stage-stack { flex-direction: column; }
+
+.calc-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+.calc-sign {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.block-caption {
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ---- Dots ----
+   A multiplication is a rectangle of dots, so it can always be counted
+   instead of recalled. */
+.dot-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 5px;
+  border: 2px solid var(--color-borde);
+  border-radius: 8px;
+  background: var(--color-superficie);
+}
+.dot-row {
+  display: flex;
+  gap: 3px;
+}
+.dot {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--color-texto);
+}
+/* The two parts of a cut sum are told apart by tone AND by their own
+   caption, never by colour alone (WCAG 1.4.1). */
+.tone-1 .dot { background: var(--mod-secuencia, var(--color-texto)); }
+.tone-2 .dot { background: var(--mod-razonamiento, var(--color-texto)); }
+
+/* ---- Piles, for the two ways of dividing ---- */
+.group-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 7.5rem;
+  padding: 0.45rem;
+  border: 2px solid var(--color-borde);
+  border-radius: 10px;
+  background: var(--color-superficie);
+}
+
+/* ---- Expressions ---- */
+.expression {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.part {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* The number line: where you start is pinned, and every stop can be
+   counted along the way. Zero is marked because it is the turning point. */
+.line-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  width: 100%;
+}
+.num-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+}
+.line-stop {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 1.6rem;
+  padding-top: 1.3rem;
+  border-top: 3px solid var(--color-texto);
+}
+.stop-num {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+/* Zero is thicker: it is where the sign changes. */
+.is-zero { border-top-width: 6px; }
+/* Where you start carries a pin as well as the outline. */
+.is-start .stop-num { text-decoration: underline; }
+.line-you {
+  position: absolute;
+  top: 0;
+  font-size: 1.1rem;
+}

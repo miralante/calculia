@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sitios y tamaños | Calculia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../../site/index.html" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="title">🧭 Sitios y tamaños</h1>
+      <span class="stars" id="stars">⭐ 0</span>
+    </header>
+
+    <section id="screenMenu" class="stack">
+      <div class="row center-row">
+        <p class="instruction" id="instruction" data-i18n="instructionMenu">Elige una actividad.</p>
+      </div>
+      <div id="activitiesMenu"></div>
+    </section>
+
+    
+
+    <section id="screenGame" class="hidden stack">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+        <span class="progress-text" id="progressText">0 / 6</span>
+        <span class="difficulty" id="difficulty"></span>
+      </div>
+
+      <div class="card centered stack">
+        <p class="prompt" id="prompt"></p>
+        <div class="visual" id="visual"></div>
+        <p class="legend hidden" id="legend"></p>
+      </div>
+
+      <div class="stack options" id="options"></div>
+
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="row explanation hidden" id="explanationWrap">
+        <p id="explanation" aria-live="polite"></p>
+      </div>
+      <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
+    </section>
+
+    <section id="screenEnd" class="hidden centered stack" aria-live="polite">
+      <div class="emoji-large" aria-hidden="true">🎉</div>
+      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+      <p id="endSummary"></p>
+      <p id="transfer" class="transfer" data-i18n="transfer"></p>
+      <button type="button" class="btn btn-secondary hidden" id="btnHarder"></button>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
+      <button type="button" class="btn btn-secondary" id="btnOtherActivity" data-i18n="btnOtherActivity">Otra actividad</button>
+      <a href="../../site/index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
+    </section>
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
+  </div>
+
+  <script src="../../assets/js/utils.js"></script>
+  <script src="../../assets/js/i18n.js"></script>
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/feedback.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="../../assets/js/sw-register.js"></script>
+</body>
+</html>

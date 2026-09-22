@@ -1,0 +1,337 @@
+/* Data and charts — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { font-size: 1.35rem; }
+
+/* ---- Pictogram: one picture, one thing ---- */
+.pictogram,
+.bar-chart,
+.share-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.chart-row,
+.share-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: var(--radio, 12px);
+}
+.row-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 600;
+}
+.row-pictos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem;
+}
+.chart-token {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+/* The row being asked about carries an arrow as well as the outline, so
+   it is never colour alone (WCAG 1.4.1). */
+.is-asked {
+  outline: 3px solid var(--color-acento, var(--color-texto));
+  outline-offset: 2px;
+}
+.row-mark { font-size: 1.1rem; }
+
+/* ---- Bar chart: horizontal, because three vertical labels do not fit
+   at 320px without shrinking the text ---- */
+.bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: var(--radio, 12px);
+}
+.bar-track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 1.6rem;
+  border: 2px solid var(--color-borde);
+  border-radius: 6px;
+  background: var(--color-superficie);
+  overflow: hidden;
+}
+.bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--mod-secuencia, var(--color-texto));
+}
+.bar-scale {
+  position: relative;
+  height: 1.4rem;
+  margin-top: 0.2rem;
+  border-top: 2px solid var(--color-borde);
+}
+.scale-mark {
+  position: absolute;
+  top: 0.15rem;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+}
+
+/* ---- Frequency table ---- */
+.freq-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+.freq-table th,
+.freq-table td {
+  padding: 0.45rem 0.5rem;
+  border: 2px solid var(--color-borde);
+  text-align: left;
+}
+.cell-n {
+  font-weight: 700;
+  text-align: right;
+}
+
+/* ---- The bag ---- */
+.bag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-height: 110px;
+  padding: 0.8rem;
+  border: 3px solid var(--color-borde);
+  border-radius: 2rem;
+  background: var(--color-superficie);
+}
+.bag-token {
+  font-size: 1.9rem;
+  line-height: 1.1;
+}
+
+/* ---- Options ---- */
+.opt-picto {
+  display: block;
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
+.opt-name { display: block; }
+.chance-name { display: block; }
+
+/* Every combination drawn, so counting them is the whole job. */
+.outfit-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 140px;
+}
+.outfit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.3rem 0.45rem;
+  border: 2px solid var(--color-borde);
+  border-radius: 10px;
+  background: var(--color-superficie);
+}
+.outfit-part {
+  font-size: 1.5rem;
+  line-height: 1.05;
+}
+
+/* Two groups of marks on the same line, so "more spread out" is visible. */
+.spread-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 140px;
+  justify-content: center;
+}
+.spread-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.spread-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.spread-line {
+  display: flex;
+  width: 100%;
+  border-bottom: 3px solid var(--color-texto);
+}
+.spread-slot {
+  flex: 1 1 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 1.6rem;
+}
+.spread-mark {
+  font-size: 0.9rem;
+  line-height: 1;
+  color: var(--mod-secuencia, var(--color-texto));
+}
+
+/* The four results of tossing two coins. */
+.coin-results {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 130px;
+}
+.coin-result {
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.35rem 0.5rem;
+  border: 2px solid var(--color-borde);
+  border-radius: 10px;
+  background: var(--color-superficie);
+}
+/* The mixed results are outlined as well as grouped, so the count never
+   depends on colour alone. */
+.is-mixed { border-style: dashed; border-width: 3px; }
+.coin-face {
+  font-size: 1.5rem;
+  line-height: 1.05;
+}
+
+/* Two things measured together, as a cloud of dots read left to right. */
+.scatter {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 150px;
+  border-bottom: 3px solid var(--color-texto);
+  border-left: 3px solid var(--color-texto);
+}
+.scatter-col {
+  position: relative;
+  flex: 1 1 0;
+  height: 100%;
+}
+.scatter-dot {
+  position: absolute;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border: 2px solid var(--color-texto);
+  border-radius: 50%;
+  background: var(--mod-secuencia, var(--color-texto));
+}
+
+/* The bag before and after, so what is left is counted and not reasoned. */
+.before-after {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+.ba-one {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.ba-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.ba-arrow {
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+/* The "after" bag is dashed as well as smaller in count, so the change is
+   not carried by position alone. */
+.is-after { border-style: dashed; }
+
+/* ---- Two series in one chart ----
+   Each series carries its own picture in the key and its own outline on the
+   bar, so the two are never told apart by colour alone (WCAG 1.4.1). */
+.pair-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 150px;
+  justify-content: center;
+}
+.pair-key {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.2rem 0.9rem;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.key-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1rem 0.4rem;
+  border: 2px solid var(--color-texto);
+  border-radius: 8px;
+}
+.key-item.is-b { border-style: dashed; }
+.key-picto { font-size: 1.1rem; }
+.pair-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.pair-label {
+  flex: 0 0 5.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.pair-bars {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.pair-track {
+  display: block;
+  width: 100%;
+  height: 0.85rem;
+  border: 1px solid var(--color-borde);
+  border-radius: 4px;
+  background: var(--color-superficie);
+}
+.pair-fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+}
+.pair-fill.is-a { background: var(--mod-secuencia, var(--color-texto)); }
+/* The second series is striped as well as tinted: at the same length the
+   two bars still read as different series without any colour. */
+.pair-fill.is-b {
+  background: var(--mod-razonamiento, var(--color-texto));
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.55) 0 3px,
+    rgba(255, 255, 255, 0) 3px 6px
+  );
+}

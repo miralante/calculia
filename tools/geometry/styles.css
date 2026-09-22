@@ -1,0 +1,245 @@
+/* Geometry — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { font-size: 1.5rem; }
+
+/* ---- Angles ----
+   The guide is the corner of a sheet of paper held against the angle. It
+   is deliberately faint and identical in every question: it helps the
+   comparison without saying anything about this particular angle. */
+.angle-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+}
+.angle-ray {
+  stroke: var(--color-texto);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.angle-guide {
+  stroke: var(--color-borde);
+  stroke-width: 3;
+  stroke-dasharray: 6 5;
+  fill: none;
+}
+.angle-vertex { fill: var(--color-texto); }
+
+/* ---- Grid figures ---- */
+.grid-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+}
+.grid-svg { overflow: visible; }
+.grid-cell {
+  fill: var(--mod-razonamiento, var(--color-texto));
+  stroke: var(--color-superficie);
+  stroke-width: 2;
+}
+/* The edge is what is being counted, so it is drawn on top of the cells,
+   thick enough to follow with a finger. */
+.grid-border {
+  fill: none;
+  stroke: var(--color-texto);
+  stroke-width: 5;
+}
+/* The fold line: dashed, so it reads as "fold here" and not as an edge. */
+.fold-line {
+  stroke: var(--color-texto);
+  stroke-width: 3;
+  stroke-dasharray: 7 5;
+}
+
+/* ---- Options ---- */
+.kind-name {
+  display: block;
+  font-weight: 700;
+}
+.kind-gloss {
+  display: block;
+  font-size: 0.9em;
+}
+
+/* Figures given by their corners, with the standard equal-side marks. */
+.figure-shape {
+  fill: var(--mod-razonamiento, var(--color-texto));
+  stroke: var(--color-texto);
+  stroke-width: 4;
+}
+.side-tick {
+  stroke: var(--color-texto);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+/* The coordinate grid: empty squares with the numbers written on the edges. */
+.coord-svg { overflow: visible; }
+.coord-cell {
+  fill: var(--color-superficie);
+  stroke: var(--color-borde);
+  stroke-width: 2;
+}
+.coord-dot { fill: var(--mod-secuencia, var(--color-texto)); }
+.coord-label {
+  fill: var(--color-texto);
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+/* The circle, and the grid that makes its inside countable. */
+.circle-outline {
+  fill: none;
+  stroke: var(--color-texto);
+  stroke-width: 4;
+}
+.across-line {
+  stroke: var(--mod-secuencia, var(--color-texto));
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.circle-cell {
+  fill: var(--color-superficie);
+  stroke: var(--color-borde);
+  stroke-width: 1;
+}
+.circle-cell.is-in { fill: var(--mod-razonamiento, var(--color-texto)); }
+
+/* A box drawn as its layers, so the cubes can be counted one by one. */
+.layer-stack {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 150px;
+}
+.layer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  border: 2px solid var(--color-borde);
+  border-radius: 6px;
+  background: var(--color-superficie);
+}
+.layer-row { display: flex; gap: 2px; }
+.cube {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--color-texto);
+  background: var(--mod-secuencia, var(--color-superficie));
+}
+
+/* ---- The protractor ----
+   A tick every ten degrees and a number every thirty, so the angle is read
+   off the scale by counting rather than guessed. */
+.deg-tick {
+  stroke: var(--color-borde);
+  stroke-width: 1.5;
+}
+.deg-tick.is-named {
+  stroke: var(--color-texto);
+  stroke-width: 2.5;
+}
+.deg-label {
+  fill: var(--color-texto);
+  font-size: 9px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+/* ---- The clock as a circle of degrees ---- */
+.clock-face {
+  fill: var(--color-superficie);
+  stroke: var(--color-texto);
+  stroke-width: 2.5;
+}
+.clock-num {
+  fill: var(--color-texto);
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+.clock-tick {
+  stroke: var(--color-texto);
+  stroke-width: 2;
+}
+.clock-hand {
+  stroke: var(--mod-secuencia, var(--color-texto));
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+/* ---- Two lines ----
+   One line is solid and the other dashed, so they are two lines even with
+   no colour at all (WCAG 1.4.1). */
+.line-box {
+  fill: var(--color-superficie);
+  stroke: var(--color-borde);
+  stroke-width: 2;
+}
+.pair-line {
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.pair-line.is-first { stroke: var(--mod-secuencia, var(--color-texto)); }
+.pair-line.is-second {
+  stroke: var(--mod-razonamiento, var(--color-texto));
+  stroke-dasharray: 9 5;
+}
+
+/* ---- A triangle inside the rectangle it is half of ---- */
+.half-box {
+  fill: none;
+  stroke: var(--color-texto);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}
+.tri-fill {
+  fill: var(--mod-secuencia, var(--color-texto));
+  fill-opacity: 0.55;
+  stroke: var(--color-texto);
+  stroke-width: 2.5;
+}
+
+/* ---- A box opened out into its six faces ---- */
+.net {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 150px;
+}
+.face {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 3px;
+  border: 2px solid var(--color-texto);
+  border-radius: 4px;
+  background: var(--color-superficie);
+}
+.face-row {
+  display: flex;
+  gap: 1px;
+}
+.face-cell {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--color-borde);
+  background: var(--mod-razonamiento, var(--color-superficie));
+}
+
+/* ---- Points that line up, and the one that does not ---- */
+.dot-letter {
+  fill: var(--color-superficie);
+  font-size: 10px;
+  font-weight: 700;
+  text-anchor: middle;
+}

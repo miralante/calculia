@@ -1,0 +1,52 @@
+/* Shapes — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { font-size: 1.5rem; }
+
+/* ---- Shape stage: one big picture, centred ---- */
+.shape-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+}
+/* Corner dots sit on the outline, so they need to read against both the
+   fill and the stroke: white centre, dark ring. */
+.corner-dot {
+  fill: var(--color-superficie);
+  stroke: var(--color-texto);
+  stroke-width: 3;
+}
+/* Everyday objects that stand in for the solids. */
+.solid-object {
+  font-size: 3rem;
+  line-height: 1.1;
+}
+.solid-big {
+  font-size: 5rem;
+}
+
+/* A net drawn open, piece by piece, so the faces can be counted. */
+.net-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+}
+.net-svg { overflow: visible; }
+.net-piece {
+  stroke: var(--color-texto);
+  stroke-width: 2.5;
+}
+/* Each kind of face has its own fill AND its own shape, so they are never
+   told apart by colour alone (WCAG 1.4.1). */
+.net-square { fill: var(--mod-razonamiento, var(--color-superficie)); }
+.net-rect { fill: var(--mod-secuencia, var(--color-superficie)); }
+.net-tri { fill: var(--color-superficie); }
+.solid-name {
+  display: block;
+  font-weight: 700;
+}
+.solid-gloss {
+  display: block;
+  font-size: 0.85em;
+}
