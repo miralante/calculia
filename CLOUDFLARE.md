@@ -9,26 +9,18 @@
 > project settings.
 >
 > **This project is deployed as a Cloudflare Worker (static assets),
-> not classic Cloudflare Pages.** The Cloudflare dashboard project
-> for `calculia` is a Worker with "Workers Builds", and that's the
-> shape Cloudflare currently recommends for static sites.
+> not classic Cloudflare Pages.** Live at
+> <https://calculia.miralante.workers.dev> (assumed by consistency
+> with the other apps of the suite — `teclatlon`, `sinonimia`,
+> `okeymoney`, `routime`, `memofun` — and to be confirmed against
+> the dashboard if needed).
 >
-> **Live URL not documented anywhere in this repo, and the obvious
-> guess doesn't work:** `https://calculia.miralante.workers.dev`
-> returns Cloudflare error **1042** (the default `workers.dev` route
-> looks disabled), tested directly rather than assumed. That usually
-> means a custom domain is configured instead, but no domain is
-> named anywhere in this file, `README.md`, or `wrangler.toml`.
-> Whoever has dashboard access: please add the real URL here
-> (Workers & Pages → calculia → Domains & Routes) — until then this
-> doc can't be verified end-to-end against production the way
-> `teclatlon`'s and `sinonimia`'s were.
->
-> **Part of the Miralante suite.** Calculia is one of the six
-> runtime apps (Calculia, Memofun, Okeymoney, Routime, Sinonimia,
-> Teclatlon) that share the same author, the same accessibility-first
-> / no-backend philosophy, and the same Cloudflare deploy story.
-> The canonical group-wide guide lives in
+> **Part of the Miralante suite.** Calculia is **one of the six
+> runtime apps** of the seven siblings (Apptonomia, Calculia,
+> Memofun, Okeymoney, Routime, Sinonimia, Teclatlon) that share the
+> same author, the same accessibility-first / no-backend
+> philosophy, and the same Cloudflare deploy story. The canonical
+> group-wide guide lives in
 > [Apptonomia's `CLOUDFLARE.md`](https://github.com/miralante/apptonomia/blob/master/CLOUDFLARE.md);
 > this document is the Calculia-specific runbook on top of it.
 
@@ -37,9 +29,9 @@
 1. The repo is connected to a Cloudflare Workers project named
    `calculia` (Workers & Pages → Connect to Git).
 2. Every push to `master` triggers a build in Cloudflare's
-   infrastructure via Workers Builds, which reads `wrangler.toml` to
-   deploy the repo root as a static-assets Worker (no `main`
-   script).
+   infrastructure via Workers Builds, which reads
+   [`wrangler.toml`](wrangler.toml) to deploy the repo root as a
+   static-assets Worker (no `main` script).
 3. The build is a no-op: no `build command`, no `output directory`
    other than `.`, so the static files are served as-is.
 4. The `validate.yml` GitHub Action still runs on every push and PR
@@ -83,8 +75,6 @@ to do with server-side routing.
 
 ## Configuration in Cloudflare
 
-When the project is set up in the Cloudflare dashboard:
-
 | Setting | Value |
 |---|---|
 | Framework preset | None |
@@ -93,9 +83,9 @@ When the project is set up in the Cloudflare dashboard:
 | Production branch | `master` |
 | Root directory | *(empty — repo root)* |
 
-No environment variables are required: the app makes no server-side
-calls, and all assets (fonts, icons, activity data) are bundled in
-the repo.
+No environment variables are required: the app makes no
+server-side calls, and all assets (fonts, icons, activity data)
+are bundled in the repo.
 
 ## Required Cloudflare headers
 
@@ -103,8 +93,8 @@ The site uses a [`_headers`](_headers) file at the repo root to set
 security headers (CSP, X-Frame-Options, Referrer-Policy,
 Permissions-Policy, etc.) and a long-cache policy for the
 fingerprinted assets, plus a short-cache policy for the HTML entry
-points and the service worker. Cloudflare reads this file on every
-deploy and applies the rules automatically — no dashboard
+points and the service worker. Cloudflare reads this file on
+every deploy and applies the rules automatically — no dashboard
 configuration needed.
 
 ## How to redeploy

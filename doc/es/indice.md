@@ -5,7 +5,7 @@
 > contribuir, consulta el [`CONTRIBUTING.md`](../../CONTRIBUTING.md) de
 > la raíz.
 >
-> **App**: [calculia.apptonomia.uk](https://calculia.apptonomia.uk) · **Repositorio**: [github.com/thenkdframe/calculia](https://github.com/thenkdframe/calculia) · **Otro idioma**: [English](../en/index.md)
+> **App**: [calculia.apptonomia.uk](https://calculia.apptonomia.uk) · **Repositorio**: [github.com/miralante/calculia](https://github.com/miralante/calculia) · **Otro idioma**: [English](../en/index.md)
 
 ---
 
@@ -16,7 +16,9 @@ doc/
 ├── es/
 │   ├── indice.md                ← Esta carpeta (punto de entrada, ES)
 │   ├── roles.md                 ← Roles del proyecto
-│   ├── SPEC.md    ├── README.md                ← Introducción en lectura fácil (orientada a la audiencia)│   ├── tecnico.md
+│   ├── SPEC.md
+│   ├── README.md                ← Introducción en lectura fácil (orientada a la audiencia)
+│   ├── tecnico.md
 │   ├── I18N.md
 │   ├── actividades.md           ← Catálogo de actividades (específico de Calculia)
 │   ├── equipo.md                ← Guía para familias / terapeutas

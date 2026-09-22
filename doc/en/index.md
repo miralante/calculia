@@ -4,7 +4,7 @@
 > for project roles, see [`roles.md`](roles.md); for how to contribute, see
 > the root [`CONTRIBUTING.md`](../../CONTRIBUTING.md).
 >
-> **App**: [calculia.apptonomia.uk](https://calculia.apptonomia.uk) · **Repository**: [github.com/thenkdframe/calculia](https://github.com/thenkdframe/calculia) · **Other language**: [Español](../es/indice.md)
+> **App**: [calculia.apptonomia.uk](https://calculia.apptonomia.uk) · **Repository**: [github.com/miralante/calculia](https://github.com/miralante/calculia) · **Other language**: [Español](../es/indice.md)
 
 ---
 
