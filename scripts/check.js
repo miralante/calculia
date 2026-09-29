@@ -118,22 +118,37 @@ var jsFiles = []
   .concat(listJs(path.join(ROOT, 'team')))
   .concat(listJs(path.join(ROOT, 'assets', 'js')));
 
-/* `node --check` is run in parallel across all JS files: each spawn
-   takes ~3 s on Windows due to process startup overhead, so the
-   sequential pass adds up to ~3 min on a repo with many files.
-   Promise.all + execFile keeps the work bounded by the slowest
-   individual check rather than the sum. The handle is saved so
+/* Parse each JS file in-process with `new vm.Script(...)` instead of
+   spawning `node --check` per file. The original approach (a
+   Promise.all over child_process.execFile) was correct but slow on
+   Windows: each spawn costs ~3 s of process startup overhead, and
+   the repo now has ~140 JS files across the 27 activities — the
+   full pass took ~7 min locally even though `vm.Script` itself
+   finishes in tens of milliseconds per file. `new vm.Script` only
+   parses (it does not run the script), so the semantics match
+   `node --check` exactly: a syntax error throws SyntaxError, a
+   clean file resolves the wrapper promise. The handle is saved so
    step "Result" can wait for the parse jobs before exiting. */
 var parseJobs = Promise.all(jsFiles.map(function (archivo) {
   return new Promise(function (resolve) {
     checks += 1;
-    execFile(process.execPath, ['--check', archivo], function (err, stdout, stderr) {
-      if (err) {
-        failures.push(rel(archivo) + ': no parsea (node --check) — ' +
-          (stderr ? stderr.toString().trim().split('\n')[0] : err.message));
-      }
-      resolve();
-    });
+    var content;
+    try {
+      content = fs.readFileSync(archivo, 'utf8');
+    } catch (e) {
+      failures.push(rel(archivo) + ': no parsea (node --check) — ' + e.message);
+      return resolve();
+    }
+    try {
+      /* Wrap in a function so top-level `return` / `await` (legal
+         in modules and sloppy scripts alike) does not throw. The
+         wrapper never runs because we never invoke the script. */
+      new vm.Script('(function(){' + content + '\n});', { filename: archivo });
+    } catch (e) {
+      failures.push(rel(archivo) + ': no parsea (node --check) — ' +
+        (e && e.message ? e.message.split('\n')[0] : String(e)));
+    }
+    resolve();
   });
 }));
 /* Run subsequent checks synchronously while the parallel parse

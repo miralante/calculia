@@ -60,14 +60,71 @@ a settings page for progress visibility.
 
 ---
 
-## 👥 Roles in the project
+## � About
+
+Calculia is a **multi-activity catalogue** for practicing math and
+logical reasoning in short, visual activities: numbers, quantities,
+math tables, Roman numerals, riddles, patterns, the wallet, the
+clock, stories, what-doesn't-belong, and puzzles. Each activity is
+self-contained, fits on one screen, and is reachable from a single
+landing page — there is no tutorial and no prerequisite order, so
+the end user can pick whatever fits the moment.
+
+Calculia ships as a static, dependency-free web app and a
+progressive web app. It is one of the **Miralante** suite of seven
+sibling apps — see [🌐 The Miralante suite](#-the-miralante-suite--projects-in-the-suite)
+below for the full list. The real product specification lives in
+[`doc/en/spec.md`](doc/en/spec.md); this README deliberately avoids
+rephrasing product decisions to keep the public description and
+the spec in lock-step.
+
+---
+
+## 🎯 Goals
+
+Calculia is built to:
+
+- 🧮 **Offer 11 short, visual activities** that can each be
+  completed in under five minutes without prior instruction.
+- ⭐ **Reward practice with stars that only ever go up**, never
+  down — no high-score tables, no streaks to break, no "you
+  failed" screens.
+- 🌐 **Stay bilingual end-to-end** — Spanish is the default and
+  source of truth, English keeps parity in every string and
+  every activity.
+- 🔒 **Keep progress on the user's device only** — every star
+  lives in `localStorage` under the `calculia:` prefix; nothing
+  is ever uploaded.
+- 📦 **Work offline as a PWA** — install to the home screen,
+  use it on a tablet with no signal, never block on a network
+  round-trip.
+- 🖐️ **Meet WCAG AA contrast and AAA reading-level** targets
+  for the audience (see [`doc/en/spec.md`](doc/en/spec.md) §3).
+
+Each goal cross-references a spec section in
+[`doc/en/spec.md`](doc/en/spec.md); if a goal is not in the spec,
+either add it to the spec or drop it from this list.
+
+---
+
+## 👥 Audience & roles
+
+Calculia is designed for a **typical user profile** — anyone who
+wants to practice math and logical reasoning in short,
+self-contained activities, on their own device, with no account
+and no pressure. The real product specification lives in
+[`doc/en/spec.md`](doc/en/spec.md); this README deliberately
+avoids any clinical label so the public description stays
+generic.
+
+The project recognises three roles around the app, each with its
+own entry point:
 
 | Role | Who they are | How they participate | Where they look first |
 |---|---|---|---|
 | 👤 **End user** (typical user profile) | Practices math and reasoning activities | Opens the app in a browser; doesn't read or write code | The app — nothing else to read |
 | ❤️ **Support / family / teacher** | Helps an end user pick the right activity, or uses Calculia with a group | Picks activities that fit a learning objective; supervises progress via stars ⭐ | [`CONTRIBUTING.md`](CONTRIBUTING.md) (the "Support" section) |
-| 💻 **Build / developer** | Maintains the catalog, the shared core, and the CI | Implements activities in `tools/<slug>/`, runs 
-ode scripts/check.js`, deploys | [`CLAUDE.md`](CLAUDE.md) |
+| 💻 **Build / developer** | Maintains the catalog, the shared core, and the CI | Implements activities in `tools/<slug>/`, runs `node scripts/check.js`, deploys | [`CLAUDE.md`](CLAUDE.md) |
 
 See [`doc/en/roles.md`](doc/en/roles.md) for the full role description
 and the trio-vs-pair-vs-sole patterns across the apps of the suite.
@@ -177,7 +234,8 @@ no telemetry, no third-party runtime. The threat model is essentially
 "what a hostile offline page could do to the same origin", which the
 browser already sandboxes. See [`SECURITY.md`](SECURITY.md) (or
 [`SECURITY.es.md`](SECURITY.es.md)) for how to report a suspected
-issue privately.
+issue privately (preferred channel:
+[`hello@apptonomia.uk`](mailto:hello@apptonomia.uk)).
 
 ---
 
@@ -216,7 +274,7 @@ script that needs to run locally.
 
 ## 🌐 The Miralante suite — projects in the suite
 
-Calculia is one of **six apps** in the **Miralante** suite, sharing
+Calculia is one of **seven apps** in the **Miralante** suite, sharing
 the same author, the same accessibility-first / no-backend philosophy
 and the same deploy story. Apptonomia, on top of being an app itself,
 also acts as the **landing portal** that introduces the whole suite.
@@ -227,6 +285,7 @@ just the original product this group grew out of.
 |---|---|---|
 | **Apptonomia** *(portal — landing only, no app)* | Landing page that introduces the Miralante suite (not a runtime app) | [github.com/miralante/apptonomia](https://github.com/miralante/apptonomia) |
 | [Calculia](https://calculia.apptonomia.uk/) | Math and logical reasoning | [github.com/miralante/calculia](https://github.com/miralante/calculia) |
+| [Ludia](https://ludia.apptonomia.uk/) | Adapted games with rules, exercises and matches | [github.com/miralante/ludia](https://github.com/miralante/ludia) |
 | [Memofun](https://memofun.apptonomia.uk/) | Flashcards built around meaningful learning | [github.com/miralante/memofun](https://github.com/miralante/memofun) |
 | [Okeymoney](https://okeymoney.apptonomia.uk/) | Personal finance and everyday autonomy | [github.com/miralante/okeymoney](https://github.com/miralante/okeymoney) |
 | [Routime](https://routime.apptonomia.uk/) | Activities for routines and daily-life skills | [github.com/miralante/routime](https://github.com/miralante/routime) |

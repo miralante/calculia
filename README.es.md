@@ -64,7 +64,66 @@ portada en `site/`), más una página de ajustes para ver el progreso.
 
 ---
 
-## 👥 Roles del proyecto
+## � Acerca de
+
+Calculia es un **catálogo multi-actividad** para practicar cálculo y
+razonamiento lógico en actividades cortas y visuales: los números,
+cantidades, las tablas, números romanos, adivinanzas, patrones,
+el monedero, el reloj, historias, qué no encaja y puzzles. Cada
+actividad es autónoma, cabe en una pantalla y se abre desde una
+portada única — no hay tutorial ni orden previo, así que la
+persona usuaria elige la que encaje con el momento.
+
+Calculia se publica como web estática sin dependencias y como
+PWA instalable. Es una de las **siete apps** de la suite
+**Miralante** — la lista completa está en
+[🌐 La suite Miralante](#-la-suite-miralante--proyectos-del-grupo)
+más abajo. La especificación real del producto vive en
+[`doc/es/spec.md`](doc/es/spec.md); este README rehúye
+reformular decisiones de producto para que la descripción
+pública y la especificación no se separen.
+
+---
+
+## 🎯 Objetivos
+
+Calculia se construye para:
+
+- 🧮 **Ofrecer 11 actividades cortas y visuales** que se completen
+  en menos de cinco minutos y sin instrucción previa.
+- ⭐ **Recompensar la práctica con estrellas que solo suman**,
+  nunca restan — sin tablas de marcas, sin rachas que romper,
+  sin pantallas de "has fallado".
+- 🌐 **Mantener la paridad bilingüe** — español por defecto y
+  fuente de verdad; inglés con paridad en cada cadena y cada
+  actividad.
+- 🔒 **Guardar el progreso solo en el dispositivo** — cada
+  estrella vive en `localStorage` bajo el prefijo `calculia:`;
+  nada se sube nunca.
+- 📦 **Funcionar sin conexión como PWA** — instalar en la
+  pantalla de inicio, usar en una tablet sin señal, sin
+  depender de una llamada de red.
+- 🖐️ **Cumplir WCAG AA de contraste y nivel de lectura AAA**
+  para la audiencia (ver [`doc/es/spec.md`](doc/es/spec.md) §3).
+
+Cada objetivo referencia una sección de
+[`doc/es/spec.md`](doc/es/spec.md); si un objetivo no está allí,
+añádelo a la especificación o sácalo de la lista.
+
+---
+
+## 👥 Audiencia y roles
+
+Calculia está pensada para una **persona tipo** — quien quiera
+practicar cálculo y razonamiento lógico en actividades cortas y
+autónomas, en su propio dispositivo, sin cuenta ni presión. La
+especificación real del producto vive en
+[`doc/es/spec.md`](doc/es/spec.md); este README evita a propósito
+cualquier etiqueta clínica para que la descripción pública se
+mantenga genérica.
+
+El proyecto reconoce tres roles alrededor de la app, cada uno
+con su propio punto de entrada:
 
 | Rol | Quién es | Cómo participa | Dónde mira primero |
 |---|---|---|---|
@@ -184,7 +243,9 @@ backend, sin base de datos, sin telemetría, sin servicios de terceros en
 tiempo de ejecución. El modelo de amenaza es esencialmente "qué podría
 hacer una página maliciosa offline contra el mismo origen", algo que el
 navegador ya aísla. Ver [`SECURITY.es.md`](SECURITY.es.md) (o
-[`SECURITY.md`](SECURITY.md)) para reportar una sospecha de forma privada.
+[`SECURITY.md`](SECURITY.md)) para reportar una sospecha de forma
+privada (canal preferido:
+[`hello@apptonomia.uk`](mailto:hello@apptonomia.uk)).
 
 ---
 
@@ -223,7 +284,7 @@ script que necesita correr en local.
 
 ## 🌐 La suite Miralante — proyectos del grupo
 
-Calculia es una de las **seis apps** de la suite **Miralante**, que
+Calculia es una de las **siete apps** de la suite **Miralante**, que
 comparten autor, la misma filosofía de accesibilidad sin backend, y la
 misma historia de despliegue en Cloudflare. Apptonomia, además de
 ser una app en sí misma, actúa como **portal de la suite** que la
@@ -234,6 +295,7 @@ son iguales; este es el producto original del que nació el grupo.
 |---|---|---|
 | **Apptonomia** *(portal — landing only, no es app)* | Landing que presenta la suite Miralante (no es una app en tiempo de ejecución) | [github.com/miralante/apptonomia](https://github.com/miralante/apptonomia) |
 | [Calculia](https://calculia.apptonomia.uk/) | Cálculo y razonamiento lógico | [github.com/miralante/calculia](https://github.com/miralante/calculia) |
+| [Ludia](https://ludia.apptonomia.uk/) | Juegos adaptados con reglas, ejercicios y partidas | [github.com/miralante/ludia](https://github.com/miralante/ludia) |
 | [Memofun](https://memofun.apptonomia.uk/) | Tarjetas de memoria con aprendizaje significativo | [github.com/miralante/memofun](https://github.com/miralante/memofun) |
 | [Okeymoney](https://okeymoney.apptonomia.uk/) | Finanzas personales y autonomía cotidiana | [github.com/miralante/okeymoney](https://github.com/miralante/okeymoney) |
 | [Routime](https://routime.apptonomia.uk/) | Actividades para rutinas y vida cotidiana | [github.com/miralante/routime](https://github.com/miralante/routime) |

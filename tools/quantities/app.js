@@ -557,7 +557,7 @@
     }
     index += 1;
     if (index < round.length) {
-      caso = GENERATORS[practice]();
+      case_ = GENERATORS[practice]();
       paint();
       return;
     }
@@ -603,12 +603,12 @@
     }
     index = 0;
     inReinforce = false;
-    casoFijo = null;
+    fixedCase = null;
     reinforceList = [];
     reinforceIndex = 0;
     App.reinforce.banner.hide();
     App.reinforce.start(function (fallos) { startReinforce(fallos); });
-    caso = GENERATORS[practice]();
+    case_ = GENERATORS[practice]();
     hide($('#screenMenu'));
     hide($('#screenFinish'));
     show($('#screenTask'));

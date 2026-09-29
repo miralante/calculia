@@ -159,8 +159,7 @@
 
   <link rel="stylesheet" href="../assets/css/tokens.css">
   <link rel="stylesheet" href="../assets/css/base.css">
-  <link rel="stylesheet" href="../assets/css/components.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../assets/css/components.css"><link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v1">  <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="../manifest.json">
 </head>
 <body>
@@ -173,10 +172,7 @@
           <p class="suite-attribution"><span data-i18n="suiteBy">Una app de</span> <a href="https://apptonomia.uk/">Apptonomia</a>.</p>
         </div>
       </div>
-      <div class="suite-controls"><div class="idioma-selector" role="group" aria-label="Elegir idioma">
-          <button type="button" class="btn-lang" id="btnLangEs" data-locale="es" aria-pressed="false" aria-label="Español"><span class="locale-full" aria-hidden="true">🇪🇸 Español</span><span class="locale-short" aria-hidden="true">ES</span></button>
-          <button type="button" class="btn-lang" id="btnLangEn" data-locale="en" aria-pressed="false" aria-label="English"><span class="locale-full" aria-hidden="true">🇬🇧 English</span><span class="locale-short" aria-hidden="true">EN</span></button>
-        </div></div>
+      <div class="suite-controls"><div id="locale-picker"></div></div>
       <div class="suite-details">
         <div class="fila centered-fila">
           <p class="saludo" id="saludo" data-i18n="saludo">Hola. ¿Qué quieres practicar hoy?</p>
@@ -358,6 +354,21 @@
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="app.js"></script>
+  <!-- Locale picker config (must run BEFORE assets/js/locale-picker.js).
+       Calculia stores site strings next to site/index.html (not under
+       assets/js/), so discovery is disabled and requiredLocales lists the
+       two files next to this page. storageKey must match the
+       one assets/js/i18n.js writes to localStorage ('calculia:locale'). -->
+  <script>
+  window.LocalePickerConfig = {
+    storageKey: 'calculia:locale',
+    path: null,
+    requiredLocales: ['es', 'en'],
+    defaultLocale: 'en',
+    settingsHref: '../config/'
+  };
+  </script>
+  <script src="../assets/js/locale-picker.js?v=calculia-v1" defer></script>
   <script src="../assets/js/sw-register.js"></script>
 </body>
 </html>

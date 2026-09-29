@@ -20,13 +20,23 @@
      only muted if someone has explicitly turned it off). */
   var audioCtx = null;
 
-  function soundsEnabled() {
+  function sharedSoundEnabled(kind) {
+    try {
+      var saved = JSON.parse(localStorage.getItem('miralante:sounds') || 'null');
+      if (saved && typeof saved[kind] === 'boolean') return saved[kind];
+    } catch (e) { /* ignore */ }
+    return null;
+  }
+
+  function soundsEnabled(kind) {
+    var shared = sharedSoundEnabled(kind);
+    if (shared !== null) return shared;
     if (!window.App.storage) return true;
     return App.storage.get('prefs').sonidos !== false;
   }
 
-  function tone(frequency, duration, type) {
-    if (!soundsEnabled()) return;
+  function tone(frequency, duration, type, kind) {
+    if (!soundsEnabled(kind || 'success')) return;
     try {
       if (!audioCtx) {
         var AC = window.AudioContext || window.webkitAudioContext;
@@ -47,13 +57,13 @@
   }
 
   function successSound() {
-    tone(523.25, 0.15);          /* C */
-    setTimeout(function () { tone(659.25, 0.2); }, 120); /* E */
+    tone(523.25, 0.15, 'sine', 'success');          /* C */
+    setTimeout(function () { tone(659.25, 0.2, 'sine', 'success'); }, 120); /* E */
   }
 
   function encourageSound() {
     /* Soft and neutral, never harsh (rule 5) */
-    tone(392, 0.2, 'sine');
+    tone(180, 0.12, 'triangle', 'error');
   }
 
   /**

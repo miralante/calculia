@@ -186,6 +186,53 @@ async function exerciseLanguages(page) {
   }
 }
 
+async function exerciseUnsupportedBrowserLanguage(browser, baseUrl) {
+  const context = await browser.newContext({
+    locale: 'fr-FR', serviceWorkers: 'block', viewport: { width: 1280, height: 900 },
+  });
+  const page = await context.newPage();
+  try {
+    await page.addInitScript(() => localStorage.clear());
+    await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+    await page.waitForSelector('#locale-picker', { state: 'attached', timeout: NAV_TIMEOUT });
+    const result = await page.evaluate(() => ({
+      htmlLocale: (document.documentElement.lang || '').slice(0, 2).toLowerCase(),
+      pickerLocale: (document.querySelector('.locale-picker-current')?.textContent || '').trim(),
+    }));
+    assert.strictEqual(result.htmlLocale, 'en',
+      'Un navegador fr-FR debe cargar inglés cuando francés no está implementado');
+    assert.strictEqual(result.pickerLocale, 'EN',
+      'El selector debe mostrar EN cuando fr-FR no está implementado');
+  } finally {
+    await page.close().catch(() => {});
+    await context.close().catch(() => {});
+  }
+}
+
+async function exerciseSoundSettings(browser, baseUrl) {
+  const context = await browser.newContext({
+    locale: 'es-ES', serviceWorkers: 'block', viewport: { width: 1280, height: 900 },
+  });
+  const page = await context.newPage();
+  try {
+    await page.addInitScript(() => localStorage.clear());
+    await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+    await page.locator('.locale-settings-trigger').click();
+    const success = page.locator('[data-settings-success]');
+    const error = page.locator('[data-settings-error]');
+    await success.waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+    assert.strictEqual(await success.isChecked(), true, 'El sonido de acierto debe estar activo por defecto');
+    assert.strictEqual(await error.isChecked(), false, 'El sonido de error debe estar desactivado por defecto');
+    await success.uncheck();
+    await error.check();
+    assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem('miralante:sounds'))),
+      { success: false, error: true }, 'Los sonidos deben guardarse en la configuración común');
+  } finally {
+    await page.close().catch(() => {});
+    await context.close().catch(() => {});
+  }
+}
+
 async function exerciseForms(page) {
   const items = await page.locator('input:visible, select:visible, textarea:visible')
     .evaluateAll(nodes => nodes.map((node, index) => ({
@@ -561,6 +608,9 @@ async function main() {
   const failures = [];
   let tested = 0, controls = 0, journeys = 0;
   try {
+    await exerciseSoundSettings(browser, baseUrl);
+    await exerciseUnsupportedBrowserLanguage(browser, baseUrl);
+    process.stdout.write('\n[' + APP + '] fr-FR fallback OK');
     for (const route of routes) {
       process.stdout.write('\n[' + APP + '] ' + route + ' ');
       try {

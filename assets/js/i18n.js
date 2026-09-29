@@ -5,7 +5,7 @@
    conditional load of strings.<locale>.js -> data.js -> app.js.
 
    Active language: localStorage 'calculia:locale' if supported; otherwise
-   detected from navigator.language ('en' prefix -> 'en', anything else -> 'es').
+   detected from navigator.language ('en' prefix -> 'en', anything else -> 'en').
 
    Multi-file system (recommended):
      - texts split by language: tools/<slug>/strings.es.js, tools/<slug>/strings.en.js
@@ -19,7 +19,7 @@
 
   var LOCALE_KEY = 'calculia:locale';
   var SUPPORTED = ['es', 'en'];
-  var DEFAULT = 'es';
+  var DEFAULT = 'en';
 
   var DICT = {
     es: {

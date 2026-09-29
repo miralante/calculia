@@ -3,7 +3,7 @@
    Cache-first strategy for the app shell (works offline).
    When adding new files: add them to FILES and bump VERSION.
    ============================================================ */
-var VERSION = 'calculia-v91';
+var VERSION = 'calculia-v95';
 
 var FILES = [
   './index.html',
@@ -32,6 +32,8 @@ var FILES = [
   './legal/strings.es.js',
   './legal/strings.en.js',
   './assets/css/tokens.css',
+  './assets/css/locale-picker.css',
+  './assets/js/locale-picker.js',
   './assets/css/base.css',
   './assets/css/components.css',
   './assets/fonts/atkinson-hyperlegible-400.woff2',
