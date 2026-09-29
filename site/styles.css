@@ -202,13 +202,39 @@
   font-size: var(--texto-base);
 }
 
-.tarjeta {
-  display: flex;
-  flex-direction: row;
+/* ---- Cards de actividades ----
+   Los selectores deben coincidir EXACTAMENTE con el marcado de
+   site/index.html: `.grid-cards` envuelve a cada <a class="card">, y
+   dentro cuelgan `.picto`, `.name` y `.detalle`.
+
+   OJO: una versión anterior de este archivo estilaba `.grid-tarjetas`
+   / `.tarjeta` / `.nombre` (nombres en español). Cuando el HTML se
+   renombró a `.grid-cards` / `.card` / `.name` el CSS se quedó atrás y
+   las cards se quedaron SIN ESTILO: al ser <a> en línea, el texto se
+   montaba unas encima de otras. Si algún día se renombra una clase en
+   el marcado, hay que renombrarla aquí en el mismo commit.
+
+   Se usan áreas de grid en vez de flex para que el nombre y la
+   descripción se apilen a la derecha del pictograma, en vez de ocupar
+   las dos el mismo ancho (los nombres largos se partían en media
+   pantalla). */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--espacio-grande);
+}
+
+.grid-cards > .card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "picto name"
+    "picto detalle";
   align-items: center;
-  justify-content: flex-start;
-  gap: var(--espacio);
+  column-gap: var(--espacio);
+  row-gap: 2px;
   min-height: 84px;
+  min-width: 0;
   padding: 12px var(--espacio);
   background: var(--color-superficie);
   border: 3px solid var(--acento-suave);
@@ -220,34 +246,43 @@
   transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
-.tarjeta:hover {
+.grid-cards > .card:hover,
+.grid-cards > .card:focus-visible {
   transform: scale(1.02);
   border-color: var(--acento);
 }
 
-.tarjeta .picto {
+.grid-cards .picto {
+  grid-area: picto;
   font-size: 36px;
-  flex: 0 0 auto;
-  width: 48px;
+  line-height: 1.1;
   text-align: center;
 }
 
-.tarjeta .nombre {
+.grid-cards .name {
+  grid-area: name;
+  align-self: end;
   font-size: var(--texto-base);
   font-weight: 800;
   color: var(--acento);
   line-height: 1.15;
+  overflow-wrap: anywhere;
 }
 
-.tarjeta .detalle {
+.grid-cards .detalle {
+  grid-area: detalle;
+  align-self: start;
   font-size: var(--texto-pequeno);
   color: var(--color-texto-suave);
   line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 /* Compactación extra cuando la ventana es alta (escritorio típico).
    Se aplica por altura, no por ancho, así no afecta a móviles en
-   vertical (donde sigue haciendo falta scroll por el ancho reducido). */
+   vertical (donde sigue haciendo falta scroll por el ancho reducido).
+   El texto de las cards NO se oculta: es la explicación en lenguaje
+   claro de qué hace cada actividad (UNE 153101). */
 @media (min-height: 720px) {
   .cabecera {
     padding: 4px 0;
@@ -261,58 +296,50 @@
   .modulos {
     gap: var(--espacio-grande);
   }
-  .tarjeta {
+  .grid-cards > .card {
     min-height: 72px;
     padding: 8px var(--espacio);
   }
-  .tarjeta .picto {
+  .grid-cards .picto {
     font-size: 32px;
-    width: 40px;
   }
 }
 
-/* En pantallas anchas (escritorio), las tarjetas vuelven al grid
-   tradicional en columnas para aprovechar mejor el espacio. */
+/* En pantallas anchas (escritorio), las cards se reparten en columnas
+   para aprovechar mejor el espacio. */
 @media (min-width: 720px) {
-  .grid-tarjetas {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  .grid-cards {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: var(--espacio);
   }
-  .tarjeta {
-    flex-direction: row;
-    text-align: left;
-    justify-content: flex-start;
+  .grid-cards > .card {
     min-height: 72px;
     padding: 8px var(--espacio);
   }
-  .tarjeta .picto {
-    width: 40px;
+  .grid-cards .picto {
     font-size: 32px;
   }
 }
 
 @media (min-width: 720px) and (min-height: 720px) {
-  .grid-tarjetas {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  .grid-cards {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 8px;
   }
-  .tarjeta {
-    min-height: 56px;
-    padding: 4px var(--espacio);
+  .grid-cards > .card {
+    min-height: 64px;
+    padding: 6px var(--espacio);
   }
-  .tarjeta .picto {
-    width: 32px;
-    font-size: 24px;
+  .grid-cards .picto {
+    font-size: 26px;
   }
-  .tarjeta .detalle {
-    display: none;
-  }
-  .tarjeta .nombre {
+  .grid-cards .name {
     font-size: var(--texto-pequeno);
   }
 }
 
-/* En móvil (vertical), cabecera de nuevo vertical y tarjetas verticales. */
+/* En móvil (vertical), cabecera de nuevo vertical y cards verticales
+   con el pictograma encima, centradas. */
 @media (max-width: 719px) {
   .cabecera {
     flex-direction: column;
@@ -331,16 +358,26 @@
   .cabecera-der .cabecera-hermanas,
   .cabecera-der .stars { justify-content: center; justify-self: center; }
   .cabecera-der h1 { text-align: center; }
-  .tarjeta {
-    flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    min-height: 140px;
+  .grid-cards {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
   }
-  .tarjeta .picto {
-    width: auto;
+  .grid-cards > .card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "picto"
+      "name"
+      "detalle";
+    justify-items: center;
+    text-align: center;
+    min-height: 140px;
+    padding: 12px 8px;
+  }
+  .grid-cards .picto {
     font-size: 48px;
   }
+  .grid-cards .name,
+  .grid-cards .detalle { align-self: center; }
 }
 
 /* Compact suite header: branding and controls share one row. */

@@ -141,12 +141,16 @@
   font-weight: 500;
 }
 
-/* Móvil: panel a ancho completo */
+/* Móvil: el panel se ancla al BORDE DERECHO del botón (no al izquierdo)
+   para que crezca hacia dentro y nunca se salga de la pantalla. Con
+   `left: 0` el menú se abría del todo fuera del viewport en pantallas de
+   320–414px, y el panel cerrado también alargaba la página 83px en
+   horizontal, obligando a desplazarse para leerlo entero. */
 @media (max-width: 480px) {
   .locale-picker-panel {
-    right: auto;
-    left: 0;
-    min-width: 200px;
+    right: 0;
+    left: auto;
+    min-width: min(200px, calc(100vw - 24px));
   }
 }
 
