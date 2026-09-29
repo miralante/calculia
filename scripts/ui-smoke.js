@@ -233,6 +233,57 @@ async function exerciseSoundSettings(browser, baseUrl) {
   }
 }
 
+async function exerciseFontSizeSettings(browser, baseUrl) {
+  const nativePrefs = {
+    calculia: { fontSize: 'muygrande' },
+    memofun: { textSize: 'extraLarge' },
+    okeymoney: { textSize: 'extraLarge' },
+    routime: { tamanoLetra: 'muygrande' },
+  }[APP];
+  const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage();
+  try {
+    await page.addInitScript(({ app, prefs }) => {
+      if (!sessionStorage.getItem('__font_size_test_initialized')) {
+        localStorage.clear();
+        if (prefs) localStorage.setItem(app + ':prefs', JSON.stringify(prefs));
+        sessionStorage.setItem('__font_size_test_initialized', 'true');
+      }
+    }, { app: APP, prefs: nativePrefs });
+    await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+    await page.locator('.locale-settings-trigger').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+    const scaleVariable = APP === 'calculia' || APP === 'routime' ? '--escala-texto' : '--text-scale';
+    const readScale = () => page.evaluate(variable =>
+      parseFloat(getComputedStyle(document.documentElement).getPropertyValue(variable)), scaleVariable);
+    if (nativePrefs) {
+      assert.strictEqual(await readScale(), 1.3,
+        'La preferencia de tamaño guardada en la app debe aplicarse al cargar');
+    }
+    const fontSizeBefore = await page.evaluate(() => parseFloat(getComputedStyle(document.body).fontSize));
+
+    await page.locator('.locale-settings-trigger').click();
+    await page.locator('[data-settings-size="large"]').click();
+    assert.strictEqual(await readScale(), 1.15,
+      'El tamaño elegido debe cambiar la escala tipográfica visible de la app');
+    const fontSizeAfter = await page.evaluate(() => parseFloat(getComputedStyle(document.body).fontSize));
+    assert.notStrictEqual(fontSizeAfter, fontSizeBefore,
+      'El tamaño elegido debe modificar el tamaño calculado del texto de la app');
+    assert.strictEqual(await page.locator('[data-settings-size="large"]').getAttribute('aria-pressed'), 'true');
+    const settingsKey = APP === 'ludia' ? 'enroca:locale:accessibility' : APP + ':locale:accessibility';
+    const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), settingsKey);
+    assert.strictEqual(saved.textSize, 'large', 'El tamaño elegido debe guardarse');
+
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    assert.strictEqual(await readScale(), 1.15,
+      'El tamaño elegido debe seguir aplicado tras recargar la app');
+    assert.strictEqual(await page.evaluate(() => parseFloat(getComputedStyle(document.body).fontSize)), fontSizeAfter,
+      'El tamaño calculado del texto debe persistir tras recargar la app');
+  } finally {
+    await page.close().catch(() => {});
+    await context.close().catch(() => {});
+  }
+}
+
 async function exerciseForms(page) {
   const items = await page.locator('input:visible, select:visible, textarea:visible')
     .evaluateAll(nodes => nodes.map((node, index) => ({
@@ -609,6 +660,9 @@ async function main() {
   let tested = 0, controls = 0, journeys = 0;
   try {
     await exerciseSoundSettings(browser, baseUrl);
+    process.stdout.write('\n[' + APP + '] sound settings OK');
+    await exerciseFontSizeSettings(browser, baseUrl);
+    process.stdout.write('\n[' + APP + '] font-size settings OK');
     await exerciseUnsupportedBrowserLanguage(browser, baseUrl);
     process.stdout.write('\n[' + APP + '] fr-FR fallback OK');
     for (const route of routes) {

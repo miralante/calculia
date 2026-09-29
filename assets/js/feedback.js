@@ -31,8 +31,9 @@
   function soundsEnabled(kind) {
     var shared = sharedSoundEnabled(kind);
     if (shared !== null) return shared;
-    if (!window.App.storage) return true;
-    return App.storage.get('prefs').sonidos !== false;
+    if (!window.App.storage) return kind !== 'error';
+    var prefs = App.storage.get('prefs');
+    return kind === 'error' ? prefs.sonidos === true : prefs.sonidos !== false;
   }
 
   function tone(frequency, duration, type, kind) {

@@ -74,13 +74,11 @@
 
   function detect() {
     try {
-      var languages = navigator.languages && navigator.languages.length
-        ? navigator.languages
-        : [navigator.language || ''];
-      for (var i = 0; i < languages.length; i++) {
-        var prefix = (languages[i] || '').slice(0, 2).toLowerCase();
-        if (SUPPORTED.indexOf(prefix) !== -1) return prefix;
-      }
+      var languages = (navigator.languages && navigator.languages.length)
+        ? navigator.languages[0]
+        : (navigator.language || '');
+      var prefix = (languages || '').split(/[-_]/)[0].toLowerCase();
+      if (SUPPORTED.indexOf(prefix) !== -1) return prefix;
     } catch (e) { /* ignore */ }
     return DEFAULT;
   }
