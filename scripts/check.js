@@ -12,9 +12,9 @@
       tool file is listed in FILES.
    4. es/en key parity between strings.es.js and strings.en.js
       (tools/, site/, config/, legal/).
-   5. Catalog parity lock: the set of activity slugs must match between
-      tools/ folders on disk, the landing cards in site/index.html, the
-      progress rows in config/index.html, and sw.js's FILES.
+   5. Public/private catalog split: site/index.html links only Roman Numerals;
+      dev/index.html links to the other activities; together they cover all
+      activity slugs in tools/, config/, and sw.js FILES.
    6. Mandatory rule: zero mentions of disability, occupational therapy
       or minors in user-facing files (see doc/<locale>/SPEC.md §4).
  6.1 Zero school-year / syllabus labels in anything served to the
@@ -306,21 +306,36 @@ compareEsEn(path.join(ROOT, 'legal'), 'legal/');
 if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'), 'about/');
 if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
-/* --- 5. Catalog parity lock ---
-   The set of activity slugs must match between:
-     - tools/ folders on disk (source of truth)
-     - the landing cards (<a href="../tools/...">) in site/index.html
-     - the progress rows (data-tool="<slug>") in config/index.html
-     - the assets listed for tools in sw.js FILES
+/* --- 5. Public/private catalog split ---
+   Roman Numerals is the only public activity. The hidden dev catalogue lists
+   every other activity. Together they cover the full tools/, config/, and
+   sw.js activity set.
 */
 checks += 1;
 var siteHtml = fs.readFileSync(path.join(ROOT, 'site', 'index.html'), 'utf8');
-var slugsInSite = [];
+var devHtml = fs.readFileSync(path.join(ROOT, 'dev', 'index.html'), 'utf8');
 var reHref = /href="\.\.\/tools\/([^/]+)\/index\.html"/g;
-var mh;
-while ((mh = reHref.exec(siteHtml)) !== null) {
-  slugsInSite.push(mh[1]);
+function parseSlugsFromPage(html) {
+  var result = [];
+  var match;
+  while ((match = reHref.exec(html)) !== null) result.push(match[1]);
+  reHref.lastIndex = 0;
+  return new Set(result);
 }
+var publicSlugs = parseSlugsFromPage(siteHtml);
+var devSlugs = parseSlugsFromPage(devHtml);
+function assertExactCatalog(label, actual, expected) {
+  expected.forEach(function (slug) {
+    if (!actual.has(slug)) failures.push('catálogo: ' + label + ' no contiene el slug "' + slug + '"');
+  });
+  actual.forEach(function (slug) {
+    if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
+  });
+}
+var expectedPublicSlugs = new Set(['roman-numerals']);
+var expectedDevSlugs = new Set(slugs.filter(function (slug) { return slug !== 'roman-numerals'; }));
+assertExactCatalog('site público', publicSlugs, expectedPublicSlugs);
+assertExactCatalog('dev oculto', devSlugs, expectedDevSlugs);
 
 function parseSlugsFromSw() {
   var matches = swContent.match(/'\.\/tools\/([^/]+)\//g) || [];
@@ -331,7 +346,7 @@ function parseSlugsFromSw() {
   });
   return set;
 }
-function parseDataToolInSettings() {
+function parseDataToolInConfig() {
   var html = fs.readFileSync(path.join(ROOT, 'config', 'index.html'), 'utf8');
   var re = /data-tool="([^"]+)"/g;
   var set = new Set();
@@ -340,7 +355,7 @@ function parseDataToolInSettings() {
   return set;
 }
 var slugsSet = new Set(slugs);
-var targets = { site: new Set(slugsInSite), settings: parseDataToolInSettings(), sw: parseSlugsFromSw() };
+var targets = { config: parseDataToolInConfig(), sw: parseSlugsFromSw() };
 Object.keys(targets).forEach(function (f) {
   var targetSet = targets[f];
   slugs.forEach(function (slug) {
@@ -350,7 +365,6 @@ Object.keys(targets).forEach(function (f) {
     if (!slugsSet.has(slug)) failures.push('catálogo: ' + f + ' contiene slug inexistente "' + slug + '"');
   });
 });
-
 /* --- 6. Mandatory rule: zero disability / occupational therapy / minors mentions ---
    doc/<locale>/SPEC.md §4: the end user never sees terms naming
    intellectual disability, occupational therapy, minors, or equivalents.
@@ -404,6 +418,7 @@ function listDir(dir) {
 }
 var userTargets = []
   .concat(listDir(path.join(ROOT, 'site')))
+  .concat(listDir(path.join(ROOT, 'dev')))
   .concat(listDir(path.join(ROOT, 'config')))
   .concat(listDir(path.join(ROOT, 'legal')));
 slugs.forEach(function (slug) {

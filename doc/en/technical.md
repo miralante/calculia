@@ -59,7 +59,8 @@ lands on a subpage directly.
 ```
 calculia/
 ├── index.html             # Level 0: redirect to site/index.html
-├── site/index.html        # Level 0: landing = activity grid (2 sections)
+├── site/index.html        # Level 0: public landing = Roman Numerals only
+├── dev/index.html         # Hidden catalogue = the other 26 activities
 ├── assets/                # Level 1: SHARED CORE
 │   ├── css/tokens.css     #   design variables (colors, typography, touch)
 │   ├── css/base.css       #   reset, self-hosted fonts, visible focus
@@ -86,12 +87,7 @@ calculia/
 └── _headers                # Cloudflare Pages cache and security headers
 ```
 
-Same three-level architecture as Apptonomia, scoped to 27 activities
-grouped in two sections instead of 7 therapeutic modules: `site/index.html`
-has a "🧮 Math" section (Places and sizes, Numbers, Shapes, Geometry, Same shapes, Fractions, Measures,
-Subtraction and Mental Math, Money, Percentages, Math Tables, Exact groups, Big sums, Quantities, Roman
-Numerals, Problems, Water Temperature) and a "🧩 Reasoning and logic" section (Riddles, Patterns, The Wallet, The balance, Data and
-charts, The Calendar, The Clock, Stories, What Doesn't Belong?, Puzzle).
+Same three-level architecture as Apptonomia, scoped to 27 activities. The public `site/index.html` links only to Roman Numerals; the hidden `dev/index.html` links to the other 26 activities.
 
 ### 2.1 `assets/` — shared core, kept whole
 

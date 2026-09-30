@@ -167,18 +167,19 @@ By role and profile, the most relevant docs are:
 Calculia grows by adding **activities** under `tools/<slug>/`. Each
 activity ships the six canonical files (`index.html`, `app.js`,
 `data.js`, `strings.es.js`, `strings.en.js`, `styles.css`); every
-change must respect the catalog parity lock (the same set of slugs
-must appear in `tools/` on disk, in `site/index.html`'s cards, in
-`settings/index.html`'s progress rows, and in `sw.js`'s `ARCHIVOS`).
+change must respect the catalog lock: the public landing lists Roman Numerals,
+the hidden `dev/` catalog lists the other activities, and the two together
+cover the slugs in `tools/`, `config/`, and `sw.js`.
 
 To add a new activity:
 
 1. Create `tools/<slug>/` with the six canonical files (use an
    existing activity as a template).
-2. Register the activity: add its card to `site/index.html` (+ both
+2. Register the activity: add its card to `dev/index.html` (+ both
    `site/strings.<locale>.js` keys), its progress row to
-   `settings/index.html` (+ both `settings/strings.<locale>.js` keys),
-   and its six files to `sw.js`'s `ARCHIVOS`.
+   `config/index.html` (+ both `config/strings.<locale>.js` keys),
+   and its six files to `sw.js`'s `ARCHIVOS`. The public `site/index.html`
+   currently exposes only Roman Numerals.
 3. Bump `VERSION` in `sw.js` (e.g. `calculia-vN` → `calculia-vN+1`).
 4. Add the slug to `STRING_LOCALES` in `scripts/check.js` only if
    you're adding a new locale (rare).
@@ -200,9 +201,9 @@ No
 pm install` needed — the script only uses Node's standard library.
 It checks JS syntax across `tools/`, `site/` and `assets/js/`,
 canonical file anatomy per activity folder, `sw.js` ↔ disk parity,
-es/en key parity, and the catalog-parity lock (the same set of slugs
-must appear in `tools/` on disk, in `site/index.html`'s cards, in
-`settings/index.html`'s progress rows, and in `sw.js`'s `ARCHIVOS`).
+es/en key parity, and the catalog lock: Roman Numerals is the only
+public activity; hidden `dev/index.html` lists the other activities, and
+together they cover all `tools/` slugs in addition to `config/` and `sw.js`.
 The same script runs on every push and PR via
 [`.github/workflows/validate.yml`](.github/workflows/validate.yml).
 

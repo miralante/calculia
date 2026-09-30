@@ -65,7 +65,8 @@ a una subpágina.
 ```
 calculia/
 ├── index.html             # Nivel 0: redirige a site/index.html
-├── site/index.html        # Nivel 0: landing = cuadrícula de actividades (2 bloques)
+├── site/index.html        # Nivel 0: landing pública = solo Números Romanos
+├── dev/index.html         # Catálogo oculto = las otras 26 actividades
 ├── assets/                # Nivel 1: NÚCLEO COMPARTIDO
 │   ├── css/tokens.css     #   variables de diseño (colores, tipografía, táctil)
 │   ├── css/base.css       #   reset, fuentes autoalojadas, foco visible
@@ -92,14 +93,7 @@ calculia/
 └── _headers                # Cabeceras de caché y seguridad de Cloudflare Pages
 ```
 
-Misma arquitectura de tres niveles que Apptonomia, acotada a 17
-actividades agrupadas en dos bloques en vez de 7 módulos terapéuticos:
-`site/index.html` tiene un bloque "🧮 Matemáticas" (Sitios y tamaños, Los Números, Geometría, Formas parecidas,
-Formas, Fracciones, Medidas, Restar y Cálculo Mental, Dinero, Porcentajes,
-Las Tablas, Grupos exactos, Cuentas grandes, Cantidades, Números Romanos, Problemas, Temperatura del agua) y un bloque "🧩 Razonamiento y lógica"
-(Adivinanzas, Patrones, El Monedero, La balanza, Datos y gráficos, El Calendario,
-El Reloj,
-Historias, ¿Qué no encaja?, Puzzle).
+Misma arquitectura de tres niveles que Apptonomia, acotada a 27 actividades. `site/index.html` pública enlaza solo a Números Romanos; `dev/index.html`, oculta, enlaza a las otras 26 actividades.
 
 ### 2.1 `assets/` — núcleo compartido, conservado entero
 

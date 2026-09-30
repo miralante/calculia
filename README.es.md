@@ -171,20 +171,19 @@ Según tu rol y perfil, te interesa una u otra documentación:
 Calculia crece añadiendo **actividades** bajo `tools/<slug>/`. Cada
 actividad trae los seis archivos canónicos (`index.html`, `app.js`,
 `data.js`, `strings.es.js`, `strings.en.js`, `styles.css`); cualquier
-cambio tiene que respetar el bloqueo de paridad del catálogo (el
-mismo conjunto de slugs debe aparecer en `tools/` en disco, en las
-tarjetas de `site/index.html`, en las filas de progreso de
-`settings/index.html` y en `ARCHIVOS` de `sw.js`).
+cambio tiene que respetar el catálogo: la portada pública muestra Números
+Romanos, `dev/` muestra las demás actividades, y ambas rutas juntas cubren
+los slugs de `tools/`, `config/` y `sw.js`.
 
 Para añadir una actividad nueva:
 
 1. Crea `tools/<slug>/` con los seis archivos canónicos (usa una
    actividad existente como plantilla).
-2. Registra la actividad: añade su tarjeta a `site/index.html` (+ las
+2. Registra la actividad: añade su tarjeta a `dev/index.html` (+ las
    claves en ambos `site/strings.<locale>.js`), su fila de progreso a
-   `settings/index.html` (+ las claves en ambos
-   `settings/strings.<locale>.js`), y sus seis archivos a `ARCHIVOS` de
-   `sw.js`.
+   `config/index.html` (+ las claves en ambos
+   `config/strings.<locale>.js`), y sus seis archivos a `ARCHIVOS` de
+   `sw.js`. `site/index.html` pública mantiene solo Números Romanos.
 3. Sube el `VERSION` en `sw.js` (p. ej. `calculia-vN` → `calculia-vN+1`).
 4. Añade el slug a `STRING_LOCALES` en `scripts/check.js` solo si vas a
    añadir un idioma nuevo (raro).
@@ -208,9 +207,9 @@ pm install` — el script solo usa la librería estándar de
 Node. Comprueba sintaxis JS en `tools/`, `site/` y `assets/js/`, la
 anatomía canónica de cada carpeta de actividad, paridad entre `sw.js`
 y el contenido en disco, paridad de claves es/en, y la regla de paridad
-del catálogo (el mismo conjunto de slugs debe aparecer en `tools/`
-en disco, en las tarjetas de `site/index.html`, en las filas de
-progreso de `settings/index.html` y en `ARCHIVOS` de `sw.js`). El
+del catálogo: Números Romanos es la única actividad pública; `dev/index.html`
+muestra las demás y, entre ambas páginas, están todos los slugs de `tools/`,
+además de las filas de `config/index.html` y `ARCHIVOS` de `sw.js`. El
 mismo script corre en cada push y PR vía
 [`.github/workflows/validate.yml`](.github/workflows/validate.yml).
 

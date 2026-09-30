@@ -56,10 +56,10 @@ HTML/CSS/JS served as static files.
   node scripts/check.js
   ```
   It checks JS syntax, activity folder structure, es/en key parity
-  (`tools/`, `site/`, `settings/`, `legal/`), `sw.js` ↔ disk parity, and
-  catalog-parity lock (the same set of slugs must appear in `tools/` on
-  disk, `site/index.html`'s cards, `settings/index.html`'s progress
-  rows, and `sw.js`'s `ARCHIVOS`). Read the script before changing the
+  (`tools/`, `site/`, `config/`, `legal/`), `sw.js` ↔ disk parity, and
+  catalog lock: Roman Numerals is the only public card; hidden `dev/` lists
+  the other activities, and their combined set plus `config/` and `sw.js`
+  must cover every slug in `tools/`. Read the script before changing the
   file layout — it encodes the invariants that layout relies on.
 
 ## Service worker cache (read this before touching any cached file)
@@ -100,7 +100,7 @@ trees), so trimming per-function like Teclatlon did would have risked
 breaking one of them. Don't remove functions from `assets/js/` without
 checking every `tools/<slug>/app.js` for a caller first.
 
-`settings/` is trimmed relative to Apptonomia's: no backup export/import,
+`config/` is trimmed relative to Apptonomia's: no backup export/import,
 no font-size/sound preferences, no personal-data form (none of Calculia's
 27 activities store a name or other personal field) — just progress
 view and the two reset actions. There is no `/team/` or `/about/` hidden
@@ -252,7 +252,7 @@ documentation.
     `doc/en/SPEC.md` §4 / `doc/es/SPEC.md` §4) continues to forbid
     **any** mention, including "usuario/a tipo", in `site/index.html`,
     `tools/<slug>/index.html`, `app.js`, `data.js`, `strings.<locale>.js`,
-    `settings/`, `legal/`, and any other user-facing surface. The
+    `config/`, `legal/`, and any other user-facing surface. The
     euphemism is for the outside world, not for what the visitor reads
     on the site.
   - It does **not** apply to project content that names a clinical
