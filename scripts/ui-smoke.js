@@ -536,6 +536,31 @@ async function exerciseFullFunctionality(page, route) {
   return 0;
 }
 
+/* A control can be :visible and still be off-screen while it slides in.
+   The shared settings drawer is position:fixed and moves with a 0.16s
+   transform, so 25ms after the gear is pressed its ✕ is already
+   :visible (the .is-open class flips visibility at once) while it is
+   still translated out of the viewport. Playwright cannot scroll a
+   fixed element into view and answers "Element is outside of the
+   viewport" — a transition race, not a UI defect. Wait, bounded, for
+   the centre of the box to come inside the viewport, so a genuinely
+   unreachable control still gets reported. */
+async function waitInsideViewport(page, locator, timeout = 700) {
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline) {
+    const inside = await locator.evaluate(node => {
+      const box = node.getBoundingClientRect();
+      if (!box.width || !box.height) return false;
+      const cx = box.left + box.width / 2;
+      const cy = box.top + box.height / 2;
+      return cx >= 0 && cx <= window.innerWidth && cy >= 0 && cy <= window.innerHeight;
+    }).catch(() => false);
+    if (inside) return true;
+    await page.waitForTimeout(40);
+  }
+  return false;
+}
+
 async function exerciseControls(page) {
   const seen = new Set();
   let actions = 0;
@@ -573,6 +598,8 @@ async function exerciseControls(page) {
         control.tag === 'SUMMARY' ? 'summary:visible' : 'a[href^="#"]:visible';
       const locator = page.locator(selector).nth(control.index);
       if (!await locator.isVisible().catch(() => false)) continue;
+      /* Let a sliding panel finish entering before clicking it. */
+      await waitInsideViewport(page, locator);
       try {
         if (control.tag === 'A') await locator.evaluate(node => node.click());
         else await locator.click({ timeout: 2000, force: true });
