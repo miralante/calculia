@@ -348,17 +348,12 @@
   <!-- Locale picker config (must run BEFORE assets/js/locale-picker.js).
        Calculia stores the landing strings at the site root, next to
        index.html (not under assets/js/), so discovery is disabled and
-       requiredLocales lists the two files next to this page. storageKey must match the
-       one assets/js/i18n.js writes to localStorage ('calculia:locale'). -->
-  <script>
-  window.LocalePickerConfig = {
-    storageKey: 'calculia:locale',
-    path: null,
-    requiredLocales: ['es', 'en'],
-    defaultLocale: 'en',
-    settingsHref: '../config/'
-  };
-  </script>
+       requiredLocales lists the two locales shipped. storageKey must match the
+       one assets/js/i18n.js writes to localStorage ('calculia:locale').
+       External file, not inline: the CSP in _headers is script-src 'self'
+       with no 'unsafe-inline', so an inline block would be blocked. The
+       settings page is one level up from this hidden catalogue. -->
+  <script src="../assets/js/calculia-locale-config.js" data-settings-href="../config/"></script>
   <script src="../assets/js/locale-picker.js?v=calculia-v2" defer></script>
 </body>
 </html>
