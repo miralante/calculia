@@ -10,7 +10,7 @@
 >
 > **This project is deployed as a Cloudflare Worker (static assets),
 > not classic Cloudflare Pages.** Live at
-> <https://calculia.miralante.workers.dev>.
+> <https://calculia.apptonomia.uk/>.
 >
 > **Part of the Miralante suite.** Calculia is **one of the seven
 > siblings** (Apptonomia, Calculia, Memofun, Okeymoney, Routime,
@@ -166,9 +166,14 @@ needed locally.
 
 ## Custom domain
 
-Calculia has no custom domain at the moment — it is served at the
-default `*.workers.dev` URL
-(<https://calculia.miralante.workers.dev>). To add one, follow
+Calculia is served at <https://calculia.apptonomia.uk/>. That is the
+canonical URL the app declares in `<link rel="canonical">`, `og:url`
+and `sitemap.xml` (it comes from `domain` in `app.config.json`), so
+the runbook pointing anywhere else is a bug. The default
+`*.workers.dev` URL (<https://calculia.miralante.workers.dev>) serves
+the same Worker and answers identically: if one URL 404s and the
+other does not, the custom domain is pointed at a different project
+rather than at `calculia`. To add or change a custom domain, follow
 **How to add a custom domain** below.
 
 ## How to redeploy
