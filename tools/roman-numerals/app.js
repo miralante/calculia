@@ -1206,6 +1206,28 @@
         when the round resolves (see showExplanation / answer). A
         single-letter Roman numeral (e.g. "X") never carries a
         formula either: there is no operation to show.
+     A piece value is an *operand*, and operands belong in the
+     prompt exactly as in the rest of the suite ("3 + 2" above
+     "¿Cuánto es?"). But when the whole numeral is a single piece —
+     a lone subtract pair (IV, IX) or a single letter (I, V, X) —
+     there is nothing to decompose and that piece's value IS the
+     answer, so the panel is not painted at all until the round
+     resolves: the letters are already the prompt above, and the
+     value underneath them gave the round over (the card read "IX"
+     with "9" under it while the three options offered 9, 1 and 10).
+     The reveal on failure/success (showExplanation / answer
+     repaint with revealTotal=true) brings the panel back with the
+     letters, their value and the formula. This is the rule the
+     socratic anatomy sets for the round: the prompt shows the
+     question and never the answer before it is resolved
+     (doc/es/spec.md, "anatomía socrática completa": the hint does
+     not reveal the answer). A lone subtract pair stays atomic in
+     the revealed panel for the reason above ("nothing else to
+     combine it with"): there it shows the rule as "5 − 1 = 4".
+     Multi-piece numerals keep the panel with its values, because
+     there they are operands and not the answer: XIX shows
+     "10 − 1", XXV shows "10 + 10 + 5", and in both cases the total
+     is still pending.
      Empty roman hides the panel (numberToRoman level: the Roman
      numeral is the answer and is not previewed). */
   function paintQuizDecomposition(roman, revealTotal) {
@@ -1214,9 +1236,16 @@
       decompositionEl.classList.add('hidden');
       return;
     }
-    decompositionEl.classList.remove('hidden');
     var deco = DATA.decompose(roman);
     var pieces = decompositionPieces(deco);
+    /* One piece == the numeral *is* that piece == nothing to
+       decompose and its value is the answer. Panel hidden until the
+       round resolves; see the comment above. */
+    if (!revealTotal && pieces.length === 1) {
+      decompositionEl.classList.add('hidden');
+      return;
+    }
+    decompositionEl.classList.remove('hidden');
 
     var tokenRow = document.createElement('div');
     tokenRow.className = 'deco-row';
