@@ -269,7 +269,7 @@ niños, ni expresiones equivalentes** ("dificultades cognitivas",
 etc.). Esto incluye todo lo visible en la interfaz:
 `tools/<slug>/index.html`, `tools/<slug>/app.js`,
 `tools/<slug>/data.js`, `tools/<slug>/strings.<locale>.js`,
-`site/index.html`, `settings/index.html`, y `legal/`. El motivo es
+`index.html`, `settings/index.html`, y `legal/`. El motivo es
 exactamente el de §1 y §2: que nadie que use la aplicación se sienta
 señalado, en inferioridad o discriminado por lo que la propia
 aplicación dice sobre su persona.
@@ -322,7 +322,7 @@ Dónde se aplica y dónde no:
   eso es contenido, no etiquetado de la audiencia.
 - **No se aplica** a la UI de la propia app: la regla de §4 sigue
   prohibiendo **cualquier** mención, incluida "persona tipo", en
-  `site/index.html`, `tools/<slug>/index.html`, `app.js`, `data.js`,
+  `index.html`, `tools/<slug>/index.html`, `app.js`, `data.js`,
   `strings.<locale>.js`, `settings/`, `legal/` y cualquier otra
   superficie visible. El eufemismo es para el exterior, no para lo que
   lee quien visita la app.

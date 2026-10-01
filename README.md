@@ -21,7 +21,7 @@ everything runs in the browser and progress is saved only in
 
 - 🌐 **App**: [calculia.apptonomia.uk](https://calculia.apptonomia.uk/)
 - 📦 **Repository**: [github.com/miralante/calculia](https://github.com/miralante/calculia)
-- 💻 **Run locally**: open `site/index.html` directly in a browser, or
+- 💻 **Run locally**: open `index.html` directly in a browser, or
   serve the folder with any static server (`npx serve .` /
   `python -m http.server 8080`) for the full offline-capable PWA
   experience.
@@ -40,7 +40,7 @@ and pick an activity to start. No accounts, no telemetry.
 
 Calculia is a **multi-activity catalogue** built on the same three-
 level architecture as Apptonomia (shared core in `assets/js/`, one
-folder per activity in `tools/<slug>/`, a landing in `site/`), plus
+folder per activity in `tools/<slug>/`, a landing at the site root), plus
 a settings page for progress visibility.
 
 - 🧮 **11 activities** — Numbers, Quantities, Math Tables, Roman
@@ -176,9 +176,9 @@ To add a new activity:
 1. Create `tools/<slug>/` with the six canonical files (use an
    existing activity as a template).
 2. Register the activity: add its card to `dev/index.html` (+ both
-   `site/strings.<locale>.js` keys), its progress row to
+   `strings.<locale>.js` keys), its progress row to
    `config/index.html` (+ both `config/strings.<locale>.js` keys),
-   and its six files to `sw.js`'s `ARCHIVOS`. The public `site/index.html`
+   and its six files to `sw.js`'s `ARCHIVOS`. The public `index.html`
    currently exposes only Roman Numerals.
 3. Bump `VERSION` in `sw.js` (e.g. `calculia-vN` → `calculia-vN+1`).
 4. Add the slug to `STRING_LOCALES` in `scripts/check.js` only if
@@ -199,7 +199,7 @@ node scripts/check.js
 
 No 
 pm install` needed — the script only uses Node's standard library.
-It checks JS syntax across `tools/`, `site/` and `assets/js/`,
+It checks JS syntax across `tools/`, the site root and `assets/js/`,
 canonical file anatomy per activity folder, `sw.js` ↔ disk parity,
 es/en key parity, and the catalog lock: Roman Numerals is the only
 public activity; hidden `dev/index.html` lists the other activities, and
@@ -265,7 +265,7 @@ workers → Unregister`) and clear site data. To force a re-validation
 after large changes:
 
 ```bash
-rm -rf site/.cache tools/.cache assets/.cache  # only if present
+rm -rf .cache tools/.cache assets/.cache  # only if present
 ```
 
 The `scripts/check.js` script is the only "test" step and the only

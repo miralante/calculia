@@ -5,7 +5,7 @@ apps of the Miralante suite (Apptonomia, Memofun, Okeymoney, Sinonimia, Teclatlo
 
 | Role | Who they are | How they participate | Where they look first |
 |---|---|---|---|
-| 👤 **End user** (anyone practicing math and logical reasoning, and in particular people who benefit from Easy Reading) | Practices the 14 activities | Opens `site/index.html` in a browser and uses the app autonomously. **Doesn't read code**, doesn't touch [`settings/`](../../settings/) for anything beyond progress reset. | The app — nothing else to read |
+| 👤 **End user** (anyone practicing math and logical reasoning, and in particular people who benefit from Easy Reading) | Practices the 14 activities | Opens `index.html` in a browser and uses the app autonomously. **Doesn't read code**, doesn't touch [`settings/`](../../settings/) for anything beyond progress reset. | The app — nothing else to read |
 | ❤️ **Support**: family, teacher, therapist | Picks the right activity for a learning goal | Chooses activities that fit a learning objective (Numeracy, Reasoning and logic) and supervises progress via the stars ⭐ in [`settings/`](../../settings/). May also report missing content or wording that's too hard. | [`CONTRIBUTING.md`](../../CONTRIBUTING.md) (the "Support" section) |
 | 💻 **Build**: developer | Maintains the catalog, the shared core, and the CI | Implements activities in `tools/<slug>/`, runs [`scripts/check.js`](../../scripts/check.js), bumps `VERSION` in `sw.js`, and deploys. | [`CLAUDE.md`](../../CLAUDE.md) · [`technical.md`](technical.md) |
 

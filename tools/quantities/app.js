@@ -667,6 +667,6 @@
     show($('#screenMenu'));
   });
   $('#backToMenu').addEventListener('click', function () {
-    window.location.href = '../../site/index.html';
+    window.location.href = '../../index.html';
   });
 })();

@@ -61,7 +61,7 @@ de pantalla.
 
 - **Actividad** es el nombre que ve la persona usuaria (la misma
   etiqueta que aparece en la pantalla de inicio de la app y en
-  `site/index.html`).
+  `index.html`).
 - **Descripción** es un resumen de una línea de la habilidad que se
   practica. La intención pedagógica completa, los niveles y las
   notas didácticas viven en

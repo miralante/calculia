@@ -361,7 +361,7 @@ un comentario en cada `data.js` para que no se pierda al añadir actividades.
 
 | Dónde | Orden |
 |---|---|
-| Portada (`site/index.html`) y progreso (`config/index.html`) | numbers → quantities → mental-math → money → math-tables → fractions-measures → roman-numerals → temperature |
+| Portada (`index.html`) y progreso (`config/index.html`) | numbers → quantities → mental-math → money → math-tables → fractions-measures → roman-numerals → temperature |
 | `numbers` | ordinales (1º) → comparar (1º) → recta (2º) → unidades (2º-4º) → placevalue (2º-6º) → positivos-y-negativos (5º-6º) |
 | `measures` | longitud → peso → capacidad |
 | `fractions-measures` (solo fracciones y decimales) | fracciones → decimales |

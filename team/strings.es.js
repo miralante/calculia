@@ -290,7 +290,7 @@
     "agentLi5d": '(ver/borrar',
     "agentLi5code3": 'localStorage',
     "agentLi5e": '): no las enlaces desde',
-    "agentLi5code4": 'site/index.html',
+    "agentLi5code4": 'index.html',
     "agentLi5f": 'ni desde ninguna actividad. Mantén esta guía actualizada cuando se añadan actividades nuevas.',
     "footerActivities": 'Ir a las actividades'
   }, 'es');

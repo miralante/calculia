@@ -1,4 +1,10 @@
-# Send only the root entry to the catalogue.
-# Worker static assets serve 404.html for unknown paths via wrangler.toml.
+# The public landing is the site root (index.html), so `/` itself needs no
+# rule: it is served directly. Worker static assets serve 404.html for
+# unknown paths via wrangler.toml.
+# These two rules only exist for back-compat, so old bookmarks, shared links
+# and any external reference to the former /site/ path still land on the app.
+# `site/index.html` is also kept in the repo as a meta-refresh stub, which
+# covers deployments where `_redirects` is not applied.
 # A wildcard redirect would also match its destination and create a loop.
-/ /site/ 302
+/site/ / 301
+/site/index.html / 301

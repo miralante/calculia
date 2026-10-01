@@ -6,7 +6,7 @@ Teclatlon):
 
 | Rol | Quién es | Cómo participa | Dónde mira primero |
 |---|---|---|---|
-| 👤 **Persona usuaria** (cualquiera que practica cálculo y razonamiento lógico, y en particular personas que se benefician de la lectura fácil) | Practica las 14 actividades | Abre `site/index.html` en un navegador y usa la app de forma autónoma. **No lee código**, no toca [`settings/`](../../settings/) más allá del reset de progreso. | La aplicación — no hace falta leer nada más |
+| 👤 **Persona usuaria** (cualquiera que practica cálculo y razonamiento lógico, y en particular personas que se benefician de la lectura fácil) | Practica las 14 actividades | Abre `index.html` en un navegador y usa la app de forma autónoma. **No lee código**, no toca [`settings/`](../../settings/) más allá del reset de progreso. | La aplicación — no hace falta leer nada más |
 | ❤️ **Apoyo**: familia, docente, terapeuta | Elige la actividad adecuada para un objetivo de aprendizaje | Escoge actividades que encajen con un objetivo (Cálculo, Razonamiento y lógica) y supervisa el progreso por las estrellas ⭐ en [`settings/`](../../settings/). También puede reportar contenido que falta o redacción que resulta difícil. | [`CONTRIBUTING.es.md`](../../CONTRIBUTING.es.md) (la sección "Apoyo") |
 | 💻 **Construcción**: desarrollador/a | Mantiene el catálogo, el core compartido y el CI | Implementa actividades en `tools/<slug>/`, ejecuta [`scripts/check.js`](../../scripts/check.js), sube el `VERSION` en `sw.js` y despliega. | [`CLAUDE.md`](../../CLAUDE.md) · [`tecnico.md`](tecnico.md) |
 

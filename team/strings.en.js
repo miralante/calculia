@@ -290,7 +290,7 @@
     "agentLi5d": '(view/delete',
     "agentLi5code3": 'localStorage',
     "agentLi5e": '): never link to them from',
-    "agentLi5code4": 'site/index.html',
+    "agentLi5code4": 'index.html',
     "agentLi5f": 'or from any activity. Keep this guide up to date whenever new activities are added.',
     "footerActivities": 'Go to the activities'
   }, 'en');

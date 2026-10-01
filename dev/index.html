@@ -154,7 +154,7 @@
 
   <link rel="stylesheet" href="../assets/css/tokens.css">
   <link rel="stylesheet" href="../assets/css/base.css">
-  <link rel="stylesheet" href="../assets/css/components.css"><link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v1">  <link rel="stylesheet" href="../site/styles.css">
+  <link rel="stylesheet" href="../assets/css/components.css"><link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v1">  <link rel="stylesheet" href="../styles.css">
   <link rel="manifest" href="../manifest.json">
 </head>
 <body>
@@ -342,13 +342,13 @@
   <script src="../assets/js/i18n.js"></script>
   <script src="../assets/js/tts.js"></script>
   <script src="../assets/js/storage.js"></script>
-  <script src="../site/strings.es.js"></script>
-  <script src="../site/strings.en.js"></script>
-  <script src="../site/app.js"></script>
+  <script src="../strings.es.js"></script>
+  <script src="../strings.en.js"></script>
+  <script src="../app.js"></script>
   <!-- Locale picker config (must run BEFORE assets/js/locale-picker.js).
-       Calculia stores site strings next to site/index.html (not under
-       assets/js/), so discovery is disabled and requiredLocales lists the
-       two files next to this page. storageKey must match the
+       Calculia stores the landing strings at the site root, next to
+       index.html (not under assets/js/), so discovery is disabled and
+       requiredLocales lists the two files next to this page. storageKey must match the
        one assets/js/i18n.js writes to localStorage ('calculia:locale'). -->
   <script>
   window.LocalePickerConfig = {

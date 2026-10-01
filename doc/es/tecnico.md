@@ -53,7 +53,7 @@ Verifica manualmente en Chromium, Firefox y WebKit (Safari), en
 escritorio y móvil, antes de publicar un cambio en los archivos del
 núcleo compartido (`assets/`) o en el `index.html`/`app.js`/`styles.css`
 de una actividad. Registra el service worker desde cada punto de entrada
-(`index.html`, `site/`, `settings/`, `legal/`, cada
+(`index.html`, `settings/`, `legal/`, cada
 `tools/<slug>/index.html`) — mismo patrón que Apptonomia, evita el error
 "no se puede abrir la página" de Safari cuando alguien llega directamente
 a una subpágina.
@@ -64,8 +64,11 @@ a una subpágina.
 
 ```
 calculia/
-├── index.html             # Nivel 0: redirige a site/index.html
-├── site/index.html        # Nivel 0: landing pública = solo Números Romanos
+├── index.html             # Nivel 0: landing pública = solo Números Romanos
+├── styles.css             #   CSS de la landing, junto a index.html
+├── app.js                 #   lógica de la landing, junto a index.html
+├── strings.<locale>.js    #   textos de la landing, es/en, junto a index.html
+├── site/index.html        # Solo stub de compatibilidad: redirige a /
 ├── dev/index.html         # Catálogo oculto = las otras 26 actividades
 ├── assets/                # Nivel 1: NÚCLEO COMPARTIDO
 │   ├── css/tokens.css     #   variables de diseño (colores, tipografía, táctil)
@@ -93,7 +96,7 @@ calculia/
 └── _headers                # Cabeceras de caché y seguridad de Cloudflare Pages
 ```
 
-Misma arquitectura de tres niveles que Apptonomia, acotada a 27 actividades. `site/index.html` pública enlaza solo a Números Romanos; `dev/index.html`, oculta, enlaza a las otras 26 actividades.
+Misma arquitectura de tres niveles que Apptonomia, acotada a 27 actividades. `index.html` pública enlaza solo a Números Romanos; `dev/index.html`, oculta, enlaza a las otras 26 actividades.
 
 ### 2.1 `assets/` — núcleo compartido, conservado entero
 
@@ -116,7 +119,7 @@ distintas, y entre todas usan casi cada rincón de la API:
   bloquear las opciones restantes tras un fallo (una pausa de lectura,
   nunca un bloqueo de progreso).
 - `App.storage.estrellasTotales()` / `.listaToolIds()`: usado por
-  `site/index.html` (estrellas totales) y `settings/` (lista de
+  `index.html` (estrellas totales) y `settings/` (lista de
   progreso, restablecimiento completo).
 
 Antes de eliminar algo de `assets/js/`, busca con grep cada
@@ -164,14 +167,14 @@ Resumen: `strings.<locale>.js` por actividad/landing registra cada
 uno un idioma con `App.i18n.register(dict, '<locale>')`; ambos
 archivos se cargan siempre y `App.i18n.locale()` decide cuál está
 activo. `scripts/check.js` comprueba la paridad de claves entre todos
-los archivos de locale para cada `tools/<slug>/`, además de `site/`,
+los archivos de locale para cada `tools/<slug>/`, además de la raíz del sitio,
 `settings/` y `legal/`.
 
 El núcleo está listo para multi-idioma desde el inicio — ver
 `I18N.md` §4 para los tres puntos binarios `es`/`en` que hay que
 generalizar al añadir un tercer idioma (mapa `BCP47` en `i18n.js`,
 `DECIMAL_SEP` en `dinero.js` y mapa `BOTONES_IDIOMA` en
-`site/index.html`).
+`index.html`).
 
 ---
 
@@ -211,7 +214,7 @@ node scripts/check.js
 ```
 
 No hace falta `npm install`. Para una pasada manual: abre
-`site/index.html`, recorre varias actividades de cada bloque, en `es` y
+`index.html`, recorre varias actividades de cada bloque, en `es` y
 en `en`, y revisa la tabla de progreso y las acciones de
 restablecimiento de `settings/index.html`.
 
@@ -336,7 +339,7 @@ Cada app expone las mismas cinco carpetas:
 Las apps de una sola actividad (Teclatlon, Okeymoney) ponen el
 `index.html` en la raíz del repo. Las apps multi-actividad
 (Apptonomia, Calculia) ponen `tools/<slug>/index.html` por
-actividad y un landing `site/index.html`; las cuatro carpetas
+actividad y un landing `index.html`; las cuatro carpetas
 ocultas viven en la raíz del repo.
 
 #### 8.1.2 La concha HTML de una página standalone

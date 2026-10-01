@@ -265,7 +265,7 @@ equivalent expressions** ("cognitive difficulties", "special needs",
 "different abilities", "underage", etc.). This includes everything
 visible in the interface: `tools/<slug>/index.html`,
 `tools/<slug>/app.js`, `tools/<slug>/data.js`,
-`tools/<slug>/strings.<locale>.js`, `site/index.html`,
+`tools/<slug>/strings.<locale>.js`, `index.html`,
 `settings/index.html`, and `legal/`. The reason is exactly the one
 from §1 and §2: that nobody who uses the app feels singled out,
 inferior, or discriminated against by what the app itself says about
@@ -317,7 +317,7 @@ Where the euphemism applies and where it doesn't:
   content, not labelling of an audience.
 - **Does NOT apply** to the UI of the app itself: the rule in §4 above
   continues to forbid **any** mention, including "persona tipo", in
-  `site/index.html`, `tools/<slug>/index.html`, `app.js`, `data.js`,
+  `index.html`, `tools/<slug>/index.html`, `app.js`, `data.js`,
   `strings.<locale>.js`, `settings/`, `legal/`, and any other
   user-facing surface. The euphemism is for the outside world, not
   for what the visitor reads on the site.

@@ -74,7 +74,7 @@
     * Shared footer injector.
     *
     * Replaces the 15+ hand-maintained <footer class="pie-app">
-    * copies in tools/<slug>/index.html + site/index.html with a
+    * copies in tools/<slug>/index.html + the root index.html with a
     * single canonical source. Reads <footer data-pie-app> markers
     * and fills them in at load time using App.i18n.t() for the
     * text. Marker attributes mirror the routime convention:

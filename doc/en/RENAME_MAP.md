@@ -14,7 +14,7 @@ English replacement.
 - **Notes**: edge cases (false positives, public-API breakage, ambiguous
   meaning).
 
-This list was generated from `tools/`, `assets/`, `site/`, `settings/`,
+This list was generated from `tools/`, `assets/`, the site root, `settings/`,
 `legal/`, `scripts/`, and `sw.js`. `tools/roman-numerals/` is intentionally
 **excluded** from this pass — there is already an in-flight rename there,
 and the user will handle it separately.
@@ -171,7 +171,7 @@ and the user will handle it separately.
 
 1. `i18n.js` + `dinero.js` + `feedback.js` + `storage.js` + `tts.js` + `utils.js` (shared core).
 2. `assets/css/` (CSS variables and class names) — separate commit.
-3. `site/`, `settings/`, `legal/`, `scripts/check.js`, `sw.js`.
+3. The site root, `settings/`, `legal/`, `scripts/check.js`, `sw.js`.
 4. Per activity (13 separate commits, alphabetical):
    - `tools/clock/`
    - `tools/fractions-measures/`

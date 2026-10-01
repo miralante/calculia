@@ -58,7 +58,7 @@ grouped by the skill they work on, not by screen folder.
 ## How to read the catalogue
 
 - **Activity** is the user-facing name (same label that appears in the
-  app's home screen and in `site/index.html`).
+  app's home screen and in `index.html`).
 - **Description** is a one-line summary of the skill the activity
   practices. The full pedagogical intent, levels and didactic notes
   live in [`creating-elements-guide.md`](creating-elements-guide.md).

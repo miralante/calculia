@@ -248,13 +248,13 @@
           <li><span data-i18n="agentLi5a">Esta página (</span><code data-i18n="agentLi5code1">team/</code><span data-i18n="agentLi5b">) es deliberadamente</span>
             <strong data-i18n="agentLi5Strong">una ruta oculta</strong><span data-i18n="agentLi5c">, igual que</span> <code data-i18n="agentLi5code2">settings/</code>
             <span data-i18n="agentLi5d">(ver/borrar</span> <code data-i18n="agentLi5code3">localStorage</code><span data-i18n="agentLi5e">): no las enlaces desde</span>
-            <code data-i18n="agentLi5code4">site/index.html</code> <span data-i18n="agentLi5f">ni desde ninguna actividad. Mantén esta guía
+            <code data-i18n="agentLi5code4">index.html</code> <span data-i18n="agentLi5f">ni desde ninguna actividad. Mantén esta guía
             actualizada cuando se añadan actividades nuevas.</span></li>
         </ul>
       </section>
 
       <footer class="pie-guia">
-        <a class="btn btn-secondary" href="../site/index.html" data-i18n="footerActivities">Ir a las actividades</a>
+        <a class="btn btn-secondary" href="../index.html" data-i18n="footerActivities">Ir a las actividades</a>
         <a class="btn btn-secondary" href="../legal/index.html" data-i18n="progressLi4Link">Protección de datos</a>
       </footer>
 
@@ -285,7 +285,7 @@
   </script>
   <script>
     /* Register the SW from this entry point so it is active for any later
-       navigation, matching what the tools and site/ pages already do. */
+       navigation, matching what the tools and the landing page already do. */
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('../sw.js').catch(function () {});
     }

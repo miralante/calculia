@@ -99,9 +99,12 @@
 # ---------------------------------------------------------------------------
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
-/404.html
+# The landing IS the site root, so `/` is an HTML entry point and needs the
+# same no-cache rule as the other pages. Without it, the request for `/`
+# would fall through to Cloudflare's default caching.
+/
   Cache-Control: public, max-age=0, must-revalidate
-/site/index.html
+/404.html
   Cache-Control: public, max-age=0, must-revalidate
 /config/index.html
   Cache-Control: public, max-age=0, must-revalidate
@@ -121,9 +124,9 @@
 /assets/img/*
   Cache-Control: public, max-age=31536000, immutable
 
-/site/styles.css
+/styles.css
   Cache-Control: public, max-age=300
-/site/strings.*
+/strings.*
   Cache-Control: public, max-age=31536000, immutable
 
 /config/styles.css

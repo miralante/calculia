@@ -204,7 +204,7 @@
 
 /* ---- Cards de actividades ----
    Los selectores deben coincidir EXACTAMENTE con el marcado de
-   site/index.html: `.grid-cards` envuelve a cada <a class="card">, y
+   index.html: `.grid-cards` envuelve a cada <a class="card">, y
    dentro cuelgan `.picto`, `.name` y `.detalle`.
 
    OJO: una versión anterior de este archivo estilaba `.grid-tarjetas`

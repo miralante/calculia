@@ -8,7 +8,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || 'playwright')
 
 const ROOT = path.resolve(__dirname, '..');
 const APP = path.basename(ROOT);
-const BASE_PATH = APP === 'calculia' || APP === 'routime' ? '/site/' : '/';
+const BASE_PATH = APP === 'routime' ? '/site/' : '/';
 const NAV_TIMEOUT = 15000;
 const SETTLE_MS = 120;
 const MAX_CONTROLS_PER_ROUTE = 180;

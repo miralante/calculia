@@ -1,19 +1,19 @@
 // Static file server for local development.
 // Used because npx is blocked by the host's PowerShell execution policy.
 // Maps URL paths to repo files the way the production Cloudflare worker does:
-//   /                       -> site/index.html
+//   /                       -> index.html (the landing, at the site root)
 //   /styles.css, /app.js,
 //   /strings.<locale>.js,
 //   /sw.js, /manifest.json   -> repo root when no referer folder matches
 //   /assets/...             -> assets/...
 //   /tools/<slug>/...       -> tools/<slug>/...
-//   /settings/...           -> settings/...
+//   /config/...             -> config/...
 //   /legal/...              -> legal/...
 //
 // For relative paths (no leading slash, or with `..`), resolve against the
 // referer's directory. This makes "../assets/..." from /tools/numbers/index.html
-// work, and bare "strings.es.js" from /site/index.html also work (since we
-// synthesize a referer of "/" -> site/).
+// work, and bare "strings.es.js" from /index.html also work (since we
+// synthesize a referer of "/" -> the site root).
 
 const http = require('http');
 const fs = require('fs');
@@ -60,21 +60,21 @@ const tryFile = (p) => {
 // Decide which folder of the repo a bare pathname (no leading slash or with
 // `..`) was authored from, based on the referer URL.
 const refererDir = (referer) => {
-  if (!referer) return path.join(ROOT, 'site'); // landing page => site/
+  if (!referer) return ROOT; // landing page => the site root
   try {
     const refUrl = new URL(referer);
     const refPath = decodeURIComponent(refUrl.pathname || '/');
-    if (refPath === '/' || refPath === '') return path.join(ROOT, 'site');
+    if (refPath === '/' || refPath === '') return ROOT;
     const refFile = path.resolve(ROOT, '.' + refPath);
     return path.dirname(refFile);
   } catch (_) {
-    return path.join(ROOT, 'site');
+    return ROOT;
   }
 };
 
 const resolveCandidates = (pathname, referer) => {
   if (pathname === '/' || pathname === '') {
-    return [path.join(ROOT, 'site', 'index.html')];
+    return [path.join(ROOT, 'index.html')];
   }
 
   const list = [];
@@ -94,7 +94,7 @@ const resolveCandidates = (pathname, referer) => {
   }
 
   // SPA fallback for extensionless paths
-  if (!path.extname(pathname)) list.push(path.join(ROOT, 'site', 'index.html'));
+  if (!path.extname(pathname)) list.push(path.join(ROOT, 'index.html'));
 
   return list;
 };
@@ -119,7 +119,7 @@ const server = http.createServer((req, res) => {
     if (tryFile(candidate)) return serveFile(candidate, res);
   }
 
-  return serveFile(path.join(ROOT, 'site', 'index.html'), res);
+  return serveFile(path.join(ROOT, 'index.html'), res);
 });
 
 server.listen(PORT, () => {

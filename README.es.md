@@ -21,7 +21,7 @@ progreso solo se guarda en `localStorage`, en tu propio dispositivo.
 
 - 🌐 **Aplicación**: [calculia.apptonomia.uk](https://calculia.apptonomia.uk/)
 - 📦 **Repositorio**: [github.com/miralante/calculia](https://github.com/miralante/calculia)
-- 💻 **Ejecutar en local**: abre `site/index.html` directamente en un
+- 💻 **Ejecutar en local**: abre `index.html` directamente en un
   navegador, o sirve la carpeta con cualquier servidor estático
   (
 npx serve .` / `python -m http.server 8080`) para la experiencia PWA
@@ -43,7 +43,7 @@ telemetría.
 Calculia es un **catálogo multi-actividad** construido sobre la misma
 arquitectura de tres niveles que Apptonomia (núcleo compartido en
 `assets/js/`, una carpeta por actividad en `tools/<slug>/`, una
-portada en `site/`), más una página de ajustes para ver el progreso.
+portada en la raíz del sitio), más una página de ajustes para ver el progreso.
 
 - 🧮 **11 actividades** — Los Números, Cantidades, Las Tablas, Números
   Romanos, Adivinanzas, Patrones, El Monedero, El Reloj, Historias,
@@ -180,10 +180,10 @@ Para añadir una actividad nueva:
 1. Crea `tools/<slug>/` con los seis archivos canónicos (usa una
    actividad existente como plantilla).
 2. Registra la actividad: añade su tarjeta a `dev/index.html` (+ las
-   claves en ambos `site/strings.<locale>.js`), su fila de progreso a
+   claves en ambos `strings.<locale>.js`), su fila de progreso a
    `config/index.html` (+ las claves en ambos
    `config/strings.<locale>.js`), y sus seis archivos a `ARCHIVOS` de
-   `sw.js`. `site/index.html` pública mantiene solo Números Romanos.
+   `sw.js`. `index.html` pública mantiene solo Números Romanos.
 3. Sube el `VERSION` en `sw.js` (p. ej. `calculia-vN` → `calculia-vN+1`).
 4. Añade el slug a `STRING_LOCALES` en `scripts/check.js` solo si vas a
    añadir un idioma nuevo (raro).
@@ -204,7 +204,7 @@ node scripts/check.js
 
 No hace falta 
 pm install` — el script solo usa la librería estándar de
-Node. Comprueba sintaxis JS en `tools/`, `site/` y `assets/js/`, la
+Node. Comprueba sintaxis JS en `tools/`, la ra�z del sitio y `assets/js/`, la
 anatomía canónica de cada carpeta de actividad, paridad entre `sw.js`
 y el contenido en disco, paridad de claves es/en, y la regla de paridad
 del catálogo: Números Romanos es la única actividad pública; `dev/index.html`
@@ -273,7 +273,7 @@ workers → Unregister`) y borra los datos del sitio. Para forzar una
 re-validación tras cambios grandes:
 
 ```bash
-rm -rf site/.cache tools/.cache assets/.cache  # solo si están presentes
+rm -rf .cache tools/.cache assets/.cache  # solo si están presentes
 ```
 
 El script `scripts/check.js` es el único paso de "test" y el único

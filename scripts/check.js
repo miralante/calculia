@@ -4,15 +4,15 @@
    Structural check with no dependencies (plain Node only).
    Usage: node scripts/check.js
    Checks:
-   1. That every .js file in tools/, site/, config/, legal/ and
+   1. That every .js file in tools/, the landing at the site root, config/, legal/ and
       assets/js/ parses (equivalent to `node --check`).
    2. That every tools/<slug>/ has the canonical files:
       index.html, app.js, data.js, strings.es.js, strings.en.js, styles.css.
    3. sw.js <-> disk parity: every FILES path exists, and every
       tool file is listed in FILES.
    4. es/en key parity between strings.es.js and strings.en.js
-      (tools/, site/, config/, legal/).
-   5. Public/private catalog split: site/index.html links only Roman Numerals;
+      (tools/, the site root, config/, legal/).
+   5. Public/private catalog split: the root index.html links only Roman Numerals;
       dev/index.html links to the other activities; together they cover all
       activity slugs in tools/, config/, and sw.js FILES.
    6. Mandatory rule: zero mentions of disability, occupational therapy
@@ -89,6 +89,22 @@ function rel(p) {
   return path.relative(ROOT, p).split(path.sep).join('/');
 }
 
+/* The public landing lives at the site root: index.html plus app.js,
+   styles.css and the strings.<locale>.js pair next to it, the same shape
+   apptonomia uses, so https://calculia.apptonomia.uk/ serves the app
+   directly instead of redirecting to /site/. `site/` now only holds a
+   back-compat redirect stub, so every check that used to scan a `site/`
+   directory targets these root files instead. */
+var LANDING_FILES = ['index.html', 'app.js', 'styles.css', 'strings.es.js', 'strings.en.js'];
+function landingFiles() {
+  return LANDING_FILES
+    .map(function (f) { return path.join(ROOT, f); })
+    .filter(function (p) { return fs.existsSync(p); });
+}
+function landingFilesByExt(ext) {
+  return landingFiles().filter(function (p) { return p.endsWith(ext); });
+}
+
 function listJs(dir) {
   var result = [];
   if (!fs.existsSync(dir)) return result;
@@ -106,13 +122,13 @@ function listJs(dir) {
   return result;
 }
 
-/* --- 1. node --check on tools/, site/, config/, legal/, team/, assets/js/ ---
+/* --- 1. node --check on the landing at the site root, tools/, config/, legal/, team/, assets/js/ ---
    team/ is the guide for the support team (the hidden route that mirrors
    the same shape in routime); it carries its own strings.<locale>.js
    pair and must be checked for syntax. */
 var jsFiles = []
   .concat(listJs(path.join(ROOT, 'tools')))
-  .concat(listJs(path.join(ROOT, 'site')))
+  .concat(landingFilesByExt('.js'))
   .concat(listJs(path.join(ROOT, 'config')))
   .concat(listJs(path.join(ROOT, 'legal')))
   .concat(listJs(path.join(ROOT, 'team')))
@@ -294,7 +310,7 @@ function compareEsEn(dir, label) {
 }
 
 slugs.forEach(function (slug) { compareEsEn(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
-compareEsEn(path.join(ROOT, 'site'), 'site/');
+compareEsEn(ROOT, 'raíz/');
 compareEsEn(path.join(ROOT, 'config'), 'config/');
 compareEsEn(path.join(ROOT, 'legal'), 'legal/');
 /* Hidden routes with their own strings.<locale>.js pair (about/, team/):
@@ -312,9 +328,11 @@ if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'),
    sw.js activity set.
 */
 checks += 1;
-var siteHtml = fs.readFileSync(path.join(ROOT, 'site', 'index.html'), 'utf8');
+var siteHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 var devHtml = fs.readFileSync(path.join(ROOT, 'dev', 'index.html'), 'utf8');
-var reHref = /href="\.\.\/tools\/([^/]+)\/index\.html"/g;
+/* The public landing sits at the site root and links "tools/<slug>/...";
+   the hidden dev/ page is one level down and links "../tools/<slug>/...". */
+var reHref = /href="(?:\.\.\/)?tools\/([^/]+)\/index\.html"/g;
 function parseSlugsFromPage(html) {
   var result = [];
   var match;
@@ -417,6 +435,8 @@ function listDir(dir) {
   return result;
 }
 var userTargets = []
+  .concat(landingFilesByExt('.html'))
+  .concat(landingFilesByExt('.js'))
   .concat(listDir(path.join(ROOT, 'site')))
   .concat(listDir(path.join(ROOT, 'dev')))
   .concat(listDir(path.join(ROOT, 'config')))
@@ -510,7 +530,7 @@ headersContent.split('\n').filter(function (line) {
    registered in either language file: browser fallback then renders
    the literal key name on the page. This section cross-references
    actual usage sites against the registered keys, per unit
-   (tools/<slug>/, site/, config/, legal/) and per language.
+   (tools/<slug>/, the site root, config/, legal/) and per language.
 */
 /* Each usage entry is { key, prefix }: prefix=false means the call
    passed a complete literal key (App.i18n.t('yourStars')) and must
@@ -594,7 +614,7 @@ function checkUsageVsRegistration(dir, label) {
 }
 
 slugs.forEach(function (slug) { checkUsageVsRegistration(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
-checkUsageVsRegistration(path.join(ROOT, 'site'), 'site/');
+checkUsageVsRegistration(ROOT, 'raíz/');
 checkUsageVsRegistration(path.join(ROOT, 'config'), 'config/');
 checkUsageVsRegistration(path.join(ROOT, 'legal'), 'legal/');
 
@@ -612,7 +632,7 @@ checkUsageVsRegistration(path.join(ROOT, 'legal'), 'legal/');
    styles.css had long been renamed to `floor-row` / `current-floor`.
 
    Scope: only tools/<slug>/{app.js,styles.css} is cross-checked.
-   site/, config/ and legal/ are out of scope on purpose — they
+   the landing (site root), config/ and legal/ are out of scope on purpose — they
    have little dynamic class emission and a lot of static HTML, so
    the false-positive rate would be high. The CSS side pools every
    .css file in the repo (the shared assets/css/*.css sheets count)
@@ -642,9 +662,12 @@ function listCssFiles() {
   }
   walk(path.join(ROOT, 'tools'));
   walk(path.join(ROOT, 'assets', 'css'));
-  walk(path.join(ROOT, 'site'));
   walk(path.join(ROOT, 'config'));
   walk(path.join(ROOT, 'legal'));
+  /* The landing's own stylesheet sits at the site root, so walk() can't
+     reach it — add the file explicitly. */
+  var landingCss = path.join(ROOT, 'styles.css');
+  if (fs.existsSync(landingCss)) out.push(landingCss);
   return out;
 }
 /* Index every class name that appears in any selector across all
@@ -874,12 +897,12 @@ var fileSizeExcluded = ['.git', 'node_modules', '.claude', 'graphify-out', 'grap
 })(ROOT);
 
 /* --- 13. Shared footer marker: every tools/<slug>/index.html and
-    site/index.html must declare the canonical <footer data-pie-app>
+    the root index.html must declare the canonical <footer data-pie-app>
     marker (no hand-written children). The injector in
     assets/js/utils.js -> App.utils.inyectarPie() fills it in at
     load time. --- */
 checks += 1;
-var CANONICAL_PIE_PATHS = [path.join('site', 'index.html')].concat(
+var CANONICAL_PIE_PATHS = ['index.html'].concat(
   slugs.map(function (s) { return path.join('tools', s, 'index.html'); })
 );
 CANONICAL_PIE_PATHS.forEach(function (relPath) {

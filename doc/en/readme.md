@@ -39,7 +39,7 @@ The app offers **27 activities** organized into **2 families**: Mathematics (num
 
 ### 1. Open the app
 
-Visit **[calculia.apptonomia.uk](https://calculia.apptonomia.uk)** or open `site/index.html` from a local server. The full step-by-step with **four ways to open Calculia** (internet, ZIP, Python, Node.js) lives in [`quick-guide.md`](quick-guide.md).
+Visit **[calculia.apptonomia.uk](https://calculia.apptonomia.uk)** or open `index.html` from a local server. The full step-by-step with **four ways to open Calculia** (internet, ZIP, Python, Node.js) lives in [`quick-guide.md`](quick-guide.md).
 
 ### 2. Choose an activity
 

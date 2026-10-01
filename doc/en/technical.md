@@ -47,7 +47,7 @@ pattern as the sibling projects Apptonomia, Sinonimia and Teclatlon:
 Verify manually in Chromium, Firefox and WebKit (Safari), on desktop and
 mobile, before landing a change to shared core files (`assets/`) or an
 activity's `index.html`/`app.js`/`styles.css`. Register the service
-worker from every entry point (`index.html`, `site/`, `settings/`,
+worker from every entry point (`index.html`, `settings/`,
 `legal/`, every `tools/<slug>/index.html`) — matches Apptonomia's
 pattern and avoids Safari's "cannot open the page" error when a user
 lands on a subpage directly.
@@ -58,8 +58,11 @@ lands on a subpage directly.
 
 ```
 calculia/
-├── index.html             # Level 0: redirect to site/index.html
-├── site/index.html        # Level 0: public landing = Roman Numerals only
+├── index.html             # Level 0: public landing = Roman Numerals only
+├── styles.css             #   landing stylesheet, next to index.html
+├── app.js                 #   landing logic, next to index.html
+├── strings.<locale>.js    #   landing texts, es/en, next to index.html
+├── site/index.html        # Back-compat stub only: redirects to /
 ├── dev/index.html         # Hidden catalogue = the other 26 activities
 ├── assets/                # Level 1: SHARED CORE
 │   ├── css/tokens.css     #   design variables (colors, typography, touch)
@@ -87,7 +90,7 @@ calculia/
 └── _headers                # Cloudflare Pages cache and security headers
 ```
 
-Same three-level architecture as Apptonomia, scoped to 27 activities. The public `site/index.html` links only to Roman Numerals; the hidden `dev/index.html` links to the other 26 activities.
+Same three-level architecture as Apptonomia, scoped to 27 activities. The public `index.html` links only to Roman Numerals; the hidden `dev/index.html` links to the other 26 activities.
 
 ### 2.1 `assets/` — shared core, kept whole
 
@@ -110,7 +113,7 @@ nearly every corner of the API:
   remaining options after a wrong answer (a reading pause, never a
   progress block).
 - `App.storage.estrellasTotales()` / `.listaToolIds()`: used by
-  `site/index.html` (total stars) and `settings/` (progress list, full
+  `index.html` (total stars) and `settings/` (progress list, full
   reset).
 
 Before removing anything from `assets/js/`, grep every `tools/<slug>/app.js`
@@ -155,13 +158,13 @@ Short version: `strings.<locale>.js` per activity/landing each
 register one language via `App.i18n.register(dict, '<locale>')`;
 both files always load, and `App.i18n.locale()` decides which is
 active. `scripts/check.js` checks key parity between every locale
-file for every `tools/<slug>/`, plus `site/`, `settings/` and
+file for every `tools/<slug>/`, plus the site root, `settings/` and
 `legal/`.
 
 The core is multi-locale-ready from day one — see `I18N.md` §4 for
 the three binary `es`/`en` spots that have to be generalized when
 adding a third language (`BCP47` map in `i18n.js`, `DECIMAL_SEP` in
-`dinero.js`, and the `BOTONES_IDIOMA` map in `site/index.html`).
+`dinero.js`, and the `BOTONES_IDIOMA` map in `index.html`).
 
 ---
 
@@ -197,7 +200,7 @@ adding a third language (`BCP47` map in `i18n.js`, `DECIMAL_SEP` in
 node scripts/check.js
 ```
 
-No `npm install` needed. For a manual pass: open `site/index.html`,
+No `npm install` needed. For a manual pass: open `index.html`,
 go through a few activities in both sections, in both `es` and `en`,
 and check `settings/index.html`'s progress table and reset actions.
 
@@ -314,9 +317,10 @@ Every app exposes the same five folders:
 ```
 
 Single-activity apps (Teclatlon, Okeymoney) put `index.html` at
-the repo root. Multi-activity apps (Apptonomia, Calculia) put
-`tools/<slug>/index.html` per activity and a `site/index.html`
-landing page; the four hidden folders live at the repo root.
+the repo root. Multi-activity apps (Apptonomia, Calculia) also put the
+landing at the repo root  `index.html`, with `app.js`, `styles.css`
+and `strings.<locale>.js` next to it  plus `tools/<slug>/index.html`
+per activity; the four hidden folders live at the repo root too.
 
 #### 8.1.2 The HTML shell of a standalone page
 

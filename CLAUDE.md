@@ -47,7 +47,7 @@ shipping a layout change.
 There is no build step, no package.json, and no test framework — it's plain
 HTML/CSS/JS served as static files.
 
-- **Preview**: open `site/index.html` directly in a browser, or serve the
+- **Preview**: open `index.html` directly in a browser, or serve the
   folder with any static server (e.g. `npx serve .`). Everything runs
   client-side.
 - **Validate everything** (this repo's only "test" step, and what CI runs
@@ -56,7 +56,7 @@ HTML/CSS/JS served as static files.
   node scripts/check.js
   ```
   It checks JS syntax, activity folder structure, es/en key parity
-  (`tools/`, `site/`, `config/`, `legal/`), `sw.js` ↔ disk parity, and
+  (`tools/`, the site root, `config/`, `legal/`), `sw.js` ↔ disk parity, and
   catalog lock: Roman Numerals is the only public card; hidden `dev/` lists
   the other activities, and their combined set plus `config/` and `sw.js`
   must cover every slug in `tools/`. Read the script before changing the
@@ -84,7 +84,7 @@ is also called out in `doc/en/technical.md` § 4 and in
 reference** — the file-by-file breakdown, the shared-core API, and the
 activity anatomy. It follows the same three-level architecture as
 Apptonomia (shared core in `assets/`, one folder per activity in
-`tools/<slug>/`, a landing in `site/`), just scoped to 27 activities
+`tools/<slug>/`, a landing at the site root), just scoped to 27 activities
 grouped into two sections (Math, Reasoning and logic) instead of
 Apptonomia's 7 therapeutic modules.
 
@@ -114,7 +114,7 @@ single-topic app needs.
   **English (`en`)**; `es` is the default and fallback when a key is
   missing or the detected locale is unsupported. UI text lives in
   per-activity `strings.<locale>.js` files, plus a couple of root ones
-  (`site/strings.<locale>.js`, `settings/strings.<locale>.js`,
+  (`strings.<locale>.js` at the site root, `settings/strings.<locale>.js`,
   `legal/strings.<locale>.js`).
 - **Technical code**: **always English** — variables, functions,
   identifiers, comments, and commit messages. Dictionary **keys** are
@@ -168,7 +168,7 @@ Before finishing:
 2. Before pushing, run `npm run test:ui`, `node scripts/smoke-sw.js`,
    and `node scripts/check-version-bump.js`; do not push if any fails.
 3. If you add or rename an activity: create `tools/<slug>/` with the 6
-   canonical files, add its card to `site/index.html` (+ `site/strings.*.js`),
+   canonical files, add its card to `index.html` (+ `strings.*.js`),
    its progress row to `settings/index.html` (+ `settings/strings.*.js`),
    and its 6 files to `sw.js`'s `ARCHIVOS` — then bump `VERSION` in `sw.js`.
 4. Report only verifications you actually ran; flag remaining manual tests.
@@ -250,7 +250,7 @@ documentation.
   - It does **not** apply to the UI of the app itself: the project's
     "Mandatory rule: zero mentions in the user-facing product" (see
     `doc/en/SPEC.md` §4 / `doc/es/SPEC.md` §4) continues to forbid
-    **any** mention, including "usuario/a tipo", in `site/index.html`,
+    **any** mention, including "usuario/a tipo", in `index.html`,
     `tools/<slug>/index.html`, `app.js`, `data.js`, `strings.<locale>.js`,
     `config/`, `legal/`, and any other user-facing surface. The
     euphemism is for the outside world, not for what the visitor reads

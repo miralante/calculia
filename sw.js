@@ -3,9 +3,10 @@
    Cache-first strategy for the app shell (works offline).
    When adding new files: add them to FILES and bump VERSION.
    ============================================================ */
-var VERSION = 'calculia-v101';
+var VERSION = 'calculia-v102';
 
 var FILES = [
+  './',
   './index.html',
   './404.html',
   './manifest.json',
@@ -17,11 +18,10 @@ var FILES = [
   './team/styles.css',
   './team/strings.es.js',
   './team/strings.en.js',
-  './site/index.html',
-  './site/app.js',
-  './site/styles.css',
-  './site/strings.es.js',
-  './site/strings.en.js',
+  './styles.css',
+  './app.js',
+  './strings.es.js',
+  './strings.en.js',
   './config/index.html',
   './config/app.js',
   './config/styles.css',
@@ -257,8 +257,9 @@ self.addEventListener('fetch', function (event) {
         }
         return r;
       }).catch(function () {
-        /* Offline / network failure: don't serve site/index.html here,
-           its relative paths only resolve correctly under /site/. Reply
+        /* Offline / network failure: don't serve the landing page here,
+           its relative paths only resolve correctly at the site root, and
+           the URL we are answering may be a deep activity path. Reply
            with a tiny inline HTML that stays at the current URL. */
         return new Response(
           '<!doctype html><html lang="es"><head><meta charset="utf-8">' +
@@ -269,7 +270,7 @@ self.addEventListener('fetch', function (event) {
           '<h1>Sin conexión</h1>' +
           '<p>No hemos podido cargar esta página. Comprueba tu conexión a ' +
           'Internet y vuelve a intentarlo.</p>' +
-          '<p><a href="./site/index.html">Volver a la portada</a></p>' +
+          '<p><a href="./">Volver a la portada</a></p>' +
           '</body></html>',
           { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
         );

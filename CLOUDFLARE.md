@@ -56,23 +56,30 @@ own `404.html` for an unmatched path instead of a bare empty 404.
 | File | Purpose |
 |---|---|
 | `_headers` | Cache and security headers |
-| `_redirects` | Single 302 rule: unknown path → `/site/index.html` (legacy fallback for the Pages path; the canonical 404 handling is `not_found_handling = "404-page"` in `wrangler.toml`) |
+| `_redirects` | Two 301 rules for the former landing path: `/site/` and `/site/index.html` → `/` (the landing is the site root; the canonical 404 handling is `not_found_handling = "404-page"` in `wrangler.toml`) |
 | `wrangler.toml` | Pins the project name + the `[assets]` binding + `not_found_handling = "404-page"` |
 | `.github/workflows/validate.yml` | `node scripts/check.js` and friends on every push/PR (does **not** deploy) |
 
 Calculia has no client-side routing (plain folder layout), so
 Cloudflare's implicit per-directory `index.html` lookup handles
 deep links (`/tools/<slug>/` → `tools/<slug>/index.html`) without
-any rewrite rule. The only `_redirects` rule is the 302 fallback
-above, so a stale path doesn't end up on Cloudflare's default JSON
-error.
+any rewrite rule. The only `_redirects` rules are the two 301s
+above, which keep old links to the former `/site/` landing working.
+Unknown paths are handled by `not_found_handling = "404-page"` in
+`wrangler.toml`, so a stale path ends up on Calculia's own 404 page
+rather than on Cloudflare's default JSON error.
 
-The root `/index.html` keeps its `<meta http-equiv="refresh">` to
-`site/index.html` as a client-side entry pointer — that has nothing
-to do with server-side routing.
+The public landing **is** the site root: `https://calculia.apptonomia.uk/`
+serves `index.html` directly, with no redirect, so the URL in the address
+bar and the `<link rel="canonical">` in the page agree. `site/index.html`
+is kept only as a back-compat stub (a `<meta http-equiv="refresh">` to
+`/`) for old bookmarks and for deployments where `_redirects` is not
+applied.
 
-No `_redirects`, no `functions/`, no `package.json`, no Cloudflare
-service-account keys.
+No `functions/` and no Cloudflare service-account keys. `_redirects`
+carries only the two back-compat 301s above, and `package.json` only
+declares Playwright for the local UI smoke test  neither takes part in
+the deploy, which uploads the repo as-is.
 
 ## Configuration in Cloudflare
 
