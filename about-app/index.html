@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="pageTitle">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre la app | Calculia</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="icon" href="../assets/img/icono.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container about-app">
+    <a href="../index.html" class="back-link" data-i18n="core.back">← Volver</a>
+    <header class="cabecera-about-app">
+      <div class="idioma-selector" role="group" data-i18n-aria="languageAria" aria-label="Elegir idioma">
+        <button type="button" class="btn-lang" id="btnIdiomaEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
+        <button type="button" class="btn-lang" id="btnIdiomaEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
+      </div>
+      <img src="../assets/img/icono.svg" alt="" width="64" height="64" class="logo-about-app">
+      <h1 data-i18n="title">ℹ️ Sobre la app</h1>
+      <p class="entradilla" data-i18n="intro">Calculia te ayuda a practicar cálculo y razonamiento. Aquí ves tus logros.</p>
+    </header>
+
+    <main class="stack">
+      <section id="logros" class="card" aria-labelledby="achievementsTitle">
+        <h2 id="achievementsTitle" data-i18n="achievementsTitle">⭐ Logros</h2>
+        <p class="achievements-hint" data-i18n="achievementsHint">Los logros se consiguen solos al jugar.</p>
+        <p class="achievements-count" id="achievementsCount" aria-live="polite"></p>
+        <ul class="achievements-grid" id="achievementsGrid"></ul>
+      </section>
+
+      <p class="nota-local" data-i18n="savedLocally">Tus logros se guardan solo en este dispositivo.</p>
+    </main>
+
+    <footer data-pie-app data-pie-base="../" data-pie-class="pie-app" data-pie-include-about="false"></footer>
+  </div>
+
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/storage.js"></script>
+  <script src="../assets/js/achievements.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="app.js"></script>
+  <script src="../assets/js/sw-register.js"></script>
+</body>
+</html>

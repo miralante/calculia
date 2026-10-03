@@ -79,7 +79,10 @@
     * and fills them in at load time using App.i18n.t() for the
     * text. Marker attributes mirror the routime convention:
     *   data-pie-base            base path for relative links
-    *   data-pie-include-config  if 'true', prepends a Configuración link
+    *   data-pie-include-about   unless 'false', starts with a "Sobre la
+    *                            app" link (about-app/: achievements),
+    *                            always placed before Configuración
+    *   data-pie-include-config  if 'true', adds a Configuración link
     *   data-pie-class           extra class added to the <footer> element
     * Idempotent: a footer that already has children is skipped.
     * --------------------------------------------------------------- */
@@ -90,10 +93,14 @@
       var pie = pies[i];
       if (pie.childNodes && pie.childNodes.length > 0) continue;
       var base = pie.getAttribute('data-pie-base') || '../../';
+      var includeAbout = pie.getAttribute('data-pie-include-about') !== 'false';
       var includeConfig = pie.getAttribute('data-pie-include-config') === 'true';
       var extraClass = pie.getAttribute('data-pie-class');
       if (extraClass) pie.className = (pie.className ? pie.className + ' ' : '') + extraClass;
       var html = '';
+      if (includeAbout) {
+        html += '<a href="' + base + 'about-app/" class="legal-link" data-i18n="core.aboutApp"></a>';
+      }
       if (includeConfig) {
         html += '<a href="' + base + 'config/" class="legal-link" data-i18n="core.config"></a>';
       }

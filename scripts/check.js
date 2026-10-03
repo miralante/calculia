@@ -132,6 +132,7 @@ var jsFiles = []
   .concat(listJs(path.join(ROOT, 'config')))
   .concat(listJs(path.join(ROOT, 'legal')))
   .concat(listJs(path.join(ROOT, 'team')))
+  .concat(listJs(path.join(ROOT, 'about-app')))
   .concat(listJs(path.join(ROOT, 'assets', 'js')));
 
 /* Parse each JS file in-process with `new vm.Script(...)` instead of
@@ -313,6 +314,7 @@ slugs.forEach(function (slug) { compareEsEn(path.join(toolsDir, slug), 'tools/' 
 compareEsEn(ROOT, 'raíz/');
 compareEsEn(path.join(ROOT, 'config'), 'config/');
 compareEsEn(path.join(ROOT, 'legal'), 'legal/');
+compareEsEn(path.join(ROOT, 'about-app'), 'about-app/');
 /* Hidden routes with their own strings.<locale>.js pair (about/, team/):
    each is a standalone guide aimed at families/therapists/agents, not
    linked from the main menu, and must keep the same es/en key parity
@@ -617,6 +619,7 @@ slugs.forEach(function (slug) { checkUsageVsRegistration(path.join(toolsDir, slu
 checkUsageVsRegistration(ROOT, 'raíz/');
 checkUsageVsRegistration(path.join(ROOT, 'config'), 'config/');
 checkUsageVsRegistration(path.join(ROOT, 'legal'), 'legal/');
+checkUsageVsRegistration(path.join(ROOT, 'about-app'), 'about-app/');
 
 /* --- 9. CSS class coverage in tools/<slug>/ ---
    The repo is mid-rename (apptonomia → calculia, plus the Spanish →
@@ -917,6 +920,32 @@ CANONICAL_PIE_PATHS.forEach(function (relPath) {
     failures.push(relPath + ': hay un <footer class="pie-app..."> manual además del marcador canónico; quítalo.');
   }
 });
+
+/* --- 14. Achievements ("logros"): the shared footer links to
+    about-app/ right before the Configuración link, and every page that
+    saves progress loads assets/js/achievements.js after storage.js,
+    otherwise the live unlocks (streak, perfect round) silently stop. --- */
+checks += 1;
+(function () {
+  var utilsSrc = fs.readFileSync(path.join(ROOT, 'assets', 'js', 'utils.js'), 'utf8');
+  var aboutAt = utilsSrc.indexOf("+ 'about-app/");
+  var configAt = utilsSrc.indexOf("+ 'config/");
+  if (aboutAt === -1) {
+    failures.push('assets/js/utils.js: injectFooter() no enlaza about-app/ (Sobre la app).');
+  } else if (configAt !== -1 && aboutAt > configAt) {
+    failures.push('assets/js/utils.js: el enlace a about-app/ debe ir antes del de config/.');
+  }
+  CANONICAL_PIE_PATHS.forEach(function (relPath) {
+    var absPath = path.join(ROOT, relPath);
+    if (!fs.existsSync(absPath)) return;
+    var html = fs.readFileSync(absPath, 'utf8');
+    var storageAt = html.search(/assets\/js\/storage\.js"/);
+    var achievementsAt = html.search(/assets\/js\/achievements\.js"/);
+    if (achievementsAt === -1 || achievementsAt < storageAt) {
+      failures.push(relPath + ': falta <script ...assets/js/achievements.js> después de storage.js.');
+    }
+  });
+})();
 
 /* --- Result --- */
 parseJobs.then(function () {

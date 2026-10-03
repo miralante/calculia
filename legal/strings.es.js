@@ -23,7 +23,7 @@
     "dataP1": 'Calculia funciona sin cuentas, sin cookies y sin analítica: no sabemos quién eres ni cómo usas la aplicación.',
     "dataP2": 'Lo único que se guarda vive en el localStorage de tu navegador, en tu propio dispositivo, y nunca se envía a ningún servidor:',
     "dataItem1Label": 'Progreso del juego',
-    "dataItem1Text": 'las estrellas ganadas y los niveles completados de cada actividad.',
+    "dataItem1Text": 'las estrellas ganadas, los niveles completados y los logros de cada actividad.',
     "dataItem2Label": 'Idioma elegido',
     "dataItem2Text": 'para no tener que elegirlo de nuevo cada vez que abres la aplicación.',
     "dataP3": 'Nunca guardamos: nombre, fallos, tiempo empleado, número de intentos, comparaciones con otras personas ni historiales de uso detallados.',

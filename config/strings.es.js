@@ -49,7 +49,7 @@
     resetAppTitle: 'Restablecer toda la aplicación',
     resetAppIntro1: 'Borra ',
     resetAppIntroStrong: 'todo',
-    resetAppIntro2: ' lo guardado en este navegador: idioma, estrellas y niveles completados de todas las actividades.',
+    resetAppIntro2: ' lo guardado en este navegador: idioma, estrellas, niveles completados y logros de todas las actividades.',
     resetAppNoteStrong: 'No se puede deshacer.',
     resetAppNote2: ' Es como si la aplicación se abriera por primera vez.',
     btnResetApp: '🗑️ Restablecer toda la aplicación',

@@ -12,9 +12,11 @@
   var PREFIX = 'calculia:';
 
   /* Keys under 'calculia:*' that are NOT an activity's progress:
-     'locale' (language) and 'prefs' (font size, sounds — see
-     /settings/). Excluded from totalStars() and toolIds(). */
-  var NON_TOOL_KEYS = ['locale', 'prefs'];
+     'locale' (language), 'prefs' (font size, sounds — see
+     /settings/), 'achievements' and 'streak' (see
+     assets/js/achievements.js). Excluded from totalStars() and
+     toolIds(). */
+  var NON_TOOL_KEYS = ['locale', 'prefs', 'achievements', 'streak'];
 
   /* Applies right away the font-size preference saved in /settings/
      (rule: only once in the shared core, never per tool — storage.js
@@ -55,17 +57,29 @@
 
   /**
    * Saves a tool's progress.
+   * After saving an activity (not a NON_TOOL_KEYS entry) it fires the
+   * DOM event 'calculia:progress' with detail { toolId, before, after },
+   * which assets/js/achievements.js listens to.
    * @param {string} toolId
    * @param {object} data - JSON-serializable object
    * @returns {boolean} true if it was saved
    */
   function set(toolId, data) {
+    var isTool = NON_TOOL_KEYS.indexOf(toolId) === -1;
+    var before = isTool ? get(toolId) : null;
     try {
       localStorage.setItem(PREFIX + toolId, JSON.stringify(data));
-      return true;
     } catch (e) {
       return false;
     }
+    if (isTool) {
+      try {
+        document.dispatchEvent(new CustomEvent('calculia:progress', {
+          detail: { toolId: toolId, before: before, after: data }
+        }));
+      } catch (e2) { /* listeners must never break saving */ }
+    }
+    return true;
   }
 
   /** Deletes a tool's progress. */
