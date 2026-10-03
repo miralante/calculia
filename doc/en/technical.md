@@ -72,6 +72,7 @@ calculia/
 │   ├── js/i18n.js         #   window.App.i18n
 │   ├── js/tts.js          #   window.App.tts
 │   ├── js/storage.js      #   window.App.storage
+│   ├── js/achievements.js #   window.App.achievements (badges, about-app/)
 │   ├── js/feedback.js     #   window.App.feedback
 │   ├── js/dinero.js       #   window.App.dinero (used by The Wallet)
 │   ├── fonts/              #   self-hosted woff2 (Atkinson Hyperlegible, Nunito)
@@ -142,6 +143,29 @@ font-size/sound preferences, and the "my details" personal-data form —
 none apply to Calculia's scope. If a future activity needs one of these,
 port the corresponding piece from `apptonomia/settings/app.js` rather
 than reinventing it.
+
+### 2.4 `about-app/` — "About the app" and achievements
+
+`about-app/` is a standalone page linked from the shared footer
+(`App.utils.injectFooter()`), always as the first link and always before
+the Configuración link when a footer carries one. It shows the six
+achievements ("logros") as a badge grid with an "X of 6" counter.
+
+- Catalog, unlock rules and renderer: `assets/js/achievements.js`
+  (`App.achievements.{list, unlocked, achieve, sync, render}`), loaded
+  after `storage.js` on the landing, on every `tools/<slug>/index.html`
+  and on `about-app/` (`scripts/check.js` §14 enforces it).
+- Storage: `calculia:achievements` = `{ id: timestamp }` and
+  `calculia:streak` = `{ lastDay, days }`. Both are in
+  `NON_TOOL_KEYS`, so they never count as an activity; "Reset entire
+  app" removes them explicitly.
+- Unlocks: `firstStar` (1 star), `tenStars` (10 stars), `tenRounds`
+  (10 rounds finished) and `allLevels` (every Roman Numerals level)
+  are derived from saved progress by `sync()`, so earlier progress gets
+  credit on the next page load. `streak3` (stars on 3 days in a row) and
+  `perfectRound` (a round with no wrong answer) need live events:
+  `App.storage.set()` fires `calculia:progress` ({ toolId, before,
+  after }) and `App.feedback.encourage()` fires `calculia:mistake`.
 
 ---
 

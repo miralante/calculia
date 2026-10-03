@@ -78,6 +78,7 @@ calculia/
 │   ├── js/i18n.js         #   window.App.i18n
 │   ├── js/tts.js          #   window.App.tts
 │   ├── js/storage.js      #   window.App.storage
+│   ├── js/achievements.js #   window.App.achievements (logros, about-app/)
 │   ├── js/feedback.js     #   window.App.feedback
 │   ├── js/dinero.js       #   window.App.dinero (usado por El Monedero)
 │   ├── fonts/              #   woff2 autoalojadas (Atkinson Hyperlegible, Nunito)
@@ -151,6 +152,31 @@ formulario de datos personales "Mis Datos" — nada de eso aplica al
 alcance de Calculia. Si una futura actividad necesita algo de esto,
 migra la pieza correspondiente desde `apptonomia/settings/app.js` en vez
 de reinventarla.
+
+### 2.4 `about-app/` — "Sobre la app" y logros
+
+`about-app/` es una página independiente enlazada desde el pie común
+(`App.utils.injectFooter()`), siempre como primer enlace y siempre antes
+del enlace a Configuración cuando el pie lo lleva. Muestra los seis
+logros como cuadrícula de insignias con un contador "X de 6".
+
+- Catálogo, reglas y dibujo: `assets/js/achievements.js`
+  (`App.achievements.{list, unlocked, achieve, sync, render}`), cargado
+  después de `storage.js` en la portada, en cada
+  `tools/<slug>/index.html` y en `about-app/` (lo exige
+  `scripts/check.js` §14).
+- Almacenamiento: `calculia:achievements` = `{ id: timestamp }` y
+  `calculia:streak` = `{ lastDay, days }`. Las dos están en
+  `NON_TOOL_KEYS` (no cuentan como actividad); "Restablecer toda la
+  aplicación" las borra explícitamente.
+- Desbloqueo: `firstStar` (1 estrella), `tenStars` (10 estrellas),
+  `tenRounds` (10 rondas terminadas) y `allLevels` (todos los niveles de
+  Números Romanos) se derivan del progreso guardado con `sync()`, así que
+  el progreso anterior cuenta en la siguiente carga. `streak3` (estrellas
+  3 días seguidos) y `perfectRound` (una ronda sin fallos) necesitan
+  eventos en vivo: `App.storage.set()` lanza `calculia:progress`
+  ({ toolId, before, after }) y `App.feedback.encourage()` lanza
+  `calculia:mistake`.
 
 ---
 

@@ -284,6 +284,65 @@ async function exerciseFontSizeSettings(browser, baseUrl) {
   }
 }
 
+/* Achievements ("logros"): only for apps that ship an about-app/ page.
+   The shared footer must link to it before any Settings link; badges
+   earned from saved progress show up there; the live events (perfect
+   round, 3-day streak) unlock; and "reset the whole app" clears them. */
+async function exerciseAchievements(browser, baseUrl) {
+  const context = await browser.newContext({
+    locale: 'es-ES', serviceWorkers: 'block', viewport: { width: 375, height: 800 },
+  });
+  const page = await context.newPage();
+  const errors = listenForErrors(page, baseUrl);
+  const key = name => APP + ':' + name;
+  try {
+    await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+    await waitForApp(page);
+    const footerHrefs = await page.locator('footer[data-pie-app] a').evaluateAll(nodes =>
+      nodes.map(node => node.getAttribute('href')));
+    assert.ok(footerHrefs.length && /about-app\/$/.test(footerHrefs[0]),
+      'El primer enlace del pie debe ser "Sobre la app": ' + footerHrefs.join(', '));
+
+    await page.evaluate(k => {
+      localStorage.clear();
+      localStorage.setItem(k, JSON.stringify({
+        stars: 12, completedRounds: 0,
+        completed: { level1: 2, level2: 2, level3: 2, level4: 2, level5: 2, test: 2 },
+      }));
+    }, key('roman-numerals'));
+    await page.goto(baseUrl + '/about-app/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+    await waitForApp(page);
+    assert.strictEqual(await page.locator('#achievementsGrid .achievement-badge').count(), 6);
+    assert.strictEqual(await page.locator('#achievementsGrid .achievement-badge.unlocked').count(), 4,
+      'Las estrellas, rondas y niveles ya guardados deben dar sus logros');
+    assert.match(await page.locator('#achievementsCount').innerText(), /4/);
+
+    const live = await page.evaluate(k => {
+      const d = new Date(); d.setDate(d.getDate() - 1);
+      const yesterday = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' +
+        String(d.getDate()).padStart(2, '0');
+      localStorage.setItem(k.streak, JSON.stringify({ lastDay: yesterday, days: 2 }));
+      App.storage.set('places', { stars: 1, completedRounds: 0 });
+      App.storage.set('places', { stars: 1, completedRounds: 1 });
+      return App.achievements.unlocked();
+    }, { streak: key('streak') });
+    assert.ok(live.perfectRound, 'Una ronda sin fallos debe dar "Ronda perfecta"');
+    assert.ok(live.streak3, 'El tercer día seguido debe dar "Racha de 3 días"');
+
+    await page.goto(baseUrl + '/config/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+    await waitForApp(page);
+    await page.locator('#btnResetApp').click();
+    await page.locator('#btnResetApp').click();
+    assert.strictEqual(await page.evaluate(k => localStorage.getItem(k), key('achievements')), null,
+      'Restablecer toda la aplicación también debe borrar los logros');
+    assert.deepEqual(errors.page, [], 'Errores de página: ' + errors.page.join('; '));
+    assert.deepEqual(errors.console, [], 'Errores de consola: ' + errors.console.join('; '));
+  } finally {
+    await page.close().catch(() => {});
+    await context.close().catch(() => {});
+  }
+}
+
 async function exerciseForms(page) {
   const items = await page.locator('input:visible, select:visible, textarea:visible')
     .evaluateAll(nodes => nodes.map((node, index) => ({
@@ -692,6 +751,10 @@ async function main() {
     process.stdout.write('\n[' + APP + '] font-size settings OK');
     await exerciseUnsupportedBrowserLanguage(browser, baseUrl);
     process.stdout.write('\n[' + APP + '] fr-FR fallback OK');
+    if (fs.existsSync(path.join(ROOT, 'about-app', 'index.html'))) {
+      await exerciseAchievements(browser, baseUrl);
+      process.stdout.write('\n[' + APP + '] achievements OK');
+    }
     for (const route of routes) {
       process.stdout.write('\n[' + APP + '] ' + route + ' ');
       try {

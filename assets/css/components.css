@@ -278,7 +278,9 @@ button.locked {
 /* ---- Legal footer link (present on every page) ---- */
 .pie-app {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 4px 8px;
   padding: var(--espacio) 0 8px;
   margin-top: var(--espacio);
 }
@@ -293,6 +295,63 @@ button.locked {
 .legal-link:hover, .legal-link:focus {
   color: var(--color-texto);
 }
+
+/* ---- Achievements panel (about-app/, see assets/js/achievements.js) ----
+   A locked badge keeps full text contrast: only the icon goes grey and
+   the border turns dashed, and the status line says it in words, so
+   colour is never the only cue (WCAG 1.4.1). */
+.achievements-grid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  gap: 12px;
+  margin: 12px 0 0;
+}
+
+.achievement-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  padding: 12px 8px;
+  border-radius: var(--radio);
+  border: 2px solid var(--color-borde);
+  background: var(--color-superficie);
+}
+
+.achievement-badge.locked { border-style: dashed; }
+.achievement-badge.locked .achievement-badge-icon { filter: grayscale(1); opacity: 0.5; }
+
+.achievement-badge.unlocked {
+  border-color: var(--color-estrella);
+  background: var(--color-acierto-suave);
+}
+
+.achievement-badge-icon { font-size: 36px; line-height: 1.2; }
+
+.achievement-badge-name {
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--color-texto);
+  line-height: 1.2;
+}
+
+.achievement-badge-desc {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-suave);
+  line-height: 1.3;
+}
+
+.achievement-badge-status {
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  color: var(--color-texto);
+  margin-top: 4px;
+}
+
+.achievement-badge.locked .achievement-badge-status { color: var(--color-texto-suave); }
 
 /* Utilities */
 .centered { text-align: center; }
