@@ -12,7 +12,7 @@
 .learn-layout { display: grid; grid-template-columns: minmax(180px, auto) 1fr; gap: var(--espacio); align-items: start; }
 .fact-list { display: flex; flex-direction: column; gap: 8px; }
 .fact-row { font-variant-numeric: tabular-nums; justify-content: flex-start; }
-.fact-row.activa { background: var(--mod-razonamiento); color: #fff; border-color: var(--mod-razonamiento); }
+.fact-row.activa { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
 
 /* Dots visual (shared by learn and quiz) */
 .visual-card { display: flex; flex-direction: column; gap: var(--espacio); align-items: flex-start; padding: var(--espacio); border: 3px solid var(--mod-razonamiento-suave); border-radius: var(--radio); background: var(--color-superficie); }
@@ -21,7 +21,7 @@
 .dot-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .dot { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; }
 .dot-removed { opacity: 0.4; position: relative; }
-.dot-removed::after { content: 'âœ•'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--color-texto); font-size: 15px; font-weight: 700; }
+.dot-removed::after { content: '✕'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--color-texto); font-size: 15px; font-weight: 700; }
 .ten-frame { padding: 6px; border: 3px solid var(--mod-razonamiento); border-radius: var(--radio); background: var(--mod-razonamiento-suave); }
 .visual-sign { font-size: var(--texto-grande); font-weight: 700; color: var(--color-texto-suave); }
 
@@ -37,7 +37,7 @@
 #pantallaFinalScreen .transferencia {
   margin: 8px auto 24px;
   font-size: 1.1rem;
-  color: var(--color-texto-secundario, #555);
+  color: var(--color-texto-suave, #555);
   max-width: 480px;
 }
 

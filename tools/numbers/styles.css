@@ -9,7 +9,7 @@
 
 .difficulty {
   font-size: var(--texto-pequeno);
-  color: var(--color-texto-secundario, #666);
+  color: var(--color-texto-suave, #666);
 }
 
 /* Activity menu */
@@ -123,7 +123,7 @@
 #screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
-  color: var(--color-texto-secundario, #555);
+  color: var(--color-texto-suave, #555);
   max-width: 480px;
 }
 
@@ -202,7 +202,7 @@
 .elevator-goal {
   font-size: var(--texto-base);
   font-weight: 700;
-  color: var(--color-texto-secundario);
+  color: var(--color-texto-suave);
   margin: 0;
   text-align: center;
 }

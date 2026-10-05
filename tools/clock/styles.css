@@ -1,4 +1,4 @@
-/* The Clock â€” tool-specific styles. Shared styles live in assets/css/. */
+/* The Clock — tool-specific styles. Shared styles live in assets/css/. */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 
@@ -12,7 +12,7 @@
 
 .difficulty {
   font-size: var(--texto-pequeno);
-  color: var(--color-texto-secundario, #666);
+  color: var(--color-texto-suave, #666);
 }
 
 .progress-bar { margin-top: var(--espacio); }
@@ -49,7 +49,7 @@
 #screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
-  color: var(--color-texto-secundario, #555);
+  color: var(--color-texto-suave, #555);
   max-width: 480px;
 }
 
@@ -130,17 +130,17 @@
   border-radius: 999px;
   border: 2px solid var(--mod-razonamiento);
   background: var(--mod-razonamiento);
-  color: #FFFFFF;
+  color: var(--texto-sobre-acento);
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
 }
-/* Same visual as .btn-step â€” the modifier classes exist so app.js
+/* Same visual as .btn-step — the modifier classes exist so app.js
    can address each button individually (`.btn-step-down` /
    `.btn-step-up`) for its click handler. */
 .btn-step-down,
-.btn-step-up { /* same look as .btn-step â€” see above */ }
+.btn-step-up { /* same look as .btn-step — see above */ }
 .btn-step:focus-visible {
   outline: 3px solid var(--color-foco, #2563EB);
   outline-offset: 2px;
@@ -161,7 +161,7 @@
 }
 .set-target .set-label {
   font-size: 1rem;
-  color: var(--color-texto-secundario, #555);
+  color: var(--color-texto-suave, #555);
 }
 .set-target .set-time {
   font-size: 1.6rem;

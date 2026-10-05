@@ -1,4 +1,4 @@
-/* Fractions â€” tool-specific styles. Shared styles live in assets/css/. */
+/* Fractions — tool-specific styles. Shared styles live in assets/css/. */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
 .btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
@@ -7,7 +7,7 @@
 
 .difficulty {
   font-size: var(--texto-pequeno);
-  color: var(--color-texto-secundario, #666);
+  color: var(--color-texto-suave, #666);
 }
 
 /* Activity menu */
@@ -57,7 +57,7 @@
 #screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
-  color: var(--color-texto-secundario, #555);
+  color: var(--color-texto-suave, #555);
   max-width: 480px;
 }
 

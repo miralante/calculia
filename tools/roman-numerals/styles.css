@@ -23,7 +23,7 @@
 
 .difficulty {
   font-size: var(--texto-pequeno);
-  color: var(--color-texto-secundario, #666);
+  color: var(--color-texto-suave, #666);
 }
 
 /* Cabecera de la mini-ronda de refuerzo de fallos. Solo se muestra
@@ -113,7 +113,7 @@
 #endScreen .transferencia {
   margin: 8px auto 24px;
   font-size: 1.1rem;
-  color: var(--color-texto-secundario, #555);
+  color: var(--color-texto-suave, #555);
   max-width: 480px;
 }
 

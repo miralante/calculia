@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Riddles texts (EN)
+   Calculia — Riddles texts (EN)
    Locale-specific file. Loaded conditionally from index.html
    according to App.i18n.locale().
    ============================================================ */
@@ -7,16 +7,16 @@
   'use strict';
 
   App.i18n.register({
-    title: 'ðŸ§© Riddles',
+    title: '🧩 Riddles',
     instruction: 'Read the riddle. Then choose the answer.',
     question: 'What is it?',
     btnMenu: 'Back to start',
     proximoNivel: 'Next step: {n}',
     endSummary: 'You won {n} stars. You now have {stars} stars.',
-    explicacionCorrecta: 'âœ… Correct! The answer is: ',
-    explicacionIncorrectaA: 'âŒ ',
+    explicacionCorrecta: '✅ Correct! The answer is: ',
+    explicacionIncorrectaA: '❌ ',
     explicacionIncorrectaB: ' is not right. The correct answer is: ',
-    pista: 'ðŸ¤” Try again. Read the clue again: ',
+    pista: '🤔 Try again. Read the clue again: ',
     refuerzoTitulo: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",

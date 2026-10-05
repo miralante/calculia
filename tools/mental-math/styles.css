@@ -1,4 +1,4 @@
-/* Mental Math â€” tool-specific styles. Shared styles live in assets/css/.
+/* Mental Math — tool-specific styles. Shared styles live in assets/css/.
    Colors by place value: blue units, green tens, purple hundreds
    (the cycle repeats every group of 3 digits). Signs are shown in orange. */
 
@@ -9,7 +9,7 @@
 
 .difficulty {
   font-size: var(--texto-pequeno);
-  color: var(--color-texto-secundario, #666);
+  color: var(--color-texto-suave, #666);
 }
 
 /* Activity menu */
@@ -30,9 +30,9 @@
 
 /* Color-coded digits by place value */
 .num-color { font-weight: 800; letter-spacing: 2px; }
-.digit-u { color: var(--mod-coordinacion); }   /* blue â€” units */
-.digit-d { color: var(--mod-secuencia); }      /* green â€” tens */
-.digit-c { color: var(--mod-emocional); }      /* purple â€” hundreds */
+.digit-u { color: var(--mod-coordinacion); }   /* blue — units */
+.digit-d { color: var(--mod-secuencia); }      /* green — tens */
+.digit-c { color: var(--mod-emocional); }      /* purple — hundreds */
 .digit-sep { color: var(--color-texto-suave); }
 .sign { color: var(--mod-memoria); }          /* orange */
 .highlight { text-decoration: underline; text-underline-offset: 6px; }
@@ -84,7 +84,7 @@
 #screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
-  color: var(--color-texto-secundario, #555);
+  color: var(--color-texto-suave, #555);
   max-width: 480px;
 }
 
