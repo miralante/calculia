@@ -12,9 +12,10 @@
       tool file is listed in FILES.
    4. es/en key parity between strings.es.js and strings.en.js
       (tools/, the site root, config/, legal/).
-   5. Public/private catalog split: the root index.html links only Roman Numerals;
-      dev/index.html links to the other activities; together they cover all
-      activity slugs in tools/, config/, and sw.js FILES.
+   5. Public/private catalog split: the root index.html links only Roman
+      Numerals and Shapes; dev/index.html links to the other activities;
+      together they cover all activity slugs in tools/, config/, and
+      sw.js FILES.
    6. Mandatory rule: zero mentions of disability, occupational therapy
       or minors in user-facing files (see doc/<locale>/SPEC.md §4).
  6.1 Zero school-year / syllabus labels in anything served to the
@@ -330,9 +331,9 @@ if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'
 if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
 /* --- 5. Public/private catalog split ---
-   Roman Numerals is the only public activity. The hidden dev catalogue lists
-   every other activity. Together they cover the full tools/, config/, and
-   sw.js activity set.
+   Roman Numerals and Shapes are the public activities. The hidden dev
+   catalogue lists every other one. Together they cover the full tools/,
+   config/, and sw.js activity set.
 */
 checks += 1;
 var siteHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -357,8 +358,11 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var expectedPublicSlugs = new Set(['roman-numerals']);
-var expectedDevSlugs = new Set(slugs.filter(function (slug) { return slug !== 'roman-numerals'; }));
+var PUBLIC_SLUGS = ['roman-numerals', 'shapes'];
+var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
+var expectedDevSlugs = new Set(slugs.filter(function (slug) {
+  return PUBLIC_SLUGS.indexOf(slug) === -1;
+}));
 assertExactCatalog('site público', publicSlugs, expectedPublicSlugs);
 assertExactCatalog('dev oculto', devSlugs, expectedDevSlugs);
 

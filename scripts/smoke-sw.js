@@ -31,7 +31,12 @@ async function main() {
   assert.ok(version, 'sw.js debe declarar VERSION');
   const filesBlock = sw.match(/(?:FILES|ARCHIVOS)\s*=\s*\[([\s\S]*?)\]/);
   assert.ok(filesBlock, 'sw.js debe declarar FILES o ARCHIVOS');
-  const files = [...filesBlock[1].matchAll(/['"]([^'"]+)['"]/g)].map(match => match[1]);
+  /* Comments live inside the array too, and one of them quotes the CSP
+     keyword `script-src 'self'`. Reading every quoted string as a path
+     made the gate fail on a file that was never cached, so comments are
+     dropped before the entries are collected. */
+  const files = [...filesBlock[1].replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/['"]([^'"]+)['"]/g)]
+    .map(match => match[1]);
   assert.ok(files.length > 0, 'La lista de caché no puede estar vacía');
   for (const relative of files) {
     assert.ok(fs.existsSync(path.join(ROOT, relative.replace(/^\.\//, ''))), `Falta en disco: ${relative}`);

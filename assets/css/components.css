@@ -275,6 +275,27 @@ button.locked {
   gap: var(--espacio-grande);
 }
 
+/* ---- Activity menu inside a tool (one card per activity) ----
+   Every activity's paintMenu() builds the same markup — a .menu-grid of
+   .btn-actividad buttons, each holding .picto, the name and a
+   .detail-card — but the rules lived only in the handful of tools whose
+   own styles.css happened to copy them. Without them the spans stay
+   inline, so the name and the detail run together in one line and the
+   cards lose their card shape. These were the copies, verbatim, moved
+   here; the tools that still declare them locally are unchanged because
+   the values are identical. */
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
+.btn-actividad {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  min-height: var(--boton-min); padding: 20px;
+  border: 3px solid var(--color-borde); border-radius: var(--radio);
+  background: var(--color-superficie); color: var(--color-texto);
+  font-size: var(--texto-base); font-weight: 700; text-align: center;
+}
+.btn-actividad:hover { border-color: var(--mod-razonamiento); }
+.btn-actividad .picto { font-size: 48px; }
+.btn-actividad .detail-card { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
+
 /* ---- Legal footer link (present on every page) ---- */
 .pie-app {
   display: flex;

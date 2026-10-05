@@ -496,8 +496,18 @@
       answered = true;
       btn.classList.add('correct');
       App.feedback.success(feedbackEl);
-      progress.stars += 1;
-      roundCorrect += 1;
+      /* The reinforcement mini-round replays questions this round already
+         asked, so counting it here reported more correct answers than the
+         round has — "Has resuelto 11 preguntas" for a 6-question round —
+         and pushed `roundCorrect` past DATA.perRound, which is the exact
+         value endRound() compares against to offer the next level. The
+         button therefore vanished for anyone who had to repeat a question,
+         which is precisely the person who should be moving up. Stars move
+         with the score so the two numbers stay consistent. */
+      if (!inReinforce) {
+        progress.stars += 1;
+        roundCorrect += 1;
+      }
       save();
       paintStars();
       App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
