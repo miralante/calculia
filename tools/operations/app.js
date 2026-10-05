@@ -474,6 +474,11 @@
   }
 
   function showExplanation(isCorrect) {
+    if (isCorrect && inReinforce) {
+      explanationEl.textContent = '';
+      explanationWrap.classList.add('hidden');
+      return;
+    }
     var correct = question.options.filter(function (o) { return o.correct; })[0];
     var said = plainText(correct.html).replace(/\s+/g, ' ').trim();
     explanationEl.textContent =
@@ -506,12 +511,13 @@
     } else {
       attempts += 1;
       App.reinforce.add(level.id + ':' + index, question);
-      if (attempts === 1) showHint();
-      else showExplanation(false);
+      var respuestaTrasPista = attempts > 1;
+      showHint();
+      /* Reveal the explanation only after the hint is acknowledged. */
       btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(false); });
     }
   }
 

@@ -14,6 +14,7 @@
     boardLabel: 'Tu tablero',
     piecesLabel: 'Piezas',
     pieceAria: 'Pieza',
+    hint: 'Compara el dibujo con el modelo y fíjate en su posición.',
     otherLevel: 'Elegir otra actividad',
     endSummary: 'Has completado {n} puzles. Ahora tienes {stars} estrellas.',
     btnMenu: 'Volver al inicio',

@@ -628,6 +628,11 @@
   }
 
   function showExplanation(isCorrect) {
+    if (isCorrect && inReinforce) {
+      explanationEl.textContent = '';
+      explanationWrap.classList.add('hidden');
+      return;
+    }
     var correct = question.options.filter(function (o) { return o.correct; })[0];
     var text = (isCorrect ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
       plainText(correct.html) + '.';
@@ -665,15 +670,13 @@
          feedback.js). In mini-round it is also registered, in case
          the same item is failed again within the reinforce. */
       App.reinforce.add(level.id + ':' + idx, question);
-      if (attempts === 1) {
-        showHint();
-      } else {
-        showExplanation(op.correct);
-      }
+      var respuestaTrasPista = attempts > 1;
+      showHint();
+      /* Reveal the explanation only after the hint is acknowledged. */
       btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(op.correct); });
     }
   }
 

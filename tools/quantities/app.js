@@ -528,7 +528,7 @@
     $('#stars').textContent = '';
     App.feedback.success($('#feedback'));
     /* In typing, show the correct form as reinforcement. */
-    if (case_.tipo === 'typing') {
+    if (case_.tipo === 'typing' && !inReinforce) {
       $('#feedback').textContent += ' ' + App.i18n.t('correctFormat').replace('{n}', case_.correct);
     }
     waitingCheck = false;

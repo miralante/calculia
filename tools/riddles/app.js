@@ -141,6 +141,11 @@
   }
 
   function showExplanation(optionText, isCorrect, item) {
+    if (isCorrect && inReinforce) {
+      explanationEl.textContent = '';
+      explanationWrap.classList.add('hidden');
+      return;
+    }
     var text = isCorrect
       ? App.i18n.t('explicacionCorrecta') + item.answer + '.'
       : App.i18n.t('explicacionIncorrectaA') + optionText +
@@ -181,15 +186,13 @@
          is replayed in the mini-round. We use item.text as the
          stable key (the item is passed whole to answer). */
       if (attempts === 1) App.reinforce.add(item.text, item);
-      if (attempts === 1) {
-        showHint(item);
-      } else {
-        showExplanation(optionText, isCorrect, item);
-      }
+      var respuestaTrasPista = attempts > 1;
+      showHint(item);
+      /* Reveal the explanation only after the hint is acknowledged. */
       btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(optionText, isCorrect, item); });
     }
   }
 

@@ -178,6 +178,11 @@
   }
 
   function showExplanation(isCorrect, item) {
+    if (isCorrect && inReinforce) {
+      explanationEl.textContent = '';
+      explanationWrap.classList.add('hidden');
+      return;
+    }
     var answer = readableText(item.options[item.correct]);
     var text = isCorrect
       ? App.i18n.t('explicacionCorrecta') + answer + '.'
@@ -214,15 +219,13 @@
     } else {
       attempts += 1;
       if (attempts === 1) App.reinforce.add(level.id + ':' + index, item);
-      if (attempts === 1) {
-        showHint();
-      } else {
-        showExplanation(isCorrect, item);
-      }
+      var respuestaTrasPista = attempts > 1;
+      showHint();
+      /* Reveal the explanation only after the hint is acknowledged. */
       btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap);
+      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(isCorrect, item); });
     }
   }
 

@@ -350,15 +350,14 @@
   function checkAnswer(item, value, button) {
     var feedback = $('#feedback');
     var correct = mode === 'parity' ? isEven(item) : itemResult(item);
-    if (value !== correct) {
-      attempts += 1;
-      button.disabled = true;
-      App.feedback.encourage(feedback);
-      if (attempts === 1) {
+      if (value !== correct) {
+        attempts += 1;
+        button.disabled = true;
+        App.feedback.encourage(feedback);
         feedback.textContent += ' ' + fill('hint' + keySuffix(item), itemValues(item));
+        App.feedback.lockUntilAck($('#options').querySelectorAll('button'), feedback);
+        return;
       }
-      return;
-    }
     progress.stars += 1;
     saveProgress();
     $('#stars').textContent = '';

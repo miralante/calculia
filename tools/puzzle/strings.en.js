@@ -14,6 +14,7 @@
     boardLabel: 'Your board',
     piecesLabel: 'Pieces',
     pieceAria: 'Piece',
+    hint: 'Compare the picture with the model and notice its position.',
     otherLevel: 'Choose another activity',
     endSummary: 'You completed {n} puzzles. You now have {stars} stars.',
     btnMenu: 'Back to start',

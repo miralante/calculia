@@ -137,6 +137,8 @@
       App.utils.$$('.piece').forEach(function (b) { b.classList.remove('selected'); });
       selectedPiece = null;
       App.feedback.encourage(feedbackEl);
+      feedbackEl.textContent += ' ' + App.i18n.t('hint');
+      App.feedback.lockUntilAck(App.utils.$$('.piece'), feedbackEl);
     }
   }
 

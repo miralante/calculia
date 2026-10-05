@@ -590,6 +590,11 @@
   }
 
   function showExplanation(isCorrect, p) {
+    if (isCorrect && inReinforce) {
+      explanationEl.textContent = '';
+      explanationWrap.classList.add('hidden');
+      return;
+    }
     var prefix = isCorrect ? App.i18n.t('correctExplanation')
                            : App.i18n.t('incorrectExplanationA');
     explanationEl.textContent = prefix + correctAnswerText(p) + '.';
@@ -627,17 +632,15 @@
     } else {
       attempts += 1;
       if (attempts === 1) App.reinforce.add(level.id + ':' + roundIndex, p);
-      if (attempts === 1) {
-        showHint(p);
-      } else {
-        showExplanation(isCorrect, p);
-      }
+      var respuestaTrasPista = attempts > 1;
+      showHint(p);
+      /* Reveal the explanation only after the hint is acknowledged. */
       btn.classList.add('encourage');
       btn.disabled = true;
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(
         App.utils.$$('#options .option-btn, #options .btn-step, #btnConfirmSet'),
-        explanationWrap);
+        explanationWrap, function () { if (respuestaTrasPista) showExplanation(isCorrect, p); });
     }
   }
 

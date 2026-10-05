@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Stories (reasoning: order in time)
+   Calculia — Stories (reasoning: order in time)
    Data in data.js (DATA.levels). Shared modules in assets/js/.
    Mechanic: tap the captions in the correct order. A tap out of
    order does not penalize: it just encourages trying again.
@@ -40,7 +40,7 @@
 
   function save() { App.storage.set(TOOL_ID, progress); }
 
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
   function levelFromProgress() {
@@ -119,20 +119,18 @@
       }
     } else {
       attempts += 1;
-      if (attempts === 1) {
-        showHint();
-      } else {
-        showExplanation();
-      }
+      var respuestaTrasPista = attempts > 1;
+      showHint();
+      /* Reveal the explanation only after the hint is acknowledged. */
       btn.disabled = true;
       btn.classList.add('encourage');
       App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('.vineta', availableEl), explanationWrap);
+      App.feedback.lockUntilAck(App.utils.$$('.vineta', availableEl), explanationWrap, function () { if (respuestaTrasPista) showExplanation(); });
     }
   }
 
-  /* Socratic method (rule 12). First mistake â†’ hint (no answer);
-     second mistake â†’ explanation with the correct beginning. */
+  /* Socratic method (rule 12). First mistake → hint (no answer);
+     second mistake → explanation with the correct beginning. */
   function showHint() {
     explanationEl.textContent = App.i18n.t('pista');
     explanationWrap.classList.remove('hidden');
