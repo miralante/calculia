@@ -407,8 +407,13 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
     const english = page.locator('#locale-picker .locale-picker-panel li[data-locale="en"]');
     await english.waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
     await english.click();
-    await page.waitForFunction(() => document.documentElement.lang.slice(0, 2) === 'en',
-      null, { timeout: NAV_TIMEOUT });
+    /* Choosing a language swaps the document, so for an instant there is
+       no documentElement at all. The predicate has to answer "not yet"
+       instead of throwing, otherwise the TypeError ends the wait instead
+       of polling through the navigation. */
+    await page.waitForFunction(() =>
+      !!(document.documentElement && document.documentElement.lang.slice(0, 2) === 'en'),
+    null, { timeout: NAV_TIMEOUT });
     assert.strictEqual((await page.locator('html').getAttribute('lang') || '').slice(0, 2), 'en',
       'El desplegable de la cabecera debe cambiar el idioma activo de la app');
     assert.strictEqual((await languagePicker.locator('.locale-picker-current').textContent()).trim(), 'EN');
@@ -500,7 +505,8 @@ async function exerciseNativeSettings(browser, baseUrl) {
         page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT }),
         page.locator('#lang-en').click(),
       ]);
-      await page.waitForFunction(() => document.documentElement.lang.slice(0, 2) === 'en',
+      await page.waitForFunction(() =>
+        !!(document.documentElement && document.documentElement.lang.slice(0, 2) === 'en'),
         null, { timeout: NAV_TIMEOUT });
     } else if (APP === 'okeymoney') {
       await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
