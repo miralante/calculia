@@ -33,7 +33,21 @@
    Multi-idioma nativo: cada opción muestra el nombre del idioma en
    SU PROPIO idioma ("Español" para es, "English" para en, etc.) —
    no se traduce a la locale activa, porque entonces perdería
-   identidad visual al cambiar. */
+   identidad visual al cambiar.
+
+   Cabecera: DOS controles y ninguno dentro del otro.
+     · el desplegable de idioma, siempre visible en #locale-picker;
+     · el ⚙️, su hermano inmediato a la derecha, que abre el cajón de
+       accesibilidad (tema, tamaño de letra, alto contraste y, si la app
+       tiene sonido, sus interruptores).
+   El idioma NO vive dentro del cajón: llegar al idioma cuesta un clic,
+   no dos. Es el modelo de Teclatlon, donde la app trae su propio cajón
+   y este componente se limita al desplegable (`settings: false`).
+
+   El cajón NO lleva enlace "Más ajustes": cada proyecto tiene su propia
+   ruta de ajustes en su navegación, y un segundo acceso al mismo sitio
+   dentro de otro control era una configuración repetida. Por eso
+   `settingsHref` ya no existe. */
 (function () {
   'use strict';
 
@@ -53,11 +67,18 @@
   var ENABLE_SETTINGS = cfg.settings !== false;
   var SETTINGS_KEY = cfg.settingsStorageKey || (STORAGE_KEY + ':accessibility');
   var SOUND_SETTINGS_KEY = cfg.soundStorageKey || 'miralante:sounds';
-  var SETTINGS_HREF = cfg.settingsHref || '';
+  var SOUND_SETTINGS_ENABLED = cfg.soundSettings !== false;
   var settingsState = null;
   var soundState = null;
   var baseRootFontSize = null;
+  /* Apps whose body copy is sized in px through --text-base (Apptonomia's
+     landing) do not resize when only the root font-size moves, so they
+     opt in and this component scales that token as well. */
+  var TEXT_BASE_TOKEN = cfg.textBaseToken === true;
+  var baseTextBaseSize = null;
   var textSizeIsExplicit = false;
+  var _discoveredLocales = null;  /* populado por discoverLocales */
+  var _activeLocale = null;        /* populado por discoverLocales */
 
   /* Mapa de etiquetas nativas (cómo se llama cada idioma en sí
      mismo). Si la app pasa su propio `localeLabels`, se usa ese;
@@ -108,6 +129,9 @@
   /* ============================================================
      Render del dropdown.
      ============================================================ */
+  /* Render del dropdown de idioma. Siempre en la cabecera, dentro de
+     #locale-picker: el idioma es un control de primer nivel, no un
+     subapartado del cajón de ajustes. */
   function buildUI(locales, activeLocale) {
     locales = filterSupportedLocales(locales);
     var root = document.getElementById('locale-picker');
@@ -150,8 +174,6 @@
     root.appendChild(btn);
     root.appendChild(panel);
 
-    if (ENABLE_SETTINGS) buildSettings(root, active);
-
     /* Eventos */
     btn.addEventListener('click', function () { toggle(panel, btn); });
     panel.addEventListener('click', function (e) {
@@ -171,24 +193,36 @@
 
   /* ============================================================
      Shared accessibility settings.
-     The gear lives next to the language picker on every suite app.
-     Teclatlon opts out because its richer drawer is already part of
-     that app's main screen. Other apps get the same small, focused
-     panel: text size, high contrast, and a link to their full settings
-     route when one exists.
+     The gear sits next to the language picker on the top right of
+     the header, on every suite app. Its drawer holds ONLY the
+     controls it is the only entry point for: theme, text size, high
+     contrast and — where the app has sounds — their switches.
+     The language is not repeated in here, and there is no "more
+     settings" link: each project already exposes its own settings
+     route from its own navigation, so a second way in was a
+     duplicated control. Teclatlon opts out of the gear entirely
+     because its richer drawer is already part of its main screen.
      ============================================================ */
   var SETTINGS_COPY = {
     es: {
       title: 'Ajustes', close: 'Cerrar ajustes', textSize: 'Tamaño de letra',
       small: 'Pequeño', normal: 'Normal', large: 'Grande',
-      contrast: 'Alto contraste', successSound: 'Sonido de acierto', errorSound: 'Sonido de error', more: 'Más ajustes', help: 'Se guarda en este dispositivo.'
+      theme: 'Tema', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Oscuro',
+      contrast: 'Alto contraste', successSound: 'Sonido de acierto', errorSound: 'Sonido de error', help: 'Se guarda en este dispositivo.'
     },
     en: {
       title: 'Settings', close: 'Close settings', textSize: 'Text size',
       small: 'Small', normal: 'Normal', large: 'Large',
-      contrast: 'High contrast', successSound: 'Correct answer sound', errorSound: 'Error sound', more: 'More settings', help: 'Saved on this device.'
+      theme: 'Theme', themeAuto: 'Auto', themeLight: 'Light', themeDark: 'Dark',
+      contrast: 'High contrast', successSound: 'Correct answer sound', errorSound: 'Error sound', help: 'Saved on this device.'
     }
   };
+
+  /* Temas que la suite soporta. "auto" no fija atributo: deja que el
+     navegador aplique prefers-color-scheme. Los otros tres se aplican
+     con data-theme, que es lo que las paletas oscuras de cada tokens.css
+     escuchan. */
+  var THEMES = ['auto', 'light', 'dark'];
 
   function settingsLocale() {
     var loc = '';
@@ -207,6 +241,7 @@
     return {
       textSize: ['small', 'normal', 'large'].indexOf(saved.textSize) !== -1 ? saved.textSize : 'normal',
       textSizeSet: textSizeIsExplicit,
+      theme: THEMES.indexOf(saved.theme) !== -1 ? saved.theme : 'auto',
       contrast: saved.contrast === true
     };
   }
@@ -223,7 +258,23 @@
   }
 
   function saveSoundSettings() {
+    if (!SOUND_SETTINGS_ENABLED) return;
     try { localStorage.setItem(SOUND_SETTINGS_KEY, JSON.stringify(soundState)); } catch (e) {}
+  }
+
+  /* El conmutador de alto contraste y el de tema son la misma palanca
+     para quien tiene baja visión: el contraste es el extremo de la
+     misma serie. Cuando el contraste está activo manda sobre el tema,
+     y por eso se aplica y se revierte data-theme en ambos sentidos. */
+  function applyTheme() {
+    var html = document.documentElement;
+    if (settingsState.contrast) {
+      html.setAttribute('data-theme', 'contrast');
+    } else if (settingsState.theme === 'auto') {
+      html.removeAttribute('data-theme');
+    } else {
+      html.setAttribute('data-theme', settingsState.theme);
+    }
   }
 
   function applySettings() {
@@ -236,10 +287,24 @@
       : (baseRootFontSize * (settingsState.textSize === 'large' ? 1.15 : 0.9)) + 'px';
     if (textSizeIsExplicit) {
       var scale = settingsState.textSize === 'large' ? 1.15 : (settingsState.textSize === 'small' ? 0.9 : 1);
+      if (TEXT_BASE_TOKEN) {
+        if (baseTextBaseSize === null) {
+          baseTextBaseSize = parseFloat(window.getComputedStyle(html).getPropertyValue('--text-base')) || 18;
+        }
+        html.style.setProperty('--text-base', (baseTextBaseSize * scale) + 'px');
+      }
       html.style.setProperty('--text-scale', scale);
       html.style.setProperty('--escala-texto', scale);
+    } else if (TEXT_BASE_TOKEN) {
+      /* Sin elección explícita los tokens vuelven a la hoja: si se
+         quedaron fijados en <html> el "Normal" ya no significaría lo
+         mismo que el tamaño de la hoja de estilos. */
+      html.style.removeProperty('--text-base');
+      html.style.removeProperty('--text-scale');
+      html.style.removeProperty('--escala-texto');
     }
     html.classList.toggle('high-contrast', settingsState.contrast && cfg.legacyContrastClass === true);
+    applyTheme();
   }
 
   function renderSettings(drawer) {
@@ -247,37 +312,62 @@
     drawer.querySelector('[data-settings-title]').textContent = copy.title;
     drawer.querySelector('[data-settings-close]').setAttribute('aria-label', copy.close);
     drawer.querySelector('[data-settings-size-label]').textContent = copy.textSize;
+    drawer.querySelector('[data-settings-theme-label]').textContent = copy.theme;
+    drawer.querySelector('[data-settings-theme-auto]').textContent = copy.themeAuto;
+    drawer.querySelector('[data-settings-theme-light]').textContent = copy.themeLight;
+    drawer.querySelector('[data-settings-theme-dark]').textContent = copy.themeDark;
     drawer.querySelector('[data-settings-size-small]').textContent = copy.small;
     drawer.querySelector('[data-settings-size-normal]').textContent = copy.normal;
     drawer.querySelector('[data-settings-size-large]').textContent = copy.large;
     drawer.querySelector('[data-settings-contrast-label]').textContent = copy.contrast;
-    drawer.querySelector('[data-settings-success-label]').textContent = copy.successSound;
-    drawer.querySelector('[data-settings-error-label]').textContent = copy.errorSound;
+    if (SOUND_SETTINGS_ENABLED) {
+      drawer.querySelector('[data-settings-success-label]').textContent = copy.successSound;
+      drawer.querySelector('[data-settings-error-label]').textContent = copy.errorSound;
+    } else {
+      var soundRows = drawer.querySelectorAll('[data-settings-success], [data-settings-error]');
+      Array.prototype.forEach.call(soundRows, function (input) {
+        var row = input.closest('label');
+        if (row) row.remove();
+      });
+    }
     drawer.querySelector('[data-settings-help]').textContent = copy.help;
-    var more = drawer.querySelector('[data-settings-more]');
-    if (more) more.textContent = copy.more;
     drawer.querySelectorAll('[data-settings-size]').forEach(function (button) {
       button.setAttribute('aria-pressed', String(button.getAttribute('data-settings-size') === settingsState.textSize));
     });
+    drawer.querySelectorAll('[data-settings-theme]').forEach(function (button) {
+      button.setAttribute('aria-pressed', String(button.getAttribute('data-settings-theme') === settingsState.theme));
+    });
     var contrast = drawer.querySelector('[data-settings-contrast]');
     contrast.checked = settingsState.contrast;
-    drawer.querySelector('[data-settings-success]').checked = soundState.success;
-    drawer.querySelector('[data-settings-error]').checked = soundState.error;
+    if (SOUND_SETTINGS_ENABLED) {
+      drawer.querySelector('[data-settings-success]').checked = soundState.success;
+      drawer.querySelector('[data-settings-error]').checked = soundState.error;
+    }
   }
 
   function closeSettings(trigger, backdrop, drawer) {
     backdrop.classList.remove('is-open');
     drawer.classList.remove('is-open');
     trigger.setAttribute('aria-expanded', 'false');
-    window.setTimeout(function () { backdrop.hidden = true; drawer.hidden = true; }, 160);
-    trigger.focus();
+    /* El foco vuelve SOLO cuando el cajon ya esta oculto. El elemento que lo
+       tenia (el boton de cerrar) vive dentro del cajon, y ocultar un subarbol
+       que contiene el elemento con el foco lo manda a <body>: hacerlo aqui,
+       160 ms antes de que el cajon desapareciera, pasaba cualquier comprobacion
+       que solo mirase aria-expanded y dejaba sin foco a quien navega con
+       teclado. */
+    window.setTimeout(function () {
+      backdrop.hidden = true;
+      drawer.hidden = true;
+      trigger.focus();
+    }, 160);
   }
 
-  function buildSettings(root) {
+  function buildSettings() {
     settingsState = loadSettings();
     soundState = loadSoundSettings();
     saveSoundSettings();
     applySettings();
+
     var trigger = document.createElement('button');
     trigger.type = 'button';
     trigger.className = 'locale-settings-trigger';
@@ -286,7 +376,14 @@
     trigger.setAttribute('aria-controls', 'accessibility-settings');
     trigger.setAttribute('aria-label', settingsLocale() === 'en' ? 'Settings' : 'Ajustes');
     trigger.textContent = '⚙️';
-    root.appendChild(trigger);
+    var headerLocalePicker = document.getElementById('locale-picker');
+    if (headerLocalePicker && headerLocalePicker.parentNode) {
+      /* Inmediatamente después del desplegable de idioma y dentro de su
+         misma fila (que es el extremo derecho de la cabecera), el ⚙️ cae
+         arriba a la derecha. No se toca #locale-picker: su panel se
+         ancla a ese contenedor y un hijo más lo desplazaría. */
+      headerLocalePicker.parentNode.insertBefore(trigger, headerLocalePicker.nextSibling);
+    }
 
     var backdrop = document.createElement('div');
     backdrop.className = 'locale-settings-backdrop';
@@ -298,12 +395,20 @@
     drawer.setAttribute('aria-modal', 'true');
     drawer.setAttribute('aria-labelledby', 'accessibility-settings-title');
     drawer.hidden = true;
+
     drawer.innerHTML =
       '<div class="locale-settings-drawer-header">' +
         '<h2 id="accessibility-settings-title" data-settings-title></h2>' +
         '<button type="button" class="locale-settings-close" data-settings-close>✕</button>' +
       '</div>' +
       '<div class="locale-settings-drawer-body">' +
+        '<div class="locale-settings-row"><span data-settings-theme-label></span>' +
+          '<div class="locale-settings-options" role="group">' +
+            '<button type="button" data-settings-theme="auto" data-settings-theme-auto></button>' +
+            '<button type="button" data-settings-theme="light" data-settings-theme-light></button>' +
+            '<button type="button" data-settings-theme="dark" data-settings-theme-dark></button>' +
+          '</div>' +
+        '</div>' +
         '<div class="locale-settings-row"><span data-settings-size-label></span>' +
           '<div class="locale-settings-options" role="group">' +
             '<button type="button" data-settings-size="small" data-settings-size-small></button>' +
@@ -317,9 +422,9 @@
           '<input type="checkbox" data-settings-success></label>' +
         '<label class="locale-settings-row locale-settings-check"><span data-settings-error-label></span>' +
           '<input type="checkbox" data-settings-error></label>' +
-        (SETTINGS_HREF ? '<a class="locale-settings-more" data-settings-more href="' + SETTINGS_HREF + '"></a>' : '') +
         '<p class="locale-settings-help" data-settings-help></p>' +
       '</div>';
+
     document.body.appendChild(backdrop);
     document.body.appendChild(drawer);
     renderSettings(drawer);
@@ -348,18 +453,32 @@
         saveSettings(); applySettings(); renderSettings(drawer);
       });
     });
+    drawer.querySelectorAll('[data-settings-theme]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var chosen = button.getAttribute('data-settings-theme');
+        if (THEMES.indexOf(chosen) === -1) return;
+        settingsState.theme = chosen;
+        /* Elegir un tema concreto apaga el alto contraste: si no, el
+           contraste se comería la elección y los botones aparecerían
+           pulsados sin efecto visible. */
+        if (chosen !== 'auto') settingsState.contrast = false;
+        saveSettings(); applySettings(); renderSettings(drawer);
+      });
+    });
     drawer.querySelector('[data-settings-contrast]').addEventListener('change', function (event) {
       settingsState.contrast = event.target.checked;
       saveSettings(); applySettings(); renderSettings(drawer);
     });
-    drawer.querySelector('[data-settings-success]').addEventListener('change', function (event) {
-      soundState.success = event.target.checked;
-      saveSoundSettings(); renderSettings(drawer);
-    });
-    drawer.querySelector('[data-settings-error]').addEventListener('change', function (event) {
-      soundState.error = event.target.checked;
-      saveSoundSettings(); renderSettings(drawer);
-    });
+    if (SOUND_SETTINGS_ENABLED) {
+      drawer.querySelector('[data-settings-success]').addEventListener('change', function (event) {
+        soundState.success = event.target.checked;
+        saveSoundSettings(); renderSettings(drawer);
+      });
+      drawer.querySelector('[data-settings-error]').addEventListener('change', function (event) {
+        soundState.error = event.target.checked;
+        saveSoundSettings(); renderSettings(drawer);
+      });
+    }
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape' && !drawer.hidden) closeSettings(trigger, backdrop, drawer);
     });
@@ -453,6 +572,15 @@
            funcione también en previews locales. */
         locales = filterSupportedLocales(cfg.requiredLocales || SUPPORTED_LOCALES);
       }
+      _discoveredLocales = locales;
+      _activeLocale = current;
+
+      /* El ⚙️ se inserta antes que nada porque es hermano del
+         #locale-picker, no hijo: el orden de los dos controles en la
+         cabecera no depende de cuál se construya primero. */
+      if (ENABLE_SETTINGS) buildSettings();
+
+      /* El idioma va siempre a la cabecera, tenga la app o no el ⚙️. */
       buildUI(locales, current);
     });
   }

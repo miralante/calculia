@@ -152,9 +152,9 @@
 }
   </script>
 
-  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=calculia-v2bc">
   <link rel="stylesheet" href="../assets/css/base.css">
-  <link rel="stylesheet" href="../assets/css/components.css"><link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v1">  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../assets/css/components.css"><link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v2bcaa">  <link rel="stylesheet" href="../styles.css">
   <link rel="manifest" href="../manifest.json">
 </head>
 <body>
@@ -352,8 +352,10 @@
        one assets/js/i18n.js writes to localStorage ('calculia:locale').
        External file, not inline: the CSP in _headers is script-src 'self'
        with no 'unsafe-inline', so an inline block would be blocked. The
-       settings page is one level up from this hidden catalogue. -->
-  <script src="../assets/js/calculia-locale-config.js" data-settings-href="../config/"></script>
-  <script src="../assets/js/locale-picker.js?v=calculia-v2" defer></script>
+       same file serves the landing and this catalogue — it no longer reads
+       a data-settings-href attribute, because the drawer's "more settings"
+       link is gone (Calculia links config/ from its own navigation). -->
+  <script src="../assets/js/locale-picker-config.js?v=1aa"></script>
+  <script src="../assets/js/locale-picker.js?v=calculia-v5aa" defer></script>
 </body>
 </html>

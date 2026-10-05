@@ -32,7 +32,14 @@
   --color-acierto-suave: #E6F2E6;
   --color-animo: #C05621;        /* never an aggressive red for mistakes */
   --color-animo-suave: #F9EBE2;
-  --color-estrella: #B8860B;
+  /* El dorado de estrella necesita ser legible como TEXTO sobre crema:
+     #B8860B original daba 2.84:1. Este dorado oscuro da 4.6:1 y sigue
+     leyendose como estrella. */
+  --color-estrella: #8A6208;
+  /* Fondo de la píldora de estrellas. Tiene que existir en TODOS los
+     temas: si falta en dark, la píldora cae al valor del tema claro
+     (crema) y el dorado claro encima queda ilegible. */
+  --acento-2-suave: #F7EFDD;
 
   /* Typography. --escala-texto is applied by assets/js/storage.js based
      on the preference saved in /settings/ (Normal=1/Large/Extra large);
@@ -54,4 +61,142 @@
 
   /* Visible focus */
   --color-foco: #1B6CA8;
+
+  /* Texto legible ENCIMA de los acentos sólidos (botones primarios).
+     En claro los acentos son oscuros y va texto blanco; en oscuro y
+     contraste se aclaran, así que el texto tiene que volverse oscuro
+     o sería ilegible. Sin este token los botones quedan con #FFFFFF
+     fijo sobre un azul claro y no se leen. */
+  --texto-sobre-acento: #FFFFFF;
+  --texto-sobre-acierto: #FFFFFF;
+}
+
+/* -------- Tema oscuro --------
+   Se aplica con data-theme="dark", o solo por prefers-color-scheme
+   cuando el atributo no está puesto (tema "auto"). */
+[data-theme="dark"] {
+  --color-fondo: #14161E;
+  --color-superficie: #1E2230;
+  --color-superficie-2: #262B3C;
+  --color-texto: #F2F0EA;
+  --color-texto-suave: #B3B0C8;
+  --color-borde: #39405A;
+
+  --mod-coordinacion: #6BB4F2;
+  --mod-coordinacion-suave: #19354D;
+  --mod-secuencia: #7BD389;
+  --mod-secuencia-suave: #1E3D24;
+  --mod-memoria: #F2B07A;
+  --mod-memoria-suave: #3A2C1E;
+  --mod-emocional: #C3A0F0;
+  --mod-emocional-suave: #2C2340;
+  --mod-razonamiento: #6FD0C4;
+  --mod-razonamiento-suave: #16352F;
+  --mod-lenguaje: #F09BC0;
+  --mod-lenguaje-suave: #3A2430;
+  --mod-cuerpo: #EFA189;
+  --mod-cuerpo-suave: #3A2820;
+
+  --color-acierto: #7BD389;
+  --color-acierto-suave: #1E3D24;
+  --color-animo: #F2B07A;
+  --color-animo-suave: #3A2C1E;
+  --color-estrella: #E0B85C;
+  /* Fondo de la píldora de estrellas: sin esto caía al crema claro del
+     tema claro (--acento-2-suave no existe en dark) y el dorado claro
+     encima quedaba ilegible. */
+  --acento-2-suave: #3A2C1E;
+
+  --sombra: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --color-foco: #6BB4F2;
+
+  /* Acentos claros -> texto oscuro encima. */
+  --texto-sobre-acento: #14161E;
+  --texto-sobre-acierto: #14161E;
+}
+
+/* -------- Alto contraste --------
+   Negro puro con texto blanco. El conmutador de ajustes lo activa
+   como data-theme="contrast" (manda sobre el tema). */
+[data-theme="contrast"] {
+  --color-fondo: #000000;
+  --color-superficie: #000000;
+  --color-superficie-2: #000000;
+  --color-texto: #FFFFFF;
+  --color-texto-suave: #FFFFFF;
+  --color-borde: #FFFFFF;
+
+  --mod-coordinacion: #FFFF00;
+  --mod-coordinacion-suave: #000000;
+  --mod-secuencia: #00FF66;
+  --mod-secuencia-suave: #000000;
+  --mod-memoria: #FF8800;
+  --mod-memoria-suave: #000000;
+  --mod-emocional: #FF66FF;
+  --mod-emocional-suave: #000000;
+  --mod-razonamiento: #00FFFF;
+  --mod-razonamiento-suave: #000000;
+  --mod-lenguaje: #FF99CC;
+  --mod-lenguaje-suave: #000000;
+  --mod-cuerpo: #FFAA88;
+  --mod-cuerpo-suave: #000000;
+
+  --color-acierto: #00FF66;
+  --color-acierto-suave: #000000;
+  --color-animo: #FF8800;
+  --color-animo-suave: #000000;
+  --color-estrella: #FFFF00;
+  --acento-2-suave: #000000;
+
+  --sombra: none;
+  --color-foco: #FFFF00;
+
+  /* Amarillo y verde puros: cualquier texto claro desaparece. */
+  --texto-sobre-acento: #000000;
+  --texto-sobre-acierto: #000000;
+}
+
+/* "Auto": si el sistema está en oscuro y la persona no ha forzado un
+   tema, se aplica la paleta oscura. Un data-theme explícito gana sobre
+   esta regla, así que forzar "Claro" funciona con el sistema en oscuro. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-fondo: #14161E;
+    --color-superficie: #1E2230;
+    --color-superficie-2: #262B3C;
+    --color-texto: #F2F0EA;
+    --color-texto-suave: #B3B0C8;
+    --color-borde: #39405A;
+
+    --mod-coordinacion: #6BB4F2;
+    --mod-coordinacion-suave: #19354D;
+    --mod-secuencia: #7BD389;
+    --mod-secuencia-suave: #1E3D24;
+    --mod-memoria: #F2B07A;
+    --mod-memoria-suave: #3A2C1E;
+    --mod-emocional: #C3A0F0;
+    --mod-emocional-suave: #2C2340;
+    --mod-razonamiento: #6FD0C4;
+    --mod-razonamiento-suave: #16352F;
+    --mod-lenguaje: #F09BC0;
+    --mod-lenguaje-suave: #3A2430;
+    --mod-cuerpo: #EFA189;
+    --mod-cuerpo-suave: #3A2820;
+
+    --color-acierto: #7BD389;
+    --color-acierto-suave: #1E3D24;
+    --color-animo: #F2B07A;
+    --color-animo-suave: #3A2C1E;
+    --color-estrella: #E0B85C;
+  /* Fondo de la píldora de estrellas: sin esto caía al crema claro del
+     tema claro (--acento-2-suave no existe en dark) y el dorado claro
+     encima quedaba ilegible. */
+  --acento-2-suave: #3A2C1E;
+
+    --sombra: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --color-foco: #6BB4F2;
+
+    --texto-sobre-acento: #14161E;
+    --texto-sobre-acierto: #14161E;
+  }
 }

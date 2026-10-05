@@ -118,6 +118,8 @@ distintas, y entre todas usan casi cada rincón de la API:
 - `App.feedback.lockUntilAck()`: usado por actividades tipo quiz para
   bloquear las opciones restantes tras un fallo (una pausa de lectura,
   nunca un bloqueo de progreso).
+- En la repetición de refuerzo, al acertar se mantiene el mensaje positivo,
+  pero se oculta la explicación con la respuesta para reducir la carga visual.
 - `App.storage.estrellasTotales()` / `.listaToolIds()`: usado por
   `index.html` (estrellas totales) y `settings/` (lista de
   progreso, restablecimiento completo).
@@ -173,8 +175,8 @@ los archivos de locale para cada `tools/<slug>/`, además de la raíz del sitio,
 El núcleo está listo para multi-idioma desde el inicio — ver
 `I18N.md` §4 para los tres puntos binarios `es`/`en` que hay que
 generalizar al añadir un tercer idioma (mapa `BCP47` en `i18n.js`,
-`DECIMAL_SEP` en `dinero.js` y mapa `BOTONES_IDIOMA` en
-`index.html`).
+`DECIMAL_SEP` en `dinero.js` y el desplegable compartido
+(`#locale-picker` + `locale-picker-config.js`) para ofrecer el idioma).
 
 ---
 
@@ -364,15 +366,17 @@ la **plantilla**; las desviaciones se indican donde apliquen.
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v5aa">
 </head>
 <body>
   <div class="container {legal|about}">
     <header class="cabecera-{legal|about}">
-      <div class="idioma-selector" role="group" aria-label="Elegir idioma">
-        <button type="button" class="btn-idioma" id="btnIdiomaEs"
-                data-locale="es" aria-pressed="false">🇪🇸 Español</button>
-        <button type="button" class="btn-idioma" id="btnIdiomaEn"
-                data-locale="en" aria-pressed="false">🇬🇧 English</button>
+      <!-- El idioma es un control de primer nivel de la cabecera, no un
+           subapartado del cajon de ajustes: el componente compartido se
+           monta dentro de .suite-controls y el engranaje se inserta el
+           solo, justo detras. No hay ningun boton de idioma en el HTML. -->
+      <div class="suite-controls">
+        <div id="locale-picker"></div>
       </div>
       <img src="../assets/img/icono.svg" alt="" width="80" height="80"
            class="logo-{legal|about}">
@@ -404,23 +408,13 @@ la **plantilla**; las desviaciones se indican donde apliquen.
   <script src="../assets/js/i18n.js"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
-  <script>
-    (function () {
-      'use strict';
-      function paintLanguageSelector() {
-        var active = App.i18n.locale();
-        document.getElementById('btnIdiomaEs')
-          .setAttribute('aria-pressed', String(active === 'es'));
-        document.getElementById('btnIdiomaEn')
-          .setAttribute('aria-pressed', String(active === 'en'));
-      }
-      document.getElementById('btnIdiomaEs')
-        .addEventListener('click', function () { App.i18n.setLocale('es'); });
-      document.getElementById('btnIdiomaEn')
-        .addEventListener('click', function () { App.i18n.setLocale('en'); });
-      paintLanguageSelector();
-    })();
-  </script>
+  <!-- El desplegable necesita su configuracion ANTES que el
+       componente. Los dos van diferidos, y los diferidos se ejecutan
+       en orden de documento, con listarlos en ese orden basta. El ?v=
+       no es opcional: los .js y .css se sirven immutable un ano, sin el
+       la pagina sirve la version vieja desde la cache. -->
+  <script src="../assets/js/locale-picker-config.js?v=calculia-v5aa"></script>
+  <script src="../assets/js/locale-picker.js?v=calculia-v5aa" defer></script>
   <script>
     /* Register the SW from this entry point so it is active for any
        later navigation, matching what the main index.html and the

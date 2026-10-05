@@ -206,9 +206,16 @@ var swContent = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
 var archMatch = swContent.match(/var FILES = \[([\s\S]*?)\];/);
 var swPaths = [];
 if (archMatch) {
+  var body = archMatch[1]
+    /* Strip comments first: the array legitimately carries explanatory
+       comments, and a quoted word inside one (e.g. the CSP's 'self') is
+       not a path. Without this, a comment becomes a bogus
+       "does not exist on disk" failure. */
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\/\/.*$/gm, '');
   var re = /'([^']+)'/g;
   var m;
-  while ((m = re.exec(archMatch[1])) !== null) {
+  while ((m = re.exec(body)) !== null) {
     swPaths.push(m[1]);
   }
 } else {
@@ -917,6 +924,56 @@ CANONICAL_PIE_PATHS.forEach(function (relPath) {
     failures.push(relPath + ': hay un <footer class="pie-app..."> manual además del marcador canónico; quítalo.');
   }
 });
+
+/* --- CSP: no executable inline <script> in any HTML page.
+
+   The production CSP is `script-src 'self'` with no 'unsafe-inline' and
+   no nonce/hash, so an inline <script> is dropped by the browser at
+   runtime: no build error, no lint error, no failed test — the code
+   simply does not run in production while working perfectly on a preview
+   server that sends no CSP.
+
+   That is not hypothetical. An inline `window.LocalePickerConfig` shipped
+   that way: the shared locale picker fell back to its own defaults and
+   rendered a second settings gear inside the app's own settings drawer.
+   The same mistake disabled the service worker, the language buttons on
+   the subpages, and (in one app) the whole 404 page.
+
+   Non-executable data blocks (`<script type="application/ld+json">`, the
+   JSON-LD in the landing page) are allowed: CSP does not apply to them. */
+var INLINE_DATA_TYPE = /^(application\/ld\+json|application\/json|text\/json|text\/template)\s*$/i;
+var inlineExcluded = ['.git', 'node_modules', '.claude', 'graphify-out', 'graphify-out-meta', 'test-results', 'doc'];
+var inlineScriptHits = [];
+(function walkForInlineScripts(dir) {
+  if (!fs.existsSync(dir)) return;
+  fs.readdirSync(dir, { withFileTypes: true }).forEach(function (entry) {
+    if (inlineExcluded.indexOf(entry.name) !== -1) return;
+    var full = path.join(dir, entry.name);
+    if (entry.isDirectory()) return walkForInlineScripts(full);
+    if (!entry.isFile() || !/\.html?$/.test(entry.name)) return;
+    checks += 1;
+    var src = fs.readFileSync(full, 'utf8');
+    /* Blank out HTML comments (keeping the newlines, so offsets and line
+       numbers stay exact). Prose in a comment is allowed to mention
+       `<script>` — that is not a tag. */
+    var scannable = src.replace(/<!--[\s\S]*?-->/g, function (comment) {
+      return comment.replace(/[^\n]/g, ' ');
+    });
+    var tagRe = /<script\b([^>]*)>/gi;
+    var m;
+    while ((m = tagRe.exec(scannable)) !== null) {
+      var attrs = m[1];
+      if (/\ssrc\s*=/i.test(attrs)) continue;            // external: allowed
+      var typeMatch = attrs.match(/\stype\s*=\s*["']?([^"'\s>]+)/i);
+      var type = typeMatch ? typeMatch[1] : '';
+      if (type && INLINE_DATA_TYPE.test(type)) continue; // data block: not executed
+      var line = scannable.slice(0, m.index).split('\n').length;
+      inlineScriptHits.push(rel(full) + ':' + line + '  <script>' + (type ? ' type="' + type + '"' : '') +
+        " is inline and will not run in production (CSP script-src 'self') - move it to an external .js file");
+    }
+  });
+})(ROOT);
+inlineScriptHits.forEach(function (hit) { failures.push(hit); });
 
 /* --- Result --- */
 parseJobs.then(function () {

@@ -33,7 +33,7 @@ img, svg, canvas, input, select, textarea, button { max-width: 100%; }
   border: 3px solid transparent;
   border-radius: var(--radio);
   background: var(--mod-coordinacion);
-  color: #FFFFFF;
+  color: var(--texto-sobre-acento, #FFFFFF);
   font-size: var(--texto-base);
   font-weight: 700;
   text-decoration: none;

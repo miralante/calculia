@@ -15,13 +15,13 @@
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v5aa">
 </head>
 <body>
   <div class="container about">
     <header class="cabecera-about">
-      <div class="idioma-selector" role="group" aria-label="Elegir idioma">
-        <button type="button" class="btn-lang" id="btnLangEs" data-locale="es" aria-pressed="false">🇪🇸 Español</button>
-        <button type="button" class="btn-lang" id="btnLangEn" data-locale="en" aria-pressed="false">🇬🇧 English</button>
+      <div class="suite-controls">
+        <div id="locale-picker"></div>
       </div>
       <p class="aviso-ruta" data-i18n="routeNotice">Esta página no se enlaza desde la aplicación. Solo se llega
         escribiendo la dirección.</p>
@@ -303,25 +303,11 @@
   <script src="../assets/js/i18n.js"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
-  <script>
-    (function () {
-      'use strict';
-      function paintLanguageSelector() {
-        var active = App.i18n.locale();
-        document.getElementById('btnLangEs').setAttribute('aria-pressed', String(active === 'es'));
-        document.getElementById('btnLangEn').setAttribute('aria-pressed', String(active === 'en'));
-      }
-      document.getElementById('btnLangEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
-      document.getElementById('btnLangEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
-      paintLanguageSelector();
-    })();
-  </script>
-  <script>
-    /* Register the SW from this entry point so it is active for any later
-       navigation, matching what the tools and the landing page already do. */
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../sw.js').catch(function () {});
-    }
-  </script>
+  <script src="../assets/js/sw-register.js?v=1"></script>
+<!-- Controles compartidos con la pantalla principal: el desplegable de idioma
+     y el ⚙️ de la cabecera, con su cajón de accesibilidad. Mismo ?v= que la
+     portada, para que las dos páginas compartan la copia en caché. -->
+<script src="../assets/js/locale-picker-config.js?v=1"></script>
+<script src="../assets/js/locale-picker.js?v=calculia-v5aa" defer></script>
 </body>
 </html>

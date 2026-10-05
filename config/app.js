@@ -90,17 +90,14 @@
     App.storage.remove('locale');
   }
 
-  function paintLanguageSelector() {
-    var active = App.i18n.locale();
-    $('#btnIdiomaEs').setAttribute('aria-pressed', String(active === 'es'));
-    $('#btnIdiomaEn').setAttribute('aria-pressed', String(active === 'en'));
-  }
+  /* El selector de idioma ya no vive en esta pagina: lo pone el desplegable
+     compartido de la cabecera (assets/js/locale-picker.js), que ademas
+     escribe la misma clave calculia:locale que usa App.i18n. Este bloque
+     solo existia para pintar y cablear los dos botones .btn-lang, asi que
+     se va entero. */
 
   confirmTwice($('#btnResetPersona'), 'btnResetPerson', 'confirmResetPerson', resetPerson);
   confirmTwice($('#btnResetApp'), 'btnResetApp', 'confirmResetApp', resetApp);
-  $('#btnIdiomaEs').addEventListener('click', function () { App.i18n.setLocale('es'); });
-  $('#btnIdiomaEn').addEventListener('click', function () { App.i18n.setLocale('en'); });
-  paintLanguageSelector();
 
   renderState();
   renderActivityProgress();
