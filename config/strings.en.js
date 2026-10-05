@@ -32,7 +32,7 @@
       'mental-math': 'Subtraction and Mental Math', 'percent': 'Percentages', 'money': 'Money',
       'divisibility': 'Exact groups', 'operations': 'Big sums', 'quantities': 'Quantities', 'math-tables': 'Math Tables',
       'roman-numerals': 'Roman Numerals', 'riddles': 'Riddles', 'patterns': 'Patterns',
-      'problems': 'Problems', 'temperature': 'Water Temperature',
+      'problems': 'Problems', 'temperature': 'Water Temperature', 'posneg': 'Positive and negative',
       'wallet': 'The Wallet', 'algebra': 'The balance', 'charts': 'Data and charts', 'calendar': 'The Calendar', 'clock': 'The Clock', 'stories': 'Stories',
       'odd-one-out': "What doesn't belong?", 'puzzle': 'Puzzle'
     },

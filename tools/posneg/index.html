@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Positivos y negativos | Calculia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../../index.html" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="title">🔢 Positivos y negativos</h1>
+      <span class="stars" id="stars">⭐ 0</span>
+    </header>
+
+    <!-- Linear screen chain. No menu: the user flows through
+         intro → temperature → elevator, the same way
+         tools/roman-numerals flows through intro → famous →
+         reminder → practice. Each transition button names the
+         NEXT action the user will take, not a generic
+         "Siguiente". -->
+
+    <!-- Screen 1: intro / theory.
+         Reading screen with the number line. The button below
+         names the next concrete action ("Move the thermometer")
+         instead of a generic "Next" — same pattern as
+         roman-numerals/referenceNext ("Empezar a practicar →"). -->
+    <section id="introScreen" class="stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="instructionIntro"></p>
+      </div>
+      <div class="card centered theory-card">
+        <p class="theory-title" data-i18n="theory.title"></p>
+        <div class="theory-body" id="theoryBody"></div>
+        <div class="numberline" id="numberline" aria-hidden="true"></div>
+        <p class="theory-example" id="theoryExample"></p>
+      </div>
+      <div class="row intro-buttons">
+        <button type="button" class="btn" id="btnIntroNext" data-i18n="introNext"></button>
+      </div>
+    </section>
+
+    <!-- Screen 2: thermometer. Big signed number + small "+"/"−"
+         hint chip. No physical-state emoji here because the
+         goal of this activity is the number, not the state. -->
+    <section id="tempScreen" class="hidden stack">
+      <div class="card centered stack temp-card" id="tempCard">
+        <p class="temp-goal" id="tempGoal"></p>
+        <div class="temp-visual">
+          <div id="tempNumber" class="temp-number" aria-live="polite"></div>
+          <p class="temp-sign" id="tempSign"></p>
+        </div>
+      </div>
+      <p class="temp-suggestion hidden" id="tempSuggestion" aria-live="polite"></p>
+      <div class="temp-controls">
+        <div class="temp-row">
+          <button type="button" class="btn-temp" data-step="-10">−10</button>
+          <button type="button" class="btn-temp" data-step="-1">−1</button>
+          <button type="button" class="btn-temp btn-temp-icon" id="tempAudio" aria-label="Escuchar el número">🔊</button>
+          <button type="button" class="btn-temp btn-temp-secondary" id="tempReset">↺ 0</button>
+          <button type="button" class="btn-temp" data-step="1">+1</button>
+          <button type="button" class="btn-temp" data-step="10">+10</button>
+          <button type="button" class="btn-temp" id="tempExit">✅ Salir</button>
+        </div>
+      </div>
+      <p class="instruction temp-hint" id="tempHint" data-i18n="gen.hint"></p>
+      <!-- Mini-celebration when the user crosses zero (negative
+           ↔ positive). Same pattern as temperature's
+           celebrateIfGoalReached, but for the SIGN flip — that's
+           the actual didactic moment of this activity. -->
+      <p class="crossed-zero hidden" id="tempCrossedZero" data-i18n="gen.crossedZero"></p>
+      <div class="row intro-buttons">
+        <button type="button" class="btn" id="btnTempNext" data-i18n="tempNext"></button>
+      </div>
+    </section>
+
+    <!-- Screen 3: elevator. Building + floor number + big
+         ▲/▼ buttons. Step size is 1 floor, matching how a real
+         elevator works. -->
+    <section id="elevScreen" class="hidden stack">
+      <div class="card centered elev-card">
+        <p class="elev-goal" id="elevGoal"></p>
+        <div class="elev-building" aria-hidden="true">
+          <div class="elev-shaft">
+            <div id="elevCabin" class="elev-cabin">🛗</div>
+          </div>
+        </div>
+        <div class="elev-display">
+          <p class="elev-floor-label" data-i18n="gen.floorLabel"></p>
+          <p id="elevFloor" class="elev-floor" aria-live="polite"></p>
+        </div>
+      </div>
+      <p class="elev-suggestion hidden" id="elevSuggestion" aria-live="polite"></p>
+      <div class="elev-controls">
+        <div class="elev-row">
+          <button type="button" class="btn-elev" id="elevDown">▼ −1</button>
+          <button type="button" class="btn-elev btn-elev-secondary" id="elevReset">↺</button>
+          <button type="button" class="btn-elev" id="elevUp">▲ +1</button>
+          <button type="button" class="btn-elev btn-elev-icon" id="elevAudio" aria-label="Escuchar la planta">🔊</button>
+        </div>
+        <button type="button" class="btn-elev btn-elev-exit" id="elevExit">✅ Salir</button>
+      </div>
+      <p class="instruction elev-hint" id="elevHint" data-i18n="gen.hint"></p>
+      <!-- Mini-celebration when the elevator crosses floor 0
+           (negative ↔ positive). One-shot per mission: reset on
+           exit/reset/replay (matches rule 5: never repeat the
+           same reinforcement). -->
+      <p class="crossed-zero hidden" id="elevCrossedZero" data-i18n="gen.crossedZero"></p>
+      <div class="row intro-buttons">
+        <button type="button" class="btn" id="btnElevFinish" data-i18n="elevFinish"></button>
+      </div>
+    </section>
+
+    <!-- End-of-round screen. Same shape as the rest of the
+         suite. 'Volver al inicio' returns to the intro screen
+         (same user-facing experience as roman-numerals/btnMenu,
+         which goes back to introScreen). -->
+    <section id="endScreen" class="hidden centered stack" aria-live="polite">
+      <div class="emoji-large" aria-hidden="true">🎉</div>
+      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+      <p id="endSummary"></p>
+      <p id="contexto" class="contexto"></p>
+      <p id="explanation" class="explanation"></p>
+      <p id="transfer" class="transfer" data-i18n="transfer"></p>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
+      <a href="../../index.html" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
+    </section>
+        <!-- Shared feedback zone for the temperature and elevator
+             missions (success line, "you crossed zero" message).
+             Lives at body level so it can be written by either
+             screen without affecting layout. -->
+        <div class="feedback hidden" id="feedback" aria-live="polite"></div>
+        <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
+  </div>
+
+  <script src="../../assets/js/utils.js"></script>
+  <script src="../../assets/js/i18n.js"></script>
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/feedback.js"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="../../assets/js/sw-register.js"></script>
+</body>
+</html>

@@ -32,6 +32,7 @@
     "romannumerals": { "name": "Números Romanos", "detail": "Aprende a reconocer los siglos." },
     "problems": { "name": "Problemas", "detail": "Entender y resolver." },
     "temperature": { "name": "Temperatura del agua", "detail": "Sube y baja los grados. Mira qué pasa con el agua." },
+    "posneg": { "name": "Positivos y negativos", "detail": "Teoría, termómetro y ascensor." },
 
     "riddles": { "name": "Adivinanzas", "detail": "¿Qué es? Piensa y elige." },
     "patterns": { "name": "Patrones", "detail": "¿Qué sigue ahora?" },

@@ -1,0 +1,361 @@
+/* ============================================================
+   Calculia — Positivos y negativos (tool-specific styles).
+   Shared styles live in assets/css/. The activity reuses
+   the .card and .btn patterns; the section below styles the
+   three phase UIs (theory, temperature, elevator) and the
+   shared mission controls.
+   ============================================================ */
+
+.tool-header h1 { color: var(--mod-mates); }
+.btn:not(.btn-secondary):not(.btn-audio):not(.btn-thermo):not(.btn-elev) {
+  background: var(--mod-mates);
+}
+.instruction { font-size: var(--texto-base); }
+.center-row { justify-content: center; }
+
+.difficulty {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-suave, #666);
+}
+
+/* ---- Transition buttons (intro → temp → elev) ----
+   Same row layout as tools/roman-numerals/.intro-buttons:
+   one centred button at the bottom of each screen, with a
+   label that names the NEXT action the user will take. */
+.intro-buttons { justify-content: center; margin-top: var(--espacio-grande); }
+
+/* ============================================================
+   Theory phase
+   ============================================================ */
+.theory-card {
+  padding: 32px 16px;
+  text-align: left;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.theory-title {
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  color: var(--mod-mates);
+  margin: 0 0 var(--espacio);
+  text-align: center;
+}
+.theory-body p { margin: 0 0 var(--espacio); font-size: var(--texto-base); line-height: 1.5; }
+.theory-body ul { padding-left: 24px; margin: 0 0 var(--espacio); }
+.theory-body li { margin-bottom: 8px; font-size: var(--texto-base); }
+.theory-example {
+  margin: var(--espacio) 0 0;
+  padding: 12px 16px;
+  border-left: 4px solid var(--mod-mates);
+  background: var(--color-fondo, #f6f4ef);
+  border-radius: var(--radio);
+  font-size: var(--texto-base);
+  color: var(--color-texto-suave);
+}
+
+/* Number line drawn under the theory text. Pure CSS: a
+ * horizontal flex of tick marks with the zero tick rendered
+ * thicker. The labels use the same signed format as the
+ * mission visuals, so the user already knows how to read
+ * them when they reach the game phase. */
+.numberline {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  margin: var(--espacio-grande) 0;
+  padding: 8px 4px 0;
+  border-top: 2px solid var(--color-borde);
+  overflow-x: auto;
+}
+.numberline-tick {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 32px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--color-texto);
+  padding-top: 4px;
+  position: relative;
+}
+.numberline-tick::before {
+  content: '';
+  display: block;
+  width: 2px;
+  height: 10px;
+  background: var(--color-borde);
+  margin-bottom: 4px;
+}
+.numberline-tick.zero {
+  color: var(--mod-mates);
+  font-weight: 800;
+}
+.numberline-tick.zero::before {
+  height: 18px;
+  width: 3px;
+  background: var(--mod-mates);
+}
+
+/* ============================================================
+   Temperature mission UI
+   ============================================================ */
+.temp-goal {
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--color-texto-suave);
+  margin: 0;
+  text-align: center;
+}
+.temp-card {
+  padding: 32px 16px;
+  border-width: 4px;
+  border-style: solid;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.temp-card.sign-positive { border-color: #FBC02D; background: #FFFBEB; }
+.temp-card.sign-negative { border-color: #42A5F5; background: #E3F2FD; }
+.temp-card.sign-zero     { border-color: var(--mod-mates); background: var(--color-superficie); }
+
+.temp-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio);
+}
+.temp-number {
+  font-size: clamp(64px, 14vw, 120px);
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-align: center;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-texto);
+}
+.temp-number.sign-positive { color: #F57F17; }
+.temp-number.sign-negative { color: #1565C0; }
+.temp-sign {
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  color: var(--color-texto-suave);
+  margin: 0;
+}
+
+.temp-suggestion {
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--mod-mates);
+  text-align: center;
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 8px 12px;
+  border: 2px dashed var(--mod-mates);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+
+.temp-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio);
+  align-items: center;
+}
+.temp-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.btn-temp {
+  min-width: 88px;
+  min-height: 56px;
+  padding: 8px 16px;
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: var(--texto-base);
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-temp:hover:not(:disabled) { border-color: var(--mod-mates); }
+.btn-temp:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: var(--color-fondo, #f0f0f0);
+}
+.btn-temp.btn-temp-secondary { background: var(--color-fondo, #f0f0f0); }
+/* Icon-only button (the 🔊 "Hear" button). Same proportions as
+ * temperature/thermoAudio's .btn-thermo-icon: enough surface to
+ * be a comfortable touch target without dominating the row. */
+.btn-temp.btn-temp-icon {
+  min-width: 56px;
+  font-size: 22px;
+}
+
+/* One-shot cross-zero celebration line. Mirrors the
+ * celebration style of .temp-suggestion and .elev-suggestion
+ * (same shape so the user recognises the family), but with the
+ * success tint to read as a milestone, not a hint. */
+.crossed-zero {
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--mod-mates);
+  text-align: center;
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 8px 12px;
+  border: 2px solid var(--mod-mates);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+
+.temp-hint {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--color-texto-suave);
+}
+
+/* ============================================================
+   Elevator mission UI
+   ============================================================ */
+.elev-goal {
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--color-texto-suave);
+  margin: 0;
+  text-align: center;
+}
+.elev-card {
+  padding: 24px 16px;
+  border-width: 4px;
+  border-style: solid;
+  border-color: var(--mod-mates);
+}
+.elev-building {
+  display: flex;
+  justify-content: center;
+  margin: var(--espacio) 0;
+}
+.elev-shaft {
+  position: relative;
+  width: 120px;
+  height: 200px;
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: linear-gradient(180deg, #FFF8E1 0%, #FFF8E1 50%, #ECEFF1 50%, #ECEFF1 100%);
+  overflow: hidden;
+}
+.elev-cabin {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 64px;
+  /* JS sets the `top` style in % at updateElev() to position the
+   * cabin between minFloor and maxFloor. The keyframe here is
+   * a soft bounce used when the cabin reaches the goal floor. */
+  transition: top 0.25s ease;
+}
+.elev-cabin.reached {
+  animation: elev-bounce 0.6s ease;
+}
+@keyframes elev-bounce {
+  0%   { transform: translateX(-50%) translateY(0); }
+  40%  { transform: translateX(-50%) translateY(-8px); }
+  100% { transform: translateX(-50%) translateY(0); }
+}
+
+.elev-display {
+  text-align: center;
+  margin-top: var(--espacio);
+}
+.elev-floor-label {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.elev-floor {
+  font-size: clamp(48px, 12vw, 96px);
+  font-weight: 800;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-texto);
+  letter-spacing: 2px;
+}
+.elev-floor.sign-positive { color: #F57F17; }
+.elev-floor.sign-negative { color: #1565C0; }
+
+.elev-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio);
+  align-items: center;
+}
+.elev-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.btn-elev {
+  min-width: 96px;
+  min-height: 64px;
+  padding: 8px 16px;
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: var(--texto-base);
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-elev:hover:not(:disabled) { border-color: var(--mod-mates); }
+.btn-elev:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: var(--color-fondo, #f0f0f0);
+}
+.btn-elev.btn-elev-secondary { background: var(--color-fondo, #f0f0f0); }
+.btn-elev.btn-elev-exit { min-width: 200px; background: var(--mod-mates); color: #fff; }
+/* Icon-only elevator button (the 🔊 "Hear" button). Smaller
+ * than the numeric ▲/▼ buttons because it's secondary. */
+.btn-elev.btn-elev-icon { min-width: 56px; font-size: 22px; }
+
+/* Suggestion line for the elevator. Same shape as the
+ * thermometer's .temp-suggestion so the two free-exploration
+ * surfaces feel related. */
+.elev-suggestion {
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--mod-mates);
+  text-align: center;
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 8px 12px;
+  border: 2px dashed var(--mod-mates);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+
+.elev-hint {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--color-texto-suave);
+}
+
+/* ============================================================
+   End-of-round
+   ============================================================ */
+.emoji-large { font-size: 96px; }
+#screenEnd { padding-top: 48px; }
+#screenEnd .btn { align-self: center; min-width: 280px; }
+#screenEnd .transfer {
+  margin: 8px auto 24px;
+  font-size: 1.1rem;
+  color: var(--color-texto-suave, #555);
+  max-width: 480px;
+}
