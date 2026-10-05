@@ -53,6 +53,7 @@ is rebalanced, this is the document to read first.
 | Activity | Slug (`tools/`) | Didactic objective | Key vocabulary |
 |---|---|---|---|
 | Numbers | `numbers/` | Reading, writing and comparing whole numbers, sequences and place value. | número, contar, secuencia, posición, mayor, menor, igual. |
+| Shapes | `shapes/` | Recognising flat shapes and solids, connecting them with real objects, and practising their names and parts. | circle, polygon, side, corner, cube, prism, pyramid, sphere, cylinder, cone. |
 | Fractions and measures | `fractions-measures/` | Recognising, comparing and operating with fractions and common units of measure. | fracción, mitad, tercio, metro, kilo, litro, comparar. |
 | Math tables | `math-tables/` | Multiplication and division facts through repetition and short challenges. | tabla, multiplicar, dividir, producto. |
 | Mental math | `mental-math/` | Quick calculation with the four operations, no written intermediate steps. | sumar, restar, multiplicar, dividir, rápido, cálculo. |
@@ -133,7 +134,21 @@ is rebalanced, this is the document to read first.
 - Reassembling a picture or sequence (`puzzle/`).
 - Reading clock positions (`clock/`).
 
-### 3.10 Logic and proof
+### 3.10 Geometric shapes
+
+- Recognising circles, triangles, squares, rectangles, rhombuses,
+  trapezoids, pentagons and hexagons (`shapes/`).
+- Distinguishing flat shapes, which have no volume, from solids:
+  cubes, prisms, pyramids, spheres, cylinders and cones (`shapes/`).
+- Connecting each shape with everyday objects and practising its name,
+  sides, corners and faces (`shapes/`).
+- The first slide shows what a flat shape and a solid are, and points to
+  one side and one corner on a drawing. The gallery presents each shape
+  by name without counting its parts.
+- Angles, areas, volumes, similarity and other geometry concepts are
+  taught in their own activities (`geometry/`, `similar/`).
+
+### 3.11 Logic and proof
 
 - Each "Odd one out", "Pattern" or "Riddles" item comes with **one
   obvious reason** and **no hidden alternative**. A reviewer must

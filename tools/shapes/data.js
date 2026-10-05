@@ -16,19 +16,38 @@
 var DATA = {
   perRound: 6,
 
+  gallery: [
+    { id: 'circle', type: 'flat', object: '🕒' },
+    { id: 'triangle', type: 'flat', object: '⚠️' },
+    { id: 'square', type: 'flat', object: '🪟' },
+    { id: 'rectangle', type: 'flat', object: '🚪' },
+    { id: 'rhombus', type: 'flat', object: '🪁' },
+    { id: 'trapezoid', type: 'flat', object: '🪴' },
+    { id: 'pentagon', type: 'flat', object: '⚽' },
+    { id: 'hexagon', type: 'flat', object: '🍯' },
+    { id: 'cube', type: 'solid', object: '🎲' },
+    { id: 'rectangularPrism', type: 'solid', object: '📦' },
+    { id: 'triangularPrism', type: 'solid', object: '⛺' },
+    { id: 'pyramid', type: 'solid', object: '🏜️' },
+    { id: 'sphere', type: 'solid', object: '⚽' },
+    { id: 'cylinder', type: 'solid', object: '🥫' },
+    { id: 'cone', type: 'solid', object: '🍦' }
+  ],
+
   activities: {
     /* Primero reconocer la forma, después contar sus partes: nombrar
        algo es más fácil que analizarlo. */
     planas: {
       picto: '🔷',
       levels: [
-        /* g1→g2 solo añade una forma más al grupo; g2→g3 cambia lo que
-           se pregunta (nombrar → contar lados); g3→g4 solo cambia qué
-           se cuenta (lados → esquinas). Una variable por paso. */
+        /* Add a few names at a time before changing the question from
+           naming to counting sides, then to counting corners. */
         { id: 'g1', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle'] },
         { id: 'g2', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle', 'rectangle'] },
-        { id: 'g3', tipo: 'shapeCount', count: 'sides', shapes: ['triangle', 'square', 'rectangle', 'pentagon', 'hexagon'] },
-        { id: 'g4', tipo: 'shapeCount', count: 'corners', shapes: ['triangle', 'square', 'rectangle', 'pentagon', 'hexagon'] }
+        { id: 'g3', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle', 'rectangle', 'pentagon', 'hexagon'] },
+        { id: 'g4', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle', 'rectangle', 'rhombus', 'trapezoid', 'pentagon', 'hexagon'] },
+        { id: 'g5', tipo: 'shapeCount', count: 'sides', shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon', 'hexagon'] },
+        { id: 'g6', tipo: 'shapeCount', count: 'corners', shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon', 'hexagon'] }
       ]
     },
 
@@ -38,8 +57,9 @@ var DATA = {
     cuerpos: {
       picto: '🧊',
       levels: [
-        { id: 'b1', tipo: 'solidName', dir: 'toName' },
-        { id: 'b2', tipo: 'solidName', dir: 'toObject' }
+        { id: 'b1', tipo: 'solidName', dir: 'toName', solids: ['cube', 'sphere', 'cylinder'] },
+        { id: 'b2', tipo: 'solidName', dir: 'toName' },
+        { id: 'b3', tipo: 'solidName', dir: 'toObject' }
       ]
     },
 
@@ -62,14 +82,20 @@ var DATA = {
     triangle:  { sides: 3, corners: 3 },
     square:    { sides: 4, corners: 4 },
     rectangle: { sides: 4, corners: 4 },
+    rhombus:   { sides: 4, corners: 4 },
+    trapezoid: { sides: 4, corners: 4 },
     pentagon:  { sides: 5, corners: 5 },
     hexagon:   { sides: 6, corners: 6 }
   },
 
   solids: [
-    { id: 'cube',     objects: ['🎲', '🧊'] },
-    { id: 'sphere',   objects: ['⚽', '🏀', '🌍'] },
-    { id: 'cylinder', objects: ['🥫', '🛢️'] }
+    { id: 'cube', objects: ['🎲', '🧊'] },
+    { id: 'rectangularPrism', objects: ['📦', '📕'] },
+    { id: 'triangularPrism', objects: ['⛺'] },
+    { id: 'pyramid', objects: ['🏜️'] },
+    { id: 'sphere', objects: ['⚽', '🏀', '🌍'] },
+    { id: 'cylinder', objects: ['🥫', '🛢️'] },
+    { id: 'cone', objects: ['🍦', '🚧'] }
   ],
 
   /* Cuerpos con caras planas, por sus piezas. `faces` es cuántas caras

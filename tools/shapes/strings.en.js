@@ -11,7 +11,25 @@
 
   App.i18n.register({
     title: '🔷 Shapes',
-    instructionMenu: 'Choose an activity.',
+    instructionIntro: 'Look at these two shapes.',
+    introFlatTitle: 'Flat shape',
+    introFlatText: 'It is smooth, like a drawing on paper.',
+    introSideText: 'Side: a straight line on the edge.',
+    introCornerText: 'Corner: where two sides meet.',
+    introSolidTitle: 'Solid',
+    introSolidText: 'It is not flat. You can hold it, like a ball.',
+    galleryPrevious: 'Previous',
+    galleryNext: 'Next',
+    introContinue: 'See them in real life →',
+    instructionReal: 'Now let us see where these shapes appear.',
+    realTitle: 'Shapes are all around us',
+    realShape: 'This object is shaped like a {name}.',
+    realBack: '← Back to the shapes',
+    realContinue: 'Take the test →',
+    instructionMenu: 'Choose what you want to practise.',
+    testTitle: 'Which shapes can you recognise?',
+    testText: 'Take a test on flat shapes, solids, or solid nets.',
+    menuBack: '← Back to the examples',
     contexto: 'A road sign, a window, a ball, a tin. Shapes are in everything you touch and see.',
     explicacion: '✅ Recognising shapes helps you describe things and understand signs, plans and drawings.',
     btnBackToMenu: '← Other activities',
@@ -36,28 +54,75 @@
       square: 'square',
       triangle: 'triangle',
       rectangle: 'rectangle',
+      rhombus: 'rhombus',
+      trapezoid: 'trapezoid',
       pentagon: 'pentagon',
       hexagon: 'hexagon'
     },
     solid: {
       cube: 'cube',
       sphere: 'sphere',
-      cylinder: 'cylinder'
+      cylinder: 'cylinder',
+      rectangularPrism: 'rectangular prism',
+      triangularPrism: 'triangular prism',
+      pyramid: 'pyramid',
+      cone: 'cone'
+    },
+    gallery: {
+      flat: {
+        circle: '{name}',
+        triangle: '{name}',
+        square: '{name}',
+        rectangle: '{name}',
+        rhombus: '{name}',
+        trapezoid: '{name}',
+        pentagon: '{name}',
+        hexagon: '{name}'
+      },
+      solid: {
+        cube: '{name}',
+        rectangularPrism: '{name}',
+        triangularPrism: '{name}',
+        pyramid: '{name}',
+        sphere: '{name}',
+        cylinder: '{name}',
+        cone: '{name}'
+      },
+      real: {
+        circle: 'A clock is shaped like a circle.',
+        triangle: 'A warning sign is shaped like a triangle.',
+        square: 'A tile can be shaped like a square.',
+        rectangle: 'A door is often shaped like a rectangle.',
+        rhombus: 'A kite can be shaped like a rhombus.',
+        trapezoid: 'Some plant pots are shaped like a trapezoid.',
+        pentagon: 'Some panels on a football are shaped like a pentagon.',
+        hexagon: 'The cells in a honeycomb are shaped like a hexagon.',
+        cube: 'A die is shaped like a cube.',
+        rectangularPrism: 'A cereal box is shaped like a rectangular prism.',
+        triangularPrism: 'A tent can be shaped like a triangular prism.',
+        pyramid: 'The pyramids of Egypt are shaped like pyramids.',
+        sphere: 'A ball is shaped like a sphere.',
+        cylinder: 'A tin can is shaped like a cylinder.',
+        cone: 'An ice-cream cone is shaped like a cone.'
+      }
     },
     activity: {
-      desarrollos: { name: 'Solids opened up', detail: 'Prisms and pyramids.', instruction: 'If you open a box out flat, you see all its faces. That is called the net. Count them: a cube has 6 square faces, a prism has 2 triangles and 3 rectangles, and a pyramid has 1 square and 4 triangles.' },
-      planas: { name: 'Flat shapes', detail: 'Circle, square, triangle…', instruction: 'Look at the picture and say which shape it is. Later you will count its sides and its corners. A side is a straight line. A corner is where two sides meet.' },
-      cuerpos: { name: 'Solids', detail: 'Cube, sphere and cylinder.', instruction: 'Solids are shapes that take up space: you can pick them up. A die is a cube. A ball is a sphere. A tin is a cylinder.' }
+      desarrollos: { name: 'Solid nets', detail: 'Prisms and pyramids.', instruction: 'If you open a box out flat, you see all its faces. That is called the net. Count the faces and look at their shapes.' },
+      planas: { name: 'Flat shapes', detail: 'Polygons and circles.', instruction: 'Look at the picture and say which shape it is. Later you will count its sides and corners.' },
+      cuerpos: { name: 'Solids', detail: 'Prisms, pyramids, and round solids.', instruction: 'Solids take up space. You can recognise them by their flat and curved faces.' }
     },
     level: {
       p1: 'How many faces?',
       p2: 'What does it fold into?',
       g1: 'Three shapes',
       g2: 'Four shapes',
-      g3: 'Count the sides',
-      g4: 'Count the corners',
+      g3: 'Six shapes',
+      g4: 'Eight shapes',
+      g5: 'Count the sides',
+      g6: 'Count the corners',
       b1: 'From object to name',
-      b2: 'From name to object'
+      b2: 'More solids',
+      b3: 'From name to object'
     },
     net: {
       cube: { name: 'cube', gloss: '6 squares' },

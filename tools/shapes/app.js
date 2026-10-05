@@ -9,10 +9,20 @@
   var TOOL_ID = 'shapes';
   var $ = App.utils.$;
 
+  var screenIntro = $('#screenIntro');
+  var screenReal = $('#screenReal');
   var screenMenu = $('#screenMenu');
-  var screenLevels = $('#screenLevels');
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
+  var galleryVisual = $('#galleryVisual');
+  var galleryCaption = $('#galleryCaption');
+  var galleryPrev = $('#galleryPrev');
+  var galleryNext = $('#galleryNext');
+  var realObject = $('#realObject');
+  var realShape = $('#realShape');
+  var realCaption = $('#realCaption');
+  var realPrev = $('#realPrev');
+  var realNext = $('#realNext');
   var promptEl = $('#prompt');
   var visualEl = $('#visual');
   var legendEl = $('#legend');
@@ -29,6 +39,8 @@
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
   if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
+  if (!progress.roundsByActivity || typeof progress.roundsByActivity !== 'object' ||
+      Array.isArray(progress.roundsByActivity)) progress.roundsByActivity = {};
 
   /* Round state */
   var activity = null;
@@ -40,6 +52,8 @@
   var attempts = 0;
   var question = null;
   var pools = {};
+  var galleryIndex = -1;
+  var realIndex = 0;
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce).
      fixedQuestion allows reusing render() with an external question
      (the reinforcement one); if null, render() generates a new one
@@ -123,6 +137,15 @@
         dots = cornerDots([{ x: 8, y: 32 }, { x: 112, y: 32 },
           { x: 112, y: 88 }, { x: 8, y: 88 }]);
       }
+    } else if (id === 'rhombus' || id === 'trapezoid') {
+      var quad = id === 'rhombus'
+        ? [{ x: 60, y: 10 }, { x: 97, y: 60 }, { x: 60, y: 110 }, { x: 23, y: 60 }]
+        : [{ x: 30, y: 16 }, { x: 90, y: 16 }, { x: 110, y: 104 }, { x: 10, y: 104 }];
+      body = '<polygon points="' + quad.map(function (p) {
+        return p.x + ',' + p.y;
+      }).join(' ') + '" fill="' + SHAPE_FILL +
+        '" stroke="var(--color-texto)" stroke-width="4"/>';
+      if (marks) dots = cornerDots(quad);
     } else {
       var pts = polygonPoints(POLY[id], 60, 62, 48);
       body = '<polygon points="' + pts.map(function (p) {
@@ -136,6 +159,123 @@
   }
 
   function shapeName(id) { return App.i18n.t('shape.' + id); }
+  function solidName(id) { return App.i18n.t('solid.' + id); }
+
+  function solidSvg(id) {
+    var body = '';
+    if (id === 'cube') {
+      body = '<polygon points="25,35 65,15 105,35 65,55" class="solid-top"/>' +
+        '<polygon points="25,35 65,55 65,105 25,85" class="solid-left"/>' +
+        '<polygon points="65,55 105,35 105,85 65,105" class="solid-right"/>';
+    } else if (id === 'rectangularPrism') {
+      body = '<polygon points="18,38 62,18 108,38 64,58" class="solid-top"/>' +
+        '<polygon points="18,38 64,58 64,100 18,80" class="solid-left"/>' +
+        '<polygon points="64,58 108,38 108,80 64,100" class="solid-right"/>';
+    } else if (id === 'triangularPrism') {
+      body = '<polygon points="20,70 45,85 69,45 44,30" class="solid-left"/>' +
+        '<polygon points="44,30 69,45 93,85 68,70" class="solid-top"/>' +
+        '<polygon points="20,70 68,70 93,85 45,85" class="solid-right"/>' +
+        '<polygon points="20,70 44,30 68,70" class="solid-base"/>';
+    } else if (id === 'pyramid') {
+      body = '<polygon points="20,80 60,60 100,80 60,100" class="solid-base"/>' +
+        '<polygon points="60,15 20,80 60,60" class="solid-left"/>' +
+        '<polygon points="60,15 60,60 100,80" class="solid-top"/>' +
+        '<polygon points="60,15 20,80 60,100" class="solid-right"/>' +
+        '<polygon points="60,15 60,100 100,80" class="solid-left"/>';
+    } else if (id === 'sphere') {
+      body = '<circle cx="60" cy="60" r="45" class="solid-sphere"/>' +
+        '<ellipse cx="45" cy="40" rx="12" ry="7" class="solid-highlight"/>';
+    } else if (id === 'cylinder') {
+      body = '<path d="M20 28v64c0 12 80 12 80 0V28" class="solid-side"/>' +
+        '<ellipse cx="60" cy="28" rx="40" ry="13" class="solid-top"/>' +
+        '<path d="M20 92c0 12 80 12 80 0" class="solid-bottom"/>';
+    } else if (id === 'cone') {
+      body = '<path d="M60 16 18 92c0 14 84 14 84 0Z" class="solid-side"/>' +
+        '<ellipse cx="60" cy="92" rx="42" ry="13" class="solid-bottom"/>';
+    }
+    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
+      '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
+      body + '</g></svg>';
+  }
+
+  function paintGallery() {
+    galleryPrev.setAttribute('aria-label', App.i18n.t('galleryPrevious'));
+    galleryNext.setAttribute('aria-label', App.i18n.t('galleryNext'));
+
+    if (galleryIndex === -1) {
+      var intro = {
+        flatTitle: App.i18n.t('introFlatTitle'),
+        flatText: App.i18n.t('introFlatText'),
+        introSideText: App.i18n.t('introSideText'),
+        introCornerText: App.i18n.t('introCornerText'),
+        solidTitle: App.i18n.t('introSolidTitle'),
+        solidText: App.i18n.t('introSolidText')
+      };
+      galleryVisual.removeAttribute('role');
+      galleryVisual.removeAttribute('aria-label');
+      galleryVisual.classList.add('gallery-intro');
+      galleryVisual.textContent = '';
+
+      ['flat', 'solid'].forEach(function (kind) {
+        var item = document.createElement('div');
+        item.className = 'shape-compare-item shape-compare-' + kind;
+
+        var visual = document.createElement('div');
+        visual.className = 'shape-compare-visual';
+        visual.setAttribute('aria-hidden', 'true');
+        if (kind === 'flat') {
+          visual.innerHTML = shapeSvg('triangle', false).replace('</svg>',
+            '<line x1="18" y1="86" x2="102" y2="86" class="intro-side-mark"/>' +
+            '<circle cx="18" cy="86" r="7" class="intro-corner-mark"/></svg>');
+        } else {
+          visual.innerHTML = solidSvg('sphere');
+        }
+
+        var title = document.createElement('h2');
+        title.textContent = intro[kind + 'Title'];
+
+        var description = document.createElement('p');
+        description.textContent = intro[kind + 'Text'];
+
+        item.appendChild(visual);
+        item.appendChild(title);
+        item.appendChild(description);
+        if (kind === 'flat') {
+          ['Side', 'Corner'].forEach(function (part) {
+            var definition = document.createElement('p');
+            definition.className = 'intro-part intro-part-' + part.toLowerCase();
+            definition.textContent = intro['intro' + part + 'Text'];
+            item.appendChild(definition);
+          });
+        }
+        galleryVisual.appendChild(item);
+      });
+      galleryCaption.classList.add('hidden');
+      return;
+    }
+
+    var item = DATA.gallery[galleryIndex];
+    var name = item.type === 'flat' ? shapeName(item.id) : solidName(item.id);
+    galleryVisual.classList.remove('gallery-intro');
+    galleryVisual.innerHTML = item.type === 'flat'
+      ? '<div class="shape-stage">' + shapeSvg(item.id, false) + '</div>'
+      : '<div class="shape-stage">' + solidSvg(item.id) + '</div>';
+    galleryVisual.setAttribute('role', 'img');
+    galleryVisual.setAttribute('aria-label', name);
+    galleryCaption.textContent = App.i18n.t('gallery.' + item.type + '.' + item.id)
+      .replace('{name}', name);
+    galleryCaption.classList.remove('hidden');
+  }
+
+  function paintRealExample() {
+    var item = DATA.gallery[realIndex];
+    var name = item.type === 'flat' ? shapeName(item.id) : solidName(item.id);
+    realObject.textContent = item.object;
+    realShape.textContent = App.i18n.t('realShape').replace('{name}', name);
+    realCaption.textContent = App.i18n.t('gallery.real.' + item.id);
+    realPrev.setAttribute('aria-label', App.i18n.t('galleryPrevious'));
+    realNext.setAttribute('aria-label', App.i18n.t('galleryNext'));
+  }
 
   /* Three counts around the right one: one fewer, the answer, one more.
      Being out by one is the mistake this level actually produces, not
@@ -299,11 +439,15 @@
     },
 
     /* Solids, always through an object you could pick up: "cilindro"
-       means something before it becomes a word. */
+       means something before it becomes a word. New solids enter in
+       later levels so the first round remains familiar. */
     solidName: function (nv) {
-      var solid = draw(nv.id, DATA.solids);
+      var solidPool = nv.solids ? DATA.solids.filter(function (s) {
+        return nv.solids.indexOf(s.id) !== -1;
+      }) : DATA.solids;
+      var solid = draw(nv.id, solidPool);
       var object = App.utils.shuffle(solid.objects)[0];
-      var others = App.utils.shuffle(DATA.solids.filter(function (s) {
+      var others = App.utils.shuffle(solidPool.filter(function (s) {
         return s.id !== solid.id;
       })).slice(0, 2);
       var nameOf = function (s) { return App.i18n.t('solid.' + s.id); };
@@ -346,7 +490,7 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenGame, screenEnd].forEach(function (p) {
+    [screenIntro, screenReal, screenMenu, screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -373,15 +517,17 @@
 
   /* The level rises one step per completed round, capped at the last
      one, so a person who comes back continues where they were. */
-  function levelFromProgress() {
+  function levelFromProgress(activityId) {
     var levels = activity.levels;
-    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
+    var completed = progress.roundsByActivity[activityId];
+    if (typeof completed !== 'number' || completed < 0) completed = 0;
+    return levels[Math.min(Math.floor(completed), levels.length - 1)];
   }
 
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    startRound(levelFromProgress());
+    startRound(levelFromProgress(id));
   }
 
   /* ---- Game ---- */
@@ -552,6 +698,8 @@
 
   function endRound() {
     progress.completedRounds = (progress.completedRounds || 0) + 1;
+    progress.roundsByActivity[activity.id] =
+      (progress.roundsByActivity[activity.id] || 0) + 1;
     save();
     show(screenEnd);
     var summaryEl = $('#endSummary');
@@ -581,10 +729,39 @@
   var elBtnBackToMenu = $('#btnBackToMenu');
   if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
   $('#btnNext').addEventListener('click', next);
-  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnRepeat').addEventListener('click', function () {
+    startRound(levelFromProgress(activity.id));
+  });
   $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
   $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
 
+  function moveGallery(step) {
+    var slideCount = DATA.gallery.length + 1;
+    galleryIndex = (galleryIndex + 1 + step + slideCount) % slideCount - 1;
+    paintGallery();
+  }
+
+  $('#galleryPrev').addEventListener('click', function () {
+    moveGallery(-1);
+  });
+  $('#galleryNext').addEventListener('click', function () {
+    moveGallery(1);
+  });
+  $('#realPrev').addEventListener('click', function () {
+    realIndex = (realIndex + DATA.gallery.length - 1) % DATA.gallery.length;
+    paintRealExample();
+  });
+  $('#realNext').addEventListener('click', function () {
+    realIndex = (realIndex + 1) % DATA.gallery.length;
+    paintRealExample();
+  });
+  $('#introContinue').addEventListener('click', function () { show(screenReal); });
+  $('#realBack').addEventListener('click', function () { show(screenIntro); });
+  $('#realContinue').addEventListener('click', function () { show(screenMenu); });
+  $('#menuBack').addEventListener('click', function () { show(screenReal); });
+
+  paintGallery();
+  paintRealExample();
   paintMenu();
   paintStars();
 })();

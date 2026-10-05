@@ -54,6 +54,7 @@ primero.
 | Actividad | Slug (`tools/`) | Objetivo didáctico | Vocabulario clave |
 |---|---|---|---|
 | Números | `numbers/` | Leer, escribir y comparar números enteros, secuencias y valor posicional. | número, contar, secuencia, posición, mayor, menor, igual. |
+| Formas | `shapes/` | Reconocer formas planas y cuerpos geométricos, relacionarlos con objetos reales y practicar sus nombres y partes. | círculo, polígono, lado, esquina, cubo, prisma, pirámide, esfera, cilindro, cono. |
 | Fracciones y medidas | `fractions-measures/` | Reconocer, comparar y operar con fracciones y unidades de medida habituales. | fracción, mitad, tercio, metro, kilo, litro, comparar. |
 | Tablas de multiplicar | `math-tables/` | Tablas de multiplicar y dividir mediante repetición y retos cortos. | tabla, multiplicar, dividir, producto. |
 | Cálculo mental | `mental-math/` | Cálculo rápido con las cuatro operaciones, sin pasos intermedios escritos. | sumar, restar, multiplicar, dividir, rápido, cálculo. |
@@ -133,7 +134,22 @@ primero.
 - Reconstruir una imagen o secuencia (`puzzle/`).
 - Leer posiciones en la esfera del reloj (`clock/`).
 
-### 3.10 Lógica y justificación
+### 3.10 Formas geométricas
+
+- Reconocer círculo, triángulo, cuadrado, rectángulo, rombo, trapecio,
+  pentágono y hexágono (`shapes/`).
+- Distinguir las formas planas, que no tienen volumen, de los cuerpos:
+  cubo, prismas, pirámide, esfera, cilindro y cono (`shapes/`).
+- Relacionar cada forma con objetos cotidianos y practicar sus nombres,
+  lados, esquinas y caras (`shapes/`).
+- La primera diapositiva muestra qué es una forma plana y un cuerpo, y
+  señala un lado y una esquina en un dibujo. La galería presenta cada
+  forma con su nombre, sin enumerar sus partes.
+- Los ángulos, las áreas, los volúmenes, la semejanza y otros conceptos
+  geométricos se trabajan en sus actividades específicas (`geometry/`,
+  `similar/`).
+
+### 3.11 Lógica y justificación
 
 - Cada elemento de "Qué sobra", "Patrones" o "Acertijos" tiene
   **una razón evidente** y **ninguna alternativa oculta**. Una
