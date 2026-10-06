@@ -52,7 +52,7 @@ is rebalanced, this is the document to read first.
 
 | Activity | Slug (`tools/`) | Didactic objective | Key vocabulary |
 |---|---|---|---|
-| Numbers | `numbers/` | Reading, writing and comparing whole numbers, sequences and place value. | número, contar, secuencia, posición, mayor, menor, igual. |
+| Numbers | `numbers/` | Reading, writing and comparing whole numbers, sequences and place value. Understanding positive numbers, negative numbers and zero through everyday examples and guided practice. | number, count, sequence, place, greater, smaller, equal, positive, negative, zero, thermometer, elevator. |
 | Shapes | `shapes/` | Recognising flat shapes and solids, connecting them with real objects, and practising their names and parts. | circle, polygon, side, corner, cube, prism, pyramid, sphere, cylinder, cone. |
 | Fractions and measures | `fractions-measures/` | Recognising, comparing and operating with fractions and common units of measure. | fracción, mitad, tercio, metro, kilo, litro, comparar. |
 | Math tables | `math-tables/` | Multiplication and division facts through repetition and short challenges. | tabla, multiplicar, dividir, producto. |
@@ -83,6 +83,7 @@ is rebalanced, this is the document to read first.
 - Counting and the number line (`numbers/`).
 - Place value (`numbers/`).
 - Comparing numbers (`numbers/`, `quantities/`).
+- Relating positive numbers, negative numbers and zero to temperatures and building floors (`numbers/`).
 
 ### 3.2 Operations
 

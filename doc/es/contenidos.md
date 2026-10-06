@@ -53,7 +53,7 @@ primero.
 
 | Actividad | Slug (`tools/`) | Objetivo didáctico | Vocabulario clave |
 |---|---|---|---|
-| Números | `numbers/` | Leer, escribir y comparar números enteros, secuencias y valor posicional. | número, contar, secuencia, posición, mayor, menor, igual. |
+| Números | `numbers/` | Leer, escribir y comparar números enteros, secuencias y valor posicional. Comprender positivos, negativos y cero con ejemplos cotidianos y práctica guiada. | número, contar, secuencia, posición, mayor, menor, igual, positivo, negativo, cero, termómetro, ascensor. |
 | Formas | `shapes/` | Reconocer formas planas y cuerpos geométricos, relacionarlos con objetos reales y practicar sus nombres y partes. | círculo, polígono, lado, esquina, cubo, prisma, pirámide, esfera, cilindro, cono. |
 | Fracciones y medidas | `fractions-measures/` | Reconocer, comparar y operar con fracciones y unidades de medida habituales. | fracción, mitad, tercio, metro, kilo, litro, comparar. |
 | Tablas de multiplicar | `math-tables/` | Tablas de multiplicar y dividir mediante repetición y retos cortos. | tabla, multiplicar, dividir, producto. |
@@ -84,6 +84,7 @@ primero.
 - Contar y la recta numérica (`numbers/`).
 - Valor posicional (`numbers/`).
 - Comparar números (`numbers/`, `quantities/`).
+- Relacionar números positivos, negativos y cero con temperaturas y plantas de un edificio (`numbers/`).
 
 ### 3.2 Operaciones
 

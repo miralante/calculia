@@ -15,9 +15,9 @@
     "modMates": "🧮 Matemáticas",
     "modLogica": "🧩 Razonamiento y lógica",
 
-    "numbers": { "name": "Los Números", "detail": "Lee, ordena y compara números." },
+    "numbers": { "name": "Los Números", "detail": "Lee y compara. Aprende los positivos y negativos." },
     "places": { "name": "Sitios y tamaños", "detail": "Dentro, fuera, más largo." },
-    "shapes": { "name": "Formas", "detail": "Círculos, cuadrados y cuerpos." },
+    "shapes": { "name": "Formas", "detail": "Las formas que ves cada día." },
     "geometry": { "name": "Geometría", "detail": "Ángulos, bordes y mitades." },
     "similar": { "name": "Formas parecidas", "detail": "Tamaños, cuadrados y rampas." },
     "fractionsmeasures": { "name": "Fracciones", "detail": "Partes, mitades y decimales." },
@@ -32,8 +32,6 @@
     "romannumerals": { "name": "Números Romanos", "detail": "Aprende a reconocer los siglos." },
     "problems": { "name": "Problemas", "detail": "Entender y resolver." },
     "temperature": { "name": "Temperatura del agua", "detail": "Sube y baja los grados. Mira qué pasa con el agua." },
-    "posneg": { "name": "Positivos y negativos", "detail": "Teoría, termómetro y ascensor." },
-
     "riddles": { "name": "Adivinanzas", "detail": "¿Qué es? Piensa y elige." },
     "patterns": { "name": "Patrones", "detail": "¿Qué sigue ahora?" },
     "wallet": { "name": "El Monedero", "detail": "Paga el precio justo." },

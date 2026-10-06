@@ -15,9 +15,9 @@
     "modMates": "🧮 Math",
     "modLogica": "🧩 Reasoning and logic",
 
-    "numbers": { "name": "Numbers", "detail": "Read, order and compare numbers." },
+    "numbers": { "name": "Numbers", "detail": "Read and compare. Learn about positive and negative numbers." },
     "places": { "name": "Places and sizes", "detail": "Inside, outside, longer." },
-    "shapes": { "name": "Shapes", "detail": "Circles, squares and solids." },
+    "shapes": { "name": "Shapes", "detail": "The shapes you see every day." },
     "geometry": { "name": "Geometry", "detail": "Angles, edges and halves." },
     "similar": { "name": "Same shapes", "detail": "Sizes, squares and ramps." },
     "fractionsmeasures": { "name": "Fractions", "detail": "Parts, halves and decimals." },
@@ -32,8 +32,6 @@
     "romannumerals": { "name": "Roman Numerals", "detail": "Learn to recognize centuries." },
     "problems": { "name": "Problems", "detail": "Understand and solve." },
     "temperature": { "name": "Water Temperature", "detail": "Raise and lower the degrees. See what happens to the water." },
-    "posneg": { "name": "Positive and negative", "detail": "Theory, thermometer and elevator." },
-
     "riddles": { "name": "Riddles", "detail": "What is it? Think and choose." },
     "patterns": { "name": "Patterns", "detail": "What comes next?" },
     "wallet": { "name": "The Wallet", "detail": "Pay the right price." },

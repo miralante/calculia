@@ -19,7 +19,7 @@ grouped by the skill they work on, not by screen folder.
 | Activity | Description |
 |----------|-------------|
 | **Places and sizes** | Say where something is (inside, outside, on top, underneath, left, right) and which of two things is longer, heavier or holds more. |
-| **Numbers** | Read, write and compare whole numbers, sequences and place value. |
+| **Numbers** | Read, write and compare whole numbers, sequences and place value. Includes positive numbers, negative numbers and zero, with everyday examples and thermometer and elevator practice. |
 | **Shapes** | Compare a flat shape and a solid through pictures, recognise shapes in real objects, and practise them in tests. |
 | **Same shapes** | Tell whether two figures are the same shape at another size, count the squares on the sides of a right triangle, and compare how steep two ramps are. |
 | **Fractions** | Recognise, compare and operate with simple fractions and decimals. |

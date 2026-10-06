@@ -47,12 +47,58 @@
     unitSingular: 'unidad',
     unitPlural: 'unidades',
     activity: {
-      'positivos-y-negativos': { name: 'Positivos y negativos', detail: 'Sube y baja del ascensor.', instruction: 'Tienes un ascensor. Empieza en la planta baja (0). Pulsa + para subir a pisos de arriba (números positivos: +1, +2, +3…). Pulsa − para bajar a pisos de abajo (números negativos: −1, −2, −3…). La planta baja es el cero (0): no es positivo ni negativo.' },
+      'positivos-y-negativos': { name: 'Positivos y negativos', detail: 'Comprende los signos y practica con el termómetro y el ascensor.', instruction: 'Los números pueden estar por encima o por debajo de cero. Mira los ejemplos y practica con el termómetro y el ascensor.' },
       unidades: { name: 'Unidades y decenas', detail: '¿Qué número es?', instruction: 'Cada color ayuda a leer el número. Azul: unidades. Verde: decenas. Morado: centenas.' },
       placevalue: { name: 'Cambiar de posición', detail: '10 pequeños se cambian por 1 grande.', instruction: 'Cuando juntas 10 iguales, forman 1 del grupo siguiente. La cifra se mueve una posición a la izquierda.' },
       ordinales: { name: 'El lugar en la fila', detail: 'Primero, segundo, tercero…', instruction: 'Los números ordinales dicen qué lugar ocupa cada uno. La fila empieza en la bandera 🏁. El de al lado de la bandera es el primero.' },
       recta: { name: 'La recta de los números', detail: '¿Qué número señala la flecha?', instruction: 'Los números van en fila y en orden. La recta los coloca de menor a mayor. Cuenta desde la marca más cercana para saber cuál señala la flecha.' },
       comparar: { name: 'Mayor, menor o igual', detail: 'Los signos <, > y =.', instruction: 'Mira los dos números. El signo se abre hacia el número más grande. Si los dos son iguales, el signo es =.' }
+    },
+    signed: {
+      introInstruction: 'Primero veremos qué significan los números positivos y negativos.',
+      theoryTitle: 'Números positivos y negativos',
+      theoryIntro: 'Los números pueden estar por encima o por debajo del cero.',
+      rulePositive: 'Los positivos son mayores que 0: +1, +2, +3…',
+      ruleNegative: 'Los negativos van por debajo del 0: −1, −2, −3…',
+      ruleZero: 'El 0 no es positivo ni negativo. Es el punto de partida.',
+      numberlineAria: 'Recta numérica desde menos tres hasta más tres. El cero está en el centro.',
+      introNext: 'Ver ejemplos de la vida real →',
+      realIntro: 'Ahora veremos los números con signo en situaciones cotidianas.',
+      realTitle: 'Números con signo en el día a día',
+      realBack: '← Volver a la explicación',
+      realNext: '👉 Practicar con el termómetro →',
+      real: {
+        termometro: {
+          title: 'El termómetro',
+          text: 'Por debajo de 0 °C hace frío. −5 °C son cinco grados bajo cero. A 0 °C el agua empieza a congelarse.'
+        },
+        ascensor: {
+          title: 'El ascensor',
+          text: 'El sótano puede ser la planta −1. La planta baja es el 0. Las plantas de arriba pueden ser +1, +2…'
+        },
+        cuentas: {
+          title: 'Las cuentas',
+          text: 'Una deuda puede escribirse con un número negativo: −20 €. Un saldo a favor puede escribirse con uno positivo: +20 €.'
+        }
+      },
+      tempHint: 'Pulsa +1 o −1 para mover el termómetro. Mira si la temperatura está por encima o por debajo de 0.',
+      tempStepDown: 'Bajar un grado',
+      tempStepUp: 'Subir un grado',
+      tempReset: 'Empezar otra vez',
+      tempGoals: {
+        negative: 'Baja de 0 °C.',
+        positive: 'Sube por encima de 0 °C.',
+        zero: 'Llega justo a 0 °C.'
+      },
+      tempReadout: 'Temperatura: {value} grados Celsius',
+      sign: {
+        positive: 'Número positivo',
+        negative: 'Número negativo',
+        zero: 'Cero'
+      },
+      tempSuccess: '✅ ¡Objetivo conseguido!',
+      tempNext: 'Siguiente reto →',
+      endSummary: 'Has practicado los números positivos y negativos. Ahora tienes {stars} estrellas.'
     },
     ordinal: { 1: 'primero', 2: 'segundo', 3: 'tercero', 4: 'cuarto', 5: 'quinto' },
     ordinalPlace: { 1: 'el primer lugar', 2: 'el segundo lugar', 3: 'el tercer lugar', 4: 'el cuarto lugar', 5: 'el quinto lugar' },

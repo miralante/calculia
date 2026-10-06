@@ -506,14 +506,14 @@ ladder belongs to the **arithmetic activities** (`tools/mental-math/`,
 Putting sums into an activity that is not about sums crowds out what it
 does teach and adds a difficulty that was never the point.
 
-The clear case is the **elevator** (the `positivos-y-negativos` activity
-in `tools/numbers/`): it is there to **understand positive and negative
-numbers**, and nothing else. Floors below ground are negative, the ground
-floor is 0, the ones above are positive; the person goes up and down and
-watches the number change as it crosses zero. **It poses no operations
-and no multiple-choice questions**, and it must not: its value is that a
-negative number becomes a place you can travel to, rather than a symbol
-you have to compute with.
+The **positive and negative numbers** section in `tools/numbers/` is
+there to understand what the sign and zero mean. It first explains them
+with a number line and everyday examples, then offers guided thermometer
+and elevator challenges. Floors below ground are negative, the ground
+floor is 0, and the ones above are positive. **It poses no operations or
+multiple-choice questions**: its value is that a negative number becomes
+a place or temperature you can recognise and explore, not a symbol you
+have to compute with.
 
 **Never a carry before its time.** In the anchor levels the numbers are
 chosen so the operation does not cross a ten: when adding, the units

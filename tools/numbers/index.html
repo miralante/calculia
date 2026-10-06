@@ -18,6 +18,65 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
+    <section id="signedIntroScreen" class="hidden stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="signed.introInstruction"></p>
+      </div>
+      <div class="card centered stack signed-lesson-card">
+        <h2 data-i18n="signed.theoryTitle"></h2>
+        <div class="signed-theory">
+          <p data-i18n="signed.theoryIntro"></p>
+          <ul>
+            <li data-i18n="signed.rulePositive"></li>
+            <li data-i18n="signed.ruleNegative"></li>
+            <li data-i18n="signed.ruleZero"></li>
+          </ul>
+        </div>
+        <div class="signed-numberline" id="signedNumberline" role="img"></div>
+      </div>
+      <button type="button" class="btn" id="signedIntroNext" data-i18n="signed.introNext"></button>
+    </section>
+
+    <section id="signedRealScreen" class="hidden stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="signed.realIntro"></p>
+      </div>
+      <div class="card centered stack signed-lesson-card">
+        <h2 data-i18n="signed.realTitle"></h2>
+        <div class="signed-real-list" id="signedRealList"></div>
+      </div>
+      <div class="row signed-lesson-actions">
+        <button type="button" class="btn btn-secondary" id="signedRealBack" data-i18n="signed.realBack"></button>
+        <button type="button" class="btn" id="signedRealNext" data-i18n="signed.realNext"></button>
+      </div>
+    </section>
+
+    <section id="signedTempScreen" class="hidden stack">
+      <div class="card centered stack signed-temp-card">
+        <p class="signed-temp-goal" id="signedTempGoal"></p>
+        <div class="signed-temp-display">
+          <div class="signed-thermometer" aria-hidden="true">
+            <div class="signed-thermometer-track">
+              <div id="signedThermometerMercury" class="signed-thermometer-mercury"></div>
+            </div>
+            <span class="signed-thermometer-zero">0</span>
+          </div>
+          <div>
+            <p class="signed-temp-number" id="signedTempNumber" aria-live="polite"></p>
+            <p class="signed-temp-sign" id="signedTempSign"></p>
+          </div>
+        </div>
+      </div>
+      <p class="instruction signed-temp-hint" data-i18n="signed.tempHint"></p>
+      <p class="signed-temp-success hidden" id="signedTempSuccess" aria-live="polite"></p>
+      <div class="signed-temp-controls">
+        <button type="button" class="btn-signed-temp" data-step="-1" data-i18n-aria="signed.tempStepDown">−1</button>
+        <button type="button" class="btn-signed-temp" id="signedTempReset" data-i18n="signed.tempReset"></button>
+        <button type="button" class="btn-signed-temp" data-step="1" data-i18n-aria="signed.tempStepUp">+1</button>
+      </div>
+      <button type="button" class="btn hidden" id="signedTempNext" data-i18n="signed.tempNext"></button>
+    </section>
+
     <section id="screenMenu" class="stack">
       <div class="row center-row">
         <p class="instruction" id="instruction" data-i18n="instructionMenu">Elige una actividad.</p>

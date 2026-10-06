@@ -522,14 +522,14 @@ del catálogo. Meter cuentas en una actividad que no va de cuentas le
 quita sitio a lo que sí enseña y añade una dificultad que no venía al
 caso.
 
-El caso claro es el **ascensor** (actividad `positivos-y-negativos` en
-`tools/numbers/`): está ahí para **entender los números positivos y
-negativos**, y nada más. Las plantas bajo el suelo son negativas, la
-planta baja es el 0, las de arriba positivas; la persona sube y baja y
-ve cómo cambia el número al cruzar el cero. **No plantea operaciones ni
-preguntas de opción múltiple**, y no debe hacerlo: su valor está en que
-el número negativo se vuelva un sitio al que se puede ir, no un símbolo
-que hay que calcular.
+El bloque de **números positivos y negativos** dentro de `tools/numbers/`
+está ahí para entender qué significan el signo y el cero. Primero los
+explica con una recta numérica y ejemplos cotidianos; después propone
+retos guiados con un termómetro y un ascensor. Las plantas bajo el suelo
+son negativas, la planta baja es el 0 y las de arriba son positivas.
+**No plantea operaciones ni preguntas de opción múltiple**: su valor
+está en que el número negativo se vuelva un lugar o una temperatura que
+se puede reconocer y explorar, no un símbolo que hay que calcular.
 
 **Nunca una llevada antes de tiempo.** En los niveles de ancla, los
 números se eligen para que la operación no cruce la decena: al sumar,

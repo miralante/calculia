@@ -17,6 +17,9 @@
   var screenLevels = $('#screenLevels');
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
+  var signedIntroScreen = $('#signedIntroScreen');
+  var signedRealScreen = $('#signedRealScreen');
+  var signedTempScreen = $('#signedTempScreen');
   var promptEl = $('#prompt');
   var visualEl = $('#visual');
   var legendEl = $('#legend');
@@ -62,11 +65,37 @@
      on every render (entry, reset, "play again"). Same pattern as
      the temperature tool's #thermoSuggestion. */
   var elevatorSuggestion = $('#elevatorSuggestion');
+  var signedNumberline = $('#signedNumberline');
+  var signedRealList = $('#signedRealList');
+  var signedTempGoal = $('#signedTempGoal');
+  var signedTempNumber = $('#signedTempNumber');
+  var signedTempSign = $('#signedTempSign');
+  var signedTempMercury = $('#signedThermometerMercury');
+  var signedTempSuccess = $('#signedTempSuccess');
+  var signedTempNext = $('#signedTempNext');
+  var signedTempReset = $('#signedTempReset');
 
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
   if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
+  if (typeof progress.signedRounds !== 'number') progress.signedRounds = 0;
+  var legacySignedProgress = App.storage.get('posneg');
+  if (!progress.signedLegacyMigrated &&
+      (typeof legacySignedProgress.stars === 'number' ||
+       typeof legacySignedProgress.completedRounds === 'number')) {
+    var migratedProgress = Object.assign({}, progress);
+    migratedProgress.stars += legacySignedProgress.stars || 0;
+    migratedProgress.signedRounds = Math.max(
+      migratedProgress.signedRounds,
+      legacySignedProgress.completedRounds || 0
+    );
+    migratedProgress.signedLegacyMigrated = true;
+    if (App.storage.set(TOOL_ID, migratedProgress)) {
+      progress = migratedProgress;
+      App.storage.remove('posneg');
+    }
+  }
 
   /* Reinforce: see core in assets/js/feedback.js (App.reinforce).
      fixedQuestion allows reusing render() with an external question
@@ -87,6 +116,9 @@
   var question = null;
   var resolved = false;
   var pools = {};
+  var signedTempLevelIndex = 0;
+  var signedTempValue = 0;
+  var signedTempMission = null;
 
   function save() { App.storage.set(TOOL_ID, progress); }
   function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
@@ -541,7 +573,7 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenGame, screenEnd].forEach(function (p) {
+    [screenMenu, screenGame, screenEnd, signedIntroScreen, signedRealScreen, signedTempScreen].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -573,12 +605,118 @@
      one, so a person who comes back continues where they were. */
   function levelFromProgress() {
     var levels = activity.levels;
-    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
+    var completed = activity.id === 'positivos-y-negativos'
+      ? progress.signedRounds
+      : progress.completedRounds;
+    return levels[Math.min(completed || 0, levels.length - 1)];
   }
 
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
+    if (id === 'positivos-y-negativos') {
+      startSignedIntro();
+      return;
+    }
+    startRound(levelFromProgress());
+  }
+
+  function startSignedIntro() {
+    show(signedIntroScreen);
+    signedNumberline.innerHTML = '';
+    for (var value = -3; value <= 3; value += 1) {
+      var tick = document.createElement('span');
+      tick.className = 'signed-numberline-tick' + (value === 0 ? ' zero' : '');
+      tick.textContent = value < 0 ? '−' + Math.abs(value) : value > 0 ? '+' + value : '0';
+      signedNumberline.appendChild(tick);
+    }
+    signedNumberline.setAttribute('aria-label', App.i18n.t('signed.numberlineAria'));
+    paintStars();
+  }
+
+  function paintSignedReal() {
+    signedRealList.innerHTML = '';
+    DATA.signedNumbers.real.forEach(function (item) {
+      var row = document.createElement('div');
+      row.className = 'signed-real-item';
+      var icon = document.createElement('span');
+      icon.className = 'signed-real-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.textContent = item.object;
+      var body = document.createElement('div');
+      var title = document.createElement('h3');
+      title.textContent = App.i18n.t('signed.real.' + item.id + '.title');
+      var text = document.createElement('p');
+      text.textContent = App.i18n.t('signed.real.' + item.id + '.text');
+      body.appendChild(title);
+      body.appendChild(text);
+      row.appendChild(icon);
+      row.appendChild(body);
+      signedRealList.appendChild(row);
+    });
+  }
+
+  function startSignedTemperature() {
+    signedTempLevelIndex = 0;
+    loadSignedTemperatureMission();
+  }
+
+  function loadSignedTemperatureMission() {
+    signedTempMission = DATA.signedNumbers.temperature[signedTempLevelIndex];
+    signedTempValue = signedTempMission.start;
+    signedTempSuccess.classList.add('hidden');
+    signedTempNext.classList.add('hidden');
+    signedTempGoal.textContent = App.i18n.t('signed.tempGoals.' + signedTempMission.id);
+    show(signedTempScreen);
+    paintSignedTemperature();
+  }
+
+  function signedTemperatureReachedGoal() {
+    if (signedTempMission.target === 'negative') return signedTempValue < 0;
+    if (signedTempMission.target === 'positive') return signedTempValue > 0;
+    return signedTempValue === signedTempMission.target;
+  }
+
+  function paintSignedTemperature() {
+    var sign = signedTempValue < 0 ? 'negative' : signedTempValue > 0 ? 'positive' : 'zero';
+    var shown = signedTempValue < 0 ? '−' + Math.abs(signedTempValue)
+      : signedTempValue > 0 ? '+' + signedTempValue : '0';
+    signedTempNumber.textContent = shown + ' °C';
+    signedTempNumber.className = 'signed-temp-number sign-' + sign;
+    signedTempNumber.setAttribute('aria-label',
+      App.i18n.t('signed.tempReadout').replace('{value}', shown));
+    signedTempSign.textContent = App.i18n.t('signed.sign.' + sign);
+    signedTempSign.className = 'signed-temp-sign sign-' + sign;
+    signedTempMercury.className = 'signed-thermometer-mercury sign-' + sign;
+    signedTempMercury.style.height = Math.abs(signedTempValue) * 5 + '%';
+    signedTempMercury.style.top = signedTempValue < 0 ? '50%' : 'auto';
+    signedTempMercury.style.bottom = signedTempValue >= 0 ? '50%' : 'auto';
+    App.utils.$$('#signedTempScreen .btn-signed-temp[data-step]').forEach(function (button) {
+      var nextValue = signedTempValue + parseInt(button.getAttribute('data-step'), 10);
+      button.disabled = nextValue < DATA.signedNumbers.min || nextValue > DATA.signedNumbers.max;
+    });
+    var reached = signedTemperatureReachedGoal();
+    signedTempSuccess.classList.toggle('hidden', !reached);
+    if (reached) signedTempSuccess.textContent = App.i18n.t('signed.tempSuccess');
+    signedTempNext.classList.toggle('hidden', !reached);
+  }
+
+  function stepSignedTemperature(step) {
+    var nextValue = signedTempValue + step;
+    if (nextValue < DATA.signedNumbers.min || nextValue > DATA.signedNumbers.max) return;
+    signedTempValue = nextValue;
+    paintSignedTemperature();
+  }
+
+  function finishSignedTemperatureMission() {
+    if (!signedTemperatureReachedGoal()) return;
+    signedTempLevelIndex += 1;
+    if (signedTempLevelIndex < DATA.signedNumbers.temperature.length) {
+      loadSignedTemperatureMission();
+      return;
+    }
+    activity = DATA.activities['positivos-y-negativos'];
+    activity.id = 'positivos-y-negativos';
     startRound(levelFromProgress());
   }
 
@@ -764,7 +902,11 @@
   }
 
   function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
+    if (activity.id === 'positivos-y-negativos') {
+      progress.signedRounds += 1;
+    } else {
+      progress.completedRounds = (progress.completedRounds || 0) + 1;
+    }
     save();
     show(screenEnd);
     var summaryEl = $('#endSummary');
@@ -776,6 +918,9 @@
         .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
         .replace('{stars}', progress.stars);
     }
+    } else if (activity.id === 'positivos-y-negativos') {
+      summaryEl.textContent = App.i18n.t('signed.endSummary')
+        .replace('{stars}', progress.stars);
     } else if (level.tipo === 'ascensorLibre' || level.tipo === 'ascensorMeta') {
       /* Free-exploration elevator: no question count, only a star
          tally. Different from the counter summary to keep each
@@ -790,7 +935,8 @@
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
     var levelIndex = activity.levels.indexOf(level);
-    var nextLevel = (roundCorrect === DATA.perRound && levelIndex !== -1 && levelIndex + 1 < activity.levels.length)
+    var nextLevel = (activity.id !== 'positivos-y-negativos' &&
+      roundCorrect === DATA.perRound && levelIndex !== -1 && levelIndex + 1 < activity.levels.length)
       ? activity.levels[levelIndex + 1] : null;
     var btnHarder = $('#btnHarder');
     if (nextLevel) {
@@ -1340,9 +1486,28 @@
   var elBtnBackToMenu = $('#btnBackToMenu');
   if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
   $('#btnNext').addEventListener('click', next);
-  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnRepeat').addEventListener('click', function () {
+    if (activity.id === 'positivos-y-negativos') startSignedIntro();
+    else startRound(levelFromProgress());
+  });
   $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
   $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
+  $('#signedIntroNext').addEventListener('click', function () {
+    paintSignedReal();
+    show(signedRealScreen);
+  });
+  $('#signedRealBack').addEventListener('click', startSignedIntro);
+  $('#signedRealNext').addEventListener('click', startSignedTemperature);
+  App.utils.$$('#signedTempScreen .btn-signed-temp[data-step]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      stepSignedTemperature(parseInt(button.getAttribute('data-step'), 10));
+    });
+  });
+  signedTempReset.addEventListener('click', function () {
+    signedTempValue = signedTempMission.start;
+    paintSignedTemperature();
+  });
+  signedTempNext.addEventListener('click', finishSignedTemperatureMission);
 
   $('#noteExtra').innerHTML = App.i18n.t('notaTablas')
     .replace('{link}', '<a href="../math-tables/index.html">' + App.i18n.t('notaTablasLink') + '</a>');

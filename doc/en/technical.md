@@ -58,12 +58,12 @@ lands on a subpage directly.
 
 ```
 calculia/
-├── index.html             # Level 0: public landing = Positivos y negativos, Números Romanos, Formas
+├── index.html             # Level 0: Numbers, Roman Numerals, Shapes
 ├── styles.css             #   landing stylesheet, next to index.html
 ├── app.js                 #   landing logic, next to index.html
 ├── strings.<locale>.js    #   landing texts, es/en, next to index.html
 ├── site/index.html        # Back-compat stub only: redirects to /
-├── dev/index.html         # Hidden catalogue = the other 26 activities
+├── dev/index.html         # Hidden catalogue = the other 24 activities
 ├── assets/                # Level 1: SHARED CORE
 │   ├── css/tokens.css     #   design variables (colors, typography, touch)
 │   ├── css/base.css       #   reset, self-hosted fonts, visible focus
@@ -76,7 +76,7 @@ calculia/
 │   ├── js/dinero.js       #   window.App.dinero (used by The Wallet)
 │   ├── fonts/              #   self-hosted woff2 (Atkinson Hyperlegible, Nunito)
 │   └── img/icono.svg       #   app icon (also the PWA icon)
-├── tools/<slug>/          # Level 2: one folder per ACTIVITY (15 total)
+├── tools/<slug>/          # Level 2: one folder per ACTIVITY (27 total)
 │   ├── index.html         #   structure and asset loading
 │   ├── app.js             #   logic only
 │   ├── data.js             #   data only
@@ -90,7 +90,7 @@ calculia/
 └── _headers                # Cloudflare Pages cache and security headers
 ```
 
-Same three-level architecture as Apptonomia, scoped to 27 activities. The public `index.html` links to the three front-door activities (Positivos y negativos, Roman Numerals, Shapes); the hidden `dev/index.html` links to the other 24 activities. The list of public slugs lives in `scripts/check.js` (`PUBLIC_SLUGS`).
+Same three-level architecture as Apptonomia, scoped to 27 activities. The public `index.html` links to the three front-door activities (Numbers, Roman Numerals, Shapes); the hidden `dev/index.html` links to the other 24 activities. Positive and negative numbers are part of Numbers, not a separate tool. The list of public slugs lives in `scripts/check.js` (`PUBLIC_SLUGS`).
 
 ### 2.1 `assets/` — shared core, kept whole
 

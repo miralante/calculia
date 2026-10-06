@@ -64,12 +64,12 @@ a una subpágina.
 
 ```
 calculia/
-├── index.html             # Nivel 0: landing pública = solo Números Romanos
+├── index.html             # Nivel 0: Números, Números Romanos y Formas
 ├── styles.css             #   CSS de la landing, junto a index.html
 ├── app.js                 #   lógica de la landing, junto a index.html
 ├── strings.<locale>.js    #   textos de la landing, es/en, junto a index.html
 ├── site/index.html        # Solo stub de compatibilidad: redirige a /
-├── dev/index.html         # Catálogo oculto = las otras 26 actividades
+├── dev/index.html         # Catálogo oculto = las otras 24 actividades
 ├── assets/                # Nivel 1: NÚCLEO COMPARTIDO
 │   ├── css/tokens.css     #   variables de diseño (colores, tipografía, táctil)
 │   ├── css/base.css       #   reset, fuentes autoalojadas, foco visible
@@ -82,7 +82,7 @@ calculia/
 │   ├── js/dinero.js       #   window.App.dinero (usado por El Monedero)
 │   ├── fonts/              #   woff2 autoalojadas (Atkinson Hyperlegible, Nunito)
 │   └── img/icono.svg       #   icono de la app (también icono PWA)
-├── tools/<slug>/          # Nivel 2: una carpeta por ACTIVIDAD (14 en total)
+├── tools/<slug>/          # Nivel 2: una carpeta por ACTIVIDAD (27 en total)
 │   ├── index.html         #   estructura y carga de assets
 │   ├── app.js             #   solo lógica
 │   ├── data.js             #   solo datos
@@ -96,7 +96,7 @@ calculia/
 └── _headers                # Cabeceras de caché y seguridad de Cloudflare Pages
 ```
 
-Misma arquitectura de tres niveles que Apptonomia, acotada a 27 actividades. `index.html` pública enlaza a las tres actividades de portada (Positivos y negativos, Números Romanos, Formas); `dev/index.html`, oculta, enlaza a las 24 actividades restantes. La lista de slugs públicos vive en `scripts/check.js` (`PUBLIC_SLUGS`).
+Misma arquitectura de tres niveles que Apptonomia, acotada a 27 actividades. `index.html` pública enlaza a las tres actividades de portada (Números, Números Romanos, Formas); `dev/index.html`, oculta, enlaza a las 24 actividades restantes. Los números positivos y negativos forman parte de Números; no hay una herramienta independiente. La lista de slugs públicos vive en `scripts/check.js` (`PUBLIC_SLUGS`).
 
 ### 2.1 `assets/` — núcleo compartido, conservado entero
 

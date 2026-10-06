@@ -32,7 +32,7 @@
       'mental-math': 'Restar y Cálculo Mental', 'percent': 'Porcentajes', 'money': 'Dinero',
       'divisibility': 'Grupos exactos', 'operations': 'Cuentas grandes', 'quantities': 'Cantidades', 'math-tables': 'Las Tablas',
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',
-      'problems': 'Problemas', 'temperature': 'Temperatura del agua', 'posneg': 'Positivos y negativos',
+      'problems': 'Problemas', 'temperature': 'Temperatura del agua',
       'wallet': 'El Monedero', 'algebra': 'La balanza', 'charts': 'Datos y gráficos', 'calendar': 'El Calendario', 'clock': 'El Reloj', 'stories': 'Historias',
       'odd-one-out': '¿Qué no encaja?', 'puzzle': 'Puzzle'
     },

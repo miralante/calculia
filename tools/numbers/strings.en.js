@@ -49,12 +49,58 @@
     unitSingular: 'one',
     unitPlural: 'ones',
     activity: {
-      'positivos-y-negativos': { name: 'Positives and negatives', detail: 'Go up and down in the elevator.', instruction: 'You have an elevator. Start at the ground floor (0). Press + to go up to upper floors (positive numbers: +1, +2, +3…). Press − to go down to lower floors (negative numbers: −1, −2, −3…). The ground floor is zero (0): not positive, not negative.' },
+      'positivos-y-negativos': { name: 'Positives and negatives', detail: 'Learn the signs with a thermometer and an elevator.', instruction: 'Numbers can be above or below zero. Look at the examples and practise with the thermometer and the elevator.' },
       unidades: { name: 'Ones and tens', detail: 'What number is it?', instruction: 'Each colour helps read the number. Blue: ones. Green: tens. Purple: hundreds.' },
       placevalue: { name: 'Changing position', detail: '10 small ones become 1 big one.', instruction: 'When you put 10 of the same together, they form 1 of the next group. The digit moves one position to the left.' },
       ordinales: { name: 'Your place in the queue', detail: 'First, second, third…', instruction: 'Ordinal numbers say which place each one is in. The queue starts at the flag 🏁. The one next to the flag is first.' },
       recta: { name: 'The number line', detail: 'Which number is the arrow pointing at?', instruction: 'Numbers go in a row, in order. The line puts them from smallest to biggest. Count from the nearest mark to find the one the arrow points at.' },
       comparar: { name: 'Greater, smaller or equal', detail: 'The signs <, > and =.', instruction: 'Look at the two numbers. The sign opens towards the bigger number. If both are the same, the sign is =.' }
+    },
+    signed: {
+      introInstruction: 'First, we will learn what positive and negative numbers mean.',
+      theoryTitle: 'Positive and negative numbers',
+      theoryIntro: 'Numbers can be above or below zero.',
+      rulePositive: 'Positive numbers are greater than 0: +1, +2, +3…',
+      ruleNegative: 'Negative numbers are less than 0: −1, −2, −3…',
+      ruleZero: '0 is not positive or negative. It is the starting point.',
+      numberlineAria: 'Number line from minus three to plus three. Zero is in the middle.',
+      introNext: 'See real-life examples →',
+      realIntro: 'Now we will see signed numbers in everyday situations.',
+      realTitle: 'Signed numbers in daily life',
+      realBack: '← Back to the explanation',
+      realNext: '👉 Practise with the thermometer →',
+      real: {
+        termometro: {
+          title: 'The thermometer',
+          text: 'Below 0 °C it is cold. −5 °C is five degrees below zero. At 0 °C, water starts to freeze.'
+        },
+        ascensor: {
+          title: 'The elevator',
+          text: 'The basement can be floor −1. The ground floor is 0. Floors above can be +1, +2…'
+        },
+        cuentas: {
+          title: 'Money',
+          text: 'A debt can be written as a negative number: −€20. A positive balance can be written as a positive number: +€20.'
+        }
+      },
+      tempHint: 'Press +1 or −1 to move the thermometer. See whether the temperature is above or below 0.',
+      tempStepDown: 'Go down one degree',
+      tempStepUp: 'Go up one degree',
+      tempReset: 'Start again',
+      tempGoals: {
+        negative: 'Go below 0 °C.',
+        positive: 'Go above 0 °C.',
+        zero: 'Land exactly on 0 °C.'
+      },
+      tempReadout: 'Temperature: {value} degrees Celsius',
+      sign: {
+        positive: 'Positive number',
+        negative: 'Negative number',
+        zero: 'Zero'
+      },
+      tempSuccess: '✅ Goal reached!',
+      tempNext: 'Next challenge →',
+      endSummary: 'You practised positive and negative numbers. You now have {stars} stars.'
     },
     ordinal: { 1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth' },
     ordinalPlace: { 1: 'first place', 2: 'second place', 3: 'third place', 4: 'fourth place', 5: 'fifth place' },

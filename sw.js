@@ -3,7 +3,7 @@
    Cache-first strategy for the app shell (works offline).
    When adding new files: add them to FILES and bump VERSION.
    ============================================================ */
-var VERSION = 'calculia-v120';
+var VERSION = 'calculia-v123';
 
 var FILES = [
   './',
@@ -206,12 +206,6 @@ var FILES = [
   './tools/temperature/strings.es.js',
   './tools/temperature/strings.en.js',
   './tools/temperature/styles.css',
-    './tools/posneg/index.html',
-    './tools/posneg/app.js',
-    './tools/posneg/data.js',
-    './tools/posneg/strings.es.js',
-    './tools/posneg/strings.en.js',
-    './tools/posneg/styles.css',
   './tools/wallet/index.html',
   './tools/wallet/app.js',
   './tools/wallet/data.js',

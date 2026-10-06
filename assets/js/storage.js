@@ -68,6 +68,15 @@
     }
   }
 
+  function isLegacyPosnegMigrated() {
+    try {
+      var numbers = JSON.parse(localStorage.getItem(PREFIX + 'numbers') || '{}');
+      return numbers && numbers.signedLegacyMigrated === true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   /** Deletes a tool's progress. */
   function remove(toolId) {
     try {
@@ -87,11 +96,14 @@
       try/catch. */
   function totalStars() {
     var total = 0;
+    var skipLegacyPosneg = isLegacyPosnegMigrated();
     for (var i = 0; i < localStorage.length; i++) {
       try {
         var key = localStorage.key(i);
         if (!key || key.indexOf(PREFIX) !== 0) continue;
-        if (NON_TOOL_KEYS.indexOf(key.slice(PREFIX.length)) !== -1) continue;
+        var id = key.slice(PREFIX.length);
+        if (NON_TOOL_KEYS.indexOf(id) !== -1) continue;
+        if (skipLegacyPosneg && id === 'posneg') continue;
         var data = JSON.parse(localStorage.getItem(key) || '{}');
         if (data && typeof data.stars === 'number') {
           total += data.stars;
@@ -111,12 +123,15 @@
    */
   function toolIds() {
     var out = [];
+    var skipLegacyPosneg = isLegacyPosnegMigrated();
     try {
       for (var i = 0; i < localStorage.length; i++) {
         var key = localStorage.key(i);
         if (!key || key.indexOf(PREFIX) !== 0) continue;
         var id = key.slice(PREFIX.length);
-        if (NON_TOOL_KEYS.indexOf(id) === -1) out.push(id);
+        if (NON_TOOL_KEYS.indexOf(id) !== -1) continue;
+        if (skipLegacyPosneg && id === 'posneg') continue;
+        out.push(id);
       }
     } catch (e) { /* ignore */ }
     return out;

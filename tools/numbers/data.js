@@ -4,6 +4,8 @@
    - DATA.activities[id]: picto and levels[]. Each level: { id, tipo,
      ...config }. The 'tipo' chooses the question generator in app.js.
      Object.keys(DATA.activities) fixes the menu order.
+   - DATA.signedNumbers: lesson examples and thermometer practice for
+     positive and negative numbers.
    - DATA.readings: large numbers with their reading in words, per
      locale (DATA.readings[locale][lista]). NOTE: the numeric scale
      differs between locales (10^9 is "mil millones" in Spanish but
@@ -146,6 +148,21 @@ var DATA = {
         { id: 'meta',  tipo: 'ascensorMeta',  min: -3, max: 3, meta: -1, inicio: 2 }
       ]
     }
+  },
+
+  signedNumbers: {
+    real: [
+      { id: 'termometro', object: '🌡️' },
+      { id: 'ascensor', object: '🛗' },
+      { id: 'cuentas', object: '💰' }
+    ],
+    temperature: [
+      { id: 'negative', start: 2, target: 'negative' },
+      { id: 'positive', start: -2, target: 'positive' },
+      { id: 'zero', start: -2, target: 0 }
+    ],
+    min: -10,
+    max: 10
   },
 
   /* Large numbers and how to read them, per language. nota is shown as a hint.

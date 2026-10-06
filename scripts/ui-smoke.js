@@ -1108,7 +1108,162 @@ async function exerciseShapes(page, baseUrl) {
   return actions ? 1 : 0;
 }
 
+async function exerciseNumbers(page, baseUrl) {
+  let actions = 0;
+  await page.goto(baseUrl + '/');
+  await page.evaluate(() => {
+    localStorage.setItem('calculia:numbers', JSON.stringify({
+      stars: 2, completedRounds: 8, signedRounds: 1,
+    }));
+    localStorage.setItem('calculia:posneg', JSON.stringify({ stars: 4, completedRounds: 2 }));
+    localStorage.setItem('calculia:locale', 'es');
+  });
+  await page.reload();
+
+  const publicCard = page.locator('a[href="tools/numbers/index.html"]');
+  assert.ok(await publicCard.isVisible().catch(() => false),
+    'Números no aparece en la portada pública');
+  assert.equal(await page.locator('a[href="tools/posneg/index.html"]').count(), 0,
+    'La portada aún muestra Positivos y negativos como herramienta separada');
+  assert.ok((await publicCard.innerText()).includes('Los Números'),
+    'La tarjeta pública de Números no aparece en español');
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
+  await page.reload();
+  assert.ok((await publicCard.innerText()).includes('Numbers'),
+    'La tarjeta pública de Numbers no aparece en inglés');
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
+  await page.reload();
+  await publicCard.click();
+  await page.waitForURL('**/tools/numbers/index.html', { timeout: NAV_TIMEOUT });
+  await page.waitForSelector('#screenMenu:not(.hidden)', { timeout: NAV_TIMEOUT });
+  actions += 1;
+
+  const migrated = await page.evaluate(() => ({
+    numbers: JSON.parse(localStorage.getItem('calculia:numbers') || '{}'),
+    legacy: localStorage.getItem('calculia:posneg'),
+  }));
+  assert.equal(migrated.numbers.stars, 6,
+    'Las estrellas existentes y las de Positivos y negativos no se conservaron al migrar');
+  assert.equal(migrated.numbers.signedRounds, 2,
+    'Las rondas previas no se conservaron para la progresión del ascensor');
+  assert.equal(migrated.numbers.completedRounds, 8,
+    'La migración alteró la progresión de las demás actividades de Números');
+  assert.equal(migrated.legacy, null,
+    'El progreso anterior quedó duplicado tras migrarlo');
+
+  const signedActivity = page.locator('#activitiesMenu .btn-actividad')
+    .filter({ hasText: 'Positivos y negativos' });
+  assert.equal(await signedActivity.count(), 1,
+    'Números no incluye la actividad de positivos y negativos');
+  await signedActivity.click();
+  await page.waitForSelector('#signedIntroScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
+  assert.equal(await page.locator('#signedNumberline .signed-numberline-tick').count(), 7,
+    'La explicación no muestra una recta numérica visual');
+  actions += 1;
+
+  await page.locator('#signedIntroNext').click();
+  await page.waitForSelector('#signedRealScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
+  assert.equal(await page.locator('#signedRealList .signed-real-item').count(), 3,
+    'Faltan los ejemplos cotidianos de termómetro, ascensor o cuentas');
+  assert.ok((await page.locator('#signedRealList').innerText()).includes('El termómetro') &&
+    (await page.locator('#signedRealList').innerText()).includes('El ascensor'),
+  'Los ejemplos cotidianos no se muestran en español');
+  for (const width of [320, 375, 768, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    const documentWidth = await page.evaluate(() => ({
+      client: document.documentElement.clientWidth,
+      scroll: document.documentElement.scrollWidth,
+    }));
+    assert.ok(documentWidth.scroll <= documentWidth.client + 1,
+      'La pantalla de ejemplos tiene desbordamiento horizontal a ' + width + 'px');
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+  actions += 1;
+
+  await page.locator('#signedRealNext').click();
+  await page.waitForSelector('#signedTempScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
+  for (const width of [320, 375, 768, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    const dimensions = await page.evaluate(() => {
+      const controls = Array.from(document.querySelectorAll(
+        '#signedTempScreen .btn-signed-temp'
+      )).map(button => {
+        const rect = button.getBoundingClientRect();
+        return { left: rect.left, right: rect.right, height: rect.height };
+      });
+      return {
+        client: document.documentElement.clientWidth,
+        scroll: document.documentElement.scrollWidth,
+        controls,
+      };
+    });
+    assert.ok(dimensions.scroll <= dimensions.client + 1,
+      'La pantalla del termómetro tiene desbordamiento horizontal a ' + width + 'px');
+    assert.ok(dimensions.controls.every(control =>
+      control.left >= 0 && control.right <= width && control.height >= 44),
+    'Los controles del termómetro no caben o no tienen un tamaño táctil usable a ' + width + 'px');
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+  for (let step = 0; step < 3; step += 1) {
+    await page.locator('#signedTempScreen [data-step="-1"]').click();
+  }
+  assert.equal((await page.locator('#signedTempNumber').innerText()).trim(), '−1 °C',
+    'El termómetro no cambia al cruzar el cero hacia los negativos');
+  await page.locator('#signedTempNext').click();
+  for (let step = 0; step < 3; step += 1) {
+    await page.locator('#signedTempScreen [data-step="1"]').click();
+  }
+  assert.equal((await page.locator('#signedTempNumber').innerText()).trim(), '+1 °C',
+    'El termómetro no cambia al cruzar el cero hacia los positivos');
+  await page.locator('#signedTempNext').click();
+  for (let step = 0; step < 2; step += 1) {
+    await page.locator('#signedTempScreen [data-step="1"]').click();
+  }
+  assert.equal((await page.locator('#signedTempNumber').innerText()).trim(), '0 °C',
+    'El último reto no llega exactamente a cero');
+  await page.locator('#signedTempNext').click();
+  await page.waitForSelector('#elevatorUI:not(.hidden)', { timeout: NAV_TIMEOUT });
+  for (let step = 0; step < 3; step += 1) {
+    await page.locator('#elevatorUI .btn-elevator[data-step="-1"]').click();
+  }
+  assert.ok((await page.locator('#feedback').innerText()).includes('¡Has llegado'),
+    'El ascensor no confirma la llegada al piso negativo objetivo');
+  await page.locator('#elevatorExit').click();
+  await page.waitForSelector('#screenEnd:not(.hidden)', { timeout: NAV_TIMEOUT });
+  assert.match(await page.locator('#endSummary').innerText(), /positivos y negativos/,
+    'El resumen no corresponde a la práctica integrada');
+  actions += 9;
+
+  const completed = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem('calculia:numbers') || '{}'));
+  assert.equal(completed.signedRounds, 3,
+    'La actividad integrada no continúa la progresión guardada');
+  assert.equal(completed.stars, 7,
+    'El progreso de estrellas no se conserva ni se actualiza correctamente');
+  assert.equal(completed.completedRounds, 8,
+    'Completar el ascensor alteró el progreso de las demás actividades de Números');
+
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
+  await page.reload();
+  await page.waitForSelector('#screenMenu:not(.hidden)', { timeout: NAV_TIMEOUT });
+  await page.locator('#activitiesMenu .btn-actividad')
+    .filter({ hasText: 'Positives and negatives' }).click();
+  await page.waitForSelector('#signedIntroScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
+  assert.ok((await page.locator('#signedIntroScreen').innerText()).includes('Positive and negative numbers'),
+    'La explicación de números con signo no está traducida al inglés');
+  await page.locator('#signedIntroNext').click();
+  assert.ok((await page.locator('#signedRealList').innerText()).includes('The thermometer'),
+    'Los ejemplos cotidianos no están traducidos al inglés');
+  actions += 2;
+  await page.locator('#signedRealBack').click();
+
+  return actions ? 1 : 0;
+}
+
 async function exerciseFullFunctionality(page, baseUrl, route) {
+  if (APP === 'calculia' && route.includes('/tools/numbers/')) {
+    return exerciseNumbers(page, baseUrl);
+  }
   if (APP === 'calculia' && route.includes('/tools/shapes/')) {
     return exerciseShapes(page, baseUrl);
   }
