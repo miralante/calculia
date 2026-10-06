@@ -155,6 +155,17 @@ async function waitForApp(page) {
 async function languageLocator(page, language) {
   const btn = page.locator('#locale-picker .locale-picker-btn');
   if (await btn.count()) {
+    /* Con `languageInDrawer` el desplegable vive DENTRO del cajon, asi
+       que no siempre esta a la vista. No basta con abrirlo una vez al
+       principio: `App.i18n.setLocale()` hace `location.reload()`, y al
+       recargar el cajon vuelve a cerrarse. Se abre aqui, justo antes de
+       pulsar, que es cuando puede hacer falta. El cierre lo hace
+       `exerciseLanguages()` en su `finally`. */
+    const drawer = page.locator('#accessibility-settings');
+    if (await drawer.count() && !await drawer.isVisible().catch(() => false)) {
+      await page.locator('.locale-settings-trigger').click();
+      await drawer.waitFor({ state: 'visible', timeout: 5000 });
+    }
     const panel = page.locator('#locale-picker .locale-picker-panel');
     if (!await panel.isVisible().catch(() => false)) await btn.click();
     return panel.locator('li[data-locale="' + language + '"]');
@@ -168,6 +179,17 @@ async function languageLocator(page, language) {
   ].join(', ')).first();
 }
 
+/* El desplegable es la primera fila del cajón de ajustes, asi que abrir el
+   ⚙️ es parte del ejercicio de idioma —y cerrarlo tambien: el backdrop se
+   queda encima y las tres funciones que van despues en runRoute() chocan
+   contra el, con un fallo que aparece lejos de su causa. */
+async function closeSettingsDrawer(page) {
+  const drawer = page.locator('#accessibility-settings');
+  if (!await drawer.count() || !await drawer.isVisible().catch(() => false)) return;
+  await drawer.locator('[data-settings-close]').click().catch(() => {});
+  await drawer.waitFor({ state: 'hidden', timeout: 3000 }).catch(() => {});
+}
+
 async function languageIsActive(page, button, language) {
   const lang = (await page.locator('html').getAttribute('lang')) || '';
   if (lang.toLowerCase().startsWith(language)) return true;
@@ -179,27 +201,36 @@ async function languageIsActive(page, button, language) {
 }
 
 async function exerciseLanguages(page) {
-  const en = await languageLocator(page, 'en');
-  if (!await en.count() || !await en.isVisible().catch(() => false)) return;
-  const before = await page.locator('main, #app, #contenido, #main, .container, body').first()
-    .innerText().catch(() => '');
-  await en.click();
-  await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
-  await page.waitForTimeout(SETTLE_MS);
-  const after = await page.locator('main, #app, #contenido, #main, .container, body').first()
-    .innerText().catch(() => '');
-  /* Se vuelve a pedir la opcion: el panel se cierra al elegir, asi que la
-     de antes ya no es visible. */
-  const enAgain = await languageLocator(page, 'en');
-  assert.ok(await languageIsActive(page, enAgain, 'en') || before !== after,
-    'El selector no activa English');
-  const es = await languageLocator(page, 'es');
-  if (await es.count() && await es.isVisible().catch(() => false)) {
-    await es.click();
+  /* Abrir el ⚙️ es cosa de `languageLocator()`, que es quien lo necesita y
+     quien sabe si hace falta: entre una llamada y otra la app puede
+     recargar y cerrarlo. Aquí solo se cuenta si existe, para poder
+     devolverlo a su sitio al terminar con el `finally` de abajo. */
+  const hasDrawer = await page.locator('#accessibility-settings').count();
+  try {
+    const en = await languageLocator(page, 'en');
+    if (!await en.count() || !await en.isVisible().catch(() => false)) return;
+    const before = await page.locator('main, #app, #contenido, #main, .container, body').first()
+      .innerText().catch(() => '');
+    await en.click();
     await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
     await page.waitForTimeout(SETTLE_MS);
-    const esAgain = await languageLocator(page, 'es');
-    assert.ok(await languageIsActive(page, esAgain, 'es'), 'El selector no vuelve a Español');
+    const after = await page.locator('main, #app, #contenido, #main, .container, body').first()
+      .innerText().catch(() => '');
+    /* Se vuelve a pedir la opcion: el panel se cierra al elegir, asi que la
+       de antes ya no es visible. */
+    const enAgain = await languageLocator(page, 'en');
+    assert.ok(await languageIsActive(page, enAgain, 'en') || before !== after,
+      'El selector no activa English');
+    const es = await languageLocator(page, 'es');
+    if (await es.count() && await es.isVisible().catch(() => false)) {
+      await es.click();
+      await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
+      await page.waitForTimeout(SETTLE_MS);
+      const esAgain = await languageLocator(page, 'es');
+      assert.ok(await languageIsActive(page, esAgain, 'es'), 'El selector no vuelve a Español');
+    }
+  } finally {
+    if (hasDrawer) await closeSettingsDrawer(page);
   }
 }
 
@@ -396,15 +427,17 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
     await page.locator('.locale-settings-trigger').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
     assert.strictEqual(await page.locator('html').getAttribute('data-theme'), 'contrast',
       'El alto contraste debe continuar activo después de recargar');
-    /* El idioma es un control de primer nivel en la cabecera, no un
-       subapartado del cajón: se cambia sin abrir los ajustes. La recarga
-       anterior deja el cajón cerrado, y su fondo a pantalla completa
-       interceptaría el clic en la cabecera si no lo estuviera. */
-    await page.locator('#accessibility-settings').waitFor({ state: 'hidden', timeout: NAV_TIMEOUT });
+    /* El idioma vive DENTRO del cajón de ajustes (`languageInDrawer` en el
+       config de esta app), no como control suelto en la cabecera: hay que
+       abrir el ⚙️ para cambiarlo. La recarga anterior deja el cajón
+       cerrado, así que se abre aquí. */
+    await page.locator('.locale-settings-trigger').click();
+    const languageDrawer = page.locator('#accessibility-settings');
+    await languageDrawer.waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
 
-    const languagePicker = page.locator('#locale-picker .locale-picker-btn');
+    const languagePicker = languageDrawer.locator('.locale-picker-btn');
     await languagePicker.click();
-    const english = page.locator('#locale-picker .locale-picker-panel li[data-locale="en"]');
+    const english = languageDrawer.locator('.locale-picker-panel li[data-locale="en"]');
     await english.waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
     await english.click();
     /* Choosing a language swaps the document, so for an instant there is
@@ -415,28 +448,27 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
       !!(document.documentElement && document.documentElement.lang.slice(0, 2) === 'en'),
     null, { timeout: NAV_TIMEOUT });
     assert.strictEqual((await page.locator('html').getAttribute('lang') || '').slice(0, 2), 'en',
-      'El desplegable de la cabecera debe cambiar el idioma activo de la app');
+      'El desplegable del cajón debe cambiar el idioma activo de la app');
     assert.strictEqual((await languagePicker.locator('.locale-picker-current').textContent()).trim(), 'EN');
 
-    /* El engranaje queda arriba a la derecha: hermano inmediato del
-       desplegable, en la misma fila alineada al final. */
+    /* El ⚙️ se queda solo en la fila de la cabecera y el idioma, dentro.
+       Se comprueba que el engranaje es el último de su fila en vez de que
+       esté solo, porque esa fila puede llevar otros controles. */
     const gearRow = await page.evaluate(() => {
-      const picker = document.getElementById('locale-picker');
       const gear = document.querySelector('.locale-settings-trigger');
+      const drawer = document.getElementById('accessibility-settings');
+      const picker = document.getElementById('locale-picker');
       return {
-        sameRow: !!gear && gear.parentNode === picker.parentNode,
-        gearAfterPicker: !!gear && picker.nextElementSibling === gear,
-        alignsEnd: getComputedStyle(picker.parentNode).justifyContent === 'flex-end',
+        pickerInDrawer: drawer.contains(picker),
+        gearIsLast: !!gear && gear.parentNode.lastElementChild === gear,
+        alignsEnd: getComputedStyle(gear.parentNode).justifyContent === 'flex-end',
       };
     });
-    assert.ok(gearRow.sameRow, 'El engranaje debe compartir fila con el desplegable de idioma');
-    assert.ok(gearRow.gearAfterPicker, 'El engranaje debe ir justo detrás del desplegable, a la derecha');
+    assert.strictEqual(await page.locator('#accessibility-settings .locale-picker-btn').count(), 1,
+      'El cajón debe traer el desplegable de idioma');
+    assert.ok(gearRow.pickerInDrawer, 'El selector de idioma debe vivir dentro del cajón de ajustes');
+    assert.ok(gearRow.gearIsLast, 'El engranaje debe quedar arriba a la derecha, el último de su fila');
     assert.ok(gearRow.alignsEnd, 'La fila de controles debe alinearse al final para quedar arriba a la derecha');
-
-    /* El cajón no repite el idioma ni enlaza a la página de ajustes
-       propia del proyecto: eso era una configuración repetida. */
-    assert.strictEqual(await page.locator('#accessibility-settings .locale-picker-btn').count(), 0,
-      'El selector de idioma no debe vivir dentro del cajón de ajustes');
     assert.strictEqual(await page.locator('#accessibility-settings [data-settings-more]').count(), 0,
       'El cajón no debe enlazar a la página de ajustes propia del proyecto');
   } finally {
@@ -828,7 +860,246 @@ async function exerciseActivityApp(page) {
   return actions ? 1 : 0;
 }
 
-async function exerciseFullFunctionality(page, route) {
+async function exerciseShapes(page, baseUrl) {
+  let actions = 0;
+  await page.goto(baseUrl + '/');
+  await page.evaluate(() => localStorage.removeItem('calculia:shapes'));
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
+  await page.reload();
+  const publicCard = page.locator('a[href="tools/shapes/index.html"]');
+  assert.ok(await publicCard.isVisible().catch(() => false),
+    'Formas no aparece en la portada pública');
+  assert.ok((await publicCard.innerText()).includes('Formas'),
+    'La tarjeta pública no muestra el nombre en español');
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
+  await page.reload();
+  assert.ok(await publicCard.isVisible().catch(() => false),
+    'Shapes no aparece en la portada pública en inglés');
+  assert.ok((await publicCard.innerText()).includes('Shapes'),
+    'La tarjeta pública no muestra el nombre en inglés');
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
+  await page.reload();
+  await publicCard.click();
+  await page.waitForURL('**/tools/shapes/index.html', { timeout: NAV_TIMEOUT });
+  await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
+  actions += 1;
+
+  const introCards = page.locator('#galleryVisual .shape-compare-item');
+  assert.equal(await introCards.count(), 2,
+    'La primera diapositiva no compara visualmente una forma plana y un cuerpo');
+  assert.deepEqual(await introCards.locator('h2').allInnerTexts(),
+    ['Forma plana', 'Cuerpo'],
+    'La primera diapositiva no presenta los dos conceptos con claridad');
+  assert.ok((await introCards.nth(0).innerText()).includes('dibujo') &&
+    (await introCards.nth(1).innerText()).includes('pelota'),
+  'La explicación inicial no usa ejemplos visuales y palabras cotidianas');
+  assert.equal(await introCards.locator('.intro-side-mark, .intro-corner-mark').count(), 0,
+    'La primera diapositiva adelanta las marcas de lado y esquina');
+  assert.ok(await page.locator('#galleryCaption').isHidden(),
+    'La primera diapositiva muestra una explicación duplicada');
+  await page.locator('#galleryNext').click();
+  const partCards = page.locator('#galleryVisual .shape-part-item');
+  assert.deepEqual(await partCards.locator('h2').allInnerTexts(), ['Lado', 'Esquina'],
+    'La segunda diapositiva no presenta lado y esquina en paralelo');
+  assert.ok((await partCards.nth(0).innerText()).includes('línea recta') &&
+    (await partCards.nth(1).innerText()).includes('juntan dos lados'),
+  'La segunda diapositiva no explica lado y esquina');
+  assert.ok(await partCards.nth(0).locator('.intro-side-mark').count() &&
+    await partCards.nth(1).locator('.intro-corner-mark').count(),
+  'La explicación de lado y esquina no tiene marcas visuales');
+  await page.locator('#galleryNext').click();
+
+  const galleryNames = [];
+  const galleryCount = await page.evaluate(() => window.DATA.gallery.length);
+  for (let i = 0; i < galleryCount; i += 1) {
+    galleryNames.push(await page.locator('#galleryVisual').getAttribute('aria-label'));
+    assert.ok((await page.locator('#galleryCaption').innerText()).trim(),
+      'Falta la explicación de una forma en la galería');
+    assert.equal(await page.locator('#galleryCaption').evaluate(node =>
+      getComputedStyle(node).textTransform), 'capitalize',
+    'El nombre de la forma no destaca con mayúscula inicial');
+    assert.equal(await page.locator('#galleryCaption').evaluate(node => node.textContent.trim()),
+      galleryNames[galleryNames.length - 1],
+      'La galería añade detalles sobre lados, esquinas o caras en vez de presentar la forma');
+    if (i < galleryCount - 1) {
+      await page.locator('#galleryNext').click();
+      actions += 1;
+    }
+  }
+  assert.equal(new Set(galleryNames).size, galleryCount,
+    'La galería no presenta todas las formas y cuerpos sin omisiones');
+  assert.ok(galleryNames.includes('círculo') && galleryNames.includes('hexágono') &&
+    galleryNames.includes('octágono') && galleryNames.includes('cubo') &&
+    galleryNames.includes('cono'),
+  'La galería no incluye formas planas y cuerpos geométricos');
+  await page.locator('#galleryNext').click();
+  assert.equal(await introCards.count(), 2,
+    'La galería no vuelve a la primera diapositiva al terminar');
+
+  await page.locator('#introContinue').click();
+  assert.ok(await page.locator('#screenReal').isVisible(),
+    'La introducción no avanza a los ejemplos reales');
+  actions += 1;
+  assert.ok(await page.locator('#realSide').isHidden(),
+    'La explicación de los lados aparece junto al ejemplo del círculo');
+  const realExamples = [];
+  const realCount = await page.evaluate(() => window.DATA.gallery.length);
+  for (let i = 0; i < realCount; i += 1) {
+    assert.equal(await page.locator('#realSide').isVisible(), i > 0 && i < 9,
+      'La explicación de los lados no coincide con el ejemplo cotidiano');
+    realExamples.push((await page.locator('#realCaption').innerText()).trim());
+    if (i < realCount - 1) {
+      await page.locator('#realNext').click();
+      actions += 1;
+    }
+  }
+  assert.equal(new Set(realExamples).size, realCount,
+    'No hay un ejemplo cotidiano distinto para cada forma');
+  for (let i = 0; i < realCount - 9; i += 1) {
+    await page.locator('#realPrev').click();
+    actions += 1;
+  }
+  assert.ok(await page.locator('#realSide').isVisible(),
+    'La explicación del lado no aparece con una forma plana');
+  assert.equal((await page.locator('#realSide').innerText()).trim(),
+    'Cada línea recta del borde de una forma plana es un lado.',
+    'La explicación práctica no define qué es un lado');
+  await page.locator('#realNext').click();
+  assert.ok(await page.locator('#realSide').isHidden(),
+    'La explicación del lado aparece en un ejemplo de cuerpo');
+  await page.locator('#realContinue').click();
+  assert.ok(await page.locator('#screenMenu').isVisible(),
+    'Los ejemplos reales no avanzan al menú de test');
+  actions += 1;
+
+  async function chooseCorrectAnswer(activityId, levelId) {
+    const correctIndex = await page.evaluate(({ activityId, levelId }) => {
+      const activity = window.DATA.activities[activityId];
+      const level = activity.levels.find(item => item.id === levelId);
+      const visual = document.querySelector('#visual');
+      const visualName = visual.getAttribute('aria-label') || '';
+      const buttons = Array.from(document.querySelectorAll('#options .option-btn'));
+      let answer;
+      if (level.tipo === 'shapeName') {
+        answer = visualName;
+      } else if (level.tipo === 'shapeCount') {
+        const shapeId = Object.keys(window.DATA.sides).find(id =>
+          window.App.i18n.t('shape.' + id) === visualName);
+        answer = String(window.DATA.sides[shapeId][level.count]);
+      } else if (level.tipo === 'solidName') {
+        answer = visualName;
+      } else if (level.tipo === 'solidParts') {
+        const match = visualName.match(/(\d+)\s+caras?/);
+        if (!match) throw new Error('No se pudo leer el número de caras: ' + visualName);
+        answer = match[1];
+      } else if (level.tipo === 'fromNet') {
+        const counts = {
+          T: visual.querySelectorAll('.net-tri').length,
+          S: visual.querySelectorAll('.net-square').length,
+          R: visual.querySelectorAll('.net-rect').length,
+        };
+        const net = window.DATA.nets.find(item => {
+          const pieces = item.rows.join('').split('');
+          return pieces.filter(ch => ch === 'T').length === counts.T &&
+            pieces.filter(ch => ch === 'S').length === counts.S &&
+            pieces.filter(ch => ch === 'R').length === counts.R;
+        });
+        if (!net) throw new Error('El desarrollo mostrado no coincide con ningún cuerpo');
+        answer = window.App.i18n.t('net.' + net.id + '.name');
+      }
+      return buttons.findIndex(button =>
+        (button.getAttribute('aria-label') || button.innerText).trim() === answer);
+    }, { activityId, levelId });
+    assert.ok(correctIndex >= 0,
+      'No se encontró respuesta correcta para ' + activityId + '/' + levelId);
+    const options = page.locator('#options .option-btn');
+    await options.nth(correctIndex).click();
+    await page.waitForSelector('#btnNext:not(.hidden)', { timeout: NAV_TIMEOUT });
+    assert.ok(await options.nth(correctIndex).evaluate(node => node.classList.contains('correct')),
+      'La respuesta calculada no fue aceptada para ' + activityId + '/' + levelId);
+    await page.locator('#btnNext').click();
+  }
+
+  const activityIds = ['planas', 'cuerpos', 'desarrollos'];
+  for (const activityId of activityIds) {
+    if (activityIds.indexOf(activityId) > 0) {
+      await page.locator('#btnMenu').click();
+    }
+    const levels = await page.evaluate(id =>
+      window.DATA.activities[id].levels.map(level => ({
+        id: level.id,
+        name: window.App.i18n.t('level.' + level.id),
+      })), activityId);
+    if (activityId === 'planas') {
+      const countLevels = await page.evaluate(() => {
+        const levelsById = Object.fromEntries(
+          window.DATA.activities.planas.levels.map(level => [level.id, level]));
+        return ['g5', 'g6'].map(id => ({
+          id,
+          count: levelsById[id].count,
+          shapes: levelsById[id].shapes,
+          values: [...new Set(levelsById[id].shapes.map(shape =>
+            window.DATA.sides[shape][levelsById[id].count]))].sort(),
+        }));
+      });
+      assert.deepEqual(countLevels, [
+        {
+          id: 'g5',
+          count: 'sides',
+          shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon'],
+          values: [3, 4, 5],
+        },
+        {
+          id: 'g6',
+          count: 'corners',
+          shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon'],
+          values: [3, 4, 5],
+        },
+      ], 'Los tests no cuentan lados y esquinas desde el triángulo hasta el pentágono');
+    }
+    const activityButtonIndex = activityIds.indexOf(activityId);
+    await page.locator('#activitiesMenu .btn-actividad').nth(activityButtonIndex).click();
+    const firstLevelType = await page.evaluate(id => window.DATA.activities[id].levels[0].tipo, activityId);
+    if (firstLevelType === 'shapeName') {
+      assert.match(await page.locator('#prompt').innerText(), /¿Qué forma es\?/,
+        'El test de formas planas no empieza por reconocer sus nombres');
+    } else if (firstLevelType === 'solidName') {
+      assert.match(await page.locator('#prompt').innerText(), /¿Qué forma tiene este objeto\?/,
+        'El test de cuerpos no empieza por reconocer objetos familiares');
+    } else if (firstLevelType === 'solidParts') {
+      assert.match(await page.locator('#prompt').innerText(), /¿Cuántas caras tiene\?/,
+        'El test de desarrollos no empieza contando sus caras');
+    }
+    actions += 1;
+    for (let levelIndex = 0; levelIndex < levels.length; levelIndex += 1) {
+      for (let question = 0; question < 6; question += 1) {
+        await chooseCorrectAnswer(activityId, levels[levelIndex].id);
+        actions += 2;
+      }
+      await page.waitForSelector('#screenEnd:not(.hidden)', { timeout: NAV_TIMEOUT });
+      assert.match(await page.locator('#endSummary').innerText(), /6 preguntas/,
+        'El resumen no refleja las seis respuestas correctas');
+      if (levelIndex + 1 < levels.length) {
+        const harder = page.locator('#btnHarder');
+        await page.waitForFunction(() => {
+          const button = document.querySelector('#btnHarder');
+          return button && !button.classList.contains('hidden');
+        });
+        assert.ok((await harder.innerText()).includes(levels[levelIndex + 1].name),
+          'No se ofrece el nivel siguiente de forma progresiva');
+        await harder.click();
+        actions += 1;
+      }
+    }
+  }
+
+  return actions ? 1 : 0;
+}
+
+async function exerciseFullFunctionality(page, baseUrl, route) {
+  if (APP === 'calculia' && route.includes('/tools/shapes/')) {
+    return exerciseShapes(page, baseUrl);
+  }
   if (APP === 'apptonomia' && route.includes('/project/')) {
     return exerciseApptonomiaProject(page);
   }
@@ -867,6 +1138,31 @@ async function waitInsideViewport(page, locator, timeout = 700) {
   return false;
 }
 
+/* Pulsa un control tolerando las transiciones. El recorrido pulsa y solo
+   espera 25 ms, asi que el control siguiente puede medirse mientras un
+   panel se abre o una tarjeta crece: Playwright lo rechaza con 'Element is
+   outside of the viewport' aunque la app este perfectamente bien. Se deja
+   que la animacion se detenga, se mete el elemento en el viewport a
+   proposito y se reintenta. Devuelve si el control quedo pulsado. */
+async function clickControl(page, locator) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      await locator.click({ timeout: 2000, force: true });
+      return true;
+    } catch (error) {
+      if (!await locator.isVisible().catch(() => false)) return false;
+      await locator.scrollIntoViewIfNeeded({ timeout: 1000 }).catch(() => {});
+      try {
+        await locator.click({ timeout: 2000, force: true });
+        return true;
+      } catch (retryError) {
+        await page.waitForTimeout(220);
+      }
+    }
+  }
+  return false;
+}
+
 async function exerciseControls(page) {
   const seen = new Set();
   let actions = 0;
@@ -899,7 +1195,6 @@ async function exerciseControls(page) {
       const identity = state + '|' + control.tag + '|' + control.id + '|' +
         control.href + '|' + control.text;
       if (seen.has(identity)) continue;
-      seen.add(identity);
       const selector = control.tag === 'BUTTON' ? 'button:visible' :
         control.tag === 'SUMMARY' ? 'summary:visible' : 'a[href^="#"]:visible';
       const locator = page.locator(selector).nth(control.index);
@@ -907,16 +1202,47 @@ async function exerciseControls(page) {
       /* Let a sliding panel finish entering before clicking it. */
       await waitInsideViewport(page, locator);
       await settleDrawerTransition(page);
+      /* El indice sale de una foto del DOM y el recorrido va pulsando: en
+         cuanto se pulsa un control la vista puede cambiar (una carta abre un
+         panel, un boton navega) y 'button:visible' ya no es la misma lista,
+         de modo que .nth(control.index) resuelve un elemento DISTINTO del
+         inventariado. Sin esta comprobacion el smoke accuse a la app de un
+         boton que no podia pulsar: el indice caduco, no se rompio nada. Si el
+         elemento que resuelve el indice ya no es el del inventario se salta,
+         y se reintenta en la ronda siguiente con el DOM ya refrescado. */
+      const stillInventoried = await locator.evaluate((node, expected) => {
+        const text = (node.innerText || node.getAttribute('aria-label') || '').trim().slice(0, 100);
+        return node.tagName === expected.tag &&
+          (node.id || '') === expected.id &&
+          (node.getAttribute('href') || '') === expected.href &&
+          text === expected.text;
+      }, control).catch(() => false);
+      if (!stillInventoried) continue;
+      /* Solo se marca como visto lo que se ha pulsado de verdad. Marcandolo
+         antes de comprobar el indice, el control se saltaba y no volvia a
+         intentarse en ninguna de las 12 rondas: el smoke dejaba de fallar
+         pero tambien dejaba de probar (medido: -54% de interacciones). */
+      seen.add(identity);
       try {
         if (control.tag === 'A') await locator.evaluate(node => node.click());
         else await locator.click({ timeout: 2000, force: true });
         actions += 1;
         await page.waitForTimeout(25);
       } catch (error) {
-        if (await locator.isVisible().catch(() => false)) {
-          throw new Error('No se pudo activar ' + control.tag + '#' +
-            (control.id || '(sin id)') + ' "' + control.text + '": ' + error.message);
+        /* Si el elemento sigue en pantalla tras el fallo, se reintenta una
+           vez dejandolo entrar en el viewport antes de declararlo fallo
+           real. El error tipico es 'Element is outside of the viewport'
+           por una transicion a medias, no un boton roto (lo reproducia
+           okeymoney en /#block-practica con #unidad-bankProducts, que un
+           clic de verdad si acepta). */
+        if (!await locator.isVisible().catch(() => false)) continue;
+        if (await clickControl(page, locator)) {
+          actions += 1;
+          await page.waitForTimeout(25);
+          continue;
         }
+        throw new Error('No se pudo activar ' + control.tag + '#' +
+          (control.id || '(sin id)') + ' "' + control.text + '": ' + error.message);
       }
     }
   }
@@ -990,7 +1316,7 @@ async function runRoute(browser, baseUrl, route) {
       await page.goto(baseUrl + route, { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
       await waitForApp(page);
     }
-    const journeys = await exerciseFullFunctionality(page, route);
+    const journeys = await exerciseFullFunctionality(page, baseUrl, route);
     const count = await exerciseControls(page);
     assert.deepEqual(errors.page, [], 'Errores de página: ' + errors.page.join('; '));
     assert.deepEqual(errors.console, [], 'Errores de consola: ' + errors.console.join('; '));

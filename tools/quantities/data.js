@@ -31,7 +31,7 @@
 var DATA = {
   perRound: 6,
   /* Absolute ceiling of the activity. The user asked "up to one
-     trillion" (10⁹). In Spanish 10� reads "mil millones" — we do
+     trillion" (10⁹). In Spanish 10⁹ reads "mil millones" — we do
      not use the word "billón" to avoid introducing a new unit;
      the ceiling is 999,999,999, which falls in the "mil millones"
      group. */

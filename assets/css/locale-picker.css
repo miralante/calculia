@@ -151,6 +151,16 @@
   left: 0;
 }
 
+/* Con `languageInDrawer` el desplegable se traslada al cajón COMPARTIDO y
+   pasa a ser su primera fila: el rótulo arriba y el desplegable debajo,
+   como las demás filas del cajón. La fila estira el contenedor a todo el
+   ancho y el panel se ancla a la izquierda —igual que dentro del cajón
+   propio de Teclatlon—, porque alineado a la derecha se saldría de la
+   fila y su mitad quedaría bajo el fondo del cajón: visible, pero sin
+   recibir el clic. */
+.locale-settings-language #locale-picker { width: 100%; }
+.locale-settings-drawer #locale-picker .locale-picker-panel { right: auto; left: 0; }
+
 /* Opciones */
 .locale-picker-panel li {
   display: flex;

@@ -19,6 +19,11 @@
    duplicated configuration this drawer is meant to avoid.
    ========================================================================== */
 window.LocalePickerConfig = {
+  /* El selector de idioma va DENTRO del cajón del ⚙️, como primera
+     fila, y el ⚙️ se queda solo en la cabecera. Antes vivía al lado
+     del ⚙️ en la fila de controles y eran dos sitios donde cambiar
+     preferencias. Coste: un clic más para llegar al idioma. */
+  languageInDrawer: true,
   storageKey: 'calculia:locale',
   /* Calculia keeps the landing strings next to the page (at the site
      root), not under assets/js/, so discovery is skipped: no HEAD probes,
