@@ -171,9 +171,10 @@ Según tu rol y perfil, te interesa una u otra documentación:
 Calculia crece añadiendo **actividades** bajo `tools/<slug>/`. Cada
 actividad trae los seis archivos canónicos (`index.html`, `app.js`,
 `data.js`, `strings.es.js`, `strings.en.js`, `styles.css`); cualquier
-cambio tiene que respetar el catálogo: la portada pública muestra Números
-Romanos, `dev/` muestra las demás actividades, y ambas rutas juntas cubren
-los slugs de `tools/`, `config/` y `sw.js`.
+cambio tiene que respetar el catálogo: la portada pública muestra Positivos
+y negativos, Números Romanos y Formas (en ese orden), `dev/` muestra las
+demás actividades, y ambas rutas juntas cubren los slugs de `tools/`,
+`config/` y `sw.js`.
 
 Para añadir una actividad nueva:
 
@@ -204,11 +205,13 @@ node scripts/check.js
 
 No hace falta 
 pm install` — el script solo usa la librería estándar de
-Node. Comprueba sintaxis JS en `tools/`, la ra�z del sitio y `assets/js/`, la
+Node. Comprueba sintaxis JS en `tools/`, la ra�z del sitio y `assets/js/`, la
 anatomía canónica de cada carpeta de actividad, paridad entre `sw.js`
 y el contenido en disco, paridad de claves es/en, y la regla de paridad
-del catálogo: Números Romanos es la única actividad pública; `dev/index.html`
-muestra las demás y, entre ambas páginas, están todos los slugs de `tools/`,
+del catálogo: Positivos y negativos, Números Romanos y Formas son las
+actividades públicas (definidas como `PUBLIC_SLUGS` en `scripts/check.js`);
+`dev/index.html` muestra las demás y, entre ambas páginas, están todos los
+slugs de `tools/`,
 además de las filas de `config/index.html` y `ARCHIVOS` de `sw.js`. El
 mismo script corre en cada push y PR vía
 [`.github/workflows/validate.yml`](.github/workflows/validate.yml).

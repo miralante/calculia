@@ -96,7 +96,7 @@ calculia/
 └── _headers                # Cabeceras de caché y seguridad de Cloudflare Pages
 ```
 
-Misma arquitectura de tres niveles que Apptonomia, acotada a 27 actividades. `index.html` pública enlaza solo a Números Romanos; `dev/index.html`, oculta, enlaza a las otras 26 actividades.
+Misma arquitectura de tres niveles que Apptonomia, acotada a 27 actividades. `index.html` pública enlaza a las tres actividades de portada (Positivos y negativos, Números Romanos, Formas); `dev/index.html`, oculta, enlaza a las 24 actividades restantes. La lista de slugs públicos vive en `scripts/check.js` (`PUBLIC_SLUGS`).
 
 ### 2.1 `assets/` — núcleo compartido, conservado entero
 

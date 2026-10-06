@@ -58,7 +58,7 @@ lands on a subpage directly.
 
 ```
 calculia/
-├── index.html             # Level 0: public landing = Roman Numerals only
+├── index.html             # Level 0: public landing = Positivos y negativos, Números Romanos, Formas
 ├── styles.css             #   landing stylesheet, next to index.html
 ├── app.js                 #   landing logic, next to index.html
 ├── strings.<locale>.js    #   landing texts, es/en, next to index.html
@@ -90,7 +90,7 @@ calculia/
 └── _headers                # Cloudflare Pages cache and security headers
 ```
 
-Same three-level architecture as Apptonomia, scoped to 27 activities. The public `index.html` links only to Roman Numerals; the hidden `dev/index.html` links to the other 26 activities.
+Same three-level architecture as Apptonomia, scoped to 27 activities. The public `index.html` links to the three front-door activities (Positivos y negativos, Roman Numerals, Shapes); the hidden `dev/index.html` links to the other 24 activities. The list of public slugs lives in `scripts/check.js` (`PUBLIC_SLUGS`).
 
 ### 2.1 `assets/` — shared core, kept whole
 

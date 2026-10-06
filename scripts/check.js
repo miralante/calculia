@@ -331,9 +331,13 @@ if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'
 if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
 /* --- 5. Public/private catalog split ---
-   Roman Numerals and Shapes are the public activities. The hidden dev
-   catalogue lists every other one. Together they cover the full tools/,
-   config/, and sw.js activity set.
+   The public landing carries THREE entries (Positivos y negativos,
+   Roman Numerals, Shapes); the hidden dev/ page carries every
+   other activity. Together they cover the full tools/, config/,
+   and sw.js activity set. Public activities are the longest-lived
+   "front door" — they stay discoverable for any visitor even when
+   the rest of the catalogue is moved behind dev/. The order in
+   PUBLIC_SLUGS is the visible order in index.html.
 */
 checks += 1;
 var siteHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -358,7 +362,7 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['roman-numerals', 'shapes'];
+var PUBLIC_SLUGS = ['posneg', 'roman-numerals', 'shapes'];
 var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
 var expectedDevSlugs = new Set(slugs.filter(function (slug) {
   return PUBLIC_SLUGS.indexOf(slug) === -1;
