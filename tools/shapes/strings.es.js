@@ -11,7 +11,7 @@
 
   App.i18n.register({
     title: '🔷 Formas',
-    instructionIntro: 'Mira estas dos formas.',
+    instructionIntro: 'Mira las formas.',
     introFlatTitle: 'Forma plana',
     introFlatText: 'Es lisa, como un dibujo en el papel.',
     introSideTitle: 'Lado',

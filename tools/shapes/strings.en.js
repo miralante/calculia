@@ -11,7 +11,7 @@
 
   App.i18n.register({
     title: '🔷 Shapes',
-    instructionIntro: 'Look at these two shapes.',
+    instructionIntro: 'Look at the shapes.',
     introFlatTitle: 'Flat shape',
     introFlatText: 'It is smooth, like a drawing on paper.',
     introSideTitle: 'Side',
