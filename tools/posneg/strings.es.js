@@ -51,7 +51,7 @@
 
     theory: {
       title: 'Positivos y negativos',
-      intro: 'Un número entero puede ser positivo, negativo o cero.',
+            intro: 'Los números que se cuentan uno a uno (1, 2, 3…) se llaman números enteros. Son distintos de los números decimales (1,5 · 2,75), que tienen una parte después de la coma. Aquí vamos a ver los números enteros: pueden ser positivos, negativos o cero.',
       rules: [
         'Los números positivos son mayores que cero: van hacia la derecha (+1, +2, +3…).',
         'Los números negativos son más bajos que cero: van hacia la izquierda (−1, −2, −3…).',

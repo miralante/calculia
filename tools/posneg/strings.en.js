@@ -38,7 +38,7 @@
 
     theory: {
       title: 'Positive and negative',
-      intro: 'A whole number can be positive, negative or zero.',
+            intro: 'Numbers you count one by one (1, 2, 3…) are called whole numbers. They are different from decimal numbers (1.5 · 2.75), which have a part after the dot. Here we look at whole numbers: they can be positive, negative, or zero.',
       rules: [
         'Positive numbers are greater than zero: they go to the right (+1, +2, +3…).',
         'Negative numbers are less than zero: they go to the left (−1, −2, −3…).',
