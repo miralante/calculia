@@ -405,10 +405,6 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
       'El tema oscuro debe aplicarse al documento');
     const dark = await bodyColors();
     assert.notDeepEqual(dark.palette, light.palette, 'El tema debe cambiar la paleta visible de la app');
-    await drawer.locator('[data-settings-theme="auto"]').click();
-    assert.strictEqual(await page.locator('html').getAttribute('data-theme'), null,
-      'El modo automático debe dejar actuar el tema del sistema');
-
     await drawer.locator('[data-settings-contrast]').check();
     assert.strictEqual(await page.locator('html').getAttribute('data-theme'), 'contrast',
       'Alto contraste debe activar la paleta de contraste');
@@ -420,7 +416,7 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
       return cfg.settingsStorageKey || ((cfg.storageKey || 'apptonomia:locale') + ':accessibility');
     });
     const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), settingsKey);
-    assert.strictEqual(saved.theme, 'auto');
+    assert.strictEqual(saved.theme, 'dark');
     assert.strictEqual(saved.contrast, true);
 
     await page.reload({ waitUntil: 'domcontentloaded' });
@@ -921,6 +917,32 @@ async function exerciseShapes(page, baseUrl) {
     assert.equal(await page.locator('#galleryCaption').evaluate(node => node.textContent.trim()),
       galleryNames[galleryNames.length - 1],
       'La galería añade detalles sobre lados, esquinas o caras en vez de presentar la forma');
+    const galleryShapeId = await page.evaluate(index => window.DATA.gallery[index].id, i);
+    if (galleryShapeId === 'rectangularPrism') {
+      assert.equal(await page.locator('#galleryVisual .solid-left').getAttribute('points'),
+        '10,42 88,42 88,102 10,102',
+      'La cara más larga del prisma rectangular no queda de frente');
+    }
+    if (galleryShapeId === 'pyramid') {
+      assert.equal(await page.locator('#galleryVisual .solid-left').count(), 2,
+        'La pirámide no muestra sus caras triangulares');
+    }
+    if (galleryShapeId === 'cylinder') {
+      const cylinder = await page.locator('#galleryVisual svg').evaluate(svg => ({
+        sideHeight: svg.querySelector('rect.solid-side')?.getAttribute('height'),
+        baseRx: svg.querySelector('.solid-cylinder-base')?.getAttribute('rx'),
+        baseOpacity: getComputedStyle(svg.querySelector('.solid-cylinder-base')).fillOpacity,
+        backEdge: svg.querySelector('.solid-cylinder-back')?.getAttribute('d'),
+        frontEdge: svg.querySelector('.solid-cylinder-front')?.getAttribute('d')
+      }));
+      assert.deepEqual(cylinder, {
+        sideHeight: '64',
+        baseRx: '40',
+        baseOpacity: '0.8',
+        backEdge: 'M20 92a40 13 0 0 1 80 0',
+        frontEdge: 'M20 92a40 13 0 0 0 80 0'
+      }, 'La base del cilindro no parece una tapa diferenciada');
+    }
     if (i < galleryCount - 1) {
       await page.locator('#galleryNext').click();
       actions += 1;
@@ -939,15 +961,26 @@ async function exerciseShapes(page, baseUrl) {
   await page.locator('#introContinue').click();
   assert.ok(await page.locator('#screenReal').isVisible(),
     'La introducción no avanza a los ejemplos reales');
+  assert.equal(await page.locator('#screenReal [data-i18n="instructionReal"], #realShape').count(), 0,
+    'La pantalla de ejemplos repite la introducción o la explicación de la forma');
   actions += 1;
   assert.ok(await page.locator('#realSide').isHidden(),
     'La explicación de los lados aparece junto al ejemplo del círculo');
   const realExamples = [];
   const realCount = await page.evaluate(() => window.DATA.gallery.length);
   for (let i = 0; i < realCount; i += 1) {
-    assert.equal(await page.locator('#realSide').isVisible(), i > 0 && i < 9,
+    const realShapeId = await page.evaluate(index => window.DATA.gallery[index].id, i);
+    assert.equal(await page.locator('#realSide').isVisible(), i === 1,
       'La explicación de los lados no coincide con el ejemplo cotidiano');
     realExamples.push((await page.locator('#realCaption').innerText()).trim());
+    if (realShapeId === 'trapezoid' || realShapeId === 'hexagon' || realShapeId === 'triangularPrism' ||
+      realShapeId === 'pyramid') {
+      const polygonCount = await page.locator('#realObject svg polygon').count();
+      const expectedPolygons = realShapeId === 'trapezoid' ? 1
+        : realShapeId === 'hexagon' ? 7 : realShapeId === 'pyramid' ? 5 : 4;
+      assert.equal(polygonCount, expectedPolygons,
+        'La ilustración real no muestra con claridad la forma esperada');
+    }
     if (i < realCount - 1) {
       await page.locator('#realNext').click();
       actions += 1;
@@ -955,7 +988,7 @@ async function exerciseShapes(page, baseUrl) {
   }
   assert.equal(new Set(realExamples).size, realCount,
     'No hay un ejemplo cotidiano distinto para cada forma');
-  for (let i = 0; i < realCount - 9; i += 1) {
+  for (let i = 0; i < realCount - 2; i += 1) {
     await page.locator('#realPrev').click();
     actions += 1;
   }
@@ -966,7 +999,7 @@ async function exerciseShapes(page, baseUrl) {
     'La explicación práctica no define qué es un lado');
   await page.locator('#realNext').click();
   assert.ok(await page.locator('#realSide').isHidden(),
-    'La explicación del lado aparece en un ejemplo de cuerpo');
+    'La explicación del lado se repite después de presentar el concepto');
   await page.locator('#realContinue').click();
   assert.ok(await page.locator('#screenMenu').isVisible(),
     'Los ejemplos reales no avanzan al menú de test');
@@ -978,40 +1011,55 @@ async function exerciseShapes(page, baseUrl) {
       const level = activity.levels.find(item => item.id === levelId);
       const visual = document.querySelector('#visual');
       const visualName = visual.getAttribute('aria-label') || '';
+      const prompt = document.querySelector('#prompt').textContent;
       const buttons = Array.from(document.querySelectorAll('#options .option-btn'));
+      const t = key => window.App.i18n.t(key);
       let answer;
-      if (level.tipo === 'shapeName') {
+      if (prompt === t('gen.shapeNamePrompt')) {
         answer = visualName;
-      } else if (level.tipo === 'shapeCount') {
+      } else if (prompt === t('gen.sidesPrompt') || prompt === t('gen.cornersPrompt')) {
         const shapeId = Object.keys(window.DATA.sides).find(id =>
           window.App.i18n.t('shape.' + id) === visualName);
-        answer = String(window.DATA.sides[shapeId][level.count]);
-      } else if (level.tipo === 'solidName') {
+        const count = prompt === t('gen.sidesPrompt') ? 'sides' : 'corners';
+        answer = String(window.DATA.sides[shapeId][count]);
+      } else if (prompt === t('gen.solidToNamePrompt')) {
         answer = visualName;
+      } else if (visual.classList.contains('net-stage') ||
+          visual.querySelector('.net-stage')) {
+        const match = (prompt + ' ' + visualName).match(/(\d+)\s+(?:caras?|faces?)/i);
+        if (/¿Cuántas caras|How many faces/i.test(prompt)) {
+          if (!match) throw new Error('No se pudo leer el número de caras: ' + visualName);
+          answer = match[1];
+        } else {
+          const counts = {
+            T: visual.querySelectorAll('.net-tri').length,
+            S: visual.querySelectorAll('.net-square').length,
+            R: visual.querySelectorAll('.net-rect').length,
+          };
+          const net = window.DATA.nets.find(item => {
+            const pieces = item.rows.join('').split('');
+            return pieces.filter(ch => ch === 'T').length === counts.T &&
+              pieces.filter(ch => ch === 'S').length === counts.S &&
+              pieces.filter(ch => ch === 'R').length === counts.R;
+          });
+          if (!net) throw new Error('El desarrollo mostrado no coincide con ningún cuerpo');
+          answer = window.App.i18n.t('net.' + net.id + '.name');
+        }
       } else if (level.tipo === 'solidParts') {
-        const match = visualName.match(/(\d+)\s+caras?/);
+        const match = visualName.match(/(\d+)\s+(?:caras?|faces?)/i);
         if (!match) throw new Error('No se pudo leer el número de caras: ' + visualName);
         answer = match[1];
-      } else if (level.tipo === 'fromNet') {
-        const counts = {
-          T: visual.querySelectorAll('.net-tri').length,
-          S: visual.querySelectorAll('.net-square').length,
-          R: visual.querySelectorAll('.net-rect').length,
-        };
-        const net = window.DATA.nets.find(item => {
-          const pieces = item.rows.join('').split('');
-          return pieces.filter(ch => ch === 'T').length === counts.T &&
-            pieces.filter(ch => ch === 'S').length === counts.S &&
-            pieces.filter(ch => ch === 'R').length === counts.R;
-        });
-        if (!net) throw new Error('El desarrollo mostrado no coincide con ningún cuerpo');
-        answer = window.App.i18n.t('net.' + net.id + '.name');
       }
       return buttons.findIndex(button =>
         (button.getAttribute('aria-label') || button.innerText).trim() === answer);
     }, { activityId, levelId });
     assert.ok(correctIndex >= 0,
-      'No se encontró respuesta correcta para ' + activityId + '/' + levelId);
+      'No se encontró respuesta correcta para ' + activityId + '/' + levelId +
+      ': ' + JSON.stringify({
+        prompt: await page.locator('#prompt').innerText(),
+        visual: await page.locator('#visual').getAttribute('aria-label'),
+        options: await page.locator('#options').innerText(),
+      }));
     const options = page.locator('#options .option-btn');
     await options.nth(correctIndex).click();
     await page.waitForSelector('#btnNext:not(.hidden)', { timeout: NAV_TIMEOUT });
@@ -1020,78 +1068,42 @@ async function exerciseShapes(page, baseUrl) {
     await page.locator('#btnNext').click();
   }
 
-  const activityIds = ['planas', 'cuerpos', 'desarrollos'];
-  for (const activityId of activityIds) {
-    if (activityIds.indexOf(activityId) > 0) {
-      await page.locator('#btnMenu').click();
-    }
-    const levels = await page.evaluate(id =>
-      window.DATA.activities[id].levels.map(level => ({
-        id: level.id,
-        name: window.App.i18n.t('level.' + level.id),
-      })), activityId);
-    if (activityId === 'planas') {
-      const countLevels = await page.evaluate(() => {
-        const levelsById = Object.fromEntries(
-          window.DATA.activities.planas.levels.map(level => [level.id, level]));
-        return ['g5', 'g6'].map(id => ({
-          id,
-          count: levelsById[id].count,
-          shapes: levelsById[id].shapes,
-          values: [...new Set(levelsById[id].shapes.map(shape =>
-            window.DATA.sides[shape][levelsById[id].count]))].sort(),
-        }));
-      });
-      assert.deepEqual(countLevels, [
-        {
-          id: 'g5',
-          count: 'sides',
-          shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon'],
-          values: [3, 4, 5],
-        },
-        {
-          id: 'g6',
-          count: 'corners',
-          shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon'],
-          values: [3, 4, 5],
-        },
-      ], 'Los tests no cuentan lados y esquinas desde el triángulo hasta el pentágono');
-    }
-    const activityButtonIndex = activityIds.indexOf(activityId);
-    await page.locator('#activitiesMenu .btn-actividad').nth(activityButtonIndex).click();
-    const firstLevelType = await page.evaluate(id => window.DATA.activities[id].levels[0].tipo, activityId);
-    if (firstLevelType === 'shapeName') {
-      assert.match(await page.locator('#prompt').innerText(), /¿Qué forma es\?/,
-        'El test de formas planas no empieza por reconocer sus nombres');
-    } else if (firstLevelType === 'solidName') {
-      assert.match(await page.locator('#prompt').innerText(), /¿Qué forma tiene este objeto\?/,
-        'El test de cuerpos no empieza por reconocer objetos familiares');
-    } else if (firstLevelType === 'solidParts') {
-      assert.match(await page.locator('#prompt').innerText(), /¿Cuántas caras tiene\?/,
-        'El test de desarrollos no empieza contando sus caras');
-    }
-    actions += 1;
-    for (let levelIndex = 0; levelIndex < levels.length; levelIndex += 1) {
-      for (let question = 0; question < 6; question += 1) {
-        await chooseCorrectAnswer(activityId, levels[levelIndex].id);
-        actions += 2;
-      }
-      await page.waitForSelector('#screenEnd:not(.hidden)', { timeout: NAV_TIMEOUT });
-      assert.match(await page.locator('#endSummary').innerText(), /6 preguntas/,
-        'El resumen no refleja las seis respuestas correctas');
-      if (levelIndex + 1 < levels.length) {
-        const harder = page.locator('#btnHarder');
-        await page.waitForFunction(() => {
-          const button = document.querySelector('#btnHarder');
-          return button && !button.classList.contains('hidden');
-        });
-        assert.ok((await harder.innerText()).includes(levels[levelIndex + 1].name),
-          'No se ofrece el nivel siguiente de forma progresiva');
-        await harder.click();
-        actions += 1;
-      }
-    }
+  const menuButtons = page.locator('#activitiesMenu .btn-actividad');
+  assert.equal(await menuButtons.count(), 1,
+    'El test de Formas está separado en más de una opción');
+  assert.match(await menuButtons.innerText(), /Formas|Shapes/,
+    'La opción única no está identificada como Formas');
+  const testSpec = await page.evaluate(() => {
+    const level = window.DATA.activities.formas.levels[0];
+    const counts = level.questions.reduce((result, question) => {
+      result[question.tipo] = (result[question.tipo] || 0) + 1;
+      return result;
+    }, {});
+    return { id: level.id, length: level.questions.length, counts };
+  });
+  assert.equal(testSpec.id, 'test');
+  assert.equal(testSpec.length, 34);
+  assert.deepEqual(testSpec.counts, {
+    shapeName: 9,
+    shapeCount: 12,
+    solidName: 7,
+    solidParts: 3,
+    fromNet: 3,
+  }, 'La prueba única no incluye todos los tipos de contenido');
+  await menuButtons.click();
+  const firstPrompt = await page.locator('#prompt').innerText();
+  assert.ok(firstPrompt.trim(),
+    'La prueba única no presenta ninguna pregunta');
+  actions += 1;
+  for (let question = 0; question < testSpec.length; question += 1) {
+    await chooseCorrectAnswer('formas', 'test');
+    actions += 2;
   }
+  await page.waitForSelector('#screenEnd:not(.hidden)', { timeout: NAV_TIMEOUT });
+  assert.match(await page.locator('#endSummary').innerText(), /34 preguntas|34 questions/,
+    'El resumen no incluye todas las preguntas de la ronda única');
+  assert.ok(await page.locator('#btnHarder').isHidden(),
+    'La prueba única ofrece niveles separados como otros tests');
 
   return actions ? 1 : 0;
 }

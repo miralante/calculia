@@ -14,22 +14,22 @@
     instructionIntro: 'Look at these two shapes.',
     introFlatTitle: 'Flat shape',
     introFlatText: 'It is smooth, like a drawing on paper.',
-    introSideText: 'Side: a straight line on the edge.',
-    introCornerText: 'Corner: where two sides meet.',
+    introSideTitle: 'Side',
+    introSideText: 'It is a straight line around the edge.',
+    introCornerTitle: 'Corner',
+    introCornerText: 'It is where two sides meet.',
     introSolidTitle: 'Solid',
     introSolidText: 'It is not flat. You can hold it, like a ball.',
     galleryPrevious: 'Previous',
     galleryNext: 'Next',
-    introContinue: 'See them in real life →',
-    instructionReal: 'Now let us see where these shapes appear.',
+    introContinue: 'See it in real life →',
     realTitle: 'Shapes are all around us',
-    realShape: 'This object is shaped like a {name}.',
     realSide: 'Each straight line around a flat shape is a side.',
     realBack: '← Back to the shapes',
     realContinue: 'Take the test →',
-    instructionMenu: 'Choose what you want to practise.',
-    testTitle: 'Which shapes can you recognise?',
-    testText: 'Take a test on flat shapes, solids, or solid nets.',
+    instructionMenu: 'Take one test with all the content.',
+    testTitle: 'One complete test',
+    testText: 'One round with shapes, solids, and nets.',
     menuBack: '← Back to the examples',
     contexto: 'A road sign, a window, a ball, a tin. Shapes are in everything you touch and see.',
     explicacion: '✅ Recognising shapes helps you describe things and understand signs, plans and drawings.',
@@ -58,7 +58,8 @@
       rhombus: 'rhombus',
       trapezoid: 'trapezoid',
       pentagon: 'pentagon',
-      hexagon: 'hexagon'
+      hexagon: 'hexagon',
+      octagon: 'octagon'
     },
     solid: {
       cube: 'cube',
@@ -78,7 +79,8 @@
         rhombus: '{name}',
         trapezoid: '{name}',
         pentagon: '{name}',
-        hexagon: '{name}'
+        hexagon: '{name}',
+        octagon: '{name}'
       },
       solid: {
         cube: '{name}',
@@ -90,40 +92,29 @@
         cone: '{name}'
       },
       real: {
-        circle: 'A clock is shaped like a circle.',
-        triangle: 'A warning sign is shaped like a triangle.',
-        square: 'A tile can be shaped like a square.',
-        rectangle: 'A door is often shaped like a rectangle.',
-        rhombus: 'A kite can be shaped like a rhombus.',
-        trapezoid: 'Some plant pots are shaped like a trapezoid.',
-        pentagon: 'Some panels on a football are shaped like a pentagon.',
-        hexagon: 'The cells in a honeycomb are shaped like a hexagon.',
-        cube: 'A die is shaped like a cube.',
-        rectangularPrism: 'A cereal box is shaped like a rectangular prism.',
-        triangularPrism: 'A tent can be shaped like a triangular prism.',
-        pyramid: 'The pyramids of Egypt are shaped like pyramids.',
-        sphere: 'A ball is shaped like a sphere.',
-        cylinder: 'A tin can is shaped like a cylinder.',
-        cone: 'An ice-cream cone is shaped like a cone.'
+        circle: 'The clock is shaped like a circle.',
+        triangle: 'The warning sign is shaped like a triangle.',
+        square: 'A small window can be shaped like a square.',
+        rectangle: 'The door is shaped like a rectangle.',
+        rhombus: 'The kite is shaped like a rhombus.',
+        trapezoid: 'Seen from the side, a beach bucket looks like a trapezoid.',
+        pentagon: 'The shield is shaped like a pentagon.',
+        hexagon: 'The cells in a honeycomb are hexagons.',
+        octagon: 'The stop sign is shaped like an octagon.',
+        cube: 'The die is shaped like a cube.',
+        rectangularPrism: 'The cereal box is shaped like a rectangular prism.',
+        triangularPrism: 'The tent is shaped like a triangular prism.',
+        pyramid: 'An Egyptian pyramid.',
+        sphere: 'The ball is shaped like a sphere.',
+        cylinder: 'The tin can is shaped like a cylinder.',
+        cone: 'The ice-cream cone is shaped like a cone.'
       }
     },
     activity: {
-      desarrollos: { name: 'Solid nets', detail: 'Prisms and pyramids.', instruction: 'If you open a box out flat, you see all its faces. That is called the net. Count the faces and look at their shapes.' },
-      planas: { name: 'Flat shapes', detail: 'Polygons and circles.', instruction: 'Look at the picture and say which shape it is. Later you will count its sides and corners.' },
-      cuerpos: { name: 'Solids', detail: 'Prisms, pyramids, and round solids.', instruction: 'Solids take up space. You can recognise them by their flat and curved faces.' }
+      formas: { name: 'Shapes', detail: 'One test with all shapes and solids.' }
     },
     level: {
-      p1: 'How many faces?',
-      p2: 'What does it fold into?',
-      g1: 'Three shapes',
-      g2: 'Four shapes',
-      g3: 'Six shapes',
-      g4: 'Eight shapes',
-      g5: '3 to 5 sides',
-      g6: '3 to 5 corners',
-      b1: 'From object to name',
-      b2: 'More solids',
-      b3: 'From name to object'
+      test: 'Complete test'
     },
     net: {
       cube: { name: 'cube', gloss: '6 squares' },

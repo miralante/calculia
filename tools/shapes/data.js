@@ -22,9 +22,10 @@ var DATA = {
     { id: 'square', type: 'flat', object: '🪟' },
     { id: 'rectangle', type: 'flat', object: '🚪' },
     { id: 'rhombus', type: 'flat', object: '🪁' },
-    { id: 'trapezoid', type: 'flat', object: '🪴' },
-    { id: 'pentagon', type: 'flat', object: '⚽' },
-    { id: 'hexagon', type: 'flat', object: '🍯' },
+    { id: 'trapezoid', type: 'flat', object: '🪣' },
+    { id: 'pentagon', type: 'flat', object: '🛡️' },
+    { id: 'hexagon', type: 'flat', object: '🐝' },
+    { id: 'octagon', type: 'flat', object: '🛑' },
     { id: 'cube', type: 'solid', object: '🎲' },
     { id: 'rectangularPrism', type: 'solid', object: '📦' },
     { id: 'triangularPrism', type: 'solid', object: '⛺' },
@@ -35,42 +36,49 @@ var DATA = {
   ],
 
   activities: {
-    /* Primero reconocer la forma, después contar sus partes: nombrar
-       algo es más fácil que analizarlo. */
-    planas: {
+    formas: {
       picto: '🔷',
       levels: [
-        /* Add a few names at a time before changing the question from
-           naming to counting sides, then to counting corners. */
-        { id: 'g1', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle'] },
-        { id: 'g2', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle', 'rectangle'] },
-        { id: 'g3', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle', 'rectangle', 'pentagon', 'hexagon'] },
-        { id: 'g4', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle', 'rectangle', 'rhombus', 'trapezoid', 'pentagon', 'hexagon'] },
-        { id: 'g5', tipo: 'shapeCount', count: 'sides', shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon'] },
-        { id: 'g6', tipo: 'shapeCount', count: 'corners', shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon'] }
-      ]
-    },
-
-    /* Los cuerpos se presentan siempre a través de un objeto que se
-       puede tener en la mano: así "cilindro" significa algo antes de
-       ser una palabra. b1→b2 solo invierte la dirección. */
-    cuerpos: {
-      picto: '🧊',
-      levels: [
-        { id: 'b1', tipo: 'solidName', dir: 'toName', solids: ['cube', 'sphere', 'cylinder'] },
-        { id: 'b2', tipo: 'solidName', dir: 'toName' },
-        { id: 'b3', tipo: 'solidName', dir: 'toObject' }
-      ]
-    },
-
-    /* Prismas y pirámides, y lo que sale al doblar un desarrollo. El
-       desarrollo se dibuja abierto y se elige el cuerpo: eso sí se puede
-       contestar mirando, aunque doblarlo con el dedo no. */
-    desarrollos: {
-      picto: '📦',
-      levels: [
-        { id: 'p1', tipo: 'solidParts' },
-        { id: 'p2', tipo: 'fromNet' }
+        {
+          id: 'test',
+          tipo: 'mixed',
+          questions: [
+            { id: 'name-circle', tipo: 'shapeName', shape: 'circle' },
+            { id: 'name-triangle', tipo: 'shapeName', shape: 'triangle' },
+            { id: 'name-square', tipo: 'shapeName', shape: 'square' },
+            { id: 'name-rectangle', tipo: 'shapeName', shape: 'rectangle' },
+            { id: 'name-rhombus', tipo: 'shapeName', shape: 'rhombus' },
+            { id: 'name-trapezoid', tipo: 'shapeName', shape: 'trapezoid' },
+            { id: 'name-pentagon', tipo: 'shapeName', shape: 'pentagon' },
+            { id: 'name-hexagon', tipo: 'shapeName', shape: 'hexagon' },
+            { id: 'name-octagon', tipo: 'shapeName', shape: 'octagon' },
+            { id: 'sides-triangle', tipo: 'shapeCount', count: 'sides', shape: 'triangle' },
+            { id: 'sides-square', tipo: 'shapeCount', count: 'sides', shape: 'square' },
+            { id: 'sides-rectangle', tipo: 'shapeCount', count: 'sides', shape: 'rectangle' },
+            { id: 'sides-rhombus', tipo: 'shapeCount', count: 'sides', shape: 'rhombus' },
+            { id: 'sides-trapezoid', tipo: 'shapeCount', count: 'sides', shape: 'trapezoid' },
+            { id: 'sides-pentagon', tipo: 'shapeCount', count: 'sides', shape: 'pentagon' },
+            { id: 'corners-triangle', tipo: 'shapeCount', count: 'corners', shape: 'triangle' },
+            { id: 'corners-square', tipo: 'shapeCount', count: 'corners', shape: 'square' },
+            { id: 'corners-rectangle', tipo: 'shapeCount', count: 'corners', shape: 'rectangle' },
+            { id: 'corners-rhombus', tipo: 'shapeCount', count: 'corners', shape: 'rhombus' },
+            { id: 'corners-trapezoid', tipo: 'shapeCount', count: 'corners', shape: 'trapezoid' },
+            { id: 'corners-pentagon', tipo: 'shapeCount', count: 'corners', shape: 'pentagon' },
+            { id: 'solid-cube', tipo: 'solidName', dir: 'toName', solid: 'cube' },
+            { id: 'solid-sphere', tipo: 'solidName', dir: 'toName', solid: 'sphere' },
+            { id: 'solid-cylinder', tipo: 'solidName', dir: 'toName', solid: 'cylinder' },
+            { id: 'solid-rectangular-prism', tipo: 'solidName', dir: 'toName', solid: 'rectangularPrism' },
+            { id: 'solid-triangular-prism', tipo: 'solidName', dir: 'toName', solid: 'triangularPrism' },
+            { id: 'solid-pyramid', tipo: 'solidName', dir: 'toName', solid: 'pyramid' },
+            { id: 'solid-cone', tipo: 'solidName', dir: 'toName', solid: 'cone' },
+            { id: 'faces-cube', tipo: 'solidParts', net: 'cube' },
+            { id: 'faces-prism', tipo: 'solidParts', net: 'prism' },
+            { id: 'faces-pyramid', tipo: 'solidParts', net: 'pyramid' },
+            { id: 'net-cube', tipo: 'fromNet', net: 'cube' },
+            { id: 'net-prism', tipo: 'fromNet', net: 'prism' },
+            { id: 'net-pyramid', tipo: 'fromNet', net: 'pyramid' }
+          ]
+        }
       ]
     }
   },
@@ -85,7 +93,8 @@ var DATA = {
     rhombus:   { sides: 4, corners: 4 },
     trapezoid: { sides: 4, corners: 4 },
     pentagon:  { sides: 5, corners: 5 },
-    hexagon:   { sides: 6, corners: 6 }
+    hexagon:   { sides: 6, corners: 6 },
+    octagon:   { sides: 8, corners: 8 }
   },
 
   solids: [

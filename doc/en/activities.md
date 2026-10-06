@@ -20,7 +20,7 @@ grouped by the skill they work on, not by screen folder.
 |----------|-------------|
 | **Places and sizes** | Say where something is (inside, outside, on top, underneath, left, right) and which of two things is longer, heavier or holds more. |
 | **Numbers** | Read, write and compare whole numbers, sequences and place value. |
-| **Shapes** | Recognise flat shapes and solids, count their sides and their corners. |
+| **Shapes** | Compare a flat shape and a solid through pictures, recognise shapes in real objects, and practise them in tests. |
 | **Same shapes** | Tell whether two figures are the same shape at another size, count the squares on the sides of a right triangle, and compare how steep two ramps are. |
 | **Fractions** | Recognise, compare and operate with simple fractions and decimals. |
 | **Measures** | Choose the right unit (cm, m, g, kg, ml, l) and estimate length, weight and capacity. |

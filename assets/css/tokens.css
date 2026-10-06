@@ -72,8 +72,10 @@
 }
 
 /* -------- Tema oscuro --------
-   Se aplica con data-theme="dark", o solo por prefers-color-scheme
-   cuando el atributo no está puesto (tema "auto"). */
+   Se aplica con data-theme="dark", que es lo que pone el conmutador del
+   engranaje. El tema por defecto es "light": se ha quitado el "auto", que
+   dejaba el atributo sin poner y delegaba en prefers-color-scheme, con lo
+   que en un equipo en oscuro el sitio salía oscuro sin haberlo pedido. */
 [data-theme="dark"] {
   --color-fondo: #14161E;
   --color-superficie: #1E2230;
@@ -159,44 +161,3 @@
 /* "Auto": si el sistema está en oscuro y la persona no ha forzado un
    tema, se aplica la paleta oscura. Un data-theme explícito gana sobre
    esta regla, así que forzar "Claro" funciona con el sistema en oscuro. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --color-fondo: #14161E;
-    --color-superficie: #1E2230;
-    --color-superficie-2: #262B3C;
-    --color-texto: #F2F0EA;
-    --color-texto-suave: #B3B0C8;
-    --color-borde: #39405A;
-
-    --mod-coordinacion: #6BB4F2;
-    --mod-coordinacion-suave: #19354D;
-    --mod-secuencia: #7BD389;
-    --mod-secuencia-suave: #1E3D24;
-    --mod-memoria: #F2B07A;
-    --mod-memoria-suave: #3A2C1E;
-    --mod-emocional: #C3A0F0;
-    --mod-emocional-suave: #2C2340;
-    --mod-razonamiento: #6FD0C4;
-    --mod-razonamiento-suave: #16352F;
-    --mod-lenguaje: #F09BC0;
-    --mod-lenguaje-suave: #3A2430;
-    --mod-cuerpo: #EFA189;
-    --mod-cuerpo-suave: #3A2820;
-
-    --color-acierto: #7BD389;
-    --color-acierto-suave: #1E3D24;
-    --color-animo: #F2B07A;
-    --color-animo-suave: #3A2C1E;
-    --color-estrella: #E0B85C;
-  /* Fondo de la píldora de estrellas: sin esto caía al crema claro del
-     tema claro (--acento-2-suave no existe en dark) y el dorado claro
-     encima quedaba ilegible. */
-  --acento-2-suave: #3A2C1E;
-
-    --sombra: 0 2px 8px rgba(0, 0, 0, 0.4);
-    --color-foco: #6BB4F2;
-
-    --texto-sobre-acento: #14161E;
-    --texto-sobre-acierto: #14161E;
-  }
-}

@@ -229,24 +229,27 @@
     es: {
       title: 'Ajustes', close: 'Cerrar ajustes', textSize: 'Tamaño de letra',
       small: 'Pequeño', normal: 'Normal', large: 'Grande',
-      theme: 'Tema', themeAuto: 'Auto', themeLight: 'Claro', themeDark: 'Oscuro',
+      theme: 'Tema', themeLight: 'Claro', themeDark: 'Oscuro',
       language: '🌐 Idioma',
       contrast: 'Alto contraste', successSound: 'Sonido de acierto', errorSound: 'Sonido de error', help: 'Se guarda en este dispositivo.'
     },
     en: {
       title: 'Settings', close: 'Close settings', textSize: 'Text size',
       small: 'Small', normal: 'Normal', large: 'Large',
-      theme: 'Theme', themeAuto: 'Auto', themeLight: 'Light', themeDark: 'Dark',
+      theme: 'Theme', themeLight: 'Light', themeDark: 'Dark',
       language: '🌐 Language',
       contrast: 'High contrast', successSound: 'Correct answer sound', errorSound: 'Error sound', help: 'Saved on this device.'
     }
   };
 
-  /* Temas que la suite soporta. "auto" no fija atributo: deja que el
-     navegador aplique prefers-color-scheme. Los otros tres se aplican
-     con data-theme, que es lo que las paletas oscuras de cada tokens.css
-     escuchan. */
-  var THEMES = ['auto', 'light', 'dark'];
+  /* Temas que la suite soporta: claro y oscuro. Antes estaba tambien
+     "auto", que no fijaba atributo y dejaba que el navegador aplicase
+     prefers-color-scheme; en un equipo en oscuro el sitio salia
+     oscuro sin que nadie lo hubiera pedido, y eso no es elegir un
+     tema. Los dos valores se aplican con data-theme, que es lo que
+     escuchan las paletas de cada tokens.css. Un "auto" ya guardado se
+     migra a "light" al leer, por no estar en la lista. */
+  var THEMES = ['light', 'dark'];
 
   function settingsLocale() {
     var loc = '';
@@ -265,7 +268,7 @@
     return {
       textSize: ['small', 'normal', 'large'].indexOf(saved.textSize) !== -1 ? saved.textSize : 'normal',
       textSizeSet: textSizeIsExplicit,
-      theme: THEMES.indexOf(saved.theme) !== -1 ? saved.theme : 'auto',
+      theme: THEMES.indexOf(saved.theme) !== -1 ? saved.theme : 'light',
       contrast: saved.contrast === true
     };
   }
@@ -294,9 +297,11 @@
     var html = document.documentElement;
     if (settingsState.contrast) {
       html.setAttribute('data-theme', 'contrast');
-    } else if (settingsState.theme === 'auto') {
-      html.removeAttribute('data-theme');
     } else {
+      /* Siempre se fija el atributo. Antes el tema "auto" lo quitaba y
+         dejaba `:root:not([data-theme])` de las hojas de tokens decidir
+         por prefers-color-scheme; sin "auto" ese bloque ya no decide
+         nada, porque data-theme siempre esta. */
       html.setAttribute('data-theme', settingsState.theme);
     }
   }
@@ -341,7 +346,6 @@
     if (languageLabel) languageLabel.textContent = copy.language;
     drawer.querySelector('[data-settings-size-label]').textContent = copy.textSize;
     drawer.querySelector('[data-settings-theme-label]').textContent = copy.theme;
-    drawer.querySelector('[data-settings-theme-auto]').textContent = copy.themeAuto;
     drawer.querySelector('[data-settings-theme-light]').textContent = copy.themeLight;
     drawer.querySelector('[data-settings-theme-dark]').textContent = copy.themeDark;
     drawer.querySelector('[data-settings-size-small]').textContent = copy.small;
@@ -450,7 +454,6 @@
         languageRow +
         '<div class="locale-settings-row"><span data-settings-theme-label></span>' +
           '<div class="locale-settings-options" role="group">' +
-            '<button type="button" data-settings-theme="auto" data-settings-theme-auto></button>' +
             '<button type="button" data-settings-theme="light" data-settings-theme-light></button>' +
             '<button type="button" data-settings-theme="dark" data-settings-theme-dark></button>' +
           '</div>' +
@@ -511,10 +514,10 @@
         var chosen = button.getAttribute('data-settings-theme');
         if (THEMES.indexOf(chosen) === -1) return;
         settingsState.theme = chosen;
-        /* Elegir un tema concreto apaga el alto contraste: si no, el
-           contraste se comería la elección y los botones aparecerían
-           pulsados sin efecto visible. */
-        if (chosen !== 'auto') settingsState.contrast = false;
+        /* Elegir un tema apaga el alto contraste: si no, el contraste
+           se comería la eleccion y los botones aparecerian pulsados
+           sin efecto visible. */
+        settingsState.contrast = false;
         saveSettings(); applySettings(); renderSettings(drawer);
       });
     });

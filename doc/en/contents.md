@@ -137,17 +137,17 @@ is rebalanced, this is the document to read first.
 ### 3.10 Geometric shapes
 
 - Recognising circles, triangles, squares, rectangles, rhombuses,
-  trapezoids, pentagons and hexagons (`shapes/`).
+  trapezoids, pentagons, hexagons and octagons (`shapes/`).
 - Distinguishing flat shapes, which have no volume, from solids:
   cubes, prisms, pyramids, spheres, cylinders and cones (`shapes/`).
 - Connecting each shape with everyday objects and practising its name,
   sides, corners and faces (`shapes/`).
 - The first slide shows what a flat shape and a solid are, and points to
-  one side and one corner on a drawing. The gallery presents each shape
-  by name without counting its parts.
+  the next explains side and corner with two drawings side by side. The
+  gallery presents each shape by name without counting its parts.
 - The everyday examples also explain that each straight line around a
-  flat shape is a side. The tests count sides and corners on shapes with
-  three to five sides, from triangles to pentagons.
+  flat shape is a side. One test mixes questions about every shape, sides
+  and corners from triangles to pentagons, solids, and solid nets.
 - Angles, areas, volumes, similarity and other geometry concepts are
   taught in their own activities (`geometry/`, `similar/`).
 

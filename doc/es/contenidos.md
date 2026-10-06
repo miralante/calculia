@@ -137,18 +137,18 @@ primero.
 ### 3.10 Formas geométricas
 
 - Reconocer círculo, triángulo, cuadrado, rectángulo, rombo, trapecio,
-  pentágono y hexágono (`shapes/`).
+  pentágono, hexágono y octágono (`shapes/`).
 - Distinguir las formas planas, que no tienen volumen, de los cuerpos:
   cubo, prismas, pirámide, esfera, cilindro y cono (`shapes/`).
 - Relacionar cada forma con objetos cotidianos y practicar sus nombres,
   lados, esquinas y caras (`shapes/`).
 - La primera diapositiva muestra qué es una forma plana y un cuerpo, y
-  señala un lado y una esquina en un dibujo. La galería presenta cada
-  forma con su nombre, sin enumerar sus partes.
+  la siguiente explica lado y esquina con dos dibujos juntos. La galería
+  presenta cada forma con su nombre, sin enumerar sus partes.
 - En los ejemplos cotidianos también se explica que cada línea recta
-  del borde de una forma plana es un lado. Los tests cuentan lados y
-  esquinas en formas de tres a cinco lados, desde el triángulo hasta el
-  pentágono.
+  del borde de una forma plana es un lado. Un solo test mezcla preguntas
+  de todas las formas, lados y esquinas del triángulo al pentágono,
+  cuerpos y desarrollos.
 - Los ángulos, las áreas, los volúmenes, la semejanza y otros conceptos
   geométricos se trabajan en sus actividades específicas (`geometry/`,
   `similar/`).

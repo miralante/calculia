@@ -19,7 +19,6 @@
   var galleryPrev = $('#galleryPrev');
   var galleryNext = $('#galleryNext');
   var realObject = $('#realObject');
-  var realShape = $('#realShape');
   var realSide = $('#realSide');
   var realCaption = $('#realCaption');
   var realPrev = $('#realPrev');
@@ -53,7 +52,8 @@
   var attempts = 0;
   var question = null;
   var pools = {};
-  var galleryIndex = -1;
+  var roundQuestions = [];
+  var galleryIndex = -2;
   var realIndex = 0;
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce).
      fixedQuestion allows reusing render() with an external question
@@ -117,7 +117,7 @@
   /* `marks` puts a dot on every corner, so corners can be counted by
      looking instead of from memory. */
   function shapeSvg(id, marks) {
-    var POLY = { triangle: 3, pentagon: 5, hexagon: 6 };
+    var POLY = { triangle: 3, pentagon: 5, hexagon: 6, octagon: 8 };
     var body = '';
     var dots = '';
 
@@ -169,27 +169,29 @@
         '<polygon points="25,35 65,55 65,105 25,85" class="solid-left"/>' +
         '<polygon points="65,55 105,35 105,85 65,105" class="solid-right"/>';
     } else if (id === 'rectangularPrism') {
-      body = '<polygon points="18,38 62,18 108,38 64,58" class="solid-top"/>' +
-        '<polygon points="18,38 64,58 64,100 18,80" class="solid-left"/>' +
-        '<polygon points="64,58 108,38 108,80 64,100" class="solid-right"/>';
+      body = '<polygon points="10,42 32,28 110,28 88,42" class="solid-top"/>' +
+        '<polygon points="10,42 88,42 88,102 10,102" class="solid-left"/>' +
+        '<polygon points="88,42 110,28 110,88 88,102" class="solid-right"/>';
     } else if (id === 'triangularPrism') {
       body = '<polygon points="20,70 45,85 69,45 44,30" class="solid-left"/>' +
         '<polygon points="44,30 69,45 93,85 68,70" class="solid-top"/>' +
         '<polygon points="20,70 68,70 93,85 45,85" class="solid-right"/>' +
         '<polygon points="20,70 44,30 68,70" class="solid-base"/>';
     } else if (id === 'pyramid') {
-      body = '<polygon points="20,80 60,60 100,80 60,100" class="solid-base"/>' +
-        '<polygon points="60,15 20,80 60,60" class="solid-left"/>' +
-        '<polygon points="60,15 60,60 100,80" class="solid-top"/>' +
-        '<polygon points="60,15 20,80 60,100" class="solid-right"/>' +
-        '<polygon points="60,15 60,100 100,80" class="solid-left"/>';
+      body = '<polygon points="20,82 60,60 100,82 60,104" class="solid-base"/>' +
+        '<polygon points="60,18 20,82 60,60" class="solid-left"/>' +
+        '<polygon points="60,18 60,60 100,82" class="solid-top"/>' +
+        '<polygon points="60,18 100,82 60,104" class="solid-right"/>' +
+        '<polygon points="60,18 60,104 20,82" class="solid-left"/>';
     } else if (id === 'sphere') {
       body = '<circle cx="60" cy="60" r="45" class="solid-sphere"/>' +
         '<ellipse cx="45" cy="40" rx="12" ry="7" class="solid-highlight"/>';
     } else if (id === 'cylinder') {
-      body = '<path d="M20 28v64c0 12 80 12 80 0V28" class="solid-side"/>' +
-        '<ellipse cx="60" cy="28" rx="40" ry="13" class="solid-top"/>' +
-        '<path d="M20 92c0 12 80 12 80 0" class="solid-bottom"/>';
+      body = '<rect x="20" y="28" width="80" height="64" class="solid-side"/>' +
+        '<ellipse cx="60" cy="92" rx="40" ry="13" class="solid-cylinder-base"/>' +
+        '<path d="M20 92a40 13 0 0 1 80 0" class="solid-cylinder-back"/>' +
+        '<path d="M20 92a40 13 0 0 0 80 0" class="solid-cylinder-front"/>' +
+        '<ellipse cx="60" cy="28" rx="40" ry="13" class="solid-top"/>';
     } else if (id === 'cone') {
       body = '<path d="M60 16 18 92c0 14 84 14 84 0Z" class="solid-side"/>' +
         '<ellipse cx="60" cy="92" rx="42" ry="13" class="solid-bottom"/>';
@@ -199,21 +201,62 @@
       body + '</g></svg>';
   }
 
+  function realObjectSvg(id) {
+    if (id === 'trapezoid') {
+      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
+        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
+        '<path d="M35 36Q60 4 85 36" fill="none"/>' +
+        '<polygon points="24,34 96,34 84,92 36,92" fill="#7CC8C3"/>' +
+        '<ellipse cx="60" cy="34" rx="36" ry="8" fill="#B6E2DC"/>' +
+        '<path d="M36 92Q60 100 84 92" fill="none"/></g></svg>';
+    }
+    if (id === 'hexagon') {
+      var cells = [
+        { x: 36, y: 30 }, { x: 60, y: 44 }, { x: 84, y: 30 },
+        { x: 36, y: 58 }, { x: 60, y: 72 }, { x: 84, y: 58 },
+        { x: 60, y: 16 }
+      ];
+      var offsets = [[16, 0], [8, 14], [-8, 14], [-16, 0], [-8, -14], [8, -14]];
+      var cellsSvg = cells.map(function (cell, index) {
+        var points = offsets.map(function (offset) {
+          return (cell.x + offset[0]) + ',' + (cell.y + offset[1]);
+        }).join(' ');
+        var fill = index % 2 ? '#EFBF47' : '#F4C95D';
+        return '<polygon points="' + points + '" fill="' + fill + '"/>';
+      }).join('');
+      return '<svg viewBox="0 0 120 100" aria-hidden="true">' +
+        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
+        cellsSvg + '</g></svg>';
+    }
+    if (id === 'triangularPrism') {
+      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
+        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
+        '<polygon points="20,88 48,36 72,26 44,78" class="solid-left"/>' +
+        '<polygon points="48,36 72,26 100,78 76,88" class="solid-right"/>' +
+        '<polygon points="20,88 76,88 100,78 44,78" class="solid-top"/>' +
+        '<polygon points="20,88 48,36 76,88" class="solid-base"/>' +
+        '</g></svg>';
+    }
+    if (id === 'pyramid') {
+      return solidSvg('pyramid');
+    }
+    return '';
+  }
+
   function paintGallery() {
     galleryPrev.setAttribute('aria-label', App.i18n.t('galleryPrevious'));
     galleryNext.setAttribute('aria-label', App.i18n.t('galleryNext'));
 
-    if (galleryIndex === -1) {
+    if (galleryIndex === -2) {
       var intro = {
         flatTitle: App.i18n.t('introFlatTitle'),
         flatText: App.i18n.t('introFlatText'),
-        introSideText: App.i18n.t('introSideText'),
-        introCornerText: App.i18n.t('introCornerText'),
         solidTitle: App.i18n.t('introSolidTitle'),
         solidText: App.i18n.t('introSolidText')
       };
       galleryVisual.removeAttribute('role');
       galleryVisual.removeAttribute('aria-label');
+      galleryVisual.classList.remove('gallery-part-intro');
       galleryVisual.classList.add('gallery-intro');
       galleryVisual.textContent = '';
 
@@ -225,9 +268,7 @@
         visual.className = 'shape-compare-visual';
         visual.setAttribute('aria-hidden', 'true');
         if (kind === 'flat') {
-          visual.innerHTML = shapeSvg('triangle', false).replace('</svg>',
-            '<line x1="18" y1="86" x2="102" y2="86" class="intro-side-mark"/>' +
-            '<circle cx="18" cy="86" r="7" class="intro-corner-mark"/></svg>');
+          visual.innerHTML = shapeSvg('triangle', false);
         } else {
           visual.innerHTML = solidSvg('sphere');
         }
@@ -241,14 +282,48 @@
         item.appendChild(visual);
         item.appendChild(title);
         item.appendChild(description);
-        if (kind === 'flat') {
-          ['Side', 'Corner'].forEach(function (part) {
-            var definition = document.createElement('p');
-            definition.className = 'intro-part intro-part-' + part.toLowerCase();
-            definition.textContent = intro['intro' + part + 'Text'];
-            item.appendChild(definition);
-          });
+        galleryVisual.appendChild(item);
+      });
+      galleryCaption.classList.add('hidden');
+      return;
+    }
+
+    if (galleryIndex === -1) {
+      var parts = [
+        {
+          id: 'side',
+          title: App.i18n.t('introSideTitle'),
+          text: App.i18n.t('introSideText'),
+          mark: '<line x1="18" y1="86" x2="102" y2="86" class="intro-side-mark"/>'
+        },
+        {
+          id: 'corner',
+          title: App.i18n.t('introCornerTitle'),
+          text: App.i18n.t('introCornerText'),
+          mark: '<circle cx="18" cy="86" r="7" class="intro-corner-mark"/>'
         }
+      ];
+      galleryVisual.removeAttribute('role');
+      galleryVisual.removeAttribute('aria-label');
+      galleryVisual.classList.add('gallery-intro', 'gallery-part-intro');
+      galleryVisual.textContent = '';
+
+      parts.forEach(function (part) {
+        var item = document.createElement('div');
+        item.className = 'shape-part-item shape-part-' + part.id;
+        var visual = document.createElement('div');
+        visual.className = 'shape-part-visual';
+        visual.setAttribute('aria-hidden', 'true');
+        visual.innerHTML = shapeSvg('triangle', false).replace('</svg>', part.mark + '</svg>');
+
+        var title = document.createElement('h2');
+        title.textContent = part.title;
+        var description = document.createElement('p');
+        description.textContent = part.text;
+
+        item.appendChild(visual);
+        item.appendChild(title);
+        item.appendChild(description);
         galleryVisual.appendChild(item);
       });
       galleryCaption.classList.add('hidden');
@@ -257,7 +332,7 @@
 
     var item = DATA.gallery[galleryIndex];
     var name = item.type === 'flat' ? shapeName(item.id) : solidName(item.id);
-    galleryVisual.classList.remove('gallery-intro');
+    galleryVisual.classList.remove('gallery-intro', 'gallery-part-intro');
     galleryVisual.innerHTML = item.type === 'flat'
       ? '<div class="shape-stage">' + shapeSvg(item.id, false) + '</div>'
       : '<div class="shape-stage">' + solidSvg(item.id) + '</div>';
@@ -270,10 +345,10 @@
 
   function paintRealExample() {
     var item = DATA.gallery[realIndex];
-    var name = item.type === 'flat' ? shapeName(item.id) : solidName(item.id);
-    realObject.textContent = item.object;
-    realShape.textContent = App.i18n.t('realShape').replace('{name}', name);
-    realSide.classList.toggle('hidden', item.type !== 'flat' || item.id === 'circle');
+    var illustration = realObjectSvg(item.id);
+    if (illustration) realObject.innerHTML = illustration;
+    else realObject.textContent = item.object;
+    realSide.classList.toggle('hidden', item.id !== 'triangle');
     realCaption.textContent = App.i18n.t('gallery.real.' + item.id);
     realPrev.setAttribute('aria-label', App.i18n.t('galleryPrevious'));
     realNext.setAttribute('aria-label', App.i18n.t('galleryNext'));
@@ -371,7 +446,9 @@
     /* How many flat faces a solid has. The net is drawn open, so the faces
        can be counted one by one instead of imagined. */
     solidParts: function (nv) {
-      var net = draw(nv.id, DATA.nets);
+      var net = nv.net
+        ? DATA.nets.find(function (item) { return item.id === nv.net; })
+        : draw(nv.id, DATA.nets);
       return {
         prompt: App.i18n.t('gen.howManyFaces').replace(/\{name\}/g, netName(net.id)),
         visual: netSvg(net),
@@ -386,7 +463,9 @@
        three solids are named with their own shapes, so the answer comes
        from looking at the pieces, not from remembering a list. */
     fromNet: function (nv) {
-      var net = draw(nv.id, DATA.nets);
+      var net = nv.net
+        ? DATA.nets.find(function (item) { return item.id === nv.net; })
+        : draw(nv.id, DATA.nets);
       return {
         prompt: App.i18n.t('gen.fromNet'),
         visual: netSvg(net),
@@ -409,8 +488,11 @@
        same level, so the confusion on offer is the real one (a square
        against a rectangle), never a random word. */
     shapeName: function (nv) {
-      var id = draw(nv.id, nv.shapes);
-      var others = App.utils.shuffle(nv.shapes.filter(function (s) {
+      var shapes = nv.shapes || DATA.gallery.filter(function (item) {
+        return item.type === 'flat';
+      }).map(function (item) { return item.id; });
+      var id = nv.shape || draw(nv.id, shapes);
+      var others = App.utils.shuffle(shapes.filter(function (s) {
         return s !== id;
       })).slice(0, 2);
       return {
@@ -429,7 +511,7 @@
     /* Count the sides or the corners. Every corner carries a dot, so the
        answer can be reached by counting what is on screen. */
     shapeCount: function (nv) {
-      var id = draw(nv.id + nv.count, nv.shapes);
+      var id = nv.shape || draw(nv.id + nv.count, nv.shapes);
       var counting = nv.count === 'corners';
       return {
         prompt: App.i18n.t(counting ? 'gen.cornersPrompt' : 'gen.sidesPrompt'),
@@ -447,7 +529,9 @@
       var solidPool = nv.solids ? DATA.solids.filter(function (s) {
         return nv.solids.indexOf(s.id) !== -1;
       }) : DATA.solids;
-      var solid = draw(nv.id, solidPool);
+      var solid = nv.solid
+        ? solidPool.find(function (item) { return item.id === nv.solid; })
+        : draw(nv.id, solidPool);
       var object = App.utils.shuffle(solid.objects)[0];
       var others = App.utils.shuffle(solidPool.filter(function (s) {
         return s.id !== solid.id;
@@ -526,6 +610,10 @@
     return levels[Math.min(Math.floor(completed), levels.length - 1)];
   }
 
+  function roundLength() {
+    return level.tipo === 'mixed' ? level.questions.length : DATA.perRound;
+  }
+
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
@@ -536,6 +624,9 @@
 
   function startRound(nv) {
     level = nv;
+    roundQuestions = level.tipo === 'mixed'
+      ? App.utils.shuffle(level.questions.slice())
+      : [];
     index = 0;
     roundCorrect = 0;
     pools = {};
@@ -565,7 +656,11 @@
   /* Paints one question. `fixed` replays a question from the reinforce
      queue; without it a new one is generated for the current level. */
   function paintQuestion(fixed) {
-    question = fixed || GENERATORS[level.tipo](level, index);
+    var questionLevel = level;
+    if (!fixed && level.tipo === 'mixed') {
+      questionLevel = roundQuestions[index];
+    }
+    question = fixed || GENERATORS[questionLevel.tipo](questionLevel, index);
     answered = false;
     attempts = 0;
 
@@ -601,7 +696,7 @@
 
     progressFill.style.width = (inReinforce
       ? ((reinforceIndex + 1) / reinforceList.length)
-      : (index / DATA.perRound)) * 100 + '%';
+      : (index / roundLength())) * 100 + '%';
     progressText.textContent = '';
     paintStars();
   }
@@ -688,7 +783,7 @@
       return;
     }
     index += 1;
-    if (index >= DATA.perRound) {
+    if (index >= roundLength()) {
       /* consume() returns [] when nothing was failed; otherwise it fires
          the callback that mounts the mini-round, which ends the round
          itself, so endRound must not also run here. */
@@ -714,7 +809,7 @@
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
     var idxN = activity.levels.indexOf(level);
-    var nextLevel = (roundCorrect === DATA.perRound && idxN !== -1 && idxN + 1 < activity.levels.length)
+    var nextLevel = (roundCorrect === roundLength() && idxN !== -1 && idxN + 1 < activity.levels.length)
       ? activity.levels[idxN + 1] : null;
     var btnHarder = $('#btnHarder');
     if (nextLevel) {
@@ -738,8 +833,8 @@
   $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
 
   function moveGallery(step) {
-    var slideCount = DATA.gallery.length + 1;
-    galleryIndex = (galleryIndex + 1 + step + slideCount) % slideCount - 1;
+    var slideCount = DATA.gallery.length + 2;
+    galleryIndex = (galleryIndex + 2 + step + slideCount) % slideCount - 2;
     paintGallery();
   }
 

@@ -14,22 +14,22 @@
     instructionIntro: 'Mira estas dos formas.',
     introFlatTitle: 'Forma plana',
     introFlatText: 'Es lisa, como un dibujo en el papel.',
-    introSideText: 'Lado: línea recta del borde.',
-    introCornerText: 'Esquina: donde se juntan dos lados.',
+    introSideTitle: 'Lado',
+    introSideText: 'Es una línea recta del borde.',
+    introCornerTitle: 'Esquina',
+    introCornerText: 'Es donde se juntan dos lados.',
     introSolidTitle: 'Cuerpo',
     introSolidText: 'No es plana. Es como una pelota que puedes coger.',
     galleryPrevious: 'Anterior',
     galleryNext: 'Siguiente',
-    introContinue: 'Verlas en la vida real →',
-    instructionReal: 'Ahora veremos dónde aparecen estas formas.',
+    introContinue: 'Ver en la vida real →',
     realTitle: 'Las formas están a nuestro alrededor',
-    realShape: 'Este objeto tiene forma de {name}.',
     realSide: 'Cada línea recta del borde de una forma plana es un lado.',
     realBack: '← Volver a las formas',
     realContinue: 'Hacer el test →',
-    instructionMenu: 'Elige qué quieres practicar.',
-    testTitle: '¿Qué formas reconoces?',
-    testText: 'Haz un test de formas planas, cuerpos o desarrollos.',
+    instructionMenu: 'Haz una prueba con todos los contenidos.',
+    testTitle: 'Una prueba completa',
+    testText: 'Una ronda con formas, cuerpos y desarrollos.',
     menuBack: '← Volver a los ejemplos',
     contexto: 'Una señal de tráfico, una ventana, una pelota, una lata. Las formas están en todo lo que tocas y ves.',
     explicacion: '✅ Reconocer las formas te ayuda a describir las cosas y a entender señales, planos y dibujos.',
@@ -58,7 +58,8 @@
       rhombus: 'rombo',
       trapezoid: 'trapecio',
       pentagon: 'pentágono',
-      hexagon: 'hexágono'
+      hexagon: 'hexágono',
+      octagon: 'octágono'
     },
     solid: {
       cube: 'cubo',
@@ -78,7 +79,8 @@
         rhombus: '{name}',
         trapezoid: '{name}',
         pentagon: '{name}',
-        hexagon: '{name}'
+        hexagon: '{name}',
+        octagon: '{name}'
       },
       solid: {
         cube: '{name}',
@@ -92,38 +94,27 @@
       real: {
         circle: 'El reloj tiene forma de círculo.',
         triangle: 'La señal de peligro tiene forma de triángulo.',
-        square: 'Una baldosa puede tener forma de cuadrado.',
-        rectangle: 'Una puerta suele tener forma de rectángulo.',
-        rhombus: 'Una cometa puede tener forma de rombo.',
-        trapezoid: 'Algunas macetas tienen forma de trapecio.',
-        pentagon: 'Algunos paneles de un balón tienen forma de pentágono.',
-        hexagon: 'Las celdas de un panal tienen forma de hexágono.',
-        cube: 'Un dado tiene forma de cubo.',
-        rectangularPrism: 'Una caja de cereales tiene forma de prisma rectangular.',
-        triangularPrism: 'Una tienda de campaña puede tener forma de prisma triangular.',
-        pyramid: 'Las pirámides de Egipto tienen forma de pirámide.',
-        sphere: 'Una pelota tiene forma de esfera.',
-        cylinder: 'Una lata tiene forma de cilindro.',
-        cone: 'Un cucurucho tiene forma de cono.'
+        square: 'Una ventana pequeña puede tener forma de cuadrado.',
+        rectangle: 'La puerta tiene forma de rectángulo.',
+        rhombus: 'La cometa tiene forma de rombo.',
+        trapezoid: 'El cubo de playa, visto de lado, parece un trapecio.',
+        pentagon: 'El escudo tiene forma de pentágono.',
+        hexagon: 'Las celdas del panal tienen forma de hexágono.',
+        octagon: 'La señal de stop tiene forma de octágono.',
+        cube: 'El dado tiene forma de cubo.',
+        rectangularPrism: 'La caja de cereales tiene forma de prisma rectangular.',
+        triangularPrism: 'La tienda tiene forma de prisma triangular.',
+        pyramid: 'Una pirámide egipcia.',
+        sphere: 'La pelota tiene forma de esfera.',
+        cylinder: 'La lata tiene forma de cilindro.',
+        cone: 'El cucurucho tiene forma de cono.'
       }
     },
     activity: {
-      desarrollos: { name: 'Cuerpos abiertos', detail: 'Prismas y pirámides.', instruction: 'Si abres una caja y la dejas plana, ves todas sus caras. A eso se le llama el desarrollo. Cuenta las caras y mira sus formas.' },
-      planas: { name: 'Formas planas', detail: 'Polígonos y círculo.', instruction: 'Mira el dibujo y di qué forma es. Después contarás sus lados y sus esquinas.' },
-      cuerpos: { name: 'Cuerpos', detail: 'Prismas, pirámides y cuerpos redondos.', instruction: 'Los cuerpos ocupan espacio. Puedes reconocerlos por sus caras planas y curvas.' }
+      formas: { name: 'Formas', detail: 'Una prueba con todas las formas y cuerpos.' }
     },
     level: {
-      p1: '¿Cuántas caras tiene?',
-      p2: '¿Qué sale al doblarlo?',
-      g1: 'Tres formas',
-      g2: 'Cuatro formas',
-      g3: 'Seis formas',
-      g4: 'Ocho formas',
-      g5: 'De 3 a 5 lados',
-      g6: 'De 3 a 5 esquinas',
-      b1: 'Del objeto al nombre',
-      b2: 'Más cuerpos',
-      b3: 'Del nombre al objeto'
+      test: 'Prueba completa'
     },
     net: {
       cube: { name: 'cubo', gloss: '6 cuadrados' },
