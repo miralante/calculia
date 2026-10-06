@@ -67,7 +67,7 @@
     "introFamousSubtitle": "Fíjate en este ejemplo:",
     "introFamousExample": "Felipe VI → el 6 (VI) es el número romano.",
     "famousPrev": "← Anterior",
-    "famousNext": "Siguiente →",
+    "famousNext": "Aprender la regla →",
 
     /* ---------- Pantalla 3: recordatorio (el valor de cada letra) ---------- */
     "referenceTitle": "Recuerda el valor de cada letra",

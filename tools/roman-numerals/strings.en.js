@@ -64,7 +64,7 @@
     "introFamousSubtitle": "Look at this example:",
     "introFamousExample": "Henry VIII → the 8 (VIII) is a Roman numeral.",
     "famousPrev": "← Previous",
-    "famousNext": "Next →",
+    "famousNext": "Learn the rule →",
 
     /* ---------- Screen 3: reminder (the mechanics) ---------- */
     "referenceTitle": "Remember the value of each letter",
