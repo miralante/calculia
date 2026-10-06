@@ -145,6 +145,10 @@ primero.
 - La primera diapositiva muestra qué es una forma plana y un cuerpo, y
   señala un lado y una esquina en un dibujo. La galería presenta cada
   forma con su nombre, sin enumerar sus partes.
+- En los ejemplos cotidianos también se explica que cada línea recta
+  del borde de una forma plana es un lado. Los tests cuentan lados y
+  esquinas en formas de tres a cinco lados, desde el triángulo hasta el
+  pentágono.
 - Los ángulos, las áreas, los volúmenes, la semejanza y otros conceptos
   geométricos se trabajan en sus actividades específicas (`geometry/`,
   `similar/`).

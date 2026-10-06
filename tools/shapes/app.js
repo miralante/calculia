@@ -20,6 +20,7 @@
   var galleryNext = $('#galleryNext');
   var realObject = $('#realObject');
   var realShape = $('#realShape');
+  var realSide = $('#realSide');
   var realCaption = $('#realCaption');
   var realPrev = $('#realPrev');
   var realNext = $('#realNext');
@@ -272,6 +273,7 @@
     var name = item.type === 'flat' ? shapeName(item.id) : solidName(item.id);
     realObject.textContent = item.object;
     realShape.textContent = App.i18n.t('realShape').replace('{name}', name);
+    realSide.classList.toggle('hidden', item.type !== 'flat' || item.id === 'circle');
     realCaption.textContent = App.i18n.t('gallery.real.' + item.id);
     realPrev.setAttribute('aria-label', App.i18n.t('galleryPrevious'));
     realNext.setAttribute('aria-label', App.i18n.t('galleryNext'));

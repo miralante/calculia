@@ -46,8 +46,8 @@ var DATA = {
         { id: 'g2', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle', 'rectangle'] },
         { id: 'g3', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle', 'rectangle', 'pentagon', 'hexagon'] },
         { id: 'g4', tipo: 'shapeName', shapes: ['circle', 'square', 'triangle', 'rectangle', 'rhombus', 'trapezoid', 'pentagon', 'hexagon'] },
-        { id: 'g5', tipo: 'shapeCount', count: 'sides', shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon', 'hexagon'] },
-        { id: 'g6', tipo: 'shapeCount', count: 'corners', shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon', 'hexagon'] }
+        { id: 'g5', tipo: 'shapeCount', count: 'sides', shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon'] },
+        { id: 'g6', tipo: 'shapeCount', count: 'corners', shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon'] }
       ]
     },
 

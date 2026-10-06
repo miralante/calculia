@@ -24,6 +24,7 @@
     instructionReal: 'Now let us see where these shapes appear.',
     realTitle: 'Shapes are all around us',
     realShape: 'This object is shaped like a {name}.',
+    realSide: 'Each straight line around a flat shape is a side.',
     realBack: '← Back to the shapes',
     realContinue: 'Take the test →',
     instructionMenu: 'Choose what you want to practise.',
@@ -118,8 +119,8 @@
       g2: 'Four shapes',
       g3: 'Six shapes',
       g4: 'Eight shapes',
-      g5: 'Count the sides',
-      g6: 'Count the corners',
+      g5: '3 to 5 sides',
+      g6: '3 to 5 corners',
       b1: 'From object to name',
       b2: 'More solids',
       b3: 'From name to object'

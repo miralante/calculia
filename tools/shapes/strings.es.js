@@ -24,6 +24,7 @@
     instructionReal: 'Ahora veremos dónde aparecen estas formas.',
     realTitle: 'Las formas están a nuestro alrededor',
     realShape: 'Este objeto tiene forma de {name}.',
+    realSide: 'Cada línea recta del borde de una forma plana es un lado.',
     realBack: '← Volver a las formas',
     realContinue: 'Hacer el test →',
     instructionMenu: 'Elige qué quieres practicar.',
@@ -118,8 +119,8 @@
       g2: 'Cuatro formas',
       g3: 'Seis formas',
       g4: 'Ocho formas',
-      g5: 'Contar los lados',
-      g6: 'Contar las esquinas',
+      g5: 'De 3 a 5 lados',
+      g6: 'De 3 a 5 esquinas',
       b1: 'Del objeto al nombre',
       b2: 'Más cuerpos',
       b3: 'Del nombre al objeto'

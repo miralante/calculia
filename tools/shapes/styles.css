@@ -128,6 +128,11 @@
   color: var(--mod-razonamiento);
 }
 
+.real-side {
+  max-width: 36rem;
+  margin: 0;
+}
+
 .solid-top { fill: var(--mod-razonamiento-suave); }
 .solid-left { fill: var(--mod-secuencia-suave, var(--mod-razonamiento-suave)); }
 .solid-right { fill: var(--mod-razonamiento); }

@@ -145,6 +145,9 @@ is rebalanced, this is the document to read first.
 - The first slide shows what a flat shape and a solid are, and points to
   one side and one corner on a drawing. The gallery presents each shape
   by name without counting its parts.
+- The everyday examples also explain that each straight line around a
+  flat shape is a side. The tests count sides and corners on shapes with
+  three to five sides, from triangles to pentagons.
 - Angles, areas, volumes, similarity and other geometry concepts are
   taught in their own activities (`geometry/`, `similar/`).
 
