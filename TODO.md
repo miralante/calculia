@@ -361,7 +361,9 @@ un comentario en cada `data.js` para que no se pierda al añadir actividades.
 
 | Dónde | Orden |
 |---|---|
-| Portada (`index.html`) y progreso (`config/index.html`) | numbers → quantities → mental-math → money → math-tables → fractions-measures → roman-numerals → temperature |
+| Portada (`index.html`) | roman-numerals → shapes (las dos únicas públicas; el resto vive en `dev/`) |
+| Catálogo oculto (`dev/index.html`) | numbers → places → geometry → divisibility → operations → quantities → mental-math → percent → money → math-tables → measures → similar → fractions-measures → problems → temperature, y luego el bloque de razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
+| Progreso (`config/index.html`) | mismo criterio y mismo bloque de razonamiento, pero con `places` y `shapes` delante de `numbers` |
 | `numbers` | ordinales (1º) → comparar (1º) → recta (2º) → unidades (2º-4º) → placevalue (2º-6º) → positivos-y-negativos (5º-6º) |
 | `measures` | longitud → peso → capacidad |
 | `fractions-measures` (solo fracciones y decimales) | fracciones → decimales |

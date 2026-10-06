@@ -972,13 +972,31 @@ async function exerciseShapes(page, baseUrl) {
     const realShapeId = await page.evaluate(index => window.DATA.gallery[index].id, i);
     assert.equal(await page.locator('#realSide').isVisible(), i === 1,
       'La explicación de los lados no coincide con el ejemplo cotidiano');
+    /* The note about sides only lands if one side is actually marked on the
+       drawing: text about straight edges above a picture with nothing
+       marked reads as a sentence about nothing. */
+    assert.equal(await page.locator('#realObject .intro-side-mark').count(), i === 1 ? 1 : 0,
+      'La explicación del lado no señala ningún lado en el ejemplo');
     realExamples.push((await page.locator('#realCaption').innerText()).trim());
-    if (realShapeId === 'trapezoid' || realShapeId === 'hexagon' || realShapeId === 'triangularPrism' ||
-      realShapeId === 'pyramid') {
+    /* Everyday objects that must be drawn, not left to the object's emoji:
+       the shield emoji is not a pentagon, the stop sign emoji loses the
+       word inside it, a parcel is not a cereal box, a rounded warning sign
+       does not have the straight sides the note beside it talks about, and
+       an ice cream emoji hides the cone it is named after. The polygon
+       count is what keeps each drawing honest about its own shape. */
+    const DRAWN_REAL = ['triangle', 'trapezoid', 'pentagon', 'hexagon', 'octagon',
+      'rectangularPrism', 'triangularPrism', 'pyramid', 'cone'];
+    const EXPECTED_REAL_POLYGONS = {
+      triangle: 1, trapezoid: 1, pentagon: 2, hexagon: 7, octagon: 1,
+      rectangularPrism: 3, triangularPrism: 3, pyramid: 2,
+    };
+    if (DRAWN_REAL.indexOf(realShapeId) !== -1) {
+      assert.ok(await page.locator('#realObject svg').count() > 0,
+        'El ejemplo cotidiano de ' + realShapeId + ' se queda en el emoji sin dibujo');
+    }
+    if (realShapeId in EXPECTED_REAL_POLYGONS) {
       const polygonCount = await page.locator('#realObject svg polygon').count();
-      const expectedPolygons = realShapeId === 'trapezoid' ? 1
-        : realShapeId === 'hexagon' ? 7 : realShapeId === 'pyramid' ? 5 : 4;
-      assert.equal(polygonCount, expectedPolygons,
+      assert.equal(polygonCount, EXPECTED_REAL_POLYGONS[realShapeId],
         'La ilustración real no muestra con claridad la forma esperada');
     }
     if (i < realCount - 1) {
@@ -1120,20 +1138,30 @@ async function exerciseNumbers(page, baseUrl) {
   });
   await page.reload();
 
-  const publicCard = page.locator('a[href="tools/numbers/index.html"]');
-  assert.ok(await publicCard.isVisible().catch(() => false),
-    'Números no aparece en la portada pública');
+  /* Números ya no es una tarjeta de portada: el catálogo público solo
+     muestra Números Romanos y Formas, y Números vive en la página oculta
+     dev/. Se comprueba en las dos rutas, para que el reparto no vuelva a
+     romperse en silencio por un lado o por otro. */
+  assert.equal(await page.locator('a[href="tools/numbers/index.html"]').count(), 0,
+    'La portada pública vuelve a mostrar Números');
   assert.equal(await page.locator('a[href="tools/posneg/index.html"]').count(), 0,
     'La portada aún muestra Positivos y negativos como herramienta separada');
-  assert.ok((await publicCard.innerText()).includes('Los Números'),
-    'La tarjeta pública de Números no aparece en español');
-  await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
-  await page.reload();
-  assert.ok((await publicCard.innerText()).includes('Numbers'),
-    'La tarjeta pública de Numbers no aparece en inglés');
+  await page.goto(baseUrl + '/dev/');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
-  await publicCard.click();
+
+  const catalogCard = page.locator('a[href="../tools/numbers/index.html"]');
+  assert.ok(await catalogCard.isVisible().catch(() => false),
+    'Números no aparece en el catálogo de dev/');
+  assert.ok((await catalogCard.innerText()).includes('Los Números'),
+    'La tarjeta de Números del catálogo no aparece en español');
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
+  await page.reload();
+  assert.ok((await catalogCard.innerText()).includes('Numbers'),
+    'La tarjeta de Numbers del catálogo no aparece en inglés');
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
+  await page.reload();
+  await catalogCard.click();
   await page.waitForURL('**/tools/numbers/index.html', { timeout: NAV_TIMEOUT });
   await page.waitForSelector('#screenMenu:not(.hidden)', { timeout: NAV_TIMEOUT });
   actions += 1;

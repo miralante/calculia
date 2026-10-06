@@ -57,7 +57,8 @@ HTML/CSS/JS served as static files.
   ```
   It checks JS syntax, activity folder structure, es/en key parity
   (`tools/`, the site root, `config/`, `legal/`), `sw.js` ↔ disk parity, and
-  catalog lock: Roman Numerals is the only public card; hidden `dev/` lists
+  catalog lock: Roman Numerals and Shapes are the only public cards; hidden
+  `dev/` lists
   the other activities, and their combined set plus `config/` and `sw.js`
   must cover every slug in `tools/`. Read the script before changing the
   file layout — it encodes the invariants that layout relies on.

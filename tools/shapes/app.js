@@ -96,15 +96,25 @@
      diamond, which is not what a square should look like. */
   var SHAPE_FILL = 'var(--mod-razonamiento)';
 
-  function polygonPoints(n, cx, cy, r) {
+  /* Regular polygons, so the drawing and the caption can never disagree on
+     how many sides a shape has. `phase` rotates the first vertex for the
+     shapes that are only right side-on: a stop sign has a flat top edge, so
+     its octagon starts a quarter step further round. */
+  function polygonPoints(n, cx, cy, r, phase) {
     var pts = [];
     for (var i = 0; i < n; i++) {
       /* Start at the top so a triangle points up, the way it is drawn
          everywhere else. */
-      var a = -Math.PI / 2 + (i * 2 * Math.PI) / n;
+      var a = -Math.PI / 2 + (phase || 0) + (i * 2 * Math.PI) / n;
       pts.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
     }
     return pts;
+  }
+
+  function pointsAttr(points) {
+    return points.map(function (p) {
+      return p.x.toFixed(1) + ',' + p.y.toFixed(1);
+    }).join(' ');
   }
 
   function cornerDots(points) {
@@ -201,7 +211,69 @@
       body + '</g></svg>';
   }
 
+  /* The everyday objects below are drawn, not left to the object's emoji.
+     The emoji were wrong in a way only a picture shows: the shield is a
+     rounded heater shield with no pentagon in it, the stop sign comes
+     without the word inside, and a cardboard parcel is not a cereal box.
+     Anything drawn with a fixed colour (a yellow sign, a red stop sign)
+     keeps its own ink instead of following --color-texto, because the
+     background it sits on does not change with the theme either. */
   function realObjectSvg(id) {
+    if (id === 'triangle') {
+      var sign = polygonPoints(3, 60, 58, 46);
+      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
+        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
+        '<polygon points="' + pointsAttr(sign) + '" fill="#F4C95D"/></g>' +
+        '<text x="60" y="72" text-anchor="middle" font-size="38" font-weight="700" ' +
+        'fill="#1E1A12" stroke="none">!</text>' +
+        /* This slide is the only one that shows the note "cada línea recta
+           del borde… es un lado", so one side is marked here for the note
+           to point at, the same mark the introduction uses. */
+        '<line x1="' + sign[2].x.toFixed(1) + '" y1="' + sign[2].y.toFixed(1) +
+        '" x2="' + sign[1].x.toFixed(1) + '" y2="' + sign[1].y.toFixed(1) +
+        '" class="intro-side-mark"/></svg>';
+    }
+    if (id === 'pentagon') {
+      /* A heater shield: flat top, two straight flanks, two straight
+         flanks meeting at the bottom point. Five straight sides, so the
+         pentagon in the caption is visible and countable. */
+      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
+        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
+        '<polygon points="26,16 94,16 102,52 60,100 18,52" class="solid-left"/>' +
+        '<polygon points="37,27 83,27 88,52 60,86 32,52" class="solid-highlight" ' +
+        'stroke="none"/>' +
+        '<rect x="55" y="40" width="10" height="34" class="solid-right" stroke="none"/>' +
+        '<rect x="45" y="50" width="30" height="10" class="solid-right" stroke="none"/>' +
+        '</g></svg>';
+    }
+    if (id === 'octagon') {
+      /* Red and white like every stop sign on the road, so the octagon is
+         eight sides with the word inside it — not a blank red octagon. */
+      var stop = polygonPoints(8, 60, 58, 46, Math.PI / 8);
+      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
+        '<polygon points="' + pointsAttr(stop) + '" fill="#C62828" ' +
+        'stroke="#FFFFFF" stroke-width="6" stroke-linejoin="round"/>' +
+        '<text x="60" y="66" text-anchor="middle" font-size="21" font-weight="700" ' +
+        'letter-spacing="1" fill="#FFFFFF" stroke="none">STOP</text></svg>';
+    }
+    if (id === 'rectangularPrism') {
+      /* Same prism the gallery draws, plus the label and the bowl of cereal on
+         the front panel: a bare carton could be any box, and the caption
+         promises a cereal box. */
+      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
+        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
+        '<polygon points="12,40 34,26 108,26 86,40" class="solid-top"/>' +
+        '<polygon points="12,40 86,40 86,100 12,100" class="solid-left"/>' +
+        '<polygon points="86,40 108,26 108,86 86,100" class="solid-right"/>' +
+        '<rect x="21" y="49" width="56" height="40" rx="4" fill="#F4C95D" ' +
+        'stroke-width="2.5"/>' +
+        '<circle cx="35" cy="61" r="3.5" class="solid-right" stroke="none"/>' +
+        '<circle cx="47" cy="58" r="4" class="solid-right" stroke="none"/>' +
+        '<circle cx="60" cy="62" r="3.5" class="solid-right" stroke="none"/>' +
+        '<path d="M28 68h42a21 13 0 0 1-42 0Z" class="solid-right" stroke-width="2.5"/>' +
+        '<path d="M28 68h42" fill="none" stroke-width="2.5"/>' +
+        '</g></svg>';
+    }
     if (id === 'trapezoid') {
       return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
         '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
@@ -224,17 +296,61 @@
         var fill = index % 2 ? '#EFBF47' : '#F4C95D';
         return '<polygon points="' + points + '" fill="' + fill + '"/>';
       }).join('');
+      /* A bee sitting in the middle cell: the comb is the point of the
+         slide, the bee is what makes it a place where bees live instead
+         of seven empty hexagons. Its body is the surface colour, not the
+         yellow of the wax — a yellow bee on a yellow cell is a smudge.
+         Drawn with ellipses and circles, not polygons, so the hexagon
+         cell count stays at 7. */
+      var bee =
+        '<g stroke="var(--color-texto)" stroke-width="2.5" stroke-linejoin="round">' +
+        '<ellipse cx="49" cy="31" rx="8" ry="4.5" fill="var(--color-superficie)" ' +
+        'transform="rotate(-32 49 31)"/>' +
+        '<ellipse cx="71" cy="31" rx="8" ry="4.5" fill="var(--color-superficie)" ' +
+        'transform="rotate(32 71 31)"/>' +
+        '<ellipse cx="60" cy="45" rx="13" ry="9.5" fill="var(--color-superficie)"/>' +
+        '<path d="M55 37.5v15M60 37.5v15M65 37.5v15" fill="none" stroke-width="3"/>' +
+        '<circle cx="54" cy="42" r="1.8" fill="var(--color-texto)" stroke="none"/>' +
+        '<circle cx="66" cy="42" r="1.8" fill="var(--color-texto)" stroke="none"/>' +
+        '</g>';
       return '<svg viewBox="0 0 120 100" aria-hidden="true">' +
         '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        cellsSvg + '</g></svg>';
+        cellsSvg + '</g>' + bee + '</svg>';
     }
     if (id === 'triangularPrism') {
+      /* A ridge tent: the triangular gable at the front, the ridge running
+         back to the right, and the flap to open. Drawn as a prism with its
+         length visible on purpose — a flat triangle would read as the flat
+         shape, not as the solid the caption names. */
       return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
         '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        '<polygon points="20,88 48,36 72,26 44,78" class="solid-left"/>' +
-        '<polygon points="48,36 72,26 100,78 76,88" class="solid-right"/>' +
-        '<polygon points="20,88 76,88 100,78 44,78" class="solid-top"/>' +
-        '<polygon points="20,88 48,36 76,88" class="solid-base"/>' +
+        '<polygon points="46,22 82,8 108,80 72,94" class="solid-top"/>' +
+        '<polygon points="20,94 46,22 72,94" class="solid-left"/>' +
+        '<polygon points="40,94 46,54 53,94" class="solid-right"/>' +
+        '<line x1="8" y1="94" x2="112" y2="94" fill="none"/></g></svg>';
+    }
+    if (id === 'pyramid') {
+      /* Corner-on, the way a pyramid is photographed: two triangular faces
+         meeting at the front edge, standing on a square base on the sand.
+         The previous drawing had no base under it and read as a sail. */
+      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
+        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
+        '<polygon points="50,20 18,88 50,104" class="solid-left"/>' +
+        '<polygon points="50,20 82,88 50,104" class="solid-right"/>' +
+        '<line x1="6" y1="104" x2="94" y2="104" fill="none"/></g></svg>';
+    }
+    if (id === 'cone') {
+      /* The whole cone, tip included: the ice cream emoji shows a scoop on
+         a stub, with no cone you could name. Here the rim, the waffle body
+         and the point are all there. */
+      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
+        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
+        '<path d="M60 100 36 50a24 8 0 0 0 48 0Z" class="solid-left"/>' +
+        '<path d="M48 56 60 96M72 56 62 96" fill="none" stroke-width="2"/>' +
+        '<ellipse cx="60" cy="50" rx="24" ry="8" class="solid-right"/>' +
+        '<circle cx="46" cy="38" r="12" fill="#F4C95D"/>' +
+        '<circle cx="74" cy="38" r="12" fill="#F4C95D"/>' +
+        '<circle cx="60" cy="30" r="13" fill="#F4C95D"/>' +
         '</g></svg>';
     }
     if (id === 'pyramid') {

@@ -331,8 +331,8 @@ if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'
 if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
 /* --- 5. Public/private catalog split ---
-   The public landing carries THREE entries (Numbers, Roman Numerals,
-   Shapes); the hidden dev/ page carries every
+   The public landing carries TWO entries (Roman Numerals, Shapes);
+   the hidden dev/ page carries every
    other activity. Together they cover the full tools/, config/,
    and sw.js activity set. Public activities are the longest-lived
    "front door" — they stay discoverable for any visitor even when
@@ -362,7 +362,7 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['numbers', 'roman-numerals', 'shapes'];
+var PUBLIC_SLUGS = ['roman-numerals', 'shapes'];
 var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
 var expectedDevSlugs = new Set(slugs.filter(function (slug) {
   return PUBLIC_SLUGS.indexOf(slug) === -1;
