@@ -18,6 +18,7 @@
     "numbers": { "name": "Numbers", "detail": "Read and compare. Learn about positive and negative numbers." },
     "places": { "name": "Places and sizes", "detail": "Inside, outside, longer." },
     "shapes": { "name": "Shapes", "detail": "The shapes you see every day." },
+    "scale": { "name": "Scale", "detail": "Read a ruler, a thermometer and a plan." },
     "geometry": { "name": "Geometry", "detail": "Angles, edges and halves." },
     "similar": { "name": "Same shapes", "detail": "Sizes, squares and ramps." },
     "fractionsmeasures": { "name": "Fractions", "detail": "Parts, halves and decimals." },

@@ -81,7 +81,7 @@ If you get it right, a brief celebration appears. If not, you get an encouraging
 | **Wallet** | Practise giving and receiving money, working out change and managing a small budget. |
 | **Quantities** | Compare quantities, estimate and reason about "more / less / equal". |
 | **Roman numerals** | Read and write Roman numerals up to the thousands. |
-| **Shapes** | Recognise flat shapes and solids, count their sides and their corners. |
+| **Shapes** | Recognise flat shapes and solids, count their sides and their vertices, and introduce perimeter, area, volume, symmetry and similarity before measuring them. |
 | **Same shapes** | Tell whether two figures are the same shape at another size, count the squares on the sides of a right triangle, and compare how steep two ramps are. |
 | **Fractions** | Recognise, compare and operate with simple fractions and decimals. |
 | **Measures** | Choose the right unit (cm, m, g, kg, ml, l) and estimate length, weight and capacity. |

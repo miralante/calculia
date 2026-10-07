@@ -76,7 +76,7 @@ calculia/
 │   ├── js/dinero.js       #   window.App.dinero (used by The Wallet)
 │   ├── fonts/              #   self-hosted woff2 (Atkinson Hyperlegible, Nunito)
 │   └── img/icono.svg       #   app icon (also the PWA icon)
-├── tools/<slug>/          # Level 2: one folder per ACTIVITY (27 total)
+├── tools/<slug>/          # Level 2: one folder per ACTIVITY (28 total)
 │   ├── index.html         #   structure and asset loading
 │   ├── app.js             #   logic only
 │   ├── data.js             #   data only
@@ -90,7 +90,7 @@ calculia/
 └── _headers                # Cloudflare Pages cache and security headers
 ```
 
-Same three-level architecture as Apptonomia, scoped to 27 activities. The public `index.html` links to the two front-door activities (Roman Numerals, Shapes); the hidden `dev/index.html` links to the other 25 activities, Numbers among them. Positive and negative numbers are part of Numbers, not a separate tool. The list of public slugs lives in `scripts/check.js` (`PUBLIC_SLUGS`).
+Same three-level architecture as Apptonomia, scoped to 28 activities. The public `index.html` links to the three front-door activities (Roman Numerals, Shapes, Scale); the hidden `dev/index.html` links to the other 25 activities, Numbers among them, plus the ones named in `BOTH_SLUGS` (Scale, which is both a front door and still listed in the full catalogue). Positive and negative numbers are part of Numbers, not a separate tool. The list of public slugs lives in `scripts/check.js` (`PUBLIC_SLUGS` and `BOTH_SLUGS`).
 
 ### 2.1 `assets/` — shared core, kept whole
 
@@ -134,7 +134,7 @@ header comment for its specific data format.
 Two actions, same two-step-confirmation pattern as Apptonomia:
 
 - **Reset person data**: removes the language preference only. None of
-  Calculia's 27 activities store a name or other personal field, so
+  Calculia's 28 activities store a name or other personal field, so
   there is no `TOOLS_WITH_NAME` list here (Apptonomia's settings/app.js
   has one, for Piano).
 - **Reset entire app**: deletes every `calculia:*` key.
@@ -347,7 +347,7 @@ the **template**; deviations are called out where they apply.
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v5aa">
+  <link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v75403dc2">
 </head>
 <body>
   <div class="container {legal|about}">
@@ -393,9 +393,11 @@ the **template**; deviations are called out where they apply.
        are deferred, and deferred scripts run in document order, so
        listing them in that order is enough. The ?v= is not optional:
        .js and .css are served immutable for a year, and without it the
-       page serves the stale copy from cache. -->
-  <script src="../assets/js/locale-picker-config.js?v=calculia-v5aa"></script>
-  <script src="../assets/js/locale-picker.js?v=calculia-v5aa" defer></script>
+       page serves the stale copy from cache. The value is NOT typed by
+       hand: `node scripts/asset-tokens.js` derives it from the file's own
+       hash, and scripts/check.js (check 16) fails if any drifted. -->
+  <script src="../assets/js/locale-picker-config.js?v=calculia-v3be3c240"></script>
+  <script src="../assets/js/locale-picker.js?v=calculia-v8b6a4103" defer></script>
   <script>
     /* Register the SW from this entry point so it is active for any
        later navigation, matching what the main index.html and the

@@ -157,16 +157,16 @@
 }
   </script>
 
-  <link rel="stylesheet" href="assets/css/tokens.css?v=calculia-v2bca">
-  <link rel="stylesheet" href="assets/css/base.css">
-  <link rel="stylesheet" href="assets/css/components.css"><link rel="stylesheet" href="assets/css/locale-picker.css?v=calculia-v2bcaa">  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=calculia-v33a007d2">
+  <link rel="stylesheet" href="assets/css/base.css?v=calculia-v89f2211a">
+  <link rel="stylesheet" href="assets/css/components.css?v=calculia-v62e5b2c5"><link rel="stylesheet" href="assets/css/locale-picker.css?v=calculia-v75403dc2">  <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
   <div class="container suite-home">
     <header class="cabecera centered suite-header">
       <div class="suite-brand">
-        <img src="assets/img/icono.svg" alt="" width="44" height="44" class="logo">
+        <img src="assets/img/icono.svg?v=calculia-v8587a7e0" alt="" width="44" height="44" class="logo">
         <div class="suite-brand-copy">
           <h1>Calculia</h1>
           <p class="suite-attribution"><span data-i18n="suiteBy">Una app de</span> <a href="https://apptonomia.uk/">Apptonomia</a>.</p>
@@ -185,15 +185,20 @@
       <section class="modulo" id="mod-mates" style="--acento: var(--mod-razonamiento); --acento-suave: var(--mod-razonamiento-suave);">
         <h2><span aria-hidden="true" data-i18n="modMates">Matemáticas</span></h2>
         <div class="grid-cards">
-          <a href="tools/roman-numerals/index.html" class="card">
+          <a href="tools/roman-numerals/" class="card">
             <span class="picto" aria-hidden="true">🏛️</span>
             <span class="name" data-i18n="romannumerals.name">Números Romanos</span>
             <span class="detalle" data-i18n="romannumerals.detail">Aprende a reconocer los siglos.</span>
           </a>
-          <a href="tools/shapes/index.html" class="card">
+          <a href="tools/shapes/" class="card">
             <span class="picto" aria-hidden="true">🔷</span>
             <span class="name" data-i18n="shapes.name">Formas</span>
             <span class="detalle" data-i18n="shapes.detail">Círculos, cuadrados y cuerpos.</span>
+          </a>
+          <a href="tools/scale/" class="card">
+            <span class="picto" aria-hidden="true">📏</span>
+            <span class="name" data-i18n="scale.name">Escala</span>
+            <span class="detalle" data-i18n="scale.detail">Lee una regla, un termómetro y un plano.</span>
           </a>
         </div>
       </section>
@@ -202,12 +207,12 @@
     <footer data-pie-app data-pie-base="./" data-pie-class="pie-app"></footer>
   </div>
 
-  <script src="assets/js/utils.js"></script>
-  <script src="assets/js/i18n.js"></script>
-  <script src="assets/js/tts.js"></script>
-  <script src="assets/js/storage.js"></script>
-  <script src="strings.es.js"></script>
-  <script src="strings.en.js"></script>
+  <script src="assets/js/utils.js?v=calculia-vfe7bb202"></script>
+  <script src="assets/js/i18n.js?v=calculia-v3d393c12"></script>
+  <script src="assets/js/tts.js?v=calculia-va9046a0d"></script>
+  <script src="assets/js/storage.js?v=calculia-vd97e2550"></script>
+  <script src="strings.es.js?v=calculia-vd8d6db8f"></script>
+  <script src="strings.en.js?v=calculia-v5aa6ebbd"></script>
   <script src="app.js"></script>
   <!-- Locale picker config (must run BEFORE assets/js/locale-picker.js).
        Calculia stores the landing strings next to this page, at the site
@@ -219,8 +224,8 @@
        inline block would be blocked and the picker would fall back to
        its own defaults (a js/strings folder Calculia does not have,
        plus the apptonomia:locale key). -->
-  <script src="assets/js/locale-picker-config.js?v=1ab"></script>
-  <script src="assets/js/locale-picker.js?v=calculia-v5aaa" defer></script>
-  <script src="assets/js/sw-register.js"></script>
+  <script src="assets/js/locale-picker-config.js?v=calculia-v3be3c240"></script>
+  <script src="assets/js/locale-picker.js?v=calculia-v8b6a4103" defer></script>
+  <script src="assets/js/sw-register.js?v=calculia-v58bd4f76"></script>
 </body>
 </html>

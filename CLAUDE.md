@@ -18,8 +18,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Calculia is a static, dependency-free web app with 27 activities for
-practicing math and logical reasoning: Places and sizes, Numbers, Shapes, Geometry, Same shapes, Fractions, Measures,
+Calculia is a static, dependency-free web app with 28 activities for
+practicing math and logical reasoning: Places and sizes, Numbers, Shapes, Geometry, Same shapes, Fractions, Measures, Scale,
 Subtraction and Mental Math, Money, Percentages, Math Tables, Exact groups, Big sums, Quantities, Roman
 Numerals, Problems, Water Temperature, The balance, Data and charts, The Calendar, Riddles, Patterns,
 The Wallet, The Clock, Stories, What Doesn't Belong?, and Puzzle. See
@@ -57,7 +57,9 @@ HTML/CSS/JS served as static files.
   ```
   It checks JS syntax, activity folder structure, es/en key parity
   (`tools/`, the site root, `config/`, `legal/`), `sw.js` ↔ disk parity, and
-  catalog lock: Roman Numerals and Shapes are the only public cards; hidden
+  catalog lock: Roman Numerals, Shapes and Scale are the public cards,
+  and Scale is listed in `dev/` as well (the `BOTH_SLUGS` list in
+  `scripts/check.js`); hidden
   `dev/` lists
   the other activities, and their combined set plus `config/` and `sw.js`
   must cover every slug in `tools/`. Read the script before changing the
@@ -79,13 +81,51 @@ the new cache and the `activate` handler will delete the old one. This
 is also called out in `doc/en/technical.md` § 4 and in
 `doc/en/I18N.md` step 6.
 
+### Asset version tokens (`?v=`) — never hand-edit these
+
+This is the **second, independent** cache layer and it has its own trap.
+`_headers` serves `assets/css/*`, `assets/js/*`, `assets/fonts/*` and
+`assets/img/*` as `max-age=31536000, immutable`: one year, no revalidation.
+A changed asset therefore only reaches a returning visitor if the *URL that
+references it* changes. That is what `?v=` is for.
+
+The tokens used to be a hand-typed serial bumped by appending an `a`
+(`calculia-v5aa` → `calculia-v5aaa`), applied per file rather than per
+deploy. The same asset ended up referenced with **different tokens from
+different pages** — `locale-picker.css` carried `calculia-v2bcaa` on the
+landing page and `calculia-v5aa` on `about/`, `team/`, `config/` and
+`legal/` — and 15 immutable assets had no token at all. Nothing failed
+when a reference was missed; pages just quietly served a year-old
+stylesheet.
+
+**Rule: never type a `?v=` value by hand.** Run:
+
+```bash
+node scripts/asset-tokens.js          # rewrite all tokens
+node scripts/asset-tokens.js --check  # verify only (exit 1 on drift)
+```
+
+The token is `sha256(<file bytes>)[0:8]`, so the same file always yields
+the same token on every page, editing a file changes its token everywhere,
+and there is no serial left to forget. `scripts/check.js` check 16 runs
+`--check` and fails the gate with the exact expected value if anything
+drifted, so this can no longer happen silently.
+
+Only the four globs above get a token. Page-local files (`styles.css`,
+`app.js`, `strings.*.js`) are `max-age=300` or `must-revalidate` and must
+**not** have one — a token there would defeat the revalidation.
+
+Note the service worker caches the *clean* paths (`assets/js/i18n.js`),
+never the tokenised URL. That is intentional: the SW owns the offline
+copy, the token only busts the HTTP cache of a live visitor.
+
 ## Architecture
 
 **See [`doc/en/technical.md`](doc/en/technical.md) for the full technical
 reference** — the file-by-file breakdown, the shared-core API, and the
 activity anatomy. It follows the same three-level architecture as
 Apptonomia (shared core in `assets/`, one folder per activity in
-`tools/<slug>/`, a landing at the site root), just scoped to 27 activities
+`tools/<slug>/`, a landing at the site root), just scoped to 28 activities
 grouped into two sections (Math, Reasoning and logic) instead of
 Apptonomia's 7 therapeutic modules.
 
@@ -103,7 +143,7 @@ checking every `tools/<slug>/app.js` for a caller first.
 
 `config/` is trimmed relative to Apptonomia's: no backup export/import,
 no font-size/sound preferences, no personal-data form (none of Calculia's
-27 activities store a name or other personal field) — just progress
+28 activities store a name or other personal field) — just progress
 view and the two reset actions. There is no `/team/` or `/about/` hidden
 route (those are Apptonomia-specific, aimed at its full multi-audience
 product story); `/settings/` and `/legal/` cover what a smaller,
@@ -272,3 +312,26 @@ publicly naming a clinical group. This rule is mirrored in the
 metaproject's `apptonomia/CLAUDE.md` and in every sibling's own
 `CLAUDE.md` and `SPEC.md` so it survives a single project's docs going
 out of sync.
+
+## Asset version tokens (`?v=`) — never hand-edit these
+
+This project's `_headers` serves some assets as
+`Cache-Control: public, max-age=31536000, immutable`: one year, no
+revalidation. A changed asset only reaches a returning visitor if the
+URL referencing it changes, which is what `?v=` is for. The tokens used
+to be a hand-typed serial, so the same asset ended up with different
+tokens on different pages and a missed reference failed silently.
+
+The token is now a hash of the file's own bytes. Do not type one by hand:
+
+```bash
+node ../scripts/asset-tokens.js calculia           # rewrite
+node ../scripts/asset-tokens.js --check calculia   # verify
+```
+
+`scripts/check-version-bump.js` runs the check, so a stale token fails
+the pre-push gate with the exact value it expects. Which files are
+tokenised is read from this project's own `_headers` — see
+[../scripts/ASSET-TOKENS.md](../scripts/ASSET-TOKENS.md) for the
+per-project table and for why `*.js` also matches nested paths and why
+fonts are tokenised from CSS rather than from HTML.

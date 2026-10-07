@@ -53,7 +53,7 @@ is rebalanced, this is the document to read first.
 | Activity | Slug (`tools/`) | Didactic objective | Key vocabulary |
 |---|---|---|---|
 | Numbers | `numbers/` | Reading, writing and comparing whole numbers, sequences and place value. Understanding positive numbers, negative numbers and zero through everyday examples and guided practice. | number, count, sequence, place, greater, smaller, equal, positive, negative, zero, thermometer, elevator. |
-| Shapes | `shapes/` | Recognising flat shapes and solids, connecting them with real objects, and practising their names and parts. | circle, polygon, side, corner, cube, prism, pyramid, sphere, cylinder, cone. |
+| Shapes | `shapes/` | Recognising flat shapes and solids, connecting them with real objects, and practising their names, their parts, and the concepts of perimeter, area, volume, symmetry and similarity. | circle, polygon, side, vertex, perimeter, area, volume, symmetry, similarity, cube, prism, pyramid, sphere, cylinder, cone. |
 | Fractions and measures | `fractions-measures/` | Recognising, comparing and operating with fractions and common units of measure. | fracción, mitad, tercio, metro, kilo, litro, comparar. |
 | Math tables | `math-tables/` | Multiplication and division facts through repetition and short challenges. | tabla, multiplicar, dividir, producto. |
 | Mental math | `mental-math/` | Quick calculation with the four operations, no written intermediate steps. | sumar, restar, multiplicar, dividir, rápido, cálculo. |
@@ -142,15 +142,45 @@ is rebalanced, this is the document to read first.
 - Distinguishing flat shapes, which have no volume, from solids:
   cubes, prisms, pyramids, spheres, cylinders and cones (`shapes/`).
 - Connecting each shape with everyday objects and practising its name,
-  sides, corners and faces (`shapes/`).
-- The first slide shows what a flat shape and a solid are, and points to
-  the next explains side and corner with two drawings side by side. The
-  gallery presents each shape by name without counting its parts.
-- The everyday examples also explain that each straight line around a
-  flat shape is a side. One test mixes questions about every shape, sides
-  and corners from triangles to pentagons, solids, and solid nets.
-- Angles, areas, volumes, similarity and other geometry concepts are
-  taught in their own activities (`geometry/`, `similar/`).
+  sides, vertices, perimeter, area, volume, symmetry and similarity (`shapes/`).
+- **Four concept slides** come before the gallery. The first shows what a
+  flat shape and a solid are. The second explains the edge of a figure:
+  side and vertex —the everyday word and the geometry one, both of them—
+  side by side, and the perimeter underneath, which is the way round all
+  the sides and so takes the whole row. The third pairs the inside of the
+  two things: the area of the figure and the volume of the solid. The fourth
+  compares two figures, symmetry (it folds into two equal halves) and
+  similarity (the same shape at another size).
+- Each concept is taught with a drawing of its own rather than with the
+  word: the perimeter is the outline in dashes, the area is the inside
+  hatched and clipped to the shape itself, the volume is the box in dashes
+  with the solid inside it, and symmetry is the line it folds along.
+- The gallery presents each shape by name with a small clarification
+  underneath: the sides and vertices of the flat shape, or the faces of the
+  solid and what they are shaped like. The clarification is not a heading,
+  it is not read before the name, and it never gives away a question of the
+  test.
+- The everyday examples then pair each shape with a real object and a
+  caption, and a note applies to that object the concepts that belong to it:
+  to a figure, its sides, vertices, perimeter and area; to a solid, its
+  volume. The note does not define them again, it counts them.
+- One test of 50 questions mixes the names of every shape, sides and
+  vertices from triangles to pentagons, perimeters, area, volume, symmetry,
+  similarity, solids, and solid nets.
+- **The concepts are introduced here, not computed.** `shapes/` asks about
+  them in their recognition form —which part of the figure is its area,
+  which way it folds, which one is the same shape made smaller— and the
+  calculation stays where it already was: area by counting little squares and
+  perimeter on the grid belong to `geometry/`, volume by counting cubes as
+  well, and similarity with scales and slopes belongs to `similar/`. The
+  same numbers are never asked twice across the suite.
+- Two choices in how perimeter and symmetry are presented are forced by the
+  question, not by taste. The perimeter is only measured on regular
+  figures, because a rectangle or a trapezoid does not have a single side
+  length. And symmetry is only asked of figures with exactly one vertical
+  fold line —triangle, pentagon, trapezoid— because a square or a hexagon
+  has a horizontal one too and the question would have no single answer.
+  Both lists are checked when the activity starts.
 
 ### 3.11 Logic and proof
 

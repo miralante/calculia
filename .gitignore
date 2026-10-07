@@ -39,3 +39,7 @@ id_ed25519
 id_ed25519.pub
 **/credentials.json
 **/service-account*.json
+
+# Screenshots and logs from the one-off probes (never commit; the deploy
+# already excludes them via .assetsignore, git was not)
+/test-results/

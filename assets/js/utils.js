@@ -97,7 +97,7 @@
       if (includeConfig) {
         html += '<a href="' + base + 'config/" class="legal-link" data-i18n="core.config"></a>';
       }
-      html += '<a href="' + base + 'legal/index.html" class="legal-link" data-i18n="core.dataProtection"></a>';
+      html += '<a href="' + base + 'legal/" class="legal-link" data-i18n="core.dataProtection"></a>';
       pie.innerHTML = html;
       if (typeof window.App.i18n.apply === 'function') {
         window.App.i18n.apply(pie);

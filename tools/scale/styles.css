@@ -1,0 +1,271 @@
+/* Scale — tool-specific styles. Shared styles live in assets/css/. */
+
+/* ---- The drawing ----
+   Every rule is drawn from the same numbers the answer is compared
+   against, so the colour here is the only thing that could make the
+   picture disagree with the question. Scripts/one-off/
+   probe-escala-contraste.js measures each pair below in the three
+   themes: a mark at 1.2:1 against the ruler is a mark nobody sees,
+   and no structural check reports that. */
+.scale-svg {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+}
+
+.prompt {
+  margin: 0;
+  text-align: center;
+}
+
+.legend {
+  margin: 0.5rem 0 0;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-pequeno);
+  text-align: center;
+}
+
+/* ---- The ruler ----
+   The outline is --color-texto and not --color-borde on purpose: the
+   border token measures 1.50:1 on the surface in light and 1.55:1 in
+   dark, so a ruler outlined with it is a ruler whose edges are not
+   there. The body would then read as loose tick marks floating on the
+   card. probe-escala-contraste.js is what caught it. */
+.ruler-face {
+  fill: var(--color-superficie);
+  stroke: var(--color-texto);
+  stroke-width: 2;
+}
+.ruler-tick {
+  stroke: var(--color-texto);
+  stroke-width: 2;
+}
+/* The mark the question is about. It is longer than every other mark
+   as well as a different colour, so it is still the mark that is
+   pointed out when colour is not perceived (WCAG 1.4.1). */
+.ruler-tick-here {
+  stroke: var(--mod-razonamiento);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+.ruler-num {
+  fill: var(--color-texto);
+  font-size: 12px;
+  text-anchor: middle;
+}
+.ruler-unit {
+  fill: var(--color-texto-suave);
+  font-size: 13px;
+}
+.pencil-body {
+  fill: var(--mod-secuencia);
+}
+.pencil-tip {
+  fill: var(--mod-razonamiento);
+}
+
+/* ---- Vertical instruments: thermometer and jug ---- */
+.gauge-tube {
+  fill: var(--color-superficie);
+  stroke: var(--color-texto);
+  stroke-width: 2;
+}
+.gauge-level {
+  fill: var(--mod-secuencia);
+}
+.gauge-bulb {
+  fill: var(--mod-secuencia);
+}
+.gauge-tick {
+  stroke: var(--color-texto);
+  stroke-width: 2;
+}
+.gauge-tick-here {
+  stroke: var(--mod-razonamiento);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+.gauge-num {
+  fill: var(--color-texto);
+  font-size: 12px;
+}
+.gauge-unit {
+  fill: var(--color-texto-suave);
+  font-size: 13px;
+}
+/* The handle and the pouring lip exist so the jug is not read as a
+   second thermometer. Both are strokes and neither is filled: the lip
+   filled reads as a mouse cursor sitting on the rim of the vessel. */
+.gauge-handle,
+.gauge-lip {
+  fill: none;
+  stroke: var(--color-texto);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+/* ---- A stretch of ruler with only its two end numbers ---- */
+.span-face {
+  fill: var(--color-superficie);
+  stroke: var(--color-texto);
+  stroke-width: 2;
+}
+.span-tick {
+  stroke: var(--color-texto);
+  stroke-width: 2;
+}
+.span-tick-end {
+  stroke: var(--mod-razonamiento);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.span-num {
+  fill: var(--color-texto);
+  font-size: 14px;
+  font-weight: 700;
+}
+/* The guides tie the two ends of the pencil to their numbers, and the
+   pencil itself is the accent: what is measured is what is coloured. */
+.span-guide {
+  stroke: var(--color-texto-suave);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+}
+.span-object {
+  fill: var(--mod-secuencia);
+}
+
+/* ---- The scale of a plan ---- */
+.plan-bar {
+  fill: var(--color-superficie);
+  stroke: var(--color-texto);
+  stroke-width: 2;
+}
+.plan-seg {
+  stroke: var(--color-texto);
+  stroke-width: 2;
+}
+.plan-num,
+.plan-measure {
+  fill: var(--color-texto);
+  font-size: 12px;
+}
+.plan-measure {
+  font-size: 14px;
+  font-weight: 700;
+}
+.plan-row-label {
+  fill: var(--color-texto-suave);
+  font-size: 13px;
+}
+.plan-route {
+  stroke: var(--color-texto);
+  stroke-width: 3;
+}
+.plan-dot {
+  fill: var(--mod-razonamiento);
+  stroke: var(--color-superficie);
+  stroke-width: 2;
+}
+
+/* ---- Four answers: two by two when there is room for them ---- */
+.options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio);
+}
+@media (min-width: 480px) {
+  .options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ---- Screens ---- */
+.center-row {
+  justify-content: center;
+  text-align: center;
+}
+.centered {
+  align-items: center;
+  text-align: center;
+}
+.tool-header h1 { font-size: 1.5rem; }
+
+.concept-card {
+  align-items: center;
+  border-color: var(--mod-razonamiento-suave);
+}
+.concept-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 150px;
+}
+.concept-title {
+  margin: 0;
+  color: var(--mod-razonamiento);
+  font-size: 1.3rem;
+}
+.concept-text {
+  max-width: 34rem;
+  margin: 0;
+  text-align: center;
+}
+
+.real-card {
+  align-items: center;
+  border-color: var(--mod-razonamiento-suave);
+}
+.real-object {
+  min-height: 1.2em;
+  font-size: 5rem;
+  line-height: 1.2;
+}
+.real-caption {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.real-note {
+  max-width: 30rem;
+  margin: 0;
+  color: var(--color-texto-suave);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--espacio);
+}
+.carousel-controls .btn {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.intro-buttons {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--espacio);
+}
+
+.emoji-large {
+  font-size: 3.5rem;
+  line-height: 1.1;
+}
+.transfer {
+  max-width: 34rem;
+  margin: 0 auto;
+  color: var(--color-texto-suave);
+  text-align: center;
+}

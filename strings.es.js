@@ -18,6 +18,7 @@
     "numbers": { "name": "Los Números", "detail": "Lee y compara. Aprende los positivos y negativos." },
     "places": { "name": "Sitios y tamaños", "detail": "Dentro, fuera, más largo." },
     "shapes": { "name": "Formas", "detail": "Las formas que ves cada día." },
+    "scale": { "name": "Escala", "detail": "Lee una regla, un termómetro y un plano." },
     "geometry": { "name": "Geometría", "detail": "Ángulos, bordes y mitades." },
     "similar": { "name": "Formas parecidas", "detail": "Tamaños, cuadrados y rampas." },
     "fractionsmeasures": { "name": "Fracciones", "detail": "Partes, mitades y decimales." },

@@ -1510,7 +1510,7 @@
   signedTempNext.addEventListener('click', finishSignedTemperatureMission);
 
   $('#noteExtra').innerHTML = App.i18n.t('notaTablas')
-    .replace('{link}', '<a href="../math-tables/index.html">' + App.i18n.t('notaTablasLink') + '</a>');
+    .replace('{link}', '<a href="../math-tables/">' + App.i18n.t('notaTablasLink') + '</a>');
 
   paintMenu();
   paintStars();

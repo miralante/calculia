@@ -54,7 +54,7 @@ primero.
 | Actividad | Slug (`tools/`) | Objetivo didáctico | Vocabulario clave |
 |---|---|---|---|
 | Números | `numbers/` | Leer, escribir y comparar números enteros, secuencias y valor posicional. Comprender positivos, negativos y cero con ejemplos cotidianos y práctica guiada. | número, contar, secuencia, posición, mayor, menor, igual, positivo, negativo, cero, termómetro, ascensor. |
-| Formas | `shapes/` | Reconocer formas planas y cuerpos geométricos, relacionarlos con objetos reales y practicar sus nombres y partes. | círculo, polígono, lado, esquina, cubo, prisma, pirámide, esfera, cilindro, cono. |
+| Formas | `shapes/` | Reconocer formas planas y cuerpos geométricos, relacionarlos con objetos reales y practicar sus nombres, sus partes y los conceptos de perímetro, área, volumen, simetría y semejanza. | círculo, polígono, lado, vértice, perímetro, área, volumen, simetría, semejanza, cubo, prisma, pirámide, esfera, cilindro, cono. |
 | Fracciones y medidas | `fractions-measures/` | Reconocer, comparar y operar con fracciones y unidades de medida habituales. | fracción, mitad, tercio, metro, kilo, litro, comparar. |
 | Tablas de multiplicar | `math-tables/` | Tablas de multiplicar y dividir mediante repetición y retos cortos. | tabla, multiplicar, dividir, producto. |
 | Cálculo mental | `mental-math/` | Cálculo rápido con las cuatro operaciones, sin pasos intermedios escritos. | sumar, restar, multiplicar, dividir, rápido, cálculo. |
@@ -142,17 +142,44 @@ primero.
 - Distinguir las formas planas, que no tienen volumen, de los cuerpos:
   cubo, prismas, pirámide, esfera, cilindro y cono (`shapes/`).
 - Relacionar cada forma con objetos cotidianos y practicar sus nombres,
-  lados, esquinas y caras (`shapes/`).
-- La primera diapositiva muestra qué es una forma plana y un cuerpo, y
-  la siguiente explica lado y esquina con dos dibujos juntos. La galería
-  presenta cada forma con su nombre, sin enumerar sus partes.
-- En los ejemplos cotidianos también se explica que cada línea recta
-  del borde de una forma plana es un lado. Un solo test mezcla preguntas
-  de todas las formas, lados y esquinas del triángulo al pentágono,
-  cuerpos y desarrollos.
-- Los ángulos, las áreas, los volúmenes, la semejanza y otros conceptos
-  geométricos se trabajan en sus actividades específicas (`geometry/`,
-  `similar/`).
+  lados, vértices, perímetro, área, volumen, simetría y semejanza (`shapes/`).
+- **Cuatro diapositivas de conceptos** antes de la galería. La primera
+  muestra qué es una forma plana y un cuerpo. La segunda explica el borde
+  de la figura: lado y vértice —la palabra de cada día y la de geometría,
+  las dos— en paralelo, y el perímetro debajo, que es la vuelta por todos
+  los lados y por eso ocupa la fila entera. La tercera empareja el interior
+  de las dos cosas: el área de la figura y el volumen del cuerpo. La cuarta
+  compara dos figuras, la simetría (se dobla en dos mitades iguales) y la
+  semejanza (la misma forma a otro tamaño).
+- Cada concepto se enseña con un dibujo propio, no con la palabra: el
+  perímetro es el contorno a trazos, el área el interior rayado y recortado
+  por la propia forma, el volumen la caja en trazos con el cuerpo dentro, y
+  la simetría la raya por la que se dobla.
+- La galería presenta cada forma con su nombre y, debajo, una aclaración
+  pequeña: los lados y los vértices que tiene la forma plana, o las caras
+  del cuerpo y de qué forma son. La aclaración no es un título, no se lee
+  antes que el nombre y no adelanta ninguna pregunta del test.
+- Los ejemplos cotidianos emparejan después cada forma con un objeto real
+  y su pie, y una nota aplica sobre ese objeto los conceptos que le
+  corresponden: a una figura, sus lados, vértices, perímetro y área; a un
+  cuerpo, su volumen. La nota no vuelve a definirlos, los cuenta.
+- Un solo test de 50 preguntas mezcla los nombres de todas las formas, lados
+  y vértices del triángulo al pentágono, perímetros, área, volumen, simetría,
+  semejanza, cuerpos y desarrollos.
+- **Aquí se presentan los conceptos, no se calculan.** `shapes/` pregunta por
+  ellos en su forma de reconocer —qué parte de la figura es su área, por
+  dónde se dobla, cuál es la misma forma más pequeña— y el cálculo se queda
+  donde ya está: el área contando cuadraditos y el perímetro sobre la
+  cuadrícula son de `geometry/`, el volumen contando cubitos también, y la
+  semejanza con escalas y pendientes es de `similar/`. Los mismos números
+  no se piden dos veces en la suite.
+- Dos decisiones de la presentación del perímetro y de la simetría están
+  forzadas por la pregunta, no por gusto. El perímetro solo se mide en
+  figuras regulares, porque en un rectángulo o un trapecio el lado no es uno
+  solo. Y la simetría solo se pregunta de figuras con un único eje vertical
+  —triángulo, pentágono, trapecio—, porque un cuadrado o un hexágono tienen
+  también el horizontal y la pregunta no tendría una sola respuesta. Ambas
+  listas se comprueban al arrancar la actividad.
 
 ### 3.11 Lógica y justificación
 

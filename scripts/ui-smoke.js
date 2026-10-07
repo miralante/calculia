@@ -862,7 +862,7 @@ async function exerciseShapes(page, baseUrl) {
   await page.evaluate(() => localStorage.removeItem('calculia:shapes'));
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
-  const publicCard = page.locator('a[href="tools/shapes/index.html"]');
+  const publicCard = page.locator('a[href="tools/shapes/"]');
   assert.ok(await publicCard.isVisible().catch(() => false),
     'Formas no aparece en la portada pública');
   assert.ok((await publicCard.innerText()).includes('Formas'),
@@ -876,7 +876,7 @@ async function exerciseShapes(page, baseUrl) {
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
   await publicCard.click();
-  await page.waitForURL('**/tools/shapes/index.html', { timeout: NAV_TIMEOUT });
+  await page.waitForURL('**/tools/shapes/', { timeout: NAV_TIMEOUT });
   await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
   actions += 1;
 
@@ -893,16 +893,82 @@ async function exerciseShapes(page, baseUrl) {
     'La primera diapositiva adelanta las marcas de lado y esquina');
   assert.ok(await page.locator('#galleryCaption').isHidden(),
     'La primera diapositiva muestra una explicación duplicada');
+  assert.ok(await page.locator('#galleryNote').isHidden(),
+    'La primera diapositiva cuenta lados o caras antes de presentar la forma');
   await page.locator('#galleryNext').click();
   const partCards = page.locator('#galleryVisual .shape-part-item');
-  assert.deepEqual(await partCards.locator('h2').allInnerTexts(), ['Lado', 'Esquina'],
-    'La segunda diapositiva no presenta lado y esquina en paralelo');
+  /* Los tres conceptos, en el orden en que se construyen: el lado, el
+     vértice donde se juntan dos lados, y el perímetro, que es la vuelta
+     por todos ellos. "Esquina" es la palabra de cada día y "vértice" la de
+     geometría: se presentan las dos, porque el niño oye una en la calle y
+     la necesita en el test. */
+  assert.deepEqual(await partCards.locator('h2').allInnerTexts(),
+    ['Lado', 'Vértice', 'Perímetro'],
+  'La segunda diapositiva no presenta lado, vértice y perímetro');
   assert.ok((await partCards.nth(0).innerText()).includes('línea recta') &&
-    (await partCards.nth(1).innerText()).includes('juntan dos lados'),
-  'La segunda diapositiva no explica lado y esquina');
+    (await partCards.nth(1).innerText()).includes('juntan dos lados') &&
+    (await partCards.nth(1).innerText()).includes('esquina'),
+  'La segunda diapositiva no explica lado, vértice y perímetro');
+  assert.match((await partCards.nth(2).innerText()).toLowerCase(),
+    /dar la vuelta/,
+  'La definición de perímetro no explica que es recorrer el borde');
   assert.ok(await partCards.nth(0).locator('.intro-side-mark').count() &&
-    await partCards.nth(1).locator('.intro-corner-mark').count(),
-  'La explicación de lado y esquina no tiene marcas visuales');
+    await partCards.nth(1).locator('.intro-corner-mark').count() &&
+    await partCards.nth(2).locator('.intro-perimeter-mark').count(),
+  'La explicación de lado, vértice y perímetro no tiene marcas visuales');
+  /* El perímetro se apoya en los otros dos, así que no va en paralelo:
+     ocupa la fila entera debajo. Sin esto la tercera tarjeta cae en la
+     segunda columna y deja un hueco al lado. */
+  const perimeterBox = await partCards.nth(2).boundingBox();
+  const sideBox = await partCards.nth(0).boundingBox();
+  assert.ok(perimeterBox.width > sideBox.width + 10,
+    'La tarjeta de perímetro no ocupa la fila entera de la diapositiva de conceptos');
+  assert.ok(perimeterBox.y > sideBox.y,
+    'La tarjeta de perímetro no va debajo de lado y vértice');
+  /* El trazo del perímetro marca el camino entero, no un lado suelto:
+     los tres lados del triángulo tienen que aparecer en el dibujo. */
+  const perimeterDash = await partCards.nth(2).locator('.intro-perimeter-mark')
+    .getAttribute('points');
+  assert.equal(perimeterDash.trim().split(/\s+/).length, 3,
+    'La marca de perímetro no recorre el triángulo entero');
+  assert.ok(await page.locator('#galleryNote').isHidden(),
+    'La segunda diapositiva cuenta lados o caras sin haber visto la forma');
+
+  /* El resto de conceptos van en dos diapositivas más, y cada una tiene su
+     propia forma de enseñar el concepto en el dibujo. Sin esto, añadir un
+     concepto al carrusel podría dejarse sin comprobar ometerlo en la
+     diapositiva que le toca. */
+  await page.locator('#galleryNext').click();
+  const insideCards = page.locator('#galleryVisual .shape-part-item');
+  assert.deepEqual(await insideCards.locator('h2').allInnerTexts(),
+    ['Área', 'Volumen'],
+  'La tercera diapositiva no presenta área y volumen');
+  assert.match((await insideCards.nth(0).innerText()).toLowerCase(), /todo lo de dentro/,
+    'La definición de área no dice que es la parte de dentro');
+  assert.match((await insideCards.nth(1).innerText()).toLowerCase(), /llenar/,
+    'La definición de volumen no dice que es el hueco de dentro');
+  /* El área se enseña rayando el interior recortado por el contorno, y el
+     volumen con la caja entera en trazos y el cuerpo dentro. */
+  assert.equal(await insideCards.nth(0).locator('clipPath polygon').count(), 1,
+    'El rayado del área deja de estar recortado por la forma');
+  assert.equal(await insideCards.nth(0).locator('.area-hatch line').count() > 3, true,
+    'El área no se enseña rayada por dentro');
+  assert.equal(await insideCards.nth(1).locator('.intro-space-mark').count(), 1,
+    'El volumen deja de enseñar el hueco que hay dentro del cuerpo');
+
+  await page.locator('#galleryNext').click();
+  const sameCards = page.locator('#galleryVisual .shape-part-item');
+  assert.deepEqual(await sameCards.locator('h2').allInnerTexts(),
+    ['Simetría', 'Semejanza'],
+  'La cuarta diapositiva no presenta simetría y semejanza');
+  assert.match((await sameCards.nth(0).innerText()).toLowerCase(), /dos mitades/,
+    'La definición de simetría no dice que son dos mitades iguales');
+  assert.match((await sameCards.nth(1).innerText()).toLowerCase(), /misma forma a otro tamaño/,
+    'La definición de semejanza no dice que es la misma forma a otro tamaño');
+  assert.equal(await sameCards.nth(0).locator('.intro-axis-mark').count(), 1,
+    'La simetría no se enseña con una raya de doblar');
+  assert.equal(await sameCards.nth(1).locator('svg polygon').count(), 2,
+    'La semejanza no enseña la misma forma en dos tamaños distintos');
   await page.locator('#galleryNext').click();
 
   const galleryNames = [];
@@ -917,7 +983,30 @@ async function exerciseShapes(page, baseUrl) {
     assert.equal(await page.locator('#galleryCaption').evaluate(node => node.textContent.trim()),
       galleryNames[galleryNames.length - 1],
       'La galería añade detalles sobre lados, esquinas o caras en vez de presentar la forma');
-    const galleryShapeId = await page.evaluate(index => window.DATA.gallery[index].id, i);
+    const galleryItem = await page.evaluate(index => window.DATA.gallery[index], i);
+    const galleryShapeId = galleryItem.id;
+    /* El nombre se queda solo en el título; la aclaración de cuántos lados
+       o caras tiene la forma va en su propia línea, debajo. */
+    const note = (await page.locator('#galleryNote').innerText()).trim();
+    assert.ok(note, 'Falta la aclaración de lados o caras bajo la forma');
+    if (galleryItem.type === 'flat') {
+      const sides = await page.evaluate(id => window.DATA.sides[id], galleryShapeId);
+      assert.equal(note, sides ? `${sides.sides} lados y ${sides.corners} vértices`
+        : 'Sin lados rectos ni vértices',
+      'La aclaración no dice los lados y los vértices que tiene la forma');
+    } else {
+      assert.match(note, /caras|curva/,
+        'La aclaración no dice cuántas caras tiene el cuerpo ni de qué forma son');
+    }
+    const [captionSize, noteSize] = await page.evaluate(() => [
+      parseFloat(getComputedStyle(document.querySelector('#galleryCaption')).fontSize),
+      parseFloat(getComputedStyle(document.querySelector('#galleryNote')).fontSize)
+    ]);
+    assert.ok(noteSize < captionSize,
+      'La aclaración destaca más que el nombre de la forma');
+    assert.notEqual(await page.locator('#galleryNote').evaluate(node =>
+      getComputedStyle(node).textTransform), 'capitalize',
+    'La aclaración se lee como un título y compite con el nombre de la forma');
     if (galleryShapeId === 'rectangularPrism') {
       assert.equal(await page.locator('#galleryVisual .solid-left').getAttribute('points'),
         '10,42 88,42 88,102 10,102',
@@ -964,30 +1053,64 @@ async function exerciseShapes(page, baseUrl) {
   assert.equal(await page.locator('#screenReal [data-i18n="instructionReal"], #realShape').count(), 0,
     'La pantalla de ejemplos repite la introducción o la explicación de la forma');
   actions += 1;
-  assert.ok(await page.locator('#realSide').isHidden(),
-    'La explicación de los lados aparece junto al ejemplo del círculo');
+  /* Los tres conceptos no se quedan en la diapositiva de conceptos: se
+     cuentan también sobre el objeto de verdad que se está mirando. La nota
+     no vuelve a definirlos —eso ya está hecho arriba— sino que los aplica
+     a ese objeto concreto. */
+  assert.equal(await page.locator('#realSide').count(), 0,
+    'La pantalla de ejemplos vuelve a explicar qué es un lado');
   const realExamples = [];
   const realCount = await page.evaluate(() => window.DATA.gallery.length);
   for (let i = 0; i < realCount; i += 1) {
     const realShapeId = await page.evaluate(index => window.DATA.gallery[index].id, i);
-    assert.equal(await page.locator('#realSide').isVisible(), i === 1,
-      'La explicación de los lados no coincide con el ejemplo cotidiano');
-    /* The note about sides only lands if one side is actually marked on the
-       drawing: text about straight edges above a picture with nothing
-       marked reads as a sentence about nothing. */
-    assert.equal(await page.locator('#realObject .intro-side-mark').count(), i === 1 ? 1 : 0,
-      'La explicación del lado no señala ningún lado en el ejemplo');
+    assert.equal(await page.locator('#realObject .intro-side-mark').count(), 0,
+      'El ejemplo cotidiano marca un lado sin que haya nada que señalar');
     realExamples.push((await page.locator('#realCaption').innerText()).trim());
+
+    /* Los tres conceptos, en la vida real: lados, vértices y perímetro.
+       Los números salen de DATA.sides, la misma fuente que el dibujo y el
+       test, así que la nota no puede contradecir a ninguna de las dos
+       cosas. Y los cuerpos se quedan sin nota: lados, vértices y
+       perímetro son palabras de una figura, y un cubo tiene caras. */
+    const realNoteText = (await page.locator('#realNote').innerText()).trim();
+    const galleryType = await page.evaluate(index => window.DATA.gallery[index].type, i);
+    if (galleryType === 'flat') {
+      const flatSides = await page.evaluate(id => window.DATA.sides[id], realShapeId);
+      assert.ok(realNoteText,
+        'El ejemplo cotidiano de ' + realShapeId + ' no cuenta los tres conceptos');
+      if (flatSides) {
+        assert.ok(realNoteText.includes(`${flatSides.sides} lados`) &&
+          realNoteText.includes(`${flatSides.corners} vértices`) &&
+          /perímetro/i.test(realNoteText) &&
+          /área/i.test(realNoteText),
+        'La nota del ejemplo cotidiano no nombra lados, vértices, perímetro y área de ' +
+          realShapeId + ': ' + realNoteText);
+      } else {
+        assert.match(realNoteText, /no tiene lados rectos ni vértices/i,
+          'El ejemplo del círculo no dice que no tiene lados ni vértices');
+        assert.match(realNoteText, /área/i,
+          'El ejemplo del círculo no dice que tiene área');
+      }
+    } else {
+      /* Los cuerpos no se cuentan en lados ni vértices: se cuentan en
+         caras, y lo que se les aplica aquí es el volumen, que es el hueco
+         que hay dentro. */
+      assert.match(realNoteText, /volumen/i,
+        'El ejemplo cotidiano de ' + realShapeId +
+        ' no explica el volumen del cuerpo: ' + realNoteText);
+    }
     /* Everyday objects that must be drawn, not left to the object's emoji:
        the shield emoji is not a pentagon, the stop sign emoji loses the
        word inside it, a parcel is not a cereal box, a rounded warning sign
-       does not have the straight sides the note beside it talks about, and
-       an ice cream emoji hides the cone it is named after. The polygon
-       count is what keeps each drawing honest about its own shape. */
-    const DRAWN_REAL = ['triangle', 'trapezoid', 'pentagon', 'hexagon', 'octagon',
+       does not show the three straight sides a triangle is made of, and
+       an ice cream emoji hides the cone it is named after. The 🪟 emoji is
+       a tall narrow strip that reads as a scratch on the card, so the
+       window is drawn too. The polygon count is what keeps each drawing
+       honest about its own shape. */
+    const DRAWN_REAL = ['triangle', 'square', 'trapezoid', 'pentagon', 'hexagon', 'octagon',
       'rectangularPrism', 'triangularPrism', 'pyramid', 'cone'];
     const EXPECTED_REAL_POLYGONS = {
-      triangle: 1, trapezoid: 1, pentagon: 2, hexagon: 7, octagon: 1,
+      triangle: 1, square: 1, trapezoid: 1, pentagon: 2, hexagon: 7, octagon: 1,
       rectangularPrism: 3, triangularPrism: 3, pyramid: 2,
     };
     if (DRAWN_REAL.indexOf(realShapeId) !== -1) {
@@ -998,6 +1121,143 @@ async function exerciseShapes(page, baseUrl) {
       const polygonCount = await page.locator('#realObject svg polygon').count();
       assert.equal(polygonCount, EXPECTED_REAL_POLYGONS[realShapeId],
         'La ilustración real no muestra con claridad la forma esperada');
+    }
+    /* The window is the square: a square frame, and the mullions drawn as
+       lines so they cannot be mistaken for sides of the frame. */
+    if (realShapeId === 'square') {
+      const frame = await page.locator('#realObject svg polygon').boundingBox();
+      assert.ok(Math.abs(frame.width - frame.height) <= 2,
+        'La ventana no es un cuadrado: el marco mide ' + Math.round(frame.width) +
+        ' por ' + Math.round(frame.height));
+      assert.equal(await page.locator('#realObject svg line').count(), 2,
+        'La ventana ha perdido el montante o el travesaño');
+    }
+    /* The badge carries a sheriff's star so it reads as "badge" without a
+       word. The star must also stay off <polygon>: the count above is what
+       proves the shield has five sides, and a star drawn as polygons would
+       quietly make that check meaningless. One path for the star, one
+       circle for the seal in its middle. */
+    if (realShapeId === 'pentagon') {
+      assert.equal(await page.locator('#realObject svg circle').count(), 1,
+        'El escudo deja de enseñar el sello del centro de la estrella');
+      assert.equal(await page.locator('#realObject svg path').count(), 1,
+        'El escudo deja de enseñar la estrella del sheriff');
+      assert.ok(await page.locator('#realObject svg path').first()
+        .getAttribute('d').then(d => /M60\.0 29\.0L/.test(d) || d.split('L').length === 12),
+      'La estrella del escudo no tiene seis puntas');
+    }
+    /* The tent is the tent: gable, long side and open door, and nothing else.
+       The guy line and the pennant it used to carry were clutter — they
+       sat next to the outline of the prism and read as extra edges. */
+    if (realShapeId === 'triangularPrism') {
+      assert.equal(await page.locator('#realObject svg line').count(), 0,
+        'La tienda ha vuelto a llevar cuerda o mástil');
+      assert.equal(await page.locator('#realObject svg path').count(), 0,
+        'La tienda ha vuelto a llevar la banderola');
+    }
+    /* The courses of stone are what make a pyramid something people built
+       rather than something somebody pitched. Three courses that bend at
+       the front corner, and no ground line under it: the mass ends on its
+       own footprint. */
+    if (realShapeId === 'pyramid') {
+      assert.equal(await page.locator('#realObject svg polyline').count(), 3,
+        'La pirámide ha perdido sus hiladas de piedra');
+      assert.equal(await page.locator('#realObject svg line').count(), 4,
+        'La pirámide ha perdido las juntas entre sillares o ha vuelto a la raya del suelo');
+    }
+    /* The swirl has to reach down into the cone. A ball resting on top of a
+       triangle is the drawing this replaced, and the difference is exactly
+       this overlap: the ice cream sits inside the rim, so the cone's front
+       edge cuts across it. Boxes are compared whole, no graze tolerance —
+       here the two overlap by most of the scoop, or not at all.
+       The cone body is picked by its own fill: the waffle lattice lives in
+       a <clipPath> whose path is in the DOM but is not rendered, so asking
+       for the first <path> would measure a zero-sized box. */
+    if (realShapeId === 'cone') {
+      async function boxOf(selector) {
+        const first = page.locator(selector).first();
+        assert.ok(await first.count() > 0, 'El cucurucho ha perdido su ' + selector);
+        return first.boundingBox();
+      }
+      const swirl = await boxOf('#realObject svg path[stroke-linecap="round"]');
+      const cone = await boxOf('#realObject svg path[fill]:not([fill="none"])');
+      const swirlInCone = swirl.y < cone.y + cone.height && swirl.y + swirl.height > cone.y;
+      assert.ok(swirlInCone,
+        'El helado se queda encima del cucurucho en vez de dentro: vuelve a ser una bola sobre un triángulo');
+      /* The ice cream is a swirl and not a pile of scoops. Each turn of it
+         is a rope of cream — one arc stroked twice, wide in the outline
+         colour and thin in the cream — and every turn is thinner than the
+         one below it, which is what makes the stack taper into a tip.
+         Stacked ellipses were tried here and read as a beehive, so this
+         checks the thickness of the ropes themselves rather than a box:
+         the same kind of regression, a set of same-sized scoops, leaves
+         every turn the same width and fails the descent below. */
+      const turns = await page.evaluate(() => [...document.querySelectorAll(
+        '#realObject svg path[stroke-linecap="round"]')]
+        .filter(p => p.getAttribute('stroke') === '#FCF0D6')
+        .map(p => Number(p.getAttribute('stroke-width'))));
+      assert.ok(turns.length >= 3,
+        'El helado ha vuelto a ser un par de bolas: faltan las vueltas de la espiral');
+      const tapers = turns.every((w, i) => i === 0 || w < turns[i - 1]);
+      assert.ok(tapers,
+        'Las vueltas del helado no se estrechan: el cucurucho vuelve a ser bolas apiladas');
+      /* The wafer has to be a lattice, not a handful of lines that happen to
+         cross: both families of diagonals, enough of them to show the
+         diamond, and all of them inside the single clip. */
+      assert.equal(await page.locator('#realObject svg clipPath').count(), 1,
+        'El gofra del cucurucho se sale del cucurucho al no recortarse');
+      const waffle = await page.locator('#realObject svg g[clip-path] path').count();
+      assert.ok(waffle >= 12,
+        'El gofra del cucurucho ha vuelto a ser un puñado de rayas: faltan las diagonales de la rejilla');
+      assert.ok(await page.locator('#realObject svg path').count() >= 8,
+        'El cucurucho ha perdido el enrejado de la gofra');
+    }
+    /* The bee has to stay off the comb. The caption says the cells are
+       hexagons, so a bee drawn inside a cell hides the very cell the
+       slide asks you to look at, and the seven cells stop being countable.
+       Measured with real boxes: two drawings can both "look fine" and
+       still overlap. */
+    if (realShapeId === 'hexagon') {
+      async function boxesOf(selector) {
+        const found = [];
+        const items = page.locator(selector);
+        for (let i = 0; i < await items.count(); i += 1) found.push(await items.nth(i).boundingBox());
+        return found;
+      }
+      const beeBoxes = [
+        ...await boxesOf('#realObject svg circle'),
+        ...await boxesOf('#realObject svg ellipse'),
+      ];
+      const cellBoxes = await boxesOf('#realObject svg polygon');
+      assert.equal(cellBoxes.length, 7, 'El panal deja de enseñar siete celdas');
+      assert.ok(beeBoxes.length > 0, 'La abeja ha desaparecido del panal');
+      cellBoxes.forEach((cell, index) => {
+        beeBoxes.forEach(bee => {
+          /* A rotated wing reports a box wider than the wing really is, so
+             two boxes that merely graze each other can cross by a fraction
+             of a pixel. Only a real overlap counts, not a graze. */
+          const graze = 0.5;
+          const overlaps = bee.x + graze < cell.x + cell.width &&
+            bee.x + bee.width - graze > cell.x &&
+            bee.y + graze < cell.y + cell.height &&
+            bee.y + bee.height - graze > cell.y;
+          assert.ok(!overlaps, 'La abeja tapa la celda ' + (index + 1) +
+            ' del panal, que es justo la que hay que contar');
+        });
+      });
+    }
+    /* A cereal box is about 19 x 27 x 6 cm: the thickness is a third of the
+       width. Drawn deeper it stops being a cereal box and becomes a crate,
+       which is exactly what the earlier version looked like. The side face
+       is the one drawn with solid-right; the front is solid-left. */
+    if (realShapeId === 'rectangularPrism') {
+      /* Point at the polygon, not at the class: solid-right is also the
+         bowl and the berries on the label, and a locator that matches
+         five elements resolves to none. */
+      const front = await page.locator('#realObject svg polygon.solid-left').boundingBox();
+      const side = await page.locator('#realObject svg polygon.solid-right').boundingBox();
+      assert.ok(side.width / front.width <= 0.4,
+        'La caja de cereales se dibuja demasiado profunda: el grosor es casi la mitad del ancho');
     }
     if (i < realCount - 1) {
       await page.locator('#realNext').click();
@@ -1010,14 +1270,13 @@ async function exerciseShapes(page, baseUrl) {
     await page.locator('#realPrev').click();
     actions += 1;
   }
-  assert.ok(await page.locator('#realSide').isVisible(),
-    'La explicación del lado no aparece con una forma plana');
-  assert.equal((await page.locator('#realSide').innerText()).trim(),
-    'Cada línea recta del borde de una forma plana es un lado.',
-    'La explicación práctica no define qué es un lado');
+  /* Back at the triangle slide: still the plain three-sided sign, now with
+     nothing drawn on top of it. */
+  assert.ok((await page.locator('#realCaption').innerText()).includes('señal de peligro'),
+    'Al volver atrás el ejemplo del triángulo no se corresponde con su dibujo');
+  assert.equal(await page.locator('#realObject svg polygon').count(), 1,
+    'El ejemplo del triángulo deja de enseñar un triángulo al volver atrás');
   await page.locator('#realNext').click();
-  assert.ok(await page.locator('#realSide').isHidden(),
-    'La explicación del lado se repite después de presentar el concepto');
   await page.locator('#realContinue').click();
   assert.ok(await page.locator('#screenMenu').isVisible(),
     'Los ejemplos reales no avanzan al menú de test');
@@ -1035,6 +1294,61 @@ async function exerciseShapes(page, baseUrl) {
       let answer;
       if (prompt === t('gen.shapeNamePrompt')) {
         answer = visualName;
+      } else if (prompt === t('gen.areaPrompt')) {
+        answer = t('gen.areaInside');
+      } else if (prompt.indexOf(t('gen.symmetryPrompt').split('{name}')[0]) === 0) {
+        /* The correct fold is the one that leaves no stroke through the
+           middle of the figure: the horizontal and the diagonal cut it in
+           two visible pieces, the vertical one does not. Read off the
+           option whose dashed line is vertical. */
+        const vertical = buttons.filter(button => {
+          const line = button.querySelector('.axis-mark');
+          return line && line.getAttribute('x1') === line.getAttribute('x2');
+        });
+        if (vertical.length !== 1) {
+          throw new Error('La pregunta de simetría no tiene un único eje vertical: ' +
+            vertical.length);
+        }
+        answer = (vertical[0].getAttribute('aria-label') || vertical[0].innerText).trim();
+      } else if (prompt.indexOf(t('gen.similarPrompt').split('{name}')[0]) === 0) {
+        /* The correct option is the one drawn as the same figure as the one
+           in the question, only smaller. Matched on the aria-label, which
+           carries the name of the shape rather than its size. */
+        answer = visualName;
+      } else if (prompt === t('gen.volumePrompt')) {
+        /* The only option drawn at the bigger size is the one with more
+           volume, so the answer comes out of the picture and never out of
+           the data: if the drawing and the answer ever disagreed, the big
+           option would stop being the correct one and this would fail. */
+        const big = buttons.filter(b => b.querySelector('.thumb-big'));
+        if (big.length !== 1) throw new Error('La pregunta de volumen no tiene un único cuerpo grande');
+        answer = (big[0].getAttribute('aria-label') || big[0].innerText).trim();
+      } else if (prompt.indexOf(t('gen.perimeterPrompt').split('{side}')[0]) === 0) {
+        /* The perimeter prompt carries the side length, so it is matched on
+           its fixed opening rather than compared whole: the text on screen
+           has {side} already filled in. The answer is worked out from
+           DATA.sides and never read from the page, so this checks the same
+           arithmetic a child would do. */
+        const sideMatch = prompt.match(/(\d+)\s*cm/);
+        if (!sideMatch) throw new Error('No se pudo leer el largo del lado: ' + prompt);
+        const shapeId = Object.keys(window.DATA.sides).find(id =>
+          window.App.i18n.t('shape.' + id) === visualName);
+        if (!shapeId) throw new Error('Perímetro de una forma desconocida: ' + visualName);
+        const side = Number(sideMatch[1]);
+        const total = window.DATA.sides[shapeId].sides * side;
+        /* The two wrong answers have to be exactly one side out in each
+           direction. The mistake this question produces is leaving the
+           last side out or counting one twice, not picking a wild number,
+           so an option outside that would be a wrong shape of mistake. */
+        const offered = buttons.map(b =>
+          Number((b.getAttribute('aria-label') || b.innerText).trim()))
+          .filter(v => !isNaN(v)).sort((a, b) => a - b);
+        const expected = [total - side, total, total + side].sort((a, b) => a - b);
+        if (JSON.stringify(offered) !== JSON.stringify(expected)) {
+          throw new Error('Las opciones del perímetro de ' + shapeId + ' son ' +
+            JSON.stringify(offered) + ' y tocaban ser ' + JSON.stringify(expected));
+        }
+        answer = String(total);
       } else if (prompt === t('gen.sidesPrompt') || prompt === t('gen.cornersPrompt')) {
         const shapeId = Object.keys(window.DATA.sides).find(id =>
           window.App.i18n.t('shape.' + id) === visualName);
@@ -1100,10 +1414,15 @@ async function exerciseShapes(page, baseUrl) {
     return { id: level.id, length: level.questions.length, counts };
   });
   assert.equal(testSpec.id, 'test');
-  assert.equal(testSpec.length, 34);
+  assert.equal(testSpec.length, 50);
   assert.deepEqual(testSpec.counts, {
     shapeName: 9,
     shapeCount: 12,
+    shapePerimeter: 6,
+    shapeArea: 1,
+    solidVolume: 3,
+    shapeSymmetry: 3,
+    shapeSimilar: 3,
     solidName: 7,
     solidParts: 3,
     fromNet: 3,
@@ -1118,10 +1437,72 @@ async function exerciseShapes(page, baseUrl) {
     actions += 2;
   }
   await page.waitForSelector('#screenEnd:not(.hidden)', { timeout: NAV_TIMEOUT });
-  assert.match(await page.locator('#endSummary').innerText(), /34 preguntas|34 questions/,
+  assert.match(await page.locator('#endSummary').innerText(), /50 preguntas|50 questions/,
     'El resumen no incluye todas las preguntas de la ronda única');
   assert.ok(await page.locator('#btnHarder').isHidden(),
     'La prueba única ofrece niveles separados como otros tests');
+
+  /* La aclaración de la galería también tiene que estar en inglés: si
+     falta, sale el nombre de la clave en pantalla. Se comprueba una
+     forma plana y un cuerpo, y se vuelve a español. */
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
+  await page.reload();
+  await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
+  /* Se recorren las cuatro diapositivas de conceptos y se vuelve a la
+     galería: la aclaración tiene que estar traducida en las dos, y el
+     número de diapositivas sale de la misma constante que app.js usa para
+     el carrusel. */
+  const conceptTitles = [];
+  for (let slide = 0; slide < 4; slide += 1) {
+    conceptTitles.push(...await page.locator('#galleryVisual h2').allInnerTexts());
+    await page.locator('#galleryNext').click();
+  }
+  assert.deepEqual(conceptTitles,
+    ['Flat shape', 'Solid', 'Side', 'Vertex', 'Perimeter',
+      'Area', 'Volume', 'Symmetry', 'Similarity'],
+  'Las diapositivas de conceptos no están traducidas al inglés');
+  assert.equal((await page.locator('#galleryNote').innerText()).trim(),
+    'No straight sides and no vertices',
+  'La aclaración de la galería no está traducida al inglés en las formas planas');
+  /* Del círculo al cubo se avanza leyendo la galería, no contando a mano:
+     insertar una forma en medio no puede dejar el recorrido en otra
+     diapositiva sin que se note. */
+  const cubeIndex = await page.evaluate(() =>
+    window.DATA.gallery.findIndex(item => item.id === 'cube'));
+  for (let step = 0; step < cubeIndex; step += 1) await page.locator('#galleryNext').click();
+  assert.equal((await page.locator('#galleryNote').innerText()).trim(), '6 faces: 6 squares.',
+    'La aclaración de la galería no está traducida al inglés en los cuerpos');
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
+  await page.reload();
+
+  /* Y la nota de los ejemplos de la vida real, en los dos idiomas: es la
+     que junta los tres conceptos sobre el objeto de verdad. Se mira la
+     misma forma en los dos (el triángulo, el segundo del carrusel) para
+     que la comparación signifique algo. */
+  const CONCEPTS = {
+    es: [/lados/, /vértices/, /perímetro/, /área/],
+    en: [/sides/, /vertices/, /perimeter/, /area/],
+  };
+  for (const locale of ['en', 'es']) {
+    await page.evaluate(code => localStorage.setItem('calculia:locale', code), locale);
+    await page.reload();
+    await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
+    await page.locator('#introContinue').click();
+    await page.locator('#realNext').click();
+    const noteText = (await page.locator('#realNote').innerText()).trim();
+    /* El triángulo tiene 3 de cada: los números salen de DATA.sides, y el
+       smoke los compara con lo que se está leyendo en pantalla. */
+    const expected = await page.evaluate(() => window.DATA.sides.triangle);
+    assert.ok(noteText.includes(`${expected.sides} lados`) ||
+      noteText.includes(`${expected.sides} sides`),
+    `La nota de los ejemplos en ${locale} no cuenta los lados del triángulo: ${noteText}`);
+    CONCEPTS[locale].forEach(concept => {
+      assert.match(noteText, concept,
+        `La nota de los ejemplos en ${locale} no nombra ${concept} : ${noteText}`);
+    });
+  }
+  await page.locator('#realBack').click();
+  await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
 
   return actions ? 1 : 0;
 }
@@ -1142,15 +1523,23 @@ async function exerciseNumbers(page, baseUrl) {
      muestra Números Romanos y Formas, y Números vive en la página oculta
      dev/. Se comprueba en las dos rutas, para que el reparto no vuelva a
      romperse en silencio por un lado o por otro. */
-  assert.equal(await page.locator('a[href="tools/numbers/index.html"]').count(), 0,
+  assert.equal(await page.locator('a[href="tools/numbers/"]').count(), 0,
     'La portada pública vuelve a mostrar Números');
-  assert.equal(await page.locator('a[href="tools/posneg/index.html"]').count(), 0,
-    'La portada aún muestra Positivos y negativos como herramienta separada');
+  /* Positivos y negativos dejó de ser una herramienta propia y se
+     integró en Números (commit "feat(numbers): integrate positive and
+     negative practice"), así que ya no existe tools/posneg/: ese
+     catálogo solo debe seguir siendo una clave localStorage heredada,
+     nunca una tarjeta. Comprobado sobre dev/, que es donde vive el
+     catálogo completo. */
   await page.goto(baseUrl + '/dev/');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
+  assert.equal(await page.locator('a[href$="posneg"]').count(), 0,
+    'El catálogo vuelve a enlazar Positivos y negativos como herramienta separada');
+  await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
+  await page.reload();
 
-  const catalogCard = page.locator('a[href="../tools/numbers/index.html"]');
+  const catalogCard = page.locator('a[href="../tools/numbers/"]');
   assert.ok(await catalogCard.isVisible().catch(() => false),
     'Números no aparece en el catálogo de dev/');
   assert.ok((await catalogCard.innerText()).includes('Los Números'),
@@ -1162,7 +1551,7 @@ async function exerciseNumbers(page, baseUrl) {
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
   await catalogCard.click();
-  await page.waitForURL('**/tools/numbers/index.html', { timeout: NAV_TIMEOUT });
+  await page.waitForURL('**/tools/numbers/', { timeout: NAV_TIMEOUT });
   await page.waitForSelector('#screenMenu:not(.hidden)', { timeout: NAV_TIMEOUT });
   actions += 1;
 

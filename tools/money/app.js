@@ -480,7 +480,7 @@
   $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
 
   $('#noteExtra').innerHTML = App.i18n.t('notaMonedero')
-    .replace('{link}', '<a href="../wallet/index.html">' + App.i18n.t('notaMonederoLink') + '</a>');
+    .replace('{link}', '<a href="../wallet/">' + App.i18n.t('notaMonederoLink') + '</a>');
 
   paintMenu();
   paintStars();

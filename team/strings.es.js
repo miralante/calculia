@@ -104,9 +104,9 @@
       },
       "shapes": {
         "name": 'Formas',
-        "does": 'Reconoce formas planas (círculo, cuadrado, triángulo, rectángulo, pentágono, hexágono) y cuerpos (cubo, esfera, cilindro) a través de objetos reales, y cuenta los lados y las esquinas de cada figura.',
-        "works": 'Vocabulario geométrico, atención al detalle del dibujo, y la idea de que una forma se reconoce por cómo es, no por para qué sirve.',
-        "daily": 'Buscad formas por la calle: las señales triangulares, las ventanas cuadradas, las latas cilíndricas. Contad juntos los lados de una baldosa.'
+        "does": 'Reconoce formas planas (círculo, cuadrado, triángulo, rectángulo, pentágono, hexágono) y cuerpos (cubo, esfera, cilindro) a través de objetos reales. Cuenta lados y vértices, y presenta los conceptos de perímetro, área, volumen, simetría y semejanza antes de preguntarlos.',
+        "works": 'Vocabulario geométrico con su significado (perímetro, área, volumen, simetría, semejanza), atención al detalle del dibujo, y la idea de que una forma se reconoce por cómo es, no por para qué sirve.',
+        "daily": 'Buscad formas por la calle: las señales triangulares, las ventanas cuadradas, las latas cilíndricas. Contad juntos los lados y los vértices de una baldosa, sumad los lados para su perímetro, y doblad una figura por la mitad a ver si las dos mitades coinciden.'
       },
       "geometry": {
         "name": 'Geometría',

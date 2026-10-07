@@ -64,7 +64,7 @@ a una subpágina.
 
 ```
 calculia/
-├── index.html             # Nivel 0: Números Romanos y Formas
+├── index.html             # Nivel 0: Números Romanos, Formas y Escala
 ├── styles.css             #   CSS de la landing, junto a index.html
 ├── app.js                 #   lógica de la landing, junto a index.html
 ├── strings.<locale>.js    #   textos de la landing, es/en, junto a index.html
@@ -82,7 +82,7 @@ calculia/
 │   ├── js/dinero.js       #   window.App.dinero (usado por El Monedero)
 │   ├── fonts/              #   woff2 autoalojadas (Atkinson Hyperlegible, Nunito)
 │   └── img/icono.svg       #   icono de la app (también icono PWA)
-├── tools/<slug>/          # Nivel 2: una carpeta por ACTIVIDAD (27 en total)
+├── tools/<slug>/          # Nivel 2: una carpeta por ACTIVIDAD (28 en total)
 │   ├── index.html         #   estructura y carga de assets
 │   ├── app.js             #   solo lógica
 │   ├── data.js             #   solo datos
@@ -96,7 +96,7 @@ calculia/
 └── _headers                # Cabeceras de caché y seguridad de Cloudflare Pages
 ```
 
-Misma arquitectura de tres niveles que Apptonomia, acotada a 27 actividades. `index.html` pública enlaza a las dos actividades de portada (Números Romanos, Formas); `dev/index.html`, oculta, enlaza a las 25 actividades restantes, Números entre ellas. Los números positivos y negativos forman parte de Números; no hay una herramienta independiente. La lista de slugs públicos vive en `scripts/check.js` (`PUBLIC_SLUGS`).
+Misma arquitectura de tres niveles que Apptonomia, acotada a 28 actividades. `index.html` pública enlaza a las tres actividades de portada (Números Romanos, Formas, Escala); `dev/index.html`, oculta, enlaza a las 25 actividades restantes, Números entre ellas, más las que aparecen en `BOTH_SLUGS` (Escala, que es a la vez portada y sigue en el catálogo completo). Los números positivos y negativos forman parte de Números; no hay una herramienta independiente. La lista de slugs públicos vive en `scripts/check.js` (`PUBLIC_SLUGS` y `BOTH_SLUGS`).
 
 ### 2.1 `assets/` — núcleo compartido, conservado entero
 
@@ -366,7 +366,7 @@ la **plantilla**; las desviaciones se indican donde apliquen.
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v5aa">
+  <link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v75403dc2">
 </head>
 <body>
   <div class="container {legal|about}">
@@ -412,9 +412,12 @@ la **plantilla**; las desviaciones se indican donde apliquen.
        componente. Los dos van diferidos, y los diferidos se ejecutan
        en orden de documento, con listarlos en ese orden basta. El ?v=
        no es opcional: los .js y .css se sirven immutable un ano, sin el
-       la pagina sirve la version vieja desde la cache. -->
-  <script src="../assets/js/locale-picker-config.js?v=calculia-v5aa"></script>
-  <script src="../assets/js/locale-picker.js?v=calculia-v5aa" defer></script>
+       la pagina sirve la version vieja desde la cache. El valor NO se
+       escribe a mano: lo calcula `node scripts/asset-tokens.js` a partir
+       del hash del propio fichero, y `scripts/check.js` (check 16) falla
+       si queda alguno desactualizado. -->
+  <script src="../assets/js/locale-picker-config.js?v=calculia-v3be3c240"></script>
+  <script src="../assets/js/locale-picker.js?v=calculia-v8b6a4103" defer></script>
   <script>
     /* Register the SW from this entry point so it is active for any
        later navigation, matching what the main index.html and the

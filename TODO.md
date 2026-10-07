@@ -63,7 +63,9 @@ producto servido al usuario.
 | La resta llevando | ✅ | `mental-math` (`borrow`, nivel `a10`) |
 | Introducción a la multiplicación | ✅ | `math-tables` |
 | Las tablas del 2, 3, 4 y 5 | ✅ | `math-tables` |
-| Formas geométricas: lados y vértices | ✅ | `shapes` (`planas`, niveles `g3`-`g4`) |
+| Formas geométricas: lados y vértices | ✅ | `shapes` los presenta en la diapositiva de conceptos, los cuenta en la galería y los pregunta en el test (`formas`, nivel `test`) |
+| El perímetro como suma de los lados | ✅ | `shapes` lo define en la diapositiva de conceptos y lo mide en las formas regulares (`shapePerimeter`); medir sobre la cuadrícula es de `geometry` (`perimetro`, niveles `p1`-`p2`) |
+| Los conceptos de área, volumen, simetría y semejanza | ✅ | `shapes` los presenta en cuatro diapositivas y los pregunta en su forma de reconocer (`shapeArea`, `solidVolume`, `shapeSymmetry`, `shapeSimilar`); el cálculo sigue en `geometry` (`area`, `volumen`, `simetria`) y en `similar` (`semejanza`) |
 | Cuerpos geométricos: cubo, esfera, cilindro | ✅ | `shapes` (`cuerpos`) |
 | Medidas de longitud: el metro y el centímetro | ✅ | `fractions-measures` (`medidas`/`longitud`) |
 | Medidas de peso: el kilogramo | ✅ | `fractions-measures` (`medidas`/`peso`) |
@@ -135,7 +137,7 @@ producto servido al usuario.
 | Potencias sencillas | ✅ | `divisibility` (`cuadrados`, nivel `s1`) |
 | Proporcionalidad sencilla | ✅ | `percent` (`proporcion`, niveles `o1`-`o2`) |
 | Porcentajes básicos | ✅ | `percent` (`porcentaje`, niveles `p1`-`p3`) |
-| Clasificación de polígonos por sus lados | ✅ | `shapes` cuenta los lados y `geometry` (`clasificar`) nombra la figura |
+| Clasificación de polígonos por sus lados | ✅ | `shapes` cuenta los lados y los vértices, y `geometry` (`clasificar`) nombra la figura |
 | El área de figuras geométricas | ✅ | `geometry` (`area`): cuadrado y rectángulo contando cuadrados (`a1`-`a2`), triángulo como la mitad de su rectángulo (`a3`), y el círculo contando los cuadraditos que caben (`w2`) |
 | El perímetro y el área del círculo: introducción | ✅ | `geometry` (`circulo`: `w1` el borde como algo más de 3 veces el diámetro, `w2` los cuadrados de dentro) |
 | Unidades de medida del Sistema Internacional | ✅ | `measures` (`medidas`) las unidades de uso diario, y `measures` (`escalera`, niveles `es1`-`es3`) la escalera completa de prefijos: km, hm, dam, m, dm, cm, mm y sus iguales de peso y capacidad, con el ×10 escrito entre cada escalón |
@@ -155,7 +157,7 @@ producto servido al usuario.
 | Porcentajes: cálculo | ✅ | `percent` (`dinero`, niveles `r1`-`r2`) |
 | Interés simple sencillo aplicado al dinero | ✅ | `percent` (`dinero`, nivel `r3`: un tanto por ciento más) |
 | Proporcionalidad directa | ✅ | `percent` (`proporcion`) |
-| Escalas y planos | ✅ | `percent` (`escala`, nivel `e1`) |
+| Escalas y planos | ✅ | `scale` (`leer`, `paso`, `instrumento`, `plano`): leer una regla, el valor de un paso, la misma lectura en otros instrumentos y la escala de un plano en ambos sentidos; `percent` (`escala`, nivel `e1`: cuánto vale un cuadrado del plano) |
 | Prismas y pirámides: elementos y desarrollo plano | ✅ | `shapes` (`desarrollos`, niveles `p1`-`p2`): las caras y los vértices de cada cuerpo, y qué sale al doblar un desarrollo dibujado abierto |
 | El volumen de cuerpos geométricos | ✅ | `geometry` (`volumen`, nivel `v1`: contar los cubos por capas) |
 | Simetría, traslación y giro de figuras | ✅ | `geometry` (`simetria`: `m1`-`m2` simetría, `m3` movida frente a girada) |
@@ -219,7 +221,7 @@ producto servido al usuario.
 | Funciones: concepto y gráficas | 🔶 | `algebra` (`graficas`) lee una gráfica real; no se presenta la función como objeto |
 | La función lineal | ✅ | `algebra` (`crecer`: la que sube siempre lo mismo es la recta) |
 | Funciones cuadráticas | 🔶 | `algebra` (`crecer`) distingue "cada vez más" de "siempre igual"; no se trabaja la parábola |
-| Proporcionalidad geométrica: escalas, Thales | ✅ | `similar` (`semejanza`) y `percent` (`escala`) |
+| Proporcionalidad geométrica: escalas, Thales | ✅ | `similar` (`semejanza`) y `scale` (`plano`); la multiplicación de un cuadrado del plano queda en `percent` (`escala`) |
 | Figuras planas: ángulos y áreas | ✅ | `geometry` (`angulos` y `area`), repetido |
 | Semejanza de figuras | ✅ | `similar` (`semejanza`) |
 | Movimientos en el plano (traslación, giro, simetría) | ✅ | `geometry` (`simetria`, nivel `m3`) |
@@ -341,6 +343,7 @@ a través de un objeto que se puede tener en la mano).
 |---|---|---|---|
 | ~~**Datos y Gráficos**~~ | P2-6, ESO1-2 | 🧱 P2-4 / 💡 P5+ | ✅ hecha — `tools/charts/`: pictogramas (contar iconos) → barras (leer la altura sobre una escala) → tabla de frecuencias y el dato que más se repite → la media como reparto a partes iguales → probabilidad por conteo. Absorbe la fila de **Probabilidad**: es la misma mecánica (contar lo que hay delante), y separarlas rompería "una actividad, un trabajo". |
 | ~~**Geometría: Ángulos, Perímetro y Área**~~ | P3-ESO4 | 🧱 P3-4 / 💡 ESO | ✅ hecha — `tools/geometry/`, con el área del círculo (contando cuadraditos enteros) y el volumen (contando cubos por capas). Queda el transportador en grados, que necesita medir y no comparar. |
+| ~~**Escala: leer la medida y la escala de un plano**~~ | P3-P6 | 🧱 leer la regla / 💡 el paso y el plano | ✅ hecha — `tools/scale/`: leer hasta dónde llega algo en una regla (números en todas las rayitas → uno de cada dos → uno de cada cinco), el valor de un paso y cuántas rayitas se recorren, la misma lectura en un termómetro y en una jarra, y la escala de un plano en los dos sentidos. Sin restar de una columna ni usar la regla al revés. |
 
 ### Nivel 3 — Prioridad baja: contenido de la ESO, ambición "concepto"
 
@@ -361,8 +364,8 @@ un comentario en cada `data.js` para que no se pierda al añadir actividades.
 
 | Dónde | Orden |
 |---|---|
-| Portada (`index.html`) | roman-numerals → shapes (las dos únicas públicas; el resto vive en `dev/`) |
-| Catálogo oculto (`dev/index.html`) | numbers → places → geometry → divisibility → operations → quantities → mental-math → percent → money → math-tables → measures → similar → fractions-measures → problems → temperature, y luego el bloque de razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
+| Portada (`index.html`) | roman-numerals → shapes → scale (las tres públicas; scale sigue además en `dev/`, el resto vive solo en `dev/`) |
+| Catálogo oculto (`dev/index.html`) | numbers → places → geometry → divisibility → operations → quantities → mental-math → percent → money → math-tables → measures → scale → similar → fractions-measures → problems → temperature, y luego el bloque de razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
 | Progreso (`config/index.html`) | mismo criterio y mismo bloque de razonamiento, pero con `places` y `shapes` delante de `numbers` |
 | `numbers` | ordinales (1º) → comparar (1º) → recta (2º) → unidades (2º-4º) → placevalue (2º-6º) → positivos-y-negativos (5º-6º) |
 | `measures` | longitud → peso → capacidad |

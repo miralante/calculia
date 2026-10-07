@@ -28,7 +28,7 @@
     module2: '🧩 Razonamiento y lógica',
 
     activity: {
-      'places': 'Sitios y tamaños', 'shapes': 'Formas', 'geometry': 'Geometría', 'similar': 'Formas parecidas', 'numbers': 'Los Números', 'fractions-measures': 'Fracciones', 'measures': 'Medidas',
+      'places': 'Sitios y tamaños', 'shapes': 'Formas', 'geometry': 'Geometría', 'similar': 'Formas parecidas', 'numbers': 'Los Números', 'fractions-measures': 'Fracciones', 'measures': 'Medidas', 'scale': 'Escala',
       'mental-math': 'Restar y Cálculo Mental', 'percent': 'Porcentajes', 'money': 'Dinero',
       'divisibility': 'Grupos exactos', 'operations': 'Cuentas grandes', 'quantities': 'Cantidades', 'math-tables': 'Las Tablas',
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',

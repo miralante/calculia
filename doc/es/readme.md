@@ -81,7 +81,7 @@ Si aciertas, aparecerá una celebración breve. Si no, recibirás un mensaje de 
 | **Monedero** | Practicar dar y recibir dinero, calcular cambios y gestionar un pequeño presupuesto. |
 | **Cantidades** | Comparar cantidades, estimar y razonar sobre "más / menos / igual". |
 | **Numerales romanos** | Leer y escribir números romanos hasta los millares. |
-| **Formas** | Reconocer formas planas y cuerpos, contar sus lados y sus esquinas. |
+| **Formas** | Reconocer formas planas y cuerpos, contar sus lados y sus vértices, y presentar perímetro, área, volumen, simetría y semejanza antes de medirlos. |
 | **Formas parecidas** | Decidir si dos figuras son la misma forma a otro tamaño, contar los cuadrados sobre los lados de un triángulo recto, y comparar lo inclinadas que están dos rampas. |
 | **Fracciones** | Reconocer, comparar y operar con fracciones sencillas y decimales. |
 | **Medidas** | Elegir la unidad adecuada (cm, m, g, kg, ml, l) y estimar longitud, peso y capacidad. |

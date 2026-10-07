@@ -22,7 +22,7 @@ de pantalla.
 |-----------|-------------|
 | **Sitios y tamaños** | Decir dónde está algo (dentro, fuera, encima, debajo, izquierda, derecha) y cuál de dos cosas es más larga, pesa más o cabe más. |
 | **Números** | Leer, escribir y comparar números enteros, secuencias y valor posicional. Incluye positivos, negativos y cero con ejemplos de la vida diaria y práctica con termómetro y ascensor. |
-| **Formas** | Comparar con dibujos cómo es una forma plana y un cuerpo, reconocer formas en objetos reales y practicarlas en tests. |
+| **Formas** | Comparar con dibujos cómo es una forma plana y un cuerpo, reconocer formas en objetos reales, y presentar en cuatro diapositivas los conceptos de lado, vértice, perímetro, área, volumen, simetría y semejanza antes de preguntarlos en el test. |
 | **Formas parecidas** | Decidir si dos figuras son la misma forma a otro tamaño, contar los cuadrados sobre los lados de un triángulo recto, y comparar lo inclinadas que están dos rampas. |
 | **Fracciones** | Reconocer, comparar y operar con fracciones sencillas y decimales. |
 | **Medidas** | Elegir la unidad adecuada (cm, m, g, kg, ml, l) y estimar longitud, peso y capacidad. |

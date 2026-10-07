@@ -104,9 +104,9 @@
       },
       "shapes": {
         "name": 'Shapes',
-        "does": 'Recognises flat shapes (circle, square, triangle, rectangle, pentagon, hexagon) and solids (cube, sphere, cylinder) through real objects, and counts the sides and corners of each figure.',
-        "works": 'Geometric vocabulary, attention to detail in a drawing, and the idea that a shape is recognised by what it is like, not by what it is for.',
-        "daily": 'Look for shapes out in the street: triangular road signs, square windows, cylindrical tins. Count the sides of a floor tile together.'
+        "does": 'Recognises flat shapes (circle, square, triangle, rectangle, pentagon, hexagon) and solids (cube, sphere, cylinder) through real objects. Counts sides and vertices, and introduces the concepts of perimeter, area, volume, symmetry and similarity before asking about them.',
+        "works": 'Geometric vocabulary with its meaning (perimeter, area, volume, symmetry, similarity), attention to detail in a drawing, and the idea that a shape is recognised by what it is like, not by what it is for.',
+        "daily": 'Look for shapes out in the street: triangular road signs, square windows, cylindrical tins. Count the sides and the vertices of a floor tile together, add up the sides for its perimeter, and fold a figure in half to see whether the two halves match.'
       },
       "geometry": {
         "name": 'Geometry',

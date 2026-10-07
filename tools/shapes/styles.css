@@ -123,6 +123,104 @@
   stroke: var(--mod-razonamiento);
   stroke-width: 4;
 }
+/* El perímetro es el camino entero, no un trozo: el contorno a trazos,
+   por dentro del triángulo. Va en el color de superficie y no en un
+   acento porque se apoya sobre el relleno del triángulo, que es
+   --mod-razonamiento: un verde --mod-secuencia encima de ese teal se
+   perdía, y la superficie contrasta con los dos temas. */
+.intro-perimeter-mark {
+  fill: none;
+  stroke: var(--color-superficie);
+  stroke-width: 4.5;
+  stroke-dasharray: 9 7;
+  stroke-linejoin: round;
+}
+/* El rayado del área: solo puede pintar dentro de la forma porque va
+   recortado con un clipPath sobre su propio contorno. Sin el recorte las
+   rayas saldrían por fuera y pasarían a ser otro borde más. */
+.area-hatch line {
+  stroke: var(--color-superficie);
+  stroke-width: 3;
+}
+/* El hueco del volumen: la caja entera en trazos, con el cuerpo dentro. */
+.intro-space-mark {
+  fill: none;
+  stroke: var(--color-texto);
+  stroke-width: 4;
+  stroke-dasharray: 9 7;
+}
+/* El eje de simetría se pinta con el color de superficie y no con un
+   acento, por lo que seMeasura en app.js: se apoya sobre el relleno de la
+   figura, que es teal oscuro en claro y teal claro en oscuro, y no hay
+   ningún acento que contraste con los dos. --color-memoria sobre ese
+   relleno daba 1,45:1 en claro, 1,02:1 en oscuro y 1,91:1 en alto
+   contraste: una raya invisible. Por eso el eje no sale de la figura. */
+.intro-axis-mark,
+.axis-mark {
+  stroke: var(--color-superficie);
+  stroke-width: 4;
+  stroke-dasharray: 8 6;
+}
+
+/* Lado y vértice van en paralelo arriba y el perímetro ocupa la fila
+   entera debajo, porque no es un cuarto concepto suelto al lado: es lo que
+   los dos anteriores sirven para medir. Sin esto la tercera tarjeta cae
+   en la segunda columna y deja un hueco al lado. */
+.shape-part-wide { grid-column: 1 / -1; }
+
+@media (min-width: 601px) {
+  .shape-part-wide {
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr);
+    column-gap: 1rem;
+    align-items: center;
+    text-align: left;
+  }
+  .shape-part-wide .shape-part-visual {
+    grid-row: 1 / span 2;
+    grid-column: 1;
+  }
+  .shape-part-wide h2,
+  .shape-part-wide p { grid-column: 2; }
+  .shape-part-wide .shape-part-visual svg { width: 96px; height: 96px; }
+}
+
+/* Las opciones con dibujo: la misma figura que en la pregunta, a menor
+   tamaño. El botón necesita holgura para que la figura no toque el borde
+   del control táctil. */
+.thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.thumb svg {
+  width: 76px;
+  height: 76px;
+}
+/* El cuerpo grande de la pregunta de volumen: se dibuja más grande a
+   propósito, para que la respuesta y el dibujo no puedan discrepar. */
+.thumb-big svg {
+  width: 132px;
+  height: 132px;
+}
+
+/* Las opciones con dibujo van en fila. Tres mini-figuras apiladas en
+   columna son una torre que empuja el botón de siguiente fuera de la
+   pantalla. La clase la pone app.js con `inline`, y aquí no había ninguna
+   regla: el resto de actividades sí la tiene. */
+.options.options-row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.options.options-row .option-btn {
+  display: flex;
+  width: auto;
+  min-width: 148px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 
 .gallery-caption {
   min-height: 3em;
@@ -138,6 +236,21 @@
   text-transform: capitalize;
 }
 
+/* La aclaración: cuántos lados tiene la forma plana, o cuántas caras
+   tiene el cuerpo y de qué forma son. Es una nota al pie del nombre,
+   así que no hereda su tamaño, su peso ni su mayúscula, y usa el color
+   de texto suave (≥ 7:1 en los tres temas) para no competir con él. */
+.gallery-note {
+  max-width: 560px;
+  min-height: 1.2em;
+  margin: 0;
+  color: var(--color-texto-suave);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  text-align: center;
+  text-transform: none;
+}
+
 .real-object {
   min-height: 1.2em;
   font-size: 5rem;
@@ -145,11 +258,6 @@
 }
 
 .real-object svg { width: 160px; height: 140px; }
-
-.real-side {
-  max-width: 36rem;
-  margin: 0;
-}
 
 .solid-top { fill: var(--mod-razonamiento-suave); }
 .solid-left { fill: var(--mod-secuencia-suave, var(--mod-razonamiento-suave)); }

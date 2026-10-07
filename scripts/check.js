@@ -12,10 +12,11 @@
       tool file is listed in FILES.
    4. es/en key parity between strings.es.js and strings.en.js
       (tools/, the site root, config/, legal/).
-   5. Public/private catalog split: the root index.html links only Roman
-      Numerals and Shapes; dev/index.html links to the other activities;
-      together they cover all activity slugs in tools/, config/, and
-      sw.js FILES.
+   5. Public/private catalog split: the root index.html links only
+      Roman Numerals, Shapes and Scale; dev/index.html links to the
+      other activities plus the ones named in BOTH_SLUGS; together
+      they cover all activity slugs in tools/, config/, and sw.js
+      FILES.
    6. Mandatory rule: zero mentions of disability, occupational therapy
       or minors in user-facing files (see doc/<locale>/SPEC.md §4).
  6.1 Zero school-year / syllabus labels in anything served to the
@@ -233,7 +234,13 @@ swPaths.forEach(function (entry) {
 slugs.forEach(function (slug) {
   CANONICAL_BASE.concat(STRING_LOCALES.map(function (loc) { return 'strings.' + loc + '.js'; }))
     .forEach(function (archivo) {
-      var ruta = './tools/' + slug + '/' + archivo;
+      /* index.html is precached under its canonical directory URL: the
+         "./tools/<slug>/index.html" form is answered by Cloudflare with a
+         307, and caching the followed redirect is what broke navigation
+         (see check 15). Every other file keeps its real path. */
+      var ruta = archivo === 'index.html'
+        ? './tools/' + slug + '/'
+        : './tools/' + slug + '/' + archivo;
       if (swPaths.indexOf(ruta) === -1) {
         failures.push('sw.js: falta ' + ruta + ' en FILES');
       }
@@ -331,20 +338,34 @@ if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'
 if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
 /* --- 5. Public/private catalog split ---
-   The public landing carries TWO entries (Roman Numerals, Shapes);
-   the hidden dev/ page carries every
-   other activity. Together they cover the full tools/, config/,
-   and sw.js activity set. Public activities are the longest-lived
-   "front door" — they stay discoverable for any visitor even when
-   the rest of the catalogue is moved behind dev/. The order in
-   PUBLIC_SLUGS is the visible order in index.html.
+   The public landing carries THREE entries (Roman Numerals, Shapes,
+   Scale); the hidden dev/ page carries every other activity.
+   Together they cover the full tools/, config/, and sw.js activity
+   set. Public activities are the longest-lived "front door" — they
+   stay discoverable for any visitor even when the rest of the
+   catalogue is moved behind dev/. The order in PUBLIC_SLUGS is the
+   visible order in index.html.
+
+   BOTH_SLUGS are the activities that are public AND still listed in
+   dev/. Until now the two lists were a partition — every slug was in
+   exactly one of them — so adding a public activity necessarily
+   removed its dev/ card. A front-door activity that keeps working
+   through the full catalogue should not lose its place in it, so the
+   split is no longer a partition and BOTH_SLUGS names the overlap.
+   A slug left in dev/ by accident still fails below, which is the
+   property that made the partition worth having.
 */
 checks += 1;
 var siteHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 var devHtml = fs.readFileSync(path.join(ROOT, 'dev', 'index.html'), 'utf8');
-/* The public landing sits at the site root and links "tools/<slug>/...";
-   the hidden dev/ page is one level down and links "../tools/<slug>/...". */
-var reHref = /href="(?:\.\.\/)?tools\/([^/]+)\/index\.html"/g;
+/* The public landing sits at the site root and links "tools/<slug>/";
+   the hidden dev/ page is one level down and links "../tools/<slug>/".
+   The trailing slash is mandatory, not cosmetic: the ".../index.html"
+   form is answered by Cloudflare with a 307 to the directory, and the
+   service worker cannot hand that redirected response to a navigation
+   (net::ERR_FAILED). The alternation keeps an index.html link from
+   silently passing this gate and re-breaking the site. */
+var reHref = /href="(?:\.\.\/)?tools\/([^/]+)\/(?:index\.html)?"/g;
 function parseSlugsFromPage(html) {
   var result = [];
   var match;
@@ -362,10 +383,14 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['roman-numerals', 'shapes'];
+var PUBLIC_SLUGS = ['roman-numerals', 'shapes', 'scale'];
+/* Public AND in dev/. Every name here must also be in PUBLIC_SLUGS,
+   otherwise dev/ would carry an activity the landing hides, which is
+   the inverse mistake and just as wrong. */
+var BOTH_SLUGS = ['scale'];
 var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
 var expectedDevSlugs = new Set(slugs.filter(function (slug) {
-  return PUBLIC_SLUGS.indexOf(slug) === -1;
+  return PUBLIC_SLUGS.indexOf(slug) === -1 || BOTH_SLUGS.indexOf(slug) !== -1;
 }));
 assertExactCatalog('site público', publicSlugs, expectedPublicSlugs);
 assertExactCatalog('dev oculto', devSlugs, expectedDevSlugs);
@@ -982,6 +1007,98 @@ var inlineScriptHits = [];
   });
 })(ROOT);
 inlineScriptHits.forEach(function (hit) { failures.push(hit); });
+
+/* --- 15. No internal link may point at a redirecting ".../index.html"
+    URL, and sw.js must not precache one either.
+
+    Cloudflare answers "/x/index.html" with a 307 to "/x/". The service
+    worker's cache.addAll() follows that redirect and stores the final
+    response under the ORIGINAL key with `redirected: true`, and the
+    Fetch spec forbids handing a redirected response to a top-level
+    navigation: Chrome kills the load with net::ERR_FAILED, which is what
+    a real visitor sees as "No se puede acceder a este sitio" on every
+    activity link. Safari happens to tolerate it, so this only ever
+    showed up on Chrome (desktop and mobile alike).
+
+    Reproduced against production with
+    scripts/one-off/probe-redirect-isolated.js: with the service worker
+    enabled every ".../index.html" navigation failed and every trailing
+    slash URL returned 200; with the service worker blocked all of them
+    returned 200. Fixed by linking the canonical directory URL.
+
+    The scan reads href/src VALUES, so an external URL (which contains
+    "index.html" but never redirects) is not a hit. --- */
+checks += 1;
+(function () {
+  var reRedirectingHref = /<[^>]*?\b(?:href|src)="([^"]*index\.html[^"]*)"/g;
+  var dirsToSkip = /(?:^|[\\/])(?:node_modules|\.git|\.wrangler|\.dev|graphify-out|test-results|doc)(?:[\\/]|$)/;
+  (function walk(dir) {
+    var entries;
+    try { entries = fs.readdirSync(dir, { withFileTypes: true }); }
+    catch (e) { return; }
+    entries.forEach(function (entry) {
+      var full = path.join(dir, entry.name);
+      var relPath = path.relative(ROOT, full);
+      if (dirsToSkip.test(relPath)) return;
+      if (entry.isDirectory()) return walk(full);
+      if (!/\.(html|js)$/.test(entry.name)) return;
+      var src = fs.readFileSync(full, 'utf8');
+      var m;
+      reRedirectingHref.lastIndex = 0;
+      while ((m = reRedirectingHref.exec(src)) !== null) {
+        var value = m[1];
+        /* Same-origin only. A path that starts with a scheme or "//"
+           is another host and cannot be our redirect. */
+        if (/^[a-z][a-z0-9+.-]*:/i.test(value) || value.slice(0, 2) === '//') continue;
+        failures.push(relPath + ': enlaza a "' + value + '" (redirige con 307; usa la ruta canónica sin index.html)');
+      }
+    });
+  })(ROOT);
+
+  /* sw.js: the same rule for the precache manifest. A redirected entry
+     there re-breaks every navigation the moment a returning visitor's
+     worker installs. */
+  var swFilesBlock = (swContent.match(/var FILES = \[([\s\S]*?)\];/) || ['', ''])[1]
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\/\/.*$/gm, '');
+  var reSwEntry = /'([^']*index\.html)'/g;
+  var swMatch;
+  while ((swMatch = reSwEntry.exec(swFilesBlock)) !== null) {
+    failures.push('sw.js: FILES incluye ' + swMatch[1] + ', que redirige con 307; usa la ruta canónica');
+  }
+})();
+
+/* --- 16. Asset version tokens must match the file's own bytes.
+    _headers serves assets/css|js|fonts|img immutable for a year, so a
+    changed file only reaches a returning visitor if its reference changes.
+    The tokens were a hand-maintained serial bumped by appending an "a",
+    applied per file instead of per deploy: the same asset ended up with
+    different tokens on different pages (locale-picker.css carried
+    calculia-v2bcaa on the landing and calculia-v5aa on about/), and
+    nothing failed when a reference was missed. scripts/asset-tokens.js
+    derives the token from the file's bytes, so drift is now detectable.
+    Run `node scripts/asset-tokens.js` to fix. --- */
+checks += 1;
+(function () {
+  try {
+    /* The suite keeps one shared tool at <suite>/scripts/asset-tokens.js
+       because the rule is identical in every project (token = hash of the
+       file's own bytes) and each project declares its immutable paths in
+       its own _headers. Scoped to `calculia` so this gate reports only
+       about this project. */
+    require('node:child_process').execFileSync(
+      process.execPath,
+      [path.join(ROOT, '..', 'scripts', 'asset-tokens.js'), '--check', 'calculia'],
+      { cwd: ROOT, encoding: 'utf8' }
+    );
+  } catch (e) {
+    /* Non-zero exit means the tokens are stale: surface its report
+       verbatim instead of a generic failure. */
+    failures.push('assets/css|js|img: token ?v= desactualizado (ejecuta '
+      + '`node ../scripts/asset-tokens.js calculia`)\n'
+      + String(e.stdout || e.message).trim());
+  }
+})();
 
 /* --- Result --- */
 parseJobs.then(function () {

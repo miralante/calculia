@@ -16,15 +16,27 @@
     introFlatText: 'Es lisa, como un dibujo en el papel.',
     introSideTitle: 'Lado',
     introSideText: 'Es una línea recta del borde.',
-    introCornerTitle: 'Esquina',
-    introCornerText: 'Es donde se juntan dos lados.',
+    /* "Vértice" es el nombre de geometría y "esquina" el de cada día: los
+       dos se dicen, porque el niño oye uno en la calle y lo necesita en el
+       test. */
+    introCornerTitle: 'Vértice',
+    introCornerText: 'Es la esquina de la forma: donde se juntan dos lados.',
+    introPerimeterTitle: 'Perímetro',
+    introPerimeterText: 'Es dar la vuelta a la forma por el borde: se suman todos sus lados.',
+    introAreaTitle: 'Área',
+    introAreaText: 'Es todo lo de dentro: la superficie que pisas al ponerte encima.',
+    introVolumeTitle: 'Volumen',
+    introVolumeText: 'Es el hueco que hay dentro y que se puede llenar de cosas.',
+    introSymmetryTitle: 'Simetría',
+    introSymmetryText: 'Es que la forma se dobla en dos mitades que coinciden exactamente.',
+    introSimilarityTitle: 'Semejanza',
+    introSimilarityText: 'Es la misma forma a otro tamaño: más grande o más pequeña.',
     introSolidTitle: 'Cuerpo',
     introSolidText: 'No es plana. Es como una pelota que puedes coger.',
     galleryPrevious: 'Anterior',
     galleryNext: 'Siguiente',
     introContinue: 'Ver en la vida real →',
     realTitle: 'Las formas están a nuestro alrededor',
-    realSide: 'Cada línea recta del borde de una forma plana es un lado.',
     realBack: '← Volver a las formas',
     realContinue: 'Hacer el test →',
     instructionMenu: 'Haz una prueba con todos los contenidos.',
@@ -121,6 +133,36 @@
       prism: { name: 'prisma', gloss: '2 triángulos y 3 rectángulos' },
       pyramid: { name: 'pirámide', gloss: '1 cuadrado y 4 triángulos' }
     },
+    /* La aclaración de la galería: cuántos lados tiene la forma plana o
+       cuántas caras tiene el cuerpo y de qué forma son. Los lados salen
+       de DATA.sides, que es la misma fuente que el dibujo y las
+       preguntas; aquí solo vive el texto. El círculo y la esfera no
+       tienen lados rectos ni caras planas: decirlo con palabras y no
+       con un 0, que parece algo que hay que contar. */
+    note: {
+      sides: '{n} lados y {corners} vértices',
+      sidesNone: 'Sin lados rectos ni vértices',
+      solid: {
+        cube: '6 caras: 6 cuadrados.',
+        rectangularPrism: '6 caras: 2 cuadrados y 4 rectángulos.',
+        triangularPrism: '5 caras: 2 triángulos y 3 rectángulos.',
+        pyramid: '5 caras: 1 cuadrado y 4 triángulos.',
+        sphere: 'No tiene caras planas. Toda su superficie es curva.',
+        cylinder: '2 caras planas: 2 círculos. Y 1 superficie curva.',
+        cone: '1 cara plana: 1 círculo. Y 1 superficie curva.'
+      }
+    },
+    /* Lo que aporta el ejemplo cotidiano: los tres conceptos sobre el
+       objeto de verdad que se acaba de mirar. No vuelve a definirlos —
+       eso ya está en la diapositiva de conceptos — sino que los cuenta
+       sobre ese puerta, esa ventana o ese cubo de playa. Solo hay texto
+       para las formas planas: lados, vértices y perímetro son palabras de
+       una figura, y un cuerpo tiene caras. */
+    realNote: {
+      polygon: 'Tiene {sides} lados y {corners} vértices. El perímetro es la vuelta por el borde, y el área, todo lo de dentro.',
+      circle: 'El borde es redondo: no tiene lados rectos ni vértices. El perímetro se mide por la curva y el área es el disco de dentro.',
+      solid: 'Ocupa sitio de verdad: el volumen es el hueco que hay dentro y se puede llenar.'
+    },
     gen: {
       howManyFaces: 'Este es un {name} abierto. ¿Cuántas caras tiene?',
       facesHint: 'Cuenta las piezas del dibujo: cada una es una cara.',
@@ -131,8 +173,31 @@
       shapeNamePrompt: '¿Qué forma es?',
       sidesPrompt: '¿Cuántos lados tiene?',
       sidesHint: 'Cuenta las rayas rectas del borde.',
-      cornersPrompt: '¿Cuántas esquinas tiene?',
+      cornersPrompt: '¿Cuántos vértices tiene?',
       cornersHint: 'Cuenta los puntos marcados.',
+      perimeterPrompt: 'Cada lado mide {side} cm. ¿Cuánto mide el perímetro?',
+      perimeterHint: 'Suma todos los lados: el perímetro es la vuelta entera.',
+      /* El área todavía no se cuenta aquí: se pregunta por la parte de la
+         forma que es, y las dos opciones falsas son justo por lo que se
+         confunde — el borde que se acaba de contar y los vértices. */
+      areaPrompt: '¿Qué parte de esta forma es su área?',
+      areaHint: 'Piensa en la parte que pisas cuando te pones encima.',
+      areaAria: 'Una forma plana con la parte de dentro rayada.',
+      areaEdge: 'El borde de fuera',
+      areaInside: 'Todo lo de dentro',
+      areaCorners: 'Los vértices',
+      volumePrompt: '¿Cuál de estos cuerpos ocupa más sitio?',
+      volumeHint: 'Lo que ocupa más sitio es el que tiene más volumen.',
+      volumeAria: 'Tres cuerpos de distinto tamaño: un {name} y dos más pequeños.',
+      symmetryPrompt: '¿Por dónde se dobla un {name} para que las dos mitades coincidan?',
+      symmetryHint: 'Las dos mitades tienen que quedar exactamente iguales.',
+      axis: {
+        vertical: 'Doblada por la raya vertical',
+        horizontal: 'Doblada por la raya horizontal',
+        diagonal: 'Doblada por la raya diagonal'
+      },
+      similarPrompt: '¿Cuál de estas figuras es un {name} más pequeño?',
+      similarHint: 'Tiene que ser la misma forma, no hace falta que sea igual de grande.',
       solidToNamePrompt: '¿Qué forma tiene este objeto?',
       solidToObjectPrompt: '¿Cuál de estos objetos es un {name}?',
       solidHint: 'Piensa en la forma del objeto, no en para qué sirve.'
