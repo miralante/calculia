@@ -92,7 +92,24 @@
       decimalToNumberPrompt: 'Which decimal number is painted?',
       decimalToPicturePrompt: 'Which pie is this number worth?',
       decimalHintTenths: 'The pie has 10 parts. Each part is 0.1.',
-      decimalHintParts: 'Look at how much is painted: half, a quarter or three quarters.'
+      decimalHintParts: 'Look at how much is painted: half, a quarter or three quarters.',
+      /* The hint that comes out when an answer is wrong. One per kind of
+         question, and each one says what to look at or do with what is on
+         screen: the single sentence it replaced ("Try again…") was the
+         same for every question, so it said nothing. These never give the
+         answer away — they give the strategy, which is what separates a
+         Socratic hint from a spoiler. */
+      socraticMixFrac: '🤔 Look at the two circles and keep only the slices of the same size.',
+      socraticFracOf: '🤔 Look at the marked group and count only the pictures inside it.',
+      socraticMixedOp: '🤔 Both numbers are in tenths: look at the pies.',
+      socraticFracVsDecimal: '🤔 Count the painted slices in each pie, not the numbers.',
+      socraticDecimalOp: '🤔 Count the slices in each pie and see how much they make.',
+      socraticFracciones: '🤔 Count the slices of the pie that are painted.',
+      socraticComparaFrac: '🤔 Compare the two pies and see which one has more painted.',
+      socraticEquivalentes: '🤔 Compare how much is painted in the two figures, part by part.',
+      socraticSumaFrac: '🤔 Both pies are cut into the same number of slices.',
+      socraticDecimalToPicture: '🤔 Look for the pie with exactly that amount painted.',
+      socraticDecimalToNumber: '🤔 Look at how much of the pie is painted and give it its number.'
     },
     transfer: 'This will help you share something in equal parts, understand half an hour or read a price with a point.'
   }, 'en');

@@ -171,7 +171,30 @@
       readScale: 'Mira hasta dónde llega la barra y lee el número de abajo.',
       readTable: 'Busca la fila y lee su número.',
       colThing: 'Qué',
-      colHowMany: 'Cuántos'
+      colHowMany: 'Cuántos',
+      /* La pista que sale al fallar. Una por tipo de pregunta, y todas
+         dicen qué mirar o qué hacer con lo que hay en pantalla: la frase
+         única que había antes («Prueba otra vez…») era la misma para
+         todas las preguntas, así que no decía nada. Estas no dan la
+         respuesta —dan la estrategia—, que es lo que distingue una
+         pista socrática de un spoiler. */
+      socraticScatter: '🤔 Compara el primer punto de la nube con el último.',
+      socraticAfterDraw: '🤔 Mira la segunda bolsa: ya falta una pieza de ese color.',
+      socraticOutfits: '🤔 Cuenta las parejas de la rejilla, una fila y una columna cada vez.',
+      socraticSpread: '🤔 Compara las dos líneas y mira cuál tiene las marcas más separadas.',
+      socraticTwoDraws: '🤔 Cuenta las parejas de la rejilla de resultados, todas y cada una.',
+      socraticReadRow: '🤔 Mira la fila señalada y cuenta sus dibujos de uno en uno.',
+      socraticExtremeRow: '🤔 Mira todas las filas y compara sus dibujos sin pasar por alto ninguna.',
+      socraticReadBar: '🤔 Compara la barra con la escala de números que tiene al lado.',
+      socraticExtremeBar: '🤔 Mira todas las barras y compáralas por su altura.',
+      socraticReadTable: '🤔 Busca la fila que toca y lee el número de su derecha.',
+      socraticMode: '🤔 Mira qué fila se repite más veces en la tabla.',
+      socraticShare: '🤔 Junta lo que hay en cada fila y reparte el total entre todas.',
+      socraticChance: '🤔 Mira la bolsa y comprueba si esa pieza está dentro o no.',
+      socraticTwoSeries: '🤔 Compara las dos barras del mismo grupo, una con la otra.',
+      socraticRange: '🤔 Busca la marca más alta y la más baja, y cuenta el hueco.',
+      socraticChanceNumber: '🤔 Cuenta primero las de ese color, y luego las de la bolsa entera.',
+      socraticMoreLikely: '🤔 Compara los dos grupos de la bolsa y mira cuál tiene más.'
     },
     transfer: 'Esto te servirá para entender los gráficos que salen en las noticias, en un cartel del centro de salud o en la tele.'
   }, 'es');

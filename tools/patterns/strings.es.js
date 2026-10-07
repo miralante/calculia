@@ -19,6 +19,17 @@
     explicacionCorrecta: '✅ ¡Correcto! Después de la serie viene: ',
     explicacionIncorrectaA: '❌ Eso no sigue el patrón. Lo que sigue es: ',
     pista: '🤔 Prueba otra vez. Mira la serie con calma.',
+
+    /* ---- Pistas socráticas, una por tipo de serie ----
+       `pista` se queda como respaldo de showHint(). Cada nivel
+       construye la serie de otra manera, así que su pista dice qué
+       mirar en esa fila de dibujos: los que se turnan, el grupo que
+       se repite, la cuenta de los números o la letra que va con cada
+       símbolo. Ninguna dice qué va después. */
+    pistaParejas: '🤔 Mira qué dos dibujos se van turnando una y otra vez.',
+    pistaGrupos: '🤔 Mira qué se repite: el grupo de dibujos o el tamaño del círculo.',
+    pistaNumeros: '🤔 Mira cuánto suma o baja el número cada vez.',
+    pistaCodigo: '🤔 Mira qué letra acompaña siempre a cada símbolo.',
     refuerzoTitulo: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',

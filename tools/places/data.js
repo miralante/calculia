@@ -75,14 +75,14 @@ var DATA = {
       { more: { id: 'snake', picto: '🐍' }, less: { id: 'worm', picto: '🐛' } }
     ],
     weight: [
-      { more: { id: 'elephant', picto: '🐘' }, less: { id: 'feather', picto: '🪶' } },
+      { more: { id: 'elephant', picto: '🐘' }, less: { id: 'leaf', picto: '🍃' } },
       { more: { id: 'car', picto: '🚗' }, less: { id: 'teddy', picto: '🧸' } },
       { more: { id: 'house', picto: '🏠' }, less: { id: 'apple', picto: '🍎' } },
       { more: { id: 'chair', picto: '🪑' }, less: { id: 'clip', picto: '📎' } }
     ],
     capacity: [
       { more: { id: 'bathtub', picto: '🛁' }, less: { id: 'cup', picto: '🥤' } },
-      { more: { id: 'bucket', picto: '🪣' }, less: { id: 'spoon', picto: '🥄' } },
+      { more: { id: 'basket', picto: '🧺' }, less: { id: 'spoon', picto: '🥄' } },
       { more: { id: 'barrel', picto: '🛢️' }, less: { id: 'bottle', picto: '🍼' } }
     ]
   }

@@ -92,7 +92,24 @@
       decimalToNumberPrompt: '¿Qué número decimal está pintado?',
       decimalToPicturePrompt: '¿Qué tarta vale este número?',
       decimalHintTenths: 'La tarta tiene 10 partes. Cada parte es 0,1.',
-      decimalHintParts: 'Mira cuánta tarta está pintada: la mitad, un cuarto o tres cuartos.'
+      decimalHintParts: 'Mira cuánta tarta está pintada: la mitad, un cuarto o tres cuartos.',
+      /* La pista que sale al fallar. Una por tipo de pregunta, y todas
+         dicen qué mirar o qué hacer con lo que hay en pantalla: la frase
+         única que había antes («Prueba otra vez…») era la misma para
+         todas las preguntas, así que no decía nada. Estas no dan la
+         respuesta —dan la estrategia—, que es lo que distingue una
+         pista socrática de un spoiler. */
+      socraticMixFrac: '🤔 Mira los dos círculos y quédate con los trozos del mismo tamaño.',
+      socraticFracOf: '🤔 Mira el grupo marcado y cuenta solo los dibujos que tiene.',
+      socraticMixedOp: '🤔 Los dos números están en diez partes: mira las tartas.',
+      socraticFracVsDecimal: '🤔 Cuenta los trozos pintados de cada tarta, no los números.',
+      socraticDecimalOp: '🤔 Cuenta las partes de cada tarta y mira cuánto suman.',
+      socraticFracciones: '🤔 Cuenta las partes de la tarta que están pintadas.',
+      socraticComparaFrac: '🤔 Compara las dos tartas y fíjate en cuál tiene más pintada.',
+      socraticEquivalentes: '🤔 Compara cuánto se pinta en las dos figuras, parte por parte.',
+      socraticSumaFrac: '🤔 Las dos tartas están cortadas en el mismo número de trozos.',
+      socraticDecimalToPicture: '🤔 Busca la tarta que tenga pintada esa misma cantidad.',
+      socraticDecimalToNumber: '🤔 Mira cuánta parte de la tarta está pintada y ponle su número.'
     },
     transfer: 'Esto te servirá para repartir algo en partes iguales, entender media hora o leer un precio con coma.'
   }, 'es');

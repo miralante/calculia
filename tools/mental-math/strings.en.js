@@ -80,7 +80,21 @@
       multiplicaGrandePista: 'Add {ceros} at the end of {n}.',
       bigMultiplyHint: 'Add {ceros} at the end of {n}.',
       oneZero: 'one zero',
-      twoZeros: 'two zeros'
+      twoZeros: 'two zeros',
+      /* Socratic hint: one per question type. The generic line
+         ("Try again…") was the same for all of them, so it said nothing.
+         These say what to look at in the picture or the sum for this
+         question and never give the answer away. */
+      socraticAnchor: '🤔 Look at the bar of ten dots and count how many move.',
+      socraticPlaceAdd: '🤔 Look at the bar of tens: the loose dots join it at the end.',
+      socraticPlaceSub: '🤔 Look at the loose units that go: the dots left make the ten.',
+      socraticCarry: '🤔 Count the loose dots: when they make ten, they become a new bar.',
+      socraticBorrow: '🤔 Look at the bar broken into ten loose dots: that is where the rest comes from.',
+      socraticRestar: '🤔 Look at the group crossed out: what is left is the answer.',
+      socraticDoubles: '🤔 The two groups are the same: put them together and count both.',
+      socraticSumLarge: '🤔 Look at the purple digit: it is the only one that changes when you add.',
+      socraticSubtractLarge: '🤔 Look at the purple digit: it is the only one that drops when you subtract.',
+      socraticMultiplyLarge: '🤔 Look at the purple digit: multiplying only changes it and the zeros.'
     },
     transfer: 'This helps you know how much you have left, how much is missing or calculate a large amount without a calculator.'
   }, 'en');

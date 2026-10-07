@@ -442,6 +442,7 @@
       }
       return {
         prompt: App.i18n.t('gen.whichHypotenuse'),
+        hint: App.i18n.t('gen.socraticHypotenuse'),
         visual: '<div class="tri-stage">' + triangleSvg(t, {}) + '</div>',
         visualAria: triAria(t),
         legend: App.i18n.t('gen.hypHint'),
@@ -476,6 +477,7 @@
       return {
         prompt: App.i18n.t(role === 'opposite' ? 'gen.whichOpposite' : 'gen.whichAdjacent')
           .replace(/\{where\}/g, App.i18n.t('gen.corner' + corner)),
+        hint: App.i18n.t('gen.socraticSideByAngle'),
         visual: '<div class="tri-stage">' + triangleSvg(t, { angleAt: corner }) + '</div>',
         visualAria: triAria(t),
         legend: App.i18n.t(role === 'opposite' ? 'gen.oppositeHint' : 'gen.adjacentHint'),
@@ -496,6 +498,7 @@
       var t = draw(nv.id, DATA.triangles);
       return {
         prompt: App.i18n.t('gen.countReason'),
+        hint: App.i18n.t('gen.socraticReason'),
         visual: '<div class="tri-stage">' + triangleSvg(t, {}) + '</div>',
         visualAria: triAria(t),
         legend: App.i18n.t('gen.reasonHint')
@@ -518,6 +521,7 @@
       var yes = sameReason(pair, right);
       return {
         prompt: App.i18n.t('gen.sameReason'),
+        hint: App.i18n.t('gen.socraticSameReason'),
         visual: '<div class="tri-stage pair-stage">' +
           triangleSvg(pair, {}) + triangleSvg(right, {}) + '</div>',
         visualAria: App.i18n.t('gen.twoAria')
@@ -564,6 +568,7 @@
         prompt: App.i18n.t('gen.whichSameReason')
           .replace(/\{up\}/g, pair.up)
           .replace(/\{along\}/g, pair.along),
+        hint: App.i18n.t('gen.socraticWhichSameReason'),
         visual: '<div class="tri-stage">' + triangleSvg(pair, {}) + '</div>',
         visualAria: App.i18n.t('gen.triAria')
           .replace(/\{up\}/g, pair.up).replace(/\{along\}/g, pair.along),
@@ -585,6 +590,7 @@
       var l = draw(nv.id, DATA.ladders.filter(function (x) { return x.run > 0; }));
       return {
         prompt: App.i18n.t('gen.ladderSide'),
+        hint: App.i18n.t('gen.socraticLadderSide'),
         visual: '<div class="tri-stage">' + laddersSvg([l], {}) + '</div>',
         visualAria: App.i18n.t('gen.ladderAria'),
         legend: App.i18n.t('gen.ladderSideHint'),
@@ -623,6 +629,7 @@
       }
       return {
         prompt: App.i18n.t('gen.ladderTaller'),
+        hint: App.i18n.t('gen.socraticLadderTaller'),
         visual: '<div class="tri-stage">' + laddersSvg(byRun, {
           labels: named.map(function (n) { return n.letter; }),
           guide: true
@@ -815,9 +822,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

@@ -63,7 +63,7 @@
       snake: 'la serpiente',
       worm: 'el gusano',
       elephant: 'el elefante',
-      feather: 'la pluma',
+      leaf: 'la hoja',
       teddy: 'el peluche',
       house: 'la casa',
       apple: 'la manzana',
@@ -71,7 +71,7 @@
       clip: 'el clip',
       bathtub: 'la bañera',
       cup: 'el vaso',
-      bucket: 'el cubo',
+      basket: 'la cesta',
       spoon: 'la cuchara',
       barrel: 'el bidón',
       bottle: 'el biberón'
@@ -103,7 +103,15 @@
       findWhere: '¿En qué dibujo está {thing} {phrase}?',
       whichIs: '¿Cuál {word}?',
       sceneAria: '{thing} está {phrase}.',
-      compareAria: '{a} y {b}, dibujados del mismo tamaño.'
+      compareAria: '{a} y {b}, dibujados del mismo tamaño.',
+      /* La pista que sale al fallar. Una por tipo de pregunta, y las tres
+         dicen qué mirar en el dibujo de delante: la frase única de antes
+         («Prueba otra vez. Mira el dibujo con calma») era la misma para
+         todas las preguntas, así que no decía nada. No dan la respuesta,
+         dan la estrategia. */
+      socraticWhereIs: '🤔 Mira dónde está la cosa en el dibujo, no solo cómo se llama.',
+      socraticFindWhere: '🤔 Lee la frase y busca en los dibujos la imagen que la cumple.',
+      socraticCompare: '🤔 Piensa cuál de las dos cosas es más grande de verdad, no cómo está dibujada.'
     },
     transfer: 'Esto te servirá para entender cuando te dicen dónde está algo, y para elegir qué llevas en cada mano cuando una bolsa pesa más que la otra.'
   }, 'es');

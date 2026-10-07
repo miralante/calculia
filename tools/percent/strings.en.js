@@ -105,7 +105,22 @@
       scaleKey: 'Each square of the plan is {unit} real metres.',
       scaleHint: 'Count the squares and look at what each one is worth.',
       planAria: 'A plan of {n} squares, each one {unit} metres.',
-      metre: ' m'
+      metre: ' m',
+      /* The line that shows up when an answer is wrong. One per question
+         type, and each one says what to look at in the picture or the
+         coins in front of you: the single old sentence ("Try again.
+         Count calmly what is coloured in.") was the same for all of them.
+         They give the strategy, never the answer. */
+      socraticReadPercent: '🤔 Count the rows and columns that are coloured in the grid.',
+      socraticPickPercent: '🤔 Compare the three grids: count the coloured squares in each one.',
+      socraticMoneyPart: '🤔 Look at which coins are marked: only those are the part the percentage takes.',
+      socraticMoneyLess: '🤔 Look at the marked coins and take them off the price you can see.',
+      socraticMoneyMore: '🤔 Look at the marked coins and add them to the money you already have.',
+      socraticRatio: '🤔 Look at the servings drawn: compare the first one with the ones beside it.',
+      socraticInverse: '🤔 Look at the rows of work: count how many there are and how long each one lasts.',
+      socraticFit: '🤔 Look at the price of one under the money: count how many times it fits.',
+      socraticLeft: '🤔 Look at the price of one and the money you have: what is left is the rest.',
+      socraticScale: '🤔 Look at the plan: count the squares and read what each one is worth.'
     },
     transfer: 'This will help you understand the sales in a shop, know how much you are really getting off, read a plan or a map, and know how many things the money you are carrying reaches for.'
   }, 'en');

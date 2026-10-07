@@ -146,7 +146,32 @@
       pickSymmetric: 'Which of the two matches when you fold it along the line?',
       symmetryHint: 'Look at one side of the line, then at the other.',
       ariaSymmetric: 'A figure that matches when folded.',
-      ariaNotSymmetric: 'A figure that does not match when folded.'
+      ariaNotSymmetric: 'A figure that does not match when folded.',
+      /* The hint that comes out when an answer is wrong. One per kind of
+         question, and each one says what to look at or do with what is on
+         screen: the single sentence it replaced ("Try again...") was the
+         same for every question, so it said nothing. These never give the
+         answer away - they give the strategy, which is what separates a
+         Socratic hint from a spoiler. */
+      socraticProtractor: '🤔 Look at which number on the protractor the moving arm reaches.',
+      socraticClock: '🤔 Count the marks along the short way round the clock, one by one.',
+      socraticLines: '🤔 Look for the point where the two lines meet each other.',
+      socraticTriangleArea: '🤔 Compare the triangle with the striped rectangle around it.',
+      socraticSurface: '🤔 Go over the faces of the open box and count their squares.',
+      socraticOffLine: '🤔 Look for the point that does not follow the line of the others.',
+      socraticCircleEdge: '🤔 Compare the border with the line straight across the circle.',
+      socraticCircleArea: '🤔 Count only the whole squares that stay inside the circle.',
+      socraticVolume: '🤔 Look at how many layers of cubes the box is drawn in.',
+      socraticMoved: '🤔 Look for the drawing that faces the same way as the first one.',
+      socraticAngleKind: '🤔 Compare the angle with the grey line marking the right corner.',
+      socraticPerimeter: '🤔 Count the squares on the outline without skipping any corner.',
+      socraticArea: '🤔 Count the squares inside, row by row, leaving out the border.',
+      socraticSymmetry: '🤔 Fold the drawing along the line and see if anything sticks out.',
+      socraticEqualSides: '🤔 Look at the matching marks and count the sides that carry them.',
+      socraticFigureName: '🤔 Count the equal sides of the figure first, then choose its name.',
+      socraticCoord: '🤔 Go down from the dot to the column below, then across to the row.',
+      socraticPickCoord: '🤔 Find the square where the two numbers meet, in the drawings.',
+      socraticSymmetryPick: '🤔 Imagine folding each drawing along its line and compare them.'
     },
     transfer: 'This will help you work out how much tape you need to go round something, how many tiles fit on a floor, or where to fold a piece of paper so both halves are the same.'
   }, 'en');

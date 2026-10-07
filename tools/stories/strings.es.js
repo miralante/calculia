@@ -22,6 +22,11 @@
     endSummary: 'Has ordenado {n} historias. Ahora tienes {stars} estrellas.',
     otherLevel: 'Elegir otra actividad',
     pista: '🤔 Mira las viñetas. ¿Cuál es el principio de la historia?',
+    /* ---- Pista socrática ----
+       `pista` se queda como respaldo de showHint(): era la misma para
+       todas las historias. Esta dice qué hacer con las viñetas de esta
+       historia y nunca dice cuál va la primera. */
+    pistaOrden: '🤔 Piensa qué viñeta puede ser la primera y qué pasa después.',
     refuerzoTitulo: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} historias que has fallado hasta acertarlas todas.',
     explicacionCorrecta: '✅ ¡Correcto!',

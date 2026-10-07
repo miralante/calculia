@@ -199,6 +199,7 @@
         visualAria: App.i18n.t('gen.lineAria')
           .replace(/\{from\}/g, w.from).replace(/\{step\}/g, w.step),
         legend: App.i18n.t('gen.walkHint'),
+        hint: App.i18n.t('gen.socraticWalk'),
         /* Forgetting the sign and answering as if you had started at zero
            is the mistake this actually produces. */
         options: pickOptions(answer, [w.step, w.from, answer + 1])
@@ -224,6 +225,7 @@
         visualAria: App.i18n.t('gen.commuteAria')
           .replace(/\{a\}/g, p.a).replace(/\{b\}/g, p.b),
         legend: App.i18n.t('gen.commuteHint'),
+        hint: App.i18n.t('gen.socraticCommute'),
         /* The two real mistakes: adding instead of multiplying, and
            counting one row too many. */
         options: pickOptions(total, [p.a + p.b, total + p.a, total - p.a])
@@ -248,6 +250,7 @@
           .replace(/\{cut\}/g, s.cut).replace(/\{rest\}/g, rest),
         legend: App.i18n.t('gen.splitHint')
           .replace(/\{left\}/g, left).replace(/\{right\}/g, right),
+        hint: App.i18n.t('gen.socraticSplit'),
         options: pickOptions(left + right, [left + right - s.a, left + right + s.a, left])
       };
     },
@@ -271,6 +274,7 @@
           .replace(/\{a\}/g, m.a).replace(/\{tens\}/g, tens).replace(/\{units\}/g, units),
         legend: App.i18n.t('gen.splitHint')
           .replace(/\{left\}/g, left).replace(/\{right\}/g, right),
+        hint: App.i18n.t('gen.socraticSplitTens'),
         options: pickOptions(left + right, [left + right - m.b, left + right + m.b, left])
       };
     },
@@ -286,6 +290,7 @@
         visualAria: App.i18n.t('gen.shareAria')
           .replace(/\{groups\}/g, s.groups).replace(/\{each\}/g, each),
         legend: App.i18n.t('gen.shareHint'),
+        hint: App.i18n.t('gen.socraticShare'),
         options: numberOptions(each)
       };
     },
@@ -303,6 +308,7 @@
         visualAria: App.i18n.t('gen.groupsAria')
           .replace(/\{count\}/g, count).replace(/\{size\}/g, g.size),
         legend: App.i18n.t('gen.groupsHint'),
+        hint: App.i18n.t('gen.socraticGroups'),
         options: numberOptions(count)
       };
     },
@@ -320,6 +326,7 @@
           expression(o, parens) + '</span></div>',
         visualAria: expression(o, parens),
         legend: App.i18n.t(parens ? 'gen.parensHint' : 'gen.timesFirstHint'),
+        hint: App.i18n.t('gen.socraticWhatFirst'),
         options: App.utils.shuffle([
           { html: '<span class="part">' + mul + '</span>', aria: mul, correct: !parens },
           { html: '<span class="part">' + add + '</span>', aria: add, correct: parens }
@@ -341,6 +348,7 @@
           expression(o, parens) + '</span></div>',
         visualAria: expression(o, parens),
         legend: App.i18n.t(parens ? 'gen.parensHint' : 'gen.timesFirstHint'),
+        hint: App.i18n.t('gen.socraticOrderResult'),
         options: pickOptions(right, [other, right + 1, right - 1])
       };
     }
@@ -488,9 +496,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

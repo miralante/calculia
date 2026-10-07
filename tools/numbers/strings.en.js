@@ -104,7 +104,7 @@
     },
     ordinal: { 1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth' },
     ordinalPlace: { 1: 'first place', 2: 'second place', 3: 'third place', 4: 'fourth place', 5: 'fifth place' },
-    level: { n1: 'Up to 10', n2: 'Up to 20', n3: 'Up to 100', n4: 'Up to 100, fewer marks', c1: 'Up to 9, with blocks', c2: 'Up to 99, with blocks', c3: 'Up to 99, no blocks', c4: 'Up to 999', c5: 'Up to 9,999', o1: 'Queue of 3', o2: 'Queue of 5', o3: 'Find a place', libre: '🛗 Free elevator', meta: '🎯 Reach a floor', u99: 'Up to 99', u999: 'Up to 999', umiles: 'Thousands', umillones: 'Millions and trillion', udictado: 'Listen and choose', counter: 'Free counter', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
+    level: { n1: 'Up to 10', n2: 'Up to 20', n3: 'Up to 100', n4: 'Up to 100, fewer marks', c1: 'Up to 9, with blocks', c2: 'Up to 99, with blocks', c3: 'Up to 99, no blocks', c4: 'Up to 999', c5: 'Up to 9,999', o1: 'Queue of 3', o2: 'Queue of 5', o3: 'Find a place', libre: '🏢 Free elevator', meta: '🎯 Reach a floor', u99: 'Up to 99', u999: 'Up to 999', umiles: 'Thousands', umillones: 'Millions and trillion', udictado: 'Listen and choose', counter: 'Free counter', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
     gen: {
       numberLinePrompt: 'Which number is the arrow pointing at?',
       numberLineHint: 'Count from the nearest written number.',
@@ -179,7 +179,7 @@
       elevatorStateBelow: 'Lower floor (negative number)',
       elevatorStateGround: 'Ground floor (zero)',
       elevatorGoalMeta: 'Goal: reach floor {piso}.',
-      elevatorSuccess: '🛗 You reached floor {piso}!',
+      elevatorSuccess: '🏢 You reached floor {piso}!',
       elevatorBtnReset: '🔄 Start at 0',
       elevatorBtnAudio: 'Hear the floor',
       elevatorBtnExit: '✅ Exit',
@@ -187,7 +187,23 @@
       elevatorTtsAbove: 'Upper floor.',
       elevatorTtsBelow: 'Lower floor.',
       elevatorTtsGround: 'Ground floor.',
-      elevatorResumenFinal: 'You explored the elevator. You now have {stars} stars.'
+      elevatorResumenFinal: 'You explored the elevator. You now have {stars} stars.',
+      /* The line that shows up when an answer is wrong. One per question
+         type, and each one says what to look at in the picture or the
+         number in front of you: the single old sentence ("Try again.
+         Think calmly.") was the same for all of them. They give the
+         strategy, never the answer. */
+      socraticOrdinalPlace: '🤔 Start at the flag and count up to the arrow, one by one.',
+      socraticOrdinalMember: '🤔 Start at the flag and count up to the place they ask about.',
+      socraticNumberLine: '🤔 Count the marks from the nearest written number up to the arrow.',
+      socraticCompare: '🤔 Look at the digits of both numbers and compare the biggest places first.',
+      socraticBlocks: '🤔 Count the blocks in each group, then put the totals together.',
+      socraticSayNumber: '🤔 Look at the number drawn and read it in parts, from left to right.',
+      socraticWriteNumber: '🤔 Look at how it is written and see which groups of ten it is split into.',
+      socraticTradeUp: '🤔 Look at the blocks and group them in tens: count the groups.',
+      socraticTradeDown: '🤔 Look at each big block and count how many small ones fit inside.',
+      socraticLadder: '🤔 Look at the number: it is a one followed by zeros, count how many.',
+      socraticDictation: '🤔 Read the number drawn slowly and compare it with the options.'
     },
     transfer: 'This will help you read large numbers, understand the elevator of a building, or know which digit changes when you add 100.'
   }, 'en');

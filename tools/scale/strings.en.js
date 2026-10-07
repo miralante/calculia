@@ -129,7 +129,18 @@
       planReal: 'Real life',
       unitCentimetre: 'centimetres',
       unitMetre: 'metres',
-      unitKm: 'kilometres'
+      unitKm: 'kilometres',
+
+      /* ---- One Socratic hint per question type ----
+         The generic line above (`hint`) was the same sentence for all
+         five questions. These say what to look at in THIS instrument or
+         plan, and never give the measure: they give the way of getting
+         to it. */
+      socraticRead: '🤔 Look at the highest mark the pencil or the level points to and count the ticks.',
+      socraticStep: '🤔 Share the space between the two numbers among all the ticks.',
+      socraticSteps: '🤔 Count the ticks the pencil passes, one by one, from where it starts.',
+      socraticPlanToReal: '🤔 Look at the scale above and count the centimetres of the road.',
+      socraticRealToPlan: '🤔 Think how many one-centimetre pieces fit in that distance.'
     },
 
     transfer: 'It will help you read a recipe, a metro plan or the water meter without fear.'

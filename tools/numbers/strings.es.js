@@ -102,7 +102,7 @@
     },
     ordinal: { 1: 'primero', 2: 'segundo', 3: 'tercero', 4: 'cuarto', 5: 'quinto' },
     ordinalPlace: { 1: 'el primer lugar', 2: 'el segundo lugar', 3: 'el tercer lugar', 4: 'el cuarto lugar', 5: 'el quinto lugar' },
-    level: { n1: 'Hasta 10', n2: 'Hasta 20', n3: 'Hasta 100', n4: 'Hasta 100, con menos marcas', c1: 'Hasta 9, con bloques', c2: 'Hasta 99, con bloques', c3: 'Hasta 99, sin bloques', c4: 'Hasta 999', c5: 'Hasta 9.999', o1: 'Fila de 3', o2: 'Fila de 5', o3: 'Buscar un lugar', libre: '🛗 Ascensor libre', meta: '🎯 Llegar a un piso', u99: 'Hasta 99', u999: 'Hasta 999', umiles: 'Los miles', umillones: 'Millones y billón', udictado: 'Escucha y elige', counter: 'Contador libre', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
+    level: { n1: 'Hasta 10', n2: 'Hasta 20', n3: 'Hasta 100', n4: 'Hasta 100, con menos marcas', c1: 'Hasta 9, con bloques', c2: 'Hasta 99, con bloques', c3: 'Hasta 99, sin bloques', c4: 'Hasta 999', c5: 'Hasta 9.999', o1: 'Fila de 3', o2: 'Fila de 5', o3: 'Buscar un lugar', libre: '🏢 Ascensor libre', meta: '🎯 Llegar a un piso', u99: 'Hasta 99', u999: 'Hasta 999', umiles: 'Los miles', umillones: 'Millones y billón', udictado: 'Escucha y elige', counter: 'Contador libre', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
     gen: {
       numberLinePrompt: '¿Qué número señala la flecha?',
       numberLineHint: 'Cuenta desde el número escrito más cercano.',
@@ -177,7 +177,7 @@
       elevatorStateBelow: 'Piso de abajo (número negativo)',
       elevatorStateGround: 'Planta baja (cero)',
       elevatorGoalMeta: 'Objetivo: llegar al piso {piso}.',
-      elevatorSuccess: '🛗 ¡Has llegado al piso {piso}!',
+      elevatorSuccess: '🏢 ¡Has llegado al piso {piso}!',
       elevatorBtnReset: '🔄 Empezar en 0',
       elevatorBtnAudio: 'Escuchar el piso',
       elevatorBtnExit: '✅ Salir',
@@ -185,7 +185,22 @@
       elevatorTtsAbove: 'Piso de arriba.',
       elevatorTtsBelow: 'Piso de abajo.',
       elevatorTtsGround: 'Planta baja.',
-      elevatorResumenFinal: 'Has explorado el ascensor. Ahora tienes {stars} estrellas.'
+      elevatorResumenFinal: 'Has explorado el ascensor. Ahora tienes {stars} estrellas.',
+      /* La pista que sale al fallar. Una por tipo de pregunta, y cada una
+         dice qué mirar en el dibujo o en el número de delante: la frase
+         única de antes («Prueba otra vez. Piensa con calma») era la misma
+         para todas. No dan la respuesta, dan la estrategia. */
+      socraticOrdinalPlace: '🤔 Empieza en la bandera y cuenta hasta la flecha, uno por uno.',
+      socraticOrdinalMember: '🤔 Empieza en la bandera y cuenta hasta el lugar que te piden.',
+      socraticNumberLine: '🤔 Cuenta las muescas desde el número escrito más cercano hasta la flecha.',
+      socraticCompare: '🤔 Mira las cifras de los dos números y compara primero las de más sitio.',
+      socraticBlocks: '🤔 Cuenta los bloques de cada grupo y después junta los resultados.',
+      socraticSayNumber: '🤔 Mira el número pintado y léelo por partes, de izquierda a derecha.',
+      socraticWriteNumber: '🤔 Mira cómo está escrito y fíjate en qué grupos de diez está dividido.',
+      socraticTradeUp: '🤔 Mira los bloques y agrúpalos de diez en diez: cuenta los grupos.',
+      socraticTradeDown: '🤔 Mira cada bloque grande y cuenta cuántos pequeños entran dentro.',
+      socraticLadder: '🤔 Mira el número: es un uno seguido de ceros, cuenta cuántos hay.',
+      socraticDictation: '🤔 Lee el número pintado despacio y compáralo con las opciones.'
     },
     transfer: 'Esto te servirá para leer números grandes, entender el ascensor de un edificio o saber qué cifra cambia al sumar 100.'
   }, 'es');

@@ -142,7 +142,7 @@ var DATA = {
        idea in this tool, while naming a place in a queue and comparing
        two numbers are the most approachable ones. */
     "positivos-y-negativos": {
-      picto: '🛗',
+      picto: '🏢',
       levels: [
         { id: 'libre', tipo: 'ascensorLibre', min: -3, max: 3 },
         { id: 'meta',  tipo: 'ascensorMeta',  min: -3, max: 3, meta: -1, inicio: 2 }
@@ -153,7 +153,7 @@ var DATA = {
   signedNumbers: {
     real: [
       { id: 'termometro', object: '🌡️' },
-      { id: 'ascensor', object: '🛗' },
+      { id: 'ascensor', object: '🏢' },
       { id: 'cuentas', object: '💰' }
     ],
     temperature: [

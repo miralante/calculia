@@ -37,6 +37,11 @@
   var nextExpected = 0;
   var slots = [];
   var attempts = 0;   /* Socratic counter per story (rule 12) */
+  /* La pista de la historia que está en pantalla. Las historias vienen
+     de data.js y no se construyen aquí, así que no hay un objeto
+     pregunta al que añadirle un campo: se guarda solo la pista que le
+     toca a esta pregunta. */
+  var pistaActual = null;
 
   function save() { App.storage.set(TOOL_ID, progress); }
 
@@ -64,8 +69,17 @@
     progressText.textContent = '';
   }
 
+  /* One question shape in this activity: order the panels of a story in
+     time. The levels only add a panel, so one good hint covers all of
+     them and it says what to do with THIS story —find the panel that
+     can come first and go on from there— without naming it. */
+  function pistaPara() {
+    return App.i18n.t('pistaOrden');
+  }
+
   function render() {
     var story = stories[index];
+    pistaActual = pistaPara();
     nextExpected = 0;
     attempts = 0;
     feedbackEl.textContent = '';
@@ -130,9 +144,13 @@
   }
 
   /* Socratic method (rule 12). First mistake → hint (no answer);
-     second mistake → explanation with the correct beginning. */
+     second mistake → explanation with the correct beginning.
+     The invitation is the one written for THIS story —what to do with
+     the panels in front of you— and not the same sentence for every
+     story. The generic line is only the fallback, for a question that
+     forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('pista');
+    explanationEl.textContent = pistaActual || App.i18n.t('pista');
     explanationWrap.classList.remove('hidden');
   }
 

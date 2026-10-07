@@ -68,6 +68,11 @@
      currentItem permite reutilizar render() con un item externo
      (el del refuerzo); si es null, render() toma items[idx]. */
   var currentItem = null;
+  /* La pista de la pregunta que está en pantalla. Las series no se
+     construyen aquí (vienen de data.js), así que no hay un objeto
+     pregunta al que añadirle un campo: se guarda solo la pista que
+     le toca a la serie de este nivel. */
+  var pistaActual = null;
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
@@ -138,9 +143,21 @@
     progressText.textContent = '';
   }
 
+  /* Cada nivel series de una manera distinta (parejas que se turnan,
+     grupos de tres, números que cuentan, códigos símbolo-letra), así
+     que cada uno tiene su pista: la que dice qué mirar en ESA serie.
+     No dice qué símbolo va después. */
+  function pistaPara(nv) {
+    if (nv.id === 2) return App.i18n.t('pistaGrupos');
+    if (nv.id === 3) return App.i18n.t('pistaNumeros');
+    if (nv.id === 4) return App.i18n.t('pistaCodigo');
+    return App.i18n.t('pistaParejas');
+  }
+
   function render() {
     var item = currentItem || items[index];
     currentItem = null;
+    pistaActual = pistaPara(level);
     resolved = false;
     attempts = 0;
     feedbackEl.textContent = '';
@@ -194,9 +211,13 @@
   /* Socratic method: on the first mistake the answer isn't given,
      the person is encouraged to look at the sequence again. Only on
      the second mistake is the correct answer explained
-     (showExplanation). */
+     (showExplanation).
+     The invitation is the one written for THIS series —what to look
+     at in the row of symbols in front of you— and not the same
+     sentence for every level. The generic line is only the fallback,
+     for a question that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('pista');
+    explanationEl.textContent = pistaActual || App.i18n.t('pista');
     explanationWrap.classList.remove('hidden');
   }
 

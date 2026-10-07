@@ -101,7 +101,15 @@
       stepFactor: '¿Cuántos {small} caben en 1 {big}?',
       factorHint: 'Cada escalón que bajas es un ×10 más.',
       ladderConvert: '{n} {big}, ¿cuántos {small} son?',
-      convertHint: 'Baja los escalones uno a uno, multiplicando por 10 cada vez.'
+      convertHint: 'Baja los escalones uno a uno, multiplicando por 10 cada vez.',
+      /* La pista que sale al fallar. Una por tipo de pregunta, y cada una
+         dice qué mirar en la escalera o en el dibujo de delante: la frase
+         única de antes («Prueba otra vez. Piensa con calma») era igual para
+         todas. No dan la respuesta, dan la estrategia. */
+      socraticSteps: '🤔 Cuenta los huecos que quedan entre los dos escalones señalados.',
+      socraticFactor: '🤔 Mira los dos escalones señalados y cuenta cuántas veces bajas.',
+      socraticConvert: '🤔 Fíjate en el tamaño de cada escalón: cada uno vale diez veces el siguiente.',
+      socraticMeasures: '🤔 Mira el dibujo y la pregunta, y fíjate en la unidad que te piden.'
     },
     transfer: 'Esto te servirá para comprar por peso, entender una receta, saber si algo cabe donde quieres ponerlo y pasar de una unidad a otra sin perderte.'
   }, 'es');

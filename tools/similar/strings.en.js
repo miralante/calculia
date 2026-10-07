@@ -58,7 +58,19 @@
       rampB: 'The second one',
       rampsAria: 'Two ramps drawn in little squares.',
       sameSlope: 'Are the two just as steep as each other?',
-      slopeHint: 'They can be different sizes and still climb the same.'
+      slopeHint: 'They can be different sizes and still climb the same.',
+
+      /* ---- One Socratic hint per question type ----
+         The generic line above (`hint`) was the same sentence for all
+         five questions and said nothing. These say what to look at in
+         THIS question —the two rectangles, the three squares, the two
+         ramps— and never give the answer: that is what separates a
+         hint from a spoiler. */
+      socraticSameShape: '🤔 Look at the two rectangles and compare their long sides with their short ones.',
+      socraticPickShape: '🤔 Find the rectangle that repeats the sides of the first one, only smaller.',
+      socraticSquares: '🤔 Count the little squares in the two squares that are already filled in.',
+      socraticSteeper: '🤔 Compare the two slopes and see which one reaches higher.',
+      socraticSlope: '🤔 Look at how much each ramp climbs for how far it goes along.'
     },
     transfer: 'This will help you understand a plan or a map, tell whether a photo has been stretched, and notice what is harder to climb.'
   }, 'en');

@@ -193,6 +193,7 @@
         prompt: sentence(p) + ' ' + App.i18n.t('gen.whatToDo'),
         visual: picture(p),
         visualAria: pictureAria(p),
+        hint: App.i18n.t('gen.socraticChooseOp'),
         options: App.utils.shuffle([
           { html: label(p.op), aria: App.i18n.t('op.' + p.op), correct: true },
           { html: label(p.op === 'add' ? 'sub' : 'add'),
@@ -214,6 +215,7 @@
         visual: picture(p),
         visualAria: pictureAria(p),
         legend: App.i18n.t('gen.countHint'),
+        hint: App.i18n.t(p.op === 'add' ? 'gen.socraticSolveAdd' : 'gen.socraticSolveSub'),
         options: numberOptions(result(p))
       };
     },
@@ -238,6 +240,7 @@
         visualAria: App.i18n.t('gen.ariaTwoStep')
           .replace(/\{total\}/g, end.total).replace(/\{gone\}/g, end.gone),
         legend: App.i18n.t('gen.twoStepHint'),
+        hint: App.i18n.t('gen.socraticTwoStep'),
         options: pickOptions(end.left, [afterFirst, end.left + 1, end.left - 1])
       };
     }
@@ -383,9 +386,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the picture in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

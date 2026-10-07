@@ -171,7 +171,30 @@
       readScale: 'Look at how far the bar reaches and read the number below.',
       readTable: 'Find the row and read its number.',
       colThing: 'What',
-      colHowMany: 'How many'
+      colHowMany: 'How many',
+      /* The hint that comes out when an answer is wrong. One per kind of
+         question, and each one says what to look at or do with what is on
+         screen: the single sentence it replaced ("Try again…") was the
+         same for every question, so it said nothing. These never give the
+         answer away — they give the strategy, which is what separates a
+         Socratic hint from a spoiler. */
+      socraticScatter: '🤔 Compare the first dot of the cloud with the last one.',
+      socraticAfterDraw: '🤔 Look at the second bag: one piece of that kind is already gone.',
+      socraticOutfits: '🤔 Count the pairs in the grid, one row and one column at a time.',
+      socraticSpread: '🤔 Compare the two lines and see which one has the marks further apart.',
+      socraticTwoDraws: '🤔 Count the pairs in the results grid, every single one.',
+      socraticReadRow: '🤔 Look at the marked row and count its pictures one by one.',
+      socraticExtremeRow: '🤔 Look at every row and compare the pictures without skipping one.',
+      socraticReadBar: '🤔 Compare the bar with the scale of numbers beside it.',
+      socraticExtremeBar: '🤔 Look at all the bars and compare them by height.',
+      socraticReadTable: '🤔 Find the row you need and read the number beside it.',
+      socraticMode: '🤔 Look at which row appears most often in the table.',
+      socraticShare: '🤔 Gather what is in each row and share the total among them all.',
+      socraticChance: '🤔 Look in the bag and check whether that piece is inside.',
+      socraticTwoSeries: '🤔 Compare the two bars of the same group, one with the other.',
+      socraticRange: '🤔 Find the highest mark and the lowest one, then count the gap.',
+      socraticChanceNumber: '🤔 Count the ones of that colour first, and then the ones in the whole bag.',
+      socraticMoreLikely: '🤔 Compare the two groups in the bag and see which one has more.'
     },
     transfer: 'This will help you understand the charts that turn up in the news, on a poster at the health centre or on television.'
   }, 'en');

@@ -52,7 +52,15 @@
       ariaTwoStep: 'A group of {total} things with {gone} crossed out.',
       countHint: 'You can count the pictures. What is crossed out is gone.',
       ariaAdd: 'A group of {a} and another group of {b}.',
-      ariaSub: 'A group of {a} things with {b} crossed out.'
+      ariaSub: 'A group of {a} things with {b} crossed out.',
+      /* Socratic hint: one per question type. The generic line
+         ("Try again…") was the same for all of them, so it said nothing.
+         These say what to look at in this question's picture and never
+         give the answer away. */
+      socraticChooseOp: '🤔 Look at the picture: do the two groups join up, or does a picture go away?',
+      socraticSolveAdd: '🤔 Put the two groups of pictures together and count them all, one by one.',
+      socraticSolveSub: '🤔 Count only the pictures that are not crossed out: those are the ones left.',
+      socraticTwoStep: '🤔 Count what is left at the end, after the two changes in the question.'
     },
     problem: {
       garden: 'There are {a} flowers in the garden. You plant {b} more flowers. Then you plant {c} more.',

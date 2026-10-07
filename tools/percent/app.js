@@ -221,6 +221,7 @@
         visual: hundredGrid(value),
         visualAria: App.i18n.t('gen.gridAria').replace(/\{n\}/g, value),
         legend: App.i18n.t('gen.percentHint'),
+        hint: App.i18n.t('gen.socraticReadPercent'),
         options: pickOptions(value, [value + nv.step, value - nv.step, 100 - value], '%')
       };
     },
@@ -234,6 +235,7 @@
       return {
         prompt: App.i18n.t('gen.whichGrid').replace(/\{n\}/g, value),
         legend: App.i18n.t('gen.percentHint'),
+        hint: App.i18n.t('gen.socraticPickPercent'),
         options: App.utils.shuffle([value].concat(others).map(function (v) {
           return {
             html: hundredGrid(v),
@@ -261,6 +263,10 @@
         visualAria: App.i18n.t('gen.coinsAria')
           .replace(/\{total\}/g, item.price).replace(/\{part\}/g, part),
         legend: App.i18n.t('gen.moneyHint'),
+        /* How much the percentage takes, and how much is left after it,
+           are not the same question, so they do not get the same hint. */
+        hint: App.i18n.t(nv.dir === 'part' ? 'gen.socraticMoneyPart'
+          : (nv.dir === 'less' ? 'gen.socraticMoneyLess' : 'gen.socraticMoneyMore')),
         /* Answering with the part when the whole price was asked, or the
            other way round, is the real mistake here. */
         options: pickOptions(answer, [part, item.price, item.price - part, answer + 1],
@@ -283,6 +289,7 @@
           .replace(/\{times\}/g, nv.times)
           .replace(/\{a\}/g, recipe.a).replace(/\{b\}/g, recipe.b),
         legend: App.i18n.t('gen.ratioHint'),
+        hint: App.i18n.t('gen.socraticRatio'),
         /* Forgetting to grow the second thing too is the mistake. */
         options: pickOptions(answer, [recipe.b, answer + 1, answer - 1])
       };
@@ -302,6 +309,7 @@
         visualAria: App.i18n.t('gen.workAria')
           .replace(/\{people\}/g, job.from).replace(/\{hours\}/g, job.hours),
         legend: App.i18n.t('gen.inverseHint').replace(/\{to\}/g, job.to),
+        hint: App.i18n.t('gen.socraticInverse'),
         /* Answering with the same hours as before is the whole mistake
            this level exists for; the total work is the other one. */
         options: pickOptions(answer, [job.hours, job.from * job.hours, answer + 1])
@@ -320,6 +328,7 @@
         visualAria: App.i18n.t('gen.budgetAria')
           .replace(/\{budget\}/g, b.budget).replace(/\{price\}/g, b.price),
         legend: App.i18n.t('gen.fitHint'),
+        hint: App.i18n.t('gen.socraticFit'),
         /* Counting the leftover as one more is the mistake here. */
         options: pickOptions(answer, [answer + 1, b.price, answer - 1])
       };
@@ -337,6 +346,7 @@
         visualAria: App.i18n.t('gen.budgetAria')
           .replace(/\{budget\}/g, b.budget).replace(/\{price\}/g, b.price),
         legend: App.i18n.t('gen.leftHint'),
+        hint: App.i18n.t('gen.socraticLeft'),
         /* Giving the number bought, or the price, instead of what is
            left is what actually happens. */
         options: pickOptions(answer, [howMany(b.budget, b.price), b.price, answer + 1],
@@ -354,6 +364,7 @@
         visualAria: App.i18n.t('gen.planAria')
           .replace(/\{n\}/g, s.squares).replace(/\{unit\}/g, s.unit),
         legend: App.i18n.t('gen.scaleHint'),
+        hint: App.i18n.t('gen.socraticScale'),
         /* Adding the two numbers instead of multiplying is the mistake a
            plan actually produces. */
         options: pickOptions(answer, [s.squares + s.unit, answer + s.unit, answer - s.unit],
@@ -504,9 +515,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

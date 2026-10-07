@@ -70,7 +70,16 @@
       etqPagas: 'Pagas con:',
       youPayWith: 'Pagas con:',
       etqCuesta: 'Cuesta:',
-      itCosts: 'Cuesta:'
+      itCosts: 'Cuesta:',
+      /* La pista que sale al fallar. Una por tipo de pregunta, y cada una
+         dice qué mirar en el dinero que hay en pantalla: la frase única de
+         antes («Prueba otra vez. Piensa con calma») era la misma para
+         todas. No dan la respuesta, dan la estrategia. */
+      socraticPrice: '🤔 Mira el precio escrito y léelo con euros y céntimos.',
+      socraticComparePrices: '🤔 Mira los dos precios y compáralos: el dibujo es igual para los dos.',
+      socraticOneEnough: '🤔 Mira cuánto dinero tienes y cuánto cuesta, y compara los dos números.',
+      socraticTwoEnough: '🤔 Mira los dos precios juntos y compáralos con el dinero que tienes.',
+      socraticChange: '🤔 Mira qué billete pagas y cuánto cuesta: piensa en la diferencia.'
     },
     transfer: 'Esto te servirá para manejarte con el dinero del día a día: saber si te llega, contar el cambio o leer un precio.'
   }, 'es');

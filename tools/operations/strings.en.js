@@ -64,7 +64,19 @@
       groupsAria: '{count} piles of {size} dots.',
       whatFirst: 'What is done first?',
       timesFirstHint: 'With no brackets, the multiplication comes before the addition.',
-      parensHint: 'What is inside the brackets goes first.'
+      parensHint: 'What is inside the brackets goes first.',
+      /* Socratic hint: one per question type. The generic line
+         ("Try again. Look at the picture and count calmly") was the same
+         for all of them, so it said nothing. These give the strategy
+         —what to look at in this question's picture— and never the answer. */
+      socraticWalk: '🤔 Start at the pin, not at zero, and count the steps.',
+      socraticCommute: '🤔 Count the dots in the blank rectangle: they are the same ones.',
+      socraticSplit: '🤔 The two parts are already worked out: look at their numbers and add them.',
+      socraticSplitTens: '🤔 Look at how the number was cut up: some tens and some units.',
+      socraticShare: '🤔 Look at just one pile and count the dots it has.',
+      socraticGroups: '🤔 The question asks how many piles there are: count those, not the dots.',
+      socraticWhatFirst: '🤔 Look first for brackets: if there are any, they come first.',
+      socraticOrderResult: '🤔 Do what is inside the brackets, or the multiplication, first; then add.'
     },
     transfer: 'This will help you do big sums in your head by cutting them into parts, and share things out between several people with none left over and none missing.'
   }, 'en');

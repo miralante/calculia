@@ -166,6 +166,7 @@
           .replace(/\{big\}/g, unitName(pair[0]))
           .replace(/\{small\}/g, unitName(pair[1])),
         legend: App.i18n.t('gen.stepsHint'),
+        hint: App.i18n.t('gen.socraticSteps'),
         /* Counting the rungs instead of the gaps between them gives one
            too many, which is the mistake a ladder actually produces. */
         options: threeNumbers(steps, [steps + 1, steps - 1])
@@ -187,6 +188,7 @@
           .replace(/\{big\}/g, unitName(pair[0]))
           .replace(/\{small\}/g, unitName(pair[1])),
         legend: App.i18n.t('gen.factorHint'),
+        hint: App.i18n.t('gen.socraticFactor'),
         /* Multiplying by ten times the number of steps, instead of by ten
            once per step, is the real confusion here. */
         options: threeNumbers(answer, [10 * steps, factorFor(steps + 1)],
@@ -213,6 +215,7 @@
           .replace(/\{big\}/g, unitName(pair[0]))
           .replace(/\{small\}/g, unitName(pair[1])),
         legend: App.i18n.t('gen.convertHint'),
+        hint: App.i18n.t('gen.socraticConvert'),
         /* One step too many or too few is what actually goes wrong. */
         options: threeNumbers(answer,
           [n * factorFor(steps + 1), n * factorFor(steps - 1)], unitPlural(pair[1]))
@@ -227,6 +230,7 @@
         prompt: item.question,
         visual: '<div class="measure-picto" aria-hidden="true">' + group.picto + '</div>' +
           '<p class="measure-text">' + item.q + '</p>' + ej,
+        hint: App.i18n.t('gen.socraticMeasures'),
         options: App.utils.shuffle([{ html: item.r, correct: true }].concat(
           item.falsas.map(function (f) { return { html: f, correct: false }; })
         ))
@@ -376,9 +380,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

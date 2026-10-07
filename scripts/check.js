@@ -1100,6 +1100,31 @@ checks += 1;
   }
 })();
 
+/* --- 17. The Socratic hint must be written per question.
+    On a wrong answer every activity shows a hint instead of the answer
+    (rule 12), and for years they all showed the SAME sentence for every
+    question in the activity — "Prueba otra vez. Mira el dibujo con
+    calma." — which says nothing at all, and cannot: the useful hint
+    depends on what is being asked ("count its sides one by one"). Each
+    question now carries its own `hint` and showHint() prefers it; the
+    generic line survives only as the fallback.
+
+    The shape that this gate forbids is the assignment straight from the
+    dictionary, with nothing of the question in it. Measured on
+    2026-10-07: twenty activities had it, and the smoke never noticed —
+    every journey answered correctly, so the hint was never on screen. --- */
+checks += 1;
+slugs.forEach(function (slug) {
+  var appJs = path.join(toolsDir, slug, 'app.js');
+  if (!fs.existsSync(appJs)) return;
+  var content = fs.readFileSync(appJs, 'utf8');
+  var generic = /\.textContent\s*=\s*App\.i18n\.t\((['"])(?:hint|pista)\1\)\s*;/.exec(content);
+  if (generic) {
+    failures.push('tools/' + slug + '/app.js: showHint() escribe la frase genérica ('
+      + generic[0].trim() + ') sin mirar la pregunta; cada tipo de pregunta debe traer la suya.');
+  }
+});
+
 /* --- Result --- */
 parseJobs.then(function () {
   if (largeFileWarnings.length) {

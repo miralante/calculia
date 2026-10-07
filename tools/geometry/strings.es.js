@@ -146,7 +146,32 @@
       pickSymmetric: '¿Cuál de las dos coincide al doblarla por la raya?',
       symmetryHint: 'Mira un lado de la raya y luego el otro.',
       ariaSymmetric: 'Una figura que coincide al doblarla.',
-      ariaNotSymmetric: 'Una figura que no coincide al doblarla.'
+      ariaNotSymmetric: 'Una figura que no coincide al doblarla.',
+      /* La pista que sale al fallar. Una por tipo de pregunta, y todas
+         dicen qué mirar o qué hacer con lo que hay en pantalla: la frase
+         única que había antes («Prueba otra vez…») era la misma para
+         todas las preguntas, así que no decía nada. Estas no dan la
+         respuesta —dan la estrategia—, que es lo que distingue una
+         pista socrática de un spoiler. */
+      socraticProtractor: '🤔 Mira en qué número del transportador cae el brazo que se mueve.',
+      socraticClock: '🤔 Cuenta las marcas del reloj por el camino corto, de una en una.',
+      socraticLines: '🤔 Mira si las dos rectas llegan a juntarse en algún punto.',
+      socraticTriangleArea: '🤔 Compara el triángulo con el rectángulo de rayas que lo rodea.',
+      socraticSurface: '🤔 Repasa las caras de la caja abierta y cuenta sus cuadraditos.',
+      socraticOffLine: '🤔 Fíjate en qué punto no sigue la recta que forman los otros.',
+      socraticCircleEdge: '🤔 Compara el borde con la raya que cruza el círculo de lado a lado.',
+      socraticCircleArea: '🤔 Cuenta solo los cuadrados enteros que quedan dentro del círculo.',
+      socraticVolume: '🤔 Fíjate en cuántas capas de cubos está dibujada la caja.',
+      socraticMoved: '🤔 Busca el dibujo que mira hacia el mismo lado que el primero.',
+      socraticAngleKind: '🤔 Compara el ángulo con la raya gris que marca la esquina recta.',
+      socraticPerimeter: '🤔 Cuenta los cuadraditos del contorno sin saltarte las esquinas.',
+      socraticArea: '🤔 Cuenta los cuadrados de dentro, fila a fila, sin el borde.',
+      socraticSymmetry: '🤔 Dobla el dibujo por la raya y mira si sobra algo en un lado.',
+      socraticEqualSides: '🤔 Mira las marcas iguales del dibujo y cuenta los lados que las llevan.',
+      socraticFigureName: '🤔 Cuenta primero los lados iguales de la figura antes de elegir el nombre.',
+      socraticCoord: '🤔 Baja del punto a la columna de abajo y cuenta hasta la fila.',
+      socraticPickCoord: '🤔 Busca en los dibujos la casilla donde se cruzan los dos números.',
+      socraticSymmetryPick: '🤔 Imagina que doblas cada dibujo por su raya y compáralos.'
     },
     transfer: 'Esto te servirá para entender cuánta cinta necesitas para rodear algo, cuántas baldosas caben en un suelo o por dónde doblar un papel para que quede igual.'
   }, 'es');

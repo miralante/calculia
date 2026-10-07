@@ -35,7 +35,7 @@ var DATA = {
        es1→es2→es3 cambia una sola cosa cada vez: contar los escalones,
        el factor que sale de ellos, y ese factor aplicado a una cantidad. */
     escalera: {
-      picto: '🪜',
+      picto: '📏',
       levels: [
         { id: 'es1', tipo: 'stepsApart' },
         { id: 'es2', tipo: 'stepFactor' },

@@ -23,6 +23,12 @@
     explicacionCorrecta: '✅ Correct! That is the one that does not go with the others.',
     explicacionIncorrectaA: '❌ That one does go with the others. The odd one out is: ',
     pista: '🤔 Try again. Look calmly at the three pictures.',
+    /* ---- The Socratic hint ----
+       `pista` stays as showHint()'s fallback: it was the same sentence
+       for every question and said nothing. This one says what to do
+       with the three drawings in front of you and never names the
+       intruder. */
+    pistaIntruso: '🤔 Check whether two of the three go together and which one is left out.',
     refuerzoTitulo: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",

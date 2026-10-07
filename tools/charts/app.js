@@ -354,6 +354,7 @@
         prompt: App.i18n.t('gen.scatterPrompt')
           .replace(/\{a\}/g, App.i18n.t('cloud.' + cloud.id + '.a'))
           .replace(/\{b\}/g, App.i18n.t('cloud.' + cloud.id + '.b')),
+        hint: App.i18n.t('gen.socraticScatter'),
         visual: html + '</div>',
         visualAria: App.i18n.t('gen.scatterAria')
           .replace(/\{n\}/g, cloud.points.length),
@@ -396,6 +397,7 @@
       return {
         prompt: App.i18n.t('gen.afterDraw')
           .replace(/\{thing\}/g, catName(taken)),
+        hint: App.i18n.t('gen.socraticAfterDraw'),
         visual: '<div class="before-after">' +
           '<span class="ba-one"><span class="ba-label">' + App.i18n.t('gen.before') +
           '</span>' + drawBag(before, 'is-before') + '</span>' +
@@ -427,6 +429,7 @@
         prompt: App.i18n.t('gen.howManyOutfits')
           .replace(/\{tops\}/g, set.tops.length)
           .replace(/\{bottoms\}/g, set.bottoms.length),
+        hint: App.i18n.t('gen.socraticOutfits'),
         visual: html + '</div>',
         visualAria: App.i18n.t('gen.outfitsAria').replace(/\{n\}/g, total),
         legend: App.i18n.t('gen.outfitsHint'),
@@ -452,6 +455,7 @@
       var answer = askWide ? wideLabel : tightLabel;
       return {
         prompt: App.i18n.t(askWide ? 'gen.whichSpread' : 'gen.whichTight'),
+        hint: App.i18n.t('gen.socraticSpread'),
         visual: '<div class="spread-stage">' +
           spreadLine(wideOnTop ? pair.wide : pair.tight, first) +
           spreadLine(wideOnTop ? pair.tight : pair.wide, second) + '</div>',
@@ -487,6 +491,7 @@
       var total = kinds.length * kinds.length;
       return {
         prompt: App.i18n.t('gen.twoDraws').replace(/\{n\}/g, kinds.length),
+        hint: App.i18n.t('gen.socraticTwoDraws'),
         visual: html + '</div>',
         visualAria: App.i18n.t('gen.coinsResultAria').replace(/\{n\}/g, total),
         legend: App.i18n.t('gen.twoDrawsHint'),
@@ -505,6 +510,7 @@
         prompt: setTitle(set.id) + ' ' +
           App.i18n.t('gen.howMany').replace(/\{thing\}/g, catName(cat.id)),
         visual: pictogram(set, cat.id),
+        hint: App.i18n.t('gen.socraticReadRow'),
         visualAria: setAria(set),
         legend: App.i18n.t('gen.countRow'),
         options: numberOptions(cat.n)
@@ -520,6 +526,7 @@
         prompt: setTitle(set.id) + ' ' +
           App.i18n.t(nv.which === 'max' ? 'gen.whichMost' : 'gen.whichLeast'),
         visual: pictogram(set, null),
+        hint: App.i18n.t('gen.socraticExtremeRow'),
         visualAria: setAria(set),
         options: catOptions(set, cat.id),
         inline: true
@@ -534,6 +541,7 @@
         prompt: setTitle(set.id) + ' ' +
           App.i18n.t('gen.howMany').replace(/\{thing\}/g, catName(cat.id)),
         visual: barChart(set, cat.id),
+        hint: App.i18n.t('gen.socraticReadBar'),
         visualAria: setAria(set),
         legend: App.i18n.t('gen.readScale'),
         options: numberOptions(cat.n, DATA.barStep)
@@ -547,6 +555,7 @@
         prompt: setTitle(set.id) + ' ' +
           App.i18n.t(nv.which === 'max' ? 'gen.whichMost' : 'gen.whichLeast'),
         visual: barChart(set, null),
+        hint: App.i18n.t('gen.socraticExtremeBar'),
         visualAria: setAria(set),
         options: catOptions(set, cat.id),
         inline: true
@@ -563,6 +572,7 @@
         visual: frequencyTable(set, null),
         visualAria: setAria(set),
         legend: App.i18n.t('gen.readTable'),
+        hint: App.i18n.t('gen.socraticReadTable'),
         options: numberOptions(cat.n)
       };
     },
@@ -573,6 +583,7 @@
       var cat = extremeCat(set, 'max');
       return {
         prompt: setTitle(set.id) + ' ' + App.i18n.t('gen.mostRepeated'),
+        hint: App.i18n.t('gen.socraticMode'),
         visual: frequencyTable(set, null),
         visualAria: setAria(set),
         options: catOptions(set, cat.id),
@@ -587,6 +598,7 @@
       var total = set.cats.reduce(function (sum, c) { return sum + c.n; }, 0);
       return {
         prompt: setTitle(set.id) + ' ' + App.i18n.t('gen.shareEqually'),
+        hint: App.i18n.t('gen.socraticShare'),
         visual: shareRows(set),
         visualAria: setAria(set),
         legend: App.i18n.t('gen.shareHint'),
@@ -618,6 +630,7 @@
       return {
         prompt: App.i18n.t('gen.chanceOf')
           .replace(/\{thing\}/g, catName(token.id)) + ' ' + token.picto,
+        hint: App.i18n.t('gen.socraticChance'),
         visual: bagHtml(bag),
         visualAria: App.i18n.t('gen.bagAria').replace(/\{n\}/g,
           bag.items.reduce(function (s, it) { return s + it.n; }, 0)),
@@ -644,6 +657,7 @@
         prompt: App.i18n.t(promptKey)
           .replace(/\{a\}/g, catName(which === 'b' ? set.b : set.a))
           .replace(/\{b\}/g, catName(which === 'b' ? set.a : set.b)),
+        hint: App.i18n.t('gen.socraticTwoSeries'),
         visual: pairChart(set),
         visualAria: App.i18n.t('gen.pairAria')
           .replace(/\{a\}/g, catName(set.a)).replace(/\{b\}/g, catName(set.b)) + ' ' +
@@ -672,6 +686,7 @@
       var answer = high - low;
       return {
         prompt: App.i18n.t('gen.rangePrompt'),
+        hint: App.i18n.t('gen.socraticRange'),
         visual: '<div class="spread-stage">' +
           spreadLine(values, App.i18n.t('gen.groupA')) + '</div>',
         visualAria: App.i18n.t('gen.rangeAria')
@@ -717,6 +732,7 @@
       return {
         prompt: App.i18n.t('gen.chanceNumber')
           .replace(/\{thing\}/g, catName(item)) + ' ' + tokenById(item).picto,
+        hint: App.i18n.t('gen.socraticChanceNumber'),
         visual: bagHtml(bag),
         visualAria: App.i18n.t('gen.bagAria').replace(/\{n\}/g, total),
         legend: App.i18n.t('gen.chanceNumberHint'),
@@ -738,6 +754,7 @@
       var sorted = bag.items.slice().sort(function (a, b) { return b.n - a.n; });
       return {
         prompt: App.i18n.t('gen.moreLikely'),
+        hint: App.i18n.t('gen.socraticMoreLikely'),
         visual: bagHtml(bag),
         visualAria: App.i18n.t('gen.bagAria').replace(/\{n\}/g,
           bag.items.reduce(function (s, it) { return s + it.n; }, 0)),
@@ -895,9 +912,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

@@ -122,7 +122,26 @@
       ariaSide: 'x más {n}',
       ariaTwoX: 'dos veces x',
       ariaTimesX: '{n} veces x',
-      hour: 'a las {h}'
+      hour: 'a las {h}',
+      /* Pista socrática: una por tipo de pregunta. La frase genérica
+         («Prueba otra vez. Mira el dibujo con calma») era la misma para
+         todas, así que no decía nada. Estas dicen qué mirar en el dibujo
+         de esta pregunta y nunca dan la respuesta. */
+      socraticReadTiles: '🤔 Mira el montón: cuenta por separado las piezas grandes, las tiras y las pequeñas.',
+      socraticSquareSide: '🤔 Recorre un lado entero del cuadrado, de esquina a esquina, y cuenta las piezas que te passes.',
+      socraticOtherSide: '🤔 Mira el lado que no lleva la x: cuenta cuántas piezas hay en ese borde.',
+      socraticSystem: '🤔 Prueba cada pareja en las dos balanzas: tiene que cumplir las dos.',
+      socraticTilted: '🤔 Mira hacia qué lado baja la balanza: ese es el que pesa más.',
+      socraticSquareEquation: '🤔 Cuenta los lados del cuadrado: eso mide la x.',
+      socraticHowItGrows: '🤔 Mira los saltos que hay entre las barras: ¿son todos iguales?',
+      socraticPickStraight: '🤔 Compara las tres gráficas: busca la que sube con el mismo salto siempre.',
+      socraticOnePlusWeights: '🤔 Mira lo que hay en cada lado de la balanza y quita las pesas que se vean.',
+      socraticManyBags: '🤔 Cuenta las bolsas del dibujo y reparte el peso entre todas.',
+      socraticBothSides: '🤔 Quita el mismo peso de los dos lados: la bolsa queda sola.',
+      socraticSubstitute: '🤔 Mira el valor de la x y multiplica por las veces que aparece en la expresión.',
+      socraticWriteIt: '🤔 Cuenta las bolsas del dibujo: ese es el número que va con la x.',
+      socraticUpOrDown: '🤔 Mira la altura de las dos barras señaladas y compáralas.',
+      socraticHighestPoint: '🤔 Busca la barra más alta de la gráfica y mira a qué hora está.'
     },
     transfer: 'Esto te servirá para entender una gráfica del periódico o del móvil, para darte cuenta de que una letra en una cuenta es solo un número que aún no te han dicho, y para ver que esas cuentas con letras son trozos que se pueden montar y separar.'
   }, 'es');

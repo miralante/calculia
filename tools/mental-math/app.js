@@ -263,6 +263,7 @@
             (adding ? paintSign('+') + addedPieces(step) : '') +
           '</div>' +
           '<p class="hint">' + App.i18n.t('gen.' + hintKey) + '</p>',
+        hint: App.i18n.t('gen.socraticAnchor'),
         options: buildOptions(correct,
           /* Near misses that a real mistake would produce: moving by one
              instead of by the anchor, or by the anchor twice. */
@@ -288,6 +289,7 @@
             paintSign('+') + '<span class="unit-group">' + unitDots(units, 'pb') + '</span></div>' +
             '<p class="hint">' + App.i18n.t('gen.placeValueAddHint') + '</p>',
           legend: legendPos(),
+          hint: App.i18n.t('gen.socraticPlaceAdd'),
           /* tens + units is the classic slip: adding the digits instead
              of joining tens and units. */
           options: buildOptions(sum, [tens + units, sum + 1, whole],
@@ -302,6 +304,7 @@
           '<div class="dot-array" aria-hidden="true">' + baseTen(start, units) + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.placeValueSubtractHint') + '</p>',
         legend: legendPos(),
+        hint: App.i18n.t('gen.socraticPlaceSub'),
         options: buildOptions(whole, [start, whole - units, whole + units],
           function (v) { return paintNumber(v); })
       };
@@ -325,6 +328,7 @@
           '<div class="dot-array" aria-hidden="true">' + baseTen(a) +
           paintSign('+') + '<span class="unit-group">' + unitDots(b, 'pb') + '</span></div>' +
           '<p class="hint">' + App.i18n.t('gen.carryAddHint') + '</p>',
+        hint: App.i18n.t('gen.socraticCarry'),
         options: buildOptions(correct, [forgotCarry, correct + 10, a],
           function (v) { return paintNumber(v); })
       };
@@ -347,6 +351,7 @@
           paintNumber(b) + paintSign('=') + '<span class="num-box empty">?</span></div>' +
           '<div class="dot-array" aria-hidden="true">' + baseTenBorrow(a, b) + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.borrowSubtractHint').replace('{b}', b) + '</p>',
+        hint: App.i18n.t('gen.socraticBorrow'),
         options: buildOptions(correct, [flipped, correct - 10, a],
           function (v) { return paintNumber(v); })
       };
@@ -362,6 +367,7 @@
           paintSign('=') + '<span class="num-box empty">?</span></div>' +
           '<div class="dot-array" aria-hidden="true">' + dotsGroupSubtract(a, b) + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.restarPista').replace('{b}', b) + '</p>',
+        hint: App.i18n.t('gen.socraticRestar'),
         options: buildOptions(correct, [correct - 1, correct + 1, a],
           function (v) { return paintNumber(v); })
       };
@@ -376,6 +382,7 @@
           '<div class="dot-array" aria-hidden="true">' + dotsGroup(a, 'pa') +
           paintSign('+') + dotsGroup(a, 'pb') + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.doblesPista') + '</p>',
+        hint: App.i18n.t('gen.socraticDoubles'),
         options: buildOptions(2 * a, [2 * a - 1, 2 * a + 2, 2 * a + 1],
           function (v) { return paintNumber(v); })
       };
@@ -405,6 +412,7 @@
           '<span class="num-box empty">?</span></div>' +
           '<p class="hint">' + hint + '</p>',
         legend: legendPos(),
+        hint: App.i18n.t('gen.socraticSumLarge'),
         options: buildOptions(correct,
           App.utils.shuffle([n + 1, n + nv.suma * 2, correct + nv.suma / 10]),
           function (v) { return paintNumber(v); })
@@ -435,6 +443,7 @@
           '<span class="num-box empty">?</span></div>' +
           '<p class="hint">' + hint + '</p>',
         legend: legendPos(),
+        hint: App.i18n.t('gen.socraticSubtractLarge'),
         options: buildOptions(correct,
           App.utils.shuffle([n - 1, correct - nv.resta, n + nv.resta]),
           function (v) { return paintNumber(v); })
@@ -453,6 +462,7 @@
         visual: '<div class="expression">' + paintNumber(n) + paintSign('×') + paintNumber(nv.factor) +
           paintSign('=') + '<span class="num-box empty">?</span></div>' +
           '<p class="hint">' + App.i18n.t('gen.multiplicaGrandePista').replace('{ceros}', zeros).replace('{n}', n) + '</p>',
+        hint: App.i18n.t('gen.socraticMultiplyLarge'),
         options: buildOptions(correct, App.utils.shuffle(distractors),
           function (v) { return paintNumber(v); })
       };
@@ -643,9 +653,12 @@
   /* Socratic method: on the first mistake the answer isn't given,
      the person is encouraged to look at the question/visual again.
      Only on the second mistake is the correct answer explained
-     (showExplanation). */
+     (showExplanation). The invitation is the one written for THIS
+     question —what to do with what is on screen— and not the same
+     sentence for every question. The generic line is only the
+     fallback, for a question that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

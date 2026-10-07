@@ -121,7 +121,26 @@
       ariaSide: 'x plus {n}',
       ariaTwoX: 'two times x',
       ariaTimesX: '{n} times x',
-      hour: 'at {h}'
+      hour: 'at {h}',
+      /* Socratic hint: one per question type. The generic line
+         ("Try again. Look at the picture calmly") was the same for all of
+         them, so it said nothing. These say what to look at in this
+         question's picture and never give the answer away. */
+      socraticReadTiles: '🤔 Look at the pile: count the big pieces, the strips and the little ones separately.',
+      socraticSquareSide: '🤔 Walk along one whole side of the square, corner to corner, counting the pieces you pass.',
+      socraticOtherSide: '🤔 Look at the side without the x on it: count the pieces along that edge.',
+      socraticSystem: '🤔 Try each pair on both balances: it has to work on both.',
+      socraticTilted: '🤔 Look at which way the balance tips down: that is the heavier side.',
+      socraticSquareEquation: '🤔 Count the sides of the square: that is how long x is.',
+      socraticHowItGrows: '🤔 Look at the jumps between the bars: are they all the same?',
+      socraticPickStraight: '🤔 Compare the three graphs: find the one that rises by the same jump every time.',
+      socraticOnePlusWeights: '🤔 Look at what is on each side of the balance and take away the weights you can see.',
+      socraticManyBags: '🤔 Count the bags in the picture and share the weight between all of them.',
+      socraticBothSides: '🤔 Take the same weight off both sides: the bag is left on its own.',
+      socraticSubstitute: '🤔 Look at the value of x and multiply it by the times in the expression.',
+      socraticWriteIt: '🤔 Count the bags in the picture: that is the number that goes with x.',
+      socraticUpOrDown: '🤔 Look at the height of the two marked bars and compare them.',
+      socraticHighestPoint: '🤔 Find the tallest bar on the graph and see what time it is.'
     },
     transfer: 'This will help you understand a graph in the newspaper or on your phone, and realise that a letter in a sum is just a number nobody has told you yet, and see that those sums with letters are pieces that can be built up and taken apart.'
   }, 'en');

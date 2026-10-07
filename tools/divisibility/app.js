@@ -326,6 +326,7 @@
         visualAria: App.i18n.t('gen.cubeAria')
           .replace(/\{side\}/g, side).replace(/\{n\}/g, cubes),
         legend: App.i18n.t('gen.cubeHint'),
+        hint: App.i18n.t('gen.socraticCubeRoot'),
         /* Answering with the layers' own size, or with the whole count, are
            the two real confusions. */
         options: pickOptions(side, [side * side, cubes])
@@ -344,6 +345,7 @@
           written + '</span></div>',
         visualAria: App.i18n.t('gen.zerosAria').replace(/\{n\}/g, big.zeros),
         legend: App.i18n.t('gen.zerosHint'),
+        hint: App.i18n.t('gen.socraticZeros'),
         options: pickOptions(big.zeros, DATA.bigNumbers.map(function (b) {
           return b.zeros;
         }))
@@ -366,6 +368,7 @@
           written + '</span></div>',
         visualAria: App.i18n.t('gen.zerosAria').replace(/\{n\}/g, big.zeros),
         legend: App.i18n.t('gen.shortHint'),
+        hint: App.i18n.t('gen.socraticShortForm'),
         options: App.utils.shuffle([big].concat(others).map(function (b) {
           return {
             html: '<span class="short-number">' + shortOf(b.zeros) + '</span>',
@@ -404,6 +407,7 @@
         visualAria: App.i18n.t(askDiagonal ? 'gen.diagonalAria' : 'gen.sideAria')
           .replace(/\{n\}/g, side),
         legend: App.i18n.t('gen.exactHint'),
+        hint: App.i18n.t(askDiagonal ? 'gen.socraticExactDiagonal' : 'gen.socraticExactSide'),
         /* The side is exactly `side` squares; the diagonal falls between
            two marks and never lands on one. */
         options: yesNoOptions(!askDiagonal)
@@ -423,6 +427,7 @@
         visualAria: App.i18n.t('gen.rowsAria')
           .replace(/\{n\}/g, n).replace(/\{base\}/g, base),
         legend: App.i18n.t('gen.multipleHint'),
+        hint: App.i18n.t('gen.socraticIsMultiple'),
         options: yesNoOptions(yes)
       };
     },
@@ -441,6 +446,7 @@
         visual: '<div class="calc-stage">' + numberCard(base, false) + '</div>',
         visualAria: String(base),
         legend: App.i18n.t('gen.multipleHint'),
+        hint: App.i18n.t('gen.socraticPickMultiple'),
         options: App.utils.shuffle([good].concat(bad).map(function (n) {
           return { html: String(n), correct: n === good };
         }))
@@ -464,6 +470,7 @@
             ' = ' + digitSum(n) + '</span>' : '') + '</div>',
         visualAria: String(n),
         legend: App.i18n.t('rule.' + rule.id),
+        hint: App.i18n.t('gen.socraticCriterion'),
         options: yesNoOptions(yes)
       };
     },
@@ -486,6 +493,7 @@
         visual: html + '</div>',
         visualAria: App.i18n.t('gen.triesAria').replace(/\{n\}/g, n),
         legend: App.i18n.t('gen.primeHint'),
+        hint: App.i18n.t('gen.socraticIsPrime'),
         options: yesNoOptions(isPrime(n))
       };
     },
@@ -501,6 +509,7 @@
         visualAria: App.i18n.t('gen.cyclesAria')
           .replace(/\{a\}/g, pair.a).replace(/\{b\}/g, pair.b),
         legend: App.i18n.t('gen.meetHint'),
+        hint: App.i18n.t('gen.socraticLcm'),
         /* Adding the two is the mistake this teaches about, and it is only
            a wrong answer when it is not the real meeting point. */
         options: pickOptions(meet, [pair.a + pair.b, meet + pair.a, meet - pair.a])
@@ -528,6 +537,7 @@
         visualAria: App.i18n.t('gen.barsAria')
           .replace(/\{a\}/g, pair.a).replace(/\{b\}/g, pair.b),
         legend: App.i18n.t('gen.chunkHint'),
+        hint: App.i18n.t('gen.socraticGcd'),
         options: pickOptions(best, [smaller, misfit, best + 1])
       };
     },
@@ -540,6 +550,7 @@
         visual: '<div class="calc-stage">' + squareGrid(side) + '</div>',
         visualAria: App.i18n.t('gen.squareAria').replace(/\{n\}/g, side),
         legend: App.i18n.t('gen.squareHint').replace(/\{n\}/g, side),
+        hint: App.i18n.t('gen.socraticSquare'),
         options: pickOptions(side * side, [side + side, side * side - side, side * side + side])
       };
     },
@@ -560,6 +571,7 @@
         visualAria: App.i18n.t('gen.negativeAria')
           .replace(/\{base\}/g, item.base).replace(/\{times\}/g, item.n),
         legend: App.i18n.t('gen.negativeHint'),
+        hint: App.i18n.t('gen.socraticNegativePower'),
         /* Getting the size right and the side of zero wrong is the whole
            mistake here, so the same number with the other sign is offered.
            Multiplying the base by the count instead is the other one. */
@@ -581,6 +593,7 @@
         visualAria: App.i18n.t('gen.chainAria')
           .replace(/\{base\}/g, item.base).replace(/\{times\}/g, item.n),
         legend: App.i18n.t('gen.chainHint').replace(/\{base\}/g, item.base),
+        hint: App.i18n.t('gen.socraticRootIndex'),
         /* Counting the boxes instead of the arrows between them gives one
            too many, which is what a chain actually produces. */
         options: pickOptions(item.n, [item.n + 1, item.n - 1, item.base])
@@ -595,6 +608,7 @@
         visual: '<div class="calc-stage">' + squareGrid(side) + '</div>',
         visualAria: App.i18n.t('gen.squareAria').replace(/\{n\}/g, side),
         legend: App.i18n.t('gen.rootHint'),
+        hint: App.i18n.t('gen.socraticRoot'),
         options: pickOptions(side, [side - 1, side + 1, side * 2])
       };
     }
@@ -742,9 +756,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

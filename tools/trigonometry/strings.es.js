@@ -101,7 +101,20 @@
       ladderOptionHint: 'mira la letra que lleva',
       ladderTaller: 'Las tres escaleras miden lo mismo. ¿Cuál llega más alto por la pared?',
       ladderTallerHint: 'Mira hasta dónde llega cada una en la pared.',
-      ladderAllAria: 'Tres escaleras de la misma longitud apoyadas en una pared, cada una más o menos derecha. La de la letra {a} está pegada a la pared, la de la {b} un poco apartada y la de la {c} más lejos todavía.'
+      ladderAllAria: 'Tres escaleras de la misma longitud apoyadas en una pared, cada una más o menos derecha. La de la letra {a} está pegada a la pared, la de la {b} un poco apartada y la de la {c} más lejos todavía.',
+      /* La pista que sale al fallar. Una por tipo de pregunta, y todas
+         dicen qué mirar o qué hacer con lo que hay en pantalla: la frase
+         única que había antes («Prueba otra vez…») era la misma para
+         todas las preguntas, así que no decía nada. Estas no dan la
+         respuesta —dan la estrategia—, que es lo que distingue una
+         pista socrática de un spoiler. */
+      socraticHypotenuse: '🤔 Compara los tres lados y busca el más largo.',
+      socraticSideByAngle: '🤔 Mira si el lado que buscas está enfrente del ángulo o junto a él.',
+      socraticReason: '🤔 Cuenta primero los cuadritos de un lado y luego los del otro.',
+      socraticSameReason: '🤔 Compara los dos triángulos y mira si los números se repiten igual.',
+      socraticWhichSameReason: '🤔 Busca el triángulo que sube y avanza en la misma proporción que el primero.',
+      socraticLadderSide: '🤔 Mira cuál de los tres lados es el único que está inclinado.',
+      socraticLadderTaller: '🤔 Mira hasta dónde sube cada escalera en la pared.'
     },
     transfer: 'Esto te sirve para saber hasta dónde llega una escalera, si una rampa es muy empinada y si un tejado necesita puntales.'
   }, 'es');

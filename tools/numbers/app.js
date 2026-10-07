@@ -312,6 +312,7 @@
           visual: visual,
           visualAria: App.i18n.t('gen.ordinalVisualAria')
             .replace('{n}', nv.items).replace('{pos}', target),
+          hint: App.i18n.t('gen.socraticOrdinalPlace'),
           options: App.utils.shuffle(
             [{ html: App.i18n.t('ordinal.' + target), correct: true }].concat(
               nearby.map(function (p) {
@@ -326,6 +327,7 @@
         visual: visual,
         visualAria: App.i18n.t('gen.ordinalVisualAria')
           .replace('{n}', nv.items).replace('{pos}', target),
+        hint: App.i18n.t('gen.socraticOrdinalMember'),
         options: App.utils.shuffle(
           [{ html: '<span class="queue-member">' + row[target - 1] + '</span>', correct: true }].concat(
             nearby.map(function (p) {
@@ -373,6 +375,7 @@
           '<p class="hint">' + App.i18n.t('gen.numberLineHint') + '</p>',
         visualAria: App.i18n.t('gen.numberLineAria')
           .replace('{min}', nv.min).replace('{max}', nv.max),
+        hint: App.i18n.t('gen.socraticNumberLine'),
         /* Landing on the neighbouring notch is the real mistake (one notch
            miscounted), so those are the alternatives. */
         options: buildOptions(target,
@@ -417,6 +420,7 @@
           '</div>' + blocksHtml +
           '<p class="hint">' + App.i18n.t('gen.compararPista') + '</p>',
         visualAria: App.i18n.t('gen.compararAria').replace('{a}', a).replace('{b}', b),
+        hint: App.i18n.t('gen.socraticCompare'),
         options: App.utils.shuffle([
           { html: '<span class="compare-sign">&lt;</span>', aria: App.i18n.t('gen.signLess'), correct: sign === '<' },
           { html: '<span class="compare-sign">&gt;</span>', aria: App.i18n.t('gen.signGreater'), correct: sign === '>' },
@@ -448,6 +452,7 @@
         visual: html,
         visualAria: App.i18n.t('gen.bloquesVisualAria').replace('{text}', text),
         legend: legendPos(),
+        hint: App.i18n.t('gen.socraticBlocks'),
         options: buildOptions(n,
           App.utils.shuffle([swapped !== n ? swapped : n + 1, n + 10, n - 10, n + 1]),
           function (v) { return paintNumber(v); })
@@ -465,6 +470,7 @@
           prompt: App.i18n.t('gen.lecturaEnunciadoNumASim'),
           visual: '<div class="visual-number">' + paintNumber(item.n, { labels: true }) + '</div>' + note,
           legend: legendPos(),
+          hint: App.i18n.t('gen.socraticSayNumber'),
           options: App.utils.shuffle([{ html: item.words, correct: true }].concat(
             others.map(function (o) { return { html: o.words, correct: false }; })
           ))
@@ -475,6 +481,7 @@
         prompt: App.i18n.t('gen.lecturaEnunciadoSimANum'),
         visual: '<p class="words-number">' + item.words + '</p>' + note,
         legend: legendPos(),
+        hint: App.i18n.t('gen.socraticWriteNumber'),
         options: App.utils.shuffle([{ html: paintNumber(item.n), correct: true }].concat(
           others.map(function (o) { return { html: paintNumber(o.n), correct: false }; })
         ))
@@ -505,6 +512,7 @@
             '</div><p class="hint">' + hint + '</p>',
           visualAria: App.i18n.t('gen.canjeAriaDirecto').replace('{k}', k),
           legend: legendPos(),
+          hint: App.i18n.t('gen.socraticTradeUp'),
           options: buildOptions(k, [n, k + 1, k - 1],
             function (v) { return paintNumber(v); })
         };
@@ -518,6 +526,7 @@
           '</span></div><p class="hint">' + hint + '</p>',
         visualAria: App.i18n.t('gen.canjeAriaInverso').replace('{k}', kInv),
         legend: legendPos(),
+        hint: App.i18n.t('gen.socraticTradeDown'),
         options: buildOptions(kInv * 10, [kInv, kInv * 10 + 10, (kInv - 1) * 10],
           function (v) { return paintNumber(v); })
       };
@@ -535,6 +544,7 @@
       var correct = n * 10;
       return {
         prompt: App.i18n.t('gen.escaleraEnunciado'),
+        hint: App.i18n.t('gen.socraticLadder'),
         visual: '<div class="expression">' + paintNumber(10) + paintSign('×') +
           paintNumber(n, { labels: true }) + paintSign('=') +
           '<span class="num-box empty">?</span></div>' +
@@ -556,6 +566,7 @@
       return {
         prompt: App.i18n.t('gen.dictadoEnunciado'),
         visual: '<div class="visual-number">' + paintNumber(n, { labels: true }) + '</div>',
+        hint: App.i18n.t('gen.socraticDictation'),
         options: buildOptions(n, candidates, function (v) { return paintNumber(v); })
       };
     },
@@ -845,9 +856,12 @@
   /* Socratic method: on the first mistake the answer isn't given,
      the person is encouraged to look at the question/visual again.
      Only on the second mistake is the correct answer explained
-     (showExplanation). */
+     (showExplanation). The invitation is the one written for THIS
+     question —which is what to do with the figure in front of you— and
+     not the same sentence for every question. The generic line is only
+     the fallback, for a question that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 
@@ -1204,7 +1218,7 @@
       }
       if (f === elevatorValue) {
         clases += ' current-floor';
-        contenido += '<span class="floor-icon">🛗</span>';
+        contenido += '<span class="floor-icon">🏢</span>';
       }
       contenido = '<span class="floor-label">' + (f > 0 ? '+' + f : (f < 0 ? '−' + Math.abs(f) : '0')) + '</span>' + contenido;
       html += '<div class="' + clases + '">' + contenido + '</div>';

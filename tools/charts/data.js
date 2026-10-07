@@ -147,8 +147,8 @@ var DATA = {
   outfits: [
     { tops: ['👕', '🧥'], bottoms: ['👖', '🩳'] },
     { tops: ['👕', '🧥', '👔'], bottoms: ['👖', '🩳'] },
-    { tops: ['👕', '🧥'], bottoms: ['👖', '🩳', '🩴'] },
-    { tops: ['👕', '🧥', '👔'], bottoms: ['👖', '🩳', '🩴'] }
+    { tops: ['👕', '🧥'], bottoms: ['👖', '🩳', '👗'] },
+    { tops: ['👕', '🧥', '👔'], bottoms: ['👖', '🩳', '👗'] }
   ],
 
   /* Dos grupos de medidas sobre la misma recta del 1 al 10. En cada
@@ -253,7 +253,7 @@ var DATA = {
     ] },
     { id: 'plants', cats: [
       { id: 'garden', picto: '🌻', n: 16 },
-      { id: 'balcony', picto: '🪴', n: 4 },
+      { id: 'balcony', picto: '🌱', n: 4 },
       { id: 'window', picto: '🌿', n: 10 }
     ] }
   ],

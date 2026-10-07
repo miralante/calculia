@@ -206,6 +206,7 @@
           .replace(/\{aw\}/g, a.w).replace(/\{ah\}/g, a.h)
           .replace(/\{bw\}/g, b.w).replace(/\{bh\}/g, b.h),
         legend: App.i18n.t('gen.shapeHint'),
+        hint: App.i18n.t('gen.socraticSameShape'),
         options: yesNoOptions(sameShape(a, b))
       };
     },
@@ -224,6 +225,7 @@
         visual: '<div class="shape-pair">' + rectSvg(a, false) + '</div>',
         visualAria: App.i18n.t('gen.oneAria').replace(/\{w\}/g, a.w).replace(/\{h\}/g, a.h),
         legend: App.i18n.t('gen.shapeHint'),
+        hint: App.i18n.t('gen.socraticPickShape'),
         options: App.utils.shuffle([good].concat(bad).map(function (o) {
           return {
             html: rectSvg(o, true),
@@ -246,6 +248,7 @@
         visualAria: App.i18n.t('gen.triAria')
           .replace(/\{a\}/g, t.a * t.a).replace(/\{b\}/g, t.b * t.b),
         legend: App.i18n.t('gen.triHint'),
+        hint: App.i18n.t('gen.socraticSquares'),
         /* Adding the sides instead of their squares is the mistake this
            actually produces. */
         options: threeOf(total, [t.a + t.b, t.a * t.b])
@@ -265,6 +268,7 @@
         visual: '<div class="ramp-stage">' + rampSvg(a, first) + rampSvg(b, second) + '</div>',
         visualAria: App.i18n.t('gen.rampsAria'),
         legend: App.i18n.t('gen.rampHint'),
+        hint: App.i18n.t('gen.socraticSteeper'),
         options: App.utils.shuffle([
           { html: '<span class="answer-name">' + first + '</span>', aria: first,
             correct: steeperThan(a, b) },
@@ -297,6 +301,7 @@
           rampSvg(a, App.i18n.t('gen.rampA')) + rampSvg(b, App.i18n.t('gen.rampB')) + '</div>',
         visualAria: App.i18n.t('gen.rampsAria'),
         legend: App.i18n.t('gen.slopeHint'),
+        hint: App.i18n.t('gen.socraticSlope'),
         options: yesNoOptions(sameSlopeAs(a, b))
       };
     }
@@ -444,9 +449,14 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —what to do
+     with the pair of figures, the squares or the ramps in front of
+     you— and not the same sentence for every question. The generic
+     line is only the fallback, for a question that forgot to bring
+     its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

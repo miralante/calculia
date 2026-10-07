@@ -44,7 +44,7 @@ var DATA = {
     /* Cuál sube más rápido. La trigonometría empieza aquí y, para esta
        actividad, aquí se queda. */
     rampas: {
-      picto: '🛝',
+      picto: '⛰️',
       levels: [
         { id: 'r1', tipo: 'steeper' },
         { id: 'r2', tipo: 'sameSlope' }

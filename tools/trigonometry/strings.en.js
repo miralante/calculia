@@ -97,7 +97,20 @@
       ladderOptionHint: 'look at the letter it carries',
       ladderTaller: 'The three ladders are the same length. Which one reaches highest up the wall?',
       ladderTallerHint: 'Look how high each one reaches on the wall.',
-      ladderAllAria: 'Three ladders of the same length leaning on one wall, each one more or less upright. The one with the letter {a} is flat against the wall, the one with {b} is a little away from it, and the one with {c} is further out still.'
+      ladderAllAria: 'Three ladders of the same length leaning on one wall, each one more or less upright. The one with the letter {a} is flat against the wall, the one with {b} is a little away from it, and the one with {c} is further out still.',
+      /* The hint that comes out when an answer is wrong. One per kind of
+         question, and each one says what to look at or do with what is on
+         screen: the single sentence it replaced ("Try again…") was the
+         same for every question, so it said nothing. These never give the
+         answer away — they give the strategy, which is what separates a
+         Socratic hint from a spoiler. */
+      socraticHypotenuse: '🤔 Compare the three sides and look for the longest one.',
+      socraticSideByAngle: '🤔 Check whether the side you want sits across from the angle or next to it.',
+      socraticReason: '🤔 Count the squares on one side first, then the squares on the other.',
+      socraticSameReason: '🤔 Compare the two triangles and see if the numbers repeat the same way.',
+      socraticWhichSameReason: '🤔 Look for the triangle that rises and goes in the same proportion as the first.',
+      socraticLadderSide: '🤔 Look for the only one of the three sides that leans.',
+      socraticLadderTaller: '🤔 Look how far each ladder climbs up the wall.'
     },
     transfer: 'This helps you know how far a ladder reaches, whether a ramp is too steep, and whether a roof needs supports.'
   }, 'en');

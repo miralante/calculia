@@ -103,7 +103,7 @@ var DATA = {
           things: [
             { id: 'sweets', picto: '🍬' },
             { id: 'apples', picto: '🍎' },
-            { id: 'coins', picto: '🪙' },
+            { id: 'coins', picto: '💰' },
             { id: 'pencils', picto: '✏️' }
           ]
         }

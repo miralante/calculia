@@ -141,6 +141,7 @@
         visual: '<div class="measure-picto" aria-hidden="true">' + prod.picto + '</div>' +
           '<div class="visual-number">' + priceHTML(cent) + '</div>',
         legend: legendPrice(),
+        hint: App.i18n.t('gen.socraticPrice'),
         options: App.utils.shuffle([
           { html: wordsPrice(cent), correct: true },
           { html: mal1, correct: false },
@@ -165,6 +166,7 @@
         prompt: App.i18n.t('gen.comparaPreciosEnunciado'),
         visual: '',
         legend: legendPrice(),
+        hint: App.i18n.t('gen.socraticComparePrices'),
         options: prods.map(function (p, i) {
           return {
             html: '<span class="price-tag"><span class="option-picto">' + p.picto + '</span>' +
@@ -184,6 +186,7 @@
       var llega = caso.precio <= caso.tiene;
       return {
         prompt: App.i18n.t('gen.llegaUnoEnunciado'),
+        hint: App.i18n.t('gen.socraticOneEnough'),
         visual:
           '<div class="llega-caja"><p class="llega-etq">' + App.i18n.t('gen.etqTienes') + '</p>' + priceHTML(caso.tiene) + '</div>' +
           '<div class="llega-caja"><p class="llega-etq">' + prod.picto + ' ' + nombreProd + ':</p>' +
@@ -205,6 +208,7 @@
       var llega = total <= caso.tiene;
       return {
         prompt: App.i18n.t('gen.llegaDosEnunciado'),
+        hint: App.i18n.t('gen.socraticTwoEnough'),
         visual:
           '<div class="llega-caja"><p class="llega-etq">' + App.i18n.t('gen.etqTienes') + '</p>' + priceHTML(caso.tiene) + '</div>' +
           '<div class="llega-row">' +
@@ -227,6 +231,7 @@
       var vuelta = caso.billete - caso.precio;
       return {
         prompt: App.i18n.t('gen.cambioEnunciado'),
+        hint: App.i18n.t('gen.socraticChange'),
         visual:
           '<div class="llega-caja"><p class="llega-etq">' + App.i18n.t('gen.etqPagas') + '</p>' + priceHTML(caso.billete) + '</div>' +
           '<div class="llega-caja"><p class="llega-etq">' + App.i18n.t('gen.etqCuesta') + '</p>' + priceHTML(caso.precio) + '</div>',
@@ -388,9 +393,12 @@
   /* Socratic method: on the first mistake the answer isn't given,
      the person is encouraged to look at the question/visual again.
      Only on the second mistake is the correct answer explained
-     (showExplanation). */
+     (showExplanation). The invitation is the one written for THIS
+     question —which is what to do with the figure in front of you— and
+     not the same sentence for every question. The generic line is only
+     the fallback, for a question that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

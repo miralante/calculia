@@ -741,6 +741,7 @@
       }));
       return {
         prompt: App.i18n.t('gen.measureAngle'),
+        hint: App.i18n.t('gen.socraticProtractor'),
         visual: '<div class="angle-stage">' + protractorSvg(angle.deg) + '</div>',
         visualAria: App.i18n.t('gen.protractorAria').replace(/\{n\}/g, angle.deg),
         legend: App.i18n.t('gen.protractorHint').replace(/\{step\}/g, DEG_STEP),
@@ -764,6 +765,7 @@
       return {
         prompt: App.i18n.t('gen.clockAngle')
           .replace(/\{a\}/g, pair.from).replace(/\{b\}/g, pair.to),
+        hint: App.i18n.t('gen.socraticClock'),
         visual: '<div class="angle-stage">' + clockSvg(pair.from, pair.to) + '</div>',
         visualAria: App.i18n.t('gen.clockAria')
           .replace(/\{a\}/g, pair.from).replace(/\{b\}/g, pair.to),
@@ -785,6 +787,7 @@
       var kind = pairKind(pair);
       return {
         prompt: App.i18n.t('gen.linePair'),
+        hint: App.i18n.t('gen.socraticLines'),
         visual: '<div class="grid-stage">' + linesSvg(pair) + '</div>',
         visualAria: App.i18n.t('gen.linesAria'),
         legend: App.i18n.t('gen.linesHint'),
@@ -807,6 +810,7 @@
       var answer = whole / 2;
       return {
         prompt: App.i18n.t('gen.triangleArea'),
+        hint: App.i18n.t('gen.socraticTriangleArea'),
         visual: '<div class="grid-stage">' + triangleSvg(t) + '</div>',
         visualAria: App.i18n.t('gen.triangleAria')
           .replace(/\{w\}/g, t.w).replace(/\{h\}/g, t.h),
@@ -823,6 +827,7 @@
       var answer = surfaceOf(box);
       return {
         prompt: App.i18n.t('gen.surface'),
+        hint: App.i18n.t('gen.socraticSurface'),
         visual: netHtml(box),
         visualAria: App.i18n.t('gen.netAria')
           .replace(/\{w\}/g, box.w).replace(/\{h\}/g, box.h).replace(/\{d\}/g, box.d),
@@ -846,6 +851,7 @@
       points.splice(slot, 0, rule.off);
       return {
         prompt: App.i18n.t('gen.offTheLine'),
+        hint: App.i18n.t('gen.socraticOffLine'),
         visual: '<div class="grid-stage">' + manyPointsSvg(points, letters) + '</div>',
         visualAria: App.i18n.t('gen.pointsAria').replace(/\{n\}/g, points.length),
         legend: App.i18n.t('gen.lineUpHint'),
@@ -868,6 +874,7 @@
       var about = circleAcross(d);
       return {
         prompt: App.i18n.t('gen.circleEdge').replace(/\{d\}/g, d),
+        hint: App.i18n.t('gen.socraticCircleEdge'),
         visual: '<div class="grid-stage">' + circleSvg(d, false) + '</div>',
         visualAria: App.i18n.t('gen.circleAria').replace(/\{d\}/g, d),
         legend: App.i18n.t('gen.circleHint').replace(/\{d\}/g, d),
@@ -889,6 +896,7 @@
       var whole = wholeSquaresIn(d);
       return {
         prompt: App.i18n.t('gen.circleArea'),
+        hint: App.i18n.t('gen.socraticCircleArea'),
         visual: '<div class="grid-stage">' + circleSvg(d, true) + '</div>',
         visualAria: App.i18n.t('gen.circleGridAria').replace(/\{n\}/g, whole),
         legend: App.i18n.t('gen.circleAreaHint'),
@@ -904,6 +912,7 @@
       var perLayer = box.w * box.h;
       return {
         prompt: App.i18n.t('gen.volume'),
+        hint: App.i18n.t('gen.socraticVolume'),
         visual: boxLayers(box),
         visualAria: App.i18n.t('gen.boxAria')
           .replace(/\{layers\}/g, box.d).replace(/\{per\}/g, perLayer),
@@ -928,6 +937,7 @@
       var flipped = paddedFigure(mirrored(fig.rows), 1, 0, true);
       return {
         prompt: App.i18n.t('gen.whichMoved'),
+        hint: App.i18n.t('gen.socraticMoved'),
         visual: '<div class="grid-stage">' + paddedFigure(fig.rows, 0, 0, false) + '</div>',
         visualAria: App.i18n.t('gen.movedAria'),
         legend: App.i18n.t('gen.movedHint'),
@@ -954,6 +964,7 @@
       var kind = angleKind(angle.deg);
       return {
         prompt: App.i18n.t('gen.whichAngle'),
+        hint: App.i18n.t('gen.socraticAngleKind'),
         visual: '<div class="angle-stage">' + angleSvg(angle.deg) + '</div>',
         visualAria: kindName(kind),
         legend: App.i18n.t('gen.angleHint'),
@@ -974,6 +985,7 @@
       var rect = draw(nv.id, DATA.rects[nv.shape]);
       return {
         prompt: App.i18n.t('gen.perimeter'),
+        hint: App.i18n.t('gen.socraticPerimeter'),
         visual: '<div class="grid-stage">' + rectSvg(rect, true) + '</div>',
         visualAria: App.i18n.t('gen.rectAria')
           .replace(/\{w\}/g, rect.w).replace(/\{h\}/g, rect.h),
@@ -987,6 +999,7 @@
       var rect = draw(nv.id, DATA.rects[nv.shape]);
       return {
         prompt: App.i18n.t('gen.area'),
+        hint: App.i18n.t('gen.socraticArea'),
         visual: '<div class="grid-stage">' + rectSvg(rect, false) + '</div>',
         visualAria: App.i18n.t('gen.rectAria')
           .replace(/\{w\}/g, rect.w).replace(/\{h\}/g, rect.h),
@@ -1001,6 +1014,7 @@
       var yes = isSymmetric(figure);
       return {
         prompt: App.i18n.t('gen.isSymmetric'),
+        hint: App.i18n.t('gen.socraticSymmetry'),
         visual: '<div class="grid-stage">' + figureSvg(figure, {}) + '</div>',
         visualAria: App.i18n.t(yes ? 'gen.ariaSymmetric' : 'gen.ariaNotSymmetric'),
         legend: App.i18n.t('gen.symmetryHint'),
@@ -1034,6 +1048,7 @@
       });
       return {
         prompt: App.i18n.t('gen.howManyEqual'),
+        hint: App.i18n.t('gen.socraticEqualSides'),
         visual: '<div class="grid-stage">' + figureSvgByPoints(fig.points, true) + '</div>',
         visualAria: App.i18n.t('gen.equalAria').replace(/\{n\}/g, n),
         legend: App.i18n.t('gen.equalHint'),
@@ -1050,6 +1065,7 @@
       var fig = draw(nv.id, pool);
       return {
         prompt: App.i18n.t('gen.whichFigure'),
+        hint: App.i18n.t('gen.socraticFigureName'),
         visual: '<div class="grid-stage">' + figureSvgByPoints(fig.points, true) + '</div>',
         visualAria: figureName(fig.id),
         legend: App.i18n.t('gen.equalHint'),
@@ -1072,6 +1088,7 @@
       var picked = neighbourSquares(col, row, 2);
       return {
         prompt: App.i18n.t('gen.whichSquare'),
+        hint: App.i18n.t('gen.socraticCoord'),
         visual: '<div class="grid-stage">' + coordGrid(col, row) + '</div>',
         visualAria: coordLabel(col, row),
         legend: App.i18n.t('gen.coordHint'),
@@ -1093,6 +1110,7 @@
       var other = neighbourSquares(col, row, 1)[0];
       return {
         prompt: App.i18n.t('gen.findSquare').replace(/\{where\}/g, coordLabel(col, row)),
+        hint: App.i18n.t('gen.socraticPickCoord'),
         legend: App.i18n.t('gen.coordHint'),
         options: App.utils.shuffle([
           { html: coordGrid(col, row), aria: coordLabel(col, row), correct: true },
@@ -1110,6 +1128,7 @@
       }));
       return {
         prompt: App.i18n.t('gen.pickSymmetric'),
+        hint: App.i18n.t('gen.socraticSymmetryPick'),
         legend: App.i18n.t('gen.symmetryHint'),
         options: App.utils.shuffle([
           { html: figureSvg(good, { small: true }),
@@ -1266,9 +1285,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

@@ -19,6 +19,17 @@
     explicacionCorrecta: '✅ Correct! Next in the series comes: ',
     explicacionIncorrectaA: "❌ That doesn't follow the pattern. What comes next is: ",
     pista: '🤔 Try again. Look calmly at the series.',
+
+    /* ---- One Socratic hint per kind of series ----
+       `pista` stays as showHint()'s fallback. Each level builds its
+       series in a different way, so its hint says what to look at in
+       that row of pictures: the two that take turns, the group that
+       repeats, the numbers counting up, the letter that goes with
+       each symbol. None of them says what comes next. */
+    pistaParejas: '🤔 Look at which two pictures keep taking turns.',
+    pistaGrupos: '🤔 Look at what repeats: the group of pictures or the size of the circle.',
+    pistaNumeros: '🤔 Look at how much the number goes up or down each time.',
+    pistaCodigo: '🤔 Look at which letter always goes with each symbol.',
     refuerzoTitulo: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",

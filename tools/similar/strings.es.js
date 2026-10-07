@@ -58,7 +58,19 @@
       rampB: 'La segunda',
       rampsAria: 'Dos rampas dibujadas en cuadraditos.',
       sameSlope: '¿Están las dos igual de inclinadas?',
-      slopeHint: 'Pueden ser de distinto tamaño y subir igual.'
+      slopeHint: 'Pueden ser de distinto tamaño y subir igual.',
+
+      /* ---- Pistas socráticas, una por tipo de pregunta ----
+         La genérica de arriba (`hint`) era la misma para las cinco
+         preguntas y no decía nada. Estas dicen qué mirar en la figura
+         de esta pregunta —los dos rectángulos, los tres cuadrados,
+         las dos rampas— y nunca dan la respuesta: eso es lo que
+         distingue una pista de un spoiler. */
+      socraticSameShape: '🤔 Mira los dos rectángulos y compara sus lados largos con los cortos.',
+      socraticPickShape: '🤔 Fíjate en qué rectángulo repite los lados del primero, pero más pequeños.',
+      socraticSquares: '🤔 Cuenta los cuadraditos de los dos cuadrados que ya están pintados.',
+      socraticSteeper: '🤔 Compara las dos rayas y mira cuál llega más arriba.',
+      socraticSlope: '🤔 Mira cuánto sube cada rampa por lo que avanza.'
     },
     transfer: 'Esto te servirá para entender un plano o un mapa, saber si una foto está estirada, y darte cuenta de qué cuesta más subir.'
   }, 'es');

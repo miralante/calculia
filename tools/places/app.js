@@ -153,6 +153,7 @@
           .replace(/\{thing\}/g, objectName(obj.id)),
         visual: scene(nv.relation, obj, posId, null),
         visualAria: sceneAria(obj, posId),
+        hint: App.i18n.t('gen.socraticWhereIs'),
         options: App.utils.shuffle(rel.ids.map(function (id) {
           return {
             html: '<span class="pos-name">' + posName(id) + '</span>',
@@ -176,6 +177,7 @@
         prompt: App.i18n.t('gen.findWhere')
           .replace(/\{thing\}/g, objectName(obj.id))
           .replace(/\{phrase\}/g, posPhrase(posId)),
+        hint: App.i18n.t('gen.socraticFindWhere'),
         options: App.utils.shuffle([
           { html: scene(relationKey, obj, posId, 'small'),
             aria: posPhrase(posId), correct: true },
@@ -200,6 +202,7 @@
         visualAria: App.i18n.t('gen.compareAria')
           .replace(/\{a\}/g, thingName(shown[0].id))
           .replace(/\{b\}/g, thingName(shown[1].id)),
+        hint: App.i18n.t('gen.socraticCompare'),
         options: shown.map(function (thing) {
           return {
             html: '<span class="opt-picto" aria-hidden="true">' + thing.picto + '</span>' +
@@ -357,9 +360,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

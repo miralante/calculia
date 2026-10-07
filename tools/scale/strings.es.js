@@ -129,7 +129,18 @@
       planReal: 'Vida real',
       unitCentimetre: 'centímetros',
       unitMetre: 'metros',
-      unitKm: 'kilómetros'
+      unitKm: 'kilómetros',
+
+      /* ---- Pistas socráticas, una por tipo de pregunta ----
+         La genérica de arriba (`hint`) era la misma para las cinco
+         preguntas. Estas dicen qué mirar en el instrumento o en el
+         plano de esta pregunta, y nunca dan la medida: dan el modo de
+         llegar a ella. */
+      socraticRead: '🤔 Mira la marca más alta que señala el lápiz o el nivel y cuenta las rayitas.',
+      socraticStep: '🤔 Reparte el espacio entre los dos números entre todas las rayitas.',
+      socraticSteps: '🤔 Cuenta las rayitas que pasa el lápiz, una a una, desde donde empieza.',
+      socraticPlanToReal: '🤔 Mira la escala de arriba y cuenta los centímetros del camino.',
+      socraticRealToPlan: '🤔 Piensa cuántos trozos de un centímetro caben en esa distancia.'
     },
 
     transfer: 'Te servirá para leer una receta, un plano del metro o el contador del agua sin miedo.'

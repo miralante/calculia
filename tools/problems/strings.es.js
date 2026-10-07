@@ -52,7 +52,15 @@
       ariaTwoStep: 'Un grupo con {total} cosas y {gone} tachadas.',
       countHint: 'Puedes contar los dibujos. Lo tachado ya no está.',
       ariaAdd: 'Un grupo de {a} y otro grupo de {b}.',
-      ariaSub: 'Un grupo con {a} cosas y {b} tachadas.'
+      ariaSub: 'Un grupo con {a} cosas y {b} tachadas.',
+      /* Pista socrática: una por tipo de pregunta. La frase genérica
+         («Prueba otra vez…») era la misma para todas, así que no decía
+         nada. Estas dicen qué mirar en el dibujo de esta pregunta y
+         nunca dan la respuesta. */
+      socraticChooseOp: '🤔 Mira el dibujo: ¿se juntan los dos grupos o se va alguna ficha?',
+      socraticSolveAdd: '🤔 Junta los dos grupos de fichas y cuéntalos todos, uno a uno.',
+      socraticSolveSub: '🤔 Cuenta solo las fichas que no están tachadas: esas son las que quedan.',
+      socraticTwoStep: '🤔 Cuenta lo que queda al final, después de los dos cambios del enunciado.'
     },
     problem: {
       garden: 'En el jardín hay {a} flores. Plantas {b} flores más. Luego plantas {c} flores más.',

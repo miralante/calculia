@@ -20,10 +20,10 @@ var DATA = {
   gallery: [
     { id: 'circle', type: 'flat', object: '🕒' },
     { id: 'triangle', type: 'flat', object: '⚠️' },
-    { id: 'square', type: 'flat', object: '🪟' },
+    { id: 'square', type: 'flat', object: '⬛' },
     { id: 'rectangle', type: 'flat', object: '🚪' },
     { id: 'rhombus', type: 'flat', object: '🪁' },
-    { id: 'trapezoid', type: 'flat', object: '🪣' },
+    { id: 'trapezoid', type: 'flat', object: '🥛' },
     { id: 'pentagon', type: 'flat', object: '🛡️' },
     { id: 'hexagon', type: 'flat', object: '🐝' },
     { id: 'octagon', type: 'flat', object: '🛑' },

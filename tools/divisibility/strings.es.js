@@ -111,7 +111,26 @@
       negativeAria: 'Menos {base} multiplicado {times} veces, con sus menos emparejados.',
       rootIndex: 'Se empieza en 1 y se multiplica por {base} hasta llegar a {n}. ¿Cuántas veces se ha multiplicado?',
       chainHint: 'Cuenta las flechas de ×{base}, no las casillas.',
-      chainAria: 'Una cadena que multiplica por {base} {times} veces.'
+      chainAria: 'Una cadena que multiplica por {base} {times} veces.',
+      /* Pista socrática: una por tipo de pregunta. La frase genérica
+         («Prueba otra vez. Mira el dibujo y cuenta con calma») era la
+         misma para todas, así que no decía nada. Estas dicen qué mirar
+         en el dibujo de esta pregunta y nunca dan la respuesta. */
+      socraticCubeRoot: '🤔 Cuenta las capas del cubo: en cuántas capas están colocadas.',
+      socraticZeros: '🤔 Mira el número largo y cuenta sus ceros, uno a uno.',
+      socraticShortForm: '🤔 Cuenta los ceros del número largo: eso es el exponente de la forma corta.',
+      socraticExactSide: '🤔 El lado va por el borde: cuenta cuántas casillas tiene de largo.',
+      socraticExactDiagonal: '🤔 La diagonal va de esquina a esquina: mira dónde cae entre las casillas.',
+      socraticIsMultiple: '🤔 Mira la última fila de puntos: si está a medias, no es múltiplo.',
+      socraticPickMultiple: '🤔 Busca el número que se puede repartir en filas iguales sin que sobre nada.',
+      socraticCriterion: '🤔 Mira lo que la regla dice mirar en el número: está resaltado.',
+      socraticIsPrime: '🤔 Mira todos los intentos: si ninguno sale exacto, es primo.',
+      socraticLcm: '🤔 Busca la estrella: es la primera vez que las dos líneas coinciden.',
+      socraticGcd: '🤔 Busca el trozo más largo que encaja sin huecos en las dos barras.',
+      socraticSquare: '🤔 Cuenta las filas y las columnas de la rejilla y multiplícalas.',
+      socraticNegativePower: '🤔 Cuenta los signos menos de la cadena: si sobran, el resultado es negativo.',
+      socraticRootIndex: '🤔 Cuenta las flechas de la cadena, no las casillas que unen.',
+      socraticRoot: '🤔 Cuenta las casillas de un solo lado, a lo largo del borde.'
     },
     transfer: 'Esto te servirá para repartir sin que sobre, para saber cuándo vuelven a coincidir dos cosas que se repiten, y para entender los números que salen en las etiquetas y las medidas.'
   }, 'es');

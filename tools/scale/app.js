@@ -565,6 +565,7 @@
         visual: visual,
         visualAria: aria,
         legend: App.i18n.t('gen.readHint'),
+        hint: App.i18n.t('gen.socraticRead'),
         options: optionsFor(value, wrongs, nv.unit)
       };
     },
@@ -585,6 +586,7 @@
           .replace(/\{from\}/g, span.from)
           .replace(/\{to\}/g, span.to),
         legend: App.i18n.t('gen.stepHint'),
+        hint: App.i18n.t('gen.socraticStep'),
         /* The total between the two numbers is the mistake here: it is
            on the picture, it is plausible, and it is not what a mark is
            worth. */
@@ -606,6 +608,7 @@
           .replace(/\{from\}/g, rec.from)
           .replace(/\{to\}/g, rec.to),
         legend: App.i18n.t('gen.stepsHint'),
+        hint: App.i18n.t('gen.socraticSteps'),
         options: optionsFor(answer, [answer - 1, answer + 1, rec.to], nv.unit)
       };
     },
@@ -638,6 +641,7 @@
         legend: App.i18n.t('gen.planKey')
           .replace(/\{key\}/g, plano.key)
           .replace(/\{unit\}/g, plano.unit) + ' ' + App.i18n.t('gen.planHint'),
+        hint: App.i18n.t('gen.socraticPlanToReal'),
         /* Adding instead of multiplying is the mistake a plan really
            produces: two numbers are written and the eye adds them. */
         options: optionsFor(answer, [answer - plano.key, answer + plano.key, cm + plano.key], plano.unit)
@@ -667,6 +671,7 @@
           App.i18n.t('gen.planBackHint')
             .replace(/\{real\}/g, real)
             .replace(/\{unit\}/g, plano.unit),
+        hint: App.i18n.t('gen.socraticRealToPlan'),
         options: optionsFor(answer, [answer - 1, answer + 1, answer * 2], 'cm')
       };
     }
@@ -819,9 +824,14 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —whether it
+     asks to read a ruler, to value one mark, to count the marks an
+     object crosses, or to go from a plan to real life— and not the
+     same sentence for every question. The generic line is only the
+     fallback, for a question that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

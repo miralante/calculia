@@ -271,6 +271,7 @@
 
       return {
         prompt: App.i18n.t(adding ? 'gen.mixFracAdd' : 'gen.mixFracSub'),
+        hint: App.i18n.t('gen.socraticMixFrac'),
         visual: '<div class="frac-expression">' +
             htmlFraccion(a) +
             '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
@@ -323,6 +324,7 @@
           .replace(/\{total\}/g, total)
           .replace(/\{thing\}/g, App.i18n.t('thing.' + thing.id))
           .replace(/\{part\}/g, App.i18n.t('part.' + den)),
+        hint: App.i18n.t('gen.socraticFracOf'),
         visual: '<div class="frac-groups">' + groups + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.fracOfHint')
             .replace(/\{den\}/g, den) + '</p>',
@@ -358,6 +360,7 @@
         prompt: App.i18n.t(adding ? 'gen.mixedAdd' : 'gen.mixedSub')
           .replace('{a}', htmlFraccion(frac))
           .replace('{b}', decimalText([tenths, 10])),
+        hint: App.i18n.t('gen.socraticMixedOp'),
         visual: '<div class="frac-visual-row">' +
             svgFraccion(frac[0], frac[1], 110) +
             '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
@@ -384,6 +387,7 @@
       var fracWins = fracTenths > tenths;
       return {
         prompt: App.i18n.t('gen.whichIsMore'),
+        hint: App.i18n.t('gen.socraticFracVsDecimal'),
         visual: '<p class="hint">' + App.i18n.t('gen.mixedCompareHint') + '</p>',
         legend: '',
         options: App.utils.shuffle([
@@ -421,6 +425,7 @@
       return {
         prompt: App.i18n.t(adding ? 'gen.decimalAdd' : 'gen.decimalSub')
           .replace('{a}', decimalText([x, 10])).replace('{b}', decimalText([y, 10])),
+        hint: App.i18n.t('gen.socraticDecimalOp'),
         visual: '<div class="frac-visual-row">' +
             svgFraccion(x, 10, 110) +
             '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
@@ -442,6 +447,7 @@
       })).slice(0, 2);
       return {
         prompt: App.i18n.t('gen.fraccionesEnunciado'),
+        hint: App.i18n.t('gen.socraticFracciones'),
         visual: svgFraccion(f[0], f[1], 170),
         visualAria: App.i18n.t('gen.fraccionesVisualAria').replace('{den}', f[1]).replace('{num}', f[0]),
         legend: leyendaFrac(),
@@ -460,6 +466,7 @@
       var greater = (par[0][0] / par[0][1] > par[1][0] / par[1][1]) ? par[0] : par[1];
       return {
         prompt: App.i18n.t('gen.comparaFracEnunciado'),
+        hint: App.i18n.t('gen.socraticComparaFrac'),
         visual: '',
         options: par.map(function (f) {
           return { html: fracOption(f), aria: fracAria(f), correct: f === greater };
@@ -482,6 +489,7 @@
       })).slice(0, 2);
       return {
         prompt: App.i18n.t('gen.equivalentesEnunciado'),
+        hint: App.i18n.t('gen.socraticEquivalentes'),
         visual: '<div class="frac-ref">' + svgFraccion(base[0], base[1], 150) +
           htmlFraccion(base) + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.equivalentesPista') + '</p>',
@@ -520,6 +528,7 @@
 
       return {
         prompt: App.i18n.t(adding ? 'gen.sumaFracEnunciado' : 'gen.restaFracEnunciado'),
+        hint: App.i18n.t('gen.socraticSumaFrac'),
         visual: '<div class="frac-expression">' +
             htmlFraccion([x, den]) +
             '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
@@ -566,6 +575,7 @@
       if (nv.dir === 'toPicture') {
         return {
           prompt: App.i18n.t('gen.decimalToPicturePrompt'),
+        hint: App.i18n.t('gen.socraticDecimalToPicture'),
           visual: '<div class="frac-ref"><span class="decimal-value">' +
             decimalText(f) + '</span></div>' +
             '<p class="hint">' + hint + '</p>',
@@ -581,6 +591,7 @@
       }
       return {
         prompt: App.i18n.t('gen.decimalToNumberPrompt'),
+        hint: App.i18n.t('gen.socraticDecimalToNumber'),
         visual: '<div class="frac-ref">' + svgFraccion(f[0], f[1], 150) + '</div>' +
           '<p class="hint">' + hint + '</p>',
         visualAria: fracAria(f),
@@ -738,9 +749,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

@@ -63,7 +63,7 @@
       snake: 'the snake',
       worm: 'the worm',
       elephant: 'the elephant',
-      feather: 'the feather',
+      leaf: 'the leaf',
       teddy: 'the teddy',
       house: 'the house',
       apple: 'the apple',
@@ -71,7 +71,7 @@
       clip: 'the paper clip',
       bathtub: 'the bath',
       cup: 'the cup',
-      bucket: 'the bucket',
+      basket: 'the basket',
       spoon: 'the spoon',
       barrel: 'the barrel',
       bottle: 'the baby bottle'
@@ -103,7 +103,15 @@
       findWhere: 'In which picture is {thing} {phrase}?',
       whichIs: 'Which one {word}?',
       sceneAria: '{thing} is {phrase}.',
-      compareAria: '{a} and {b}, drawn the same size.'
+      compareAria: '{a} and {b}, drawn the same size.',
+      /* The line that shows up when an answer is wrong. One per question
+         type, and all three say what to look at in the picture in front
+         of you: the single old sentence ("Try again. Look at the picture
+         calmly.") was the same for every question, so it said nothing.
+         They give the strategy, never the answer. */
+      socraticWhereIs: '🤔 Look at where the thing sits in the picture, not just what it is called.',
+      socraticFindWhere: '🤔 Read the sentence, then find the picture that matches it.',
+      socraticCompare: '🤔 Think about which of the two is really bigger, not how it is drawn.'
     },
     transfer: 'This will help you understand when someone tells you where something is, and choose what to carry in each hand when one bag weighs more than the other.'
   }, 'en');

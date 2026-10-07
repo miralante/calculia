@@ -101,7 +101,16 @@
       stepFactor: 'How many {small} fit in 1 {big}?',
       factorHint: 'Every rung you go down is one more ×10.',
       ladderConvert: '{n} {big}, how many {small} is that?',
-      convertHint: 'Go down the rungs one at a time, multiplying by 10 each time.'
+      convertHint: 'Go down the rungs one at a time, multiplying by 10 each time.',
+      /* The line that shows up when an answer is wrong. One per question
+         type, and each one says what to look at on the ladder or in the
+         picture in front of you: the single old sentence ("Try again.
+         Think calmly.") was the same for all of them. They give the
+         strategy, never the answer. */
+      socraticSteps: '🤔 Count the gaps between the two rungs that are marked.',
+      socraticFactor: '🤔 Look at the two marked rungs and count how many times you go down.',
+      socraticConvert: '🤔 Watch how big each rung is: every one is worth ten times the next.',
+      socraticMeasures: '🤔 Look at the picture and the question, and check which unit they want.'
     },
     transfer: 'This will help you buy things by weight, follow a recipe, work out whether something fits where you want it, and change from one unit to another without getting lost.'
   }, 'en');

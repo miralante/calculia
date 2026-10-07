@@ -107,7 +107,21 @@
       yearAria: 'The months of the year with {month} marked.',
       yearGapAria: 'The months of the year with one month left blank.',
       seasonOf: 'Which season is {month} in?',
-      monthOfSeason: 'Which of these months is in {season}?'
+      monthOfSeason: 'Which of these months is in {season}?',
+      /* The hint that comes out when an answer is wrong. One per kind of
+         question, and each one says what to look at or do with what is on
+         screen: the single sentence it replaced ("Try again…") was the
+         same for every question, so it said nothing. These never give the
+         answer away — they give the strategy, which is what separates a
+         Socratic hint from a spoiler. */
+      socraticDaySeq: '🤔 Find the marked day on the strip and count from there.',
+      socraticDayGap: '🤔 Look at the days on the strip and find the one missing between them.',
+      socraticMonthSeq: '🤔 Find the marked month on the strip of twelve.',
+      socraticMonthGap: '🤔 Look at the months on the strip and find the gap between them.',
+      socraticSeason: '🤔 Look at the month on the card and the weather it usually brings.',
+      socraticHowManyIn: '🤔 Count the pictures on the strip, one by one.',
+      socraticLongerUnit: '🤔 Look at which of the two measures fits inside the other.',
+      socraticSeasonMonth: '🤔 Look at the season in the drawing and which months belong to it.'
     },
     transfer: 'This will help you know what day it is, write an appointment in the calendar and count how long is left until something you are waiting for.'
   }, 'en');

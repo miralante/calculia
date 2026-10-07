@@ -71,7 +71,16 @@
       etqPagas: 'You pay with:',
       youPayWith: 'You pay with:',
       etqCuesta: 'It costs:',
-      itCosts: 'It costs:'
+      itCosts: 'It costs:',
+      /* The line that shows up when an answer is wrong. One per question
+         type, and each one says what to look at in the money on screen:
+         the single old sentence ("Try again. Think calmly.") was the same
+         for all of them. They give the strategy, never the answer. */
+      socraticPrice: '🤔 Look at the written price and read it out in euros and cents.',
+      socraticComparePrices: '🤔 Look at the two prices and compare them: both are drawn the same.',
+      socraticOneEnough: '🤔 Look at how much money you have and what it costs, and compare.',
+      socraticTwoEnough: '🤔 Look at both prices together and compare them with your money.',
+      socraticChange: '🤔 Look at which note you hand over and what it costs: think about the difference.'
     },
     transfer: 'This will help you handle money in daily life: knowing if you have enough, counting change or reading a price.'
   }, 'en');

@@ -9,7 +9,19 @@
    fiable: `document.fonts.check()` no sabe de fuentes de color y no
    sirve, y el codepoint ser valido no significa que exista el dibujo.
 
+   /* Con `--check` no escanea el proyecto: mide los emoji que le pases.
+     Es el MISMO metodo y el mismo canvas que el escaneo, a proposito:
+     dos mediciones distintas del "se pinta o no" acabarian discrepando y
+     la que se usara para elegir seria la que no se ha medido bien.
+
    Uso: node scripts/one-off/scan-emoji-tofu.js [carpeta ...]
+        node scripts/one-off/scan-emoji-tofu.js --check 🍺 🏢 👗
+
+   LO QUE NO MIDE: solo distingue "dibujado" de "caja vacia". Un
+   simbolo que se pinta como glifo de TEXTO en vez de como emoji sale
+   "bien" aqui y sigue estando mal en pantalla: ⛰ sin el selector de
+   variacion U+FE0F se ve como un triangulo negro, no como la montana.
+   Para esos, mira el dibujo: capturas/rampas-picto.png.
    ============================================================ */
 'use strict';
 
@@ -80,14 +92,18 @@ function harvest(dirs) {
 }
 
 (async () => {
-  const dirs = process.argv.slice(2);
+  const argv = process.argv.slice(2);
+  const checkMode = argv[0] === '--check';
+  const dirs = checkMode ? [] : argv;
   const server = await startServer();
   const base = 'http://127.0.0.1:' + server.address().port;
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto(base + '/index.html');
 
-  const chars = [...harvest(dirs.length ? dirs : [ROOT]).keys()];
+  const chars = checkMode
+    ? argv.slice(1)
+    : [...harvest(dirs.length ? dirs : [ROOT]).keys()];
   const verdicts = await page.evaluate(list => {
     /* El estilo REAL de la tarjeta de "vida real", no uno inventado:
        si el tofu sale con otra fuente, aqui no sale con esta. */
@@ -112,12 +128,20 @@ function harvest(dirs) {
 
   const rotos = verdicts.filter(v => v.tofu);
   const bien = verdicts.filter(v => !v.tofu);
-  console.log('emoji que SÍ se pintan (' + bien.length + '):');
-  console.log('  ' + bien.map(v => v.ch).join(' '));
-  console.log('\nCAJA VACÍA (' + rotos.length + '):');
-  for (const v of rotos) {
-    const files = [...harvest(dirs.length ? dirs : [ROOT]).get(v.ch)];
-    console.log('  ' + v.ch + '  ' + v.cp + '   ' + files.slice(0, 4).join(', ') + (files.length > 4 ? ' …+' + (files.length - 4) : ''));
+  if (checkMode) {
+    for (const v of verdicts) {
+      console.log((v.tofu ? 'CAJA VACIA  ' : 'se pinta    ') + v.ch + '  ' + v.cp);
+    }
+    console.log('\n' + bien.length + ' de ' + verdicts.length + ' candidatos se pintan.');
+  } else {
+    console.log('emoji que SÍ se pintan (' + bien.length + '):');
+    console.log('  ' + bien.map(v => v.ch).join(' '));
+    console.log('\nCAJA VACÍA (' + rotos.length + '):');
+    const mapa = harvest(dirs.length ? dirs : [ROOT]);
+    for (const v of rotos) {
+      const files = [...mapa.get(v.ch)];
+      console.log('  ' + v.ch + '  ' + v.cp + '   ' + files.slice(0, 4).join(', ') + (files.length > 4 ? ' …+' + (files.length - 4) : ''));
+    }
   }
 
   await browser.close(); server.close();

@@ -80,7 +80,21 @@
       multiplicaGrandePista: 'Añade {ceros} al final de {n}.',
       bigMultiplyHint: 'Añade {ceros} al final de {n}.',
       oneZero: 'un cero',
-      twoZeros: 'dos ceros'
+      twoZeros: 'dos ceros',
+      /* Pista socrática: una por tipo de pregunta. La frase genérica
+         («Prueba otra vez…») era la misma para todas, así que no decía
+         nada. Estas dicen qué mirar en el dibujo o en la cuenta de esta
+         pregunta y nunca dan la respuesta. */
+      socraticAnchor: '🤔 Mira la barra de diez cosas y cuenta cuántas se mueven.',
+      socraticPlaceAdd: '🤔 Mira la barra de decenas: los sueltos se pegan al final.',
+      socraticPlaceSub: '🤔 Mira las unidades sueltas que se van: los puntos que quedan son la decena.',
+      socraticCarry: '🤔 Cuenta los puntos sueltos: cuando forman diez, se convierten en una barra nueva.',
+      socraticBorrow: '🤔 Mira la barra rota en diez sueltos: de ahí se quita lo que falta.',
+      socraticRestar: '🤔 Mira el grupo tachado: lo que queda es la respuesta.',
+      socraticDoubles: '🤔 Los dos grupos son iguales: juntalos y cuenta los dos.',
+      socraticSumLarge: '🤔 Mira la cifra morada: es la única que cambia al sumar.',
+      socraticSubtractLarge: '🤔 Mira la cifra morada: es la única que baja al restar.',
+      socraticMultiplyLarge: '🤔 Mira la cifra morada: al multiplicar solo cambia ella y los ceros.'
     },
     transfer: 'Esto te servirá para saber cuánto te queda, cuánto falta o calcular una cantidad grande sin usar la calculadora.'
   }, 'es');

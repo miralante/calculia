@@ -107,7 +107,21 @@
       yearAria: 'Los meses del año con {month} señalado.',
       yearGapAria: 'Los meses del año con un mes en blanco.',
       seasonOf: '¿En qué estación está {month}?',
-      monthOfSeason: '¿Cuál de estos meses es de {season}?'
+      monthOfSeason: '¿Cuál de estos meses es de {season}?',
+      /* La pista que sale al fallar. Una por tipo de pregunta, y todas
+         dicen qué mirar o qué hacer con lo que hay en pantalla: la frase
+         única que había antes («Prueba otra vez…») era la misma para
+         todas las preguntas, así que no decía nada. Estas no dan la
+         respuesta —dan la estrategia—, que es lo que distingue una
+         pista socrática de un spoiler. */
+      socraticDaySeq: '🤔 Mira el día señalado en la tira y cuenta a partir de ahí.',
+      socraticDayGap: '🤔 Mira qué días están en la tira y busca el que falta entre ellos.',
+      socraticMonthSeq: '🤔 Sitúate en el mes señalado en la tira de los doce.',
+      socraticMonthGap: '🤔 Mira los meses de la tira y busca el hueco que queda entre ellos.',
+      socraticSeason: '🤔 Mira el mes de la tarjeta y el tiempo que suele hacer.',
+      socraticHowManyIn: '🤔 Cuenta los dibujos de la tira, uno a uno.',
+      socraticLongerUnit: '🤔 Mira cuál de las dos medidas cabe dentro de la otra.',
+      socraticSeasonMonth: '🤔 Mira la estación del dibujo y qué meses caen en ella.'
     },
     transfer: 'Esto te servirá para saber qué día es hoy, apuntar una cita en el calendario y contar cuánto falta para algo que esperas.'
   }, 'es');

@@ -381,6 +381,7 @@
         visual: '<div class="tile-stage">' + tilePile(t) + '</div>',
         visualAria: tileAria(t),
         legend: App.i18n.t('gen.tilesHint'),
+        hint: App.i18n.t('gen.socraticReadTiles'),
         options: threeWritten(right, wrong),
         inline: true
       };
@@ -398,6 +399,7 @@
         /* What the picture is made of, so it is not the answer read out. */
         visualAria: tileAria({ sq: 1, str: 2 * a, one: a * a }),
         legend: App.i18n.t('gen.squareSideHint'),
+        hint: App.i18n.t('gen.socraticSquareSide'),
         options: threeWritten(right, [
           { html: '2x', aria: App.i18n.t('gen.ariaTwoX') },
           sidePlus(a + 1),
@@ -419,6 +421,7 @@
           '<span class="side-label">x</span>' + tileRect(a, 0) + '</div>',
         visualAria: tileAria({ sq: 1, str: a, one: 0 }),
         legend: App.i18n.t('gen.otherSideHint'),
+        hint: App.i18n.t('gen.socraticOtherSide'),
         /* Reading the strips as a multiplier is the mistake: `a` of them
            along the side means x plus a, not a times x. */
         options: threeWritten(right, [
@@ -459,6 +462,7 @@
         visualAria: App.i18n.t('gen.systemAria')
           .replace(/\{total\}/g, item.total).replace(/\{diff\}/g, item.diff),
         legend: App.i18n.t('gen.systemHint'),
+        hint: App.i18n.t('gen.socraticSystem'),
         options: App.utils.shuffle(
           [{ html: '<span class="pair-name">' + label(bag, box) + '</span>',
              aria: label(bag, box), correct: true }].concat(
@@ -490,6 +494,7 @@
         visualAria: App.i18n.t('gen.tiltAria')
           .replace(/\{left\}/g, item.left).replace(/\{right\}/g, item.right),
         legend: App.i18n.t('gen.tiltHint'),
+        hint: App.i18n.t('gen.socraticTilted'),
         options: App.utils.shuffle([
           { html: '<span class="answer-name">' + first + '</span>', aria: first,
             correct: leftHeavier },
@@ -518,6 +523,7 @@
         visualAria: App.i18n.t('gen.squareEqAria')
           .replace(/\{n\}/g, total).replace(/\{side\}/g, side),
         legend: App.i18n.t('gen.squareEqHint'),
+        hint: App.i18n.t('gen.socraticSquareEquation'),
         /* Answering with the total, or with half of it, are the two real
            confusions. */
         options: threeOf(side, [total, Math.round(total / 2)])
@@ -537,6 +543,7 @@
         visual: growthGraph(g.values),
         visualAria: App.i18n.t('gen.growthAria').replace(/\{n\}/g, g.values.length),
         legend: App.i18n.t('gen.growthHint'),
+        hint: App.i18n.t('gen.socraticHowItGrows'),
         options: App.utils.shuffle([true, false].map(function (v) {
           return {
             html: '<span class="trend-name">' +
@@ -561,6 +568,7 @@
       return {
         prompt: App.i18n.t('gen.pickStraight'),
         legend: App.i18n.t('gen.growthHint'),
+        hint: App.i18n.t('gen.socraticPickStraight'),
         options: App.utils.shuffle([good].concat(bad).map(function (g) {
           return {
             html: growthGraph(g.values, true),
@@ -584,6 +592,7 @@
         visualAria: App.i18n.t('gen.balanceAria')
           .replace(/\{left\}/g, item.add).replace(/\{right\}/g, item.total),
         legend: App.i18n.t('gen.simpleHint'),
+        hint: App.i18n.t('gen.socraticOnePlusWeights'),
         /* Answering with the whole side, or with the weights that are
            already there, are the two real confusions. */
         options: threeOf(answer, [item.total, item.add], App.i18n.t('gen.kilo'))
@@ -601,6 +610,7 @@
         visualAria: App.i18n.t('gen.manyAria')
           .replace(/\{bags\}/g, item.bags).replace(/\{total\}/g, item.total),
         legend: App.i18n.t('gen.manyHint').replace(/\{bags\}/g, item.bags),
+        hint: App.i18n.t('gen.socraticManyBags'),
         options: threeOf(answer, [item.total, item.bags], App.i18n.t('gen.kilo'))
       };
     },
@@ -616,6 +626,7 @@
         visualAria: App.i18n.t('gen.balanceAria')
           .replace(/\{left\}/g, item.left).replace(/\{right\}/g, item.right),
         legend: App.i18n.t('gen.bothHint'),
+        hint: App.i18n.t('gen.socraticBothSides'),
         options: threeOf(answer, [item.right, item.left], App.i18n.t('gen.kilo'))
       };
     },
@@ -634,6 +645,7 @@
         visualAria: App.i18n.t('gen.substituteAria')
           .replace(/\{times\}/g, item.times).replace(/\{x\}/g, item.x),
         legend: App.i18n.t('gen.substituteHint').replace(/\{times\}/g, item.times),
+        hint: App.i18n.t('gen.socraticSubstitute'),
         /* Adding instead of multiplying, and answering with the letter's
            own value, are the two real confusions. */
         options: threeOf(answer, [item.x + item.times, item.x])
@@ -656,6 +668,7 @@
           bags(times) + '</span></div>',
         visualAria: App.i18n.t('gen.writeItAria').replace(/\{times\}/g, times),
         legend: App.i18n.t('gen.writeItHint'),
+        hint: App.i18n.t('gen.socraticWriteIt'),
         options: App.utils.shuffle([right].concat(wrong).map(function (s) {
           return {
             html: '<span class="letter-expr">' + s + '</span>',
@@ -687,6 +700,7 @@
         visualAria: App.i18n.t('gen.graphAria')
           .replace(/\{what\}/g, App.i18n.t('series.' + series.id)),
         legend: App.i18n.t('gen.trendHint'),
+        hint: App.i18n.t('gen.socraticUpOrDown'),
         options: App.utils.shuffle(['up', 'down', 'same'].map(function (k) {
           return {
             html: '<span class="trend-name">' + App.i18n.t('trend.' + k) + '</span>',
@@ -713,6 +727,7 @@
         visualAria: App.i18n.t('gen.graphAria')
           .replace(/\{what\}/g, App.i18n.t('series.' + series.id)),
         legend: App.i18n.t('gen.highestHint'),
+        hint: App.i18n.t('gen.socraticHighestPoint'),
         options: App.utils.shuffle([at].concat(others).map(function (h) {
           return {
             html: App.i18n.t('gen.hour').replace(/\{h\}/g, h),
@@ -866,9 +881,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the picture in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 

@@ -111,7 +111,26 @@
       negativeAria: 'Minus {base} multiplied {times} times, with its minus signs paired up.',
       rootIndex: 'You start at 1 and multiply by {base} until you reach {n}. How many times did you multiply?',
       chainHint: 'Count the ×{base} arrows, not the boxes.',
-      chainAria: 'A chain that multiplies by {base} {times} times.'
+      chainAria: 'A chain that multiplies by {base} {times} times.',
+      /* Socratic hint: one per question type. The generic line
+         ("Try again. Look at the picture and count calmly") was the same
+         for all of them, so it said nothing. These say what to look at in
+         this question's picture and never give the answer away. */
+      socraticCubeRoot: '🤔 Count the layers of the cube: how many layers they are stacked in.',
+      socraticZeros: '🤔 Look at the long number and count its zeros, one by one.',
+      socraticShortForm: '🤔 Count the zeros of the long number: that is the exponent of the short form.',
+      socraticExactSide: '🤔 The side runs along the edge: count how many cells it is long.',
+      socraticExactDiagonal: '🤔 The diagonal goes corner to corner: see where it lands between the cells.',
+      socraticIsMultiple: '🤔 Look at the last row of dots: if it is short, it is not a multiple.',
+      socraticPickMultiple: '🤔 Look for the number that splits into equal rows with none left over.',
+      socraticCriterion: '🤔 Look at what the rule says to look at in the number: it is highlighted.',
+      socraticIsPrime: '🤔 Look at all the tries: if none comes out exact, it is prime.',
+      socraticLcm: '🤔 Look for the star: it is the first time the two lines line up.',
+      socraticGcd: '🤔 Look for the longest chunk that fits into both bars with no gaps.',
+      socraticSquare: '🤔 Count the rows and the columns of the grid and multiply them.',
+      socraticNegativePower: '🤔 Count the minus signs in the chain: if any are left over, the answer is negative.',
+      socraticRootIndex: '🤔 Count the arrows in the chain, not the boxes joining them.',
+      socraticRoot: '🤔 Count the cells along one side only, following the edge.'
     },
     transfer: 'This will help you share things out with none left over, know when two repeating things come round together again, and understand the numbers on labels and measurements.'
   }, 'en');

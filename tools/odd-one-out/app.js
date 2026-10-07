@@ -38,6 +38,10 @@
      currentGroup allows reusing render() with an external group
      (the reinforcement one); if null, render() takes groups[idx]. */
   var currentGroup = null;
+  /* La pista de la pregunta que está en pantalla. Los grupos vienen de
+     data.js y no se construyen aquí, así que no hay un objeto pregunta
+     al que añadirle un campo: se guarda solo la pista que le toca. */
+  var pistaActual = null;
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
@@ -97,9 +101,19 @@
     progressText.textContent = '';
   }
 
+  /* One question shape in this activity: three drawings, two of them
+     belong together and one does not. The levels only make the pair
+     harder to tell apart, so one good hint covers all of them and it
+     says what to do —compare the three and find the pair— without
+     naming the intruder. */
+  function pistaPara() {
+    return App.i18n.t('pistaIntruso');
+  }
+
   function render() {
     var group = currentGroup || groups[index];
     currentGroup = null;
+    pistaActual = pistaPara();
     resolved = false;
     attempts = 0;
     feedbackEl.textContent = '';
@@ -143,9 +157,13 @@
 
   /* Socratic method: on the first mistake the answer isn't given,
      the person is encouraged to look again. Only on the second
-     mistake is the odd one out explained (showExplanation). */
+     mistake is the odd one out explained (showExplanation).
+     The invitation is the one written for THIS question —what to do
+     with the three drawings in front of you— and not the same
+     sentence for every question. The generic line is only the
+     fallback, for a question that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('pista');
+    explanationEl.textContent = pistaActual || App.i18n.t('pista');
     explanationWrap.classList.remove('hidden');
   }
 

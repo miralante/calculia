@@ -64,7 +64,19 @@
       groupsAria: '{count} montones de {size} puntos.',
       whatFirst: '¿Qué se hace primero?',
       timesFirstHint: 'Sin paréntesis, la multiplicación va antes que la suma.',
-      parensHint: 'Lo que está dentro del paréntesis va primero.'
+      parensHint: 'Lo que está dentro del paréntesis va primero.',
+      /* Pista socrática: una por tipo de pregunta. La frase genérica
+         («Prueba otra vez. Mira el dibujo y cuenta con calma») era la
+         misma para todas, así que no decía nada. Estas dan la estrategia
+         —qué mirar en el dibujo de esta pregunta— y nunca la respuesta. */
+      socraticWalk: '🤔 Empieza en la chincheta, no en el cero, y cuenta los pasos.',
+      socraticCommute: '🤔 Cuenta los puntos del rectángulo que está en blanco: son los mismos.',
+      socraticSplit: '🤔 Los dos trozos ya están calculados: mira sus números y júntalos.',
+      socraticSplitTens: '🤔 Mira cómo se ha partido el número: unas decenas y unas unidades.',
+      socraticShare: '🤔 Fíjate en un solo montón y cuenta los puntos que tiene.',
+      socraticGroups: '🤔 Lo que se pregunta es cuántos montones hay: cuéntalos, no cuentes puntos.',
+      socraticWhatFirst: '🤔 Mira primero si hay paréntesis: si los hay, mandan ellos.',
+      socraticOrderResult: '🤔 Haz primero lo de dentro del paréntesis o la multiplicación; luego suma.'
     },
     transfer: 'Esto te servirá para hacer cuentas grandes de cabeza partiéndolas en trozos, y para repartir cosas entre varias personas sin que sobre ni falte.'
   }, 'es');

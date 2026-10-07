@@ -170,6 +170,7 @@
       return {
         prompt: App.i18n.t(nv.dir === 'prev' ? 'gen.dayBefore' : 'gen.dayAfter')
           .replace(/\{day\}/g, dayName(id)),
+        hint: App.i18n.t('gen.socraticDaySeq'),
         visual: strip('week', DATA.days, dayName, id, null),
         visualAria: App.i18n.t('gen.weekAria').replace(/\{day\}/g, dayName(id)),
         options: neighbourOptions(DATA.days, answer, dayName)
@@ -181,6 +182,7 @@
       var id = draw(nv.id, DATA.days);
       return {
         prompt: App.i18n.t('gen.dayGap'),
+        hint: App.i18n.t('gen.socraticDayGap'),
         visual: strip('week', DATA.days, dayName, null, id),
         visualAria: App.i18n.t('gen.weekGapAria'),
         options: neighbourOptions(DATA.days, id, dayName)
@@ -193,6 +195,7 @@
       return {
         prompt: App.i18n.t(nv.dir === 'prev' ? 'gen.monthBefore' : 'gen.monthAfter')
           .replace(/\{month\}/g, monthName(id)),
+        hint: App.i18n.t('gen.socraticMonthSeq'),
         visual: strip('year', DATA.months, monthName, id, null),
         visualAria: App.i18n.t('gen.yearAria').replace(/\{month\}/g, monthName(id)),
         options: neighbourOptions(DATA.months, answer, monthName)
@@ -203,6 +206,7 @@
       var id = draw(nv.id, DATA.months);
       return {
         prompt: App.i18n.t('gen.monthGap'),
+        hint: App.i18n.t('gen.socraticMonthGap'),
         visual: strip('year', DATA.months, monthName, null, id),
         visualAria: App.i18n.t('gen.yearGapAria'),
         options: neighbourOptions(DATA.months, id, monthName)
@@ -223,6 +227,7 @@
       };
       return {
         prompt: App.i18n.t('gen.seasonOf').replace(/\{month\}/g, monthName(month)),
+        hint: App.i18n.t('gen.socraticSeason'),
         visual: '<div class="month-card"><span class="month-big">' +
           monthName(month) + '</span></div>',
         visualAria: monthName(month),
@@ -242,6 +247,7 @@
       var unit = draw(nv.id, DATA.units);
       return {
         prompt: App.i18n.t('gen.howManyIn.' + unit.id),
+        hint: App.i18n.t('gen.socraticHowManyIn'),
         visual: unitStrip(unit.kind),
         visualAria: App.i18n.t('gen.unitAria')
           .replace(/\{n\}/g, unit.n)
@@ -261,6 +267,7 @@
         prompt: App.i18n.t(askLonger ? 'gen.whichLonger' : 'gen.whichShorter')
           .replace(/\{a\}/g, App.i18n.t('unit.' + pair.small))
           .replace(/\{b\}/g, App.i18n.t('unit.' + pair.big)),
+        hint: App.i18n.t('gen.socraticLongerUnit'),
         visual: unitStrip(pair.kind, true),
         visualAria: App.i18n.t('gen.pairAria')
           .replace(/\{small\}/g, App.i18n.t('unit.' + pair.small))
@@ -287,6 +294,7 @@
       })).slice(0, 2).map(function (o) { return App.utils.shuffle(o.months)[0]; });
       return {
         prompt: App.i18n.t('gen.monthOfSeason').replace(/\{season\}/g, seasonName(s.id)),
+        hint: App.i18n.t('gen.socraticSeasonMonth'),
         visual: '<div class="month-card"><span class="season-big" aria-hidden="true">' +
           s.icon + '</span><span class="season-name">' + seasonName(s.id) + '</span></div>',
         visualAria: seasonName(s.id),
@@ -441,9 +449,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 
