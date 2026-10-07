@@ -12,7 +12,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v143';
+var VERSION = 'calculia-v144';
 
 var FILES = [
   './',
@@ -228,14 +228,42 @@ var FILES = [
   './tools/wallet/styles.css'
 ];
 
+/* Cloudflare answers EVERY "/x.html" URL with a 307 to its extensionless form
+   (/index.html -> /, /404.html -> /404, /offline.html -> /offline,
+   /legal/privacidad.html -> /legal/privacidad). Following that redirect yields
+   a response with `redirected === true`, and the Cache API PRESERVES that flag
+   across a store/load round trip, so cache.addAll() silently poisons the entry
+   under its original key. Chrome refuses to hand such a response to a top-level
+   navigation ("Response served by service worker has redirections"), so a Back
+   button that lands on a cached .html entry aborts the whole navigation.
+
+   Rebuilding the response produces a brand-new object whose flag is false while
+   keeping body, status and headers, which is what the navigation needs. */
+function deRedirect(res) {
+  if (!res || !res.redirected) return res;
+  return new Response(res.body, {
+    status: res.status,
+    statusText: res.statusText,
+    headers: res.headers
+  });
+}
+
+/* addAll() stores the followed response as-is, so precache entry by entry and
+   sanitise. Still all-or-nothing: a missing file rejects, as addAll did. */
+function precache(cache, files) {
+  return Promise.all(files.map(function (file) {
+    /* cache: 'reload' avoids storing stale copies from the browser HTTP cache */
+    return fetch(new Request(file, { cache: 'reload' })).then(function (res) {
+      if (!res || !res.ok) throw new Error('precache failed: ' + file);
+      return cache.put(file, deRedirect(res));
+    });
+  }));
+}
+
 self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(VERSION).then(function (cache) {
-      /* cache: 'reload' avoids storing stale copies from the browser's HTTP cache */
-      var requests = FILES.map(function (a) {
-        return new Request(a, { cache: 'reload' });
-      });
-      return cache.addAll(requests);
+      return precache(cache, FILES);
     }).then(function () {
       return self.skipWaiting();
     })
@@ -259,20 +287,20 @@ self.addEventListener('fetch', function (event) {
   if (event.request.method !== 'GET') return;
   event.respondWith(
     caches.match(event.request).then(function (response) {
-      if (response) return response;
+      /* A cache hit can come from a precache written by an older worker, so it
+         is sanitised here too rather than trusted. */
+      if (response) return deRedirect(response);
       return fetch(event.request).then(function (r) {
-        /* Also cache new same-origin resources â€” but never cache a
-           redirect. Safari (and the Fetch spec) rejects a top-level
-           navigation served by the SW that carries a Location header
-           ("Response served by service worker has redirections"), so we
-           follow the redirect and cache only the final 200. */
+        /* Cache same-origin resources, but never a redirect. Following one
+           still yields status 200 with redirected === true, which is exactly
+           the poisoned entry the precache comment above describes. */
         if (r.status === 200) {
-          var copia = r.clone();
+          var copia = deRedirect(r.clone());
           caches.open(VERSION).then(function (cache) {
             cache.put(event.request, copia);
           });
         }
-        return r;
+        return deRedirect(r);
       }).catch(function () {
         /* Offline / network failure: don't serve the landing page here,
            its relative paths only resolve correctly at the site root, and
