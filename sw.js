@@ -295,9 +295,8 @@ self.addEventListener('fetch', function (event) {
            still yields status 200 with redirected === true, which is exactly
            the poisoned entry the precache comment above describes. */
         if (r.status === 200) {
-          var copia = deRedirect(r.clone());
           caches.open(VERSION).then(function (cache) {
-            cache.put(event.request, copia);
+            cache.put(event.request, deRedirect(r.clone()));
           });
         }
         return deRedirect(r);
