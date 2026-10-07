@@ -83,3 +83,38 @@ console.log(
   "✓ sw.js VERSION bump check passed (" + cachedChanged.length + " cached file(s) changed" +
   (cachedChanged.length ? ", VERSION correctly bumped: " + before.version + " -> " + after.version : ", VERSION unchanged as expected") + ")"
 );
+
+/* --- Redirect-free links, sanitised service-worker caches -------------
+   Cloudflare answers EVERY "/x.html" URL with a 307 to its extensionless
+   form (verified on all eight sites). fetch() follows it before the worker
+   sees it, so the response arrives with status 200 AND redirected === true,
+   the Cache API preserves that flag across a store/load round trip, and
+   Chrome then refuses to serve it to a top-level navigation: "Response
+   served by service worker has redirections". Measured: online navigation
+   survives, offline navigation (served from the cache) aborts with
+   net::ERR_FAILED.
+
+   This gate fails if a page links to a ".html" URL, or if sw.js can store a
+   followed redirect (cache.addAll, or a cache.put without deRedirect).
+
+   Fix links with: node ../scripts/one-off/fix-html-links.js --apply
+   Prove the gate with: node ../scripts/one-off/test-check-sw-redirects.js
+   ------------------------------------------------------------------- */
+(function () {
+  const suiteTool = require('path').join(__dirname, '..', '..', 'scripts', 'check-sw-redirects.js');
+  if (!require('fs').existsSync(suiteTool)) {
+    console.log('~ skipping SW-redirect check: ' + suiteTool + ' not found');
+    return;
+  }
+  try {
+    const out = require('node:child_process').execFileSync(
+      process.execPath, [suiteTool, 'calculia'],
+      { cwd: require('path').join(__dirname, '..'), encoding: 'utf8', stdio: 'pipe' }
+    );
+    console.log(String(out).trim());
+  } catch (e) {
+    console.error(String(e.stdout || e.message).trim());
+    console.error('  Fix links with: node ../scripts/one-off/fix-html-links.js --apply');
+    process.exitCode = 1;
+  }
+})();
