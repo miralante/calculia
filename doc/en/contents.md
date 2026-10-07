@@ -182,7 +182,39 @@ is rebalanced, this is the document to read first.
   has a horizontal one too and the question would have no single answer.
   Both lists are checked when the activity starts.
 
-### 3.11 Logic and proof
+### 3.11 Trigonometry
+
+- `trigonometry/` is **the activity where the right triangle appears as a
+  figure**, and with it the ratio that gives trigonometry its name. It
+  works in three blocks, in this order: the three sides (`lados`), the
+  ratio (`razon`) and the ladder (`medir`).
+- **The ratio is counted, never written out.** "How many squares does it
+  rise for every square it goes along" is read off a grid drawn under the
+  triangle. There are no decimals, no division and not a single symbol:
+  the sentence already carries the two numbers in place ("3 for every 4")
+  and the only decision is which ones they are.
+- **The idea holding up all of trigonometry is that the ratio does not
+  depend on size**: two triangles with the same ratio are the same
+  triangle, only bigger. That is why `y2` asks whether two of them share
+  it and `y3` which of three does, and the one that does is always twice
+  the size of the first. Both are drawn to the same scale on the two
+  axes: scaling them separately would make the drawing's lean differ from
+  the triangle's, and the question would then be answered by what the
+  picture looks like rather than by what the triangle is.
+- **No level computes a sine, a cosine or a tangent**, and none writes a
+  letter such as "s". The word *hypotenuse* is taught, but always beside
+  its explanation ("the longest one: it is the slanted side"), the same
+  way the three kinds of angle are taught in `geometry/`.
+- **The `medir` block is the transfer**: what was counted in the abstract
+  shows up as a ladder leaning against a wall. The three ladders in the
+  last level measure exactly the same — 7-24-25 and 15-20-25, the only
+  two pairs of right triangles sharing a hypotenuse that fit in a small
+  drawing — so the only variable is how far upright they stand. A
+  reviewing activity must check that equality at start-up: if the
+  ladders measured different lengths, "which one reaches highest" would
+  be answered by the length instead of by the lean.
+
+### 3.12 Logic and proof
 
 - Each "Odd one out", "Pattern" or "Riddles" item comes with **one
   obvious reason** and **no hidden alternative**. A reviewer must

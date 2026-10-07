@@ -320,6 +320,6 @@ tokens el resultado sale limpio sin tocar nada.
 | [`SPEC.md`](SPEC.md) | Definición de producto, restricciones no negociables y reglas de accesibilidad (§3.5, §6) |
 | [`tecnico.md`](tecnico.md) | Arquitectura, core compartido y anatomía de una actividad |
 | [`guia-crear-elementos.md`](guia-crear-elementos.md) | Receta para crear una actividad nueva |
-| [`actividades.md`](actividades.md) | Catálogo de las 27 actividades |
+| [`actividades.md`](actividades.md) | Catálogo de las 30 actividades |
 | [`roles.md`](roles.md) | Quién decide qué |
 | [`../../CLAUDE.md`](../../CLAUDE.md) | Normas de la suite, incluida la regla de "usuario/a tipo" |

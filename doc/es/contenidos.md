@@ -181,7 +181,40 @@ primero.
   también el horizontal y la pregunta no tendría una sola respuesta. Ambas
   listas se comprueban al arrancar la actividad.
 
-### 3.11 Lógica y justificación
+### 3.11 Trigonometría
+
+- `trigonometry/` es **la actividad donde aparece el triángulo rectángulo
+  como figura**, y por tanto la razón que da nombre a la trigonometría.
+  Trabaja en tres bloques y en este orden: los tres lados (`lados`), la
+  razón (`razon`) y la escalera (`medir`).
+- **La razón se cuenta, nunca se escribe.** "Cuántos cuadraditos sube por
+  cada cuadradito que avanza" se lee en una cuadrícula dibujada debajo
+  del triángulo. No hay decimales, ni división, ni un solo símbolo: el
+  enunciado ya viene con los dos números colocados ("3 por cada 4"), y
+  lo que se decide es cuáles son.
+- **La idea que sostiene toda la trigonometría es que la razón no depende
+  del tamaño**: dos triángulos con la misma razón son el mismo
+  triángulo, pero más grande. Por eso `y2` pregunta si dos la comparten y
+  `y3` cuál
+  de tres la comparte, y el que la comparte es siempre el doble del
+  primero. Está dibujado a la misma escala en los dos ejes: si se
+  escalaran aparte, la inclinación del dibujo no sería la del triángulo y
+  la pregunta contestaría por lo que ve, no por lo que es.
+- **Ningún nivel calcula un seno, un coseno ni una tangente**, ni escribe
+  una letra como "s". La palabra *hipotenusa* sí se enseña, pero
+  siempre junto a su explicación ("la más larga: la que está inclinada"),
+  como los tres tipos de ángulo en `geometry/`.
+- **El bloque `medir` es la transferencia**: lo que se ha contado en
+  abstracto aparece en una escalera apoyada en la pared. Las tres
+  escaleras del último nivel miden exactamente lo mismo —7-24-25 y
+  15-20-25, las dos únicas parejas de triángulos rectángulos con la misma
+  hipotenusa que caben en un dibujo pequeño—, así que la única variable
+  es cuánto se levantan. Una actividad revisora debe comprobar esa
+  igualdad al arrancar: si las escaleras midieran distinto, la pregunta
+  "cuál llega más alto" contestaría por la longitud y no por la
+  inclinación.
+
+### 3.12 Lógica y justificación
 
 - Cada elemento de "Qué sobra", "Patrones" o "Acertijos" tiene
   **una razón evidente** y **ninguna alternativa oculta**. Una

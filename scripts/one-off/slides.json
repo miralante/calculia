@@ -1,0 +1,448 @@
+{
+ "slides": [
+  {
+   "title": "La escala",
+   "svgCount": 1,
+   "nestedSvg": 0,
+   "viewBoxes": [
+    "0 0 320 168"
+   ],
+   "outerBox": {
+    "w": 307,
+    "h": 161
+   },
+   "hostBox": {
+    "w": 307,
+    "h": 161,
+    "top": 160
+   },
+   "faceCount": 1,
+   "texts": [
+    {
+     "cls": "ruler-unit",
+     "content": "cm",
+     "x": "24",
+     "y": "80",
+     "w": 17,
+     "h": 16,
+     "top": 225,
+     "left": 57,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "0",
+     "x": "24",
+     "y": "156",
+     "w": 8,
+     "h": 14,
+     "top": 299,
+     "left": 53,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "1",
+     "x": "51.2",
+     "y": "156",
+     "w": 5,
+     "h": 14,
+     "top": 299,
+     "left": 81,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "2",
+     "x": "78.4",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 106,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "3",
+     "x": "105.6",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 132,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "4",
+     "x": "132.8",
+     "y": "156",
+     "w": 8,
+     "h": 14,
+     "top": 299,
+     "left": 158,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "5",
+     "x": "160",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 184,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "6",
+     "x": "187.2",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 210,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "7",
+     "x": "214.4",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 236,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "8",
+     "x": "241.6",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 262,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "9",
+     "x": "268.79999999999995",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 288,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "10",
+     "x": "296",
+     "y": "156",
+     "w": 13,
+     "h": 14,
+     "top": 299,
+     "left": 312,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "title": "La rayita",
+   "svgCount": 1,
+   "nestedSvg": 0,
+   "viewBoxes": [
+    "0 0 320 168"
+   ],
+   "outerBox": {
+    "w": 307,
+    "h": 161
+   },
+   "hostBox": {
+    "w": 307,
+    "h": 161,
+    "top": 160
+   },
+   "faceCount": 1,
+   "texts": [
+    {
+     "cls": "ruler-unit",
+     "content": "cm",
+     "x": "24",
+     "y": "80",
+     "w": 17,
+     "h": 16,
+     "top": 225,
+     "left": 57,
+     "visible": true
+    },
+    {
+     "cls": "span-num",
+     "content": "0",
+     "x": "24",
+     "y": "156",
+     "w": 9,
+     "h": 17,
+     "top": 297,
+     "left": 53,
+     "visible": true
+    },
+    {
+     "cls": "span-num",
+     "content": "5",
+     "x": "296",
+     "y": "156",
+     "w": 8,
+     "h": 17,
+     "top": 297,
+     "left": 314,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "title": "Llegar a la rayita",
+   "svgCount": 1,
+   "nestedSvg": 0,
+   "viewBoxes": [
+    "0 0 320 168"
+   ],
+   "outerBox": {
+    "w": 307,
+    "h": 161
+   },
+   "hostBox": {
+    "w": 307,
+    "h": 161,
+    "top": 160
+   },
+   "faceCount": 1,
+   "texts": [
+    {
+     "cls": "ruler-unit",
+     "content": "cm",
+     "x": "24",
+     "y": "36",
+     "w": 17,
+     "h": 16,
+     "top": 183,
+     "left": 57,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "0",
+     "x": "24",
+     "y": "156",
+     "w": 8,
+     "h": 14,
+     "top": 299,
+     "left": 53,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "1",
+     "x": "69.33333333333334",
+     "y": "156",
+     "w": 5,
+     "h": 14,
+     "top": 299,
+     "left": 98,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "2",
+     "x": "114.66666666666667",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 141,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "3",
+     "x": "160",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 184,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "4",
+     "x": "205.33333333333334",
+     "y": "156",
+     "w": 8,
+     "h": 14,
+     "top": 299,
+     "left": 227,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "5",
+     "x": "250.66666666666669",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 271,
+     "visible": true
+    },
+    {
+     "cls": "ruler-num",
+     "content": "6",
+     "x": "296",
+     "y": "156",
+     "w": 7,
+     "h": 14,
+     "top": 299,
+     "left": 315,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "title": "La escala de un dibujo",
+   "svgCount": 1,
+   "nestedSvg": 0,
+   "viewBoxes": [
+    "0 0 320 196"
+   ],
+   "outerBox": {
+    "w": 307,
+    "h": 188
+   },
+   "hostBox": {
+    "w": 307,
+    "h": 188,
+    "top": 160
+   },
+   "faceCount": 1,
+   "texts": [
+    {
+     "cls": "plan-row-label",
+     "content": "Plano",
+     "x": "66",
+     "y": "45",
+     "w": 31,
+     "h": 16,
+     "top": 191,
+     "left": 67,
+     "visible": true
+    },
+    {
+     "cls": "plan-num",
+     "content": "1",
+     "x": "131",
+     "y": "66",
+     "w": 5,
+     "h": 14,
+     "top": 212,
+     "left": 157,
+     "visible": true
+    },
+    {
+     "cls": "plan-num",
+     "content": "2",
+     "x": "184",
+     "y": "66",
+     "w": 7,
+     "h": 14,
+     "top": 212,
+     "left": 207,
+     "visible": true
+    },
+    {
+     "cls": "plan-num",
+     "content": "3",
+     "x": "237",
+     "y": "66",
+     "w": 7,
+     "h": 14,
+     "top": 212,
+     "left": 258,
+     "visible": true
+    },
+    {
+     "cls": "plan-num",
+     "content": "4",
+     "x": "290",
+     "y": "66",
+     "w": 8,
+     "h": 14,
+     "top": 212,
+     "left": 309,
+     "visible": true
+    },
+    {
+     "cls": "plan-equation",
+     "content": "1 cm = 50 m",
+     "x": "184",
+     "y": "90",
+     "w": 85,
+     "h": 18,
+     "top": 232,
+     "left": 168,
+     "visible": true
+    },
+    {
+     "cls": "plan-measure",
+     "content": "3 cm",
+     "x": "157.5",
+     "y": "120",
+     "w": 31,
+     "h": 17,
+     "top": 262,
+     "left": 169,
+     "visible": true
+    },
+    {
+     "cls": "plan-row-label",
+     "content": "El camino",
+     "x": "66",
+     "y": "139",
+     "w": 54,
+     "h": 16,
+     "top": 281,
+     "left": 43,
+     "visible": true
+    },
+    {
+     "cls": "plan-measure",
+     "content": "150 m",
+     "x": "184",
+     "y": "166",
+     "w": 39,
+     "h": 17,
+     "top": 306,
+     "left": 191,
+     "visible": true
+    },
+    {
+     "cls": "plan-row-label",
+     "content": "Vida real",
+     "x": "66",
+     "y": "185",
+     "w": 49,
+     "h": 16,
+     "top": 325,
+     "left": 48,
+     "visible": true
+    }
+   ]
+  }
+ ],
+ "errors": []
+}

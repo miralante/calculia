@@ -118,6 +118,17 @@
     }).join(' ');
   }
 
+  /* One cell of the honeycomb, from the same six offsets every time it is
+     drawn. The comb and the cell drawn on its own are the same polygon this
+     way, so the one that answers "this is the hexagon" cannot quietly drift
+     into a different shape than the one the caption is about. */
+  var CELL_OFFSETS = [[16, 0], [8, 14], [-8, 14], [-16, 0], [-8, -14], [8, -14]];
+  function cellPoints(cx, cy) {
+    return CELL_OFFSETS.map(function (offset) {
+      return (cx + offset[0]) + ',' + (cy + offset[1]);
+    }).join(' ');
+  }
+
   /* The same list of points, as the `d` of a path. */
   function pathFromPoints(points, close) {
     return points.map(function (p, index) {
@@ -340,29 +351,42 @@
          beside it, not inside it. The bee used to sit in the middle cell,
          which hid the one cell the caption is about: seven cells, each
          visibly a hexagon. Beside the comb it still says "this is where
-         bees live" without covering the thing being counted. */
+         bees live" without covering the thing being counted.
+         And one cell is now drawn on its own, well clear of the comb,
+         because that is the question a child really has in front of a
+         honeycomb: "which bit of it is the hexagon?". The comb alone
+         answers "all of it at once", so the shape never actually gets
+         looked at. On its own it can be pointed at and its six sides
+         counted. It is the same polygon at the same size, so it is one
+         cell of the comb and not some other shape that happens to sit
+         nearby; and it sits below the comb and to the right of it, far
+         enough that nobody counts eight cells in the comb.
+         The canvas grew downwards to make room for it: at 156 x 100 the
+         drawing used barely two thirds of the card's height and left
+         empty bands above and below, which none of the other drawings
+         here have. */
       var cells = [
         { x: 20, y: 30 }, { x: 44, y: 44 }, { x: 68, y: 30 },
         { x: 20, y: 58 }, { x: 44, y: 72 }, { x: 68, y: 58 },
         { x: 44, y: 16 }
       ];
-      var offsets = [[16, 0], [8, 14], [-8, 14], [-16, 0], [-8, -14], [8, -14]];
       var cellsSvg = cells.map(function (cell, index) {
-        var points = offsets.map(function (offset) {
-          return (cell.x + offset[0]) + ',' + (cell.y + offset[1]);
-        }).join(' ');
-        var fill = index % 2 ? '#EFBF47' : '#F4C95D';
-        return '<polygon points="' + points + '" fill="' + fill + '"/>';
+        return '<polygon points="' + cellPoints(cell.x, cell.y) + '" fill="' +
+          (index % 2 ? '#EFBF47' : '#F4C95D') + '"/>';
       }).join('');
+      /* The lone cell: the wax and the outline of the comb, because it is
+         one of those cells and nothing more. */
+      var looseSvg = '<polygon points="' + cellPoints(118, 116) +
+        '" fill="#F4C95D"/>';
       /* The bee keeps the wax yellow and the ink of the theme, the same
          split the comb uses. Its body cannot be the surface colour any
          more: outside the comb that is the colour of the card, so the bee
          would disappear into the background instead of into a cell. The
          outline is what carries it against a light card.
-         Drawn with ellipses and circles, not polygons, so the hexagon
-         cell count stays at 7. The gap to the comb is deliberately wide:
-         the smoke measures the bee's box, and a rotated wing reports a box
-         wider than the wing. */
+         Drawn with ellipses and circles, not polygons, so the cells stay
+         countable: seven in the comb and one on its own. The gap to the
+         comb is deliberately wide: the smoke measures the bee's box, and a
+         rotated wing reports a box wider than the wing. */
       var bee =
         '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
         '<ellipse cx="107" cy="38" rx="11" ry="6" fill="var(--color-superficie)" ' +
@@ -375,9 +399,9 @@
         '<circle cx="118.5" cy="34" r="1.6" fill="#F4C95D" stroke="none"/>' +
         '<circle cx="123.5" cy="34" r="1.6" fill="#F4C95D" stroke="none"/>' +
         '</g>';
-      return '<svg viewBox="0 0 156 100" aria-hidden="true">' +
+      return '<svg viewBox="0 0 156 140" aria-hidden="true">' +
         '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        cellsSvg + '</g>' + bee + '</svg>';
+        cellsSvg + looseSvg + '</g>' + bee + '</svg>';
     }
     if (id === 'triangularPrism') {
       /* A tent: the triangular gable at the front, the ridge running back
@@ -1032,6 +1056,7 @@
         visualAria: App.i18n.t('gen.netAria')
           .replace(/\{n\}/g, net.faces).replace(/\{name\}/g, netName(net.id)),
         legend: App.i18n.t('gen.facesHint'),
+        hint: App.i18n.t('gen.socraticFaces'),
         options: faceOptions(net.faces)
       };
     },
@@ -1048,6 +1073,7 @@
         visual: netSvg(net),
         visualAria: App.i18n.t('gen.netPiecesAria').replace(/\{n\}/g, net.faces),
         legend: App.i18n.t('gen.netHint'),
+        hint: App.i18n.t('gen.socraticNet'),
         options: App.utils.shuffle(DATA.nets.map(function (o) {
           return {
             html: '<span class="solid-name">' + netName(o.id) + '</span>' +
@@ -1076,6 +1102,7 @@
         prompt: App.i18n.t('gen.shapeNamePrompt'),
         visual: '<div class="shape-stage">' + shapeSvg(id, false) + '</div>',
         visualAria: shapeName(id),
+        hint: App.i18n.t('gen.socraticName'),
         options: App.utils.shuffle(
           [{ html: shapeName(id), correct: true }].concat(
             others.map(function (s) {
@@ -1095,6 +1122,7 @@
         visual: '<div class="shape-stage">' + shapeSvg(id, true) + '</div>' +
           '<p class="hint">' + App.i18n.t(counting ? 'gen.cornersHint' : 'gen.sidesHint') + '</p>',
         visualAria: shapeName(id),
+        hint: App.i18n.t(counting ? 'gen.socraticCorners' : 'gen.socraticSides'),
         options: buildCounts(DATA.sides[id][nv.count])
       };
     },
@@ -1116,6 +1144,7 @@
            length of a side is already in the prompt, which is read out
            on its own. */
         visualAria: shapeName(nv.shape),
+        hint: App.i18n.t('gen.socraticPerimeter'),
         options: perimeterOptions(total, nv.side)
       };
     },
@@ -1131,6 +1160,7 @@
         visual: '<div class="shape-stage">' + areaSvg() + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.areaHint') + '</p>',
         visualAria: App.i18n.t('gen.areaAria'),
+        hint: App.i18n.t('gen.socraticArea'),
         options: App.utils.shuffle([
           { html: App.i18n.t('gen.areaEdge'), correct: false },
           { html: App.i18n.t('gen.areaInside'), correct: true },
@@ -1155,6 +1185,7 @@
         prompt: App.i18n.t('gen.volumePrompt'),
         visual: '<p class="hint">' + App.i18n.t('gen.volumeHint') + '</p>',
         visualAria: App.i18n.t('gen.volumeAria').replace(/\{name\}/g, solidName(nv.solid)),
+        hint: App.i18n.t('gen.socraticVolume'),
         options: App.utils.shuffle(others.concat([{
           html: solidThumb(nv.solid, true),
           aria: App.i18n.t('solid.' + nv.solid),
@@ -1175,6 +1206,7 @@
         visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false) + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.symmetryHint') + '</p>',
         visualAria: shapeName(nv.shape),
+        hint: App.i18n.t('gen.socraticSymmetry'),
         options: keys.map(function (key) {
           return {
             html: shapeThumb(nv.shape, AXES[key]),
@@ -1195,6 +1227,7 @@
         visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false) + '</div>' +
           '<p class="hint">' + App.i18n.t('gen.similarHint') + '</p>',
         visualAria: shapeName(nv.shape),
+        hint: App.i18n.t('gen.socraticSimilar'),
         options: App.utils.shuffle(
           [{ id: nv.shape, correct: true }].concat(nv.against.map(function (id) {
             return { id: id, correct: false };
@@ -1231,6 +1264,7 @@
           prompt: App.i18n.t('gen.solidToObjectPrompt').replace('{name}', nameOf(solid)),
           visual: '<p class="hint">' + App.i18n.t('gen.solidHint') + '</p>',
           visualAria: nameOf(solid),
+          hint: App.i18n.t('gen.socraticSolid'),
           options: App.utils.shuffle(
             [{ html: '<span class="solid-object">' + object + '</span>',
                aria: nameOf(solid), correct: true }].concat(
@@ -1249,6 +1283,7 @@
         visual: '<div class="shape-stage"><span class="solid-object solid-big">' +
           object + '</span></div>',
         visualAria: nameOf(solid),
+        hint: App.i18n.t('gen.socraticSolid'),
         options: App.utils.shuffle(
           [{ html: nameOf(solid), correct: true }].concat(
             others.map(function (s) {
@@ -1306,6 +1341,19 @@
     activity = DATA.activities[id];
     activity.id = id;
     startRound(levelFromProgress(id));
+  }
+
+  /* "Hacer el test" only asks which test when there is more than one.
+     With a single test the menu said "Elige un test" above a grid with
+     exactly one button, so the child paid a tap for a decision there was
+     no way to make — and the button's own promise ("do the test") was not
+     kept on the press. The menu is not removed: the moment DATA grows a
+     second activity it comes back by itself, and it is still how the end
+     screen gets back to the list. */
+  function startTest() {
+    var ids = Object.keys(DATA.activities);
+    if (ids.length === 1) { openActivity(ids[0]); return; }
+    show(screenMenu);
   }
 
   /* ---- Game ---- */
@@ -1414,9 +1462,13 @@
   }
 
   /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it. */
+     it invites another look. Only the second one explains it.
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
+     every question. The generic line is only the fallback, for a question
+     that forgot to bring its own. */
   function showHint() {
-    explanationEl.textContent = App.i18n.t('hint');
+    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
     explanationWrap.classList.remove('hidden');
   }
 
@@ -1554,7 +1606,7 @@
   });
   $('#introContinue').addEventListener('click', function () { show(screenReal); });
   $('#realBack').addEventListener('click', function () { show(screenIntro); });
-  $('#realContinue').addEventListener('click', function () { show(screenMenu); });
+  $('#realContinue').addEventListener('click', startTest);
   $('#menuBack').addEventListener('click', function () { show(screenReal); });
 
   paintGallery();

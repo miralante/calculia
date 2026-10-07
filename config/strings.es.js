@@ -28,9 +28,9 @@
     module2: '🧩 Razonamiento y lógica',
 
     activity: {
-      'places': 'Sitios y tamaños', 'shapes': 'Formas', 'geometry': 'Geometría', 'similar': 'Formas parecidas', 'numbers': 'Los Números', 'fractions-measures': 'Fracciones', 'measures': 'Medidas', 'scale': 'Escala',
+      'places': 'Sitios y tamaños', 'shapes': 'Formas', 'trigonometry': 'Trigonometría', 'geometry': 'Geometría', 'similar': 'Formas parecidas', 'numbers': 'Los Números', 'fractions-measures': 'Fracciones', 'measures': 'Medidas', 'scale': 'Escala',
       'mental-math': 'Restar y Cálculo Mental', 'percent': 'Porcentajes', 'money': 'Dinero',
-      'divisibility': 'Grupos exactos', 'operations': 'Cuentas grandes', 'quantities': 'Cantidades', 'math-tables': 'Las Tablas',
+      'divisibility': 'Grupos exactos', 'operations': 'Cuentas grandes', 'quantities': 'Cantidades', 'ordinals': 'Números ordinales', 'math-tables': 'Las Tablas',
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',
       'problems': 'Problemas', 'temperature': 'Temperatura del agua',
       'wallet': 'El Monedero', 'algebra': 'La balanza', 'charts': 'Datos y gráficos', 'calendar': 'El Calendario', 'clock': 'El Reloj', 'stories': 'Historias',

@@ -165,9 +165,10 @@
   }
 
   /* A ruler with its marks and numbers. `here` is the mark the question
-     is about; it is left out of the loop and drawn afterwards, taller,
-     so the difference is carried by the LENGTH of the mark as well as by
-     its colour (WCAG 1.4.1: never colour alone). */
+     is about; its plain mark is left out of the loop and it is drawn
+     afterwards, taller, so the difference is carried by the LENGTH of
+     the mark as well as by its colour (WCAG 1.4.1: never colour alone).
+     Its number is still printed: the mark is pointed out, not removed. */
   function rulerFace(from, to, step, labelEvery, here) {
     var px = RULER.w / (to - from);
     var labelStep = Math.max(1, Math.round(labelEvery / step));
@@ -175,11 +176,19 @@
     var ticks = '';
     var labels = '';
     for (var v = from; v <= to; v += step, i += 1) {
-      if (here !== undefined && v === here) continue;
       var x = RULER.x + (v - from) * px;
       var isLabel = i % labelStep === 0;
-      ticks += '<line class="ruler-tick" x1="' + x + '" y1="' + RULER.top +
-        '" x2="' + x + '" y2="' + (RULER.top + (isLabel ? 18 : 10)) + '"/>';
+      /* Only the TICK of the reached mark is left out; its NUMBER is
+         still printed. Skipping the number as well left the ruler with
+         a hole exactly where the pencil points — on the third slide the
+         pencil reached 6 and the 6 was not written — and in l1, where
+         every mark carries a number, it happened on every question. The
+         number sits 40px below the mark, so the taller reached tick does
+         not touch it: both can be drawn. */
+      if (here === undefined || v !== here) {
+        ticks += '<line class="ruler-tick" x1="' + x + '" y1="' + RULER.top +
+          '" x2="' + x + '" y2="' + (RULER.top + (isLabel ? 18 : 10)) + '"/>';
+      }
       if (isLabel) {
         labels += '<text class="ruler-num" x="' + x + '" y="' + NUM_Y + '">' + v + '</text>';
       }
@@ -233,11 +242,15 @@
     var ticks = '';
     var labels = '';
     for (var v = cfg.from; v <= cfg.to; v += cfg.step, i += 1) {
-      if (v === cfg.value) continue;
       var y = GAUGE.bottom - (v - cfg.from) * py;
       var isLabel = i % labelStep === 0;
-      ticks += '<line class="gauge-tick" x1="' + tickX + '" y1="' + y +
-        '" x2="' + (tickX + (isLabel ? 20 : 11)) + '" y2="' + y + '"/>';
+      /* Same as on the ruler: the reached mark loses its tick, not its
+         number. The number sits at numX, four pixels past the end of
+         the reached tick, so both fit as well. */
+      if (v !== cfg.value) {
+        ticks += '<line class="gauge-tick" x1="' + tickX + '" y1="' + y +
+          '" x2="' + (tickX + (isLabel ? 20 : 11)) + '" y2="' + y + '"/>';
+      }
       if (isLabel) {
         labels += '<text class="gauge-num" x="' + numX + '" y="' + (y + 4) + '">' + v + '</text>';
       }
@@ -280,8 +293,14 @@
   /* A stretch of ruler with only its two end numbers written, so the
      marks between them can be counted — the picture of "a step". */
   function spanSvg(span, unit) {
-    var x0 = 44;
-    var w = 232;
+    /* The SAME x and the SAME width as every other ruler in the
+       activity. This stretch used to start at 44 and be 232 wide while
+       the rest of the app draws from RULER.x over RULER.w, so the
+       second slide showed a rule that was not the rule of the first —
+       same marks, different ruler, and nothing in the drawing said so.
+       One ruler everywhere: the eye learns it once. */
+    var x0 = RULER.x;
+    var w = RULER.w;
     var seg = w / span.gaps;
     var ticks = '';
     for (var i = 0; i <= span.gaps; i += 1) {
@@ -322,6 +341,98 @@
       '" height="24" rx="5"/>';
     return svgWrap(RULE_BOX, rulerUnit(unit) + guides + pencil +
       rulerFace(0, rec.to, 1, 1, undefined));
+  }
+
+  /* "The object reaches a mark" as a thing you can see: a pencil LYING
+     on the ruler, starting on zero and ending its tip on the reached
+     mark, with both ends tied to their numbers by a guide. The mark it
+     reaches is the same taller, differently coloured one a question
+     uses, and the number under it is still written — the whole point is
+     that you need that number to know how long the pencil is.
+
+     Its own body and tip, not the plain bar objectSpanSvg() draws: that
+     one is a "start here, end here" marker for the counting question,
+     and a green block with nothing on it does not read as a pencil. The
+     unit sits above the pencil instead of in rulerUnit()'s usual place,
+     which is inside the pencil. */
+  function conceptReachSvg(rec, unit) {
+    var px = RULER.w / rec.to;
+    var fx = RULER.x + rec.from * px;
+    var tx = RULER.x + rec.to * px;
+    var yTop = 56;
+    var h = 20;
+    var tipW = 14;
+    var bodyW = (tx - fx) - tipW;
+    var pencil =
+      '<rect class="pencil-body" x="' + fx + '" y="' + yTop + '" width="' + bodyW +
+      '" height="' + h + '" rx="3"/>' +
+      '<path class="pencil-tip" d="M' + (fx + bodyW) + ' ' + yTop + ' L' + tx + ' ' +
+      (yTop + h / 2) + ' L' + (fx + bodyW) + ' ' + (yTop + h) + ' Z"/>';
+    var guides = '<line class="span-guide" x1="' + fx + '" y1="' + (yTop + h) + '" x2="' +
+      fx + '" y2="' + RULER.top + '"/>' +
+      '<line class="span-guide" x1="' + tx + '" y1="' + (yTop + h) + '" x2="' + tx +
+      '" y2="' + RULER.top + '"/>';
+    return svgWrap(RULE_BOX,
+      '<text class="ruler-unit" x="' + RULER.x + '" y="36">' + unit + '</text>' +
+      guides + pencil + rulerFace(0, rec.to, 1, 1, rec.to));
+  }
+
+  /* The idea behind the plan scale, as a picture with THREE rows instead
+     of the two a question needs: the scale bar with the equation it
+     stands for, the same thing measured on the plan, and the same thing
+     measured in real life. One question never shows both at once —they
+     are the two directions of the same activity— but the IDEA is the
+     comparison, and the comparison is what the fourth slide is for.
+
+     The real row is longer and carries no marks on purpose. Long, so
+     "bigger in real life" is visible; unmarked, so nobody can count it
+     against the bar and get 150 m by measuring the picture. Which is
+     the same rule planSvg() already follows on its own. */
+  function planCompareSvg(cfg) {
+    var seg = PLAN.w / PLAN.segs;
+    var barY = 30;
+    var parts = '';
+    var cmLabels = '';
+    for (var i = 1; i <= PLAN.segs; i += 1) {
+      var x = PLAN.x + seg * i;
+      parts += '<line class="plan-seg" x1="' + x + '" y1="' + barY + '" x2="' + x +
+        '" y2="' + (barY + 20) + '"/>';
+      cmLabels += '<text class="plan-num" x="' + x + '" y="' + (barY + 36) +
+        '" text-anchor="middle">' + i + '</text>';
+    }
+    parts = '<rect class="plan-bar" x="' + PLAN.x + '" y="' + barY + '" width="' + PLAN.w +
+      '" height="20" rx="4"/>' + parts + cmLabels;
+    /* The equation, in the accent colour and bigger than the row labels:
+       it is the one line that says WHICH scale this is. */
+    parts += '<text class="plan-equation" x="' + (PLAN.x + PLAN.w / 2) + '" y="' + (barY + 60) +
+      '" text-anchor="middle">1 cm = ' + cfg.key + ' ' + cfg.unit + '</text>';
+
+    var label = function (key, y) {
+      return '<text class="plan-row-label" x="' + (PLAN.x - 12) + '" y="' + (y + 5) +
+        '" text-anchor="end">' + App.i18n.t(key) + '</text>';
+    };
+    /* Row 2: on the plan, and drawn to the plan's own scale, so its
+       length IS countable against the bar above. */
+    var yPlan = barY + 104;
+    var planLen = cfg.cm * seg;
+    parts += '<line class="plan-route" x1="' + PLAN.x + '" y1="' + yPlan + '" x2="' +
+      (PLAN.x + planLen) + '" y2="' + yPlan + '"/>' +
+      '<circle class="plan-dot" cx="' + PLAN.x + '" cy="' + yPlan + '" r="6"/>' +
+      '<circle class="plan-dot" cx="' + (PLAN.x + planLen) + '" cy="' + yPlan + '" r="6"/>' +
+      '<text class="plan-measure" x="' + (PLAN.x + planLen / 2) + '" y="' + (yPlan - 14) +
+      '" text-anchor="middle">' + cfg.cm + ' cm</text>' + label('gen.planPath', yPlan);
+    /* Row 3: in real life, longer and to no scale, with the number that
+       is 50 times the one above written on it. */
+    var yReal = yPlan + 46;
+    parts += '<line class="plan-route" x1="' + PLAN.x + '" y1="' + yReal + '" x2="' +
+      (PLAN.x + PLAN.w) + '" y2="' + yReal + '"/>' +
+      '<circle class="plan-dot" cx="' + PLAN.x + '" cy="' + yReal + '" r="6"/>' +
+      '<circle class="plan-dot" cx="' + (PLAN.x + PLAN.w) + '" cy="' + yReal + '" r="6"/>' +
+      '<text class="plan-measure" x="' + (PLAN.x + PLAN.w / 2) + '" y="' + (yReal - 14) +
+      '" text-anchor="middle">' + cfg.real + ' ' + cfg.unit + '</text>' + label('gen.planReal', yReal);
+
+    return svgWrap('0 0 320 ' + (yReal + 16),
+      label('gen.planLabel', barY + 10) + parts);
   }
 
   /* The scale of a plan: a bar split into four centimetres, which is
@@ -378,20 +489,24 @@
       return svgWrap(RULE_BOX, rulerUnit('cm') + rulerFace(0, 10, 1, 1, undefined));
     }
     if (id === 'rayita') {
-      /* The marks between two numbers, all the same length: a step. */
-      return svgWrap(RULE_BOX, rulerUnit('cm') +
-        spanSvg({ from: 0, to: 5, gaps: 5 }, 'cm'));
+      /* The marks between two numbers, all the same length: a step.
+         spanSvg() and rulerSvg() and planSvg() ALREADY return a whole
+         <svg>: wrapping them in svgWrap() again nested a second one
+         inside the first, and the unit came out printed twice ("cm cm")
+         on the two slides that wrap. Each one is returned as it is. */
+      return spanSvg({ from: 0, to: 5, gaps: 5 }, 'cm');
     }
     if (id === 'llegar') {
-      /* The pencil on its mark, and that mark drawn taller than the
-         rest so the eye knows which one is being asked about. */
-      return svgWrap(RULE_BOX, rulerUnit('cm') +
-        rulerSvg({ from: 0, to: 10, step: 1, labelEvery: 1, value: 6, unit: 'cm' }));
+      /* An object OF that measure, not a pointer to a mark: it starts at
+         zero and ends on the reached mark, so the sentence "esa rayita
+         es su medida" is a thing you can see. The mark it reaches is the
+         same taller, coloured one a question uses. */
+      return conceptReachSvg({ from: 0, to: 6 }, 'cm');
     }
     /* id === 'dibujo': the plan's scale, which is a step too — one
-       centimetre of the drawing for so much of real life. */
-    return svgWrap('0 0 320 176',
-      planSvg({ key: 5, unit: 'm', cm: 3 }));
+       centimetre of the drawing for so much of real life. Here both
+       halves at once, with the equation that joins them. */
+    return planCompareSvg({ key: 50, unit: 'm', cm: 3, real: 150 });
   }
 
   function paintConcept() {

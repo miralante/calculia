@@ -1,26 +1,67 @@
 /* Quantities — tool-specific styles.
-   La actividad es leer/escribir números grandes y descomponer cifras
-   por posición. Compartimos el color de cifra con la actividad
-   numbers (azul unidades / verde decenas / morado centenas) replicando
-   las clases localmente para mantener el contrato "actividad aislada"
-   (no se importan estilos entre tools/). */
 
+   Two halves share this file: the three typing practices (a number
+   in a box and a text field) and the 'groups' practice (the
+   roman-numerals-style walkthrough: carousel, real-life examples,
+   colour reminder, levels, quiz).
+
+   Contract "actividad aislada": no styles are imported from other
+   tools/, so every class used here is defined here. Only .btn,
+   .option-btn and .explanation come from components.css.
+
+   The six group colours are module tokens (shared core), never
+   literals, so they survive light / dark / high-contrast. Each one
+   is always shown together with its NAME (WCAG 1.4.1: colour is never
+   the only carrier of information), and each chip pairs the strong
+   token as text with its own -suave variant as background — if the
+   background follows the theme, the text inside must follow it too.
+   The teal of the header is deliberately not a group colour, so the
+   brand and the palette never collide. */
 .tool-header h1 { color: var(--mod-razonamiento); }
 
+/* --- Group palette ---
+   Six groups, six distinct module tokens, plus the header teal. */
+.grp-unit      { color: var(--mod-cuerpo); }
+.grp-ten       { color: var(--mod-coordinacion); }
+.grp-hundred   { color: var(--mod-secuencia); }
+.grp-thousand  { color: var(--mod-emocional); }
+.grp-halfdozen { color: var(--mod-lenguaje); }
+.grp-dozen     { color: var(--mod-memoria); }
+
+.grp-bg-unit      { background: var(--mod-cuerpo-suave); border-color: var(--mod-cuerpo); }
+.grp-bg-ten       { background: var(--mod-coordinacion-suave); border-color: var(--mod-coordinacion); }
+.grp-bg-hundred   { background: var(--mod-secuencia-suave); border-color: var(--mod-secuencia); }
+.grp-bg-thousand  { background: var(--mod-emocional-suave); border-color: var(--mod-emocional); }
+.grp-bg-halfdozen { background: var(--mod-lenguaje-suave); border-color: var(--mod-lenguaje); }
+.grp-bg-dozen     { background: var(--mod-memoria-suave); border-color: var(--mod-memoria); }
+
+/* ============================================================
+   Menú de prácticas y de niveles (compartido por los dos menús)
+   ============================================================ */
 .practice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--espacio); }
 .btn-practice { min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: var(--mod-razonamiento); text-align: center; }
 .practice-icon, .task-icon { font-size: 42px; line-height: 1; }
-.btn-practice small { font-size: var(--texto-pequeno); font-weight: 400; }
 .practice-name { font-weight: 700; }
 .practice-detail { font-size: var(--texto-pequeno); font-weight: 400; opacity: 0.9; }
+.practice-stars { font-size: var(--texto-pequeno); letter-spacing: 2px; }
+.practice-done {
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  background: var(--color-acierto-suave);
+  color: var(--color-acierto);
+  border-radius: var(--radio);
+  padding: 2px 12px;
+  margin-top: 4px;
+}
 
+/* ============================================================
+   Prácticas de escritura
+   ============================================================ */
 .task-card { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); text-align: center; border-color: var(--mod-razonamiento-suave); }
 .task-card h2 { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); }
 .task-detail { margin: 0; color: var(--color-texto-suave); }
 
 #nextTask { align-self: center; }
-
-/* --- Número mostrado (varios modos) --- */
 
 .number-shown {
   font-size: 52px;
@@ -37,18 +78,11 @@
 
 .number-shown--raw {
   /* Modo "puntos": lo que se ve NO tiene separador; el usuario debe
-     añadirlo. Hacemos un guiño visual con un fondo más neutro para
-     que se note que "aquí falta algo". */
+     añadirlo. Fondo neutro y borde discontinuo para que se note que
+     "aquí falta algo". */
   background: var(--color-superficie);
   border-style: dashed;
 }
-
-.number-shown--colored {
-  background: var(--color-superficie);
-  border: 3px solid var(--mod-razonamiento-suave);
-}
-
-/* --- Input de answer (typing) --- */
 
 .answer-input {
   font-size: 32px;
@@ -70,83 +104,239 @@
   outline-offset: 2px;
 }
 
-/* --- Opciones para descomponer (3 botones con cifras grandes) --- */
-
-.options-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(80px, 1fr));
-  gap: var(--espacio);
-  width: min(100%, 480px);
-}
-
-.option-btn {
-  min-height: var(--boton-min);
-  min-width: var(--boton-min);
-  padding: 12px;
-  border: 3px solid var(--color-borde);
-  border-radius: var(--radio);
-  background: var(--color-superficie);
-  color: var(--color-texto);
-  font-size: var(--texto-grande);
-  font-weight: 800;
-  cursor: pointer;
-  text-align: center;
-}
-
-.option-btn:hover {
-  border-color: var(--mod-razonamiento);
-}
-
-.option-btn.locked {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.option-btn--digit { font-size: 42px; }
-
-/* --- Leyenda de posiciones (sólo descomponer) --- */
-
-.legend-pos {
-  font-size: var(--texto-pequeno);
-  font-weight: 700;
-  color: var(--color-texto-suave);
-  text-align: center;
-  margin: 0;
-}
-
-/* --- Botón de audio --- */
-
-#btnEscucharBtn {
+#listenBtn {
   font-size: 28px;
   min-width: var(--boton-min);
   min-height: var(--boton-min);
+  align-self: center;
 }
 
-/* --- Color de cifras por posición (réplica local del convenio de numbers) --- */
+/* Color de cifras por posición. Solo las cuatro primeras posiciones
+   las pinta la práctica de grupos (unidades a millares); las de
+   millones se conservan para que el lector de números grandes siga
+   coloreando igual que antes. */
+.digit-u { color: var(--mod-cuerpo); }
+.digit-d { color: var(--mod-coordinacion); }
+.digit-c { color: var(--mod-secuencia); }
+.digit-sep { color: var(--color-texto-suave); }
+.sign { color: var(--mod-memoria); }
 
-.digit-u { color: var(--mod-coordinacion); }    /* azul — unidades */
-.digit-d { color: var(--mod-secuencia); }       /* verde — decenas */
-.digit-c { color: var(--mod-emocional); }       /* morado — centenas */
-.digit-sep { color: var(--color-texto-suave); } /* gris — separador */
-.sign { color: var(--mod-memoria); }           /* naranja — signo menos */
-
-/* Las clases con sufijo -mil / -millon / -mil-millones heredan el
-   color base; el sufijo permite, si en el futuro se quiere cambiar
-   el color por grupo, hacerlo sin tocar .digit-u/.digit-d/.digit-c. */
 .cifra-mil, .cifra-millon, .cifra-mil-millones { /* placeholder para diferenciación futura */ }
 
+/* ============================================================
+   Práctica "grupos" — recorrido tipo números romanos
+   ============================================================ */
+
+.reference-card { border-color: var(--mod-razonamiento-suave); }
+.reference-title { margin: 0; font-size: var(--texto-grande); color: var(--mod-razonamiento); }
+.reference-text { margin: 0; color: var(--color-texto); }
+
+.intro-card, .famosos-card, .symbols-card, .rule-card, .quiz-card {
+  align-items: center;
+  gap: var(--espacio);
+}
+
+/* --- Pantalla 1: carrusel --- */
+.carousel-card { border-color: var(--mod-razonamiento-suave); }
+
+.carousel-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 120px;
+  padding: var(--espacio);
+  border: 2px dashed var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  width: 100%;
+  max-width: 480px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s ease;
+}
+.carousel-display:active { transform: scale(0.97); }
+.carousel-display:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 2px; }
+
+/* El nombre del grupo en su color y en grande (≥20px bold, así que
+   cuenta como texto grande a efectos de contraste AAA), y su valor
+   debajo. El color nunca va solo: el nombre siempre está escrito. */
+.carousel-name { font-size: 44px; font-weight: 800; line-height: 1.1; text-align: center; }
+.carousel-value { font-size: var(--texto-grande); font-weight: 700; color: var(--color-texto); font-variant-numeric: tabular-nums; }
+
+.carousel-caption {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto);
+  text-align: center;
+  margin: 0;
+  min-height: 1.2em;
+}
+
+.carousel-controls { display: flex; align-items: center; justify-content: center; gap: var(--espacio); width: 100%; }
+.carousel-controls .btn { min-width: var(--boton-min); align-self: center; padding: 4px 14px; }
+
+/* --- Pantalla 2: ejemplos reales --- */
+.famosos-card { border-color: var(--mod-razonamiento-suave); }
+.famoso-ejemplo-row { display: flex; align-items: center; justify-content: center; gap: var(--espacio); width: 100%; flex-wrap: wrap; }
+
+.famoso-ejemplo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-weight: 800;
+  padding: var(--espacio) var(--espacio-grande);
+  border: 3px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  text-align: center;
+  width: 100%;
+  max-width: 480px;
+  flex: 1 1 240px;
+}
+.famoso-group { font-size: 44px; line-height: 1.1; }
+.famoso-value { display: flex; align-items: baseline; justify-content: center; gap: 6px; }
+.famoso-equals { color: var(--color-texto-suave); font-size: var(--texto-grande); }
+.famoso-number { font-size: var(--texto-grande); color: var(--color-texto); font-variant-numeric: tabular-nums; }
+
+.famous-text { margin: 0; color: var(--color-texto); text-align: center; }
+
+/* --- Pantalla 3: recordatorio --- */
+.reminder-buttons { justify-content: center; margin-top: var(--espacio-grande); }
+
+.groups-row { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--espacio); width: 100%; }
+
+.group-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--espacio);
+  min-width: 140px;
+  border: 3px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+.group-chip-name { font-size: var(--texto-base); font-weight: 800; }
+.group-chip-size { font-size: var(--texto-grande); font-weight: 700; color: var(--color-texto); font-variant-numeric: tabular-nums; }
+
+.rule-card { border-color: var(--mod-razonamiento-suave); }
+.rule-title { font-weight: 700; margin: 0; text-align: center; font-size: var(--texto-base); color: var(--color-texto); }
+
+/* "3 decenas = 3 × 10 = 30". Cada pieza que pertenece al grupo
+   conserva su color (viene de la clase grp-* que app.js añade); el
+   total va en color de texto, para que el resultado no compita con
+   el multiplicando. ex-count y ex-size son las dos piezas que el
+   color por sí solo no distingue — el número de grupos y lo que
+   vale cada uno—, así que se les fija la anchura de cifras para
+   que no bailen al cambiar de grupo. */
+.rule-example {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.ex-phrase { font-size: var(--texto-grande); }
+.ex-count, .ex-size { min-width: 2ch; text-align: center; }
+.ex-op { color: var(--color-texto-suave); }
+.ex-total { color: var(--color-texto); }
+
+/* --- Pantalla 4: juego --- */
+.quiz-card { border-color: var(--mod-razonamiento-suave); }
+
+.quiz-shown {
+  font-size: 72px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-align: center;
+  min-height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: break-word;
+}
+
+/* Cuando el prompt es una frase ("4 decenas") y no una cifra, 72px
+   no cabe en 320px de ancho. Este es el único caso en que se
+   necesita el texto más pequeño. */
+.quiz-shown--phrase { font-size: var(--texto-titulo); letter-spacing: 1px; }
+
+.context-text {
+  margin: 0;
+  text-align: center;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-pequeno);
+  max-width: 480px;
+}
+
+.question { color: var(--color-texto-suave); font-size: var(--texto-grande); }
+
+.groups-progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio);
+  flex-wrap: wrap;
+}
+.progress-step { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
+
+/* Cabecera de la mini-ronda encadenada: sólo aparece al pasar de un
+   sub-nivel al siguiente dentro de un grupo, para que se entienda
+   que el nivel cambió a propósito y no por error. */
+.round-header {
+  margin: 0;
+  padding: var(--espacio);
+  border-radius: var(--radio);
+  background: var(--mod-razonamiento-suave);
+  color: var(--color-texto);
+  font-weight: 700;
+  text-align: center;
+}
+
+/* minmax(110px) en vez de tres columnas fijas: a 375px, tres
+   columnas de ~90px obligaban a partir la frase ("4 dece/nas"), y
+   una frase de grupo partida se lee mal. Con 110px mínimos salen
+   dos columnas cómodas a 320-375px y tres en tablet y escritorio. */
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: var(--espacio); width: min(100%, 480px); }
+
+/* Opciones de texto: `break-word` y no `anywhere` — `anywhere` parte
+   la frase aunque haya sitio; `break-word` sólo corta si de verdad
+   no cabe. */
+.option-btn--word { font-size: var(--texto-base); overflow-wrap: break-word; padding: 12px 10px; }
+
+/* --- Pantalla final --- */
+.big-emoji { font-size: 96px; }
+
+.transfer { color: var(--color-texto-suave); max-width: 480px; }
+.contexto, .explanation { color: var(--color-texto-suave); }
+
+/* ============================================================
+   Responsive — 320 / 375 / 768 / desktop
+   ============================================================ */
 @media (max-width: 480px) {
   .practice-grid { grid-template-columns: 1fr; }
   .task-card { padding: var(--espacio); }
   .number-shown { min-width: 0; width: 100%; font-size: 40px; }
   .answer-input { min-width: 0; width: 100%; }
-  .options-grid { grid-template-columns: repeat(3, 1fr); }
-  .option-btn--digit { font-size: 32px; }
+  .carousel-name, .famoso-group { font-size: 32px; }
+  .quiz-shown { font-size: 56px; min-height: 72px; }
+  .quiz-shown--phrase { font-size: var(--texto-grande); }
+  .rule-example { font-size: var(--texto-base); }
+  .group-chip { min-width: 0; flex: 1 1 120px; }
+  .big-emoji { font-size: 64px; }
 }
 
-#screenEnd .transfer {
-  margin: 8px auto 24px;
-  font-size: 1.1rem;
-  color: var(--color-texto-suave, #555);
-  max-width: 480px;
+/* Muy estrecho (320px): las tres opciones en fila se quedan sin
+   sitio, así que bajan a una columna. El mínimo táctil de 64px se
+   mantiene en las dos direcciones. */
+@media (max-width: 360px) {
+  .quiz-shown { font-size: 44px; letter-spacing: 2px; }
 }
+/* Centred instead of left-hugging the screen edge. A lone button
+   lands centred; back/next stay side by side. Same as scale. */
+.intro-buttons { justify-content: center; gap: var(--espacio); }

@@ -1,0 +1,352 @@
+/* Números ordinales — tool-specific styles.
+
+   Cuatro pantallas con la misma estructura que Números Romanos:
+   carrusel, ejemplos reales, recordatorio y juego.
+
+   Contrato "actividad aislada": no se importan estilos de otros
+   tools/, así que todo lo que se usa aquí está definido aquí. Sólo
+   .btn, .option-btn y .explanation vienen de components.css.
+
+   La fila (`queue-row`) reproduce el criterio que ya usa Los Números:
+   la columna de la bandera, la de la flecha y la de cada animal
+   comparten anchura, para que la flecha caiga exactamente encima
+   del sitio que señala. Si el ancho se dividiera entre "n"
+   generosamente, la flecha se desplazaría y apuntaría a otro.
+
+   Los cinco colores recorren la serie y se repiten del sexto al
+   décimo (ver data.js). El color nunca identifica al ordinal: la
+   cifra y la palabra van siempre escritas al lado, así que repetir
+   color no puede llevar a error (WCAG 1.4.1). El turquesa de la
+   cabecera no es color de ningún ordinal, para que marca y paleta
+   no se pisen. */
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+.ord-c1 { color: var(--mod-coordinacion); }
+.ord-c2 { color: var(--mod-secuencia); }
+.ord-c3 { color: var(--mod-emocional); }
+.ord-c4 { color: var(--mod-memoria); }
+.ord-c5 { color: var(--mod-lenguaje); }
+
+/* ============================================================
+   Rejilla de pasos
+   ============================================================
+   Estas clases están también en el CSS de Cantidades, pero cada
+   actividad carga sólo su propio styles.css: definirlas aquí no es
+   duplicar, es lo único que hace que esta pantalla salga con
+   aspecto. (Que check.js no lo detecte es otro asunto: busca el
+   nombre de la clase en el CSS de todo el proyecto, así que da por
+   buena una clase que en esta página no está definida.) */
+.practice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--espacio); }
+.btn-practice {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--mod-razonamiento);
+  text-align: center;
+}
+.practice-icon { font-size: 42px; line-height: 1; }
+.practice-name { font-weight: 700; }
+.practice-detail { font-size: var(--texto-pequeno); font-weight: 400; opacity: 0.9; }
+.practice-stars { font-size: var(--texto-pequeno); letter-spacing: 2px; }
+.practice-done {
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  background: var(--color-acierto-suave);
+  color: var(--color-acierto);
+  border-radius: var(--radio);
+  padding: 2px 12px;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   Pantallas 1 y 2: carrusel y ejemplos
+   ============================================================ */
+.reference-card { border-color: var(--mod-razonamiento-suave); }
+.reference-title { margin: 0; font-size: var(--texto-grande); color: var(--mod-razonamiento); }
+.reference-text { margin: 0; color: var(--color-texto); }
+
+.intro-card, .famosos-card, .ordinals-card, .rule-card, .quiz-card {
+  align-items: center;
+  gap: var(--espacio);
+}
+
+.carousel-card { border-color: var(--mod-razonamiento-suave); }
+
+.carousel-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 120px;
+  padding: var(--espacio);
+  border: 2px dashed var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  width: 100%;
+  max-width: 480px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s ease;
+}
+.carousel-display:active { transform: scale(0.97); }
+.carousel-display:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 2px; }
+
+/* Forma corta y palabra apiladas y en grande (≥20px en negrita, así
+   que cuentan como texto grande a efectos de contraste AAA). */
+.carousel-figure { font-size: 44px; font-weight: 800; line-height: 1.1; }
+.carousel-name { font-size: var(--texto-grande); font-weight: 800; }
+
+.carousel-caption {
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto);
+  text-align: center;
+  margin: 0;
+  min-height: 1.2em;
+}
+
+.carousel-controls { display: flex; align-items: center; justify-content: center; gap: var(--espacio); width: 100%; }
+.carousel-controls .btn { min-width: var(--boton-min); align-self: center; padding: 4px 14px; }
+
+.famosos-card { border-color: var(--mod-razonamiento-suave); }
+.famoso-ejemplo-row { display: flex; align-items: center; justify-content: center; gap: var(--espacio); width: 100%; flex-wrap: wrap; }
+
+.famoso-ejemplo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-weight: 800;
+  padding: var(--espacio) var(--espacio-grande);
+  border: 3px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  text-align: center;
+  width: 100%;
+  max-width: 480px;
+  flex: 1 1 240px;
+}
+.famoso-figure { font-size: 44px; line-height: 1.1; }
+.famoso-value { display: flex; align-items: baseline; justify-content: center; gap: 8px; }
+.famoso-equals { color: var(--color-texto-suave); font-size: var(--texto-grande); }
+.famoso-name { font-size: var(--texto-grande); }
+
+.famous-text { margin: 0; color: var(--color-texto); text-align: center; }
+
+/* ============================================================
+   Pantalla 3: recordatorio
+   ============================================================ */
+.reminder-buttons { justify-content: center; margin-top: var(--espacio-grande); }
+
+.ordinals-row { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--espacio); width: 100%; }
+
+/* Cada ficha lleva la cifra, la palabra y el lugar del ordinal,
+   porque el error típico es usar una donde toca otra: la palabra en
+   el sitio donde va la cifra, o al revés. */
+.ord-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--espacio);
+  min-width: 150px;
+  border: 3px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+.ord-chip-figure { font-size: var(--texto-grande); font-weight: 800; line-height: 1.1; }
+.ord-chip-name { font-size: var(--texto-base); font-weight: 700; }
+.ord-chip-place { font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
+
+.rule-card { border-color: var(--mod-razonamiento-suave); }
+.rule-title { font-weight: 700; margin: 0; text-align: center; font-size: var(--texto-base); color: var(--color-texto); }
+
+/* "1 · primero · primer lugar" */
+.rule-example {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.rule-example--tight { font-size: var(--texto-base); }
+.ex-figure { font-size: var(--texto-grande); }
+.ex-name { font-size: var(--texto-base); }
+.ex-place { color: var(--color-texto); }
+.ex-op { color: var(--color-texto-suave); }
+
+/* La regla "no hay lugar cero" se apoya en una fila en miniatura: es
+   la única de las dos que se ve en la fila y no se entiende leyendo.
+   Cada hueco apila el miembro y su número, porque el número va DEBAJO
+   de lo que nombra: si los dos van en el mismo flujo, el "1" queda
+   flotando entre la bandera y el gato y se lee como que está en
+   medio. */
+.strip {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: var(--espacio);
+  margin-top: var(--espacio);
+}
+.strip-slot { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.strip-member {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
+.strip-first { border-radius: var(--radio); background: var(--mod-razonamiento-suave); }
+.strip-label {
+  font-size: var(--texto-pequeno);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   Pantalla 4: juego
+   ============================================================ */
+.quiz-card { border-color: var(--mod-razonamiento-suave); }
+
+.quiz-shown {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-align: center;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.big-word { font-size: var(--texto-titulo); line-height: 1.1; }
+.big-digit { font-size: 88px; line-height: 1; }
+
+/* La fila: bandera, animales y (en su sitio) la flecha. La columna
+   de la bandera es un hueco de la misma anchura que las demás, sólo
+   que con la bandera dentro, para que todo quede alineado. */
+.queue-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  max-width: 100%;
+}
+.queue-member,
+.queue-start,
+.queue-pointer,
+.queue-start-spacer {
+  flex: 0 0 auto;
+  width: 44px;
+  text-align: center;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+.queue-start {
+  font-size: 1.6rem;
+  border-radius: var(--radio);
+  background: var(--mod-razonamiento-suave);
+}
+/* La fila de punteros es sólo un marcador de posición: cuando no hay
+   flecha no debe añadir altura. */
+.queue-pointers { min-height: 2.2rem; }
+.queue-pointer { font-size: 1.5rem; }
+
+.queue-hint {
+  margin: var(--espacio) 0 0;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-suave);
+}
+
+.context-text {
+  margin: 0;
+  text-align: center;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-pequeno);
+  max-width: 480px;
+}
+
+.question { color: var(--color-texto-suave); font-size: var(--texto-grande); }
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio);
+  flex-wrap: wrap;
+}
+.progress-step { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
+
+/* Cabecera de la mini-ronda encadenada: sólo al pasar de un
+   sub-paso al siguiente, para que se entienda que el nivel cambió a
+   propósito. */
+.round-header {
+  margin: 0;
+  padding: var(--espacio);
+  border-radius: var(--radio);
+  background: var(--mod-razonamiento-suave);
+  color: var(--color-texto);
+  font-weight: 700;
+  text-align: center;
+}
+
+/* minmax(110px) en vez de tres columnas fijas: a 375px, tres
+   columnas de ~90px obligaban a partir las palabras ("terce/ro"),
+   y una palabra de ordinal partida se lee como dos. Con 110px
+   mínimos salen dos columnas cómodas a 320-375px y tres en tablet y
+   escritorio, sin tocar nada más. */
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: var(--espacio); width: min(100%, 480px); }
+
+/* Opciones de texto: `break-word` y no `anywhere`. `anywhere` parte
+   la palabra aunque haya sitio (affecta además al cálculo de
+   min-content); `break-word` sólo corta si de verdad no cabe, que es
+   justo cuando no hay otra opción. */
+.option-btn--word { font-size: var(--texto-base); overflow-wrap: break-word; padding: 12px 10px; }
+
+/* ============================================================
+   Pantalla final
+   ============================================================ */
+.big-emoji { font-size: 96px; }
+.transfer { color: var(--color-texto-suave); max-width: 480px; }
+
+/* ============================================================
+   Responsive — 320 / 375 / 768 / desktop
+   ============================================================ */
+@media (max-width: 480px) {
+  .practice-grid { grid-template-columns: 1fr; }
+  .carousel-figure, .famoso-figure { font-size: 32px; }
+  .quiz-shown { font-size: 48px; min-height: 72px; }
+  .big-digit { font-size: 64px; }
+  .big-word { font-size: var(--texto-grande); }
+  .rule-example { font-size: var(--texto-base); }
+  .ex-figure { font-size: var(--texto-base); }
+  .ord-chip { min-width: 0; flex: 1 1 130px; }
+  .big-emoji { font-size: 64px; }
+  /* La fila se estrecha un poco para que cinco animales + bandera
+     sigan cabiendo en 375px sin desbordar. */
+  .queue-member, .queue-start, .queue-pointer, .queue-start-spacer { width: 40px; font-size: 1.7rem; }
+}
+
+/* Muy estrecho (320px): las tres opciones en fila se quedan sin
+   sitio y bajan a una columna. El mínimo táctil de 64px se mantiene
+   en las dos direcciones. */
+@media (max-width: 360px) {
+  .quiz-shown { font-size: 38px; }
+  .queue-member, .queue-start, .queue-pointer, .queue-start-spacer { width: 34px; font-size: 1.4rem; }
+  .strip-member { width: 44px; }
+}
+/* Centred instead of left-hugging the screen edge. A lone button
+   lands centred; back/next stay side by side. Same as scale. */
+.intro-buttons { justify-content: center; gap: var(--espacio); }

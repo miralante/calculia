@@ -42,16 +42,28 @@ const MIME = {
    actividad: es lo que decide el nivel (levelFromProgress), asi que
    fijandolo se prueban los nueve sin tener que ganar nueve veces. */
 const LEVELS = [
-  { act: 0, actId: 'leer', name: 'leer', rounds: 0, kind: 'ruler', ticks: 10, label: 'l1' },
-  { act: 0, actId: 'leer', name: 'leer', rounds: 1, kind: 'ruler', ticks: 10, label: 'l2' },
-  { act: 0, actId: 'leer', name: 'leer', rounds: 2, kind: 'ruler', ticks: 20, label: 'l3' },
+  { act: 0, actId: 'leer', name: 'leer', rounds: 0, kind: 'ruler', ticks: 10, from: 0, to: 10, labelEvery: 1, label: 'l1' },
+  { act: 0, actId: 'leer', name: 'leer', rounds: 1, kind: 'ruler', ticks: 10, from: 0, to: 10, labelEvery: 2, label: 'l2' },
+  { act: 0, actId: 'leer', name: 'leer', rounds: 2, kind: 'ruler', ticks: 20, from: 0, to: 20, labelEvery: 5, label: 'l3' },
   { act: 1, actId: 'paso', name: 'paso', rounds: 0, kind: 'span', label: 'p1' },
   { act: 1, actId: 'paso', name: 'paso', rounds: 1, kind: 'object', label: 'p2' },
-  { act: 2, actId: 'instrumento', name: 'instrumento', rounds: 0, kind: 'gauge', ticks: 8, label: 't1' },
-  { act: 2, actId: 'instrumento', name: 'instrumento', rounds: 1, kind: 'gauge', ticks: 10, label: 't2' },
+  { act: 2, actId: 'instrumento', name: 'instrumento', rounds: 0, kind: 'gauge', ticks: 8, from: 0, to: 40, labelEvery: 10, label: 't1' },
+  { act: 2, actId: 'instrumento', name: 'instrumento', rounds: 1, kind: 'gauge', ticks: 10, from: 0, to: 1000, labelEvery: 200, label: 't2' },
   { act: 3, actId: 'plano', name: 'plano', rounds: 0, kind: 'plan', label: 'd1' },
   { act: 3, actId: 'plano', name: 'plano', rounds: 1, kind: 'plan', label: 'd2' }
 ];
+
+/* How many numbers SHOULD be written on this level: one per labelled
+   position, from `from` to `to`. The drawing used to leave out the
+   number of the REACHED mark, so the count came out one short whenever
+   the pencil landed on a written number. In l2, l3, t1 and t2 the data
+   avoids that by never choosing such a value, so the count was right
+   there and only l1 —every mark numbered, the first level anyone sees—
+   lost one. Counting the marks did not catch it: the mark was still
+   there, only its number was gone. */
+function expectedLabels(spec) {
+  return Math.floor((spec.to - spec.from) / spec.labelEvery) + 1;
+}
 
 function startServer() {
   const server = http.createServer((req, res) => {
@@ -124,8 +136,21 @@ async function playRound(page, spec, log) {
       'Una diapositiva de concepto se queda sin titulo');
     assert.ok((await page.locator('#conceptText').innerText()).trim().length > 0,
       'Una diapositiva de concepto se queda sin explicacion');
-    assert.ok(await page.locator('#conceptVisual svg').count() > 0,
-      'Una diapositiva de concepto se queda sin dibujo');
+    /* Un solo <svg>, y SIN OTRO DENTRO. Que haya alguno lo llevaba
+       cualquiera: con el dibujo bien anidado habia dos y esta misma
+       comprobacion daba verde. El numero de la unidad se escribia dos
+       veces por eso, y se veia en la pantalla como "cm cm". */
+    assert.equal(await page.locator('#conceptVisual svg').count(), 1,
+      'Una diapositiva de concepto deberia traer UN <svg>, no uno dentro de otro');
+    assert.equal(await page.locator('#conceptVisual svg svg').count(), 0,
+      'Una diapositiva de concepto anida un <svg> dentro de otro');
+    /* textContent y no innerText: <text> es un elemento SVG y no tiene
+       innerText — sale undefined y el .trim revienta. */
+    const nums = (await page.locator('#conceptVisual text.ruler-num, '
+      + '#conceptVisual text.span-num, #conceptVisual text.gauge-num, '
+      + '#conceptVisual text.plan-num').allTextContents()).map(t => t.trim()).filter(Boolean);
+    assert.ok(nums.length > 0,
+      'Una diapositiva de concepto se queda SIN NUMEROS: la idea se enseña con una regla, y una regla sin numeros no se lee');
     await page.locator('#conceptNext').click();
   }
   await page.locator('#introContinue').click();
@@ -165,9 +190,19 @@ async function playRound(page, spec, log) {
         gaugeHere: n('.gauge-tick-here'), tube: n('.gauge-tube'), level: n('.gauge-level'),
         handle: n('.gauge-handle'), spanTick: n('.span-tick'), spanEnd: n('.span-tick-end'),
         spanObject: n('.span-object'), guide: n('.span-guide'), bar: n('.plan-bar'),
-        seg: n('.plan-seg'), route: n('.plan-route'), dot: n('.plan-dot')
+        seg: n('.plan-seg'), route: n('.plan-route'), dot: n('.plan-dot'),
+        /* Cuántos números están ESCRITOS, no cuántos marks hay. */
+        rulerNum: [...document.querySelectorAll('#visual .ruler-num')].map(t => t.textContent),
+        gaugeNum: [...document.querySelectorAll('#visual .gauge-num')].map(t => t.textContent),
+        /* Un <svg> dentro de otro <svg> no lo ve ninguna puerta de
+           estructura: el DOM es valido y el dibujo sale. Lo que sale es
+           la unidad escrita DOS veces, porque el envoltorio repite el
+           texto que la funcion de dibujo ya traia. */
+        nestedSvg: document.querySelectorAll('#visual svg svg').length
       };
     });
+    assert.equal(counts.nestedSvg, 0,
+      'El dibuja un <svg> dentro de otro <svg>: el envoltorio duplica lo que la funcion de dibujo ya devuelve');
     /* El "exactly one" solo aplica a los niveles que SI preguntan por una
    marca: leer e instrumento, donde la marca alcanzada se dibuja aparte
    para que resalte. En paso y plano no hay una marca preguntada —la
@@ -179,12 +214,20 @@ async function playRound(page, spec, log) {
       assert.equal(counts.pencil, 1, 'La regla debe dibujar el lapiz una vez');
       assert.equal(counts.rulerTick + counts.here, spec.ticks + 1,
         'La regla no lleva una rayita por unidad del nivel');
+      assert.equal(counts.rulerNum.length, expectedLabels(spec),
+        'La regla no lleva un numero en cada posicion etiquetada: hay ' +
+        counts.rulerNum.length + ' y deberian ser ' + expectedLabels(spec) +
+        ' (' + counts.rulerNum.join(',') + ')');
     } else if (spec.kind === 'gauge') {
       assert.equal(counts.gaugeHere, 1, 'El instrumento debe marcar una sola rayita, la que se pregunta');
       assert.equal(counts.tube, 1, 'El instrumento debe dibujar su tubo una vez');
       assert.equal(counts.level, 1, 'El instrumento debe dibujar el nivel una vez');
       assert.equal(counts.gaugeTick + counts.gaugeHere, spec.ticks + 1,
         'El instrumento no lleva una rayita por unidad del nivel');
+      assert.equal(counts.gaugeNum.length, expectedLabels(spec),
+        'El instrumento no lleva un numero en cada posicion etiquetada: hay ' +
+        counts.gaugeNum.length + ' y deberian ser ' + expectedLabels(spec) +
+        ' (' + counts.gaugeNum.join(',') + ')');
       /* Solo el segundo nivel es la jarra, y la jarra es la que lleva
          asa: si aparece en t1, los dos instrumentos son el mismo. */
       if (spec.label === 't1') assert.equal(counts.handle, 0, 'El termometro no deberia tener asa');
@@ -288,15 +331,20 @@ function readDataJs() {
     await page.goto(base + '/');
     await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
 
-    /* The card has to be reachable from the landing, right after
-       Formas — that is the whole point of putting it there. */
+    /* The card has to be reachable from the landing. Looked up BY ITS
+       OWN href and not by position: this probe had the card pinned to
+       index 2, and every tool added to the landing since then moved it,
+       so the gate failed on a tool nobody had touched and stopped the
+       probe BEFORE it played a single round. The order of the catalogue
+       is not this gate's business; that the card points at Escala is. */
     await page.reload();
     const cards = page.locator('.grid-cards a.card');
-    assert.ok((await cards.count()) >= 3, 'La portada deberia llevar la tarjeta de Escala');
-    assert.equal(await cards.nth(1).getAttribute('href'), 'tools/shapes/');
-    assert.equal(await cards.nth(2).getAttribute('href'), 'tools/scale/',
-      'La tarjeta de Escala deberia ir justo despues de Formas');
-    assert.ok((await cards.nth(2).innerText()).includes('Escala'),
+    const hrefs = await cards.evaluateAll(els => els.map(e => e.getAttribute('href')));
+    assert.ok(hrefs.includes('tools/scale/'),
+      'La portada deberia llevar la tarjeta de Escala; lleva: ' + hrefs.join(', '));
+    const card = page.locator('.grid-cards a.card[href="tools/scale/"]');
+    assert.equal(await card.count(), 1, 'La tarjeta de Escala deberia aparecer una sola vez en la portada');
+    assert.ok((await card.innerText()).includes('Escala'),
       'La tarjeta de Escala no muestra su nombre');
 
     /* And it has to still be in the full catalogue. */

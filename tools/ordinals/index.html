@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Números ordinales | Calculia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
+  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v62e5b2c5">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
+    <header class="tool-header centered">
+      <h1 data-i18n="title">🥇 Números ordinales</h1>
+      <div class="row center-row">
+        <p class="instruction" data-i18n="instruction">Aprende qué lugar ocupa cada uno.</p>
+      </div>
+      <p class="stars" id="stars">⭐ 0</p>
+    </header>
+
+    <main>
+      <!-- Pantalla 1: la serie de ordinales, en carrusel. Es la
+           única pantalla sin "hidden": si app.js no llegara a
+           pintarse, se ve esto en vez de una página en blanco. -->
+      <section id="screenIntro" class="stack">
+        <div class="card reference-card stack intro-card">
+          <h2 class="reference-title" data-i18n="introTitle">Los ordinales dicen el lugar</h2>
+          <p class="reference-text" data-i18n="introText">Los números dicen cuántos hay. Los ordinales dicen en qué puesto está cada uno.</p>
+        </div>
+
+        <div class="card stack carousel-card">
+          <div class="carousel-display" id="carouselDisplay" role="button" tabindex="0"></div>
+          <p class="carousel-caption" id="carouselCaption"></p>
+          <div class="carousel-controls">
+            <button type="button" class="btn btn-secondary" id="carouselPrev" data-i18n="prev">←</button>
+            <button type="button" class="btn btn-secondary" id="carouselNext" data-i18n="nextArrow">→</button>
+          </div>
+        </div>
+
+        <div class="row intro-buttons">
+          <button type="button" class="btn" id="introNext" data-i18n="introNext">Siguiente →</button>
+        </div>
+      </section>
+
+      <!-- Pantalla 2: el ordinal en una situación real. -->
+      <section id="screenFamous" class="stack hidden">
+        <div class="card famosos-card stack" aria-labelledby="famousTitle">
+          <h2 class="reference-title" id="famousTitle" data-i18n="famousTitle">Un ordinal de la vida real</h2>
+          <p class="reference-text" data-i18n="famousSubtitle">Fíjate en este ejemplo:</p>
+          <div class="famoso-ejemplo-row">
+            <div class="famoso-ejemplo" id="famousExample"></div>
+          </div>
+          <p class="famous-text" id="famousText"></p>
+          <div class="carousel-controls">
+            <button type="button" class="btn btn-secondary" id="famousPrev2" data-i18n="prev">←</button>
+            <button type="button" class="btn btn-secondary" id="famousNext2" data-i18n="nextArrow">→</button>
+          </div>
+        </div>
+
+        <div class="row intro-buttons">
+          <button type="button" class="btn btn-secondary" id="famousBackBtn" data-i18n="back">← Anterior</button>
+          <button type="button" class="btn" id="famousNextBtn" data-i18n="continue">Siguiente →</button>
+        </div>
+      </section>
+
+      <!-- Pantalla 3: recordatorio. La serie entera en fichas de
+           color (forma corta · palabra · lugar), y las dos reglas con
+           ejemplos calculados por app.js. -->
+      <section id="screenReminder" class="stack hidden">
+        <div class="row center-row">
+          <!-- Botón de vuelta DENTRO del recorrido, distinto del
+               "← Volver" de la cabecera: dos botones iguales
+               apilados parecen un error en vez de dos niveles. -->
+          <button type="button" class="btn btn-secondary" id="reminderBack" data-i18n="backToExamples">← Volver a los ejemplos</button>
+        </div>
+        <div class="card reference-card stack">
+          <h2 class="reference-title" data-i18n="reminderTitle">Recuerda la serie entera</h2>
+          <p class="reference-text" data-i18n="reminderText">Cada ordinal va con su número.</p>
+        </div>
+
+        <div class="card stack ordinals-card">
+          <div class="ordinals-row" id="ordinalsRow"></div>
+        </div>
+
+        <div class="card stack rule-card">
+          <p class="rule-title" data-i18n="ruleMatchTitle">Cada ordinal va con su número:</p>
+          <div id="ruleMatch"></div>
+          <p class="rule-title" data-i18n="ruleStartTitle">Y la cuenta empieza en el primero. No hay un lugar cero:</p>
+          <div id="ruleStart"></div>
+        </div>
+
+        <div class="row reminder-buttons">
+          <button type="button" class="btn" id="referenceNext" data-i18n="start">Empezar a practicar →</button>
+        </div>
+      </section>
+
+      <!-- Pantalla 4: los grupos de pasos. Tres botones, no cinco:
+           cada grupo encadena sus pasos solo. -->
+      <section id="screenLevels" class="stack hidden">
+        <div class="row">
+          <button type="button" class="btn btn-secondary" id="levelsBack" data-i18n="backToReminder">← Volver al recordatorio</button>
+        </div>
+        <h2 data-i18n="chooseLevel">Elige un paso.</h2>
+        <div class="practice-grid" id="levelsGrid"></div>
+      </section>
+
+      <!-- Pantalla de juego. -->
+      <section id="screenQuiz" class="stack hidden">
+        <div class="row">
+          <button type="button" class="btn btn-secondary" id="backLevelsBtn" data-i18n="backToLevels">← Volver a los pasos</button>
+        </div>
+        <div class="progress-bar" aria-hidden="true">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-row">
+          <span class="progress-text" id="progressText"></span>
+          <span class="progress-step" id="stepLabel"></span>
+        </div>
+        <p class="round-header hidden" id="chainBanner" aria-live="polite"></p>
+
+        <div class="card centered stack quiz-card">
+          <div class="quiz-shown" id="shown"></div>
+          <p class="context-text hidden" id="context"></p>
+        </div>
+
+        <h2 class="question centered" id="question"></h2>
+        <div class="options-grid" id="options" aria-label="Opciones"></div>
+        <div class="feedback" id="feedback" aria-live="polite"></div>
+        <div class="explanation hidden" id="explanationWrap">
+          <p id="explanation" aria-live="polite"></p>
+        </div>
+        <button type="button" class="btn hidden" id="next" data-i18n="core.next">Siguiente →</button>
+      </section>
+
+      <!-- Pantalla final. -->
+      <section id="screenEnd" class="stack hidden centered">
+        <div class="big-emoji" aria-hidden="true">🥇</div>
+        <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+        <p id="finalSummary"></p>
+        <p class="transfer" data-i18n="transfer"></p>
+        <button type="button" class="btn" id="replayBtn" data-i18n="core.playAgain">Jugar otra vez</button>
+        <button type="button" class="btn btn-secondary" id="btnChooseLevel" data-i18n="chooseAnother">Elegir otro paso</button>
+        <a href="../../" class="btn btn-secondary" id="btnHome" data-i18n="btnHome">Volver al inicio</a>
+      </section>
+    </main>
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
+  </div>
+
+  <script src="../../assets/js/utils.js?v=calculia-vfe7bb202"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-v3d393c12"></script>
+  <script src="../../assets/js/storage.js?v=calculia-vd97e2550"></script>
+  <script src="../../assets/js/feedback.js?v=calculia-v73bb9e8a"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

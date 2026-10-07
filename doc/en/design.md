@@ -317,6 +317,6 @@ clean without touching anything.
 | [`SPEC.md`](SPEC.md) | Product definition, non-negotiable constraints and accessibility rules (§3.5, §6) |
 | [`technical.md`](technical.md) | Architecture, shared core and activity anatomy |
 | [`creating-elements-guide.md`](creating-elements-guide.md) | Recipe for building a new activity |
-| [`activities.md`](activities.md) | Catalogue of the 27 activities |
+| [`activities.md`](activities.md) | Catalogue of the 30 activities |
 | [`roles.md`](roles.md) | Who decides what |
 | [`../../CLAUDE.md`](../../CLAUDE.md) | Suite-wide rules, including the "typical user" wording rule |

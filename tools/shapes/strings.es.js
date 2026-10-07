@@ -55,7 +55,9 @@
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ Mira: la respuesta correcta es ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    pista: '🤔 Prueba otra vez. Mira el dibujo con calma.',
+    /* La genérica se queda solo como respaldo de showHint(), para una
+       pregunta que se olvide de traer la suya: la clave `pista` que había
+       aquí era esta misma frase duplicada y nadie la leía. */
     hint: '🤔 Prueba otra vez. Mira el dibujo con calma.',
     refuerzoTitulo: 'Refuerzo',
     reinforceTitle: 'Refuerzo',
@@ -200,7 +202,24 @@
       similarHint: 'Tiene que ser la misma forma, no hace falta que sea igual de grande.',
       solidToNamePrompt: '¿Qué forma tiene este objeto?',
       solidToObjectPrompt: '¿Cuál de estos objetos es un {name}?',
-      solidHint: 'Piensa en la forma del objeto, no en para qué sirve.'
+      solidHint: 'Piensa en la forma del objeto, no en para qué sirve.',
+      /* La pista que sale al fallar. Una por tipo de pregunta, y todas
+         dicen qué hacer con la figura que se está mirando: la frase
+         única que había antes («Prueba otra vez. Mira el dibujo con
+         calma») era la misma para las 50 preguntas, así que no decía
+         nada. Estas no dan la respuesta —dan la estrategia—, que es lo
+         que distingue una pista socrática de un spoiler. */
+      socraticSides: '🤔 Mira la figura otra vez y cuenta sus lados uno por uno.',
+      socraticCorners: '🤔 Mira la figura otra vez y cuenta sus vértices uno por uno.',
+      socraticName: '🤔 Fíjate en su forma: no todas las figuras tienen los mismos lados.',
+      socraticPerimeter: '🤔 El perímetro es la vuelta entera: súmale todos los lados.',
+      socraticArea: '🤔 Piensa en la parte de la figura que pisas cuando te pones encima.',
+      socraticVolume: '🤔 Compara los tres cuerpos: mira cuál ocupa más sitio de verdad.',
+      socraticSymmetry: '🤔 Dobla la figura por cada raya y mira en cuál las dos mitades quedan iguales.',
+      socraticSimilar: '🤔 Busca la figura que se parece a esta; no hace falta que sea igual de grande.',
+      socraticFaces: '🤔 Cuenta las piezas del dibujo: cada una es una cara.',
+      socraticNet: '🤔 Dobla las piezas mentalmente y mira qué cuerpo sale.',
+      socraticSolid: '🤔 Piensa en la forma del objeto, no en para qué sirve.'
     },
     transfer: 'Esto te servirá para entender señales y dibujos, y para decir cómo es algo cuando lo tengas que explicar.'
   }, 'es');

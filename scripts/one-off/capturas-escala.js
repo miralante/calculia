@@ -81,6 +81,11 @@ async function shot(page, name) {
     await shot(page, theme + '-1-concepto');
 
     const levels = [
+      /* l1 va el primero a proposito: es el nivel en el que todas las
+         rayitas llevan numero, y por tanto el nivel donde la marca
+         alcanzada se quedaba SIN el suyo. Una captura de l2 no lo
+         enseña: alli el valor nunca cae en un numero escrito. */
+      { act: 0, id: 'leer', rounds: 0, name: 'leer-l1' },
       { act: 0, id: 'leer', rounds: 1, name: 'leer-l2' },
       { act: 1, id: 'paso', rounds: 0, name: 'paso-p1' },
       { act: 2, id: 'instrumento', rounds: 1, name: 'jarra-t2' },

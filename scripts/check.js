@@ -338,13 +338,13 @@ if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'
 if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
 /* --- 5. Public/private catalog split ---
-   The public landing carries THREE entries (Roman Numerals, Shapes,
-   Scale); the hidden dev/ page carries every other activity.
-   Together they cover the full tools/, config/, and sw.js activity
-   set. Public activities are the longest-lived "front door" — they
-   stay discoverable for any visitor even when the rest of the
-   catalogue is moved behind dev/. The order in PUBLIC_SLUGS is the
-   visible order in index.html.
+   The public landing carries FIVE entries (Quantities, Ordinal
+   Numbers, Roman Numerals, Shapes, Scale); the hidden dev/ page
+   carries every other activity. Together they cover the full
+   tools/, config/, and sw.js activity set. Public activities are the
+   longest-lived "front door" — they stay discoverable for any
+   visitor even when the rest of the catalogue is moved behind dev/.
+   The order in PUBLIC_SLUGS is the visible order in index.html.
 
    BOTH_SLUGS are the activities that are public AND still listed in
    dev/. Until now the two lists were a partition — every slug was in
@@ -383,11 +383,11 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['roman-numerals', 'shapes', 'scale'];
+var PUBLIC_SLUGS = ['quantities', 'ordinals', 'roman-numerals', 'shapes', 'trigonometry', 'scale'];
 /* Public AND in dev/. Every name here must also be in PUBLIC_SLUGS,
    otherwise dev/ would carry an activity the landing hides, which is
    the inverse mistake and just as wrong. */
-var BOTH_SLUGS = ['scale'];
+var BOTH_SLUGS = ['quantities', 'ordinals', 'scale', 'trigonometry'];
 var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
 var expectedDevSlugs = new Set(slugs.filter(function (slug) {
   return PUBLIC_SLUGS.indexOf(slug) === -1 || BOTH_SLUGS.indexOf(slug) !== -1;

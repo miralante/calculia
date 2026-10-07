@@ -22,6 +22,7 @@ grouped by the skill they work on, not by screen folder.
 | **Numbers** | Read, write and compare whole numbers, sequences and place value. Includes positive numbers, negative numbers and zero, with everyday examples and thermometer and elevator practice. |
 | **Shapes** | Compare a flat shape and a solid through pictures, recognise shapes in real objects, and introduce side, vertex, perimeter, area, volume, symmetry and similarity on four slides before asking about them in the test. |
 | **Same shapes** | Tell whether two figures are the same shape at another size, count the squares on the sides of a right triangle, and compare how steep two ramps are. |
+| **Trigonometry** | Name the three sides of a right triangle after the job they do, count how many squares it rises for every square it goes along (the ratio), see that two equally steep triangles share it even when one is twice as big, and carry it over to a ladder against a wall. It never computes a sine or a cosine: everything is counted and looked at. |
 | **Fractions** | Recognise, compare and operate with simple fractions and decimals. |
 | **Measures** | Choose the right unit (cm, m, g, kg, ml, l) and estimate length, weight and capacity. |
 | **Geometry** | Tell a right angle from an acute or obtuse one, count the edge and the squares inside a figure, and fold a figure in half to see if it matches. |

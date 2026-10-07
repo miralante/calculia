@@ -48,23 +48,23 @@
     real: {
       regla: {
         name: 'Una regla',
-        text: 'Mide en centímetros. Cada rayita es un centímetro.'
+        text: 'Mide en centímetros. Las rayitas más cortas son los milímetros.'
       },
       termo: {
         name: 'Un termómetro',
-        text: 'Mide los grados. Cada rayita son cinco grados.'
+        text: 'Mide la temperatura. Cada rayita es un grado.'
       },
       jarra: {
         name: 'Una jarra de la cocina',
         text: 'Mide los mililitros. Cada rayita son cien.'
       },
       mapa: {
-        name: 'El mapa de la ciudad',
-        text: 'El mapa es más pequeño que la ciudad. La escala dice cuánto.'
+        name: 'Un mapa',
+        text: 'Una ciudad entera cabe en una hoja. La escala lo hace posible.'
       },
       agua: {
         name: 'El contador del agua',
-        text: 'Marca los litros que has gastado.'
+        text: 'Sus números van de uno en uno. Es una lista de medidas, como la regla.'
       }
     },
 

@@ -280,3 +280,16 @@
   font-weight: 700;
 }
 .chain-step::before { content: '→ '; }
+/* Answer options */
+/* app.js toggles `.options-row` for questions marked `inline: true`.
+   Without this rule the class is inert and those answers stack in a
+   column — three side-by-side figures become a tower that pushes the
+   next button off the screen. Same rule as money/measures/numbers. */
+.options.options-row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+.options.options-row .option-btn { width: auto; min-width: 180px; }
+/* A cube is drawn as a row of layers; without this the layers stack
+   vertically and the cube reads as a flat wall. Same rule as geometry. */
+.layer-row { display: flex; gap: 2px; }
+
+.emoji-large { font-size: 96px; }
+.transfer { margin: 8px auto 24px; font-size: 1.1rem; color: var(--color-texto-suave, #555); max-width: 480px; }

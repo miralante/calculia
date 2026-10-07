@@ -164,6 +164,15 @@
   font-size: 14px;
   font-weight: 700;
 }
+/* The equation the whole scale bar stands for: which scale this is.
+   Bigger and in the accent colour because it is the one line on the
+   slide that carries the idea; the row labels and the centimetres are
+   only there so it can be read. */
+.plan-equation {
+  fill: var(--mod-razonamiento);
+  font-size: 15px;
+  font-weight: 700;
+}
 .plan-row-label {
   fill: var(--color-texto-suave);
   font-size: 13px;

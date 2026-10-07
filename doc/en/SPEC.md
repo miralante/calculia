@@ -5,7 +5,7 @@
 
 ## 1. What Calculia is
 
-A free, static web app with 28 activities for practicing math and
+A free, static web app with 30 activities for practicing math and
 logical reasoning:
 
 - **Math**: Places and sizes, Numbers, Shapes, Geometry, Same shapes, Fractions, Measures, Scale, Subtraction and

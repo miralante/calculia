@@ -48,23 +48,23 @@
     real: {
       regla: {
         name: 'A ruler',
-        text: 'It measures in centimetres. Each mark is one centimetre.'
+        text: 'It measures in centimetres. The shorter marks are millimetres.'
       },
       termo: {
         name: 'A thermometer',
-        text: 'It measures degrees. Each mark is five degrees.'
+        text: 'It measures temperature. Each mark is one degree.'
       },
       jarra: {
         name: 'A jug in the kitchen',
         text: 'It measures millilitres. Each mark is a hundred.'
       },
       mapa: {
-        name: 'The map of the city',
-        text: 'The map is smaller than the city. The scale says how much.'
+        name: 'A map',
+        text: 'A whole city fits on one sheet of paper. The scale makes it possible.'
       },
       agua: {
         name: 'The water meter',
-        text: 'It shows the litres you have used.'
+        text: 'Its numbers go up one by one. It is a list of measures, like the ruler.'
       }
     },
 

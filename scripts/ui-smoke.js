@@ -1109,8 +1109,12 @@ async function exerciseShapes(page, baseUrl) {
        honest about its own shape. */
     const DRAWN_REAL = ['triangle', 'square', 'trapezoid', 'pentagon', 'hexagon', 'octagon',
       'rectangularPrism', 'triangularPrism', 'pyramid', 'cone'];
+    /* hexagon is 8 and not 6: seven cells of the comb plus one cell drawn
+       on its own, so a child can see what a single cell looks like before
+       being sent to the comb to count. The bee is ellipses and circles, so
+       nothing else in that drawing is a polygon. */
     const EXPECTED_REAL_POLYGONS = {
-      triangle: 1, square: 1, trapezoid: 1, pentagon: 2, hexagon: 7, octagon: 1,
+      triangle: 1, square: 1, trapezoid: 1, pentagon: 2, hexagon: 8, octagon: 1,
       rectangularPrism: 3, triangularPrism: 3, pyramid: 2,
     };
     if (DRAWN_REAL.indexOf(realShapeId) !== -1) {
@@ -1229,7 +1233,38 @@ async function exerciseShapes(page, baseUrl) {
         ...await boxesOf('#realObject svg ellipse'),
       ];
       const cellBoxes = await boxesOf('#realObject svg polygon');
-      assert.equal(cellBoxes.length, 7, 'El panal deja de enseñar siete celdas');
+      assert.equal(cellBoxes.length, 8, 'El panal tiene que enseñar siete celdas y ' +
+        'la suelta; ahora enseña ' + cellBoxes.length);
+      /* Six sides on every cell, the lone one included: the caption says
+         hexagon, so the cell drawn on its own has to be the very polygon
+         the comb is made of, not a lookalike parked next to it. */
+      const vertices = await page.evaluate(() =>
+        [...document.querySelectorAll('#realObject svg polygon')]
+          .map(p => p.getAttribute('points').trim().split(/\s+/).length));
+      assert.ok(vertices.every(n => n === 6), 'Alguna celda ha dejado de tener seis ' +
+        'vértices: ' + vertices.join(', '));
+      /* How far apart two boxes are, in px; negative when they overlap.
+         The max of the four separations is the conservative one, and it is
+         the number that decides "these two are one drawing" here. */
+      const gapTo = (a, b) => Math.max(b.x - a.x - a.width, a.x - b.x - b.width,
+        b.y - a.y - a.height, a.y - b.y - b.height);
+      const near = (cell, other) => gapTo(cell, other) < 10;
+      const comb = cellBoxes.filter(cell => cellBoxes.some(o => o !== cell && near(cell, o)));
+      const loose = cellBoxes.filter(cell => !comb.includes(cell));
+      assert.equal(comb.length, 7, 'El panal tiene que seguir siendo de siete celdas: ' +
+        'ahora son ' + comb.length);
+      assert.equal(loose.length, 1, 'La celda suelta tiene que estar sola y separada: ' +
+        'hay ' + loose.length + ' celdas sueltas');
+      /* And separated by enough to read as apart, not just off by a pixel:
+         the confusion this drawing fixes comes straight back if the eighth
+         cell drifts close enough to be counted as part of the comb. It is
+         drawn 18 px to the side and 30 px below the nearest cell, and 24 px
+         is asked for here — deliberately more than the 10 px that decides
+         which cells belong to the comb, so this one can fail on its own
+         instead of hiding behind the count above. */
+      const clearance = Math.min(...comb.map(cell => gapTo(loose[0], cell)));
+      assert.ok(clearance >= 24, 'La celda suelta se ha pegado al panal (separa ' +
+        Math.round(clearance) + ' px): vuelve a contar como una octava celda');
       assert.ok(beeBoxes.length > 0, 'La abeja ha desaparecido del panal');
       cellBoxes.forEach((cell, index) => {
         beeBoxes.forEach(bee => {
@@ -1278,11 +1313,26 @@ async function exerciseShapes(page, baseUrl) {
     'El ejemplo del triángulo deja de enseñar un triángulo al volver atrás');
   await page.locator('#realNext').click();
   await page.locator('#realContinue').click();
-  assert.ok(await page.locator('#screenMenu').isVisible(),
-    'Los ejemplos reales no avanzan al menú de test');
+  /* Con un solo test no hay nada que elegir, y app.js entra en él
+     directamente: el menú que decía "Elige un test" sobre una cuadrícula
+     de un botón era un paso que solo retrasaba. La puerta sigue
+     aceptando las dos formas —menú cuando hay más de un test— para no
+     atar el smoke a un dato que puede cambiar. */
+  const testCount = await page.evaluate(() => Object.keys(window.DATA.activities).length);
+  if (testCount === 1) {
+    assert.ok(await page.locator('#screenGame').isVisible(),
+      'Los ejemplos reales no entran en el test cuando solo hay uno: el menú solo añade un paso');
+  } else {
+    assert.ok(await page.locator('#screenMenu').isVisible(),
+      'Los ejemplos reales no avanzan al menú de test');
+  }
   actions += 1;
 
-  async function chooseCorrectAnswer(activityId, levelId) {
+  /* Which option is the right one, worked out from DATA and from the
+     drawing rather than read off the page. Shared with the Socratic-hint
+     check at the end, which needs the same index to answer wrong on
+     purpose. */
+  async function correctOptionIndex(activityId, levelId) {
     const correctIndex = await page.evaluate(({ activityId, levelId }) => {
       const activity = window.DATA.activities[activityId];
       const level = activity.levels.find(item => item.id === levelId);
@@ -1392,6 +1442,11 @@ async function exerciseShapes(page, baseUrl) {
         visual: await page.locator('#visual').getAttribute('aria-label'),
         options: await page.locator('#options').innerText(),
       }));
+    return correctIndex;
+  }
+
+  async function chooseCorrectAnswer(activityId, levelId) {
+    const correctIndex = await correctOptionIndex(activityId, levelId);
     const options = page.locator('#options .option-btn');
     await options.nth(correctIndex).click();
     await page.waitForSelector('#btnNext:not(.hidden)', { timeout: NAV_TIMEOUT });
@@ -1427,7 +1482,8 @@ async function exerciseShapes(page, baseUrl) {
     solidParts: 3,
     fromNet: 3,
   }, 'La prueba única no incluye todos los tipos de contenido');
-  await menuButtons.click();
+  /* Con un solo test el recorrido ya venía dentro desde "Hacer el test". */
+  if (testCount > 1) await menuButtons.click();
   const firstPrompt = await page.locator('#prompt').innerText();
   assert.ok(firstPrompt.trim(),
     'La prueba única no presenta ninguna pregunta');
@@ -1503,6 +1559,70 @@ async function exerciseShapes(page, baseUrl) {
   }
   await page.locator('#realBack').click();
   await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
+
+  /* La pista socrática dice qué hacer con la figura de ESTA pregunta.
+     Antes era la misma frase en las 50 preguntas del test, así que no
+     decía nada; ahora cada tipo de pregunta trae la suya. Se falla a
+     propósito en varias y cada una tiene que enseñar la suya, no la
+     genérica —que sigue existiendo solo como respaldo. */
+  const SOCRATIC = [
+    ['gen.sidesPrompt', 'gen.socraticSides'],
+    ['gen.cornersPrompt', 'gen.socraticCorners'],
+    ['gen.shapeNamePrompt', 'gen.socraticName'],
+    ['gen.perimeterPrompt', 'gen.socraticPerimeter'],
+    ['gen.areaPrompt', 'gen.socraticArea'],
+    ['gen.volumePrompt', 'gen.socraticVolume'],
+    ['gen.symmetryPrompt', 'gen.socraticSymmetry'],
+    ['gen.similarPrompt', 'gen.socraticSimilar'],
+    ['gen.solidToNamePrompt', 'gen.socraticSolid'],
+    ['gen.solidToObjectPrompt', 'gen.socraticSolid'],
+    ['gen.howManyFaces', 'gen.socraticFaces'],
+    ['gen.fromNet', 'gen.socraticNet'],
+  ];
+  await page.locator('#introContinue').click();
+  await page.locator('#realContinue').click();
+  assert.ok(await page.locator('#screenGame').isVisible(),
+    'La pista socrática no se puede comprobar: el test no arranca desde "Hacer el test"');
+  const pistasVistas = new Set();
+  for (let question = 0; question < 8; question += 1) {
+    const correctIndex = await correctOptionIndex('formas', 'test');
+    const options = page.locator('#options .option-btn');
+    const total = await options.count();
+    await options.nth((correctIndex + 1) % total).click();
+    await page.waitForSelector('#explanationWrap:not(.hidden)', { timeout: NAV_TIMEOUT });
+    /* La pareja pregunta→pista se resuelve dentro de la página, en el
+       idioma que esté puesto, y por la parte fija del prompt: los huecos
+       {name} y {side} llegan ya rellenados. */
+    const shown = await page.evaluate(pairs => {
+      const t = key => window.App.i18n.t(key);
+      const prompt = document.querySelector('#prompt').textContent.trim();
+      const found = pairs.find(pair => prompt.indexOf(t(pair[0]).split('{')[0]) === 0);
+      return {
+        prompt,
+        expected: found ? t(found[1]) : null,
+        generic: t('hint'),
+        text: document.querySelector('#explanation').textContent.trim(),
+      };
+    }, SOCRATIC);
+    assert.ok(shown.expected, 'Una pregunta del test no trae pista socrática: ' + shown.prompt);
+    assert.notEqual(shown.text, shown.generic,
+      'La pista socrática vuelve a ser la misma frase para todas las preguntas: ' + shown.prompt);
+    assert.equal(shown.text, shown.expected,
+      'La pista socrática no es la de esta pregunta ("' + shown.prompt + '"): ' + shown.text);
+    pistasVistas.add(shown.expected);
+    /* Y ahora sí, la respuesta buena. La pista deja las opciones
+       bloqueadas hasta que se pulsa "Entendido", igual que se las deja a
+       un niño: el recorrido tiene que pasar por ahí también. */
+    await page.locator('#explanationWrap .btn-understood').click();
+    await options.nth(correctIndex).click();
+    await page.waitForSelector('#btnNext:not(.hidden)', { timeout: NAV_TIMEOUT });
+    await page.locator('#btnNext').click();
+    actions += 3;
+  }
+  /* Si las ocho preguntas falladas hubieran salido del mismo tipo, la
+     comprobación de arriba no habría visto nada nuevo. */
+  assert.ok(pistasVistas.size > 1,
+    'Las ocho preguntas felladas eran del mismo tipo: la puerta no ha visto dos pistas distintas');
 
   return actions ? 1 : 0;
 }

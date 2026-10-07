@@ -55,7 +55,9 @@
     correctExplanation: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ Look: the correct answer is ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    pista: '🤔 Try again. Look at the picture calmly.',
+    /* The generic line stays only as showHint()'s fallback, for a question
+       that forgets to bring its own: the `pista` key that used to sit here
+       was this very sentence duplicated, and nothing read it. */
     hint: '🤔 Try again. Look at the picture calmly.',
     refuerzoTitulo: 'Reinforcement',
     reinforceTitle: 'Reinforcement',
@@ -199,7 +201,24 @@
       similarHint: 'It has to be the same shape; it does not have to be as big.',
       solidToNamePrompt: 'What shape is this object?',
       solidToObjectPrompt: 'Which of these objects is a {name}?',
-      solidHint: 'Think about the shape of the object, not what it is for.'
+      solidHint: 'Think about the shape of the object, not what it is for.',
+      /* The hint shown after a mistake. One per question type, and each one
+         says what to do with the figure being looked at: the single
+         sentence it replaced ("Try again. Look at the picture calmly") was
+         the same for all 50 questions, so it said nothing. These never
+         give the answer away — they give the strategy, which is what
+         separates a Socratic hint from a spoiler. */
+      socraticSides: '🤔 Look at the figure again and count its sides one by one.',
+      socraticCorners: '🤔 Look at the figure again and count its vertices one by one.',
+      socraticName: '🤔 Look at its shape: not every figure has the same sides.',
+      socraticPerimeter: '🤔 The perimeter is the whole way round: add up all the sides.',
+      socraticArea: '🤔 Think of the part of the figure you stand on when you step on it.',
+      socraticVolume: '🤔 Compare the three solids: see which one really takes up more room.',
+      socraticSymmetry: '🤔 Fold the figure along each line and see which one leaves both halves the same.',
+      socraticSimilar: '🤔 Look for the figure that looks like this one; it does not have to be as big.',
+      socraticFaces: '🤔 Count the pieces in the drawing: each one is a face.',
+      socraticNet: '🤔 Fold the pieces in your mind and see which solid comes out.',
+      socraticSolid: '🤔 Think about the shape of the object, not what it is for.'
     },
     transfer: 'This will help you understand signs and drawings, and describe what something is like when you need to explain it.'
   }, 'en');

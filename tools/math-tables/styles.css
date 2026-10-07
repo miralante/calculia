@@ -48,3 +48,5 @@
 @media (max-width: 400px) {
   .operation-grid { grid-template-columns: 1fr; }
 }
+
+.emoji-large { font-size: 96px; }

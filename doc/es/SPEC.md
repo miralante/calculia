@@ -5,7 +5,7 @@
 
 ## 1. Qué es Calculia
 
-Una aplicación web gratuita y estática con 28 actividades para practicar
+Una aplicación web gratuita y estática con 30 actividades para practicar
 cálculo y razonamiento lógico:
 
 - **Matemáticas**: Sitios y tamaños, Los Números, Formas, Geometría, Formas parecidas, Fracciones, Medidas, Escala, Restar y

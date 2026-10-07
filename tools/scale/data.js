@@ -131,11 +131,18 @@ var DATA = {
 
   /* Los instrumentos de la vida diaria, para la pantalla de "esto está
      en tu alrededor". Solo el dibujo y el id: el nombre y lo que mide
-     cada uno son texto y viven en strings.<locale>.js. */
+     cada uno son texto y viven en strings.<locale>.js.
+
+     El picto de la jarra era 🥛, un vaso de leche: sin una sola rayita
+     arriba, que es justo lo contrario de lo que dice su texto. Unicode
+     no tiene emoji de jarra medidora, y 🫗 (jarra vertiendo) y 🫙
+     (jarra) existen pero aquí se pintan como CAJA VACÍA.
+     scan-emoji-tofu.js lo mide. 🍺 es la única con asa que sí se pinta,
+     y un asa es lo que hace que un recipiente se lea como jarra. */
   real: [
     { id: 'regla', picto: '📏' },
     { id: 'termo', picto: '🌡️' },
-    { id: 'jarra', picto: '🥛' },
+    { id: 'jarra', picto: '🍺' },
     { id: 'mapa', picto: '🗺️' },
     { id: 'agua', picto: '🚰' }
   ]

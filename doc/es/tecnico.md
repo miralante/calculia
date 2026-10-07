@@ -64,7 +64,7 @@ a una subpágina.
 
 ```
 calculia/
-├── index.html             # Nivel 0: Números Romanos, Formas y Escala
+├── index.html             # Nivel 0: Cantidades, Ordinales, Romanos, Formas y Escala
 ├── styles.css             #   CSS de la landing, junto a index.html
 ├── app.js                 #   lógica de la landing, junto a index.html
 ├── strings.<locale>.js    #   textos de la landing, es/en, junto a index.html
@@ -96,7 +96,7 @@ calculia/
 └── _headers                # Cabeceras de caché y seguridad de Cloudflare Pages
 ```
 
-Misma arquitectura de tres niveles que Apptonomia, acotada a 28 actividades. `index.html` pública enlaza a las tres actividades de portada (Números Romanos, Formas, Escala); `dev/index.html`, oculta, enlaza a las 25 actividades restantes, Números entre ellas, más las que aparecen en `BOTH_SLUGS` (Escala, que es a la vez portada y sigue en el catálogo completo). Los números positivos y negativos forman parte de Números; no hay una herramienta independiente. La lista de slugs públicos vive en `scripts/check.js` (`PUBLIC_SLUGS` y `BOTH_SLUGS`).
+Misma arquitectura de tres niveles que Apptonomia, acotada a 30 actividades. `index.html` pública enlaza a las seis actividades de portada (Cantidades, Números ordinales, Números Romanos, Formas, Trigonometría, Escala); `dev/index.html`, oculta, enlaza a las restantes, Números entre ellas, más las que aparecen en `BOTH_SLUGS` (Cantidades, Números ordinales, Escala y Trigonometría, que son a la vez portada y siguen en el catálogo completo). Los números positivos y negativos forman parte de Números; no hay una herramienta independiente. La lista de slugs públicos vive en `scripts/check.js` (`PUBLIC_SLUGS` y `BOTH_SLUGS`), y el orden en `PUBLIC_SLUGS` es el orden visible en `index.html`.
 
 ### 2.1 `assets/` — núcleo compartido, conservado entero
 

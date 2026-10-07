@@ -226,7 +226,7 @@ producto servido al usuario.
 | Semejanza de figuras | ✅ | `similar` (`semejanza`) |
 | Movimientos en el plano (traslación, giro, simetría) | ✅ | `geometry` (`simetria`, nivel `m3`) |
 | Cuerpos geométricos: áreas y volúmenes | ✅ | `geometry` (`volumen`): el volumen contando cubos por capas (`v1`) y la superficie contando los cuadraditos de las seis caras abiertas (`v2`) |
-| Trigonometría básica | 🔶 | `similar` (`rampas`) presenta la pendiente comparando rampas; no hay razones trigonométricas |
+| Trigonometría básica | ✅ | `trigonometry` (`lados`, `razon`, `medir`): los tres lados del triángulo rectángulo nombrados por su faena, la razón (cuánto sube por cada cuánto avanza) contada en la cuadrícula, y la escalera apoyada en la pared. `similar` (`rampas`) sigue cubriendo la pendiente entre dos rampas, que es el escalón anterior |
 | Estadística: medidas de dispersión | ✅ | `charts` (`reparto`, nivel `x1`: juntos o repartidos, sin fórmula) |
 | Probabilidad compuesta | ✅ | `charts` (`probabilidad`, nivel `p3`: sacar dos veces y contar las parejas) |
 | Progresiones | 🔶 | `patterns` trabaja series con regla, repetido |
@@ -244,7 +244,7 @@ producto servido al usuario.
 | Funciones: dominio, continuidad, tasa de variación | 🔶 | `algebra` (`crecer`) muestra la tasa de variación como el salto entre dos valores; dominio y continuidad no |
 | Funciones elementales | 🔶 | `algebra` (`graficas` y `crecer`); no se clasifican por familias |
 | Semejanza de figuras y resolución de triángulos | 🔶 | `similar` (`semejanza` y `pitagoras`); resolver triángulos no se pide |
-| Trigonometría: razones trigonométricas | 🔶 | `similar` (`rampas`): la pendiente es la razón, sin nombrarla |
+| Trigonometría: razones trigonométricas | ✅ | `trigonometry` (`razon`): la razón es el cateto que sube sobre el que avanza, reducida y comparable entre triángulos de distinto tamaño (`y1` la cuenta, `y2` dice si dos la comparten, `y3` elige cuál la comparte). Los tres lados se nombran en `lados` y se llevan a una escalera real en `medir`. Nunca se calcula un seno ni un coseno |
 | Geometría analítica: la recta | ✅ | `geometry` (`coordenadas`): el punto dicho con dos números (`k1`-`k2`) y la recta como los puntos que se alinean, con uno que se sale (`k3`). Sin ecuación de la recta: no hay dibujo que la sostenga |
 | Estadística bidimensional | ✅ | 💡 `charts` (`dosCosas`, nivel `y1`): dos cosas medidas a la vez en una nube de puntos — cuando una sube, ¿la otra sube o baja? |
 | Combinatoria | ✅ | `charts` (`combinaciones`, nivel `k1`), repetido |
@@ -351,7 +351,7 @@ a través de un objeto que se puede tener en la mano).
 |---|---|---|---|
 | ~~**Porcentajes y Proporcionalidad**~~ | P5-6, ESO1-2 | 🧱 básico / 💡 resto | ✅ hecha — `tools/percent/`: el porcentaje sobre cien cuadraditos, la receta que crece, la proporcionalidad inversa y el límite de dinero. |
 | ~~**Potencias y Raíces**~~ | P5-ESO3 | 🧱 cuadrados simples / 💡 resto | ✅ hecha — `divisibility` (`cuadrados` y `grandes`): el cuadrado dibujado cuadrado, su raíz, la raíz del cubo por capas y el número grande escrito corto. |
-| ~~**Trigonometría**~~ | ESO2-4 | 💡 Concepto puro | ✅ hecha — `tools/similar/` (`rampas`). "¿Qué rampa está más inclinada?" comparando ángulos visualmente; nunca calcular seno/coseno. |
+| ~~**Trigonometría**~~ | ESO2-4 | 💡 Concepto puro | ✅ hecha — `tools/trigonometry/`: los tres lados del triángulo rectángulo (`lados`), la razón contada en la cuadrícula y comparada entre triángulos de distinto tamaño (`razon`), y la escalera apoyada en la pared (`medir`). La pendiente entre rampas sigue en `tools/similar/`. Nunca calcular seno/coseno. |
 | ~~**Álgebra y Ecuaciones**~~ | ESO1-4 | 💡 Concepto puro | ✅ hecha — `tools/algebra/`. Una balanza que debe quedar equilibrada: quitar/poner el mismo peso en los dos platos. Nunca manipulación simbólica de "x". |
 | ~~**Funciones**~~ | ESO1-4 | 💡 Concepto puro | ✅ hecha — `algebra` (`graficas`) lee una gráfica real hora a hora, y `algebra` (`crecer`) distingue crecer siempre igual de crecer cada vez más. Sin notación ni fórmulas. |
 | ~~**Geometría Analítica y Programación Lineal**~~ | ESO3-4 | 💡 Concepto puro | ✅ hecha — `geometry` (`coordenadas`): un punto se dice con dos números. Y `percent` (`limite`): con este dinero y este precio, cuántas caben y cuánto sobra, que es la restricción de la que va el tema. |

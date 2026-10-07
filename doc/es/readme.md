@@ -8,7 +8,7 @@
 
 Calculia es una herramienta digital para practicar matemáticas y razonamiento lógico a tu propio ritmo, en el navegador, sin coste.
 
-La aplicación ofrece **27 actividades** organizadas en **2 familias**: Matemáticas (números, formas, operaciones, medidas, dinero) y Razonamiento y lógica (patrones, secuencias, adivinanzas, el monedero, el reloj, problemas, ¿cuál no pertenece?, puzzle). Ver el catálogo completo actividad por actividad en [`actividades.md`](actividades.md).
+La aplicación ofrece **30 actividades** organizadas en **2 familias**: Matemáticas (números, formas, operaciones, medidas, dinero) y Razonamiento y lógica (patrones, secuencias, adivinanzas, el monedero, el reloj, problemas, ¿cuál no pertenece?, puzzle). Ver el catálogo completo actividad por actividad en [`actividades.md`](actividades.md).
 
 ---
 
@@ -107,7 +107,7 @@ Si aciertas, aparecerá una celebración breve. Si no, recibirás un mensaje de 
 ## Más información
 
 - [Guía rápida de uso](guia-rapida.md) — Paso a paso (cuatro formas de abrir Calculia)
-- [Catálogo de actividades](actividades.md) — Lista completa de las 27 actividades
+- [Catálogo de actividades](actividades.md) — Lista completa de las 30 actividades
 - [Guía para profesionales](equipo.md) — Cómo usar Calculia en terapia
 - [Información técnica](tecnico.md) — Para desarrolladores
 

@@ -1,6 +1,6 @@
 # Catálogo de actividades
 
-Calculia ofrece actualmente **27 actividades**, organizadas en dos
+Calculia ofrece actualmente **30 actividades**, organizadas en dos
 familias: **matemáticas** (números, operaciones, medidas, dinero) y
 **razonamiento** (lógica, patrones, secuencias, acertijos). Las
 actividades se agrupan por la habilidad que trabajan, no por carpeta
@@ -24,6 +24,7 @@ de pantalla.
 | **Números** | Leer, escribir y comparar números enteros, secuencias y valor posicional. Incluye positivos, negativos y cero con ejemplos de la vida diaria y práctica con termómetro y ascensor. |
 | **Formas** | Comparar con dibujos cómo es una forma plana y un cuerpo, reconocer formas en objetos reales, y presentar en cuatro diapositivas los conceptos de lado, vértice, perímetro, área, volumen, simetría y semejanza antes de preguntarlos en el test. |
 | **Formas parecidas** | Decidir si dos figuras son la misma forma a otro tamaño, contar los cuadrados sobre los lados de un triángulo recto, y comparar lo inclinadas que están dos rampas. |
+| **Trigonometría** | Nombrar los tres lados de un triángulo rectángulo por la faena que hacen, contar cuántos cuadraditos sube por cada uno que avanza (la razón), ver que dos triángulos igual de inclinados la comparten aunque uno sea el doble de grande, y llevarlo a una escalera apoyada en la pared. Nunca calcula un seno ni un coseno: todo se cuenta y se mira. |
 | **Fracciones** | Reconocer, comparar y operar con fracciones sencillas y decimales. |
 | **Medidas** | Elegir la unidad adecuada (cm, m, g, kg, ml, l) y estimar longitud, peso y capacidad. |
 | **Geometría** | Distinguir un ángulo recto de uno agudo u obtuso, contar el borde y los cuadrados de dentro de una figura, y doblarla por la mitad para ver si coincide. |

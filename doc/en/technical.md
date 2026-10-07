@@ -58,12 +58,12 @@ lands on a subpage directly.
 
 ```
 calculia/
-├── index.html             # Level 0: Roman Numerals, Shapes
+├── index.html             # Level 0: Quantities, Ordinals, Roman Numerals
 ├── styles.css             #   landing stylesheet, next to index.html
 ├── app.js                 #   landing logic, next to index.html
 ├── strings.<locale>.js    #   landing texts, es/en, next to index.html
 ├── site/index.html        # Back-compat stub only: redirects to /
-├── dev/index.html         # Hidden catalogue = the other 25 activities
+├── dev/index.html         # Hidden catalogue = the rest of the activities
 ├── assets/                # Level 1: SHARED CORE
 │   ├── css/tokens.css     #   design variables (colors, typography, touch)
 │   ├── css/base.css       #   reset, self-hosted fonts, visible focus
@@ -76,7 +76,7 @@ calculia/
 │   ├── js/dinero.js       #   window.App.dinero (used by The Wallet)
 │   ├── fonts/              #   self-hosted woff2 (Atkinson Hyperlegible, Nunito)
 │   └── img/icono.svg       #   app icon (also the PWA icon)
-├── tools/<slug>/          # Level 2: one folder per ACTIVITY (28 total)
+├── tools/<slug>/          # Level 2: one folder per ACTIVITY (30 total)
 │   ├── index.html         #   structure and asset loading
 │   ├── app.js             #   logic only
 │   ├── data.js             #   data only
@@ -90,7 +90,7 @@ calculia/
 └── _headers                # Cloudflare Pages cache and security headers
 ```
 
-Same three-level architecture as Apptonomia, scoped to 28 activities. The public `index.html` links to the three front-door activities (Roman Numerals, Shapes, Scale); the hidden `dev/index.html` links to the other 25 activities, Numbers among them, plus the ones named in `BOTH_SLUGS` (Scale, which is both a front door and still listed in the full catalogue). Positive and negative numbers are part of Numbers, not a separate tool. The list of public slugs lives in `scripts/check.js` (`PUBLIC_SLUGS` and `BOTH_SLUGS`).
+Same three-level architecture as Apptonomia, scoped to 30 activities. The public `index.html` links to the six front-door activities (Quantities, Ordinal Numbers, Roman Numerals, Shapes, Trigonometry, Scale); the hidden `dev/index.html` links to the other activities, Numbers among them, plus the ones named in `BOTH_SLUGS` (Quantities, Ordinal Numbers, Scale and Trigonometry, which are both front doors and still listed in the full catalogue). Positive and negative numbers are part of Numbers, not a separate tool. The list of public slugs lives in `scripts/check.js` (`PUBLIC_SLUGS` and `BOTH_SLUGS`), and the order in `PUBLIC_SLUGS` is the visible order in `index.html`.
 
 ### 2.1 `assets/` — shared core, kept whole
 
@@ -134,7 +134,7 @@ header comment for its specific data format.
 Two actions, same two-step-confirmation pattern as Apptonomia:
 
 - **Reset person data**: removes the language preference only. None of
-  Calculia's 28 activities store a name or other personal field, so
+  Calculia's 30 activities store a name or other personal field, so
   there is no `TOOLS_WITH_NAME` list here (Apptonomia's settings/app.js
   has one, for Piano).
 - **Reset entire app**: deletes every `calculia:*` key.

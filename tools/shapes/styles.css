@@ -296,3 +296,8 @@
   .shape-compare-visual .shape-stage { min-height: 76px; }
   .shape-compare-visual svg { width: 76px; height: 76px; }
 }
+/* The soft line under the figure. Same rule as money/numbers/measures. */
+.hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
+/* Centred instead of left-hugging the screen edge. A lone button
+   lands centred; back/next stay side by side. Same as scale. */
+.intro-buttons { justify-content: center; gap: var(--espacio); }

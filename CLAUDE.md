@@ -18,8 +18,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Calculia is a static, dependency-free web app with 28 activities for
-practicing math and logical reasoning: Places and sizes, Numbers, Shapes, Geometry, Same shapes, Fractions, Measures, Scale,
+Calculia is a static, dependency-free web app with 30 activities for
+practicing math and logical reasoning: Places and sizes, Numbers, Shapes, Geometry, Trigonometry, Same shapes, Fractions, Measures, Scale,
 Subtraction and Mental Math, Money, Percentages, Math Tables, Exact groups, Big sums, Quantities, Roman
 Numerals, Problems, Water Temperature, The balance, Data and charts, The Calendar, Riddles, Patterns,
 The Wallet, The Clock, Stories, What Doesn't Belong?, and Puzzle. See
@@ -57,12 +57,15 @@ HTML/CSS/JS served as static files.
   ```
   It checks JS syntax, activity folder structure, es/en key parity
   (`tools/`, the site root, `config/`, `legal/`), `sw.js` ↔ disk parity, and
-  catalog lock: Roman Numerals, Shapes and Scale are the public cards,
-  and Scale is listed in `dev/` as well (the `BOTH_SLUGS` list in
+  catalog lock: Quantities, Ordinal Numbers, Roman Numerals, Shapes,
+  Trigonometry and Scale are the public cards, and Quantities, Ordinal
+  Numbers, Scale and Trigonometry are listed in `dev/` as well
+  (the `BOTH_SLUGS` list in
   `scripts/check.js`); hidden
   `dev/` lists
   the other activities, and their combined set plus `config/` and `sw.js`
-  must cover every slug in `tools/`. Read the script before changing the
+  must cover every slug in `tools/`. The order in `PUBLIC_SLUGS` is the
+  visible order in `index.html`. Read the script before changing the
   file layout — it encodes the invariants that layout relies on.
 
 ## Service worker cache (read this before touching any cached file)
@@ -125,7 +128,7 @@ copy, the token only busts the HTTP cache of a live visitor.
 reference** — the file-by-file breakdown, the shared-core API, and the
 activity anatomy. It follows the same three-level architecture as
 Apptonomia (shared core in `assets/`, one folder per activity in
-`tools/<slug>/`, a landing at the site root), just scoped to 28 activities
+`tools/<slug>/`, a landing at the site root), just scoped to 30 activities
 grouped into two sections (Math, Reasoning and logic) instead of
 Apptonomia's 7 therapeutic modules.
 
@@ -143,7 +146,7 @@ checking every `tools/<slug>/app.js` for a caller first.
 
 `config/` is trimmed relative to Apptonomia's: no backup export/import,
 no font-size/sound preferences, no personal-data form (none of Calculia's
-28 activities store a name or other personal field) — just progress
+30 activities store a name or other personal field) — just progress
 view and the two reset actions. There is no `/team/` or `/about/` hidden
 route (those are Apptonomia-specific, aimed at its full multi-audience
 product story); `/settings/` and `/legal/` cover what a smaller,

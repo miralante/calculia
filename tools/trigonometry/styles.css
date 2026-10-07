@@ -1,0 +1,130 @@
+/* Trigonometry — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { font-size: 1.5rem; }
+
+/* ---- The stage ----
+   Both drawings (the triangle and the ladder) sit on the same centred
+   stage, so a question that changes activity keeps its place on the
+   page and the person does not have to find the picture again. */
+.tri-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  min-height: 170px;
+}
+/* Two triangles side by side for the "same ratio?" question. They must
+   read as two separate drawings, not as one broken one, so the gap is
+   generous and each keeps its own box. */
+.pair-stage { gap: 1.5rem; }
+
+.tri-svg { overflow: visible; }
+
+/* ---- The right triangle ----
+   The grid under the triangle is what makes a leg countable, so it is
+   faint and never competes with the sides. */
+.tri-cell {
+  fill: var(--color-superficie);
+  stroke: var(--color-borde);
+  stroke-width: 1.5;
+}
+/* The corner guide: the sheet of paper held against the angle. Dashed,
+   so it reads as a guide and not as a fourth side. */
+.tri-corner {
+  fill: none;
+  stroke: var(--color-borde);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+/* The marked angle: thicker than the guide and solid, so it is the only
+   arc on screen. */
+.tri-angle {
+  fill: none;
+  stroke: var(--color-texto);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+/* All three sides are drawn the same by default. The one a question is
+   about is heavier AND in a second colour, so the three answer options
+   are still three different pictures with no colour at all (WCAG 1.4.1). */
+.tri-side {
+  stroke: var(--color-texto);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.tri-side.is-marked {
+  stroke: var(--mod-secuencia, var(--color-texto));
+  stroke-width: 8;
+}
+.tri-vertex { fill: var(--color-texto); }
+
+/* ---- A ladder against a wall ----
+   The wall and the floor are the two sides that never lean, so they are
+   the heaviest strokes in the drawing. The wall is deliberately thinner
+   than a ladder: the most upright ladder of the last level stands flat
+   against it, and if the two were the same weight that ladder would be
+   invisible — the very answer the question is asking about. */
+.lad-svg { overflow: visible; }
+.lad-wall,
+.lad-floor {
+  stroke: var(--color-texto);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+/* The ladder itself: slanted, and in the accent colour so it is the
+   side the eye goes to. */
+.lad-ladder {
+  stroke: var(--mod-secuencia, var(--color-texto));
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+.lad-ladder.is-marked {
+  stroke: var(--mod-razonamiento, var(--color-texto));
+  stroke-width: 11;
+}
+.lad-tip { fill: var(--color-texto); }
+/* The height line the tops reach, dashed so it reads as a guide and not
+   as another side of the triangle. */
+.lad-guide {
+  stroke: var(--color-borde);
+  stroke-width: 3;
+  stroke-dasharray: 7 5;
+}
+.lad-label {
+  fill: var(--color-texto);
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+/* ---- Options ----
+   The name of a side and the reason a triangle rises are shown the same
+   way: the real name on top, its plain-words gloss underneath. */
+.reason-name,
+.kind-name {
+  display: block;
+  font-weight: 700;
+}
+.reason-gloss,
+.kind-gloss {
+  display: block;
+  font-size: 0.9em;
+}
+
+/* app.js toggles .options-row for questions marked inline: true.
+   Without this rule the class is inert and those answers stack in a
+   column. Same rule as geometry/measures/numbers. */
+.options.options-row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+.options.options-row .option-btn { width: auto; min-width: 150px; }
+/* A picture option has to keep its own shape: without this the SVG would
+   be squeezed by the button's padding. */
+.options.options-row .option-btn .tri-svg { display: block; margin: 0 auto; }
+
+/* ---- Small screens ----
+   At 320px the two triangles of the "same ratio?" question no longer fit
+   side by side, so they stack instead of being scaled down to nothing. */
+@media (max-width: 420px) {
+  .pair-stage { flex-direction: column; gap: 0.5rem; }
+  .options.options-row .option-btn { min-width: 0; width: 100%; }
+}

@@ -897,15 +897,25 @@
      with its first sub-level and stores currentGroup + currentSubIdx
      so the next sub-levels are chained automatically when each round
      ends (see finish()). */
-  function startLevel(level) {
+  function startLevel(level, inChain) {
     if (level.pool === 'group') {
       currentGroup = level;
       currentSubIdx = 0;
-      startLevel(level.sublevels[0]);
+      startLevel(level.sublevels[0], true);
       return;
     }
-    currentGroup = null;
-    currentSubIdx = 0;
+    /* `inChain` separa "entrada desde el menú" de "siguiente
+       sub-nivel de la cadena". Sin esa distinción, la rama de
+       no-cadena ponía currentGroup a null y la cadena se rompía en
+       silencio: finish() ya no encontraba el grupo, así que tras el
+       PRIMER sub-nivel saltaba a la pantalla final y los sub-niveles
+       2 y 3 nunca se jugaban. Nada fallaba — la ronda se cerraba
+       con normalidad y sólo se perdían los pasos intermedios.
+       El salto dentro de finish() es el que pasa `true`. */
+    if (!inChain) {
+      currentGroup = null;
+      currentSubIdx = 0;
+    }
     currentLevel = level;
     items = itemsForLevel(level);
     idx = 0;
@@ -1421,7 +1431,7 @@
        group's end screen is shown. */
     if (currentGroup && currentSubIdx + 1 < currentGroup.sublevels.length) {
       currentSubIdx += 1;
-      startLevel(currentGroup.sublevels[currentSubIdx]);
+      startLevel(currentGroup.sublevels[currentSubIdx], true);
       return;
     }
     show(endScreen);
