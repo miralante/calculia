@@ -42,7 +42,7 @@
        tercero) ya dicen todo. La intro general de la pantalla (la
        tarjeta de arriba, "Los ordinales dicen el lugar") titula la
        sección. */
-    introNext: 'En la vida real →',
+    introNext: 'Ver en la vida real →',
     prev: '←',
     nextArrow: '→',
 

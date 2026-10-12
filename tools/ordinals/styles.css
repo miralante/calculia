@@ -100,16 +100,38 @@
 /* Cada medalla se pinta con su número de podio (🥇 arriba, 🥈 en
    medio, 🥉 abajo) usando grid-row. Si los tres se quedaran en la
    misma fila, el 🥇 no parecería el primero: el ojo entiende "el
-   primero" como "el que está más alto". */
+   primero" como "el que está más alto".
+
+   Dentro de cada pieza, el texto (cifra + nombre) va a la izquierda
+   y la medalla a la derecha: la cifra y la palabra son lo que se lee,
+   y la medalla es el "sello" que confirma el puesto. Si la medalla
+   viviera arriba del número, se leería como un adorno; si viviera
+   debajo, como dato separado. El texto se alinea a la derecha de
+   su columna para que quede pegado a la medalla — así cifra,
+   palabra y medalla forman una sola unidad visual. */
 .medal-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 4px;
+  justify-content: space-between;
+  gap: var(--espacio);
   padding: var(--espacio);
   border-radius: var(--radio);
   background: var(--color-fondo);
   border: 2px solid var(--mod-razonamiento-suave);
+}
+
+/* Bloque de texto (cifra + nombre) a la izquierda de la medalla.
+   Las dos piezas en columna, alineadas a la derecha de su columna
+   para que el "primero" (más ancho que "1º") no descuelgue la
+   composición. */
+.medal-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 .medal-item--1 { grid-row: 1; padding-bottom: calc(var(--espacio) + 8px); }
 .medal-item--2 { grid-row: 2; }

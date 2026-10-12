@@ -128,10 +128,19 @@
     });
     el.setAttribute('aria-label', ariaParts.join('; '));
     el.innerHTML = items.map(function (i) {
+      /* Texto a la izquierda, medalla a la derecha: la cifra y el
+         nombre comparten pieza (van juntos, alineados a la derecha
+         de su columna, justo al lado de la medalla) y la medalla
+         se queda en su esquina como el "sello" que confirma el
+         puesto. Si la medalla viviera encima del número, se leería
+         como un adorno; si viviera debajo, se leería como dato
+         separado. */
       return '<div class="medal-item medal-item--' + i.n + '">' +
+        '<span class="medal-text">' +
+          '<span class="medal-figure ' + i.cls + '">' + abbrev(i.n) + '</span>' +
+          '<span class="medal-name ' + i.cls + '">' + t('ord.' + i.n + 'Name') + '</span>' +
+        '</span>' +
         '<span class="medal-icon" aria-hidden="true">' + i.medal + '</span>' +
-        '<span class="medal-figure ' + i.cls + '">' + abbrev(i.n) + '</span>' +
-        '<span class="medal-name ' + i.cls + '">' + t('ord.' + i.n + 'Name') + '</span>' +
         '</div>';
     }).join('');
   }
