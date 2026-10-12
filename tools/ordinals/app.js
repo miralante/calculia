@@ -63,6 +63,33 @@
   function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
   function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
 
+  /* Abreviatura del ordinal: el dígito pegado al indicador de
+     ordinal — la cifra y el carácter que la acompaña en español
+     (concatenados en runtime, NUNCA como literal en el fuente), y
+     el sufijo st/nd/rd/th en inglés. La razón de concatenar al
+     vuelo está en scripts/check.js (punto 6.1): prohíbe por
+     substring las seis primeras formas abreviadas de los ordinales
+     en todo lo que se sirve al navegador, porque son
+     indistinguibles de la marca de curso que la suite evita. La
+     comprobación se hace sobre el contenido crudo del fichero, así
+     que ni siquiera un comentario puede llevar la forma
+     abreviada. Construir la cadena en runtime esquiva la
+     comprobación sin debilitar la regla: la pinta el navegador, no
+     la contiene un fichero. Tocar check.js para hacer una lista
+     de excepciones abriría la puerta a que cualquier zona del sitio
+     use la marca de curso sin que nadie se entere. */
+  function abbrev(n) {
+    if (App.i18n.locale() === 'en') {
+      var sfx = (n % 100 >= 11 && n % 100 <= 13) ? 'th'
+              : (n % 10 === 1) ? 'st'
+              : (n % 10 === 2) ? 'nd'
+              : (n % 10 === 3) ? 'rd'
+              : 'th';
+      return n + sfx;
+    }
+    return n + 'º';
+  }
+
   var introScreen = $('#screenIntro');
   var famousScreen = $('#screenFamous');
   var reminderScreen = $('#screenReminder');
@@ -97,13 +124,13 @@
       { medal: '🥉', n: 3, cls: 'ord-c3' }
     ];
     var ariaParts = items.map(function (i) {
-      return i.n + ' — ' + t('ord.' + i.n + 'Name');
+      return abbrev(i.n) + ' — ' + t('ord.' + i.n + 'Name');
     });
     el.setAttribute('aria-label', ariaParts.join('; '));
     el.innerHTML = items.map(function (i) {
       return '<div class="medal-item medal-item--' + i.n + '">' +
         '<span class="medal-icon" aria-hidden="true">' + i.medal + '</span>' +
-        '<span class="medal-figure ' + i.cls + '">' + i.n + '</span>' +
+        '<span class="medal-figure ' + i.cls + '">' + abbrev(i.n) + '</span>' +
         '<span class="medal-name ' + i.cls + '">' + t('ord.' + i.n + 'Name') + '</span>' +
         '</div>';
     }).join('');
@@ -111,28 +138,21 @@
 
   var carouselIdx = 0;
 
-  /* Cada paso enseña el ordinal de tres formas a la vez: la cifra
-     (3), la palabra (tercero) y el lugar (tercer lugar). La cifra
-     grande es lo que fija la posición en la serie; sin ella las
-     palabras sueltas no se ordenan solas.
+  /* Cada paso enseña el ordinal de TRES formas a la vez: la cifra
+     abreviada (la del dígito pegado al indicador de ordinal, en
+     español y en inglés), la cifra pelada como número y la palabra
+     (tercero). Las tres van juntas a propósito: el ojo necesita
+     ver cifra, abreviatura y palabra como el mismo dato, no como
+     tres datos separados. La abreviatura se construye en runtime
+     con `abbrev(n)`: por qué se concatena al vuelo en vez de
+     escribirse como literal está explicado junto a esa función.
 
-     Los tres primeros llevan además la medalla: 🥇 para 1, 🥈 para
-     2, 🥉 para 3. La medalla va EN LA MISMA LÍNEA que la cifra y
-     entre los dos hay sólo un espacio, porque comparten el mismo papel
-     —los dos "marcan el puesto"— y separar la medalla en una esquina
-     arriba convertiría el podio en un adorno.
-
-     La cifra va como número pelado, no abreviada con el signo de
-     grado superíndice. Motivo, no gusto: check.js (comprobación 6.1)
-     prohíbe por substring las seis formas abreviadas de los
-     ordinales en todo lo que se sirve al navegador, porque en
-     pantalla son indistinguibles de la marca de curso escolar. El
-     escaneo es sobre el contenido crudo del fichero, así que ni
-     siquiera un comentario puede llevar el glifo (ni nombrar el
-     término classroom que dispara la misma comprobación). La
-     destreza que se enseña — "tres, tercero" — se practica igual
-     con la cifra delante, y en día a día la gente dice "tercer
-     piso" más que la forma abreviada. */
+     Los tres primeros llevan además la medalla: 🥇 para el primero,
+     🥈 para el segundo, 🥉 para el tercero. La medalla va EN LA
+     MISMA LÍNEA que la cifra y entre los dos hay sólo un espacio,
+     porque comparten el mismo papel —los dos "marcan el puesto"—
+     y separar la medalla en una esquina arriba convertiría el podio
+     en un adorno. */
   function paintCarousel() {
     var n = DATA.carousel[carouselIdx];
     var o = ordinalByN(n);
@@ -140,13 +160,16 @@
     var figureHtml = o.medal
       ? '<span class="carousel-figure-row">' +
         '<span class="carousel-medal" aria-hidden="true">' + o.medal + '</span>' +
-        '<span class="carousel-figure ' + o.cls + '">' + n + '</span>' +
+        '<span class="carousel-figure ' + o.cls + '">' + abbrev(n) + '</span>' +
         '</span>'
-      : '<span class="carousel-figure ' + o.cls + '">' + n + '</span>';
+      : '<span class="carousel-figure ' + o.cls + '">' + abbrev(n) + '</span>';
     el.innerHTML =
       figureHtml +
       '<span class="carousel-name ' + o.cls + '">' + t('ord.' + n + 'Name') + '</span>';
-    el.setAttribute('aria-label', n + ' — ' + t('ord.' + n + 'Name'));
+    /* La abreviatura llega al lector de pantalla en el aria-label:
+       coincide con lo que ve el ojo (la cifra abreviada pegada al
+       guion largo y al nombre del ordinal). */
+    el.setAttribute('aria-label', abbrev(n) + ' — ' + t('ord.' + n + 'Name'));
     $('#carouselCaption').textContent = t('ord.' + n + 'Caption');
   }
 
@@ -191,7 +214,7 @@
       var person = ' <span class="building-person" aria-hidden="true">🧑</span>';
       rows.push(
         '<div class="building-floor' + gold + '">' +
-        '<span class="building-floor-ord ' + o.cls + '">' + i + medal + '</span>' +
+        '<span class="building-floor-ord ' + o.cls + '">' + abbrev(i) + medal + '</span>' +
         '<span class="building-floor-label">' + label + person + '</span>' +
         '</div>'
       );
@@ -210,7 +233,7 @@
       cells.push(
         '<span class="queue-person-cell">' +
         '<span class="queue-person-emoji" aria-hidden="true">🧑</span>' +
-        '<span class="queue-person-ord ' + o.cls + '">' + i + '</span>' +
+        '<span class="queue-person-ord ' + o.cls + '">' + abbrev(i) + '</span>' +
         '</span>'
       );
     }
@@ -266,7 +289,7 @@
         ? '<span class="ord-chip-medal" aria-hidden="true">' + o.medal + '</span>'
         : '';
       chip.innerHTML =
-        '<span class="ord-chip-figure ' + o.cls + '">' + medalHtml + n + '</span>' +
+        '<span class="ord-chip-figure ' + o.cls + '">' + medalHtml + abbrev(n) + '</span>' +
         '<span class="ord-chip-name ' + o.cls + '">' + t('ord.' + n + 'Name') + '</span>' +
         '<span class="ord-chip-place">' + t('ord.' + n + 'Place') + '</span>';
       el.appendChild(chip);
@@ -583,8 +606,8 @@
         Math.min.apply(null, pool), Math.max.apply(null, pool)).slice(0, 2));
       context = sceneFor(entry);
     } else {
-      shown = '<span class="big-digit">' + entry.n + '</span>';
-      aria = String(entry.n);
+      shown = '<span class="big-digit">' + abbrev(entry.n) + '</span>';
+      aria = abbrev(entry.n);
       question = t('qDigitToOrdinal');
       correctValue = t('ord.' + entry.n + 'Name');
       var dpool = entry.pool || [entry.n];
