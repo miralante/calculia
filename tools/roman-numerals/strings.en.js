@@ -57,7 +57,7 @@
     /* ---------- Screen 1: introduction (symbol carousel) ---------- */
     "introTitle": "What Roman numerals are",
     "introText": "Roman numerals are an ancient system that is still used today. You see them on clocks, monuments and in books.",
-    "introNext": "Next →",
+    "introNext": "In real life →",
 
     /* ---------- Screen 2: famous Roman numerals ---------- */
     "introFamousTitle": "A famous Roman numeral",

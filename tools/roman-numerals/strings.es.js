@@ -60,7 +60,7 @@
     /* ---------- Pantalla 1: introducción (carrusel de símbolos) ---------- */
     "introTitle": "Qué son los números romanos",
     "introText": "Los números romanos son un sistema antiguo que aún se usa hoy. Los verás en relojes, monumentos y libros.",
-    "introNext": "Siguiente →",
+    "introNext": "En la vida real →",
 
     /* ---------- Pantalla 2: números romanos famosos ---------- */
     "introFamousTitle": "Un número romano famoso",

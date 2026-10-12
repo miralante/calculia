@@ -36,7 +36,7 @@
        figure (1st, 2nd, 3rd) and their name (first, second, third)
        already say it all. The general intro card above ("Ordinals
        say the place") titles the screen. */
-    introNext: 'Next →',
+    introNext: 'In real life →',
     prev: '←',
     nextArrow: '→',
 

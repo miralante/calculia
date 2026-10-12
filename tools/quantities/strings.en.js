@@ -71,7 +71,7 @@
     /* Screen 1: what counting in groups is. */
     groupsIntroTitle: 'We count in groups',
     groupsIntroText: 'Counting one by one is very slow. So people count in groups.',
-    groupsIntroNext: 'Next →',
+    groupsIntroNext: 'In real life →',
     groupsPrev: '←',
     groupsNext: '→',
 

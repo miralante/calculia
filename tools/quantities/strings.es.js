@@ -74,7 +74,7 @@
     /* Pantalla 1: qué es contar en grupos. */
     groupsIntroTitle: 'Contamos en grupos',
     groupsIntroText: 'Contar de uno en uno es muy lento. Por eso la gente cuenta en grupos.',
-    groupsIntroNext: 'Siguiente →',
+    groupsIntroNext: 'En la vida real →',
     groupsPrev: '←',
     groupsNext: '→',
 
