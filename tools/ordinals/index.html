@@ -38,11 +38,12 @@
         <!-- Tarjeta de medallas: la presentación del concepto. Va
              SIEMPRE antes del carrusel porque primero/segundo/tercero
              son los que la gente ya conoce; los demás se añaden
-             después. Cada medalla lleva su cifra y su nombre: los
-             tres van juntos a propósito, porque la medalla sola se
-             lee como un adorno. -->
-        <div class="card stack medals-card" aria-labelledby="medalsTitle">
-          <h2 class="reference-title" id="medalsTitle" data-i18n="medalsTitle">El podio: primero, segundo, tercero</h2>
+             después. La frase introductoria y las medallas
+             ("primero/segundo/tercero") llevan ya el contenido, así
+             que esta tarjeta no necesita un h2 propio: lo repite la
+             intro general ("Los ordinales dicen el lugar") que vive
+             en la tarjeta de arriba. -->
+        <div class="card stack medals-card">
           <p class="reference-text" data-i18n="medalsText">El que gana la carrera se lleva el oro: es el primero. Detrás va el segundo. Y detrás del segundo, el tercero.</p>
           <div class="medals-row" id="medalsRow"></div>
         </div>
@@ -171,7 +172,7 @@
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
 
-  <script src="../../assets/js/utils.js?v=calculia-vfe7bb202"></script>
+  <script src="../../assets/js/utils.js?v=calculia-v67568c66"></script>
   <script src="../../assets/js/i18n.js?v=calculia-v3d393c12"></script>
   <script src="../../assets/js/storage.js?v=calculia-vd97e2550"></script>
   <script src="../../assets/js/feedback.js?v=calculia-v73bb9e8a"></script>
