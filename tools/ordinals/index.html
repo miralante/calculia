@@ -22,13 +22,29 @@
     </header>
 
     <main>
-      <!-- Pantalla 1: la serie de ordinales, en carrusel. Es la
-           única pantalla sin "hidden": si app.js no llegara a
-           pintarse, se ve esto en vez de una página en blanco. -->
+      <!-- Pantalla 1: la serie, dividida en tarjeta de medallas
+           (presentación del concepto) y carrusel (lo que viene
+           después). La tarjeta de medallas es fija: explica
+           primero/segundo/tercero. El carrusel añade el resto
+           (cuarto en adelante + los redondos 11/12/20/30). Si
+           app.js no llegara a pintarse, se ve esto en vez de una
+           página en blanco. -->
       <section id="screenIntro" class="stack">
         <div class="card reference-card stack intro-card">
           <h2 class="reference-title" data-i18n="introTitle">Los ordinales dicen el lugar</h2>
           <p class="reference-text" data-i18n="introText">Los números dicen cuántos hay. Los ordinales dicen en qué puesto está cada uno.</p>
+        </div>
+
+        <!-- Tarjeta de medallas: la presentación del concepto. Va
+             SIEMPRE antes del carrusel porque primero/segundo/tercero
+             son los que la gente ya conoce; los demás se añaden
+             después. Cada medalla lleva su cifra y su nombre: los
+             tres van juntos a propósito, porque la medalla sola se
+             lee como un adorno. -->
+        <div class="card stack medals-card" aria-labelledby="medalsTitle">
+          <h2 class="reference-title" id="medalsTitle" data-i18n="medalsTitle">El podio: primero, segundo, tercero</h2>
+          <p class="reference-text" data-i18n="medalsText">El que gana la carrera se lleva el oro: es el primero. Detrás va el segundo. Y detrás del segundo, el tercero.</p>
+          <div class="medals-row" id="medalsRow"></div>
         </div>
 
         <div class="card stack carousel-card">
@@ -45,13 +61,19 @@
         </div>
       </section>
 
-      <!-- Pantalla 2: el ordinal en una situación real. -->
+      <!-- Pantalla 2: DOS escenarios de la vida real —el edificio y
+           la cola— que se recorren con los mismos controles de
+           carrusel que la pantalla 1. Cada escenario muestra varios
+           ordinales a la vez, no un ordinal suelto: la persona ve
+           los ordinales rodeados de contexto, que es como se
+           encuentran en la realidad. -->
       <section id="screenFamous" class="stack hidden">
         <div class="card famosos-card stack" aria-labelledby="famousTitle">
-          <h2 class="reference-title" id="famousTitle" data-i18n="famousTitle">Un ordinal de la vida real</h2>
-          <p class="reference-text" data-i18n="famousSubtitle">Fíjate en este ejemplo:</p>
-          <div class="famoso-ejemplo-row">
-            <div class="famoso-ejemplo" id="famousExample"></div>
+          <h2 class="reference-title" id="famousTitle" data-i18n="famousTitle">En la vida real</h2>
+          <p class="reference-text" data-i18n="famousSubtitle">Dos sitios donde se usan los ordinales:</p>
+          <p class="famous-label" id="famousLabel"></p>
+          <div class="famous-stage-wrap" id="famousSceneWrap">
+            <div class="famous-stage" id="famousScene"></div>
           </div>
           <p class="famous-text" id="famousText"></p>
           <div class="carousel-controls">

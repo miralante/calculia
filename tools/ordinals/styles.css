@@ -1,7 +1,7 @@
 /* Números ordinales — tool-specific styles.
 
    Cuatro pantallas con la misma estructura que Números Romanos:
-   carrusel, ejemplos reales, recordatorio y juego.
+   medallas + carrusel, ejemplos reales, recordatorio y juego.
 
    Contrato "actividad aislada": no se importan estilos de otros
    tools/, así que todo lo que se usa aquí está definido aquí. Sólo
@@ -14,11 +14,11 @@
    generosamente, la flecha se desplazaría y apuntaría a otro.
 
    Los cinco colores recorren la serie y se repiten del sexto al
-   décimo (ver data.js). El color nunca identifica al ordinal: la
-   cifra y la palabra van siempre escritas al lado, así que repetir
-   color no puede llevar a error (WCAG 1.4.1). El turquesa de la
-   cabecera no es color de ningún ordinal, para que marca y paleta
-   no se pisen. */
+   décimo y más allá (ver data.js). El color nunca identifica al
+   ordinal: la cifra y la palabra van siempre escritas al lado, así
+   que repetir color no puede llevar a error (WCAG 1.4.1). El turquesa
+   de la cabecera no es color de ningún ordinal, para que marca y
+   paleta no se pisen. */
 .tool-header h1 { color: var(--mod-razonamiento); }
 
 .ord-c1 { color: var(--mod-coordinacion); }
@@ -62,7 +62,7 @@
 }
 
 /* ============================================================
-   Pantallas 1 y 2: carrusel y ejemplos
+   Pantallas 1 y 2: medallas, carrusel y ejemplos
    ============================================================ */
 .reference-card { border-color: var(--mod-razonamiento-suave); }
 .reference-title { margin: 0; font-size: var(--texto-grande); color: var(--mod-razonamiento); }
@@ -75,6 +75,73 @@
 
 .carousel-card { border-color: var(--mod-razonamiento-suave); }
 
+/* ----- Tarjeta de medallas (presentación del concepto) -----
+   El podio es la metáfora que ya se conoce sin tener que aprenderla:
+   🥇 arriba, 🥈 en medio, 🥉 abajo. La disposición se ha copiado
+   del podio olímpico y se reconoce al primer vistazo.
+
+   La altura se deja flexible (auto) y NO se fija: si las medallas
+   bajaran a una sola fila en 320px (3 × 90px = 270px + textos), el
+   podio dejaría de parecerse a un podio y pasaría a parecerse a
+   una lista horizontal. Tres columnas en tablet/escritorio y una
+   columna en 320-375px (auto-fit + minmax) es lo que mejor
+   preserva la forma de podio en ambos sitios. */
+.medals-card { border-color: var(--mod-razonamiento-suave); }
+
+.medals-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--espacio);
+  align-items: end;
+  width: 100%;
+  margin-top: var(--espacio);
+}
+
+/* Cada medalla se pinta con su número de podio (🥇 arriba, 🥈 en
+   medio, 🥉 abajo) usando grid-row. Si los tres se quedaran en la
+   misma fila, el 🥇 no parecería el primero: el ojo entiende "el
+   primero" como "el que está más alto". */
+.medal-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--espacio);
+  border-radius: var(--radio);
+  background: var(--color-fondo);
+  border: 2px solid var(--mod-razonamiento-suave);
+}
+.medal-item--1 { grid-row: 1; padding-bottom: calc(var(--espacio) + 8px); }
+.medal-item--2 { grid-row: 2; }
+.medal-item--3 { grid-row: 3; }
+
+.medal-icon {
+  font-size: 56px;
+  line-height: 1;
+}
+.medal-figure {
+  font-size: var(--texto-titulo);
+  font-weight: 800;
+  line-height: 1.1;
+}
+.medal-name {
+  font-size: var(--texto-grande);
+  font-weight: 800;
+}
+
+/* En 480px+ los tres en columna. Por debajo de 480px, el podium
+   se aplana a una fila (auto-fit minmax(140px, 1fr) lo hace
+   solo): tres columnas de 140px no caben en 320-375px, así que se
+   baja a 1-2 columnas. La forma de podio se pierde en pantallas
+   pequeñas y se gana legibilidad: en 320px con letras grandes, el
+   🥇 solo no se lee si va arriba de los otros dos. */
+@media (max-width: 480px) {
+  .medal-icon { font-size: 44px; }
+  .medal-figure { font-size: var(--texto-grande); }
+  .medal-name { font-size: var(--texto-base); }
+}
+
+/* ----- Carrusel (después de las medallas) ----- */
 .carousel-display {
   display: flex;
   flex-direction: column;
@@ -95,8 +162,22 @@
 .carousel-display:active { transform: scale(0.97); }
 .carousel-display:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 2px; }
 
-/* Forma corta y palabra apiladas y en grande (≥20px en negrita, así
-   que cuentan como texto grande a efectos de contraste AAA). */
+/* Figura y nombre: la cifra grande (≥20px en negrita) cuenta como
+   texto grande a efectos de contraste AAA. */
+
+/* Cuando el ordinal lleva medalla (1, 2, 3), la medalla y la cifra
+   van en la misma fila y a la misma altura. La medalla y la cifra
+   comparten papel — las dos "marcan el puesto" — así que viven en
+   una sola pieza. Separarlas en líneas distintas convertiría la
+   medalla en un adorno encima del número y haría que la persona
+   leyera "🥇" y "1" como dos datos separados. */
+.carousel-figure-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+}
+.carousel-medal { font-size: 44px; line-height: 1; }
 .carousel-figure { font-size: 44px; font-weight: 800; line-height: 1.1; }
 .carousel-name { font-size: var(--texto-grande); font-weight: 800; }
 
@@ -111,28 +192,145 @@
 .carousel-controls { display: flex; align-items: center; justify-content: center; gap: var(--espacio); width: 100%; }
 .carousel-controls .btn { min-width: var(--boton-min); align-self: center; padding: 4px 14px; }
 
+/* ----- Pantalla 2: escenario (edificio o cola) ----- */
 .famosos-card { border-color: var(--mod-razonamiento-suave); }
-.famoso-ejemplo-row { display: flex; align-items: center; justify-content: center; gap: var(--espacio); width: 100%; flex-wrap: wrap; }
 
-.famoso-ejemplo {
+/* Etiqueta encima del escenario: es la que dice "El edificio" o
+   "La cola" — el subtítulo ("Dos sitios donde se usan los
+   ordinales") ya está en la cabecera de la tarjeta, esta es la
+   versión corta que va pegada a la imagen. */
+.famous-label {
+  margin: 0;
+  font-weight: 700;
+  font-size: var(--texto-grande);
+  color: var(--mod-razonamiento);
+  text-align: center;
+}
+
+/* El escenario en sí: un marco con borde que contiene el edificio
+   o la cola. El borde doble es lo que separa la escena del resto
+   de la tarjeta y la hace reconocible como "lo que se mira". El
+   escenario siempre está visible en un único marco, no animado: la
+   persona que mira la pantalla tiene que poder ver los cinco
+   ordinales a la vez, y un escenario partido en dos mitades (con
+   un carrusel por dentro) lo impediría. */
+.famous-stage-wrap { width: 100%; }
+.famous-stage {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  font-weight: 800;
-  padding: var(--espacio) var(--espacio-grande);
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--espacio);
   border: 3px solid var(--mod-razonamiento-suave);
   border-radius: var(--radio);
   background: var(--color-superficie);
-  text-align: center;
-  width: 100%;
-  max-width: 480px;
-  flex: 1 1 240px;
+  min-height: 180px;
 }
-.famoso-figure { font-size: 44px; line-height: 1.1; }
-.famoso-value { display: flex; align-items: baseline; justify-content: center; gap: 8px; }
-.famoso-equals { color: var(--color-texto-suave); font-size: var(--texto-grande); }
-.famoso-name { font-size: var(--texto-grande); }
+
+/* ----- El edificio -----
+   Una pila de plantas, la baja abajo (porque así es como se
+   cuentan los pisos: el primero es el de abajo). El primer piso
+   lleva la medalla 🥇 y un fondo más cálido para que la cuenta
+   arranque visualmente desde él: si la planta baja se quedara sin
+   marca, alguien podría leer la pila de arriba abajo y pensar que
+   el primero es el último. */
+
+.famous-building {
+  gap: 4px;
+  align-items: stretch;
+}
+
+.building-floor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio);
+  padding: 10px 12px;
+  border: 2px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-fondo);
+  font-weight: 700;
+  min-height: 44px;
+}
+
+.building-floor--ground {
+  background: var(--mod-razonamiento-suave);
+  border-color: var(--mod-razonamiento);
+}
+
+.building-floor-ord {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  min-width: 2.5ch;
+  font-variant-numeric: tabular-nums;
+}
+
+.building-medal { font-size: 1.4rem; line-height: 1; }
+
+.building-floor-label {
+  flex: 1;
+  text-align: right;
+  color: var(--color-texto);
+}
+
+.building-person { font-size: 1.6rem; line-height: 1; margin-left: 6px; }
+
+/* ----- La cola -----
+   Una fila horizontal con la bandera al frente y las personas
+   detrás. Misma idea que la fila del juego, pero con personas en
+   vez de animales y con la cifra ordinal al lado de cada persona.
+
+   Los emojis de persona son genéricos (🧑) para evitar el escollo
+   del género y el tono de piel: el CLAUDE.md de Calculia dice
+   "no hay género ni tono de piel que elegir" en la cola
+   abstracta; aquí, donde la cola ES la de personas esperando, lo
+   respetamos igual. */
+.famous-queue {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.queue-flag {
+  font-size: 1.8rem;
+  line-height: 1.1;
+  flex: 0 0 auto;
+  padding: 0 4px;
+}
+
+.queue-person-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+  min-width: 44px;
+}
+
+.queue-person-emoji { font-size: 2rem; line-height: 1; }
+
+.queue-person-ord {
+  font-size: var(--texto-base);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 360px) {
+  .queue-person-cell { min-width: 36px; }
+  .queue-person-emoji { font-size: 1.6rem; }
+  .building-person { font-size: 1.3rem; }
+  .building-floor { padding: 6px 8px; min-height: 36px; }
+  .building-floor-ord { font-size: var(--texto-base); }
+  .building-floor-label { font-size: var(--texto-pequeno); }
+}
 
 .famous-text { margin: 0; color: var(--color-texto); text-align: center; }
 
@@ -157,7 +355,15 @@
   border-radius: var(--radio);
   background: var(--color-superficie);
 }
-.ord-chip-figure { font-size: var(--texto-grande); font-weight: 800; line-height: 1.1; }
+.ord-chip-figure {
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  line-height: 1.1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.ord-chip-medal { font-size: 1.4rem; line-height: 1; }
 .ord-chip-name { font-size: var(--texto-base); font-weight: 700; }
 .ord-chip-place { font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
 
@@ -326,7 +532,9 @@
    ============================================================ */
 @media (max-width: 480px) {
   .practice-grid { grid-template-columns: 1fr; }
-  .carousel-figure, .famoso-figure { font-size: 32px; }
+  .carousel-figure, .carousel-medal { font-size: 32px; }
+  .carousel-figure-row { gap: 6px; }
+  .famoso-figure { font-size: 32px; }
   .quiz-shown { font-size: 48px; min-height: 72px; }
   .big-digit { font-size: 64px; }
   .big-word { font-size: var(--texto-grande); }

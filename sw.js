@@ -12,7 +12,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v152';
+var VERSION = 'calculia-v155';
 
 var FILES = [
   './',
@@ -320,11 +320,11 @@ self.addEventListener('fetch', function (event) {
         return new Response(
           '<!doctype html><html lang="es"><head><meta charset="utf-8">' +
           '<meta name="viewport" content="width=device-width,initial-scale=1">' +
-          '<title>Sin conexiÃ³n</title><style>body{font-family:system-ui,sans-serif;' +
+          '<title>Sin conexión</title><style>body{font-family:system-ui,sans-serif;' +
           'margin:2rem auto;max-width:32rem;padding:0 1rem;line-height:1.5}' +
           'a{color:#1d4ed8}</style></head><body>' +
-          '<h1>Sin conexiÃ³n</h1>' +
-          '<p>No hemos podido cargar esta pÃ¡gina. Comprueba tu conexiÃ³n a ' +
+          '<h1>Sin conexión</h1>' +
+          '<p>No hemos podido cargar esta página. Comprueba tu conexión a ' +
           'Internet y vuelve a intentarlo.</p>' +
           '<p><a href="./">Volver a la portada</a></p>' +
           '</body></html>',

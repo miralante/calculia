@@ -155,16 +155,27 @@ async function main() {
   await shot('01-intro');
 
   // --- Ejemplos reales ---
+  /* La pantalla 2 ("En la vida real") tiene DOS escenarios fijos:
+     el edificio y la cola. Antes había cinco ejemplos sueltos; ahora
+     son los dos contextos donde la gente oye "tercer piso" y "el
+     primero de la cola" de verdad. Si la sonda encuentra más o
+     menos de dos, casi siempre es que DATA.famous se quedó a
+     medias. */
   step('ejemplos reales');
   await page.locator('#introNext').click();
   if (!(await visible('#screenFamous'))) fail.push('no se abre la pantalla de ejemplos');
   const facts = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 2; i++) {
     facts.push((await page.locator('#famousText').innerText()).trim());
     await page.locator('#famousNext2').click();
   }
   if (facts.some((f) => !f)) fail.push('algún ejemplo se quedó sin texto');
   if (facts.some((f) => !f.endsWith(':'))) fail.push('una frase de ejemplo no termina en ":" (rompería la cuenta con color)');
+  /* Las dos frases que aparecen: "En un edificio..." y "En una
+     cola...". Si las dos se quedan en una sola, casi siempre es
+     que la pantalla 2 ya no recorre los DOS escenarios. */
+  const uniqFacts = Array.from(new Set(facts));
+  if (uniqFacts.length !== 2) fail.push(`la pantalla 2 debería tener 2 escenarios distintos (edificio y cola), hay ${uniqFacts.length}`);
   await shot('02-ejemplos');
 
   // --- Recordatorio ---
@@ -172,7 +183,14 @@ async function main() {
   await page.locator('#famousNextBtn').click();
   if (!(await visible('#screenReminder'))) fail.push('no se abre el recordatorio');
   const chips = await page.locator('#ordinalsRow .ord-chip').count();
-  if (chips !== 10) fail.push(`la tabla debería tener los 10 ordinales, tiene ${chips}`);
+  /* La tabla del recordatorio muestra la serie que se enseña en la
+     pantalla 1: 1..10 más los cuatro ordinales "redondos"
+     (11, 12, 20, 30) = 14. Antes la serie llegaba sólo a 10; ahora
+     se amplía con los redondos que la gente oye en la vida real
+     (pisos 11/12, cumpleaños 20/30). Si el conteo no cuadra, lo
+     más probable es que falte un ordinal en PRESENTED_ORDINALS o
+     que se haya añadido uno sin tocar la lista. */
+  if (chips !== 14) fail.push(`la tabla debería tener 14 ordinales (1-10 + 11, 12, 20, 30), tiene ${chips}`);
   const ruleOne = (await page.locator('#ruleMatch .rule-example').allInnerTexts()).map((s) => s.replace(/\s+/g, ' ').trim());
   if (ruleOne.length < 2) fail.push('la regla 1 necesita al menos dos ejemplos');
   if (!ruleOne.some((s) => s === '1 · primero · primer lugar')) fail.push(`la regla 1 no cuadra: ${JSON.stringify(ruleOne)}`);

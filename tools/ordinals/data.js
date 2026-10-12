@@ -34,7 +34,11 @@
    DATA.ordinals — un ordinal por fila. 'n' es su número, 'cls' la
    clase de color. Las palabras viven en strings.<locale>.js como
    'ord.<n>Name' (primero), 'ord.<n>Place' (primer lugar) y
-   'ord.<n>Caption' (una frase fácil).
+   'ord.<n>Caption' (una frase fácil). Los tres primeros llevan
+   además 'medal' con la medalla correspondiente (🥇🥈🥉): la
+   medalla es lo que abre la actividad, porque "primero, segundo,
+   tercero" es la cara que la gente ya reconoce sin tener que
+   aprenderla primero.
 
    No hay forma abreviada con el signo de grado superíndice, y es
    deliberado: check.js (comprobación 6.1) prohíbe por substring las
@@ -45,23 +49,27 @@
    persona ve "3" y "tercero" juntos, que es justo la correspondencia
    que hay que aprender.
 
-   El color recorre 5 valores y se repite del sexto al décimo. Es
+   El color recorre 5 valores y se repite del sexto en adelante. Es
    deliberado y no es un descuido: el color aquí no identifica al
    ordinal —eso lo hacen la cifra y la palabra, que siempre están
-   escritas al lado—, sino que ayuda a seguir la serie. Los cinco
-   primeros coinciden con el rango de la fila (o1-o3), que es el que
-   la persona ve más a menudo.
+   escritas al lado—, sino que ayuda a seguir la serie.
 
-   DATA.famous — situaciones reales para la pantalla de ejemplos.
-   'factKey' apunta a 'famous.<factKey>'; las frases terminan en ':'
-   porque app.js añade detrás la cuenta con color.
+   DATA.famous — los DOS escenarios de la vida real. Son dos, no un
+   carrusel de ordinales sueltos: la pantalla 2 ("En la vida real")
+   recorre uno a uno los dos casos que la RAE y la vida cotidiana
+   asocian a los ordinales, "el edificio" y "la cola", que son los
+   dos contextos donde alguien escucha de verdad "vivo en el tercer
+   piso" o "es el primero de la cola". Cada escenario muestra
+   varios ordinales a la vez (5 pisos o 5 personas) para que se vea
+   la serie funcionando, no un ordinal suelto.
 
-   DATA.scenes — la misma idea como apoyo bajo el enunciado del
-   juego: "tercero" no es solo una palabra, es el piso en el que
-   vive alguien o el puesto que quedó en una carrera.
+   DATA.scenes — apoyo bajo el enunciado del juego: "tercero" no es
+   solo una palabra, es el piso en el que vive alguien o el puesto
+   que quedó en una carrera.
 
    DATA.levels — dos grupos visibles que encadenan sus sub-niveles
-   sin volver al menú (regla 13, un cambio de variable cada vez):
+   sin volver al menú (regla 13, un cambio de variable cada vez),
+   más un test que mezcla todo:
 
      - 'learn' : leer el lugar en la fila.
          paso 1 → 2 cambia SÓLO el largo de la fila (3 → 5);
@@ -70,8 +78,17 @@
          quién está ahí).
      - 'apply' : usar el ordinal fuera de la fila.
          paso 4 → 5 cambia SÓLO el sentido (ordinal → cifra,
-         cifra → ordinal), con el rango 1..10.
-     - 'test'  : mezcla de los cinco modos, en orden aleatorio.
+         cifra → ordinal), con el rango de los ordinales
+         presentados en la pantalla 1.
+     - 'test'  : mezcla de los cinco modos, en orden aleatorio,
+         sobre los mismos ordinales que la pantalla 1.
+
+   El rango de la pantalla 1 —los ordinales que se enseñan— es
+   intencionadamente corto: 1..10 más los cuatro ordinales "redondos"
+   que la gente necesita oír en la vida real (undécimo, duodécimo,
+   vigésimo, trigésimo). Meter los 29 huecos intermedios sólo serviría
+   para llenar la pantalla de palabras que no suenan en ningún sitio.
+   La serie entera, si alguien la necesita, sigue en el diccionario.
 
    Los cuatro modos base:
 
@@ -86,21 +103,25 @@
 
    La fila tiene un tope de 5 en los pasos de la fila y 3 en el
    primero: a 375px de ancho, seis animales de 44px más separaciones
-   ya no caben y empezarían a salirse. El rango 1..10 se practica
-   en los pasos de texto, donde no hay que dibujar a nadie.
+   ya no caben y empezarían a salirse. El rango de ordinales se
+   practica en los pasos de texto, donde no hay que dibujar a nadie.
    ============================================================ */
 
 var ORDINALS = [
-  { n: 1, cls: 'ord-c1' },
-  { n: 2, cls: 'ord-c2' },
-  { n: 3, cls: 'ord-c3' },
+  { n: 1, cls: 'ord-c1', medal: '🥇' },
+  { n: 2, cls: 'ord-c2', medal: '🥈' },
+  { n: 3, cls: 'ord-c3', medal: '🥉' },
   { n: 4, cls: 'ord-c4' },
   { n: 5, cls: 'ord-c5' },
   { n: 6, cls: 'ord-c1' },
   { n: 7, cls: 'ord-c2' },
   { n: 8, cls: 'ord-c3' },
   { n: 9, cls: 'ord-c4' },
-  { n: 10, cls: 'ord-c5' }
+  { n: 10, cls: 'ord-c5' },
+  { n: 11, cls: 'ord-c1' },
+  { n: 12, cls: 'ord-c2' },
+  { n: 20, cls: 'ord-c3' },
+  { n: 30, cls: 'ord-c4' }
 ];
 
 /* Quién se coloca en la fila. Emoji, así que la lista no necesita
@@ -115,6 +136,12 @@ function ordinalByN(n) {
   return found || ORDINALS[0];
 }
 
+/* El conjunto de ordinales que se enseñan y se preguntan en los
+   pasos de práctica. Lo comparten el carrusel de la pantalla 1 y los
+   modos de texto de la pantalla 5 (apply + test). Si la pantalla 1
+   cambia, basta con tocar este array y el resto se actualiza. */
+var PRESENTED_ORDINALS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 20, 30];
+
 var DATA = {
   /* Cuántos ítems tiene una ronda. Más corta que la de Cantidades
      porque aquí cada ronda enseña una regla y hay tres pantallas
@@ -123,34 +150,37 @@ var DATA = {
   maxQueue: 5,
   ordinals: ORDINALS,
   queueMembers: QUEUE_MEMBERS,
+  presentedOrdinals: PRESENTED_ORDINALS,
 
   /* Orden del carrusel y de la tabla del recordatorio: del primero
-     al décimo, en orden. Un ordinal suelto no significa nada; la
-     serie sí. */
-  carousel: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+     al décimo, en orden, y luego los cuatro ordinales "redondos" que
+     la pantalla 1 anuncia como los que también hay que saber. Un
+     ordinal suelto no significa nada; la serie sí. */
+  carousel: PRESENTED_ORDINALS,
 
-  /* Ejemplos de la vida real para la pantalla 2. */
+  /* Los DOS escenarios de la vida real. La pantalla 2 ("En la vida
+     real") recorre uno a uno estos dos casos: el edificio (los pisos
+     se cuentan de abajo arriba) y la cola (el primero va delante).
+     No es un carrusel de ordinales sueltos: cada escenario muestra
+     varios ordinales a la vez para que se vea la serie funcionando. */
   famous: [
-    { n: 1, factKey: 'primeraCita' },
-    { n: 2, factKey: 'segundaVez' },
-    { n: 3, factKey: 'tercerPiso' },
-    { n: 4, factKey: 'cuartoLugar' },
-    { n: 5, factKey: 'quintoPiso' }
+    { id: 'edificio', n: 5 },
+    { id: 'cola', n: 5 }
   ],
 
   /* Situaciones de apoyo en el juego, para que el ordinal nombre
      algo y no sea una palabra suelta. */
   scenes: [
-    { id: 'cita', n: 1 },
-    { id: 'repetir', n: 2 },
-    { id: 'piso', n: 3 },
-    { id: 'carrera', n: 4 },
-    { id: 'turno', n: 5 },
-    { id: 'entrega', n: 1 },
-    { id: 'visita', n: 2 },
-    { id: 'escalera', n: 3 },
-    { id: 'clasificacion', n: 4 },
-    { id: 'puesto', n: 5 }
+    { id: 'piso', n: 1 },
+    { id: 'piso2', n: 2 },
+    { id: 'piso3', n: 3 },
+    { id: 'piso4', n: 4 },
+    { id: 'piso5', n: 5 },
+    { id: 'cola', n: 1 },
+    { id: 'cola2', n: 2 },
+    { id: 'cola3', n: 3 },
+    { id: 'cola4', n: 4 },
+    { id: 'cola5', n: 5 }
   ],
 
   levels: [
@@ -165,8 +195,10 @@ var DATA = {
     {
       id: 'apply', pool: 'group', icon: '🧩',
       sublevels: [
-        { id: 'l4', group: 'apply', mode: 'ordinalToDigit', min: 1, max: 10, stars: 2 },
-        { id: 'l5', group: 'apply', mode: 'digitToOrdinal', min: 1, max: 10, stars: 3 }
+        { id: 'l4', group: 'apply', mode: 'ordinalToDigit',
+          pool: PRESENTED_ORDINALS, stars: 2 },
+        { id: 'l5', group: 'apply', mode: 'digitToOrdinal',
+          pool: PRESENTED_ORDINALS, stars: 3 }
       ]
     },
     { id: 'test', pool: 'random', mode: 'random', icon: '🎲', stars: 2 }

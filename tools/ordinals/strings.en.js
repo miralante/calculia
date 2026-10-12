@@ -27,13 +27,20 @@
     /* ---------- Screen 1: the series ---------- */
     introTitle: 'Ordinals say the place',
     introText: 'Numbers say how many. Ordinals say which place each one takes.',
+    /* Medals card: the concept presentation. It is the first real
+       contact with the ordinals — first, second, third are the ones
+       people already recognise without having to learn them. That is
+       why the card is fixed and goes BEFORE the carousel: the series
+       that follows adds to, not introduces. */
+    medalsTitle: 'The podium: first, second, third',
+    medalsText: 'The one who wins the race takes the gold: they are first. Behind them comes second. And behind second, third.',
     introNext: 'Next →',
     prev: '←',
     nextArrow: '→',
 
     /* ---------- Screen 2: real life ---------- */
-    famousTitle: 'An ordinal from real life',
-    famousSubtitle: 'Look at this example:',
+    famousTitle: 'In real life',
+    famousSubtitle: 'Two places where ordinals are used:',
     back: '← Back',
     continue: 'Next →',
 
@@ -53,13 +60,17 @@
     btnHome: 'Back to the start',
 
     /* ---------- The series ----------
-       Two forms per ordinal — the figure and the word — plus the
-       place, because the usual mistake is using one where another
-       belongs. There is deliberately no degree-sign abbreviation
-       ("1st" with the raised letters): check.js (6.1) forbids those
-       by substring in everything served to the browser, because they
-       are indistinguishable from a school-grade marker. The figure
-       does the same job without fighting that gate. */
+       Three forms per ordinal — the figure, the word, and the place —
+       because the usual mistake is using one where another belongs.
+       The four "round" ordinals (11, 12, 20, 30) have a more
+       explicit caption because their words do not ring a bell at
+       first glance and need a sentence that places them.
+
+       There is deliberately no degree-sign abbreviation ("1st" with
+       the raised letters): check.js (6.1) forbids those by substring
+       in everything served to the browser, because they are
+       indistinguishable from a school-grade marker. The figure does
+       the same job without fighting that gate. */
     ord: {
       '1Name': 'first', '1Place': 'first place',
       '1Caption': 'It goes in front of everyone. The first in the queue.',
@@ -80,34 +91,48 @@
       '9Name': 'ninth', '9Place': 'ninth place',
       '9Caption': 'Ninth. Nine in a queue.',
       '10Name': 'tenth', '10Place': 'tenth place',
-      '10Caption': 'Tenth. Ten in a queue: the tenth is the last one.'
+      '10Caption': 'Tenth. Ten in a queue: the tenth is the last one.',
+      /* The four "round" ordinals that are actually taught. The
+         caption puts them in real life — the 11th floor, the 12th
+         month, age 20, age 30 — because the bare word does not ring
+         a bell. */
+      '11Name': 'eleventh', '11Place': 'eleventh place',
+      '11Caption': 'Eleventh. Eleven in a queue. Used for floors: "lives on the eleventh floor".',
+      '12Name': 'twelfth', '12Place': 'twelfth place',
+      '12Caption': 'Twelfth. Twelve in a queue. Also used for months: "the twelfth month".',
+      '20Name': 'twentieth', '20Place': 'twentieth place',
+      '20Caption': 'Twentieth. Twenty in a queue. Used for birthdays: "the twentieth".',
+      '30Name': 'thirtieth', '30Place': 'thirtieth place',
+      '30Caption': 'Thirtieth. Thirty in a queue. Also for birthdays: "the thirtieth".'
     },
 
     /* ---------- Real-life examples ----------
-       The sentences end with ':' because app.js appends the coloured
-       count after them ("3rd = third"). If they brought their own
-       full stop, the two halves would fight over the punctuation. */
+       Only TWO: the building and the queue. The sentences end with
+       ':' because each scenario is rendered as a whole (the stack of
+       floors or the row of people), not as "1 = first ... = third"
+       one piece at a time; the sentence is the lead-in and the
+       ordinals are read inside. */
     famous: {
-      primeraCita: 'It is the first time they book an appointment. First is the one who goes in front:',
-      segundaVez: 'They come back for the second time. The second time is no longer the first:',
-      tercerPiso: 'They live on the third floor. Floors are counted from the bottom:',
-      cuartoLugar: 'They came fourth in the race. You say fourth place:',
-      quintoPiso: 'They live on the fifth floor. It is five floors above the first one:'
+      edificio: 'In a building, floors are counted from the bottom. The first floor is the lowest, and you go up:',
+      cola: 'In a queue, the first one is at the front. You count from the first:'
     },
 
     /* ---------- Support situations ----------
-       So the ordinal names something instead of being a bare word. */
+       So the ordinal names something instead of being a bare word.
+       After the redesign of screen 2, the in-game support scenarios
+       are split between floors (1st–5th) and queue (1st–5th) — the
+       two contexts screen 2 has just introduced. */
     scene: {
-      cita: 'It is the first time they come.',
-      repetir: 'It is the second time they do it.',
       piso: 'It is the floor they live on.',
-      carrera: 'It is the place they got in the race.',
-      turno: 'It is the turn they have.',
-      entrega: 'It is the first delivery of the parcel.',
-      visita: 'It is the second visit.',
-      escalera: 'It is the floor they go up to.',
-      clasificacion: 'It is the position in the list.',
-      puesto: 'It is the place they have.'
+      piso2: 'It is the floor they live on.',
+      piso3: 'It is the floor they live on.',
+      piso4: 'It is the floor they live on.',
+      piso5: 'It is the floor they live on.',
+      cola: 'It is the place in the queue.',
+      cola2: 'It is the place in the queue.',
+      cola3: 'It is the place in the queue.',
+      cola4: 'It is the place in the queue.',
+      cola5: 'It is the place in the queue.'
     },
 
     /* ---------- The steps ---------- */
@@ -115,7 +140,7 @@
       learnName: 'Learn the places',
       learnDetail: 'Look at a queue and say which place each one takes.',
       applyName: 'Use the ordinals',
-      applyDetail: 'Written: 1st, 2nd, 3rd… up to the tenth.',
+      applyDetail: 'The common ones: from first to tenth, and the round ones.',
       testName: 'Everything',
       testDetail: 'A bit of everything, in no fixed order.'
     },
@@ -127,6 +152,15 @@
     /* ---------- The queue ---------- */
     queueHint: 'Count from the flag 🏁.',
     queueAria: 'Queue of {n}. The arrow points at place {pos}.',
+
+    /* ---------- The building and the queue (screen 2) ---------- */
+    /* Label that appears above the scenario on screen 2. */
+    buildingLabel: 'The building',
+    buildingAria: 'Building with {n} floors. The ground floor is floor 1; you climb up to floor {top}.',
+    buildingFloor: 'floor {n}',
+    queueLabel: 'The queue',
+    queuePosition: '{n}th',
+    queueAriaLabel: 'Queue of {n} people. The first one is at the front; the last one, at the back.',
 
     /* ---------- The game ---------- */
     qPosition: 'Which place does the arrow point at?',

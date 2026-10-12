@@ -4,21 +4,26 @@
    Metodología de Números Romanos aplicada a "qué lugar ocupa cada
    uno":
 
-     1. intro    : un carrusel que nombra cada ordinal y lo sitúa en
-                   la serie, con la cifra siempre escrita al lado.
-     2. famous   : el mismo ordinal en una situación real (una cita,
-                   un piso, un puesto en una carrera), para que la
-                   palabra nombre algo y no sea una etiqueta.
+     1. intro    : una tarjeta de medallas (🥇🥈🥉) que explica
+                   primero/segundo/tercero, seguida de un carrusel
+                   que recorre la serie completa con la cifra siempre
+                   escrita al lado.
+     2. famous   : DOS escenarios de la vida real —el edificio y la
+                   cola de personas—, uno por slide, con cinco
+                   ordinales pintados a la vez en cada uno. El
+                   escenario es el que dice qué lugar es cada uno.
      3. reminder : tabla de color con la serie entera y las dos
                    reglas que explican los errores de verdad.
      4. quiz     : pasos encadenados que cambian UNA variable cada
                    vez, pistas socráticas que no dan la respuesta y
                    una ronda de refuerzo de los fallos.
 
-   El contenido (la fila, la bandera, los ordinales 1..10, los
-   niveles) viene de data.js y de la sub-actividad `ordinales` que
-   ya existía dentro de Los Números; aquí se explica en data.js por
-   qué se conserva esa fila y por qué el rango llega al décimo.
+   El contenido (la fila, los ordinales 1..10 + los redondos 11/12/
+   20/30, los niveles) viene de data.js y de la sub-actividad
+   `ordinales` que ya existía dentro de Los Números; aquí se explica
+   en data.js por qué se conserva esa fila, por qué el rango no llega
+   al trigésimo noveno (saldrían demasiados) y por qué las opciones
+   equivocadas son los LUGARES VECINOS.
 
    Dos decisiones que conviene no deshacer sin pensarlo:
 
@@ -26,7 +31,7 @@
      VECINOS (target±1, target±2), no números cualesquiera. El error
      real de un ordinal es contar desde el otro extremo o empezar
      por cero, y por eso las alternativas tienen que parecerse a ese
-     error. Sacadas al azar de 1..10 el acierto pasa a ser suerte.
+     error. Sacadas al azar de 1..N el acierto pasa a ser suerte.
 
    - El paso 1 del recordatorio avisa de que no existe un "lugar
      cero". Es la misma idea, dicha de otra forma, y evita el
@@ -66,8 +71,44 @@
   var endScreen = $('#screenEnd');
 
   /* ============================================================
-     Pantalla 1: la serie, en carrusel
+     Pantalla 1: medallas + serie, en carrusel
      ============================================================ */
+
+  /* Tarjeta de medallas: es la presentación del concepto y va
+     SIEMPRE en el mismo sitio, ANTES del carrusel. La razón está en
+     strings.es.js / strings.en.js: primero/segundo/tercero son los
+     ordinales que ya se conocen sin tener que aprenderlos, así que
+     la tarjeta los presenta y el carrusel lo que viene después —
+     cuarto, quinto… y los redondos — los añade.
+
+     Cada medalla se pinta como su número de podium (🥇 arriba, 🥈
+     en medio, 🥉 abajo): es la disposición que se ve en cualquier
+     foto de una carrera, y por eso se reconoce sin tener que
+     aprenderla. La cifra y la palabra se quedan DENTRO de la misma
+     pieza, no como hermanos sueltos: si la cifra viviera en una
+     esquina y la palabra en otra, alguien podría leerlas como
+     datos separados en vez de como la misma cosa. */
+  function paintMedals() {
+    var el = $('#medalsRow');
+    if (!el) return;
+    var items = [
+      { medal: '🥇', n: 1, cls: 'ord-c1' },
+      { medal: '🥈', n: 2, cls: 'ord-c2' },
+      { medal: '🥉', n: 3, cls: 'ord-c3' }
+    ];
+    var ariaParts = items.map(function (i) {
+      return i.n + ' — ' + t('ord.' + i.n + 'Name');
+    });
+    el.setAttribute('aria-label', ariaParts.join('; '));
+    el.innerHTML = items.map(function (i) {
+      return '<div class="medal-item medal-item--' + i.n + '">' +
+        '<span class="medal-icon" aria-hidden="true">' + i.medal + '</span>' +
+        '<span class="medal-figure ' + i.cls + '">' + i.n + '</span>' +
+        '<span class="medal-name ' + i.cls + '">' + t('ord.' + i.n + 'Name') + '</span>' +
+        '</div>';
+    }).join('');
+  }
+
   var carouselIdx = 0;
 
   /* Cada paso enseña el ordinal de tres formas a la vez: la cifra
@@ -75,9 +116,15 @@
      grande es lo que fija la posición en la serie; sin ella las
      palabras sueltas no se ordenan solas.
 
+     Los tres primeros llevan además la medalla: 🥇 para 1, 🥈 para
+     2, 🥉 para 3. La medalla va EN LA MISMA LÍNEA que la cifra y
+     entre los dos hay sólo un espacio, porque comparten el mismo papel
+     —los dos "marcan el puesto"— y separar la medalla en una esquina
+     arriba convertiría el podio en un adorno.
+
      La cifra va como número pelado, no abreviada con el signo de
-     grado superíndice. Motivo, no gusto: check.js (comprobación
-     6.1) prohíbe por substring las seis formas abreviadas de los
+     grado superíndice. Motivo, no gusto: check.js (comprobación 6.1)
+     prohíbe por substring las seis formas abreviadas de los
      ordinales en todo lo que se sirve al navegador, porque en
      pantalla son indistinguibles de la marca de curso escolar. El
      escaneo es sobre el contenido crudo del fichero, así que ni
@@ -90,8 +137,14 @@
     var n = DATA.carousel[carouselIdx];
     var o = ordinalByN(n);
     var el = $('#carouselDisplay');
+    var figureHtml = o.medal
+      ? '<span class="carousel-figure-row">' +
+        '<span class="carousel-medal" aria-hidden="true">' + o.medal + '</span>' +
+        '<span class="carousel-figure ' + o.cls + '">' + n + '</span>' +
+        '</span>'
+      : '<span class="carousel-figure ' + o.cls + '">' + n + '</span>';
     el.innerHTML =
-      '<span class="carousel-figure ' + o.cls + '">' + n + '</span>' +
+      figureHtml +
       '<span class="carousel-name ' + o.cls + '">' + t('ord.' + n + 'Name') + '</span>';
     el.setAttribute('aria-label', n + ' — ' + t('ord.' + n + 'Name'));
     $('#carouselCaption').textContent = t('ord.' + n + 'Caption');
@@ -103,21 +156,91 @@
   }
 
   /* ============================================================
-     Pantalla 2: el ordinal en una situación real
+     Pantalla 2: DOS escenarios de la vida real
      ============================================================ */
+
+  /* El edificio y la cola se renderizan a la vez, no como un
+     carrusel de ordinales sueltos. La razón está en la actividad:
+     cuando alguien oye "vivo en el tercer piso", los ordinales
+     están rodeados de contexto (el resto de los pisos del edificio),
+     y ese contexto es lo que le da sentido a la palabra. Un ordinal
+     aislado — "tercero = 3" — se recuerda peor que la palabra dentro
+     de una escena. */
   var famousIdx = 0;
+
+  /* Edificio: una pila de plantas, la baja abajo y el último arriba.
+     El número va junto a la cifra ordinal (cinco + "piso cinco", no
+     "piso" suelto), no como hermano suelto: si el "5" viviera en
+     una esquina arriba del rectángulo y "piso" en otra, el orden
+     se leería como "el piso 5", no como "el quinto piso".
+
+     El primer piso lleva el marco "primero" (medalla de oro) para
+     anclar la cuenta desde abajo. La persona que mira la imagen
+     tiene que poder encontrar la planta baja sin contar de arriba
+     hacia abajo — eso es exactamente el error que se quiere evitar.
+     Por eso la primera planta tiene un color distinto al resto: el
+     color marca el principio de la cuenta, como la bandera marca
+     el principio de la fila. */
+  function renderBuilding(total) {
+    var rows = [];
+    for (var i = total; i >= 1; i--) {
+      var o = ordinalByN(i);
+      var label = t('buildingFloor').replace('{n}', i);
+      var gold = i === 1 ? ' building-floor--ground' : '';
+      var medal = i === 1 ? ' <span class="building-medal" aria-hidden="true">🥇</span>' : '';
+      var person = ' <span class="building-person" aria-hidden="true">🧑</span>';
+      rows.push(
+        '<div class="building-floor' + gold + '">' +
+        '<span class="building-floor-ord ' + o.cls + '">' + i + medal + '</span>' +
+        '<span class="building-floor-label">' + label + person + '</span>' +
+        '</div>'
+      );
+    }
+    return rows.join('');
+  }
+
+  /* Cola: una fila de personas con la bandera al frente. Igual que
+     en el juego, pero con personas en vez de animales y con la
+     cifra ordinal al lado de cada persona. La bandera es lo que fija
+     por dónde empieza la cuenta, igual que en buildQueue(). */
+  function renderQueue(total) {
+    var cells = ['<span class="queue-flag" aria-hidden="true">🚩</span>'];
+    for (var i = 1; i <= total; i++) {
+      var o = ordinalByN(i);
+      cells.push(
+        '<span class="queue-person-cell">' +
+        '<span class="queue-person-emoji" aria-hidden="true">🧑</span>' +
+        '<span class="queue-person-ord ' + o.cls + '">' + i + '</span>' +
+        '</span>'
+      );
+    }
+    return cells.join('');
+  }
 
   function paintFamous() {
     var item = DATA.famous[famousIdx];
-    var o = ordinalByN(item.n);
-    var example = realText('famous.' + item.factKey);
-    $('#famousExample').innerHTML =
-      '<span class="famoso-figure ' + o.cls + '">' + item.n + '</span>' +
-      '<span class="famoso-value"><span class="famoso-equals">=</span>' +
-      '<span class="famoso-name ' + o.cls + '">' + t('ord.' + item.n + 'Name') + '</span></span>';
-    $('#famousExample').setAttribute('aria-label',
-      item.n + ' — ' + t('ord.' + item.n + 'Name'));
-    $('#famousText').textContent = example;
+    var container = $('#famousScene');
+    var labelEl = $('#famousLabel');
+    var textEl = $('#famousText');
+    var ariaEl = $('#famousSceneWrap');
+
+    if (item.id === 'edificio') {
+      container.className = 'famous-stage famous-building';
+      container.innerHTML = renderBuilding(item.n);
+      container.setAttribute('aria-hidden', 'true');
+      labelEl.textContent = t('buildingLabel');
+      textEl.textContent = realText('famous.edificio');
+      ariaEl.setAttribute('aria-label', t('buildingAria')
+        .replace('{n}', item.n).replace('{top}', item.n));
+    } else {
+      container.className = 'famous-stage famous-queue';
+      container.innerHTML = renderQueue(item.n);
+      container.setAttribute('aria-hidden', 'true');
+      labelEl.textContent = t('queueLabel');
+      textEl.textContent = realText('famous.cola');
+      ariaEl.setAttribute('aria-label', t('queueAriaLabel')
+        .replace('{n}', item.n));
+    }
   }
 
   function famousStep(delta) {
@@ -139,8 +262,11 @@
       var o = ordinalByN(n);
       var chip = document.createElement('div');
       chip.className = 'ord-chip';
+      var medalHtml = o.medal
+        ? '<span class="ord-chip-medal" aria-hidden="true">' + o.medal + '</span>'
+        : '';
       chip.innerHTML =
-        '<span class="ord-chip-figure ' + o.cls + '">' + n + '</span>' +
+        '<span class="ord-chip-figure ' + o.cls + '">' + medalHtml + n + '</span>' +
         '<span class="ord-chip-name ' + o.cls + '">' + t('ord.' + n + 'Name') + '</span>' +
         '<span class="ord-chip-place">' + t('ord.' + n + 'Place') + '</span>';
       el.appendChild(chip);
@@ -299,11 +425,24 @@
     return out;
   }
 
+  /* Variantes: si el nivel trae un 'pool' (lista cerrada de ordinales,
+     no un rango uniforme), saca uno de la lista. Esto es lo que hace
+     que apply y test se queden en los 14 ordinales presentados (1-10
+     + 11, 12, 20, 30) sin saltar a los 29 huecos intermedios que la
+     pantalla 1 no enseña. */
+  function pickFromPool(pool) {
+    return pool[randomInt(0, pool.length - 1)];
+  }
+
   function entryFor(level) {
     var mode = level.mode;
     if (mode === 'positionToName' || mode === 'nameToMember') {
       var itemsCount = Math.min(level.items || 3, DATA.maxQueue);
       return { mode: mode, items: itemsCount, target: randomInt(1, itemsCount) };
+    }
+    if (level.pool && Array.isArray(level.pool)) {
+      var n = pickFromPool(level.pool);
+      return { mode: mode, n: n, pool: level.pool.slice() };
     }
     return {
       mode: mode,
@@ -439,16 +578,20 @@
       aria = t('ord.' + entry.n + 'Name');
       question = t('qOrdinalToDigit');
       correctValue = entry.n;
-      options = [entry.n].concat(nearbyDigits(entry.n, entry.min, entry.max).slice(0, 2));
+      var pool = entry.pool || [entry.n];
+      options = [entry.n].concat(nearbyDigits(entry.n,
+        Math.min.apply(null, pool), Math.max.apply(null, pool)).slice(0, 2));
       context = sceneFor(entry);
     } else {
       shown = '<span class="big-digit">' + entry.n + '</span>';
       aria = String(entry.n);
       question = t('qDigitToOrdinal');
       correctValue = t('ord.' + entry.n + 'Name');
-      options = [correctValue].concat(nearbyDigits(entry.n, entry.min, entry.max).slice(0, 2).map(function (p) {
-        return t('ord.' + p + 'Name');
-      }));
+      var dpool = entry.pool || [entry.n];
+      options = [correctValue].concat(nearbyDigits(entry.n,
+        Math.min.apply(null, dpool), Math.max.apply(null, dpool)).slice(0, 2).map(function (p) {
+          return t('ord.' + p + 'Name');
+        }));
       context = sceneFor(entry);
     }
 
@@ -637,6 +780,7 @@
   function init() {
     App.i18n.apply();
     paintStars();
+    paintMedals();
     paintCarousel();
     paintFamous();
     paintOrdinalRow();

@@ -31,13 +31,20 @@
     /* ---------- Pantalla 1: la serie ---------- */
     introTitle: 'Los ordinales dicen el lugar',
     introText: 'Los números dicen cuántos hay. Los ordinales dicen en qué puesto está cada uno.',
+    /* Tarjeta de medallas: la presentación del concepto. Es el
+       primer contacto real con los ordinales — primero, segundo,
+       tercero son los que ya se conocen sin tener que aprenderlos.
+       Por eso la tarjeta es fija y va ANTES del carrusel: la serie
+       que viene después añade, no presenta. */
+    medalsTitle: 'El podio: primero, segundo, tercero',
+    medalsText: 'El que gana la carrera se lleva el oro: es el primero. Detrás va el segundo. Y detrás del segundo, el tercero.',
     introNext: 'Siguiente →',
     prev: '←',
     nextArrow: '→',
 
     /* ---------- Pantalla 2: la vida real ---------- */
-    famousTitle: 'Un ordinal de la vida real',
-    famousSubtitle: 'Fíjate en este ejemplo:',
+    famousTitle: 'En la vida real',
+    famousSubtitle: 'Dos sitios donde se usan los ordinales:',
     back: '← Anterior',
     continue: 'Siguiente →',
 
@@ -57,11 +64,15 @@
     btnHome: 'Volver al inicio',
 
     /* ---------- La serie ----------
-       Dos formas por ordinal —la cifra y la palabra— más el lugar,
-       porque el error típico es usar una donde toca otra. No hay
-       abreviatura con el signo de grado superíndice: check.js (6.1)
-       la prohíbe por substring en todo lo que se sirve, porque es
-       indistinguible de la marca de curso escolar, y el escaneo
+       Tres formas por ordinal —la cifra, la palabra y el lugar— porque
+       el error típico es usar una donde toca otra. Los cuatro
+       ordinales redondos (11, 12, 20, 30) tienen una "caption" más
+       explícita porque son palabras que la mayoría de la gente no
+       reconoce a primera vista y necesita una frase que las sitúe.
+
+       No hay abreviatura con el signo de grado superíndice: check.js
+       (6.1) la prohíbe por substring en todo lo que se sirve, porque
+       es indistinguible de la marca de curso escolar, y el escaneo
        incluye los comentarios. La cifra hace el mismo trabajo sin
        chocar con esa puerta. */
     ord: {
@@ -84,34 +95,47 @@
       '9Name': 'noveno', '9Place': 'noveno lugar',
       '9Caption': 'Noveno. Nueve en fila.',
       '10Name': 'décimo', '10Place': 'décimo lugar',
-      '10Caption': 'Décimo. Diez en fila: el décimo es el último.'
+      '10Caption': 'Décimo. Diez en fila: el décimo es el último.',
+      /* Los cuatro ordinales "redondos" que sí se enseñan. La frase
+         los mete en la vida real — pisos del 11, mes 12, edad 20,
+         edad 30 — porque la palabra sola no se asocia a nada. */
+      '11Name': 'undécimo', '11Place': 'undécimo lugar',
+      '11Caption': 'Undécimo. Once en fila. Se usa para los pisos: "vive en el piso undécimo".',
+      '12Name': 'duodécimo', '12Place': 'duodécimo lugar',
+      '12Caption': 'Duodécimo. Doce en fila. También se usa para los meses: "el duodécimo mes".',
+      '20Name': 'vigésimo', '20Place': 'vigésimo lugar',
+      '20Caption': 'Vigésimo. Veinte en fila. Se usa para los cumpleaños: "el vigésimo".',
+      '30Name': 'trigésimo', '30Place': 'trigésimo lugar',
+      '30Caption': 'Trigésimo. Treinta en fila. También para los cumpleaños: "el trigésimo".'
     },
 
     /* ---------- Ejemplos de la vida real ----------
-       Las frases terminan en ':' porque app.js añade detrás la cuenta
-       con color ("3 = tercero"). Si trajeran su punto final, las dos
-       mitades pelearían por la puntuación. */
+       Sólo hay DOS: el edificio y la cola. Las frases terminan en
+       ':' porque cada escenario se pinta como un todo (la pila de
+       pisos o la fila de gente), no como "1= primero ... = tercero"
+       pieza a pieza; la frase es la introducción y los ordinales se
+       leen dentro. */
     famous: {
-      primeraCita: 'Es la primera vez que pide cita. Primero es el que va delante:',
-      segundaVez: 'Vuelve por segunda vez. La segunda vez ya no es la primera:',
-      tercerPiso: 'Vive en el tercer piso. Los pisos se cuentan desde abajo:',
-      cuartoLugar: 'Llegó cuarto a la carrera. Se dice cuarto lugar:',
-      quintoPiso: 'Vive en el quinto piso. Está cinco plantas más arriba que el primero:'
+      edificio: 'En un edificio, los pisos se cuentan desde abajo. El primero es el de abajo y se sube:',
+      cola: 'En una cola, el primero está delante. Se cuenta desde el primero:'
     },
 
     /* ---------- Situaciones de apoyo ----------
-       Para que el ordinal nombre algo y no sea una palabra suelta. */
+       Para que el ordinal nombre algo y no sea una palabra suelta.
+       Después del rediseño de la pantalla 2, las situaciones de
+       apoyo del juego se reparten entre pisos (1°-5°) y cola (1°-5°)
+       —los dos contextos que la pantalla 2 acaba de presentar. */
     scene: {
-      cita: 'Es la primera vez que viene.',
-      repetir: 'Es la segunda vez que lo hace.',
       piso: 'Es el piso en el que vive.',
-      carrera: 'Es el puesto que sacó en la carrera.',
-      turno: 'Es el turno que le toca.',
-      entrega: 'Es la primera entrega del paquete.',
-      visita: 'Es la segunda visita.',
-      escalera: 'Es el piso al que sube.',
-      clasificacion: 'Es la posición en la lista.',
-      puesto: 'Es el puesto que le toca.'
+      piso2: 'Es el piso en el que vive.',
+      piso3: 'Es el piso en el que vive.',
+      piso4: 'Es el piso en el que vive.',
+      piso5: 'Es el piso en el que vive.',
+      cola: 'Es el puesto en la cola.',
+      cola2: 'Es el puesto en la cola.',
+      cola3: 'Es el puesto en la cola.',
+      cola4: 'Es el puesto en la cola.',
+      cola5: 'Es el puesto en la cola.'
     },
 
     /* ---------- Los pasos ---------- */
@@ -119,7 +143,7 @@
       learnName: 'Aprender los lugares',
       learnDetail: 'Mira una fila y di qué lugar ocupa cada uno.',
       applyName: 'Usar los ordinales',
-      applyDetail: 'Primero, segundo, tercero… hasta el décimo.',
+      applyDetail: 'Los más comunes: del primero al décimo y los redondos.',
       testName: 'Todos',
       testDetail: 'Un poco de todo, sin orden fijo.'
     },
@@ -131,6 +155,15 @@
     /* ---------- La fila ---------- */
     queueHint: 'Cuenta desde la bandera 🏁.',
     queueAria: 'Fila de {n}. La flecha señala el lugar {pos}.',
+
+    /* ---------- El edificio y la cola ---------- */
+    /* Etiqueta que aparece sobre el escenario en la pantalla 2. */
+    buildingLabel: 'El edificio',
+    buildingAria: 'Edificio de {n} pisos. La planta baja es el piso 1; se sube hasta el piso {top}.',
+    buildingFloor: 'piso {n}',
+    queueLabel: 'La cola',
+    queuePosition: '{n}º',
+    queueAriaLabel: 'Cola de {n} personas. La primera está delante; la última, detrás.',
 
     /* ---------- El juego ---------- */
     qPosition: '¿Qué lugar ocupa el que señala la flecha?',
