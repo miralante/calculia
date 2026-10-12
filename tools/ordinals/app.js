@@ -281,7 +281,12 @@
   function paintOrdinalRow() {
     var el = $('#ordinalsRow');
     el.innerHTML = '';
-    DATA.carousel.forEach(function (n) {
+    /* El recordatorio pinta la serie entera (incluyendo 1/2/3 con sus
+       medallas), no la del carrusel. La tarjeta de medallas de la
+       pantalla 1 ya presentó 1/2/3, pero aquí no se pinta otra vez —
+       las tres fichas del recordatorio llevan 🥇🥈🥉 como el podio
+       inicial. */
+    DATA.presentedOrdinals.forEach(function (n) {
       var o = ordinalByN(n);
       var chip = document.createElement('div');
       chip.className = 'ord-chip';

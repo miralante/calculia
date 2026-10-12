@@ -152,11 +152,14 @@ var DATA = {
   queueMembers: QUEUE_MEMBERS,
   presentedOrdinals: PRESENTED_ORDINALS,
 
-  /* Orden del carrusel y de la tabla del recordatorio: del primero
-     al décimo, en orden, y luego los cuatro ordinales "redondos" que
-     la pantalla 1 anuncia como los que también hay que saber. Un
-     ordinal suelto no significa nada; la serie sí. */
-  carousel: PRESENTED_ORDINALS,
+  /* Orden del carrusel de la pantalla 1: arranca en el cuarto, el
+     primero que NO está en la tarjeta de medallas de arriba (🥇🥈🥉).
+     Mostrar 1/2/3 otra vez duplicaba la medalla: la persona veía dos
+     veces "🥉 tercero" y solo una vez "🥇 cuarto". El recordatorio
+     (pantalla 3) sigue usando presentedOrdinals, que sí incluye los
+     tres primeros, porque ahí la serie entera va junta y la medalla
+     no se pinta. */
+  carousel: [4, 5, 6, 7, 8, 9, 10, 11, 12, 20, 30],
 
   /* Los DOS escenarios de la vida real. La pantalla 2 ("En la vida
      real") recorre uno a uno estos dos casos: el edificio (los pisos
