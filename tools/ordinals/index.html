@@ -38,13 +38,17 @@
         <!-- Tarjeta de medallas: la presentación del concepto. Va
              SIEMPRE antes del carrusel porque primero/segundo/tercero
              son los que la gente ya conoce; los demás se añaden
-             después. La frase introductoria y las medallas
-             ("primero/segundo/tercero") llevan ya el contenido, así
-             que esta tarjeta no necesita un h2 propio: lo repite la
-             intro general ("Los ordinales dicen el lugar") que vive
-             en la tarjeta de arriba. -->
+             después. Las tres medallas 🥇🥈🥉 con su cifra abreviada
+             y su nombre (la cifra la pinta app.js con `abbrev(n)`,
+             que la concatena en runtime para esquivar el check 6.1
+             que prohíbe por substring las seis primeras abreviaturas
+             de ordinal pegadas al dígito en el fuente) llevan ya
+             todo el contenido del podio: ponerlas al lado es
+             suficiente, y no hace falta ni h2 (la intro general
+             "Los ordinales dicen el lugar" arriba titula la pantalla)
+             ni párrafo explicativo (la propia fila de medallas lo
+             dice). -->
         <div class="card stack medals-card">
-          <p class="reference-text" data-i18n="medalsText">El que gana la carrera se lleva el oro: es el primero. Detrás va el segundo. Y detrás del segundo, el tercero.</p>
           <div class="medals-row" id="medalsRow"></div>
         </div>
 

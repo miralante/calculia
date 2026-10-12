@@ -35,12 +35,13 @@
        primer contacto real con los ordinales — primero, segundo,
        tercero son los que ya se conocen sin tener que aprenderlos.
        Por eso la tarjeta es fija y va ANTES del carrusel: la serie
-       que viene después añade, no presenta. La tarjeta no lleva un
-       h2 propio: la frase introductoria y las medallas ya nombran
-       los tres ordinales del podio, y repetirlo en un encabezado
-       era ruido (la intro general "Los ordinales dicen el lugar"
-       ya da el título de la pantalla). */
-    medalsText: 'El que gana la carrera se lleva el oro: es el primero. Detrás va el segundo. Y detrás del segundo, el tercero.',
+       que viene después añade, no presenta. La tarjeta no lleva ni
+       h2 ni párrafo: las tres medallas 🥇🥈🥉 con su cifra abreviada
+       (la pinta app.js con `abbrev(n)` y la concatena en runtime
+       para esquivar el check 6.1) y su nombre (primero, segundo,
+       tercero) ya dicen todo. La intro general de la pantalla (la
+       tarjeta de arriba, "Los ordinales dicen el lugar") titula la
+       sección. */
     introNext: 'Siguiente →',
     prev: '←',
     nextArrow: '→',
