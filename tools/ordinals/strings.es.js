@@ -60,7 +60,6 @@
     reminderTitle: 'Recuerda la serie entera',
     reminderText: 'Cada ordinal va con su número.',
     ruleMatchTitle: 'Cada ordinal va con su número:',
-    ruleStartTitle: 'Y la cuenta empieza en el primero. No hay un lugar cero:',
     start: 'Empezar a practicar →',
     backToReminder: '← Volver al recordatorio',
 
@@ -83,37 +82,34 @@
        incluye los comentarios. La cifra hace el mismo trabajo sin
        chocar con esa puerta. */
     ord: {
+      /* Antes había aquí 15 claves 'NNNCaption', una por ordinal. Cada
+         caption estaba escrito a mano con su propia frase (algunos
+         incluso variaban la fórmula entre sí). Eran 15 partes. Ahora
+         se construyen todos con captionFor() en app.js, que usa UNA
+         sola plantilla a partir de:
+           - el nombre del ordinal (la clave NName de aquí)
+           - el número escrito con letras (number.N, en strings.i18n)
+           - un ejemplo de uso real (numberUsage.N, si existe)
+         Los nombres y los lugares siguen aquí porque el recordatorio
+         y el carrusel los usan. */
       '1Name': 'primero', '1Place': 'primer lugar',
-      '1Caption': 'Es el que va delante de todos. El primero de la fila.',
       '2Name': 'segundo', '2Place': 'segundo lugar',
-      '2Caption': 'Va detrás del primero. El segundo de la fila.',
       '3Name': 'tercero', '3Place': 'tercer lugar',
-      '3Caption': 'Va el tercero. En una fila, el tercero va en el tercer puesto.',
       '4Name': 'cuarto', '4Place': 'cuarto lugar',
-      '4Caption': 'Cuarto. Desde aquí, el ordinal se parece a su número: 4.',
       '5Name': 'quinto', '5Place': 'quinto lugar',
-      '5Caption': 'Quinto. El quinto va en el quinto puesto.',
       '6Name': 'sexto', '6Place': 'sexto lugar',
-      '6Caption': 'Sexto. Seis en fila: el sexto es el sexto puesto.',
       '7Name': 'séptimo', '7Place': 'séptimo lugar',
-      '7Caption': 'Séptimo. Siete en fila.',
       '8Name': 'octavo', '8Place': 'octavo lugar',
-      '8Caption': 'Octavo. Ocho en fila.',
       '9Name': 'noveno', '9Place': 'noveno lugar',
-      '9Caption': 'Noveno. Nueve en fila.',
       '10Name': 'décimo', '10Place': 'décimo lugar',
-      '10Caption': 'Décimo. Diez en fila: el décimo es el último.',
-      /* Los cuatro ordinales "redondos" que sí se enseñan. La frase
-         los mete en la vida real — pisos del 11, mes 12, edad 20,
-         edad 30 — porque la palabra sola no se asocia a nada. */
+      /* Los cinco ordinales "redondos" que sí se enseñan. La palabra
+         sola no se asocia a nada: el uso real (pisos, meses,
+         cumpleaños, edad) viene en numberUsage.N. */
       '11Name': 'undécimo', '11Place': 'undécimo lugar',
-      '11Caption': 'Undécimo. Once en fila. Se usa para los pisos: "vive en el piso undécimo".',
       '12Name': 'duodécimo', '12Place': 'duodécimo lugar',
-      '12Caption': 'Duodécimo. Doce en fila. También se usa para los meses: "el duodécimo mes".',
       '20Name': 'vigésimo', '20Place': 'vigésimo lugar',
-      '20Caption': 'Vigésimo. Veinte en fila. Se usa para los cumpleaños: "el vigésimo".',
       '30Name': 'trigésimo', '30Place': 'trigésimo lugar',
-      '30Caption': 'Trigésimo. Treinta en fila. También para los cumpleaños: "el trigésimo".'
+      '40Name': 'cuadragésimo', '40Place': 'cuadragésimo lugar'
     },
 
     /* ---------- Ejemplos de la vida real ----------
@@ -185,11 +181,43 @@
     queueHint: 'Cuenta desde la bandera 🏁.',
     queueAria: 'Fila de {n}. La flecha señala el lugar {pos}.',
 
+    /* ---------- Texto unificado de los ordinales ----------
+       Antes había 15 'NNNCaption' separados, uno por ordinal, cada uno
+       escrito a mano. Eso era "partes": la misma fórmula repetida 15
+       veces. Aquí se construye UN SOLO texto a partir de tres piezas
+       mínimas: el nombre del ordinal (ord.NName), el número escrito
+       con letras (number.N) y, si lo tiene, un ejemplo de uso real
+       (number.usage.N). La fórmula es la misma para los 15 ordinales:
+       "{Name}. {Spell} en fila. {Uso}". */
+    captionInRow: 'en fila',
+    number: {
+      1: 'uno', 2: 'dos', 3: 'tres', 4: 'cuatro', 5: 'cinco',
+      6: 'seis', 7: 'siete', 8: 'ocho', 9: 'nueve', 10: 'diez',
+      11: 'once', 12: 'doce', 20: 'veinte', 30: 'treinta', 40: 'cuarenta'
+    },
+    /* Solo los redondos (11, 12, 20, 30, 40) llevan una segunda
+       frase con un ejemplo de uso: la palabra suelta ("undécimo") no
+       se asocia a nada sin el contexto. */
+    numberUsage: {
+      11: 'Se usa para los pisos: "vive en el piso undécimo".',
+      12: 'También se usa para los meses: "el duodécimo mes".',
+      20: 'Se usa para los cumpleaños: "el vigésimo".',
+      30: 'También para los cumpleaños: "el trigésimo".',
+      40: 'Para los 40 años: "el cuadragésimo cumpleaños".'
+    },
+
     /* ---------- El edificio y la cola ---------- */
     /* Etiqueta que aparece sobre el escenario en la pantalla 2. */
     buildingLabel: 'El edificio',
-    buildingAria: 'Edificio de {n} pisos. La planta baja es el piso 1; se sube hasta el piso {top}.',
+    /* La aria menciona el piso actual ({current}) además del rango: un
+       lector de pantalla oye "estás en el piso N", que es justo lo
+       que la persona ve en el visual con el realce del piso. */
+    buildingAria: 'Edificio de {n} pisos. Estás en el piso {current}; la planta baja es el piso 1 y se sube hasta el {top}.',
     buildingFloor: 'piso {n}',
+    /* Etiquetas accesibles de las flechas arriba/abajo. No son
+       visibles — solo las oyen los lectores de pantalla. */
+    buildingArrowUp: 'Subir al piso de arriba',
+    buildingArrowDown: 'Bajar al piso de abajo',
     queueLabel: 'La cola',
     queuePosition: '{n}º',
     queueAriaLabel: 'Cola de {n} personas. La primera está delante; la última, detrás.',

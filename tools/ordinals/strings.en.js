@@ -55,7 +55,6 @@
     reminderTitle: 'Remember the whole series',
     reminderText: 'Each ordinal goes with its number.',
     ruleMatchTitle: 'Each ordinal goes with its number:',
-    ruleStartTitle: 'And counting starts at first. There is no zeroth place:',
     start: 'Start practising →',
     backToReminder: '← Back to the reminder',
 
@@ -78,38 +77,34 @@
        indistinguishable from a school-grade marker. The figure does
        the same job without fighting that gate. */
     ord: {
+      /* Before this entry held 15 hand-written 'NNNCaption' keys, one
+         per ordinal. That was "parts": the same shape repeated 15
+         times, with some of them even drifting apart from each other.
+         The captions are now built by captionFor() in app.js, which
+         uses ONE template from three minimal pieces:
+           - the ordinal's name (the NName key here)
+           - the number spelled out (number.N, in strings.i18n)
+           - a real-life usage example (numberUsage.N, if any)
+         The names and places stay here because the reminder and the
+         carousel still need them. */
       '1Name': 'first', '1Place': 'first place',
-      '1Caption': 'It goes in front of everyone. The first in the queue.',
       '2Name': 'second', '2Place': 'second place',
-      '2Caption': 'It goes after the first. The second in the queue.',
       '3Name': 'third', '3Place': 'third place',
-      '3Caption': 'It goes third. In a queue, the third takes the third place.',
       '4Name': 'fourth', '4Place': 'fourth place',
-      '4Caption': 'Fourth. From here on, the ordinal looks like its number: 4.',
       '5Name': 'fifth', '5Place': 'fifth place',
-      '5Caption': 'Fifth. The fifth takes the fifth place.',
       '6Name': 'sixth', '6Place': 'sixth place',
-      '6Caption': 'Sixth. Six in a queue: the sixth is the sixth place.',
       '7Name': 'seventh', '7Place': 'seventh place',
-      '7Caption': 'Seventh. Seven in a queue.',
       '8Name': 'eighth', '8Place': 'eighth place',
-      '8Caption': 'Eighth. Eight in a queue.',
       '9Name': 'ninth', '9Place': 'ninth place',
-      '9Caption': 'Ninth. Nine in a queue.',
       '10Name': 'tenth', '10Place': 'tenth place',
-      '10Caption': 'Tenth. Ten in a queue: the tenth is the last one.',
-      /* The four "round" ordinals that are actually taught. The
-         caption puts them in real life — the 11th floor, the 12th
-         month, age 20, age 30 — because the bare word does not ring
-         a bell. */
+      /* The five "round" ordinals that are actually taught. The bare
+         word does not ring a bell: the real-life usage (floors, months,
+         birthdays, age) comes from numberUsage.N. */
       '11Name': 'eleventh', '11Place': 'eleventh place',
-      '11Caption': 'Eleventh. Eleven in a queue. Used for floors: "lives on the eleventh floor".',
       '12Name': 'twelfth', '12Place': 'twelfth place',
-      '12Caption': 'Twelfth. Twelve in a queue. Also used for months: "the twelfth month".',
       '20Name': 'twentieth', '20Place': 'twentieth place',
-      '20Caption': 'Twentieth. Twenty in a queue. Used for birthdays: "the twentieth".',
       '30Name': 'thirtieth', '30Place': 'thirtieth place',
-      '30Caption': 'Thirtieth. Thirty in a queue. Also for birthdays: "the thirtieth".'
+      '40Name': 'fortieth', '40Place': 'fortieth place'
     },
 
     /* ---------- Real-life examples ----------
@@ -180,11 +175,45 @@
     queueHint: 'Count from the flag 🏁.',
     queueAria: 'Queue of {n}. The arrow points at place {pos}.',
 
+    /* ---------- Unified ordinal text ----------
+       Before this entry held 15 separate 'NNNCaption' keys, one per
+       ordinal, each hand-written. That was "parts": the same shape
+       repeated 15 times, with some drifting apart. Now there is ONE
+       template (used by captionFor() in app.js) built from three
+       minimal pieces: the ordinal's name (ord.NName), the number
+       spelled out (number.N) and, if it has one, a real-life usage
+       example (numberUsage.N). The formula is the same for all 15
+       ordinals: "{Name}. {Spell} in a row. {Usage}". */
+    captionInRow: 'in a row',
+    number: {
+      1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five',
+      6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten',
+      11: 'eleven', 12: 'twelve', 20: 'twenty', 30: 'thirty', 40: 'forty'
+    },
+    /* Only the round ones (11, 12, 20, 30, 40) get a second sentence
+       with a real-life example: the bare word ("eleventh") does not
+       ring a bell without context. */
+    numberUsage: {
+      11: 'Used for floors: "lives on the eleventh floor".',
+      12: 'Also used for months: "the twelfth month".',
+      20: 'Used for birthdays: "the twentieth".',
+      30: 'Also for birthdays: "the thirtieth".',
+      40: 'For the 40th birthday: "the fortieth birthday".'
+    },
+
     /* ---------- The building and the queue (screen 2) ---------- */
     /* Label that appears above the scenario on screen 2. */
     buildingLabel: 'The building',
-    buildingAria: 'Building with {n} floors. The ground floor is floor 1; you climb up to floor {top}.',
+    /* The aria mentions the current floor ({current}) on top of the
+       range: a screen reader hears "you are on floor N", which is
+       exactly what the person sees in the visual via the floor
+       highlight. */
+    buildingAria: 'Building with {n} floors. You are on floor {current}; the ground floor is floor 1 and you climb up to floor {top}.',
     buildingFloor: 'floor {n}',
+    /* Accessible labels for the up/down arrows. Not visible — only
+       heard by screen readers. */
+    buildingArrowUp: 'Go up one floor',
+    buildingArrowDown: 'Go down one floor',
     queueLabel: 'The queue',
     queuePosition: '{n}th',
     queueAriaLabel: 'Queue of {n} people. The first one is at the front; the last one, at the back.',

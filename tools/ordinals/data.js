@@ -121,7 +121,8 @@ var ORDINALS = [
   { n: 11, cls: 'ord-c1' },
   { n: 12, cls: 'ord-c2' },
   { n: 20, cls: 'ord-c3' },
-  { n: 30, cls: 'ord-c4' }
+  { n: 30, cls: 'ord-c4' },
+  { n: 40, cls: 'ord-c5' }
 ];
 
 /* Quién se coloca en la fila. Emoji, así que la lista no necesita
@@ -140,7 +141,7 @@ function ordinalByN(n) {
    pasos de práctica. Lo comparten el carrusel de la pantalla 1 y los
    modos de texto de la pantalla 5 (apply + test). Si la pantalla 1
    cambia, basta con tocar este array y el resto se actualiza. */
-var PRESENTED_ORDINALS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 20, 30];
+var PRESENTED_ORDINALS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 20, 30, 40];
 
 var DATA = {
   /* Cuántos ítems tiene una ronda. Más corta que la de Cantidades
@@ -159,11 +160,12 @@ var DATA = {
      (pantalla 3) sigue usando presentedOrdinals, que sí incluye los
      tres primeros, porque ahí la serie entera va junta y la medalla
      no se pinta. */
-  carousel: [4, 5, 6, 7, 8, 9, 10, 11, 12, 20, 30],
+  carousel: [4, 5, 6, 7, 8, 9, 10, 11, 12, 20, 30, 40],
 
   /* Los DOS escenarios de la vida real. La pantalla 2 ("En la vida
-     real") recorre uno a uno estos dos casos: el edificio (los pisos
-     se cuentan de abajo arriba) y la cola (el primero va delante).
+     real") recorre uno a uno estos dos casos: la cola (el primero va
+     delante) y el edificio (los pisos se cuentan de abajo arriba,
+     con flechas arriba/abajo para señalar el piso actual).
      No es un carrusel de ordinales sueltos: cada escenario muestra
      varios ordinales a la vez para que se vea la serie funcionando.
 
@@ -175,9 +177,9 @@ var DATA = {
      escenario. */
   famous: [
     { id: 'lista1a9', type: 'list', ordinals: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
-    { id: 'listaRedondos', type: 'list', ordinals: [11, 12, 20, 30] },
-    { id: 'edificio', type: 'scenario', n: 5 },
-    { id: 'cola', type: 'scenario', n: 5 }
+    { id: 'listaRedondos', type: 'list', ordinals: [11, 12, 20, 30, 40] },
+    { id: 'cola', type: 'scenario', n: 5 },
+    { id: 'edificio', type: 'scenario', n: 5 }
   ],
 
   /* Situaciones de apoyo en el juego, para que el ordinal nombre

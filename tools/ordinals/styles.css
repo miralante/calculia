@@ -293,9 +293,62 @@
   min-height: 44px;
 }
 
-.building-floor--ground {
+/* Piso actualmente destacado: la persona lo ve "encendido" mientras
+   navega con las flechas. Se pinta con el realce del módulo
+   (fondo suave + borde), y se aplica al piso que diga currentFloor,
+   no solo al primero: si la persona pulsa la flecha arriba, el piso
+   2 hereda el realce y el piso 1 vuelve al estilo normal. La sombra
+   y el ligero escalado hacen que el piso "salte" del resto sin
+   necesidad de un color más chillón. */
+.building-floor--current {
   background: var(--mod-razonamiento-suave);
   border-color: var(--mod-razonamiento);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  transform: scale(1.03);
+}
+
+/* Flechas arriba/abajo del edificio: redondas, del color del módulo,
+   con el mismo tamaño mínimo táctil que los botones del proyecto
+   (48-56px). Se desactivan en los extremos: la flecha de arriba en
+   el ático, la de abajo en la planta baja. La transición de scale
+   evita que el cambio de piso se sienta como un "salto". */
+.building-arrow,
+.building-arrow--up,
+.building-arrow--down {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--mod-razonamiento);
+  color: #fff;
+  border: 2px solid var(--mod-razonamiento);
+  font-size: 22px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px auto;
+  transition: transform 0.1s ease, opacity 0.2s ease, background 0.2s ease;
+  padding: 0;
+}
+.building-arrow:hover:not(:disabled) {
+  transform: scale(1.08);
+  background: var(--mod-razonamiento);
+  filter: brightness(1.08);
+}
+.building-arrow:active:not(:disabled) {
+  transform: scale(0.94);
+}
+.building-arrow:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+.building-arrow:focus-visible {
+  outline: 3px solid var(--color-texto);
+  outline-offset: 3px;
 }
 
 .building-floor-ord {
@@ -424,35 +477,12 @@
 .ex-place { color: var(--color-texto); }
 .ex-op { color: var(--color-texto-suave); }
 
-/* La regla "no hay lugar cero" se apoya en una fila en miniatura: es
-   la única de las dos que se ve en la fila y no se entiende leyendo.
-   Cada hueco apila el miembro y su número, porque el número va DEBAJO
-   de lo que nombra: si los dos van en el mismo flujo, el "1" queda
-   flotando entre la bandera y el gato y se lee como que está en
-   medio. */
-.strip {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  flex-wrap: nowrap;
-  gap: var(--espacio);
-  margin-top: var(--espacio);
-}
-.strip-slot { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.strip-member {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  font-size: 1.8rem;
-  line-height: 1.1;
-}
-.strip-first { border-radius: var(--radio); background: var(--mod-razonamiento-suave); }
-.strip-label {
-  font-size: var(--texto-pequeno);
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
+/* Antes del rediseño, debajo de los ejemplos de la regla 1 vivía una
+   segunda regla ("la cuenta empieza en el primero, no hay lugar cero")
+   apoyada en una miniatura de fila con bandera. Era redundante con
+   la primera y se quitó: el conteo desde la bandera se entiende
+   mejor en el juego, donde la fila es real. La miniatura y su CSS
+   (clases .strip*) ya no se emiten. */
 
 /* ============================================================
    Pantalla 4: juego
@@ -590,7 +620,6 @@
 @media (max-width: 360px) {
   .quiz-shown { font-size: 38px; }
   .queue-member, .queue-start, .queue-pointer, .queue-start-spacer { width: 34px; font-size: 1.4rem; }
-  .strip-member { width: 44px; }
 }
 /* Centred instead of left-hugging the screen edge. A lone button
    lands centred; back/next stay side by side. Same as scale. */

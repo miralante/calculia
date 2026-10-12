@@ -60,6 +60,37 @@
     return text !== key ? text : '';
   }
 
+  /* Texto unificado del carrusel de la pantalla 1. Antes había 15
+     claves 'NNNCaption' separadas en strings.<locale>.js, una por
+     ordinal, cada una con su propia frase y todas describiendo el
+     mismo patrón ("el nombre, una coletilla"). Eran partes; ahora es
+     un solo texto construido aquí.
+
+     Fórmula = "{Name capitalizado}. {Número con letras} en fila.
+     {Uso real, si lo tiene}".
+       - Nombre: ord.NName (sigue en strings por i18n)
+       - Número con letras: number.N (nuevo en strings, bilingüe)
+       - "en fila": captionInRow (un único valor bilingüe)
+       - Uso real: numberUsage.N (nuevo en strings, solo para 11/12/20/
+         30/40, donde la palabra suelta no se asocia a nada)
+     Si una pieza falta, se omite sin dejar huecos raros. */
+  function captionFor(n) {
+    var name = t('ord.' + n + 'Name');
+    var spell = t('number.' + n);
+    var usage = t('numberUsage.' + n);
+    var parts = [];
+    if (name && name !== 'ord.' + n + 'Name') {
+      parts.push(name.charAt(0).toUpperCase() + name.slice(1) + '.');
+    }
+    if (spell && spell !== 'number.' + n) {
+      parts.push(spell + ' ' + t('captionInRow') + '.');
+    }
+    if (usage && usage !== 'numberUsage.' + n) {
+      parts.push(usage);
+    }
+    return parts.join(' ');
+  }
+
   function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
   function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
 
@@ -179,7 +210,7 @@
        coincide con lo que ve el ojo (la cifra abreviada pegada al
        guion largo y al nombre del ordinal). */
     el.setAttribute('aria-label', abbrev(n) + ' — ' + t('ord.' + n + 'Name'));
-    $('#carouselCaption').textContent = t('ord.' + n + 'Caption');
+    $('#carouselCaption').textContent = captionFor(n);
   }
 
   function carouselStep(delta) {
@@ -200,34 +231,48 @@
      de una escena. */
   var famousIdx = 0;
 
-  /* Edificio: una pila de plantas, la baja abajo y el último arriba.
-     El número va junto a la cifra ordinal (cinco + "piso cinco", no
-     "piso" suelto), no como hermano suelto: si el "5" viviera en
-     una esquina arriba del rectángulo y "piso" en otra, el orden
-     se leería como "el piso 5", no como "el quinto piso".
+  /* Edificio: una pila de plantas con flechas arriba/abajo para
+     señalar el piso actual. La flecha de arriba está DESACTIVADA en
+     el último piso y la de abajo en el primero: no se puede subir
+     más alto del ático ni bajar más abajo de la planta baja. La
+     idea de gamificación es la misma que en una app de mapas: el
+     usuario navega por las plantas y la actual se queda "encendida"
+     mientras las demás quedan en reposo.
 
-     El primer piso lleva el marco "primero" (medalla de oro) para
-     anclar la cuenta desde abajo. La persona que mira la imagen
-     tiene que poder encontrar la planta baja sin contar de arriba
-     hacia abajo — eso es exactamente el error que se quiere evitar.
-     Por eso la primera planta tiene un color distinto al resto: el
-     color marca el principio de la cuenta, como la bandera marca
-     el principio de la fila. */
+     El piso 1 lleva siempre la 🥇 como marcador semántico de
+     "primer lugar" (igual que en el podio de la pantalla 1): la
+     cuenta de los pisos empieza abajo, y la medalla ayuda a que la
+     cuenta arranque por el sitio correcto. El resaltado del piso
+     actual es independiente: aplica a cualquier piso según las
+     flechas, piso 1 incluido. */
+  var currentFloor = 1;
+
   function renderBuilding(total) {
+    var upDisabled = currentFloor >= total ? ' disabled' : '';
+    var downDisabled = currentFloor <= 1 ? ' disabled' : '';
     var rows = [];
+    rows.push(
+      '<button type="button" class="building-arrow building-arrow--up" id="buildingUp"' +
+      upDisabled + ' aria-label="' + t('buildingArrowUp') + '">▲</button>'
+    );
     for (var i = total; i >= 1; i--) {
       var o = ordinalByN(i);
       var label = t('buildingFloor').replace('{n}', i);
-      var gold = i === 1 ? ' building-floor--ground' : '';
+      var isCurrent = i === currentFloor;
+      var currentClass = isCurrent ? ' building-floor--current' : '';
       var medal = i === 1 ? ' <span class="building-medal" aria-hidden="true">🥇</span>' : '';
       var person = ' <span class="building-person" aria-hidden="true">🧑</span>';
       rows.push(
-        '<div class="building-floor' + gold + '">' +
+        '<div class="building-floor' + currentClass + '">' +
         '<span class="building-floor-ord ' + o.cls + '">' + abbrev(i) + medal + '</span>' +
         '<span class="building-floor-label">' + label + person + '</span>' +
         '</div>'
       );
     }
+    rows.push(
+      '<button type="button" class="building-arrow building-arrow--down" id="buildingDown"' +
+      downDisabled + ' aria-label="' + t('buildingArrowDown') + '">▼</button>'
+    );
     return rows.join('');
   }
 
@@ -268,8 +313,12 @@
       container.innerHTML = renderBuilding(item.n);
       container.setAttribute('aria-hidden', 'true');
       labelEl.textContent = t('buildingLabel');
+      /* La aria menciona el piso destacado para que el lector de
+         pantalla sepa en cuál está la persona sin tener que
+         descubrirlo en el DOM. */
       ariaEl.setAttribute('aria-label', t('buildingAria')
-        .replace('{n}', item.n).replace('{top}', item.n));
+        .replace('{n}', item.n).replace('{top}', item.n)
+        .replace('{current}', currentFloor));
     } else if (item.id === 'cola') {
       container.className = 'famous-stage famous-queue';
       container.innerHTML = renderQueue(item.n);
@@ -296,6 +345,11 @@
 
   function famousStep(delta) {
     famousIdx = (famousIdx + delta + DATA.famous.length) % DATA.famous.length;
+    /* Cada vez que se cambia de slide, el piso destacado vuelve al 1.
+       Si la persona sale del edificio y vuelve, empieza de nuevo desde
+       la planta baja: el "ahorro" del piso actual solo aplica dentro
+       del propio slide, mientras la persona lo está explorando. */
+    currentFloor = 1;
     paintFamous();
   }
 
@@ -337,13 +391,14 @@
     el.innerHTML = renderOrdinalChips(DATA.presentedOrdinals);
   }
 
-  /* Las dos reglas, con ejemplos.
-     Regla 1 — el ordinal va con su número: 1 primero, 2 segundo.
-     Regla 2 — la cuenta empieza en el primero: no hay lugar cero.
-     La 2 se cuenta también con la bandera dibujada debajo, porque es
-     la regla que se ve en la fila y no se entiende leyendo. */
+  /* Una sola regla en el recordatorio: el ordinal va con su número.
+     "1·primero·primer lugar", "2·segundo·segundo lugar" — los ejemplos
+     se pintan en columna para que la persona vea la misma fórmula
+     repetida. La antigua regla 2 ("la cuenta empieza en el primero,
+     no hay lugar cero") se apoyaba en una miniatura de fila con
+     bandera; era redundante con esta primera regla y se ha quitado:
+     el conteo desde la bandera ya se entiende en el juego. */
   var RULE_ONE = [1, 2, 3, 4];
-  var RULE_TWO = [1, 2, 3];
 
   /* "1 · primero · primer lugar": cifra, palabra y lugar unidos por
      un punto, que es como se leen en un cartel de puerta ("tercer
@@ -357,37 +412,10 @@
       '<span class="ex-place">' + t('ord.' + n + 'Place') + '</span>';
   }
 
-  /* La regla 2 se apoya en la fila: la bandera es el primero y a
-     partir de ahí no hay huecos. Se dibuja en miniatura, con tres
-     posiciones.
-
-     Cada miembro va DENTRO de su hueco junto a su número, no como
-     hermano suelto: con los dos en el mismo flujo, el "1" quedaba
-     flotando entre la bandera y el gato, que es justo lo contrario
-     de lo que la regla quiere decir — el número va DEBAJO de lo que
-     nombra. */
-  function stripSlot(member, n, isFlag) {
-    return '<span class="strip-slot">' +
-      '<span class="strip-member' + (isFlag ? ' strip-first' : '') + '">' + member + '</span>' +
-      '<span class="strip-label ' + ordinalByN(n).cls + '">' + n + '</span>' +
-      '</span>';
-  }
-
-  function queueStrip() {
-    return '<div class="strip">' +
-      stripSlot('🏁', 1, true) +
-      stripSlot('🐱', 2, false) +
-      stripSlot('🐶', 3, false) +
-      '</div>';
-  }
-
   function paintRuleExamples() {
     $('#ruleMatch').innerHTML = RULE_ONE.map(function (n) {
       return '<div class="rule-example">' + exampleFormula(n) + '</div>';
     }).join('');
-    $('#ruleStart').innerHTML = RULE_TWO.map(function (n) {
-      return '<div class="rule-example rule-example--tight">' + exampleFormula(n) + '</div>';
-    }).join('') + queueStrip();
   }
 
   /* ============================================================
@@ -827,6 +855,26 @@
   $('#introNext').addEventListener('click', function () { switchTo(famousScreen); });
 
   $('#famousPrev2').addEventListener('click', function () { famousStep(-1); });
+  /* Click delegado: las flechas del edificio (#buildingUp /
+     #buildingDown) viven DENTRO de #famousScene, cuyo innerHTML se
+     regenera en cada paintFamous. Adjuntar el handler al contenedor
+     evita re-enganchar listeners cada vez que cambia el DOM. El
+     delegate ignora otros slides (cola, listas) porque ningún botón
+     suyo tiene esos ids. */
+  $('#famousScene').addEventListener('click', function (e) {
+    var target = e.target;
+    if (target.id === 'buildingUp') {
+      if (currentFloor < DATA.famous[famousIdx].n) {
+        currentFloor += 1;
+        paintFamous();
+      }
+    } else if (target.id === 'buildingDown') {
+      if (currentFloor > 1) {
+        currentFloor -= 1;
+        paintFamous();
+      }
+    }
+  });
   $('#famousNext2').addEventListener('click', function () { famousStep(1); });
   $('#famousBackBtn').addEventListener('click', function () { switchTo(introScreen); });
   $('#famousNextBtn').addEventListener('click', function () { switchTo(reminderScreen); });
