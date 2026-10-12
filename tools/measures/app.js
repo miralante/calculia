@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Measures
+   Calculia â€” Measures
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -39,7 +39,6 @@
   var resolved = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce).
      fixedQuestion allows reusing render() with an external question
      (the reinforcement one); if null, render() generates a new one
@@ -51,28 +50,13 @@
   var reinforceTotal = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Utilidades ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   /* ---- The ladder of units ----
      Nothing that can be worked out is stored: how many steps apart two
@@ -116,7 +100,7 @@
       }
       html += '<span class="rung' + (mark ? ' is-marked' : '') +
         '" style="margin-left:' + (i * 7) + 'px">' +
-        (mark ? '<span class="rung-mark" aria-hidden="true">👉</span>' : '') +
+        (mark ? '<span class="rung-mark" aria-hidden="true">ðŸ‘‰</span>' : '') +
         '<span class="rung-symbol">' + u + '</span>' +
         '<span class="rung-name">' + unitName(u) + '</span></span>';
     });
@@ -132,7 +116,7 @@
         if (i + d < ladder.units.length) pairs.push([u, ladder.units[i + d]]);
       }
     });
-    return draw(key, pairs);
+    return App.utils.drawRound(key, pairs);
   }
 
   /* Three distinct numbers, the answer first. `suffix` writes the unit
@@ -154,7 +138,7 @@
 
     /* How far apart two units are, counted on the ladder. */
     stepsApart: function (nv) {
-      var ladder = draw(nv.id, DATA.ladders);
+      var ladder = App.utils.drawRound(nv.id, DATA.ladders);
       var pair = twoRungs(nv.id + ladder.id, ladder, DATA.maxSteps);
       var steps = stepsBetween(ladder, pair[0], pair[1]);
       return {
@@ -175,7 +159,7 @@
 
     /* And what those steps multiply by: one ten for each step. */
     stepFactor: function (nv) {
-      var ladder = draw(nv.id, DATA.ladders);
+      var ladder = App.utils.drawRound(nv.id, DATA.ladders);
       var pair = twoRungs(nv.id + ladder.id, ladder, DATA.maxSteps);
       var steps = stepsBetween(ladder, pair[0], pair[1]);
       var answer = factorFor(steps);
@@ -198,12 +182,12 @@
 
     /* The same factor put to work on a quantity. */
     ladderConvert: function (nv) {
-      var ladder = draw(nv.id, DATA.ladders);
+      var ladder = App.utils.drawRound(nv.id, DATA.ladders);
       /* Two steps at most here: with three the answer runs into the
          thousands and the ladder stops being what is being read. */
       var pair = twoRungs(nv.id + ladder.id, ladder, 2);
       var steps = stepsBetween(ladder, pair[0], pair[1]);
-      var n = draw(nv.id + 'many', DATA.ladderAmounts);
+      var n = App.utils.drawRound(nv.id + 'many', DATA.ladderAmounts);
       var answer = n * factorFor(steps);
       return {
         prompt: App.i18n.t('gen.ladderConvert')
@@ -224,7 +208,7 @@
 
     medidas: function (nv) {
       var group = DATA.measures[App.i18n.locale()][nv.lista];
-      var item = draw('med_' + nv.lista, group.items);
+      var item = App.utils.drawRound('med_' + nv.lista, group.items);
       var ej = item.ej ? '<p class="hint">' + item.ej + '</p>' : '';
       return {
         prompt: item.question,
@@ -287,7 +271,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -305,7 +289,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -381,8 +365,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the figure in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the figure in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

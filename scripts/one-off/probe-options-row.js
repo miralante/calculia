@@ -31,7 +31,7 @@ const server = http.createServer((req, res) => {
 });
 
 const CONTROL = 'money';   /* sí define .options.options-row */
-const CASES = ['algebra', 'calendar', 'charts', 'divisibility', 'geometry', 'operations', 'percent', 'places', 'problems', 'similar'];
+const CASES = ['algebra', 'calendar', 'charts', 'divisibility', 'geometry', 'operations', 'percent', 'problems', 'similar'];
 
 async function measure(page, slug) {
   await page.goto('http://127.0.0.1:' + port + '/tools/' + slug + '/', { waitUntil: 'domcontentloaded' });

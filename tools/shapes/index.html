@@ -25,10 +25,9 @@
       <div class="card stack gallery-card">
         <div class="gallery-visual" id="galleryVisual"></div>
         <p class="gallery-caption" id="galleryCaption"></p>
-        <!-- La aclaración va en su propia línea, debajo del nombre: el
-             nombre manda y la aclaración solo explica cuántos lados o
-             caras tiene la forma. app.js la rellena desde DATA. -->
-        <p class="gallery-note" id="galleryNote"></p>
+        <!-- La galería solo dice el nombre: los lados, los vértices y las
+             caras se enseñan en los concept slides y se preguntan en el
+             test, no al presentar la figura. -->
         <div class="carousel-controls">
           <button type="button" class="btn btn-secondary" id="galleryPrev" aria-label="Anterior">←</button>
           <button type="button" class="btn btn-secondary" id="galleryNext" aria-label="Siguiente">→</button>
@@ -44,10 +43,8 @@
           <div class="card centered stack real-card">
             <div class="real-object" id="realObject" aria-hidden="true"></div>
             <p class="gallery-caption" id="realCaption"></p>
-            <!-- Los tres conceptos contados sobre el objeto de verdad:
-                 app.js los rellena desde DATA.sides y los oculta en los
-                 cuerpos, donde no son palabras de una figura. -->
-            <p class="gallery-note hidden" id="realNote"></p>
+            <!-- Solo el nombre del objeto: contar lados o caras sobre una
+                 foto distrae de la forma que estamos asociando. -->
             <div class="carousel-controls">
               <button type="button" class="btn btn-secondary" id="realPrev" aria-label="Anterior">←</button>
               <button type="button" class="btn btn-secondary" id="realNext" aria-label="Siguiente">→</button>
@@ -109,7 +106,7 @@
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
 
-  <script src="../../assets/js/utils.js?v=calculia-vfe7bb202"></script>
+  <script src="../../assets/js/utils.js?v=calculia-ve69cce55"></script>
   <script src="../../assets/js/i18n.js?v=calculia-v3d393c12"></script>
   <script src="../../assets/js/storage.js?v=calculia-vd97e2550"></script>
   <script src="../../assets/js/feedback.js?v=calculia-v73bb9e8a"></script>

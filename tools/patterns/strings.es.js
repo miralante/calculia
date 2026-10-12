@@ -10,7 +10,7 @@
     title: 'Patrones',
     titleH1: '🔵 Patrones',
     instruction: 'Mira la serie. Elige lo que sigue.',
-    chooseLevel: 'Elige una actividad',
+    startButton: 'Empezar a practicar →',
     whatNext: '¿Qué sigue?',
     queSigueAudio: '¿Qué sigue?',
     btnMenu: 'Volver al inicio',

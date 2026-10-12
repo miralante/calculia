@@ -337,6 +337,12 @@
       }
       questions.push(q);
     }
+    /* Barajamos la ronda: en una sola sentada se ven las cinco mecánicas
+       en orden (read, set, convert, situations, elapsed) si el modo es
+       "todas" y el usuario aprende la posición del botón más que la
+       hora. El barajado se hace aquí, no por pregunta, porque el orden
+       de la ronda no forma parte de lo que se enseña. */
+    questions = App.utils.shuffle(questions);
     roundIndex = 0;
     roundCorrect = 0;
     inReinforce = false;

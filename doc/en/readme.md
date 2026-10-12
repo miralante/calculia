@@ -69,7 +69,6 @@ If you get it right, a brief celebration appears. If not, you get an encouraging
 
 | Activity | What it does |
 |----------|--------------|
-| **Places and sizes** | Say where something is (inside, outside, on top, underneath, left, right) and which of two things is longer, heavier or holds more. |
 | **Numbers** | Read, write and compare whole numbers, sequences and place value. |
 | **Geometry** | Tell a right angle from an acute or obtuse one, count the edge and the squares inside a figure, and fold a figure in half to see if it matches. |
 | **Math tables** | Practise multiplication and division facts through repetition and short challenges. |

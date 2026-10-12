@@ -137,6 +137,57 @@ sin importar nada de otra carpeta `tools/`, funciona si abres su
 el comentario de cabecera de `data.js` de cada actividad para su formato
 de datos específico.
 
+#### 2.2.1 Aleatoriedad de preguntas y opciones (contrato)
+
+Por diseño, **toda actividad baraja el orden de las preguntas** dentro
+de una ronda **y baraja las opciones de respuesta** de cada pregunta.
+El barajado se hace con `App.utils.shuffle(...)` (Fisher–Yates en
+`assets/js/utils.js`); nunca con `sort(() => Math.random() - 0.5)`,
+que está sesgado y produce listas no uniformes.
+
+La razón es que el orden fijo enseña la **posición** del botón, no el
+contenido: el mismo niño que pasa una ronda entera en la que la
+respuesta correcta siempre estaba abajo a la izquierda fallaría la
+misma ronda si la lista apareciera barajada. Barajar a cada ronda
+fuerza a leer el contenido y a comprobar antes de pulsar.
+
+Excepciones documentadas (no se baraja porque el orden es intrínseco al
+contenido, no una distracción):
+
+- **Pares Sí/No** (por ejemplo `wallet` → "¿has pagado lo justo?"): el
+  orden natural Sí/No es la convención y barajarlo confunde sin añadir
+  ningún reto.
+- **Líneas numéricas** (por ejemplo `wallet` → "aproximadamente,
+  ¿cuánto cuesta?" con tres importes consecutivos): barajar una recta
+  la convierte en una distracción sin pista visual, que es justo lo que
+  la línea numérica intenta evitar.
+- **Piezas de puzzle** (`puzzle`, `stories`): se barajan las piezas
+  disponibles, pero la "pregunta" es la imagen completa y su orden de
+  pintado es siempre de izquierda a derecha.
+
+`temperature` queda fuera de este contrato porque su mecánica no es de
+opción múltiple y la ronda no tiene orden que barajar (las parejas se
+arman al abrir el termómetro).
+
+#### 2.2.2 Implementación
+
+Cada `tools/<slug>/app.js` aplica el contrato con uno de estos dos
+patrones (ambos válidos):
+
+- **Opciones**: `App.utils.shuffle([correcto].concat(distractores))`
+  dentro del generador de la pregunta, o
+  `App.utils.shuffle(p.options).forEach(...)` al pintar.
+- **Preguntas**: `draw(key, list)` (un bolsa sin repetición dentro de
+  la ronda, con refill al acabarse) cuando la actividad elige una forma
+  concreta por pregunta; o `App.utils.shuffle(list).slice(0, N)` cuando
+  la ronda toma N elementos de un pool mayor.
+
+Un check en `scripts/check.js` (sección 5, "Estructura de la ronda")
+comprueba que toda actividad con preguntas de opción múltiple baraja
+las opciones y que toda actividad con un pool mayor que la ronda baraja
+el orden. Las actividades mecánicas (`puzzle`, `stories`,
+`odd-one-out`) y `temperature` están excluidas del check.
+
 ### 2.3 `settings/` — recortado respecto al de Apptonomia
 
 Dos acciones, mismo patrón de confirmación en dos pasos que Apptonomia:

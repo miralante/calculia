@@ -23,6 +23,97 @@
     return copy;
   }
 
+  /* State for drawRound: pools of un-handed-out elements, keyed by the
+     string the activity passes. Each activity should pick a key that
+     uniquely identifies the round (e.g. '<activity>:<level>:<slot>'),
+     so two concurrent rounds of the same activity don't share state. */
+  var drawPools = {};
+
+  /**
+   * Returns one element from `list` per call, with no repeats within
+   * the same round. When the pool is empty, it is reshuffled; the first
+   * element of the new pool is swapped with the second if it would be
+   * identical to the last element handed out (two identical questions
+   * in a row read as a "Siguiente" button that does nothing).
+   *
+   * The first argument is a string the activity uses to identify the
+   * pool; pass a different one for each round so the bag is refilled.
+   */
+  function drawRound(key, list) {
+    var pool = drawPools[key];
+    if (!pool || pool.i >= pool.orden.length) {
+      var fresh = shuffle(list);
+      if (pool && fresh.length > 1 && fresh[0] === pool.last) {
+        var swap = fresh[1];
+        fresh[1] = fresh[0];
+        fresh[0] = swap;
+      }
+      pool = drawPools[key] = {
+        orden: fresh,
+        i: 0,
+        last: pool ? pool.last : null
+      };
+    }
+    pool.last = pool.orden[pool.i];
+    return pool.orden[pool.i++];
+  }
+
+  /**
+   * Clears every pool tracked by drawRound. Activities call this at the
+   * start of each round (or round + reinforce) so the bag is filled
+   * fresh from the pool list, instead of carrying state from a previous
+   * round.
+   */
+  function drawRoundReset() {
+    drawPools = {};
+  }
+
+  /** True if `list` has two adjacent entries with the same keyFn. */
+  function hasAdjacentRepeat(list, keyFn) {
+    for (var i = 1; i < list.length; i++) {
+      if (keyFn(list[i]) === keyFn(list[i - 1])) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Shuffles `list` while making sure two entries with the same key
+   * never end up side by side. The repetition itself is allowed (the
+   * activity may want the same number asked twice); the constraint is
+   * only that no two copies of the same entry are adjacent. Two
+   * adjacent identical questions make the "Siguiente" button read as
+   * dead: the click works but the screen does not change.
+   *
+   * Reshuffle up to 20 times; if luck is against us, fall back to
+   * filling even positions with the most-repeated keys first, then
+   * odd ones, so two copies of the same entry cannot sit next to each
+   * other. `keyFn(entry)` is the identity of a single question (the
+   * same number in the same mode is the same question).
+   */
+  function spreadRepeats(list, keyFn) {
+    for (var attempt = 0; attempt < 20; attempt++) {
+      var shuffled = shuffle(list);
+      if (!hasAdjacentRepeat(shuffled, keyFn)) return shuffled;
+    }
+    var byKey = {};
+    list.forEach(function (e) {
+      var k = keyFn(e);
+      (byKey[k] = byKey[k] || []).push(e);
+    });
+    var flat = [];
+    Object.keys(byKey)
+      .sort(function (a, b) { return byKey[b].length - byKey[a].length; })
+      .forEach(function (k) { flat = flat.concat(byKey[k]); });
+    var out = new Array(flat.length);
+    var slot = 0;
+    for (var i = 0; i < flat.length; i++) {
+      out[slot] = flat[i];
+      slot += 2;
+      if (slot >= flat.length) slot = 1;
+    }
+    return out;
+  }
+
   /** Shortcut for querySelector. */
   function $(selector) {
     return document.querySelector(selector);
@@ -107,6 +198,9 @@
 
   window.App.utils = {
     shuffle: shuffle,
+    drawRound: drawRound,
+    drawRoundReset: drawRoundReset,
+    spreadRepeats: spreadRepeats,
     $: $,
     $$: $$,
     today: today,

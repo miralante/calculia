@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Grupos exactos
+   Calculia â€” Grupos exactos
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -37,14 +37,13 @@
   var answered = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Everything is worked out, nothing is stored ---- */
   var PRIME_TESTS = [2, 3, 5];
@@ -90,7 +89,7 @@
       throw new Error('divisibility: ' + i.base + ' to the ' + i.n + ' is not a power');
     }
     /* Past three figures the number stops being something to hold on to,
-       and the sign — which is what this level is for — gets lost in it. */
+       and the sign â€” which is what this level is for â€” gets lost in it. */
     if (Math.pow(i.base, i.n) > 999) {
       throw new Error('divisibility: ' + i.base + ' to the ' + i.n + ' is too big to read');
     }
@@ -116,24 +115,9 @@
 
   /* ---- Utilities ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   function yesNoOptions(isYes) {
     return App.utils.shuffle([true, false].map(function (v) {
@@ -196,10 +180,10 @@
     var html = '<span class="minus-row">';
     var pairs = Math.floor(n / 2);
     for (var i = 0; i < pairs; i++) {
-      html += '<span class="minus-pair"><span class="minus">−</span>' +
-        '<span class="minus">−</span></span>';
+      html += '<span class="minus-pair"><span class="minus">âˆ’</span>' +
+        '<span class="minus">âˆ’</span></span>';
     }
-    if (n % 2) html += '<span class="minus-pair is-lonely"><span class="minus">−</span></span>';
+    if (n % 2) html += '<span class="minus-pair is-lonely"><span class="minus">âˆ’</span></span>';
     return html + '</span>';
   }
 
@@ -217,7 +201,7 @@
     var value = 1;
     for (var i = 0; i <= n; i++) {
       if (i > 0) {
-        html += '<span class="chain-step" aria-hidden="true">×' + base + '</span>';
+        html += '<span class="chain-step" aria-hidden="true">Ã—' + base + '</span>';
         value *= base;
       }
       html += '<span class="chain-box">' + value + '</span>';
@@ -263,7 +247,7 @@
         var on = t % step === 0;
         html += '<span class="tick' + (on ? ' is-on' : '') +
           (on && t === meetAt ? ' is-meet' : '') + '">' +
-          (t === meetAt ? '<span class="meet-mark" aria-hidden="true">★</span>' : '') +
+          (t === meetAt ? '<span class="meet-mark" aria-hidden="true">â˜…</span>' : '') +
           '</span>';
       }
       return html + '</span>';
@@ -308,7 +292,7 @@
     /* The cube root: the same idea as the square root in one more
        direction. The layers are drawn, so the side is counted. */
     cubeRoot: function (nv) {
-      var side = draw(nv.id, DATA.cubeSides);
+      var side = App.utils.drawRound(nv.id, DATA.cubeSides);
       var cubes = side * side * side;
       var html = '<div class="layer-row">';
       for (var layer = 0; layer < side; layer++) {
@@ -336,7 +320,7 @@
     /* How many zeros a big round number carries. Nothing is calculated:
        the zeros are written out and counted. */
     howManyZeros: function (nv) {
-      var big = draw(nv.id, DATA.bigNumbers);
+      var big = App.utils.drawRound(nv.id, DATA.bigNumbers);
       var written = '1' + new Array(big.zeros + 1).join('0');
       return {
         prompt: App.i18n.t('gen.howManyZeros')
@@ -356,7 +340,7 @@
        that many zeros", so the short form can be matched to the long one
        by counting. */
     shortForm: function (nv) {
-      var big = draw(nv.id, DATA.bigNumbers);
+      var big = App.utils.drawRound(nv.id, DATA.bigNumbers);
       var written = '1' + new Array(big.zeros + 1).join('0');
       var others = App.utils.shuffle(DATA.bigNumbers.filter(function (b) {
         return b.zeros !== big.zeros;
@@ -384,8 +368,8 @@
        a square does; its diagonal never does. That is the first number
        that is not a fraction, shown rather than asserted. */
     exactOrNot: function (nv) {
-      var side = draw(nv.id, DATA.exacts);
-      var askDiagonal = draw(nv.id + 'which', [true, false]);
+      var side = App.utils.drawRound(nv.id, DATA.exacts);
+      var askDiagonal = App.utils.drawRound(nv.id + 'which', [true, false]);
       var cells = '';
       for (var r = 0; r < side; r++) {
         cells += '<span class="dot-row">';
@@ -417,8 +401,8 @@
 
     /* Is it a multiple? The rows tell you: a short last row means no. */
     isMultiple: function (nv) {
-      var base = draw(nv.id + 'b', nv.bases);
-      var n = draw(nv.id + 'n', DATA.numbers);
+      var base = App.utils.drawRound(nv.id + 'b', nv.bases);
+      var n = App.utils.drawRound(nv.id + 'n', DATA.numbers);
       var yes = n % base === 0;
       return {
         prompt: App.i18n.t('gen.isMultiple')
@@ -434,7 +418,7 @@
 
     /* The other way round: which of these three is a multiple. */
     pickMultiple: function (nv) {
-      var base = draw(nv.id + 'b', nv.bases);
+      var base = App.utils.drawRound(nv.id + 'b', nv.bases);
       var good = App.utils.shuffle(DATA.numbers.filter(function (n) {
         return n % base === 0;
       }))[0];
@@ -456,10 +440,10 @@
     /* The shortcuts. Each rule is spelled out in the hint, and what the
        rule looks at is highlighted in the number. */
     criterion: function (nv) {
-      var rule = draw(nv.id + 'r', DATA.criteria.filter(function (c) {
+      var rule = App.utils.drawRound(nv.id + 'r', DATA.criteria.filter(function (c) {
         return nv.which.indexOf(c.id) !== -1;
       }));
-      var n = draw(nv.id + 'n', DATA.criteriaNumbers);
+      var n = App.utils.drawRound(nv.id + 'n', DATA.criteriaNumbers);
       var yes = n % rule.divisor === 0;
       var digits = rule.id === 'by3';
       return {
@@ -478,14 +462,14 @@
     /* Prime or not, decided by trying to build the rows. Every attempt is
        on screen, so the answer is "none of them came out even". */
     isPrime: function (nv) {
-      var n = draw(nv.id, DATA.primeCandidates);
+      var n = App.utils.drawRound(nv.id, DATA.primeCandidates);
       var tries = PRIME_TESTS.filter(function (t) { return t < n; });
       var html = '<div class="try-stage">';
       tries.forEach(function (t) {
         var fits = n % t === 0;
         html += '<span class="try' + (fits ? ' is-fit' : '') + '">' +
           '<span class="try-label">' + App.i18n.t('gen.inRowsOf').replace(/\{t\}/g, t) +
-          ' <span class="try-verdict" aria-hidden="true">' + (fits ? '✔' : '✖') + '</span></span>' +
+          ' <span class="try-verdict" aria-hidden="true">' + (fits ? 'âœ”' : 'âœ–') + '</span></span>' +
           rowsOf(n, t, fits ? 1 : 2) + '</span>';
       });
       return {
@@ -500,7 +484,7 @@
 
     /* Every how often do the two meet. The star marks the first time. */
     lcm: function (nv) {
-      var pair = draw(nv.id, DATA.cyclePairs);
+      var pair = App.utils.drawRound(nv.id, DATA.cyclePairs);
       var meet = lcm(pair.a, pair.b);
       return {
         prompt: App.i18n.t('gen.meetEvery')
@@ -518,7 +502,7 @@
 
     /* The biggest chunk that fits exactly in both. */
     gcd: function (nv) {
-      var pair = draw(nv.id, DATA.commonPairs);
+      var pair = App.utils.drawRound(nv.id, DATA.commonPairs);
       var best = gcd(pair.a, pair.b);
       /* A smaller chunk that also fits, and one that does not fit either:
          both are the real confusions here. */
@@ -544,7 +528,7 @@
 
     /* The power as a square you can count. */
     square: function (nv) {
-      var side = draw(nv.id, DATA.squareSides);
+      var side = App.utils.drawRound(nv.id, DATA.squareSides);
       return {
         prompt: App.i18n.t('gen.squareOf').replace(/\{n\}/g, side),
         visual: '<div class="calc-stage">' + squareGrid(side) + '</div>',
@@ -559,15 +543,15 @@
        on the table; they cancel two at a time, and if one is left over the
        answer ends up on the other side of zero. */
     negativePower: function (nv) {
-      var item = draw(nv.id, DATA.negPowers);
+      var item = App.utils.drawRound(nv.id, DATA.negPowers);
       var answer = negativePowerOf(item.base, item.n);
       var written = [];
-      for (var i = 0; i < item.n; i++) written.push('(−' + item.base + ')');
+      for (var i = 0; i < item.n; i++) written.push('(âˆ’' + item.base + ')');
       return {
         prompt: App.i18n.t('gen.negativePower')
           .replace(/\{times\}/g, item.n).replace(/\{base\}/g, item.base),
         visual: '<div class="calc-stage"><p class="long-number">' +
-          written.join(' × ') + '</p>' + minusPairs(item.n) + '</div>',
+          written.join(' Ã— ') + '</p>' + minusPairs(item.n) + '</div>',
         visualAria: App.i18n.t('gen.negativeAria')
           .replace(/\{base\}/g, item.base).replace(/\{times\}/g, item.n),
         legend: App.i18n.t('gen.negativeHint'),
@@ -582,9 +566,9 @@
 
     /* How many times a number was multiplied by itself to get here. That
        count is what the index of a root says, and it is counted off the
-       chain — which works for four times or six, not only two or three. */
+       chain â€” which works for four times or six, not only two or three. */
     rootIndex: function (nv) {
-      var item = draw(nv.id, DATA.powerChains);
+      var item = App.utils.drawRound(nv.id, DATA.powerChains);
       var result = Math.pow(item.base, item.n);
       return {
         prompt: App.i18n.t('gen.rootIndex')
@@ -602,7 +586,7 @@
 
     /* And the root as its side. */
     root: function (nv) {
-      var side = draw(nv.id, DATA.squareSides);
+      var side = App.utils.drawRound(nv.id, DATA.squareSides);
       return {
         prompt: App.i18n.t('gen.rootOf').replace(/\{n\}/g, side * side),
         visual: '<div class="calc-stage">' + squareGrid(side) + '</div>',
@@ -663,7 +647,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -679,7 +663,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -757,8 +741,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the figure in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the figure in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

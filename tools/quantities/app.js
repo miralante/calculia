@@ -802,43 +802,9 @@
   }
 
   /* Identity of a round entry, so two identical questions never land
-     one after the other (see spreadRepeats). */
+     one after the other (see App.utils.spreadRepeats). */
   function groupsEntryKey(entry) {
     return entry.mode + '|' + entry.groupId + '|' + entry.count + '|' + entry.digit;
-  }
-
-  function hasAdjacentRepeat(list) {
-    for (var i = 1; i < list.length; i++) {
-      if (groupsEntryKey(list[i]) === groupsEntryKey(list[i - 1])) return true;
-    }
-    return false;
-  }
-
-  /* Reshuffle a few times until no two copies of the same question
-     are side by side. Two identical cards in a row make "Siguiente"
-     look broken: the button works but the screen does not change. */
-  function spreadRepeats(list) {
-    for (var attempt = 0; attempt < 20; attempt++) {
-      var shuffled = App.utils.shuffle(list);
-      if (!hasAdjacentRepeat(shuffled)) return shuffled;
-    }
-    var byKey = {};
-    list.forEach(function (e) {
-      var k = groupsEntryKey(e);
-      (byKey[k] = byKey[k] || []).push(e);
-    });
-    var flat = [];
-    Object.keys(byKey)
-      .sort(function (a, b) { return byKey[b].length - byKey[a].length; })
-      .forEach(function (k) { flat = flat.concat(byKey[k]); });
-    var out = new Array(flat.length);
-    var slot = 0;
-    for (var i = 0; i < flat.length; i++) {
-      out[slot] = flat[i];
-      slot += 2;
-      if (slot >= flat.length) slot = 1;
-    }
-    return out;
   }
 
   /* The flat list of base sub-levels (those with their own mode),

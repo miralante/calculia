@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Problemas
+   Calculia â€” Problemas
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -37,14 +37,13 @@
   var answered = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* A subtraction that goes below zero would be a different topic (and
      this activity never asks for one), so a bad data row must be loud
@@ -82,24 +81,9 @@
 
   /* ---- Utilities ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   function result(p) { return p.op === 'add' ? p.a + p.b : p.a - p.b; }
 
@@ -140,7 +124,7 @@
     var html = '';
     for (var i = 0; i < n; i++) {
       html += '<span class="token' + (gone ? ' is-gone' : '') + '">' + picto +
-        (gone ? '<span class="cross" aria-hidden="true">✖</span>' : '') + '</span>';
+        (gone ? '<span class="cross" aria-hidden="true">âœ–</span>' : '') + '</span>';
     }
     return html;
   }
@@ -184,9 +168,9 @@
        between joining and taking away is its own step. */
     chooseOp: function (nv) {
       var pool = DATA.problems.filter(function (p) { return p.cue === nv.cue; });
-      var p = draw(nv.id, pool);
+      var p = App.utils.drawRound(nv.id, pool);
       var label = function (op) {
-        return '<span class="op-icon" aria-hidden="true">' + (op === 'add' ? '➕' : '➖') +
+        return '<span class="op-icon" aria-hidden="true">' + (op === 'add' ? 'âž•' : 'âž–') +
           '</span><span class="op-name">' + App.i18n.t('op.' + op) + '</span>';
       };
       return {
@@ -209,7 +193,7 @@
       var pool = DATA.problems.filter(function (p) {
         return (!nv.op || p.op === nv.op) && result(p) <= nv.max;
       });
-      var p = draw(nv.id + (nv.op || 'both'), pool);
+      var p = App.utils.drawRound(nv.id + (nv.op || 'both'), pool);
       return {
         prompt: sentence(p) + ' ' + questionLine(p),
         visual: picture(p),
@@ -221,13 +205,13 @@
     },
 
     /* Two things happen, one after the other. The picture shows how it
-       ends up, so the count is still possible — what has to be held in
+       ends up, so the count is still possible â€” what has to be held in
        mind is only that there were two steps, not one. */
     twoStep: function (nv) {
       var pool = DATA.twoStep.filter(function (p) {
         return (p.ops[0] !== p.ops[1]) === !!nv.mix;
       });
-      var p = draw(nv.id, pool);
+      var p = App.utils.drawRound(nv.id, pool);
       var end = walkSteps(p);
       /* Stopping after the first step is THE mistake this level is about,
          so that number has to be one of the buttons. */
@@ -295,7 +279,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -311,7 +295,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -387,8 +371,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the picture in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the picture in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

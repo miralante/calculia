@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Porcentajes y proporción
+   Calculia â€” Porcentajes y proporciÃ³n
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -37,14 +37,13 @@
   var answered = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      The percentage, the discount, the doubled recipe and the real-world
@@ -101,24 +100,9 @@
 
   /* ---- Utilities ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   /* Options from candidates, kept distinct and never negative. */
   function pickOptions(correct, candidates, suffix) {
@@ -154,7 +138,7 @@
   function coins(total, part) {
     var html = '<div class="coin-row">';
     for (var i = 0; i < total; i++) {
-      html += '<span class="coin' + (i < part ? ' is-part' : '') + '">€</span>';
+      html += '<span class="coin' + (i < part ? ' is-part' : '') + '">â‚¬</span>';
     }
     return html + '</div>';
   }
@@ -184,17 +168,17 @@
     var html = '<div class="limit-stage">' + coins(b.budget, 0) +
       '<p class="price-tag"><span class="tag-picto" aria-hidden="true">' +
       b.picto + '</span>';
-    for (var i = 0; i < b.price; i++) html += '<span class="coin is-price">€</span>';
+    for (var i = 0; i < b.price; i++) html += '<span class="coin is-price">â‚¬</span>';
     return html + '</p></div>';
   }
 
   /* The same job in rows: one row per person, one block per hour. The
-     blocks are the work, and there are always the same number of them —
+     blocks are the work, and there are always the same number of them â€”
      which is why more rows means shorter rows. */
   function workRows(people, hoursEach, picto) {
     var html = '<div class="work-stage">';
     for (var p = 0; p < people; p++) {
-      html += '<span class="work-row"><span class="worker" aria-hidden="true">🙂</span>';
+      html += '<span class="work-row"><span class="worker" aria-hidden="true">ðŸ™‚</span>';
       for (var h = 0; h < hoursEach; h++) {
         html += '<span class="hour-block" aria-hidden="true">' + picto + '</span>';
       }
@@ -215,7 +199,7 @@
 
     /* How much of the hundred is coloured in. */
     readPercent: function (nv) {
-      var value = draw(nv.id, DATA.percents[nv.step]);
+      var value = App.utils.drawRound(nv.id, DATA.percents[nv.step]);
       return {
         prompt: App.i18n.t('gen.whatPercent'),
         visual: hundredGrid(value),
@@ -228,7 +212,7 @@
 
     /* The other way round: which grid shows this percentage. */
     pickPercent: function (nv) {
-      var value = draw(nv.id, DATA.percents[nv.step]);
+      var value = App.utils.drawRound(nv.id, DATA.percents[nv.step]);
       var others = App.utils.shuffle(DATA.percents[nv.step].filter(function (v) {
         return v !== value;
       })).slice(0, 2);
@@ -250,7 +234,7 @@
     /* The percentage applied to money: how much it is, what is left after
        a discount, and what it comes to after a rise. */
     percentOf: function (nv) {
-      var item = draw(nv.id, DATA.prices);
+      var item = App.utils.drawRound(nv.id, DATA.prices);
       var part = partOf(item.price, item.percent);
       var answer = nv.dir === 'part' ? part
         : (nv.dir === 'less' ? item.price - part : item.price + part);
@@ -276,7 +260,7 @@
 
     /* For every so much, so much. Doubling the recipe doubles both. */
     ratio: function (nv) {
-      var recipe = draw(nv.id, DATA.recipes);
+      var recipe = App.utils.drawRound(nv.id, DATA.recipes);
       var answer = recipe.b * nv.times;
       return {
         prompt: App.i18n.t('gen.ratioPrompt')
@@ -298,7 +282,7 @@
     /* Not every pair grows together: share the same job between more
        people and each one is at it for less time. */
     inverse: function (nv) {
-      var job = draw(nv.id, DATA.jobs);
+      var job = App.utils.drawRound(nv.id, DATA.jobs);
       var answer = hoursFor(job, job.to);
       return {
         prompt: App.i18n.t('gen.inversePrompt')
@@ -318,7 +302,7 @@
 
     /* You have this much, one costs that much: how many fit inside. */
     howManyFit: function (nv) {
-      var b = draw(nv.id, DATA.budgets);
+      var b = App.utils.drawRound(nv.id, DATA.budgets);
       var answer = howMany(b.budget, b.price);
       return {
         prompt: App.i18n.t('gen.howManyFit')
@@ -336,7 +320,7 @@
 
     /* And what the limit leaves over, which is never enough for one more. */
     whatIsLeft: function (nv) {
-      var b = draw(nv.id, DATA.budgets);
+      var b = App.utils.drawRound(nv.id, DATA.budgets);
       var answer = leftOver(b.budget, b.price);
       return {
         prompt: App.i18n.t('gen.whatIsLeft')
@@ -356,7 +340,7 @@
 
     /* On a plan, every square is worth something real. */
     scale: function (nv) {
-      var s = draw(nv.id, DATA.scales);
+      var s = App.utils.drawRound(nv.id, DATA.scales);
       var answer = s.unit * s.squares;
       return {
         prompt: App.i18n.t('gen.scalePrompt').replace(/\{n\}/g, s.squares),
@@ -422,7 +406,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -438,7 +422,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -516,8 +500,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the figure in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the figure in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

@@ -18,8 +18,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Calculia is a static, dependency-free web app with 30 activities for
-practicing math and logical reasoning: Places and sizes, Numbers, Shapes, Geometry, Trigonometry, Same shapes, Fractions, Measures, Scale,
+Calculia is a static, dependency-free web app with 29 activities for
+practicing math and logical reasoning: Numbers, Shapes, Geometry, Trigonometry, Same shapes, Fractions, Measures, Scale,
 Subtraction and Mental Math, Money, Percentages, Math Tables, Exact groups, Big sums, Quantities, Roman
 Numerals, Problems, Water Temperature, The balance, Data and charts, The Calendar, Riddles, Patterns,
 The Wallet, The Clock, Stories, What Doesn't Belong?, and Puzzle. See

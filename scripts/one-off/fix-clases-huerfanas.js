@@ -79,7 +79,7 @@ const END_SCREEN = {
 };
 const END_SCREEN_SLUGS = [
   'algebra', 'calendar', 'charts', 'divisibility', 'geometry', 'math-tables',
-  'operations', 'percent', 'places', 'problems', 'similar',
+  'operations', 'percent', 'problems', 'similar',
 ];
 
 function dominantEol(text) {

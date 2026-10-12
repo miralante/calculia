@@ -856,6 +856,79 @@ async function exerciseActivityApp(page) {
   return actions ? 1 : 0;
 }
 
+/* Patterns, odd-one-out and stories shipped with an empty start screen: a
+   level list that nothing ever filled, so "choose an activity" had nothing
+   under it and there was no way to start. The smoke walked all three with
+   zero controls and reported OK — a green over a screen a child cannot get
+   past, because a route with nothing to click has nothing to fail. Each one
+   now has a single "start practising" button, and this walks them for real.
+
+   It does not reimplement any activity's rules: the right answer comes from
+   clicking and seeing what the page does, not from knowing it. What it does
+   check is the thing that was broken — that the start screen leaves a way in
+   and that the round really produces questions. The Socratic hint of these
+   three is checked by scripts/one-off/check-pistas.js, which plays badly on
+   purpose; here a wrong answer is not guaranteed to happen. */
+const SIMPLE_STARTS = {
+  '/tools/patterns/': { options: '#options .option-btn', accepted: 'correct' },
+  '/tools/odd-one-out/': { options: '#group .option-btn', accepted: 'correct' },
+  '/tools/stories/': { options: '#available .vineta', accepted: 'colocada' },
+};
+
+async function exerciseSimpleStart(page, baseUrl, route) {
+  const path = Object.keys(SIMPLE_STARTS).find(key => route.includes(key));
+  if (!path) return 0;
+  const { options } = SIMPLE_STARTS[path];
+  const name = path.split('/').filter(Boolean).pop();
+  let actions = 0;
+
+  await page.goto(baseUrl + path, { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+  await page.waitForSelector('#screenStart:not(.hidden)', { timeout: NAV_TIMEOUT });
+  /* A start screen with no button at all looks exactly like a working one
+     to anything that only counts clicks. */
+  assert.ok(await page.locator('button:visible').count() > 0,
+    name + ': la pantalla de inicio se queda sin un solo botón: no hay forma de empezar');
+  assert.equal(await page.locator('#levels').count(), 0,
+    name + ': vuelve el <div id="levels"> vacío que dejaba la actividad inalcanzable');
+  await page.locator('#btnStart').click();
+  await page.waitForSelector('#screenGame:not(.hidden)', { timeout: NAV_TIMEOUT });
+  actions += 1;
+
+  let accepted = 0;
+  for (let question = 0; question < 3; question += 1) {
+    /* El locator NO lleva :not([disabled]): en cuanto una opción falla
+       queda deshabilitada, la lista se acorta y los índices se corren,
+       con lo que alguna opción buena no llega a pulsarse nunca. El índice
+       tiene que ser estable y lo habilitado se mira en el elemento. */
+    const items = page.locator(options);
+    const total = await items.count();
+    if (!total) break;
+    for (let i = 0; i < total; i += 1) {
+      const item = items.nth(i);
+      if (!await item.isVisible().catch(() => false)) continue;
+      if (!await item.isEnabled().catch(() => false)) continue;
+      await item.click({ force: true });
+      await page.waitForTimeout(40);
+      actions += 1;
+      const classes = (await item.getAttribute('class').catch(() => '')) || '';
+      /* Historias coloca una viñeta cada vez y sigue con la siguiente,
+         así que acertar una no termina la pregunta. */
+      if (classes.includes(SIMPLE_STARTS[path].accepted)) { accepted += 1; continue; }
+      const ack = page.locator('#explanationWrap .btn-understood');
+      if (await ack.count() && await ack.first().isVisible().catch(() => false)) {
+        await ack.first().click({ force: true });
+      }
+    }
+    const next = page.locator('#btnNext');
+    if (!await next.isVisible().catch(() => false)) break;
+    await next.click({ force: true });
+    actions += 1;
+  }
+  assert.ok(accepted > 0,
+    name + ': entra al test pero no llega a completar ninguna pregunta');
+  return actions ? 1 : 0;
+}
+
 async function exerciseShapes(page, baseUrl) {
   let actions = 0;
   await page.goto(baseUrl + '/');
@@ -893,8 +966,6 @@ async function exerciseShapes(page, baseUrl) {
     'La primera diapositiva adelanta las marcas de lado y esquina');
   assert.ok(await page.locator('#galleryCaption').isHidden(),
     'La primera diapositiva muestra una explicación duplicada');
-  assert.ok(await page.locator('#galleryNote').isHidden(),
-    'La primera diapositiva cuenta lados o caras antes de presentar la forma');
   await page.locator('#galleryNext').click();
   const partCards = page.locator('#galleryVisual .shape-part-item');
   /* Los tres conceptos, en el orden en que se construyen: el lado, el
@@ -931,8 +1002,6 @@ async function exerciseShapes(page, baseUrl) {
     .getAttribute('points');
   assert.equal(perimeterDash.trim().split(/\s+/).length, 3,
     'La marca de perímetro no recorre el triángulo entero');
-  assert.ok(await page.locator('#galleryNote').isHidden(),
-    'La segunda diapositiva cuenta lados o caras sin haber visto la forma');
 
   /* El resto de conceptos van en dos diapositivas más, y cada una tiene su
      propia forma de enseñar el concepto en el dibujo. Sin esto, añadir un
@@ -985,28 +1054,9 @@ async function exerciseShapes(page, baseUrl) {
       'La galería añade detalles sobre lados, esquinas o caras en vez de presentar la forma');
     const galleryItem = await page.evaluate(index => window.DATA.gallery[index], i);
     const galleryShapeId = galleryItem.id;
-    /* El nombre se queda solo en el título; la aclaración de cuántos lados
-       o caras tiene la forma va en su propia línea, debajo. */
-    const note = (await page.locator('#galleryNote').innerText()).trim();
-    assert.ok(note, 'Falta la aclaración de lados o caras bajo la forma');
-    if (galleryItem.type === 'flat') {
-      const sides = await page.evaluate(id => window.DATA.sides[id], galleryShapeId);
-      assert.equal(note, sides ? `${sides.sides} lados y ${sides.corners} vértices`
-        : 'Sin lados rectos ni vértices',
-      'La aclaración no dice los lados y los vértices que tiene la forma');
-    } else {
-      assert.match(note, /caras|curva/,
-        'La aclaración no dice cuántas caras tiene el cuerpo ni de qué forma son');
-    }
-    const [captionSize, noteSize] = await page.evaluate(() => [
-      parseFloat(getComputedStyle(document.querySelector('#galleryCaption')).fontSize),
-      parseFloat(getComputedStyle(document.querySelector('#galleryNote')).fontSize)
-    ]);
-    assert.ok(noteSize < captionSize,
-      'La aclaración destaca más que el nombre de la forma');
-    assert.notEqual(await page.locator('#galleryNote').evaluate(node =>
-      getComputedStyle(node).textTransform), 'capitalize',
-    'La aclaración se lee como un título y compite con el nombre de la forma');
+    /* La galería solo dice el nombre: lados, vértices y caras se enseñan en
+       los concept slides y se preguntan en el test, así que listarlos aquí
+       partiría la atención entre la figura y un número que todavía no toca. */
     if (galleryShapeId === 'rectangularPrism') {
       assert.equal(await page.locator('#galleryVisual .solid-left').getAttribute('points'),
         '10,42 88,42 88,102 10,102',
@@ -1067,38 +1117,9 @@ async function exerciseShapes(page, baseUrl) {
       'El ejemplo cotidiano marca un lado sin que haya nada que señalar');
     realExamples.push((await page.locator('#realCaption').innerText()).trim());
 
-    /* Los tres conceptos, en la vida real: lados, vértices y perímetro.
-       Los números salen de DATA.sides, la misma fuente que el dibujo y el
-       test, así que la nota no puede contradecir a ninguna de las dos
-       cosas. Y los cuerpos se quedan sin nota: lados, vértices y
-       perímetro son palabras de una figura, y un cubo tiene caras. */
-    const realNoteText = (await page.locator('#realNote').innerText()).trim();
-    const galleryType = await page.evaluate(index => window.DATA.gallery[index].type, i);
-    if (galleryType === 'flat') {
-      const flatSides = await page.evaluate(id => window.DATA.sides[id], realShapeId);
-      assert.ok(realNoteText,
-        'El ejemplo cotidiano de ' + realShapeId + ' no cuenta los tres conceptos');
-      if (flatSides) {
-        assert.ok(realNoteText.includes(`${flatSides.sides} lados`) &&
-          realNoteText.includes(`${flatSides.corners} vértices`) &&
-          /perímetro/i.test(realNoteText) &&
-          /área/i.test(realNoteText),
-        'La nota del ejemplo cotidiano no nombra lados, vértices, perímetro y área de ' +
-          realShapeId + ': ' + realNoteText);
-      } else {
-        assert.match(realNoteText, /no tiene lados rectos ni vértices/i,
-          'El ejemplo del círculo no dice que no tiene lados ni vértices');
-        assert.match(realNoteText, /área/i,
-          'El ejemplo del círculo no dice que tiene área');
-      }
-    } else {
-      /* Los cuerpos no se cuentan en lados ni vértices: se cuentan en
-         caras, y lo que se les aplica aquí es el volumen, que es el hueco
-         que hay dentro. */
-      assert.match(realNoteText, /volumen/i,
-        'El ejemplo cotidiano de ' + realShapeId +
-        ' no explica el volumen del cuerpo: ' + realNoteText);
-    }
+    /* Los ejemplos de la vida real solo muestran el nombre del objeto:
+       contar lados, vértices o caras sobre la foto distrae de la forma
+       que estamos asociando. */
     /* Everyday objects that must be drawn, not left to the object's emoji:
        the shield emoji is not a pentagon, the stop sign emoji loses the
        word inside it, a parcel is not a cereal box, a rounded warning sign
@@ -1469,10 +1490,10 @@ async function exerciseShapes(page, baseUrl) {
     return { id: level.id, length: level.questions.length, counts };
   });
   assert.equal(testSpec.id, 'test');
-  assert.equal(testSpec.length, 50);
+  assert.equal(testSpec.length, 45);
   assert.deepEqual(testSpec.counts, {
     shapeName: 9,
-    shapeCount: 12,
+    shapeCount: 7,
     shapePerimeter: 6,
     shapeArea: 1,
     solidVolume: 3,
@@ -1493,7 +1514,7 @@ async function exerciseShapes(page, baseUrl) {
     actions += 2;
   }
   await page.waitForSelector('#screenEnd:not(.hidden)', { timeout: NAV_TIMEOUT });
-  assert.match(await page.locator('#endSummary').innerText(), /50 preguntas|50 questions/,
+  assert.match(await page.locator('#endSummary').innerText(), /45 preguntas|45 questions/,
     'El resumen no incluye todas las preguntas de la ronda única');
   assert.ok(await page.locator('#btnHarder').isHidden(),
     'La prueba única ofrece niveles separados como otros tests');
@@ -1517,45 +1538,38 @@ async function exerciseShapes(page, baseUrl) {
     ['Flat shape', 'Solid', 'Side', 'Vertex', 'Perimeter',
       'Area', 'Volume', 'Symmetry', 'Similarity'],
   'Las diapositivas de conceptos no están traducidas al inglés');
-  assert.equal((await page.locator('#galleryNote').innerText()).trim(),
-    'No straight sides and no vertices',
-  'La aclaración de la galería no está traducida al inglés en las formas planas');
   /* Del círculo al cubo se avanza leyendo la galería, no contando a mano:
      insertar una forma en medio no puede dejar el recorrido en otra
-     diapositiva sin que se note. */
+     diapositiva sin que se note. La galería solo dice el nombre, así que
+     el caption es la propia etiqueta accesible del dibujo. textContent
+     (no innerText) para no arrastrar el text-transform: capitalize del
+     CSS, que rompería la comparación con el aria-label en minúsculas. */
+  const captionText = await page.locator('#galleryCaption').evaluate(node =>
+    node.textContent.trim());
+  const ariaLabel = await page.locator('#galleryVisual').getAttribute('aria-label');
+  assert.equal(captionText, ariaLabel.trim(),
+    'La galería añade detalles en vez de quedarse en el nombre');
   const cubeIndex = await page.evaluate(() =>
     window.DATA.gallery.findIndex(item => item.id === 'cube'));
   for (let step = 0; step < cubeIndex; step += 1) await page.locator('#galleryNext').click();
-  assert.equal((await page.locator('#galleryNote').innerText()).trim(), '6 faces: 6 squares.',
-    'La aclaración de la galería no está traducida al inglés en los cuerpos');
+  assert.equal(await page.locator('#galleryCaption').evaluate(node =>
+    node.textContent.trim()),
+  (await page.locator('#galleryVisual').getAttribute('aria-label')).trim(),
+  'La galería de los cuerpos añade detalles en vez de quedarse en el nombre');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
 
-  /* Y la nota de los ejemplos de la vida real, en los dos idiomas: es la
-     que junta los tres conceptos sobre el objeto de verdad. Se mira la
-     misma forma en los dos (el triángulo, el segundo del carrusel) para
-     que la comparación signifique algo. */
-  const CONCEPTS = {
-    es: [/lados/, /vértices/, /perímetro/, /área/],
-    en: [/sides/, /vertices/, /perimeter/, /area/],
-  };
+  /* El ejemplo cotidiano de la vida real, en los dos idiomas: muestra solo
+     el nombre del objeto, no una lista de lados y vértices. */
   for (const locale of ['en', 'es']) {
     await page.evaluate(code => localStorage.setItem('calculia:locale', code), locale);
     await page.reload();
     await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
     await page.locator('#introContinue').click();
     await page.locator('#realNext').click();
-    const noteText = (await page.locator('#realNote').innerText()).trim();
-    /* El triángulo tiene 3 de cada: los números salen de DATA.sides, y el
-       smoke los compara con lo que se está leyendo en pantalla. */
-    const expected = await page.evaluate(() => window.DATA.sides.triangle);
-    assert.ok(noteText.includes(`${expected.sides} lados`) ||
-      noteText.includes(`${expected.sides} sides`),
-    `La nota de los ejemplos en ${locale} no cuenta los lados del triángulo: ${noteText}`);
-    CONCEPTS[locale].forEach(concept => {
-      assert.match(noteText, concept,
-        `La nota de los ejemplos en ${locale} no nombra ${concept} : ${noteText}`);
-    });
+    const captionText = (await page.locator('#realCaption').innerText()).trim();
+    assert.ok(captionText.length > 0,
+      `El ejemplo cotidiano está vacío en ${locale}`);
   }
   await page.locator('#realBack').click();
   await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
@@ -1803,6 +1817,9 @@ async function exerciseFullFunctionality(page, baseUrl, route) {
   }
   if (APP === 'calculia' && route.includes('/tools/shapes/')) {
     return exerciseShapes(page, baseUrl);
+  }
+  if (APP === 'calculia' && Object.keys(SIMPLE_STARTS).some(key => route.includes(key))) {
+    return exerciseSimpleStart(page, baseUrl, route);
   }
   if (APP === 'apptonomia' && route.includes('/project/')) {
     return exerciseApptonomiaProject(page);

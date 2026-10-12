@@ -96,12 +96,6 @@
         "works": 'Mental calculation, decomposition strategies (10 + n), automating basic operations.',
         "daily": 'Calculate together without paper: "what is 23 + 14? And if we add 2 more?" Add the prices before paying.'
       },
-      "places": {
-        "name": 'Places and sizes',
-        "does": 'Looks at a picture and says whether the thing is inside or outside the box, on top of or underneath the chair, on the left or on the right of the tree. Also compares two real things: which is longer, which weighs more and which holds more.',
-        "works": 'Vocabulary of position and size, orientation in space, and comparing without measuring or counting.',
-        "daily": 'Ask for things by saying where they are: \"the glass that is inside the cupboard\". When carrying the shopping, ask which bag weighs more before picking it up.'
-      },
       "shapes": {
         "name": 'Shapes',
         "does": 'Recognises flat shapes (circle, square, triangle, rectangle, pentagon, hexagon) and solids (cube, sphere, cylinder) through real objects. Counts sides and vertices, and introduces the concepts of perimeter, area, volume, symmetry and similarity before asking about them.',

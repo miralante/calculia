@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Trigonometría
+   Calculia â€” TrigonometrÃ­a
    Data and levels in data.js. Shared modules in assets/js/.
    Every question is generated on the fly from the level type.
    ============================================================ */
@@ -37,14 +37,13 @@
   var answered = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      The hypotenuse comes from the two legs, the reason from the two
@@ -62,7 +61,7 @@
 
   /* The ladder length, over the fields a ladder actually has. Reading
      `up`/`along` here returned NaN, and a comparison of NaN is always
-     false — so the "all three ladders are the same length" check below
+     false â€” so the "all three ladders are the same length" check below
      would have passed no matter what the data said. */
   function ladderLen(l) {
     return hypOfParts(l.rise, l.run);
@@ -75,7 +74,7 @@
 
   /* "3 for every 4", reduced: 6 for every 8 is still 3 for every 4. Two
      triangles share the reason exactly when this string matches, which is
-     the whole claim of the `razon` levels — so it is computed, never
+     the whole claim of the `razon` levels â€” so it is computed, never
      listed.
      It takes the two numbers rather than the object, because two different
      things are compared with it and they name their legs differently: a
@@ -119,7 +118,7 @@
   function sideGloss(side) { return App.i18n.t('side.' + side + '.gloss'); }
 
   /* A picture option that also says the name of the side it marks, with
-     its plain-words gloss underneath — the same shape geometry uses to
+     its plain-words gloss underneath â€” the same shape geometry uses to
      teach right/acute/obtuse. The word is taught beside the drawing it
      belongs to, never instead of it, and never on its own. */
   function sideOptionHtml(t, side, opts) {
@@ -136,7 +135,7 @@
       throw new Error('trigonometry: triangle "' + t.id + '" has a leg below one square');
     }
     /* "Which side is the hypotenuse" is answerable only if the slanted
-       side really is the STRICTLY longest one — an equal match would
+       side really is the STRICTLY longest one â€” an equal match would
        leave that question with no single answer.
        Equal legs are deliberately ALLOWED, though: a triangle with both
        legs the same length is a shape people recognise, and it is the
@@ -194,24 +193,9 @@
 
   /* ---- Utilities ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   function ratioText(up, along) {
     return App.i18n.t('gen.reason')
@@ -375,7 +359,7 @@
   function ratioOptions(t) {
     /* Build the right answer FIRST and never drop it. An earlier version
        shuffled all four candidates and then cut to three, which quietly
-       removed the correct answer from one question in four — the page
+       removed the correct answer from one question in four â€” the page
        then had no right answer at all, and clicking any option threw
        while trying to explain itself. Taking the correct one first and
        filling the rest makes that impossible. */
@@ -411,12 +395,12 @@
 
   var GENERATORS = {
 
-    /* Which side is the slanted one — the longest. Every option is the
+    /* Which side is the slanted one â€” the longest. Every option is the
        same triangle with a different side drawn heavier, so the answer
        is which marked side reaches furthest: counting and looking, not
        remembering a word. */
     whichHypotenuse: function (nv) {
-      var t = draw(nv.id, DATA.triangles);
+      var t = App.utils.drawRound(nv.id, DATA.triangles);
       /* The answer is "the longest side", so check that the side this
          question points at really is the longest one in the drawing that
          goes with it. Nothing else catches this: an edit that moved
@@ -462,13 +446,13 @@
        something to recall.
        The wording has to rule the hypotenuse out explicitly. "Which side
        touches that angle?" would have TWO right answers, because the
-       slanted side touches it too — and a question with two right
+       slanted side touches it too â€” and a question with two right
        answers is not something the person can get wrong, only something
        the activity looks broken doing. */
     whichSideByAngle: function (nv) {
       var role = nv.tipo === 'whichOpposite' ? 'opposite' : 'adjacent';
       var corner = nv.corner || 'B';
-      var t = draw(nv.id, DATA.triangles);
+      var t = App.utils.drawRound(nv.id, DATA.triangles);
       var wanted = sideFor(t, role, corner);
       if (wanted === 'hyp') {
         throw new Error('trigonometry: level "' + nv.id + '" asks for the "' +
@@ -495,7 +479,7 @@
     /* How many up for every along. Counted off the grid, so the number is
        read, not computed. */
     countReason: function (nv) {
-      var t = draw(nv.id, DATA.triangles);
+      var t = App.utils.drawRound(nv.id, DATA.triangles);
       return {
         prompt: App.i18n.t('gen.countReason'),
         hint: App.i18n.t('gen.socraticReason'),
@@ -513,9 +497,9 @@
     /* Do these two share the reason? Same lean, different size: counting
        both shows the two numbers keep their proportion. */
     sameReasonJudge: function (nv) {
-      var pair = draw(nv.id, DATA.reasonPairs);
-      var wantSame = draw(nv.id + 'same', [true, false]);
-      var other = draw(nv.id + 'other',
+      var pair = App.utils.drawRound(nv.id, DATA.reasonPairs);
+      var wantSame = App.utils.drawRound(nv.id + 'same', [true, false]);
+      var other = App.utils.drawRound(nv.id + 'other',
         DATA.triangles.filter(function (t) { return !sameReason(t, pair); }));
       var right = wantSame ? doubled(pair) : other;
       var yes = sameReason(pair, right);
@@ -542,7 +526,7 @@
     /* Which one of the three shares it. One step on from judging: the
        same comparison, but out loud. */
     whichSameReason: function (nv) {
-      var pair = draw(nv.id, DATA.reasonPairs);
+      var pair = App.utils.drawRound(nv.id, DATA.reasonPairs);
       var right = doubled(pair);
       var wrongs = [];
       var seenReason = {};
@@ -559,7 +543,7 @@
       /* Never pad with the right answer. The start-up invariant already
          guarantees two distinct wrong reasons exist, so falling back to
          `doubled(pair)` here could only have produced a second correct
-         option — a question nobody can get wrong. Fail loudly instead. */
+         option â€” a question nobody can get wrong. Fail loudly instead. */
       if (wrongs.length < 2) {
         throw new Error('trigonometry: level "' + nv.id + '" could only offer ' +
           wrongs.length + ' wrong answer(s) for pair "' + pair.id + '"');
@@ -587,7 +571,7 @@
     /* The ladder against the wall. Which of the three is the slanted one?
        Answerable by looking: two of them stand straight up, one leans. */
     ladderSide: function (nv) {
-      var l = draw(nv.id, DATA.ladders.filter(function (x) { return x.run > 0; }));
+      var l = App.utils.drawRound(nv.id, DATA.ladders.filter(function (x) { return x.run > 0; }));
       return {
         prompt: App.i18n.t('gen.ladderSide'),
         hint: App.i18n.t('gen.socraticLadderSide'),
@@ -607,7 +591,7 @@
     },
 
     /* The same ladder, three ways of standing it up. Which reaches
-       highest? More upright, higher — and all three are exactly the same
+       highest? More upright, higher â€” and all three are exactly the same
        length, so nothing else is being compared.
        Each is named by a letter drawn on it, and the letters are handed
        out in a different order every question: if the letters followed
@@ -615,8 +599,8 @@
     ladderTaller: function (nv) {
       var all = DATA.ladders;
       var tallest = Math.max.apply(null, all.map(function (l) { return l.rise; }));
-      /* Shuffled, not drawn from the bag. `draw()` hands out ONE item of a
-         list, so calling it here returned a single letter — and then
+      /* Shuffled, not drawn from the bag. `App.utils.drawRound()` hands out ONE item of a
+         list, so calling it here returned a single letter â€” and then
          `letters[1]` and `letters[2]` were undefined, which put "La
          escalera undefined" on two of the three answers. */
       var letters = App.utils.shuffle(App.i18n.t('gen.ladderLetters').split(''));
@@ -715,7 +699,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -731,7 +715,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -823,8 +807,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the figure in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the figure in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

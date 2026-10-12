@@ -10,7 +10,7 @@
     title: 'Patterns',
     titleH1: '🔵 Patterns',
     instruction: 'Look at the series. Choose what comes next.',
-    chooseLevel: 'Choose an activity',
+    startButton: 'Start practising →',
     whatNext: 'What comes next?',
     queSigueAudio: 'What comes next?',
     btnMenu: 'Back to start',

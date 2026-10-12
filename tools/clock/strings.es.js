@@ -36,7 +36,7 @@
     quarterTo: '{h} menos cuarto',
     correctExplanation: '✅ ¡Correcto! Son las ',
     incorrectExplanationA: '❌ No es esa hora. Son las ',
-    readHint: '🤔 Prueba otra vez. Mira el reloj con calma.',
+    readHint: '🤔 Empieza por la aguja corta: marca la hora. La larga, los minutos.',
     associateHint: '🤔 Prueba otra vez. Piensa en ese momento del día.',
     setHint: '🤔 Prueba otra vez. Ajusta la hora con los botones.',
     convertHint: '🤔 Prueba otra vez. Compara el reloj con los números.',

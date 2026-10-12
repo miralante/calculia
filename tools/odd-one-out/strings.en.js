@@ -9,7 +9,7 @@
   App.i18n.register({
     title: '🔎 What does not belong?',
     instruction: 'Look at the three pictures. Tap the one that does not go with the others.',
-    levelsTitle: 'Choose an activity',
+    startButton: 'Start practising →',
     question: 'Which one does not belong?',
     otherLevel: 'Choose another activity',
     pictureAria: 'Picture',

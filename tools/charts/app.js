@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Datos y gráficos
+   Calculia â€” Datos y grÃ¡ficos
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -37,14 +37,13 @@
   var answered = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Data invariants ----
      Every "which has most / least" question needs a single winner, and
@@ -81,24 +80,9 @@
 
   /* ---- Utilities ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   function catName(id) { return App.i18n.t('cat.' + id); }
   function setTitle(id) { return App.i18n.t('set.' + id); }
@@ -153,7 +137,7 @@
     set.cats.forEach(function (c) {
       html += '<div class="chart-row' + (c.id === markId ? ' is-asked' : '') + '">' +
         '<span class="row-label">' +
-        (c.id === markId ? '<span class="row-mark" aria-hidden="true">👉</span>' : '') +
+        (c.id === markId ? '<span class="row-mark" aria-hidden="true">ðŸ‘‰</span>' : '') +
         catName(c.id) + '</span>' +
         '<span class="row-pictos">' + tokensHtml(c.n, c.picto) + '</span>' +
         '</div>';
@@ -168,7 +152,7 @@
     set.cats.forEach(function (c) {
       html += '<div class="bar-row' + (c.id === markId ? ' is-asked' : '') + '">' +
         '<span class="row-label">' +
-        (c.id === markId ? '<span class="row-mark" aria-hidden="true">👉</span>' : '') +
+        (c.id === markId ? '<span class="row-mark" aria-hidden="true">ðŸ‘‰</span>' : '') +
         catName(c.id) + '</span>' +
         '<span class="bar-track"><span class="bar-fill" style="width:' +
         ((c.n / DATA.barMax) * 100) + '%"></span></span>' +
@@ -242,7 +226,7 @@
       var n = values.filter(function (x) { return x === v; }).length;
       html += '<span class="spread-slot">' +
         (n ? '<span class="spread-mark" data-count="' + n + '">' +
-          new Array(n + 1).join('●') + '</span>' : '') + '</span>';
+          new Array(n + 1).join('â—') + '</span>' : '') + '</span>';
     }
     return html + '</span></span>';
   }
@@ -342,7 +326,7 @@
        "when one goes up, does the other go up or down?" is read off the
        cloud rather than worked out. */
     scatter: function (nv) {
-      var cloud = draw(nv.id, DATA.clouds);
+      var cloud = App.utils.drawRound(nv.id, DATA.clouds);
       var top = Math.max.apply(Math, cloud.points);
       var html = '<div class="scatter">';
       cloud.points.forEach(function (v, i) {
@@ -374,12 +358,12 @@
        and NOT put back, so the bag is drawn twice: before and after. What
        is left is counted, not reasoned about. */
     afterDraw: function (nv) {
-      var bag = draw(nv.id, DATA.bags.filter(function (b) {
+      var bag = App.utils.drawRound(nv.id, DATA.bags.filter(function (b) {
         return b.items.length === 2 && b.items.every(function (i) { return i.n >= 2; });
       }));
       /* Keyed by the bag as well as the level: a pool shared across bags
          would hand out a colour that is not in this one. */
-      var taken = draw(nv.id + 'take' + bag.id, bag.items.map(function (i) {
+      var taken = App.utils.drawRound(nv.id + 'take' + bag.id, bag.items.map(function (i) {
         return i.id;
       }));
       var before = bag.items.map(function (i) { return { id: i.id, n: i.n }; });
@@ -416,7 +400,7 @@
     /* How many different outfits come out. Every one of them is drawn, so
        the count is a count and not a multiplication to be trusted. */
     outfits: function (nv) {
-      var set = draw(nv.id, DATA.outfits);
+      var set = App.utils.drawRound(nv.id, DATA.outfits);
       var total = set.tops.length * set.bottoms.length;
       var html = '<div class="outfit-grid">';
       set.tops.forEach(function (top) {
@@ -443,11 +427,11 @@
        "more spread" is something you see rather than something you work
        out. */
     spread: function (nv) {
-      var pair = draw(nv.id, DATA.spreads);
-      var askWide = draw(nv.id + 'dir', [true, false]);
+      var pair = App.utils.drawRound(nv.id, DATA.spreads);
+      var askWide = App.utils.drawRound(nv.id + 'dir', [true, false]);
       /* Which of the two is drawn on top changes from question to
          question, so the answer is never "always the first one". */
-      var wideOnTop = draw(nv.id + 'order', [true, false]);
+      var wideOnTop = App.utils.drawRound(nv.id + 'order', [true, false]);
       var first = App.i18n.t('gen.groupA');
       var second = App.i18n.t('gen.groupB');
       var wideLabel = wideOnTop ? first : second;
@@ -477,7 +461,7 @@
        is nine, which is exactly the idea: doing it twice multiplies what
        can happen. */
     twoDraws: function (nv) {
-      var kinds = draw(nv.id, DATA.drawSets).map(function (id) {
+      var kinds = App.utils.drawRound(nv.id, DATA.drawSets).map(function (id) {
         return tokenById(id);
       });
       var html = '<div class="coin-results">';
@@ -504,7 +488,7 @@
 
     /* How many of this one are there? Counting a row of a pictogram. */
     readRow: function (nv) {
-      var set = draw(nv.id, DATA.sets);
+      var set = App.utils.drawRound(nv.id, DATA.sets);
       var cat = App.utils.shuffle(set.cats)[0];
       return {
         prompt: setTitle(set.id) + ' ' +
@@ -520,7 +504,7 @@
     /* Which one has most / least. No number is asked for: comparing rows
        is its own step. */
     extreme: function (nv) {
-      var set = draw(nv.id, DATA.sets);
+      var set = App.utils.drawRound(nv.id, DATA.sets);
       var cat = extremeCat(set, nv.which);
       return {
         prompt: setTitle(set.id) + ' ' +
@@ -535,7 +519,7 @@
 
     /* The same question, now against a scale instead of countable things. */
     readBar: function (nv) {
-      var set = draw(nv.id, DATA.barSets);
+      var set = App.utils.drawRound(nv.id, DATA.barSets);
       var cat = App.utils.shuffle(set.cats)[0];
       return {
         prompt: setTitle(set.id) + ' ' +
@@ -549,7 +533,7 @@
     },
 
     extremeBar: function (nv) {
-      var set = draw(nv.id, DATA.barSets);
+      var set = App.utils.drawRound(nv.id, DATA.barSets);
       var cat = extremeCat(set, nv.which);
       return {
         prompt: setTitle(set.id) + ' ' +
@@ -564,7 +548,7 @@
 
     /* The same information with no picture at all: only numbers. */
     readTable: function (nv) {
-      var set = draw(nv.id, DATA.sets.concat(DATA.barSets));
+      var set = App.utils.drawRound(nv.id, DATA.sets.concat(DATA.barSets));
       var cat = App.utils.shuffle(set.cats)[0];
       return {
         prompt: setTitle(set.id) + ' ' +
@@ -579,7 +563,7 @@
 
     /* The mode, named for what it is: the one that comes up most. */
     mode: function (nv) {
-      var set = draw(nv.id, DATA.sets.concat(DATA.barSets));
+      var set = App.utils.drawRound(nv.id, DATA.sets.concat(DATA.barSets));
       var cat = extremeCat(set, 'max');
       return {
         prompt: setTitle(set.id) + ' ' + App.i18n.t('gen.mostRepeated'),
@@ -594,7 +578,7 @@
     /* The average as what it really is: sharing out so everyone has the
        same. No formula, no dividing written down. */
     share: function (nv) {
-      var set = draw(nv.id, DATA.shareSets);
+      var set = App.utils.drawRound(nv.id, DATA.shareSets);
       var total = set.cats.reduce(function (sum, c) { return sum + c.n; }, 0);
       return {
         prompt: setTitle(set.id) + ' ' + App.i18n.t('gen.shareEqually'),
@@ -608,7 +592,7 @@
 
     /* Certain, possible or impossible, decided by looking in the bag. */
     chance: function (nv) {
-      var bag = draw(nv.id, DATA.bags);
+      var bag = App.utils.drawRound(nv.id, DATA.bags);
       var present = bag.items.map(function (it) { return it.id; });
       var absent = DATA.tokens.filter(function (t) {
         return present.indexOf(t.id) === -1;
@@ -646,8 +630,8 @@
        changes with the question, and one column is a tie, so all three
        answers really happen. */
     twoSeries: function (nv) {
-      var set = draw(nv.id, DATA.pairSets);
-      var which = draw(nv.id + 'which', ['a', 'b', 'same']);
+      var set = App.utils.drawRound(nv.id, DATA.pairSets);
+      var which = App.utils.drawRound(nv.id + 'which', ['a', 'b', 'same']);
       var answer = set.cats.filter(function (c) {
         return which === 'same' ? c.an === c.bn
           : (which === 'a' ? c.an > c.bn : c.bn > c.an);
@@ -679,8 +663,8 @@
     /* From the lowest mark to the highest: that is the range, and here it
        is the number of steps you count along the line. */
     range: function (nv) {
-      var pair = draw(nv.id, DATA.spreads);
-      var values = draw(nv.id + 'group', [pair.tight, pair.wide]);
+      var pair = App.utils.drawRound(nv.id, DATA.spreads);
+      var values = App.utils.drawRound(nv.id + 'group', [pair.tight, pair.wide]);
       var low = Math.min.apply(null, values);
       var high = Math.max.apply(null, values);
       var answer = high - low;
@@ -704,10 +688,10 @@
     chanceNumber: function (nv) {
       /* One kind only would make every chance "all of them", and the
          level would have nothing to teach. */
-      var bag = draw(nv.id, DATA.bags.filter(function (b) {
+      var bag = App.utils.drawRound(nv.id, DATA.bags.filter(function (b) {
         return b.items.length >= 2;
       }));
-      var item = draw(nv.id + bag.id, bag.items.map(function (it) { return it.id; }));
+      var item = App.utils.drawRound(nv.id + bag.id, bag.items.map(function (it) { return it.id; }));
       var part = bag.items.filter(function (it) { return it.id === item; })[0].n;
       var total = bag.items.reduce(function (s, it) { return s + it.n; }, 0);
       var say = function (k, n) {
@@ -748,7 +732,7 @@
       /* Exactly two kinds, and not the same amount of each: with three
          kinds there would be no two options to choose between, and with
          a tie there would be no single right answer. */
-      var bag = draw(nv.id, DATA.bags.filter(function (b) {
+      var bag = App.utils.drawRound(nv.id, DATA.bags.filter(function (b) {
         return b.items.length === 2 && b.items[0].n !== b.items[1].n;
       }));
       var sorted = bag.items.slice().sort(function (a, b) { return b.n - a.n; });
@@ -821,7 +805,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -837,7 +821,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -913,8 +897,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the figure in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the figure in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — La balanza
+   Calculia â€” La balanza
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -37,14 +37,13 @@
   var answered = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      What the bag weighs, what several bags come to, and whether the graph
@@ -95,24 +94,9 @@
 
   /* ---- Utilities ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   /* Three distinct numbers: the answer, then the given confusions, then
      neighbours to pad if any of them collided with it. */
@@ -246,7 +230,7 @@
      x long and 1 wide, and a little 1. A pile of them written down is a
      polynomial; a square built out of them is an identity; and looking
      for the missing side of a rectangle is factorising. The writing is
-     never stored — it is built here from the counts, and the picture is
+     never stored â€” it is built here from the counts, and the picture is
      built from the same ones.
 
      The big square is drawn 2.6 little squares wide on purpose: a whole
@@ -366,7 +350,7 @@
     /* A pile of pieces, written down. That writing is a polynomial, and
        it says nothing the pile does not already show. */
     readTiles: function (nv) {
-      var t = draw(nv.id, DATA.tiles);
+      var t = App.utils.drawRound(nv.id, DATA.tiles);
       var right = { html: tileText(t), aria: tileAria(t) };
       /* Swapping the strips for the little ones, and losing the square,
          are the two mistakes the writing actually invites. */
@@ -388,10 +372,10 @@
     },
 
     /* The same pieces put together into a square. Its side is x plus the
-       little ones along one edge — which is the identity, seen whole
+       little ones along one edge â€” which is the identity, seen whole
        instead of remembered. */
     squareSide: function (nv) {
-      var a = draw(nv.id, DATA.tileSquares);
+      var a = App.utils.drawRound(nv.id, DATA.tileSquares);
       var right = sidePlus(a);
       return {
         prompt: App.i18n.t('gen.squareSide'),
@@ -413,7 +397,7 @@
        pieces is what dividing one of these by x, or factorising it,
        comes down to. */
     otherSide: function (nv) {
-      var a = draw(nv.id, DATA.tileRects);
+      var a = App.utils.drawRound(nv.id, DATA.tileRects);
       var right = sidePlus(a);
       return {
         prompt: App.i18n.t('gen.otherSide'),
@@ -437,7 +421,7 @@
        together weigh, the other how much heavier one is. Both are on screen,
        so the pair that fits them both can be tried out by looking. */
     system: function (nv) {
-      var item = draw(nv.id, DATA.systems);
+      var item = App.utils.drawRound(nv.id, DATA.systems);
       var bag = (item.total + item.diff) / 2;
       var box = item.total - bag;
       var label = function (a, b) {
@@ -480,7 +464,7 @@
     /* A balance that does NOT stay level: one side weighs more. That is a
        "greater than", and it is read off the tilt and the weights. */
     tilted: function (nv) {
-      var item = draw(nv.id, DATA.tilts);
+      var item = App.utils.drawRound(nv.id, DATA.tilts);
       var leftHeavier = item.left > item.right;
       var first = App.i18n.t('gen.sideLeft');
       var second = App.i18n.t('gen.sideRight');
@@ -508,7 +492,7 @@
     /* If x times x makes this many squares, how much is x? That is an
        equation of the second degree, asked as what it is. */
     squareEquation: function (nv) {
-      var side = draw(nv.id, DATA.squareSides);
+      var side = App.utils.drawRound(nv.id, DATA.squareSides);
       var total = side * side;
       var html = '<div class="square-stage"><span class="sq-of-x">';
       for (var r = 0; r < side; r++) {
@@ -518,7 +502,7 @@
       }
       return {
         prompt: App.i18n.t('gen.squareEquation').replace(/\{n\}/g, total),
-        visual: html + '</span><span class="letter-expr">x × x = ' + total +
+        visual: html + '</span><span class="letter-expr">x Ã— x = ' + total +
           '</span></div>',
         visualAria: App.i18n.t('gen.squareEqAria')
           .replace(/\{n\}/g, total).replace(/\{side\}/g, side),
@@ -536,7 +520,7 @@
        and not recalled. This is the difference between a straight line and
        a curve, without either word. */
     howItGrows: function (nv) {
-      var g = draw(nv.id, DATA.growths);
+      var g = App.utils.drawRound(nv.id, DATA.growths);
       var steady = isSteady(g.values);
       return {
         prompt: App.i18n.t('gen.howItGrows'),
@@ -559,7 +543,7 @@
     /* The other way round: which of the three climbs by the same each
        time. That one is the straight line. */
     pickStraight: function (nv) {
-      var good = draw(nv.id + 'yes', DATA.growths.filter(function (g) {
+      var good = App.utils.drawRound(nv.id + 'yes', DATA.growths.filter(function (g) {
         return isSteady(g.values);
       }));
       var bad = App.utils.shuffle(DATA.growths.filter(function (g) {
@@ -584,7 +568,7 @@
     /* One bag and some weights on one side, weights on the other. What the
        bag weighs is what is missing. */
     onePlusWeights: function (nv) {
-      var item = draw(nv.id, DATA.simple);
+      var item = App.utils.drawRound(nv.id, DATA.simple);
       var answer = bagWeight(item);
       return {
         prompt: App.i18n.t('gen.howMuchBag'),
@@ -602,7 +586,7 @@
     /* Several bags, all the same. What one of them weighs is the total
        shared out between them. */
     manyBags: function (nv) {
-      var item = draw(nv.id, DATA.groups);
+      var item = App.utils.drawRound(nv.id, DATA.groups);
       var answer = bagWeight(item);
       return {
         prompt: App.i18n.t('gen.howMuchEachBag').replace(/\{bags\}/g, item.bags),
@@ -618,7 +602,7 @@
     /* Weights on both sides: take the same off each and the bag is left
        alone. That is what solving an equation is, without the word. */
     bothSides: function (nv) {
-      var item = draw(nv.id, DATA.both);
+      var item = App.utils.drawRound(nv.id, DATA.both);
       var answer = bagWeight(item);
       return {
         prompt: App.i18n.t('gen.howMuchBag'),
@@ -634,7 +618,7 @@
     /* A letter is the name of a number you do not know yet. Give it a
        value and everything else follows. */
     substitute: function (nv) {
-      var item = draw(nv.id, DATA.values);
+      var item = App.utils.drawRound(nv.id, DATA.values);
       var answer = item.x * item.times;
       return {
         prompt: App.i18n.t('gen.substitute')
@@ -657,7 +641,7 @@
       /* Only how many bags there are is shown here, and several rows of
          DATA.values share that number: drawing the rows would hand out
          the very same question twice in a row. */
-      var times = draw(nv.id, DATA.values.map(function (v) {
+      var times = App.utils.drawRound(nv.id, DATA.values.map(function (v) {
         return v.times;
       }).filter(function (t, i, all) { return all.indexOf(t) === i; }));
       var right = times + 'x';
@@ -683,8 +667,8 @@
     /* Reading a real graph: between these two hours, does it go up, down,
        or stay the same? */
     upOrDown: function (nv) {
-      var series = draw(nv.id, DATA.series);
-      var i = draw(nv.id + series.id, (function () {
+      var series = App.utils.drawRound(nv.id, DATA.series);
+      var i = App.utils.drawRound(nv.id + series.id, (function () {
         var list = [];
         for (var k = 1; k < series.values.length; k++) list.push(k);
         return list;
@@ -714,7 +698,7 @@
 
     /* And where the highest point is. */
     highestPoint: function (nv) {
-      var series = draw(nv.id, DATA.series);
+      var series = App.utils.drawRound(nv.id, DATA.series);
       var top = Math.max.apply(Math, series.values);
       var at = series.from + series.values.indexOf(top);
       var others = App.utils.shuffle(series.values.map(function (v, i) {
@@ -788,7 +772,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -804,7 +788,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -882,8 +866,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the picture in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the picture in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

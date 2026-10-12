@@ -69,7 +69,6 @@ Si aciertas, aparecerá una celebración breve. Si no, recibirás un mensaje de 
 
 | Actividad | ¿Qué hace? |
 |-----------|------------|
-| **Sitios y tamaños** | Decir dónde está algo (dentro, fuera, encima, debajo, izquierda, derecha) y cuál de dos cosas es más larga, pesa más o cabe más. |
 | **Números** | Leer, escribir y comparar números enteros, secuencias y valor posicional. |
 | **Geometría** | Distinguir un ángulo recto de uno agudo u obtuso, contar el borde y los cuadrados de dentro de una figura, y doblarla por la mitad para ver si coincide. |
 | **Tablas** | Practicar las tablas de multiplicar y dividir con repetición y retos cortos. |

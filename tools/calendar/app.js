@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — El Calendario
+   Calculia â€” El Calendario
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -37,7 +37,6 @@
   var answered = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var fixedQuestion = null;
   var inReinforce = false;
@@ -45,28 +44,13 @@
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Utilities ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   function dayName(id) { return App.i18n.t('day.' + id); }
   function monthName(id) { return App.i18n.t('month.' + id); }
@@ -104,7 +88,7 @@
         classes.push('is-weekend');
       }
       html += '<span class="' + classes.join(' ') + '">' +
-        (id === markId ? '<span class="cell-mark" aria-hidden="true">👉</span>' : '') +
+        (id === markId ? '<span class="cell-mark" aria-hidden="true">ðŸ‘‰</span>' : '') +
         '<span class="cell-name">' +
         (id === gapId ? '?' : nameOf(id)) +
         '</span></span>';
@@ -165,7 +149,7 @@
     /* Which day comes after / before this one. The whole week stays on
        screen with the day in question marked. */
     daySeq: function (nv) {
-      var id = draw(nv.id, DATA.days);
+      var id = App.utils.drawRound(nv.id, DATA.days);
       var answer = step(DATA.days, id, nv.dir);
       return {
         prompt: App.i18n.t(nv.dir === 'prev' ? 'gen.dayBefore' : 'gen.dayAfter')
@@ -179,7 +163,7 @@
 
     /* The support is removed: the day is missing from the strip. */
     dayGap: function (nv) {
-      var id = draw(nv.id, DATA.days);
+      var id = App.utils.drawRound(nv.id, DATA.days);
       return {
         prompt: App.i18n.t('gen.dayGap'),
         hint: App.i18n.t('gen.socraticDayGap'),
@@ -190,7 +174,7 @@
     },
 
     monthSeq: function (nv) {
-      var id = draw(nv.id, DATA.months);
+      var id = App.utils.drawRound(nv.id, DATA.months);
       var answer = step(DATA.months, id, nv.dir);
       return {
         prompt: App.i18n.t(nv.dir === 'prev' ? 'gen.monthBefore' : 'gen.monthAfter')
@@ -203,7 +187,7 @@
     },
 
     monthGap: function (nv) {
-      var id = draw(nv.id, DATA.months);
+      var id = App.utils.drawRound(nv.id, DATA.months);
       return {
         prompt: App.i18n.t('gen.monthGap'),
         hint: App.i18n.t('gen.socraticMonthGap'),
@@ -216,7 +200,7 @@
     /* Which season a month falls in. Only whole months are asked (see
        DATA.seasons), so there is never a half-right answer. */
     season: function (nv) {
-      var s = draw(nv.id, DATA.seasons);
+      var s = App.utils.drawRound(nv.id, DATA.seasons);
       var month = App.utils.shuffle(s.months)[0];
       var others = App.utils.shuffle(DATA.seasons.filter(function (o) {
         return o.id !== s.id;
@@ -244,7 +228,7 @@
     /* How many of one thing fit in the other. The answer is counted on
        the strip, so nothing has to be remembered. */
     howManyIn: function (nv) {
-      var unit = draw(nv.id, DATA.units);
+      var unit = App.utils.drawRound(nv.id, DATA.units);
       return {
         prompt: App.i18n.t('gen.howManyIn.' + unit.id),
         hint: App.i18n.t('gen.socraticHowManyIn'),
@@ -260,8 +244,8 @@
     /* Which of the two lasts longer. Only pairs where one really contains
        the other, with the smaller one marked inside the bigger. */
     longerUnit: function (nv) {
-      var pair = draw(nv.id, DATA.unitPairs);
-      var askLonger = draw(nv.id + 'dir', [true, false]);
+      var pair = App.utils.drawRound(nv.id, DATA.unitPairs);
+      var askLonger = App.utils.drawRound(nv.id + 'dir', [true, false]);
       var answer = askLonger ? pair.big : pair.small;
       return {
         prompt: App.i18n.t(askLonger ? 'gen.whichLonger' : 'gen.whichShorter')
@@ -287,7 +271,7 @@
     /* The other way round: a season is named, and one of the months
        belongs to it. */
     seasonMonth: function (nv) {
-      var s = draw(nv.id, DATA.seasons);
+      var s = App.utils.drawRound(nv.id, DATA.seasons);
       var answer = App.utils.shuffle(s.months)[0];
       var wrong = App.utils.shuffle(DATA.seasons.filter(function (o) {
         return o.id !== s.id;
@@ -357,7 +341,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -374,7 +358,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -450,8 +434,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the figure in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the figure in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

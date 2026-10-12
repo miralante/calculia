@@ -9,7 +9,7 @@
   App.i18n.register({
     title: '🔎 ¿Qué no encaja?',
     instruction: 'Mira los tres dibujos. Toca el que no va con los demás.',
-    levelsTitle: 'Elige una actividad',
+    startButton: 'Empezar a practicar →',
     question: '¿Cuál no encaja?',
     otherLevel: 'Elegir otra actividad',
     pictureAria: 'Dibujo',

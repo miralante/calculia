@@ -43,8 +43,8 @@ producto servido al usuario.
 | La resta sin llevar | ✅ | `mental-math` (`anchors`) |
 | Formas geométricas básicas (círculo, cuadrado, triángulo) | ✅ | `shapes` (`planas`, niveles `g1`-`g2`) |
 | Cuerpos geométricos básicos (cubo, esfera) | ✅ | `shapes` (`cuerpos`, niveles `b1`-`b2`) |
-| Nociones espaciales (dentro/fuera, arriba/abajo, izq/dcha) | ✅ | `places` (`posicion`, niveles `s1`-`s4`) |
-| Medidas sin instrumentos (más largo/corto, más pesado/ligero) | ✅ | `places` (`comparar`, niveles `c1`-`c3`) |
+| Nociones espaciales (dentro/fuera, arriba/abajo, izq/dcha) | ❌ | eliminada (`places`, `posicion`, niveles `s1`-`s4`) |
+| Medidas sin instrumentos (más largo/corto, más pesado/ligero) | ❌ | eliminada (`places`, `comparar`, niveles `c1`-`c3`) |
 | El calendario: días de la semana | ✅ | `calendar` (`semana`, niveles `w1`-`w3`) |
 | El calendario: los meses del año | ✅ | `calendar` (`meses`, niveles `m1`-`m3`) |
 | Monedas y billetes: reconocerlos | ✅ | `money` |
@@ -292,7 +292,7 @@ filas es la que tenía cada hebra al empezar, para poder medir el avance:
 | Múltiplos, divisores, primos, potencias y raíces | 11 | ✅ hecha: `tools/divisibility/`, con la notación corta y la raíz del cubo; quedan las raíces de índice cualquiera, que ya no se pueden contar |
 | Multiplicar y dividir a lo grande, jerarquía de operaciones | 7 | ✅ hecha: `tools/operations/` |
 | Proporcionalidad, porcentajes, dinero real | 7 | ✅ hecha: `tools/percent/`, con proporcionalidad inversa y el límite de dinero |
-| Espacio y coordenadas | 8 | ✅ hecha: nociones espaciales en `places`, coordenadas en `geometry` (`coordenadas`) |
+| Espacio y coordenadas | 8 | ⚠️ parcial: coordenadas en `geometry` (`coordenadas`); las nociones espaciales (dentro/fuera/...) estaban en `places`, que se eliminó |
 | Fracciones y decimales avanzados | 5 | ✅ hecha: `fractions-measures` (`f7`-`f9`, `d4`-`d5`) |
 | Problemas de varios pasos | 3 | ✅ hecha: `problems` (`dosPasos`) |
 | Tiempo: intervalos y equivalencias | 3 | ✅ hecha: unidades en `calendar`, equivalencias en `measures`, intervalos en `clock` |
@@ -364,9 +364,9 @@ un comentario en cada `data.js` para que no se pierda al añadir actividades.
 
 | Dónde | Orden |
 |---|---|
-| Portada (`index.html`) | roman-numerals → shapes → scale (las tres públicas; scale sigue además en `dev/`, el resto vive solo en `dev/`) |
-| Catálogo oculto (`dev/index.html`) | numbers → places → geometry → divisibility → operations → quantities → mental-math → percent → money → math-tables → measures → scale → similar → fractions-measures → problems → temperature, y luego el bloque de razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
-| Progreso (`config/index.html`) | mismo criterio y mismo bloque de razonamiento, pero con `places` y `shapes` delante de `numbers` |
+| Portada (`index.html`) | quantities → ordinals → roman-numerals → shapes → trigonometry → scale → math-tables (las siete públicas; quantities, ordinals, trigonometry, scale y math-tables siguen además en `dev/`, el resto vive solo en `dev/`) |
+| Catálogo oculto (`dev/index.html`) | numbers → geometry → divisibility → operations → quantities → mental-math → percent → money → math-tables → measures → scale → similar → fractions-measures → problems → temperature, y luego el bloque de razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
+| Progreso (`config/index.html`) | mismo criterio y mismo bloque de razonamiento, pero con `shapes` delante de `numbers` |
 | `numbers` | ordinales (1º) → comparar (1º) → recta (2º) → unidades (2º-4º) → placevalue (2º-6º) → positivos-y-negativos (5º-6º) |
 | `measures` | longitud → peso → capacidad |
 | `fractions-measures` (solo fracciones y decimales) | fracciones → decimales |

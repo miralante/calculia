@@ -1,10 +1,10 @@
 /* ============================================================
-   Calculia — Numbers (read, order and place numbers)
+   Calculia — Numbers (read, order and place numbers)
    Data and levels in data.js. Shared modules in assets/js/.
    Each digit is painted according to its place: blue units,
    green tens, purple hundreds. The decimal separator, cents and
    signs use orange. Large numbers carry group labels (thousands,
-   millions… up to billions).
+   millions⬦ up to billions).
    Questions are generated on the fly based on the level type.
    ============================================================ */
 (function () {
@@ -51,7 +51,7 @@
   var counterWritten = $('#counterWritten');
   /* Free-exploration elevator level (see data.js: 'ascensorLibre' /
      'ascensorMeta'). Same mechanic as the water-temperature tool:
-     −10/−1/+1/+10 buttons, the visual reacts on every step. */
+     ——10/——1/+1/+10 buttons, the visual reacts on every step. */
   var elevatorUI = $('#elevatorUI');
   var elevatorGoal = $('#elevatorGoal');
   var elevatorShaft = $('#elevatorShaft');
@@ -115,7 +115,6 @@
   var attempts = 0;
   var question = null;
   var resolved = false;
-  var pools = {};
   var signedTempLevelIndex = 0;
   var signedTempValue = 0;
   var signedTempMission = null;
@@ -141,24 +140,9 @@
     return min;
   }
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   /* ---- Color-coded digits by place value ---- */
 
@@ -175,8 +159,8 @@
       '<span class="digit-c">' + App.i18n.t('leyendaCentenasTxt') + '</span>';
   }
 
-  /* html for the digits of n. highlight: place (0=units, 1=tens…)
-     that gets underlined. labels: group labels (thousands, millions…). */
+  /* html for the digits of n. highlight: place (0=units, 1=tens⬦)
+     that gets underlined. labels: group labels (thousands, millions⬦). */
   function digits(n, labels, highlight) {
     var s = String(n);
     var groups = [];
@@ -253,7 +237,7 @@
     /* Free-exploration elevator missions (positivos-y-negativos).
        Not a quiz, no prompt/options. Each generator returns a marker
        that render() detects to switch into the elevator UI
-       (renderElevator). 'libre' has no target — exit when ready
+       (renderElevator). 'libre' has no target — exit when ready
        (+1 star). 'meta' has a target floor (level.meta); a
        celebration message plays once the user lands on it, then
        exit still grants the star. Same shape as the 'counter'
@@ -294,12 +278,12 @@
         pointerRow = '<div class="queue-row queue-pointers" aria-hidden="true">' +
           '<span class="queue-start-spacer"></span>' +
           row.map(function (_, idx) {
-            return '<span class="queue-pointer">' + (idx + 1 === target ? '⬇️' : '') + '</span>';
+            return '<span class="queue-pointer">' + (idx + 1 === target ? '—!️' : '') + '</span>';
           }).join('') + '</div>';
       }
 
       var queue = '<div class="queue-row" aria-hidden="true">' +
-        '<span class="queue-start">🏁</span>' +
+        '<span class="queue-start">—x——</span>' +
         row.map(function (m) { return '<span class="queue-member">' + m + '</span>'; }).join('') +
         '</div>';
 
@@ -356,7 +340,7 @@
       /* Drawn from the no-repeat bag, not at random: with only eight
          notches to choose from, pure chance hands out the same notch
          twice in a row often enough to read as a dead "Siguiente". */
-      var target = draw(nv.id, candidates);
+      var target = App.utils.drawRound(nv.id, candidates);
 
       var ticks = '';
       for (var w = nv.min; w <= nv.max; w += nv.tick) {
@@ -366,7 +350,7 @@
           '</span>';
       }
       var mark = '<span class="line-mark" style="left:' +
-        (((target - nv.min) / span) * 100).toFixed(2) + '%">▼</span>';
+        (((target - nv.min) / span) * 100).toFixed(2) + '%">——</span>';
 
       return {
         prompt: App.i18n.t('gen.numberLinePrompt'),
@@ -461,11 +445,11 @@
 
     lectura: function (nv, i) {
       var list = DATA.readings[App.i18n.locale()][nv.lista];
-      var item = draw(nv.lista, list);
+      var item = App.utils.drawRound(nv.lista, list);
       var others = App.utils.shuffle(list.filter(function (o) { return o.n !== item.n; })).slice(0, 2);
       var note = item.nota ? '<p class="hint">' + item.nota + '</p>' : '';
       if (i % 2 === 0) {
-        /* paintNumber → words */
+        /* paintNumber —  words */
         return {
           prompt: App.i18n.t('gen.lecturaEnunciadoNumASim'),
           visual: '<div class="visual-number">' + paintNumber(item.n, { labels: true }) + '</div>' + note,
@@ -476,7 +460,7 @@
           ))
         };
       }
-      /* words → paintNumber */
+      /* words —  paintNumber */
       return {
         prompt: App.i18n.t('gen.lecturaEnunciadoSimANum'),
         visual: '<p class="words-number">' + item.words + '</p>' + note,
@@ -489,7 +473,7 @@
     },
 
     /* Place-value exchange: 10 of one kind become 1 of the next
-       (units→tens, tens→hundreds, hundreds→thousands). Even questions
+       (units— tens, tens— hundreds, hundreds— thousands). Even questions
        group small blocks into framed tens; odd questions go the other
        way (how many small ones make these big blocks?). */
     canje: function (nv, i) {
@@ -532,20 +516,20 @@
       };
     },
 
-    /* ×10 ladder: multiplying a power of ten by 10 moves every digit
+    /* —10 ladder: multiplying a power of ten by 10 moves every digit
        one place left, up to 10^12 (un billón / one trillion). The
        exponent range gives exactly 6 rungs per level, so a round
        walks the whole ladder without repeats. */
     escalera: function (nv) {
       var exponents = [];
       for (var e = nv.minExp; e <= nv.maxExp; e++) exponents.push(e);
-      var exp = draw('esc' + nv.id, exponents);
+      var exp = App.utils.drawRound('esc' + nv.id, exponents);
       var n = Math.pow(10, exp);
       var correct = n * 10;
       return {
         prompt: App.i18n.t('gen.escaleraEnunciado'),
         hint: App.i18n.t('gen.socraticLadder'),
-        visual: '<div class="expression">' + paintNumber(10) + paintSign('×') +
+        visual: '<div class="expression">' + paintNumber(10) + paintSign('—') +
           paintNumber(n, { labels: true }) + paintSign('=') +
           '<span class="num-box empty">?</span></div>' +
           '<p class="hint">' + App.i18n.t('gen.escaleraPista') + '</p>',
@@ -735,7 +719,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     inReinforce = false;
     fixedQuestion = null;
     reinforceList = [];
@@ -752,7 +736,7 @@
     reinforceIndex = 0;
     inReinforce = true;
     App.reinforce.banner.set(
-      App.i18n.t('refuerzoTitulo') + ' — ' +
+      App.i18n.t('refuerzoTitulo') + ' — ' +
       App.i18n.t('refuerzoIntro').replace('{n}', reinforceTotal)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -857,7 +841,7 @@
      the person is encouraged to look at the question/visual again.
      Only on the second mistake is the correct answer explained
      (showExplanation). The invitation is the one written for THIS
-     question —which is what to do with the figure in front of you— and
+     question —which is what to do with the figure in front of you— and
      not the same sentence for every question. The generic line is only
      the fallback, for a question that forgot to bring its own. */
   function showHint() {
@@ -1013,7 +997,7 @@
   function numberNameEn(d) { return DIGIT_NAMES_EN[+d]; }
 
   /* Per-level state for the counter. Held in a closure so re-entering
-     the level (via Exit → Play again) starts fresh. */
+     the level (via Exit —  Play again) starts fresh. */
   var counterValue = 0;
   var counterMax = 0;
   var counterShowSep = true;
@@ -1055,7 +1039,7 @@
     counterNumber.innerHTML = paintCounterNumber(counterValue);
     counterWritten.textContent = counterShowWords ? numberToWords(counterValue) : '';
     counterWritten.classList.toggle('hidden', !counterShowWords);
-    /* Disable "-" buttons at 0; the "−" buttons share the .data-step
+    /* Disable "-" buttons at 0; the "——" buttons share the .data-step
        attribute that starts with "-". */
     App.utils.$$('#counterUI .btn-counter[data-step]').forEach(function (b) {
       var step = parseInt(b.getAttribute('data-step'), 10);
@@ -1067,16 +1051,16 @@
 
   /* ============================================================
      Free-exploration elevator (no quiz)
-     Sibling of the water-temperature tool: −10/−1/+1/+10 buttons,
+     Sibling of the water-temperature tool: ——10/——1/+1/+10 buttons,
      the visual reacts on every step. The big number reads with a
      sign; the shaft shows the elevator emoji on the current floor,
      with the ground floor (0) always highlighted as the boundary
      between positive and negative. Same storage shape as the
-     counter — progress.stars increments on exit.
+     counter — progress.stars increments on exit.
      ============================================================ */
 
   /* Per-mission state. Held in closures so re-entering the level
-     (Exit → Play again) starts fresh. */
+     (Exit —  Play again) starts fresh. */
   var elevatorValue = 0;
   var elevatorMin = 0;
   var elevatorMax = 0;
@@ -1137,7 +1121,7 @@
      avoiding the level's starting floor and 0. Same helper used
      by the temperature tool; kept local because both tools share
      the exact same mechanic. Avoids 0 because 0 is the ground
-     floor — saying "go to floor 0" while the elevator is already
+     floor — saying "go to floor 0" while the elevator is already
      there adds noise rather than direction. */
   function pickElevatorSuggestion() {
     var start = (elevatorMode === 'meta' && typeof level.inicio === 'number')
@@ -1149,7 +1133,7 @@
 
   /* Paint the suggestion line. For 'ascensorMeta' the goal line
      already names the target floor, so showing ANOTHER random
-     floor would conflict — hide the suggestion. For 'ascensorLibre'
+     floor would conflict — hide the suggestion. For 'ascensorLibre'
      the goal line is empty, so the suggestion adds a concrete
      starting floor to the open-ended mission. */
   function paintElevatorSuggestion() {
@@ -1159,7 +1143,7 @@
       return;
     }
     var v = pickElevatorSuggestion();
-    var sign = v < 0 ? '−' : '+';
+    var sign = v < 0 ? '——' : '+';
     var key = v < 0 ? 'gen.elevatorSuggestionDown'
       : 'gen.elevatorSuggestionUp';
     elevatorSuggestion.textContent = App.i18n.t(key)
@@ -1173,11 +1157,11 @@
     var n = elevatorValue;
     /* Big floor number. The sign is part of the text so screen
        readers say "menos cinco" naturally. */
-    elevatorNumber.textContent = (n < 0 ? '−' : '') + Math.abs(n);
+    elevatorNumber.textContent = (n < 0 ? '——' : '') + Math.abs(n);
     elevatorNumber.setAttribute(
       'aria-label',
       App.i18n.t('gen.elevatorReadoutAria')
-        .replace('{piso}', (n < 0 ? '−' : '') + Math.abs(n))
+        .replace('{piso}', (n < 0 ? '——' : '') + Math.abs(n))
     );
     /* State label: above / on / below ground. Same vocabulary as
        the activity instruction so the user sees the same words in
@@ -1186,10 +1170,10 @@
       : n < 0 ? 'gen.elevatorStateBelow'
       : 'gen.elevatorStateGround';
     elevatorStateLabel.textContent = App.i18n.t(labelKey);
-    /* Disable "+" / "−" at the true edges of the building (±3) so the
+    /* Disable "+" / "——" at the true edges of the building (±3) so the
        elevator cannot be sent past the top or bottom floor. With a
        ±3 range and single-floor steps this is a rare, honest edge
-       case — not a stand-in for a range the buttons don't fit. */
+       case — not a stand-in for a range the buttons don't fit. */
     App.utils.$$('#elevatorUI .btn-elevator[data-step]').forEach(function (b) {
       var step = parseInt(b.getAttribute('data-step'), 10);
       var wouldBe = elevatorValue + step;
@@ -1201,11 +1185,11 @@
   }
 
   /* Render the shaft. Same shape as the old quiz-style
-     shaftHTML(min, max, markers) but with a single marker — the
-     elevator emoji on the current floor — and the ground floor
+     shaftHTML(min, max, markers) but with a single marker — the
+     elevator emoji on the current floor — and the ground floor
      always tinted with the project reasoning colour. Floors are
      listed top-to-bottom (max first) so floor +10 sits at the top
-     and floor −10 at the bottom, matching the building
+     and floor ——10 at the bottom, matching the building
      convention. */
   function paintElevatorShaft() {
     var html = '';
@@ -1214,11 +1198,11 @@
       var contenido = '';
       if (f === 0) {
         clases += ' ground-floor';
-        contenido += '<span class="floor-icon">🏠</span>';
+        contenido += '<span class="floor-icon">—x——</span>';
       }
       if (f === elevatorValue) {
         clases += ' current-floor';
-        contenido += '<span class="floor-icon">🏢</span>';
+        contenido += '<span class="floor-icon">—x——</span>';
       }
       contenido = '<span class="floor-label">' + (f > 0 ? '+' + f : (f < 0 ? '−' + Math.abs(f) : '0')) + '</span>' + contenido;
       html += '<div class="' + clases + '">' + contenido + '</div>';
@@ -1244,7 +1228,7 @@
        'success' modifier is added with classList.add afterwards.
        Same intent as the temperature tool: App.feedback.success()
        would overwrite the celebration text with a generic
-       "⭐ Fantastic!" pick, which doesn't fit here — the message
+       "⭐ Fantastic!" pick, which doesn't fit here — the message
        has to identify the floor the user just reached. */
     feedbackEl.className = 'feedback';
     feedbackEl.classList.add('success');
@@ -1276,10 +1260,10 @@
 
   /* Three paint variants for the displayed number, chosen from the
      current toggle state:
-       - showSep              → digit groups with . separator + label
-       - !showSep && colorGroups → digit groups with a coloured background
+       - showSep              —  digit groups with . separator + label
+       - !showSep && colorGroups —  digit groups with a coloured background
                                    per 3-digit chunk (no separator glyph)
-       - !showSep && !colorGroups → one continuous digit string */
+       - !showSep && !colorGroups —  one continuous digit string */
   function paintCounterNumber(n) {
     if (counterShowSep) return paintNumber(n, { labels: true });
     var s = String(n);
@@ -1383,7 +1367,7 @@
   }
 
   /* Elevator step handler: clamps the new value within the mission
-     range and redraws. Same pattern as counterAddStep — the
+     range and redraws. Same pattern as counterAddStep — the
      button enable/disable state is recomputed inside paintElevator
      so the next click will reflect the updated bounds. */
   function elevatorAddStep(step) {
@@ -1399,7 +1383,7 @@
   function elevatorSay() {
     var n = elevatorValue;
     var main = App.i18n.t('gen.elevatorTtsFloor')
-      .replace('{piso}', (n < 0 ? '−' : '') + Math.abs(n));
+      .replace('{piso}', (n < 0 ? '——' : '') + Math.abs(n));
     var labelKey = n > 0 ? 'gen.elevatorTtsAbove'
       : n < 0 ? 'gen.elevatorTtsBelow'
       : 'gen.elevatorTtsGround';

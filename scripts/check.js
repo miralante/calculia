@@ -338,10 +338,11 @@ if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'
 if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
 /* --- 5. Public/private catalog split ---
-   The public landing carries FIVE entries (Quantities, Ordinal
-   Numbers, Roman Numerals, Shapes, Scale); the hidden dev/ page
-   carries every other activity. Together they cover the full
-   tools/, config/, and sw.js activity set. Public activities are the
+   The public landing carries SEVEN entries (Quantities, Ordinal
+   Numbers, Roman Numerals, Shapes, Trigonometry, Scale, Math Tables);
+   the hidden dev/ page carries every other activity, plus the public
+   ones listed in BOTH_SLUGS. Together they cover the full tools/,
+   config/, and sw.js activity set. Public activities are the
    longest-lived "front door" — they stay discoverable for any
    visitor even when the rest of the catalogue is moved behind dev/.
    The order in PUBLIC_SLUGS is the visible order in index.html.
@@ -383,11 +384,11 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['quantities', 'ordinals', 'roman-numerals', 'shapes', 'trigonometry', 'scale'];
+var PUBLIC_SLUGS = ['quantities', 'ordinals', 'roman-numerals', 'shapes', 'trigonometry', 'scale', 'math-tables'];
 /* Public AND in dev/. Every name here must also be in PUBLIC_SLUGS,
    otherwise dev/ would carry an activity the landing hides, which is
    the inverse mistake and just as wrong. */
-var BOTH_SLUGS = ['quantities', 'ordinals', 'scale', 'trigonometry'];
+var BOTH_SLUGS = ['quantities', 'ordinals', 'scale', 'trigonometry', 'math-tables'];
 var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
 var expectedDevSlugs = new Set(slugs.filter(function (slug) {
   return PUBLIC_SLUGS.indexOf(slug) === -1 || BOTH_SLUGS.indexOf(slug) !== -1;
@@ -422,6 +423,42 @@ Object.keys(targets).forEach(function (f) {
   targetSet.forEach(function (slug) {
     if (!slugsSet.has(slug)) failures.push('catálogo: ' + f + ' contiene slug inexistente "' + slug + '"');
   });
+});
+/* --- 5b. Round structure: shuffle contract ---
+   Every tools/<slug>/app.js must call App.utils.shuffle at least once. The
+   contract (see doc/<locale>/tecnico.md §2.2.1) is that every activity
+   shuffles its questions and its options; temperature is out of scope
+   because its round has no order to shuffle. A regression here would
+   mean a new (or rewritten) activity forgot the shuffle, and the round
+   would teach button position instead of content.
+
+   The helpers App.utils.drawRound (bag with no repeats) and
+   App.utils.spreadRepeats (no adjacent repeats) live in
+   assets/js/utils.js. An activity that still defines its own `function
+   draw(` or `function spreadRepeats(` is duplicating that helper and
+   going around the contract. */
+var NO_SHUFFLE = ['temperature'];
+slugs.forEach(function (slug) {
+  if (NO_SHUFFLE.indexOf(slug) !== -1) return;
+  checks += 1;
+  var appJs = fs.readFileSync(path.join(toolsDir, slug, 'app.js'), 'utf8');
+  if (appJs.indexOf('App.utils.shuffle') === -1) {
+    failures.push('tools/' + slug + '/app.js: la ronda no llama a App.utils.shuffle ' +
+      '(contrato §2.2.1: barajar preguntas u opciones)');
+  }
+  checks += 1;
+  /* Local `function draw(` instead of App.utils.drawRound: copy-pasted
+     helper. The regex requires whitespace + name + paren so it does
+     not match `drawRound(` (helper calls) or `draw(` (a method). */
+  if (/\bfunction\s+draw\s*\(/.test(appJs)) {
+    failures.push('tools/' + slug + '/app.js: define su propio `function draw(`. ' +
+      'Usar App.utils.drawRound (assets/js/utils.js).');
+  }
+  checks += 1;
+  if (/\bfunction\s+spreadRepeats\s*\(/.test(appJs)) {
+    failures.push('tools/' + slug + '/app.js: define su propio `function spreadRepeats(`. ' +
+      'Usar App.utils.spreadRepeats (assets/js/utils.js).');
+  }
 });
 /* --- 6. Mandatory rule: zero disability / occupational therapy / minors mentions ---
    doc/<locale>/SPEC.md §4: the end user never sees terms naming

@@ -16,7 +16,6 @@
     "modLogica": "🧩 Razonamiento y lógica",
 
     "numbers": { "name": "Los Números", "detail": "Lee y compara. Aprende los positivos y negativos." },
-    "places": { "name": "Sitios y tamaños", "detail": "Dentro, fuera, más largo." },
     "shapes": { "name": "Formas", "detail": "Las formas que ves cada día." },
     "trigonometry": { "name": "Trigonometría", "detail": "Los tres lados de un triángulo." },
     "scale": { "name": "Escala", "detail": "Lee una regla, un termómetro y un plano." },

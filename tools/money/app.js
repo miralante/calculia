@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Money (enough money?, change, and prices)
+   Calculia â€” Money (enough money?, change, and prices)
    Data and levels in data.js. Shared modules in assets/js/.
    Amounts use euros and cents, with the decimal separator and
    cents painted in orange. Questions are generated on the fly
@@ -41,7 +41,6 @@
   var attempts = 0;
   var resolved = false;
   var question = null;
-  var pools = {};
   /* Refuerzo: ver core en assets/js/feedback.js (App.reinforce).
      fixedQuestion permite reutilizar render() con una question
      externa (la del refuerzo); si es null, render() genera una
@@ -54,33 +53,18 @@
   var reinforceTotal = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Utilidades ---- */
 
   function randInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   /* Separador decimal (',' es / '.' en). No es solo estilo: intercambiar
-     el separador entre idiomas es obligatorio (ver I18N.md §2). */
+     el separador entre idiomas es obligatorio (ver I18N.md Â§2). */
   function decimalSeparator() { return App.i18n.locale() === 'en' ? '.' : ','; }
 
   var POS_CLASS = ['digit-u', 'digit-d', 'digit-c'];
@@ -99,7 +83,7 @@
   }
 
   function legendPrice() {
-    return '<span class="digit-u">' + App.i18n.t('leyendaEurosTxt') + '</span> · ' +
+    return '<span class="digit-u">' + App.i18n.t('leyendaEurosTxt') + '</span> Â· ' +
       '<span class="digit-comma">' + App.i18n.t('leyendaComaTxt') + '</span>';
   }
 
@@ -108,7 +92,7 @@
     var c = cent % 100;
     var cc = (c < 10 ? '0' : '') + c;
     return '<span class="num-color">' + digits(e) +
-      '<span class="digit-comma">' + decimalSeparator() + '</span><span class="digit-dec">' + cc + '</span> €</span>';
+      '<span class="digit-comma">' + decimalSeparator() + '</span><span class="digit-dec">' + cc + '</span> â‚¬</span>';
   }
 
   function wordsPrice(cent) {
@@ -127,7 +111,7 @@
   var GENERATORS = {
 
     precios: function () {
-      var prod = draw('prod', DATA.productos);
+      var prod = App.utils.drawRound('prod', DATA.productos);
       var nombreProd = App.i18n.t('producto.' + prod.id);
       var e = randInt(1, 9);
       var c = [5, 10, 25, 50, 75, 90][randInt(0, 5)];
@@ -180,8 +164,8 @@
     },
 
     llegaUno: function () {
-      var caso = draw('llegaUno', DATA.llegaUno);
-      var prod = draw('prodLlegaUno', DATA.productos);
+      var caso = App.utils.drawRound('llegaUno', DATA.llegaUno);
+      var prod = App.utils.drawRound('prodLlegaUno', DATA.productos);
       var nombreProd = App.i18n.t('producto.' + prod.id);
       var llega = caso.precio <= caso.tiene;
       return {
@@ -201,7 +185,7 @@
     },
 
     llegaDos: function () {
-      var caso = draw('llegaDos', DATA.llegaDos);
+      var caso = App.utils.drawRound('llegaDos', DATA.llegaDos);
       var prods = App.utils.shuffle(DATA.productos).slice(0, 2);
       var nombres = prods.map(function (p) { return App.i18n.t('producto.' + p.id); });
       var total = caso.precios[0] + caso.precios[1];
@@ -227,7 +211,7 @@
     },
 
     cambio: function (levelArg) {
-      var caso = draw('cambio_' + levelArg.lista, DATA.cambio[levelArg.lista]);
+      var caso = App.utils.drawRound('cambio_' + levelArg.lista, DATA.cambio[levelArg.lista]);
       var vuelta = caso.billete - caso.precio;
       return {
         prompt: App.i18n.t('gen.cambioEnunciado'),
@@ -296,7 +280,7 @@
     level = levelArg;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     inReinforce = false;
     fixedQuestion = null;
     reinforceList = [];
@@ -313,7 +297,7 @@
     reinforceIndex = 0;
     inReinforce = true;
     App.reinforce.banner.set(
-      App.i18n.t('refuerzoTitulo') + ' — ' +
+      App.i18n.t('refuerzoTitulo') + ' â€” ' +
       App.i18n.t('refuerzoIntro').replace('{n}', reinforceTotal)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -394,7 +378,7 @@
      the person is encouraged to look at the question/visual again.
      Only on the second mistake is the correct answer explained
      (showExplanation). The invitation is the one written for THIS
-     question —which is what to do with the figure in front of you— and
+     question â€”which is what to do with the figure in front of youâ€” and
      not the same sentence for every question. The generic line is only
      the fallback, for a question that forgot to bring its own. */
   function showHint() {

@@ -129,6 +129,56 @@ from another `tools/` folder, works if you open its `index.html`
 directly) — same contract as Apptonomia's. See each activity's `data.js`
 header comment for its specific data format.
 
+#### 2.2.1 Question and option randomness (contract)
+
+By design, **every activity shuffles the question order within a
+round** **and shuffles the answer options** of every question.
+Shuffling uses `App.utils.shuffle(...)` (Fisher–Yates in
+`assets/js/utils.js`); never `sort(() => Math.random() - 0.5)`, which
+is biased and produces non-uniform lists.
+
+The reason is that a fixed order teaches the **position** of the
+button, not the content: a child who passes a whole round where the
+correct answer is always bottom-left would fail the same round if the
+list showed up shuffled. Shuffling every round forces reading the
+content and checking before tapping.
+
+Documented exceptions (no shuffle because the order is intrinsic to
+the content, not a distractor):
+
+- **Yes/No pairs** (e.g. `wallet` → "did you pay the right amount?"):
+  the natural Yes/No order is the convention, and shuffling it confuses
+  without adding any challenge.
+- **Number lines** (e.g. `wallet` → "roughly, how much does it cost?"
+  with three consecutive amounts): shuffling a number line turns it
+  into a distractor quiz without the visual hint the line is meant to
+  provide.
+- **Puzzle pieces** (`puzzle`, `stories`): the available pieces are
+  shuffled, but the "question" is the whole picture and its paint
+  order is always left-to-right.
+
+`temperature` is out of scope for this contract: its mechanic is not
+multiple-choice and the round has no order to shuffle.
+
+#### 2.2.2 Implementation
+
+Each `tools/<slug>/app.js` applies the contract using one of two
+patterns (both are valid):
+
+- **Options**: `App.utils.shuffle([correct].concat(distractors))`
+  inside the question generator, or
+  `App.utils.shuffle(p.options).forEach(...)` when painting.
+- **Questions**: `draw(key, list)` (a bag with no repeats within the
+  round, refilled when empty) when the activity picks a concrete shape
+  per question; or `App.utils.shuffle(list).slice(0, N)` when the round
+  takes N elements from a larger pool.
+
+A check in `scripts/check.js` (section 5, "Round structure") verifies
+that every activity with multiple-choice questions shuffles its options
+and that every activity with a pool larger than the round shuffles
+the order. Mechanical activities (`puzzle`, `stories`, `odd-one-out`)
+and `temperature` are excluded from the check.
+
 ### 2.3 `settings/` — trimmed relative to Apptonomia's
 
 Two actions, same two-step-confirmation pattern as Apptonomia:

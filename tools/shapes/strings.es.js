@@ -135,36 +135,6 @@
       prism: { name: 'prisma', gloss: '2 triángulos y 3 rectángulos' },
       pyramid: { name: 'pirámide', gloss: '1 cuadrado y 4 triángulos' }
     },
-    /* La aclaración de la galería: cuántos lados tiene la forma plana o
-       cuántas caras tiene el cuerpo y de qué forma son. Los lados salen
-       de DATA.sides, que es la misma fuente que el dibujo y las
-       preguntas; aquí solo vive el texto. El círculo y la esfera no
-       tienen lados rectos ni caras planas: decirlo con palabras y no
-       con un 0, que parece algo que hay que contar. */
-    note: {
-      sides: '{n} lados y {corners} vértices',
-      sidesNone: 'Sin lados rectos ni vértices',
-      solid: {
-        cube: '6 caras: 6 cuadrados.',
-        rectangularPrism: '6 caras: 2 cuadrados y 4 rectángulos.',
-        triangularPrism: '5 caras: 2 triángulos y 3 rectángulos.',
-        pyramid: '5 caras: 1 cuadrado y 4 triángulos.',
-        sphere: 'No tiene caras planas. Toda su superficie es curva.',
-        cylinder: '2 caras planas: 2 círculos. Y 1 superficie curva.',
-        cone: '1 cara plana: 1 círculo. Y 1 superficie curva.'
-      }
-    },
-    /* Lo que aporta el ejemplo cotidiano: los tres conceptos sobre el
-       objeto de verdad que se acaba de mirar. No vuelve a definirlos —
-       eso ya está en la diapositiva de conceptos — sino que los cuenta
-       sobre ese puerta, esa ventana o ese cubo de playa. Solo hay texto
-       para las formas planas: lados, vértices y perímetro son palabras de
-       una figura, y un cuerpo tiene caras. */
-    realNote: {
-      polygon: 'Tiene {sides} lados y {corners} vértices. El perímetro es la vuelta por el borde, y el área, todo lo de dentro.',
-      circle: 'El borde es redondo: no tiene lados rectos ni vértices. El perímetro se mide por la curva y el área es el disco de dentro.',
-      solid: 'Ocupa sitio de verdad: el volumen es el hueco que hay dentro y se puede llenar.'
-    },
     gen: {
       howManyFaces: 'Este es un {name} abierto. ¿Cuántas caras tiene?',
       facesHint: 'Cuenta las piezas del dibujo: cada una es una cara.',
@@ -176,7 +146,6 @@
       sidesPrompt: '¿Cuántos lados tiene?',
       sidesHint: 'Cuenta las rayas rectas del borde.',
       cornersPrompt: '¿Cuántos vértices tiene?',
-      cornersHint: 'Cuenta los puntos marcados.',
       perimeterPrompt: 'Cada lado mide {side} cm. ¿Cuánto mide el perímetro?',
       perimeterHint: 'Suma todos los lados: el perímetro es la vuelta entera.',
       /* El área todavía no se cuenta aquí: se pregunta por la parte de la
@@ -198,7 +167,7 @@
         horizontal: 'Doblada por la raya horizontal',
         diagonal: 'Doblada por la raya diagonal'
       },
-      similarPrompt: '¿Cuál de estas figuras es un {name} más pequeño?',
+      similarPrompt: '¿Cuál es la figura semejante?',
       similarHint: 'Tiene que ser la misma forma, no hace falta que sea igual de grande.',
       solidToNamePrompt: '¿Qué forma tiene este objeto?',
       solidToObjectPrompt: '¿Cuál de estos objetos es un {name}?',
@@ -210,7 +179,7 @@
          nada. Estas no dan la respuesta —dan la estrategia—, que es lo
          que distingue una pista socrática de un spoiler. */
       socraticSides: '🤔 Mira la figura otra vez y cuenta sus lados uno por uno.',
-      socraticCorners: '🤔 Mira la figura otra vez y cuenta sus vértices uno por uno.',
+      socraticCorners: '🤔 Mira la figura otra vez, cuenta los puntos marcados uno por uno.',
       socraticName: '🤔 Fíjate en su forma: no todas las figuras tienen los mismos lados.',
       socraticPerimeter: '🤔 El perímetro es la vuelta entera: súmale todos los lados.',
       socraticArea: '🤔 Piensa en la parte de la figura que pisas cuando te pones encima.',

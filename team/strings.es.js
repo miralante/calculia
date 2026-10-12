@@ -96,12 +96,6 @@
         "works": 'Cálculo mental, estrategias de descomposición (10 + n), automatización de las operaciones básicas.',
         "daily": 'Calculad juntos sin papel: "¿cuánto es 23 + 14? ¿y si añadimos 2 más?". Sumad los precios antes de pagar.'
       },
-      "places": {
-        "name": 'Sitios y tamaños',
-        "does": 'Mira un dibujo y dice si la cosa está dentro o fuera de la caja, encima o debajo de la silla, a la izquierda o a la derecha del árbol. También compara dos cosas reales: cuál es más larga, cuál pesa más y en cuál cabe más.',
-        "works": 'Vocabulario de posición y de tamaño, orientación en el espacio, y comparar sin medir ni contar.',
-        "daily": 'Pedidle cosas diciendo dónde están: "el vaso que está dentro del armario". Al cargar la compra, preguntadle qué bolsa pesa más antes de cogerla.'
-      },
       "shapes": {
         "name": 'Formas',
         "does": 'Reconoce formas planas (círculo, cuadrado, triángulo, rectángulo, pentágono, hexágono) y cuerpos (cubo, esfera, cilindro) a través de objetos reales. Cuenta lados y vértices, y presenta los conceptos de perímetro, área, volumen, simetría y semejanza antes de preguntarlos.',

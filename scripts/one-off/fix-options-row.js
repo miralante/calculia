@@ -4,7 +4,7 @@
    app.js does `optionsEl.classList.toggle('options-row', !!question.inline)`.
    money, measures, mental-math, numbers and fractions-measures carry
    the rule; algebra, calendar, charts, divisibility, operations,
-   percent, places, problems and similar toggle the class with nothing
+   percent, problems and similar toggle the class with nothing
    behind it, so every `inline: true` question stacks its answers in a
    column and the row layout silently never happens.
 
@@ -16,7 +16,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const SLUGS = ['algebra', 'calendar', 'charts', 'divisibility', 'operations', 'percent', 'places', 'problems', 'similar'];
+const SLUGS = ['algebra', 'calendar', 'charts', 'divisibility', 'operations', 'percent', 'problems', 'similar'];
 
 const BLOCK = [
   '',

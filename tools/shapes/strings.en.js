@@ -135,35 +135,6 @@
       prism: { name: 'prism', gloss: '2 triangles and 3 rectangles' },
       pyramid: { name: 'pyramid', gloss: '1 square and 4 triangles' }
     },
-    /* Gallery clarification: how many sides a flat shape has, or how many
-       faces a solid has and what they are shaped like. The side count
-       comes from DATA.sides, the same source as the drawing and the
-       questions; only the text lives here. The circle and the sphere
-       have no straight sides and no flat faces, which is said with words
-       and not with a 0 that looks like something there is to count. */
-    note: {
-      sides: '{n} sides and {corners} vertices',
-      sidesNone: 'No straight sides and no vertices',
-      solid: {
-        cube: '6 faces: 6 squares.',
-        rectangularPrism: '6 faces: 2 squares and 4 rectangles.',
-        triangularPrism: '5 faces: 2 triangles and 3 rectangles.',
-        pyramid: '5 faces: 1 square and 4 triangles.',
-        sphere: 'No flat faces. The whole surface is curved.',
-        cylinder: '2 flat faces: 2 circles. And 1 curved surface.',
-        cone: '1 flat face: 1 circle. And 1 curved surface.'
-      }
-    },
-    /* What the everyday example adds: the three concepts applied to the real
-       object just looked at. It does not define them again — that is the
-       concept slide's job — it counts them on that door, window or beach
-       bucket. Only flat shapes get one: sides, vertices and perimeter are
-       words for a figure, and a solid has faces. */
-    realNote: {
-      polygon: 'It has {sides} sides and {corners} vertices. The perimeter is the way round the edge, and the area is all of the inside.',
-      circle: 'The edge is round: it has no straight sides and no vertices. The perimeter is measured along the curve and the area is the disc inside.',
-      solid: 'It really takes up room: the volume is the space inside, and you can fill it.'
-    },
     gen: {
       howManyFaces: 'This is a {name} opened up. How many faces has it got?',
       facesHint: 'Count the pieces in the drawing: each one is a face.',
@@ -175,7 +146,6 @@
       sidesPrompt: 'How many sides does it have?',
       sidesHint: 'Count the straight lines around the edge.',
       cornersPrompt: 'How many vertices does it have?',
-      cornersHint: 'Count the marked dots.',
       perimeterPrompt: 'Each side is {side} cm long. How long is the perimeter?',
       perimeterHint: 'Add up all the sides: the perimeter is the whole way round.',
       /* The area is not counted here yet: the question is which part of the
@@ -197,7 +167,7 @@
         horizontal: 'Folded on the horizontal line',
         diagonal: 'Folded on the diagonal line'
       },
-      similarPrompt: 'Which of these figures is a smaller {name}?',
+      similarPrompt: 'Which figure is similar?',
       similarHint: 'It has to be the same shape; it does not have to be as big.',
       solidToNamePrompt: 'What shape is this object?',
       solidToObjectPrompt: 'Which of these objects is a {name}?',
@@ -209,7 +179,7 @@
          give the answer away — they give the strategy, which is what
          separates a Socratic hint from a spoiler. */
       socraticSides: '🤔 Look at the figure again and count its sides one by one.',
-      socraticCorners: '🤔 Look at the figure again and count its vertices one by one.',
+      socraticCorners: '🤔 Look at the figure again and count the marked dots one by one.',
       socraticName: '🤔 Look at its shape: not every figure has the same sides.',
       socraticPerimeter: '🤔 The perimeter is the whole way round: add up all the sides.',
       socraticArea: '🤔 Think of the part of the figure you stand on when you step on it.',

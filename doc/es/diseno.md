@@ -113,7 +113,7 @@ pertenece. La tabla se lee del catálogo, no del gusto:
 
 | Sección | Acento | Actividades |
 |---|---|---|
-| **Matemáticas** (`#mod-mates`) | `--mod-razonamiento` (verde azulado) | numbers (incluye positivos y negativos), roman-numerals, shapes, places, geometry, divisibility, operations, quantities, mental-math, percent, money, math-tables, measures, similar, fractions-measures, problems, temperature |
+| **Matemáticas** (`#mod-mates`) | `--mod-razonamiento` (verde azulado) | numbers (incluye positivos y negativos), roman-numerals, shapes, geometry, divisibility, operations, quantities, mental-math, percent, money, math-tables, measures, similar, fractions-measures, problems, temperature |
 | **Razonamiento y lógica** (`#mod-logica`) | `--mod-memoria` (naranja) | riddles, patterns, wallet, algebra, charts, calendar, clock, stories, odd-one-out, puzzle |
 
 ⚠️ **`--mod-mates` no es un token.** Es el `id` de la `<section>` de

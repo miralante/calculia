@@ -9,7 +9,7 @@
   App.i18n.register({
     title: '📖 Historias',
     instruction: 'Toca las viñetas en el orden correcto, de primero a último.',
-    levelsTitle: 'Elige una actividad',
+    startButton: 'Empezar a practicar →',
     nivelDescripcion: '{n} viñetas',
     levelDescription: '{n} viñetas',
     orderLabel: 'Tu orden',

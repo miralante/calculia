@@ -36,7 +36,7 @@
     quarterTo: 'quarter to {h}',
     correctExplanation: "✅ Correct! It's ",
     incorrectExplanationA: "❌ That is not the time. It's ",
-    readHint: '🤔 Try again. Look calmly at the clock.',
+    readHint: '🤔 Start with the short hand: that one is the hour. The long hand is the minutes.',
     associateHint: '🤔 Try again. Think about that time of day.',
     setHint: '🤔 Try again. Adjust the time with the buttons.',
     convertHint: '🤔 Try again. Compare the clock face with the numbers.',

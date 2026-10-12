@@ -236,21 +236,6 @@
   text-transform: capitalize;
 }
 
-/* La aclaración: cuántos lados tiene la forma plana, o cuántas caras
-   tiene el cuerpo y de qué forma son. Es una nota al pie del nombre,
-   así que no hereda su tamaño, su peso ni su mayúscula, y usa el color
-   de texto suave (≥ 7:1 en los tres temas) para no competir con él. */
-.gallery-note {
-  max-width: 560px;
-  min-height: 1.2em;
-  margin: 0;
-  color: var(--color-texto-suave);
-  font-size: 0.85rem;
-  line-height: 1.4;
-  text-align: center;
-  text-transform: none;
-}
-
 .real-object {
   min-height: 1.2em;
   font-size: 5rem;

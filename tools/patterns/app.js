@@ -290,6 +290,12 @@
   }
 
   /* Events */
+  /* La pantalla de inicio llegó a producción con una lista de niveles
+     vacía: el <div id="levels"> nunca se llenó, así que se veía "Elige
+     una actividad" sin nada debajo y no había forma de empezar. Ahora es
+     un botón que arranca en el nivel que toque por el progreso, como en
+     el Reloj. */
+  $('#btnStart').addEventListener('click', function () { startRound(levelFromProgress()); });
   $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
   $('#btnMenu').addEventListener('click', function () {
     screenEnd.classList.add('hidden');

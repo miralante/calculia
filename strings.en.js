@@ -16,7 +16,6 @@
     "modLogica": "🧩 Reasoning and logic",
 
     "numbers": { "name": "Numbers", "detail": "Read and compare. Learn about positive and negative numbers." },
-    "places": { "name": "Places and sizes", "detail": "Inside, outside, longer." },
     "shapes": { "name": "Shapes", "detail": "The shapes you see every day." },
     "trigonometry": { "name": "Trigonometry", "detail": "The three sides of a triangle." },
     "scale": { "name": "Scale", "detail": "Read a ruler, a thermometer and a plan." },

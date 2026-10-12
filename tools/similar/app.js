@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Formas parecidas
+   Calculia â€” Formas parecidas
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -37,14 +37,13 @@
   var answered = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      Whether two rectangles are the same shape, how many little squares
@@ -79,24 +78,9 @@
 
   /* ---- Utilities ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   function yesNoOptions(isYes) {
     return App.utils.shuffle([true, false].map(function (v) {
@@ -148,10 +132,10 @@
   function trianglePic(a, b) {
     var big = a * a + b * b;
     return '<div class="tri-stage">' +
-      '<span class="tri-part"><span class="tri-label">' + a + ' × ' + a + '</span>' +
+      '<span class="tri-part"><span class="tri-label">' + a + ' Ã— ' + a + '</span>' +
       squareOf(a) + '</span>' +
       '<span class="tri-plus" aria-hidden="true">+</span>' +
-      '<span class="tri-part"><span class="tri-label">' + b + ' × ' + b + '</span>' +
+      '<span class="tri-part"><span class="tri-label">' + b + ' Ã— ' + b + '</span>' +
       squareOf(b) + '</span>' +
       '<span class="tri-plus" aria-hidden="true">=</span>' +
       '<span class="tri-part"><span class="tri-label">?</span>' +
@@ -189,10 +173,10 @@
     /* Are these two the same shape? Same shape means one is the other
        made bigger, with nothing squashed. */
     sameShape: function (nv) {
-      var a = draw(nv.id, DATA.rects);
+      var a = App.utils.drawRound(nv.id, DATA.rects);
       /* Half the questions are a real pair and half are not, so the answer
          cannot be guessed from how the level feels. */
-      var wantYes = draw(nv.id + 'yes', [true, false]);
+      var wantYes = App.utils.drawRound(nv.id + 'yes', [true, false]);
       var pool = DATA.rects.filter(function (o) {
         var isSame = sameShape(a, o);
         var sameSize = o.w === a.w && o.h === a.h;
@@ -213,7 +197,7 @@
 
     /* The other way round: which of the three is the same shape, bigger. */
     pickSameShape: function (nv) {
-      var a = draw(nv.id, DATA.rects);
+      var a = App.utils.drawRound(nv.id, DATA.rects);
       var good = App.utils.shuffle(DATA.rects.filter(function (o) {
         return sameShape(a, o) && (o.w !== a.w || o.h !== a.h);
       }))[0];
@@ -240,7 +224,7 @@
     /* The square on the long side holds as many little squares as the
        other two put together. Counted, not proved. */
     squaresOnSides: function (nv) {
-      var t = draw(nv.id, DATA.legs);
+      var t = App.utils.drawRound(nv.id, DATA.legs);
       var total = t.a * t.a + t.b * t.b;
       return {
         prompt: App.i18n.t('gen.squaresOnSides'),
@@ -257,7 +241,7 @@
 
     /* Which ramp climbs faster. */
     steeper: function (nv) {
-      var a = draw(nv.id, DATA.ramps);
+      var a = App.utils.drawRound(nv.id, DATA.ramps);
       var b = App.utils.shuffle(DATA.ramps.filter(function (o) {
         return !sameSlopeAs(a, o);
       }))[0];
@@ -282,8 +266,8 @@
     /* And two ramps of different size can still climb the same: that is
        what "the same slope" means, and it is where trigonometry starts. */
     sameSlope: function (nv) {
-      var a = draw(nv.id, DATA.ramps);
-      var wantYes = draw(nv.id + 'yes', [true, false]);
+      var a = App.utils.drawRound(nv.id, DATA.ramps);
+      var wantYes = App.utils.drawRound(nv.id + 'yes', [true, false]);
       var pool = DATA.ramps.filter(function (o) {
         var same = sameSlopeAs(a, o);
         var identical = o.run === a.run && o.rise === a.rise;
@@ -356,7 +340,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -372,7 +356,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -450,9 +434,9 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —what to do
+     The invitation is the one written for THIS question â€”what to do
      with the pair of figures, the squares or the ramps in front of
-     you— and not the same sentence for every question. The generic
+     youâ€” and not the same sentence for every question. The generic
      line is only the fallback, for a question that forgot to bring
      its own. */
   function showHint() {

@@ -9,7 +9,7 @@
   App.i18n.register({
     title: '📖 Stories',
     instruction: 'Tap the panels in the correct order, from first to last.',
-    levelsTitle: 'Choose an activity',
+    startButton: 'Start practising →',
     nivelDescripcion: '{n} panels',
     levelDescription: '{n} panels',
     orderLabel: 'Your order',

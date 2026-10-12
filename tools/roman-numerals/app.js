@@ -824,44 +824,6 @@
     return (item.id || item.n) + '|' + entry.mode;
   }
 
-  function hasAdjacentRepeat(list) {
-    for (var i = 1; i < list.length; i++) {
-      if (entryKey(list[i]) === entryKey(list[i - 1])) return true;
-    }
-    return false;
-  }
-
-  /* Two identical questions in a row make "Siguiente" look broken: the
-     button works, but the screen does not change, so it reads as a dead
-     control. The repetition itself is deliberate (DATA.repetitions: each
-     number is meant to come up twice), so keep it and spread it out.
-     Reshuffle a few times; if luck is against us, fall back to filling
-     even positions and then odd ones, where two copies of the same entry
-     cannot end up side by side. */
-  function spreadRepeats(list) {
-    for (var attempt = 0; attempt < 20; attempt++) {
-      var shuffled = App.utils.shuffle(list);
-      if (!hasAdjacentRepeat(shuffled)) return shuffled;
-    }
-    var byKey = {};
-    list.forEach(function (e) {
-      var k = entryKey(e);
-      (byKey[k] = byKey[k] || []).push(e);
-    });
-    var flat = [];
-    Object.keys(byKey)
-      .sort(function (a, b) { return byKey[b].length - byKey[a].length; })
-      .forEach(function (k) { flat = flat.concat(byKey[k]); });
-    var out = new Array(flat.length);
-    var slot = 0;
-    for (var i = 0; i < flat.length; i++) {
-      out[slot] = flat[i];
-      slot += 2;
-      if (slot >= flat.length) slot = 1;
-    }
-    return out;
-  }
-
   function itemsForLevel(level) {
     if (level.pool === 'random' || level.mode === 'random') {
       var modes = baseLevels();
@@ -890,7 +852,7 @@
     for (var r = 0; r < reps; r++) {
       repeated = repeated.concat(picked);
     }
-    return spreadRepeats(repeated);
+    return App.utils.spreadRepeats(repeated, entryKey);
   }
 
   /* Starts a round. If 'level' is a group (pool 'group'), starts

@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Fractions
+   Calculia â€” Fractions
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -39,7 +39,6 @@
   var resolved = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce).
      fixedQuestion allows reusing render() with an external question
      (the reinforcement one); if null, render() generates a new one
@@ -51,31 +50,16 @@
   var reinforceTotal = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Utilidades ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   function leyendaFrac() {
-    return '<span class="digit-u">' + App.i18n.t('leyendaPartesPintadasTxt') + '</span> · ' +
+    return '<span class="digit-u">' + App.i18n.t('leyendaPartesPintadasTxt') + '</span> Â· ' +
       '<span class="digit-d">' + App.i18n.t('leyendaPartesTotalTxt') + '</span>';
   }
 
@@ -122,7 +106,7 @@
 
   /* Spanish writes 0,5 and English 0.5. Same per-tool convention as
      thousandsSeparator() in tools/numbers and DECIMAL_SEP in
-     assets/js/dinero.js (see doc/es/i18n.md §4). */
+     assets/js/dinero.js (see doc/es/i18n.md Â§4). */
   function decimalSeparator() {
     return App.i18n.locale() === 'en' ? '.' : ',';
   }
@@ -249,7 +233,7 @@
        so what changes is visible rather than asserted.
        `casos` is [denA, numA, denB, numB] with denB a multiple of denA. */
     mixFrac: function (nv) {
-      var item = draw(nv.id, nv.casos);
+      var item = App.utils.drawRound(nv.id, nv.casos);
       var a = [item[1], item[0]];
       var b = [item[3], item[2]];
       /* The common slice is the bigger denominator, because the other one
@@ -274,14 +258,14 @@
         hint: App.i18n.t('gen.socraticMixFrac'),
         visual: '<div class="frac-expression">' +
             htmlFraccion(a) +
-            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            '<span class="frac-sign">' + (adding ? '+' : 'âˆ’') + '</span>' +
             htmlFraccion(b) +
             '<span class="frac-sign">=</span>' +
             '<span class="frac-gap">?</span>' +
           '</div>' +
           '<div class="frac-visual-row">' +
             svgFraccion(a[0], a[1], 110) +
-            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            '<span class="frac-sign">' + (adding ? '+' : 'âˆ’') + '</span>' +
             svgFraccion(b[0], b[1], 110) +
           '</div>' +
           '<p class="hint">' + App.i18n.t('gen.mixFracHint')
@@ -304,11 +288,11 @@
        groups, one of them marked, so the answer is counted.
        `casos` is [den, total]; the total is always a multiple of den. */
     fracOf: function (nv) {
-      var item = draw(nv.id, nv.casos);
+      var item = App.utils.drawRound(nv.id, nv.casos);
       var den = item[0];
       var total = item[1];
       var each = total / den;
-      var thing = draw(nv.id + 'thing', nv.things);
+      var thing = App.utils.drawRound(nv.id + 'thing', nv.things);
 
       var groups = '';
       for (var g = 0; g < den; g++) {
@@ -346,7 +330,7 @@
        the point lands by itself: they are the same kind of number, only
        written two ways, and once they are in tenths they simply add up. */
     mixedOp: function (nv) {
-      var item = draw(nv.id, nv.casos);
+      var item = App.utils.drawRound(nv.id, nv.casos);
       var frac = item[0];
       var tenths = item[1];
       var fracTenths = (frac[0] * 10) / frac[1];
@@ -363,7 +347,7 @@
         hint: App.i18n.t('gen.socraticMixedOp'),
         visual: '<div class="frac-visual-row">' +
             svgFraccion(frac[0], frac[1], 110) +
-            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            '<span class="frac-sign">' + (adding ? '+' : 'âˆ’') + '</span>' +
             svgFraccion(tenths, 10, 110) +
           '</div>' +
           '<p class="hint">' + App.i18n.t('gen.mixedOpHint') + '</p>',
@@ -380,7 +364,7 @@
        so the two ways of writing a number are compared as what they are:
        two amounts of the same thing. */
     fracOrDecimal: function (nv) {
-      var item = draw(nv.id, nv.casos);
+      var item = App.utils.drawRound(nv.id, nv.casos);
       var frac = item[0];
       var tenths = item[1];
       var fracTenths = (frac[0] * 10) / frac[1];
@@ -410,7 +394,7 @@
     },
 
     decimalOp: function (nv) {
-      var item = draw(nv.id, nv.casos);
+      var item = App.utils.drawRound(nv.id, nv.casos);
       var x = item[0];
       var y = item[1];
       var adding = nv.op === 'add';
@@ -428,7 +412,7 @@
         hint: App.i18n.t('gen.socraticDecimalOp'),
         visual: '<div class="frac-visual-row">' +
             svgFraccion(x, 10, 110) +
-            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            '<span class="frac-sign">' + (adding ? '+' : 'âˆ’') + '</span>' +
             svgFraccion(y, 10, 110) +
           '</div>' +
           '<p class="hint">' + App.i18n.t('gen.decimalOpHint') + '</p>',
@@ -441,7 +425,7 @@
 
 
     fracciones: function (nv) {
-      var f = draw(nv.id, nv.fracs);
+      var f = App.utils.drawRound(nv.id, nv.fracs);
       var otros = App.utils.shuffle(nv.fracs.filter(function (o) {
         return o[0] * f[1] !== o[1] * f[0]; /* remove fracciones equivalentes */
       })).slice(0, 2);
@@ -462,7 +446,7 @@
     },
 
     comparaFrac: function (nv) {
-      var par = App.utils.shuffle(draw(nv.id, nv.pares));
+      var par = App.utils.shuffle(App.utils.drawRound(nv.id, nv.pares));
       var greater = (par[0][0] / par[0][1] > par[1][0] / par[1][1]) ? par[0] : par[1];
       return {
         prompt: App.i18n.t('gen.comparaFracEnunciado'),
@@ -477,9 +461,9 @@
 
     /* Equivalent fractions: different numbers, the same
        amount. Two pies side by side make that visible, which IS the
-       insight — the notation on its own hides it. */
+       insight â€” the notation on its own hides it. */
     equivalentes: function (nv) {
-      var pair = draw(nv.id, nv.pares);
+      var pair = App.utils.drawRound(nv.id, nv.pares);
       var base = pair[0];
       var answer = pair[1];
       /* Alternatives must NOT be equivalent to the answer, or there would
@@ -507,9 +491,9 @@
 
     /* Adding and subtracting fractions with the same denominator
        The slices are already the same size, so the
-       denominator never changes — only the count of slices does. */
+       denominator never changes â€” only the count of slices does. */
     sumaFrac: function (nv) {
-      var item = draw(nv.id, nv.casos);
+      var item = App.utils.drawRound(nv.id, nv.casos);
       var den = item[0];
       var x = item[1];
       var y = item[2];
@@ -531,18 +515,18 @@
         hint: App.i18n.t('gen.socraticSumaFrac'),
         visual: '<div class="frac-expression">' +
             htmlFraccion([x, den]) +
-            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            '<span class="frac-sign">' + (adding ? '+' : 'âˆ’') + '</span>' +
             htmlFraccion([y, den]) +
             '<span class="frac-sign">=</span>' +
             '<span class="frac-gap">?</span>' +
           '</div>' +
           '<div class="frac-visual-row">' +
             svgFraccion(x, den, 110) +
-            '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
+            '<span class="frac-sign">' + (adding ? '+' : 'âˆ’') + '</span>' +
             svgFraccion(y, den, 110) +
           '</div>' +
           '<p class="hint">' + App.i18n.t('gen.sumaFracPista') + '</p>',
-        /* {den} appears twice, so it needs a global replace — a plain
+        /* {den} appears twice, so it needs a global replace â€” a plain
            string replace would leave the second one in the spoken text. */
         visualAria: App.i18n.t(adding ? 'gen.sumaFracAria' : 'gen.restaFracAria')
           .replace('{x}', x).replace('{y}', y).replace(/\{den\}/g, den),
@@ -557,13 +541,13 @@
     },
 
     /* Decimal numbers, taught as another way of writing the fractions
-       already learned —
+       already learned â€”
        same pies, new notation. `dir` picks the direction: read the
        picture and name the decimal, or read the decimal and find the
        picture. The everyday anchor (prices, litres) lives in the
        activity instruction, not in every question. */
     decimalPie: function (nv) {
-      var f = draw(nv.id, nv.fracs);
+      var f = App.utils.drawRound(nv.id, nv.fracs);
       var others = App.utils.shuffle(nv.fracs.filter(function (o) {
         return !sameAmount(o, f);
       })).slice(0, 2);
@@ -656,7 +640,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -674,7 +658,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -750,8 +734,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the figure in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the figure in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

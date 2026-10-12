@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Shapes
+   Calculia â€” Shapes
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -16,12 +16,10 @@
   var screenEnd = $('#screenEnd');
   var galleryVisual = $('#galleryVisual');
   var galleryCaption = $('#galleryCaption');
-  var galleryNote = $('#galleryNote');
   var galleryPrev = $('#galleryPrev');
   var galleryNext = $('#galleryNext');
   var realObject = $('#realObject');
   var realCaption = $('#realCaption');
-  var realNote = $('#realNote');
   var realPrev = $('#realPrev');
   var realNext = $('#realNext');
   var promptEl = $('#prompt');
@@ -52,7 +50,6 @@
   var resolved = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   var roundQuestions = [];
   var galleryIndex = -1;
   var realIndex = 0;
@@ -67,28 +64,13 @@
   var reinforceTotal = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Utilidades ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   /* ---- Drawing the shapes ----
      Regular polygons are generated from their vertex count, so the picture
@@ -254,7 +236,7 @@
      background it sits on does not change with the theme either. */
   function realObjectSvg(id) {
     if (id === 'square') {
-      /* A window with four panes. It used to be left to the 🪟 emoji, and
+      /* A window with four panes. It used to be left to the ðŸªŸ emoji, and
          that emoji is a tall narrow strip: on the carousel it read as a
          scratch on the card rather than as a window, which is a poor way to
          introduce the square when the very next slide says "the door is a
@@ -302,7 +284,7 @@
     }
     if (id === 'octagon') {
       /* Red and white like every stop sign on the road, so the octagon is
-         eight sides with the word inside it — not a blank red octagon. */
+         eight sides with the word inside it â€” not a blank red octagon. */
       var stop = polygonPoints(8, 60, 58, 46, Math.PI / 8);
       return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
         '<polygon points="' + pointsAttr(stop) + '" fill="#C62828" ' +
@@ -314,13 +296,13 @@
       /* The same prism the gallery draws, standing upright instead of on
          its side: a cereal box is taller than it is wide, and the caption
          promises a cereal box. The gallery keeps the long face square to
-         the viewer on purpose — that is the rectangular face the activity
-         is about — so the two drawings differ in proportion and agree in
+         the viewer on purpose â€” that is the rectangular face the activity
+         is about â€” so the two drawings differ in proportion and agree in
          shape.
          Both proportions come off a real box, about 19 x 27 x 6 cm: the
          front is a bit over half as wide as it is tall, and the thickness
          is a third of the width. Drawn deeper than that it stops being a
-         cereal box and becomes a crate — which is what the earlier
+         cereal box and becomes a crate â€” which is what the earlier
          version was, with a thickness near half the width.
          The label and the bowl of cereal are on the front panel: a bare
          carton could be any box. */
@@ -406,7 +388,7 @@
     if (id === 'triangularPrism') {
       /* A tent: the triangular gable at the front, the ridge running back
          to the right, and the door open. Drawn as a prism with its length
-         visible on purpose — a flat triangle would read as the flat shape,
+         visible on purpose â€” a flat triangle would read as the flat shape,
          not as the solid the caption names.
          The front gable is the pale one and the long side is the dark one.
          With both faces in the same pale colour the tent does not read as
@@ -425,9 +407,9 @@
       /* Corner-on, the way a pyramid is photographed: two triangular faces
          meeting at the front edge, standing on a square base.
          The proportions are the point. The Great Pyramid of Giza is 230 m
-         on a side and 146 m tall, so each face leans at about 52° and the
+         on a side and 146 m tall, so each face leans at about 52Â° and the
          whole thing reads as a broad mass. The previous drawing leaned at
-         65°, which is a ridge tent, not a pyramid: narrow and steep was
+         65Â°, which is a ridge tent, not a pyramid: narrow and steep was
          the one shape nobody mistakes for Giza.
          The masonry is what makes it something people built rather than
          something somebody pitched: the courses of stone run level all the
@@ -441,7 +423,7 @@
          the brown of the mortar between the blocks. Fixed ink, like the
          yellow of the warning sign: a teal pyramid is a piece of glass, and
          this one is supposed to be Giza.
-         Two faces only — the back edges would have to cross the front
+         Two faces only â€” the back edges would have to cross the front
          ones to be drawn, which no solid does.
          No ground line: the mass ends on its own footprint, and a
          horizontal rule under it reads as a bar of the layout, not as
@@ -499,7 +481,7 @@
          than the one below it, because the light comes from above and a
          swirl drawn in one flat colour reads as a stack of rings.
          The cone keeps its bowed sides and its rolled rim, and the wafer
-         is scored in a diamond lattice — the ridges of a real waffle run
+         is scored in a diamond lattice â€” the ridges of a real waffle run
          across the cone, not up to the tip, and the earlier radial version
          looked like a basket. The lattice is clipped to the cone so it
          follows its curve instead of hanging over the card.
@@ -511,7 +493,7 @@
          directly on top of the body fill and before every ice cream
          shape: a full-size "inside of the cone" path drawn after it
          covers the whole silhouette, and the lattice is then in the DOM,
-         correctly clipped, correctly coloured — and invisible, because
+         correctly clipped, correctly coloured â€” and invisible, because
          it is simply painted over. Nothing in the markup says which
          layer wins; the same markup in another order shows the waffle
          perfectly. The mouth is now an ellipse and the front rim an arc,
@@ -520,7 +502,7 @@
          The wafer is two families of parallel diagonals, the way a cone is
          actually pressed, and not a handful of lines that happen to
          cross: too few ridges and it reads as scratches on a plain cone.
-         The ends run past the cone on purpose — the clip is what cuts
+         The ends run past the cone on purpose â€” the clip is what cuts
          them, so the lattice follows the bowed sides instead of stopping
          short of them. */
       var CONE = 'M35 52Q41 82 60 106Q79 82 85 52A25 9 0 0 1 35 52Z';
@@ -539,7 +521,7 @@
          line that curls, and a curl is a stroked arc. Each turn is narrower
          and higher than the one below it, so the stack tapers into a tip
          instead of repeating. The mound underneath joins the turns into one
-         mass — without it they are a pile of separate rings. */
+         mass â€” without it they are a pile of separate rings. */
       var turns = ['M40 47Q60 62 80 47', 'M45 38.5Q60 50 75 38.5',
         'M50 31Q60 40 70 31', 'M55 24Q60 31 65 24'];
       var turnsWide = [9, 7.5, 6, 4.5];
@@ -577,50 +559,10 @@
     return '';
   }
 
-  /* The clarification that goes under the name in the gallery: how many
-     sides and vertices a flat shape has, or how many faces a solid has and
-     what they are shaped like. It is a footnote under the name, so it
-     lives in its own element and never in the caption.
-     A flat shape takes its numbers from DATA.sides, the same source its
-     drawing and its counting questions use, so the note cannot contradict
-     the test. The circle is not in DATA.sides: it has no straight side and
-     no vertex, and "0 lados" would ask to count something that is not
-     there. */
-  function shapeNote(item) {
-    if (item.type === 'flat') {
-      var sides = DATA.sides[item.id];
-      /* Two {n}-like slots in one string, so both have to be replaced
-         globally: a single replace() would leave the second one printed
-         as "{n}". */
-      return sides
-        ? App.i18n.t('note.sides')
-            .replace(/\{n\}/g, sides.sides)
-            .replace(/\{corners\}/g, sides.corners)
-        : App.i18n.t('note.sidesNone');
-    }
-    return App.i18n.t('note.solid.' + item.id);
-  }
-
-  /* What the everyday example adds under its caption: the concepts, counted
-     on the object that is actually on screen. It does not define them again
-     — the concept slides do that — it applies them.
-     A flat figure gets its edges (sides, vertices), the perimeter along
-     them, and the area inside; a solid gets the volume, because "the space
-     inside" is what a body occupies and a flat drawing never does. */
-  function realNoteFor(item) {
-    if (item.type === 'solid') return App.i18n.t('realNote.solid');
-    var sides = DATA.sides[item.id];
-    return sides
-      ? App.i18n.t('realNote.polygon')
-          .replace(/\{sides\}/g, sides.sides)
-          .replace(/\{corners\}/g, sides.corners)
-      : App.i18n.t('realNote.circle');
-  }
-
-    /* ---- Concept slides ----
+  /* ---- Concept slides ----
      More than one, and the number is CONCEPT_SLIDES: both the carousel
      arithmetic and the smoke read it from here, so adding a concept slide is
-     adding one entry and nothing else. The count is arithmetic, not data —
+     adding one entry and nothing else. The count is arithmetic, not data â€”
      it has to match the branches below or the carousel wraps into a
      gallery slide it should never show. */
   var CONCEPT_SLIDES = 4;
@@ -680,7 +622,7 @@
 
   /* Similarity: the same figure at two sizes, side by side. Both are
      equilateral triangles from the same helper, so they differ in size and
-     in nothing else — which is the whole point of the concept. */
+     in nothing else â€” which is the whole point of the concept. */
   function similaritySvg() {
     return '<svg viewBox="0 0 120 120" aria-hidden="true">' +
       '<polygon points="' + pointsAttr(polygonPoints(3, 36, 62, 32)) +
@@ -733,7 +675,7 @@
       /* The edges of a flat figure, in the order they build on each other: a
          side, the vertex where two of them meet, and the perimeter, which
          is all the sides added up. The perimeter is not a third thing
-         parallel to the other two — it is what they are for — so it takes
+         parallel to the other two â€” it is what they are for â€” so it takes
          its own row underneath. */
       return {
         layout: 'parts',
@@ -814,7 +756,6 @@
       });
     }
     galleryCaption.classList.add('hidden');
-    galleryNote.classList.add('hidden');
   }
 
 
@@ -840,8 +781,10 @@
     galleryCaption.textContent = App.i18n.t('gallery.' + item.type + '.' + item.id)
       .replace('{name}', name);
     galleryCaption.classList.remove('hidden');
-    galleryNote.textContent = shapeNote(item);
-    galleryNote.classList.remove('hidden');
+    /* Gallery only shows the name: sides, vertices and faces live on the
+       concept slides and the questions, so listing them here would split
+       the user's attention between the figure and a number they do not
+       need yet. */
   }
 
   function paintRealExample() {
@@ -850,9 +793,9 @@
     if (illustration) realObject.innerHTML = illustration;
     else realObject.textContent = item.object;
     realCaption.textContent = App.i18n.t('gallery.real.' + item.id);
-    var note = realNoteFor(item);
-    realNote.textContent = note;
-    realNote.classList.toggle('hidden', !note);
+    /* Everyday examples only show the name: counting sides, vertices or
+       faces on the photo of a real object pulls attention to the count
+       and away from the shape itself. */
     realPrev.setAttribute('aria-label', App.i18n.t('galleryPrevious'));
     realNext.setAttribute('aria-label', App.i18n.t('galleryNext'));
   }
@@ -871,7 +814,7 @@
 
   /* The perimeter options. The mistake this question produces is not a wild
      number: it is leaving the last side out, or counting one twice. So the
-     two wrong answers are exactly one side short and one side long — the
+     two wrong answers are exactly one side short and one side long â€” the
      same "out by one" the counting questions produce, one level up. */
   function perimeterOptions(total, side) {
     return App.utils.shuffle([total - side, total, total + side].map(function (v) {
@@ -901,24 +844,6 @@
     if (pieces !== net.faces) {
       throw new Error('shapes: net "' + net.id + '" draws ' + pieces +
         ' pieces for ' + net.faces + ' faces');
-    }
-  });
-
-  /* The clarification of the gallery states the number of faces as text,
-     while the net states it as data, and for a solid that has a net both
-     end up on screen: the note promises a count and the test asks it.
-     They are compared here so that changing one without the other fails
-     loudly instead of quietly teaching a number and asking another.
-     The note must therefore start with the number of faces, in both
-     languages. A solid without a net (the sphere, the cylinder, the cone)
-     is not checked: its faces are never asked about in the test. */
-  DATA.nets.forEach(function (net) {
-    if (!net.solid) return;
-    var stated = parseInt(shapeNote({ type: 'solid', id: net.solid }), 10);
-    if (stated !== net.faces) {
-      throw new Error('shapes: the note for "' + net.solid + '" says ' +
-        (isNaN(stated) ? 'no number of faces' : stated) +
-        ' faces, its net has ' + net.faces);
     }
   });
 
@@ -1034,7 +959,7 @@
   /* Three axes for a figure that has exactly one: straight up, straight
      across, and at an angle. Every shape this question is asked of has one
      vertical fold line and neither of the other two, so exactly one option
-     can be right — a square would have all three and the question would
+     can be right â€” a square would have all three and the question would
      have no answer. app.js checks that at start-up. */
   var AXES = {
     vertical: '<line x1="60" y1="4" x2="60" y2="116" class="axis-mark"/>',
@@ -1049,7 +974,7 @@
     solidParts: function (nv) {
       var net = nv.net
         ? DATA.nets.find(function (item) { return item.id === nv.net; })
-        : draw(nv.id, DATA.nets);
+        : App.utils.drawRound(nv.id, DATA.nets);
       return {
         prompt: App.i18n.t('gen.howManyFaces').replace(/\{name\}/g, netName(net.id)),
         visual: netSvg(net),
@@ -1067,7 +992,7 @@
     fromNet: function (nv) {
       var net = nv.net
         ? DATA.nets.find(function (item) { return item.id === nv.net; })
-        : draw(nv.id, DATA.nets);
+        : App.utils.drawRound(nv.id, DATA.nets);
       return {
         prompt: App.i18n.t('gen.fromNet'),
         visual: netSvg(net),
@@ -1094,7 +1019,7 @@
       var shapes = nv.shapes || DATA.gallery.filter(function (item) {
         return item.type === 'flat';
       }).map(function (item) { return item.id; });
-      var id = nv.shape || draw(nv.id, shapes);
+      var id = nv.shape || App.utils.drawRound(nv.id, shapes);
       var others = App.utils.shuffle(shapes.filter(function (s) {
         return s !== id;
       })).slice(0, 2);
@@ -1113,14 +1038,19 @@
     },
 
     /* Count the sides or the corners. Every corner carries a dot, so the
-       answer can be reached by counting what is on screen. */
+       answer can be reached by counting what is on screen. The "count
+       the marked dots" reminder used to live as a `<p class="hint">`
+       under the figure, but the dots are already on the drawing, so the
+       text was a duplicate of the picture. It moved to the socratic
+       hint, which only fires when the answer is wrong, so the screen
+       stays clean during the test. */
     shapeCount: function (nv) {
-      var id = nv.shape || draw(nv.id + nv.count, nv.shapes);
+      var id = nv.shape || App.utils.drawRound(nv.id + nv.count, nv.shapes);
       var counting = nv.count === 'corners';
       return {
         prompt: App.i18n.t(counting ? 'gen.cornersPrompt' : 'gen.sidesPrompt'),
         visual: '<div class="shape-stage">' + shapeSvg(id, true) + '</div>' +
-          '<p class="hint">' + App.i18n.t(counting ? 'gen.cornersHint' : 'gen.sidesHint') + '</p>',
+          (counting ? '' : '<p class="hint">' + App.i18n.t('gen.sidesHint') + '</p>'),
         visualAria: shapeName(id),
         hint: App.i18n.t(counting ? 'gen.socraticCorners' : 'gen.socraticSides'),
         options: buildCounts(DATA.sides[id][nv.count])
@@ -1128,7 +1058,7 @@
     },
 
     /* The perimeter: going all the way round the shape. The answer is
-       never stored — it is the length of a side times the number of sides,
+       never stored â€” it is the length of a side times the number of sides,
        read from the same DATA.sides the drawing and the counting questions
        use, so the picture, the caption and the right answer cannot drift
        apart. The side length travels in the question (it is the one number
@@ -1219,7 +1149,7 @@
     },
 
     /* Similarity: the same shape at another size. All three options are
-       drawn at the same small size, so only the shape tells them apart —
+       drawn at the same small size, so only the shape tells them apart â€”
        picking the biggest or the smallest would be a different question. */
     shapeSimilar: function (nv) {
       return {
@@ -1252,7 +1182,7 @@
       }) : DATA.solids;
       var solid = nv.solid
         ? solidPool.find(function (item) { return item.id === nv.solid; })
-        : draw(nv.id, solidPool);
+        : App.utils.drawRound(nv.id, solidPool);
       var object = App.utils.shuffle(solid.objects)[0];
       var others = App.utils.shuffle(solidPool.filter(function (s) {
         return s.id !== solid.id;
@@ -1346,7 +1276,7 @@
   /* "Hacer el test" only asks which test when there is more than one.
      With a single test the menu said "Elige un test" above a grid with
      exactly one button, so the child paid a tap for a decision there was
-     no way to make — and the button's own promise ("do the test") was not
+     no way to make â€” and the button's own promise ("do the test") was not
      kept on the press. The menu is not removed: the moment DATA grows a
      second activity it comes back by itself, and it is still how the end
      screen gets back to the list. */
@@ -1360,12 +1290,12 @@
 
   function startRound(nv) {
     level = nv;
+    App.utils.drawRoundReset();
     roundQuestions = level.tipo === 'mixed'
       ? App.utils.shuffle(level.questions.slice())
       : [];
     index = 0;
     roundCorrect = 0;
-    pools = {};
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -1383,7 +1313,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -1463,8 +1393,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the figure in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the figure in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {
@@ -1481,7 +1411,7 @@
       App.feedback.success(feedbackEl);
       /* The reinforcement mini-round replays questions this round already
          asked, so counting it here reported more correct answers than the
-         round has — "Has resuelto 11 preguntas" for a 6-question round —
+         round has â€” "Has resuelto 11 preguntas" for a 6-question round â€”
          and pushed `roundCorrect` past DATA.perRound, which is the exact
          value endRound() compares against to offer the next level. The
          button therefore vanished for anyone who had to repeat a question,
@@ -1577,7 +1507,7 @@
        index is not a ring: the concept slides count backwards from -1 and
        the gallery items count up from 0, so -1 and 0 are neighbours in the
        ring and nothing like each other in the index. Walking the ring with
-       one offset put the wrap in the wrong place — it jumped from the last
+       one offset put the wrap in the wrong place â€” it jumped from the last
        gallery item to the LAST concept slide instead of back to the
        opening. Converting through a linear position is the only way to get
        both ends right. */

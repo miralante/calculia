@@ -31,9 +31,19 @@ const MIME = {
 const ALL = [
   'algebra', 'calendar', 'charts', 'clock', 'divisibility', 'fractions-measures',
   'geometry', 'measures', 'mental-math', 'money', 'numbers', 'odd-one-out',
-  'operations', 'patterns', 'percent', 'places', 'problems', 'riddles',
+  'operations', 'patterns', 'percent', 'problems', 'riddles',
   'scale', 'shapes', 'similar', 'stories', 'trigonometry'
 ];
+/* Las tres que no llaman #options a las opciones y arrancan con un botón
+   propio. Con el paseo a lo bruto no se llegaba a su test; aquí van
+   directas, que además es como se llega en la app. */
+const STARTS = {
+  patterns: { button: '#btnStart', options: '#options .option-btn', accepted: 'correct' },
+  'odd-one-out': { button: '#btnStart', options: '#group .option-btn', accepted: 'correct' },
+  /* Historias coloca una viñeta cada vez y sigue con la siguiente: acertar
+     una NO termina la pregunta, así que el recorrido no puede parar ahí. */
+  stories: { button: '#btnStart', options: '#available .vineta', accepted: 'colocada', sigue: true },
+};
 
 function startServer() {
   const server = http.createServer((req, res) => {
@@ -52,6 +62,37 @@ function startServer() {
 
 const visible = (page, selector) => page.locator(selector).first().isVisible().catch(() => false);
 
+/* Esperar a que haya texto, en vez de confiar en un plazo fijo. Con 40 ms
+   de reloj la sonda falla a veces en la primera pregunta de riddles y
+   reporta cero fallos en una actividad que sí los está dando: un plazo
+   que a veces se queda corto no es una puerta, es una moneda. */
+async function leerExplicacion(page) {
+  for (let intento = 0; intento < 5; intento += 1) {
+    const text = (await page.locator('#explanation').innerText().catch(() => '')).trim();
+    if (text) return text;
+    await page.waitForTimeout(60);
+  }
+  return '';
+}
+
+/* Lo mismo para el botón de avanzar: si la ronda se resuelve un poco
+   después del clic, sin esta espera la sonda cierra la ronda antes de
+   tiempo y cree que no se pudo jugar. */
+async function esperarAvance(page) {
+  for (let intento = 0; intento < 5; intento += 1) {
+    if (await visible(page, '#btnNext:not(.hidden)')) return true;
+    if (await visible(page, '#screenEnd:not(.hidden)')) return false;
+    await page.waitForTimeout(60);
+  }
+  return visible(page, '#btnNext:not(.hidden)');
+}
+
+/* Con CHECK_PISTAS_DEBUG=1 se imprime por qué una actividad no dio fallos:
+   si el recorrido no entra, no se ve, o si entra y no falla. Sin esto, "0
+   fallos vistos" mezcla tres cosas distintas y no dice cuál. */
+const DEBUG = process.env.CHECK_PISTAS_DEBUG === '1';
+const dbg = (...args) => { if (DEBUG) console.log('    ·', ...args); };
+
 async function tap(page, locator) {
   try {
     await locator.click({ timeout: 1500, force: true });
@@ -61,8 +102,21 @@ async function tap(page, locator) {
 
 /* Click through whatever screens come until the options are on screen.
    Brute force on purpose: this probe must work on activities whose
-   navigation nobody has documented. */
+   navigation nobody has documented. The three that were unreachable get
+   their documented way in instead of the blind walk, which is exactly
+   the difference between "cannot start" and "this walk does not know
+   how to start it". */
 async function reachGame(page, base, slug) {
+  const start = STARTS[slug];
+  if (start) {
+    dbg(slug + ': ¿' + start.button + '? ->', await visible(page, start.button));
+    if (!await visible(page, start.button)) return false;
+    if (!await tap(page, page.locator(start.button).first())) { dbg(slug + ': el botón no se pudo pulsar'); return false; }
+    await page.waitForTimeout(200);
+    const n = await page.locator(start.options).count();
+    dbg(slug + ': dentro del test, ' + n + ' elemento(s) con ' + start.options);
+    return Boolean(n);
+  }
   const seen = new Set();
   for (let step = 0; step < 60; step += 1) {
     if (await page.locator('#options .option-btn').count()) return true;
@@ -100,8 +154,17 @@ async function reachGame(page, base, slug) {
   return false;
 }
 
-/* Play the round answering badly, and note every hint it shows. */
-async function collectHints(page, questions) {
+/* Play the round answering badly, and note every hint it shows.
+
+   Lo que se lee es SI HA CAMBIADO EL TEXTO DE #explanation, no la clase
+   del botón. Patterns rehace #options entero tras cada clic, así que la
+   marca "encourage" que pone al fallar ya no existe cuando se la mira: una
+   sonda que decide por la clase ve cero fallos en una actividad que sí los
+   está dando. El texto no miente y además dice QUÉ está mostrando. */
+async function collectHints(page, questions, opts) {
+  const optionsSel = (opts && opts.options) || '#options .option-btn';
+  const accepted = (opts && opts.accepted) || 'correct';
+  const sigue = Boolean(opts && opts.sigue);
   const hints = [];
   for (let q = 0; q < questions; q += 1) {
     if (await visible(page, '#screenEnd:not(.hidden)')) break;
@@ -112,33 +175,37 @@ async function collectHints(page, questions) {
     if (await pending.count() && await pending.first().isVisible().catch(() => false)) {
       await tap(page, pending.first());
     }
-    const options = page.locator('#options .option-btn');
+    const options = page.locator(optionsSel);
     const total = await options.count();
+    dbg('pregunta ' + q + ': ' + total + ' en ' + optionsSel);
     if (!total) break;
+    /* Una misma pista puede volver en la misma pregunta si se insiste; se
+       cuenta una vez y el recuento dice "distintas". */
+    const vistas = new Set();
     for (let i = 0; i < total; i += 1) {
       const button = options.nth(i);
-      if (!(await button.isVisible().catch(() => false))) continue;
-      if (!(await tap(page, button))) continue;
-      await page.waitForTimeout(40);
-      const outcome = await button.evaluate(node => ({
-        correct: node.classList.contains('correct'),
-        wrong: node.classList.contains('encourage'),
-      }));
-      if (outcome.wrong) {
-        const text = await page.locator('#explanation').innerText().catch(() => '');
+      if (!(await button.isVisible().catch(() => false))) { dbg('  [' + i + '] no visible'); continue; }
+      if (!(await tap(page, button))) { dbg('  [' + i + '] no se pudo pulsar'); continue; }
+      const text = await leerExplicacion(page);
+      dbg('  [' + i + '] explicación="' + text.slice(0, 60) + '"');
+      if (text && !vistas.has(text)) {
+        vistas.add(text);
         /* Con el segundo fallo la actividad ya enseña la respuesta
            ("❌ Mira: la respuesta correcta es…"). Eso es la explicación,
            no la pista, y aquí no se mide. */
-         if (!/^[✅❌]/.test(text.trim())) hints.push(text.trim());
-        const ack = page.locator('#explanationWrap .btn-understood');
-        if (await ack.count() && await ack.first().isVisible().catch(() => false)) await tap(page, ack.first());
+        if (!/^[✅❌]/.test(text)) hints.push(text);
       }
+      /* El «Entendido» es la señal de verdad de que la interfaz está
+         bloqueada; la clase del botón no lo es, porque rehacerse la borra. */
+      const ack = page.locator('#explanationWrap .btn-understood');
+      if (await ack.count() && await ack.first().isVisible().catch(() => false)) await tap(page, ack.first());
       /* Un fallo no termina la pregunta: se sigue probando hasta dar con
          la buena, y así la ronda avanza y se ve más de un tipo de pista. */
-      if (outcome.correct) break;
+      const clase = await button.evaluate((n, ok) => n.classList.contains(ok), accepted).catch(() => false);
+      if (clase && !sigue) break;
     }
     const next = page.locator('#btnNext');
-    if (await visible(page, '#btnNext:not(.hidden)')) await tap(page, next);
+    if (await esperarAvance(page)) await tap(page, next);
     else break;
   }
   return hints;
@@ -163,7 +230,7 @@ async function collectHints(page, questions) {
       await page.goto(base + '/tools/' + slug + '/');
       await page.waitForTimeout(300);
       if (await reachGame(page, base, slug)) {
-        hints.push(...await collectHints(page, 6));
+        hints.push(...await collectHints(page, 6, STARTS[slug]));
       }
       /* Dónde se quedó: sin esto, "no se llegó a fallar" no distingue entre
          un test que no se puede alcanzar y una ronda que se acabó. */
@@ -180,15 +247,23 @@ async function collectHints(page, questions) {
       problems.push(slug + ': no se pudo jugar (' + error.message.split('\n')[0] + ')');
     }
 
-    const genericas = await page.evaluate(() => ['hint', 'pista']
+    /* «hint» es la genérica y «pista» su nombre en estas tres; «explanation»
+       es lo que sale en el segundo fallo, que ya no es una pista. */
+    const genericas = await page.evaluate(() => ['hint', 'pista', 'explanation']
       .map(k => { try { return window.App.i18n.t(k); } catch { return null; } })
       .filter(Boolean)).catch(() => []);
     const propias = hints.filter(h => h && !genericas.includes(h));
     const iguales = genericas.filter(g => hints.includes(g));
+    /* La misma pista puede volver cinco preguntas seguidas —en unas
+       cuantas actividades da igual el tipo de pregunta—. Listarla cinco
+       veces no informa de nada, así que se cuenta y se enseña una vez. */
+    const distintas = [...new Set(propias)];
+    const veces = new Map();
+    hints.forEach(h => veces.set(h, (veces.get(h) || 0) + 1));
 
     console.log('\n' + slug + ': ' + hints.length + ' fallo(s) visto(s), ' +
-      propias.length + ' con pista propia  [' + landed + ']');
-    hints.forEach(h => console.log('   · ' + h));
+      distintas.length + ' pista(s) propia(s)  [' + landed + ']');
+    distintas.forEach(h => console.log('   · (' + (veces.get(h) || 1) + '×) ' + h));
     if (!hints.length) {
       problems.push(botones === 0
         ? slug + ': no se puede empezar. La pantalla de inicio (' + landed +
@@ -196,6 +271,19 @@ async function collectHints(page, questions) {
         : slug + ': no se llegó a fallar ninguna pregunta (se quedó en ' + landed + ')');
     }
     iguales.forEach(g => problems.push(slug + ': vuelve la frase genérica "' + g + '"'));
+    /* Una pista puede ser genérica sin ser la clave de reserva. Clock
+       tenía readHint = "Prueba otra vez. Mira el reloj con calma", que no
+       es el `hint` de nadie: comparar por clave no la cazaba. Aquí se
+       huele el "prueba otra vez" de la frase, y sólo se perdona cuando el
+       texto es literalmente la reserva de la actividad.
+       Riddles es la excepción que no es una excusa: su pista pega la
+       adivinanza entre comillas ("Vuelve a leer la pista: "…""), así que
+       trae el "prueba otra vez" nombrando la pregunta, que es justo lo
+       que la puerta exige. Las comillas son la señal, no una lista de
+      (indultados a la que se pueda añadir sin que nadie lo mire. */
+    hints.filter(h => h && !genericas.includes(h) && !/["“”«»]/.test(h) &&
+      /prueba otra vez|try again/i.test(h))
+      .forEach(h => problems.push(slug + ': pista genérica bajo OTRA clave — "' + h + '"'));
     await page.close();
   }
 

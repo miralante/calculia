@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Cuentas grandes
+   Calculia â€” Cuentas grandes
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -37,14 +37,13 @@
   var answered = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Data invariants ----
      Nothing that can be worked out is stored, so the only thing that can
@@ -85,24 +84,9 @@
 
   /* ---- Utilities ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   function numberOptions(value, step) {
     var d = step || 1;
@@ -153,7 +137,7 @@
       '<span class="block-caption">' + caption + '</span></span>';
   }
 
-  function times(a, b) { return a + ' × ' + b; }
+  function times(a, b) { return a + ' Ã— ' + b; }
 
   /* Groups of things, for the two ways of dividing. */
   function groupsHtml(count, per, tone) {
@@ -168,8 +152,8 @@
 
   function expression(o, parens) {
     return parens
-      ? '( ' + o.a + ' + ' + o.b + ' ) × ' + o.c
-      : o.a + ' + ' + o.b + ' × ' + o.c;
+      ? '( ' + o.a + ' + ' + o.b + ' ) Ã— ' + o.c
+      : o.a + ' + ' + o.b + ' Ã— ' + o.c;
   }
 
   var GENERATORS = {
@@ -179,7 +163,7 @@
        answer, and every stop in between can be counted: there is no sign
        rule to learn. */
     walkLine: function (nv) {
-      var w = draw(nv.id, DATA.walks.filter(function (x) {
+      var w = App.utils.drawRound(nv.id, DATA.walks.filter(function (x) {
         var end = nv.dir === 'up' ? x.from + x.step : x.from - x.step;
         return end >= DATA.lineMin && end <= DATA.lineMax;
       }));
@@ -189,7 +173,7 @@
         var isStart = v === w.from;
         html += '<span class="line-stop' + (isStart ? ' is-start' : '') +
           (v === 0 ? ' is-zero' : '') + '">' +
-          (isStart ? '<span class="line-you" aria-hidden="true">📍</span>' : '') +
+          (isStart ? '<span class="line-you" aria-hidden="true">ðŸ“</span>' : '') +
           '<span class="stop-num">' + v + '</span></span>';
       }
       return {
@@ -210,7 +194,7 @@
     /* Turning it round gives the same. The two rectangles hold the same
        dots, one standing up and one lying down. */
     commute: function (nv) {
-      var p = draw(nv.id, DATA.pairs);
+      var p = App.utils.drawRound(nv.id, DATA.pairs);
       var total = p.a * p.b;
       return {
         prompt: App.i18n.t('gen.commute')
@@ -234,7 +218,7 @@
 
     /* Cutting a hard multiplication into two easy ones. */
     split: function (nv) {
-      var s = draw(nv.id, DATA.splits);
+      var s = App.utils.drawRound(nv.id, DATA.splits);
       var rest = s.b - s.cut;
       var left = s.a * s.cut;
       var right = s.a * rest;
@@ -258,7 +242,7 @@
     /* The same cut, now used on a two-digit number: the tens on one side
        and the units on the other. */
     splitTens: function (nv) {
-      var m = draw(nv.id, DATA.twoDigit);
+      var m = App.utils.drawRound(nv.id, DATA.twoDigit);
       var tens = Math.floor(m.a / 10) * 10;
       var units = m.a - tens;
       var left = tens * m.b;
@@ -281,7 +265,7 @@
 
     /* Dividing as sharing out: how many does each one get. */
     share: function (nv) {
-      var s = draw(nv.id, DATA.shares);
+      var s = App.utils.drawRound(nv.id, DATA.shares);
       var each = s.total / s.groups;
       return {
         prompt: App.i18n.t('gen.share')
@@ -299,7 +283,7 @@
        one that lets the divisor have two digits without drawing a dozen
        piles at once. */
     groups: function (nv) {
-      var g = draw(nv.id, DATA.groups);
+      var g = App.utils.drawRound(nv.id, DATA.groups);
       var count = g.total / g.size;
       return {
         prompt: App.i18n.t('gen.groups')
@@ -316,9 +300,9 @@
     /* Which part is done first. No result is asked for: deciding the
        order is its own step. */
     whatFirst: function (nv) {
-      var o = draw(nv.id, DATA.orders);
-      var parens = draw(nv.id + 'p', [true, false]);
-      var mul = o.b + ' × ' + o.c;
+      var o = App.utils.drawRound(nv.id, DATA.orders);
+      var parens = App.utils.drawRound(nv.id + 'p', [true, false]);
+      var mul = o.b + ' Ã— ' + o.c;
       var add = o.a + ' + ' + o.b;
       return {
         prompt: App.i18n.t('gen.whatFirst'),
@@ -338,8 +322,8 @@
     /* And now the number. The other reading is offered as the wrong
        answer, because it is exactly the mistake this teaches about. */
     orderResult: function (nv) {
-      var o = draw(nv.id, DATA.orders);
-      var parens = draw(nv.id + 'p', [true, false]);
+      var o = App.utils.drawRound(nv.id, DATA.orders);
+      var parens = App.utils.drawRound(nv.id + 'p', [true, false]);
       var right = parens ? (o.a + o.b) * o.c : o.a + o.b * o.c;
       var other = parens ? o.a + o.b * o.c : (o.a + o.b) * o.c;
       return {
@@ -403,7 +387,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -419,7 +403,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -497,8 +481,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the figure in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the figure in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

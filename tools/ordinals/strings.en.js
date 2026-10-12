@@ -32,11 +32,10 @@
        people already recognise without having to learn them. That is
        why the card is fixed and goes BEFORE the carousel: the series
        that follows adds to, not introduces. The card carries no h2
-       of its own: the lead-in and the medals already name the three
-       podium places, and repeating them in a heading was noise (the
-       general "Ordinals say the place" card above already titles the
-       screen). */
-    medalsText: 'The one who wins the race takes the gold: they are first. Behind them comes second. And behind second, third.',
+       and no lead-in: the three medals 🥇🥈🥉 with their abbreviated
+       figure (1st, 2nd, 3rd) and their name (first, second, third)
+       already say it all. The general intro card above ("Ordinals
+       say the place") titles the screen. */
     introNext: 'Next →',
     prev: '←',
     nextArrow: '→',

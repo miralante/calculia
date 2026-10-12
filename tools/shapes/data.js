@@ -59,12 +59,13 @@ var DATA = {
             { id: 'sides-rhombus', tipo: 'shapeCount', count: 'sides', shape: 'rhombus' },
             { id: 'sides-trapezoid', tipo: 'shapeCount', count: 'sides', shape: 'trapezoid' },
             { id: 'sides-pentagon', tipo: 'shapeCount', count: 'sides', shape: 'pentagon' },
-            { id: 'corners-triangle', tipo: 'shapeCount', count: 'corners', shape: 'triangle' },
-            { id: 'corners-square', tipo: 'shapeCount', count: 'corners', shape: 'square' },
-            { id: 'corners-rectangle', tipo: 'shapeCount', count: 'corners', shape: 'rectangle' },
-            { id: 'corners-rhombus', tipo: 'shapeCount', count: 'corners', shape: 'rhombus' },
-            { id: 'corners-trapezoid', tipo: 'shapeCount', count: 'corners', shape: 'trapezoid' },
-            { id: 'corners-pentagon', tipo: 'shapeCount', count: 'corners', shape: 'pentagon' },
+            /* Solo un ejemplo de contar vértices: la pregunta se repite
+               con una forma distinta cada ronda (la elige draw() entre
+               las mismas formas con lados). El aviso de "cuenta los
+               puntos" se quedó en la pista socrática para no ensanchar
+               la pantalla durante el test. */
+            { id: 'corners', tipo: 'shapeCount', count: 'corners',
+              shapes: ['triangle', 'square', 'rectangle', 'rhombus', 'trapezoid', 'pentagon'] },
             /* El perímetro: el lado se da en la pregunta y el total sale de
                multiplicarlo por los lados que tiene la forma, así que
                aquí no hay ningún número que se pueda desincronizar del

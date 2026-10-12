@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Geometría
+   Calculia â€” GeometrÃ­a
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -37,14 +37,13 @@
   var answered = false;
   var attempts = 0;
   var question = null;
-  var pools = {};
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      The kind of an angle comes from its degrees, the perimeter and the
@@ -78,7 +77,7 @@
     });
     /* The fold line is drawn down the middle of the grid, so an empty
        first or last column would put it off-centre from the figure the
-       person actually sees — and folding along the wrong line teaches
+       person actually sees â€” and folding along the wrong line teaches
        the wrong thing. */
     var usesEdges = f.rows.some(function (row) { return row[0] === '#'; }) &&
       f.rows.some(function (row) { return row[width - 1] === '#'; });
@@ -108,27 +107,12 @@
 
   /* ---- Utilities ---- */
 
-  /* Takes elements from a list without repeating within the round. */
-  function draw(key, list) {
-    var p = pools[key];
-    if (!p || p.i >= p.orden.length) {
-      var fresh = App.utils.shuffle(list);
-      /* When the bag is refilled, its first item must not be the one just
-         handed out: two identical questions in a row read as a "Siguiente"
-         button that does nothing. */
-      if (p && fresh.length > 1 && fresh[0] === p.last) {
-        var swap = fresh[1];
-        fresh[1] = fresh[0];
-        fresh[0] = swap;
-      }
-      p = pools[key] = { orden: fresh, i: 0, last: p ? p.last : null };
-    }
-    p.last = p.orden[p.i];
-    return p.orden[p.i++];
-  }
+  /* The round takes elements from the pool without repeating: the
+     activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
+     and App.utils.drawRound refills the bag when it runs out. */
 
   /* The real name is what the angle is called everywhere else, so it is
-     what gets taught — with its plain-words gloss next to it, never
+     what gets taught â€” with its plain-words gloss next to it, never
      instead of it. */
   function range(from, to) {
     var list = [];
@@ -330,7 +314,7 @@
 
   /* Squares near this one, to offer as the wrong answers. The swapped pair
      comes first because saying the two numbers the other way round is the
-     mistake this activity is about — but only when that really is another
+     mistake this activity is about â€” but only when that really is another
      square, which it is not on the diagonal. Every candidate is checked to
      be on the grid and different, so a corner square never ends up offering
      itself twice. */
@@ -736,7 +720,7 @@
     measureAngle: function (nv) {
       /* Only angles that land on a numbered mark: one that fell between
          two marks could not be read exactly, only guessed. */
-      var angle = draw(nv.id, DATA.angles.filter(function (a) {
+      var angle = App.utils.drawRound(nv.id, DATA.angles.filter(function (a) {
         return a.deg % DEG_LABEL === 0;
       }));
       return {
@@ -759,7 +743,7 @@
        marks cut it into equal pieces, so one hour is a piece of it. That is
        the base-sixty system standing where it can be seen. */
     clockAngle: function (nv) {
-      var pair = draw(nv.id, DATA.clockPairs);
+      var pair = App.utils.drawRound(nv.id, DATA.clockPairs);
       var marks = marksApart(pair.from, pair.to);
       var answer = marks * degreesPerMark();
       return {
@@ -783,7 +767,7 @@
 
     /* Two lines: never touching, crossing, or crossing square. */
     linePair: function (nv) {
-      var pair = draw(nv.id, DATA.linePairs);
+      var pair = App.utils.drawRound(nv.id, DATA.linePairs);
       var kind = pairKind(pair);
       return {
         prompt: App.i18n.t('gen.linePair'),
@@ -805,7 +789,7 @@
 
     /* The area of a triangle, seen as half of its rectangle. */
     triangleArea: function (nv) {
-      var t = draw(nv.id, DATA.triangles);
+      var t = App.utils.drawRound(nv.id, DATA.triangles);
       var whole = t.w * t.h;
       var answer = whole / 2;
       return {
@@ -823,7 +807,7 @@
 
     /* The outside of a box, counted on its six faces opened out. */
     surface: function (nv) {
-      var box = draw(nv.id, DATA.boxes);
+      var box = App.utils.drawRound(nv.id, DATA.boxes);
       var answer = surfaceOf(box);
       return {
         prompt: App.i18n.t('gen.surface'),
@@ -841,12 +825,12 @@
     /* Several points at once: three of them line up and one does not. That
        line is the line of analytic geometry, without an equation in sight. */
     offTheLine: function (nv) {
-      var rule = draw(nv.id, DATA.lineRules);
+      var rule = App.utils.drawRound(nv.id, DATA.lineRules);
       var inLine = pointsFromRule(rule);
       var letters = App.i18n.t('gen.dotLetters').split('');
       /* Where the odd one sits among the others changes from question to
          question, so the answer is never always the last dot. */
-      var slot = draw(nv.id + 'slot', [0, 1, 2, 3]);
+      var slot = App.utils.drawRound(nv.id + 'slot', [0, 1, 2, 3]);
       var points = inLine.slice();
       points.splice(slot, 0, rule.off);
       return {
@@ -870,7 +854,7 @@
        what the circle measures across, and the question asks for the
        "about", which is the honest version of that idea. */
     circleEdge: function (nv) {
-      var d = draw(nv.id, DATA.circles);
+      var d = App.utils.drawRound(nv.id, DATA.circles);
       var about = circleAcross(d);
       return {
         prompt: App.i18n.t('gen.circleEdge').replace(/\{d\}/g, d),
@@ -892,7 +876,7 @@
 
     /* How much fits inside, counted in whole squares. */
     circleArea: function (nv) {
-      var d = draw(nv.id, DATA.circles.filter(function (x) { return x <= 8; }));
+      var d = App.utils.drawRound(nv.id, DATA.circles.filter(function (x) { return x <= 8; }));
       var whole = wholeSquaresIn(d);
       return {
         prompt: App.i18n.t('gen.circleArea'),
@@ -907,7 +891,7 @@
     /* How many cubes fit in the box. The layers are drawn, so this is
        counting, not a formula. */
     volume: function (nv) {
-      var box = draw(nv.id, DATA.boxes);
+      var box = App.utils.drawRound(nv.id, DATA.boxes);
       var cubes = box.w * box.h * box.d;
       var perLayer = box.w * box.h;
       return {
@@ -931,7 +915,7 @@
     /* Moved, or turned? A figure that has only been moved is still facing
        the same way; a turned one is not. */
     movedOrTurned: function (nv) {
-      var fig = draw(nv.id, DATA.movedFigures);
+      var fig = App.utils.drawRound(nv.id, DATA.movedFigures);
       var moved = paddedFigure(fig.rows, 1, 1, true);
       var spun = paddedFigure(turned(fig.rows), 0, 1, true);
       var flipped = paddedFigure(mirrored(fig.rows), 1, 0, true);
@@ -960,7 +944,7 @@
       var pool = DATA.angles.filter(function (a) {
         return kinds.indexOf(angleKind(a.deg)) !== -1;
       });
-      var angle = draw(nv.id, pool);
+      var angle = App.utils.drawRound(nv.id, pool);
       var kind = angleKind(angle.deg);
       return {
         prompt: App.i18n.t('gen.whichAngle'),
@@ -982,7 +966,7 @@
 
     /* How long is the edge all the way round, in squares. */
     perimeter: function (nv) {
-      var rect = draw(nv.id, DATA.rects[nv.shape]);
+      var rect = App.utils.drawRound(nv.id, DATA.rects[nv.shape]);
       return {
         prompt: App.i18n.t('gen.perimeter'),
         hint: App.i18n.t('gen.socraticPerimeter'),
@@ -996,7 +980,7 @@
 
     /* How many squares fit inside. */
     area: function (nv) {
-      var rect = draw(nv.id, DATA.rects[nv.shape]);
+      var rect = App.utils.drawRound(nv.id, DATA.rects[nv.shape]);
       return {
         prompt: App.i18n.t('gen.area'),
         hint: App.i18n.t('gen.socraticArea'),
@@ -1010,7 +994,7 @@
 
     /* Does it match when you fold it along the line? */
     symmetry: function (nv) {
-      var figure = draw(nv.id, DATA.figures);
+      var figure = App.utils.drawRound(nv.id, DATA.figures);
       var yes = isSymmetric(figure);
       return {
         prompt: App.i18n.t('gen.isSymmetric'),
@@ -1033,7 +1017,7 @@
        is counting, not remembering. */
     equalSides: function (nv) {
       var all = DATA.figuresByName.triangles.concat(DATA.figuresByName.quads);
-      var fig = draw(nv.id, all);
+      var fig = App.utils.drawRound(nv.id, all);
       var n = equalSideCount(fig.points);
       /* The three answers a figure can give: all of them, some of them, or
          none. They are always the same three, because that is the whole
@@ -1062,7 +1046,7 @@
        word is taught, not hidden. */
     nameFigure: function (nv) {
       var pool = DATA.figuresByName[nv.group];
-      var fig = draw(nv.id, pool);
+      var fig = App.utils.drawRound(nv.id, pool);
       return {
         prompt: App.i18n.t('gen.whichFigure'),
         hint: App.i18n.t('gen.socraticFigureName'),
@@ -1083,8 +1067,8 @@
 
     /* Which square is the dot on. Two numbers, column first. */
     readCoord: function (nv) {
-      var col = draw(nv.id + 'c', range(1, DATA.grid.cols));
-      var row = draw(nv.id + 'r', range(1, DATA.grid.rows));
+      var col = App.utils.drawRound(nv.id + 'c', range(1, DATA.grid.cols));
+      var row = App.utils.drawRound(nv.id + 'r', range(1, DATA.grid.rows));
       var picked = neighbourSquares(col, row, 2);
       return {
         prompt: App.i18n.t('gen.whichSquare'),
@@ -1105,8 +1089,8 @@
     /* The other way round: the square is named and the grid has to be
        found. */
     pickCoord: function (nv) {
-      var col = draw(nv.id + 'c', range(1, DATA.grid.cols));
-      var row = draw(nv.id + 'r', range(1, DATA.grid.rows));
+      var col = App.utils.drawRound(nv.id + 'c', range(1, DATA.grid.cols));
+      var row = App.utils.drawRound(nv.id + 'r', range(1, DATA.grid.rows));
       var other = neighbourSquares(col, row, 1)[0];
       return {
         prompt: App.i18n.t('gen.findSquare').replace(/\{where\}/g, coordLabel(col, row)),
@@ -1122,8 +1106,8 @@
 
     /* The other way round: which of the two folds and matches. */
     symmetryPick: function (nv) {
-      var good = draw(nv.id + 'yes', DATA.figures.filter(isSymmetric));
-      var bad = draw(nv.id + 'no', DATA.figures.filter(function (f) {
+      var good = App.utils.drawRound(nv.id + 'yes', DATA.figures.filter(isSymmetric));
+      var bad = App.utils.drawRound(nv.id + 'no', DATA.figures.filter(function (f) {
         return !isSymmetric(f);
       }));
       return {
@@ -1190,7 +1174,7 @@
     level = nv;
     index = 0;
     roundCorrect = 0;
-    pools = {};
+    App.utils.drawRoundReset();
     reinforceList = [];
     reinforceIndex = 0;
     inReinforce = false;
@@ -1206,7 +1190,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
+      App.i18n.t('reinforceTitle') + ' â€” ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -1286,8 +1270,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —which is what
-     to do with the figure in front of you— and not the same sentence for
+     The invitation is the one written for THIS question â€”which is what
+     to do with the figure in front of youâ€” and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {
