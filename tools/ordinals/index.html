@@ -12,13 +12,10 @@
 </head>
 <body>
   <div class="container">
-    <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
-    <header class="tool-header centered">
+    <header class="tool-header">
+      <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
       <h1 data-i18n="title">🥇 Números ordinales</h1>
-      <div class="row center-row">
-        <p class="instruction" data-i18n="instruction">Aprende qué lugar ocupa cada uno.</p>
-      </div>
-      <p class="stars" id="stars">⭐ 0</p>
+      <span class="stars" id="stars">⭐ 0</span>
     </header>
 
     <main>
@@ -30,6 +27,9 @@
            app.js no llegara a pintarse, se ve esto en vez de una
            página en blanco. -->
       <section id="screenIntro" class="stack">
+        <div class="row center-row">
+          <p class="instruction" data-i18n="instruction">Aprende qué lugar ocupa cada uno.</p>
+        </div>
         <div class="card reference-card stack intro-card">
           <h2 class="reference-title" data-i18n="introTitle">Los ordinales dicen el lugar</h2>
           <p class="reference-text" data-i18n="introText">Los números dicen cuántos hay. Los ordinales dicen en qué puesto está cada uno.</p>
