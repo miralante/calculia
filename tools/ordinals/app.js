@@ -256,22 +256,41 @@
     var textEl = $('#famousText');
     var ariaEl = $('#famousSceneWrap');
 
+    /* El texto explicativo (#famousText) no se pinta: el slide se
+       compone solo de un título (label) y el visual. El mismo criterio
+       que la galería de Formas, donde cada figura se muestra con su
+       nombre y nada más — la aclaración larga está en la tabla del
+       recordatorio. */
+    textEl.textContent = '';
+
     if (item.id === 'edificio') {
       container.className = 'famous-stage famous-building';
       container.innerHTML = renderBuilding(item.n);
       container.setAttribute('aria-hidden', 'true');
       labelEl.textContent = t('buildingLabel');
-      textEl.textContent = realText('famous.edificio');
       ariaEl.setAttribute('aria-label', t('buildingAria')
         .replace('{n}', item.n).replace('{top}', item.n));
-    } else {
+    } else if (item.id === 'cola') {
       container.className = 'famous-stage famous-queue';
       container.innerHTML = renderQueue(item.n);
       container.setAttribute('aria-hidden', 'true');
       labelEl.textContent = t('queueLabel');
-      textEl.textContent = realText('famous.cola');
       ariaEl.setAttribute('aria-label', t('queueAriaLabel')
         .replace('{n}', item.n));
+    } else if (item.type === 'list') {
+      /* Slide-lista: una rejilla con los ordinales que la persona
+         tiene que aprender de memoria (1-9 o los redondos 11/12/20/30).
+         Misma ficha que el recordatorio (cifra + medalla si la tiene +
+         nombre + lugar), pero aquí se ve un subconjunto y no la serie
+         entera. */
+      container.className = 'famous-stage famous-list';
+      container.innerHTML = renderOrdinalChips(item.ordinals);
+      container.setAttribute('aria-hidden', 'true');
+      labelEl.textContent = t('famous.' + item.id + '.label');
+      ariaEl.setAttribute('aria-label', t('famous.' + item.id + '.aria')
+        .replace('{list}', item.ordinals.map(function (n) {
+          return abbrev(n) + ' (' + t('ord.' + n + 'Name') + ')';
+        }).join(', ')));
     }
   }
 
@@ -284,30 +303,38 @@
      Pantalla 3: recordatorio
      ============================================================ */
 
-  /* La serie entera. Cada ficha lleva su forma corta, su palabra y su
-     lugar: los tres van juntos a propósito, porque el error típico es
-     usar la palabra en el sitio donde va la forma corta o al revés. */
-  function paintOrdinalRow() {
-    var el = $('#ordinalsRow');
-    el.innerHTML = '';
-    /* El recordatorio pinta la serie entera (incluyendo 1/2/3 con sus
-       medallas), no la del carrusel. La tarjeta de medallas de la
-       pantalla 1 ya presentó 1/2/3, pero aquí no se pinta otra vez —
-       las tres fichas del recordatorio llevan 🥇🥈🥉 como el podio
-       inicial. */
-    DATA.presentedOrdinals.forEach(function (n) {
+  /* Construye el HTML de un conjunto de ord-chips a partir de una lista
+     de ordinales. La usan tanto el recordatorio (pantalla 3, serie
+     entera) como los slides-lista de "En la vida real" (subconjunto
+     de ordinales destacados). Las medallas se incluyen si el ordinal
+     las tiene (1/2/3): la persona las ha visto en la pantalla 1, pero
+     aquí también — el recordatorio NO es donde se quita la medalla,
+     es donde se consolida la serie entera. */
+  function renderOrdinalChips(ordinals) {
+    var html = '';
+    ordinals.forEach(function (n) {
       var o = ordinalByN(n);
-      var chip = document.createElement('div');
-      chip.className = 'ord-chip';
       var medalHtml = o.medal
         ? '<span class="ord-chip-medal" aria-hidden="true">' + o.medal + '</span>'
         : '';
-      chip.innerHTML =
+      html +=
+        '<div class="ord-chip">' +
         '<span class="ord-chip-figure ' + o.cls + '">' + medalHtml + abbrev(n) + '</span>' +
         '<span class="ord-chip-name ' + o.cls + '">' + t('ord.' + n + 'Name') + '</span>' +
-        '<span class="ord-chip-place">' + t('ord.' + n + 'Place') + '</span>';
-      el.appendChild(chip);
+        '<span class="ord-chip-place">' + t('ord.' + n + 'Place') + '</span>' +
+        '</div>';
     });
+    return html;
+  }
+
+  /* La serie entera. Cada ficha lleva su forma corta, su palabra y su
+     lugar: los tres van juntos a propósito, porque el error típico es
+     usar la palabra en el sitio donde va la forma corta o al revés.
+     El HTML se delega en renderOrdinalChips para no duplicar la
+     construcción de la ficha entre el recordatorio y los slides-lista. */
+  function paintOrdinalRow() {
+    var el = $('#ordinalsRow');
+    el.innerHTML = renderOrdinalChips(DATA.presentedOrdinals);
   }
 
   /* Las dos reglas, con ejemplos.

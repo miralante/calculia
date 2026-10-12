@@ -165,10 +165,19 @@ var DATA = {
      real") recorre uno a uno estos dos casos: el edificio (los pisos
      se cuentan de abajo arriba) y la cola (el primero va delante).
      No es un carrusel de ordinales sueltos: cada escenario muestra
-     varios ordinales a la vez para que se vea la serie funcionando. */
+     varios ordinales a la vez para que se vea la serie funcionando.
+
+     Antes de los escenarios, dos slides-lista con los ordinales más
+     conocidos: la serie 1-9 (los que se oyen a diario) y los cuatro
+     redondos (11, 12, 20, 30) que la gente necesita reconocer pero
+     rara vez practica. La lista sirve de "ancla verbal": la persona
+     ve cómo se escribe cada uno y se lo puede llevar al siguiente
+     escenario. */
   famous: [
-    { id: 'edificio', n: 5 },
-    { id: 'cola', n: 5 }
+    { id: 'lista1a9', type: 'list', ordinals: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
+    { id: 'listaRedondos', type: 'list', ordinals: [11, 12, 20, 30] },
+    { id: 'edificio', type: 'scenario', n: 5 },
+    { id: 'cola', type: 'scenario', n: 5 }
   ],
 
   /* Situaciones de apoyo en el juego, para que el ordinal nombre

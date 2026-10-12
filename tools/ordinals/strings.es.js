@@ -46,9 +46,12 @@
     prev: '←',
     nextArrow: '→',
 
-    /* ---------- Pantalla 2: la vida real ---------- */
+    /* ---------- Pantalla 2: la vida real ----------
+       Cuatro slides: dos listas (los más conocidos 1-9, los redondos
+       11/12/20/30) y dos escenarios (edificio, cola). El subtítulo
+       refleja esa mezcla: los más oídos + dos ejemplos de uso. */
     famousTitle: 'En la vida real',
-    famousSubtitle: 'Dos sitios donde se usan los ordinales:',
+    famousSubtitle: 'Los más conocidos y dos sitios donde se usan:',
     back: '← Anterior',
     continue: 'Siguiente →',
 
@@ -120,8 +123,30 @@
        pieza a pieza; la frase es la introducción y los ordinales se
        leen dentro. */
     famous: {
-      edificio: 'En un edificio, los pisos se cuentan desde abajo. El primero es el de abajo y se sube:',
-      cola: 'En una cola, el primero está delante. Se cuenta desde el primero:'
+      /* Slides de "En la vida real": cada uno se compone solo de un
+         titular (label, pintado por #famousLabel) y el visual. Sin
+         texto explicativo debajo — la aclaración larga vive en la
+         tabla del recordatorio (pantalla 3), que es donde se
+         consolidan las cifras, las palabras y los lugares. Mismo
+         criterio que la galería de Formas: la figura se muestra con
+         su nombre y nada más.
+
+         La "aria" sigue siendo larga para los lectores de pantalla:
+         lo que se calla visualmente se sigue leyendo. Las "text" se
+         conservan vacías para que la clave quede registrada y la
+         paridad es/en no se queje de claves huérfanas. */
+      lista1a9: {
+        label: 'Los más conocidos',
+        text: '',
+        aria: 'Los ordinales del primero al noveno: {list}.'
+      },
+      listaRedondos: {
+        label: 'Los redondos',
+        text: '',
+        aria: 'Los ordinales redondos: {list}.'
+      },
+      edificio: '',
+      cola: ''
     },
 
     /* ---------- Situaciones de apoyo ----------

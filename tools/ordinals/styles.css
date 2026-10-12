@@ -252,6 +252,21 @@
   min-height: 180px;
 }
 
+/* Slide-lista: una rejilla de fichas (las mismas .ord-chip del
+   recordatorio) para mostrar el subconjunto de ordinales que la
+   persona tiene que reconocer de memoria. La rejilla envuelve a
+   varias columnas según el ancho, así la lista 1-9 cabe en 2-3
+   filas en 375px sin apretarse. */
+.famous-list {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--espacio);
+  min-height: 0;
+}
+.famous-list .ord-chip { flex: 0 1 130px; }
+
 /* ----- El edificio -----
    Una pila de plantas, la baja abajo (porque así es como se
    cuentan los pisos: el primero es el de abajo). El primer piso

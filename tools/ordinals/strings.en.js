@@ -40,9 +40,13 @@
     prev: '←',
     nextArrow: '→',
 
-    /* ---------- Screen 2: real life ---------- */
+    /* ---------- Screen 2: real life ----------
+       Four slides: two explicit lists (the most common 1-9, the
+       round ones 11/12/20/30) and two scenarios (building, queue).
+       The subtitle reflects that mix: the ones you hear most + two
+       examples in use. */
     famousTitle: 'In real life',
-    famousSubtitle: 'Two places where ordinals are used:',
+    famousSubtitle: 'The most common ones and two places where they are used:',
     back: '← Back',
     continue: 'Next →',
 
@@ -115,8 +119,29 @@
        one piece at a time; the sentence is the lead-in and the
        ordinals are read inside. */
     famous: {
-      edificio: 'In a building, floors are counted from the bottom. The first floor is the lowest, and you go up:',
-      cola: 'In a queue, the first one is at the front. You count from the first:'
+      /* "In real life" slides: each one is just a title (label, painted
+         by #famousLabel) and the visual. No explanatory text below —
+         the long clarification lives in the reminder table (screen 3),
+         which is where the figures, words, and places get consolidated.
+         Same criterion as the Shapes gallery: the figure is shown with
+         its name and nothing else.
+
+         The "aria" stays long for screen readers: what is hidden
+         visually is still read aloud. The "text" entries are kept
+         empty so the key is registered and es/en parity does not
+         complain about orphan keys. */
+      lista1a9: {
+        label: 'The most common',
+        text: '',
+        aria: 'The ordinals from first to ninth: {list}.'
+      },
+      listaRedondos: {
+        label: 'The round ones',
+        text: '',
+        aria: 'The round ordinals: {list}.'
+      },
+      edificio: '',
+      cola: ''
     },
 
     /* ---------- Support situations ----------
