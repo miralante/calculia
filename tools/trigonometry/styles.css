@@ -9,7 +9,10 @@
 .btn-reference { align-self: center; }
 .real-card { align-items: center; border-color: var(--mod-razonamiento-suave); }
 .real-visual { display: flex; min-height: 170px; align-items: center; justify-content: center; width: 100%; }
-.real-caption { min-height: 3em; max-width: 560px; margin: 0; text-align: center; font-weight: 700; }
+.real-caption { max-width: 560px; margin: 0; padding-inline-start: 1.6rem; text-align: left; }
+.real-caption li { padding-inline-start: 0.2rem; line-height: 1.45; }
+.real-caption li + li { margin-top: 0.35rem; }
+.real-caption li::marker { color: var(--mod-secuencia, var(--color-texto)); font-weight: 700; }
 .real-life-svg { width: min(100%, 360px); height: auto; overflow: visible; }
 .real-ladder-svg { width: min(100%, 230px); }
 .real-wall,
@@ -30,6 +33,7 @@
 .real-wheel-hub { fill: var(--color-superficie); }
 .real-label { fill: var(--color-texto); font-size: 12px; font-weight: 700; text-anchor: middle; }
 .real-guide { fill: none; stroke: var(--color-borde); stroke-width: 3; stroke-dasharray: 6 5; }
+.real-angle-mark { fill: none; stroke: var(--mod-razonamiento, var(--color-texto)); stroke-width: 4; stroke-linecap: round; }
 .carousel-controls { display: flex; justify-content: center; gap: var(--espacio); }
 .carousel-controls .btn { min-width: 44px; min-height: 44px; }
 .intro-buttons { justify-content: center; gap: var(--espacio); }

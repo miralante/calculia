@@ -22,15 +22,27 @@
     realContinue: 'Empezar a practicar →',
     galleryPrevious: 'Anterior',
     galleryNext: 'Siguiente',
-    realExample: {
-      ladder: 'La inclinación ayuda a colocar la escalera con seguridad y saber hasta dónde llega.',
-      roof: 'La inclinación del tejado ayuda a darle forma y a elegir sus apoyos.',
-      cars: 'Compara los coches: en la rampa más empinada, suben más en menos distancia.'
+    realExampleSteps: {
+      ladder: {
+        first: 'La pared indica cuánto sube la escalera.',
+        second: 'El suelo indica cuánto avanza.',
+        third: 'El ángulo con el suelo muestra su inclinación.'
+      },
+      roof: {
+        first: 'La línea de color sigue el tejado.',
+        second: 'El arco marca el ángulo con la línea horizontal.',
+        third: 'Un ángulo mayor indica un tejado más inclinado.'
+      },
+      cars: {
+        first: 'Las ruedas descansan sobre la rampa.',
+        second: 'El arco marca el ángulo entre la rampa y el suelo.',
+        third: 'Un ángulo mayor indica una rampa más empinada.'
+      }
     },
     realExampleAria: {
       ladder: 'Escalera con peldaños, apoyada en una pared y sobre el suelo.',
-      roof: 'Casa con puerta y ventana. El tejado tiene una línea que muestra su inclinación.',
-      cars: 'Dos coches sobre rampas: una suave y otra más empinada.'
+      roof: 'Casa con puerta y ventana. Una línea discontinua muestra la horizontal y un arco marca el ángulo del tejado.',
+      cars: 'Dos coches apoyados sobre rampas de distinta inclinación. Los arcos marcan los ángulos entre las rampas y el suelo.'
     },
     realExampleLabel: {
       gentle: 'Suave',

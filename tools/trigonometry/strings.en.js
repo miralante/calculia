@@ -22,15 +22,27 @@
     realContinue: 'Start practising →',
     galleryPrevious: 'Previous',
     galleryNext: 'Next',
-    realExample: {
-      ladder: 'The slope helps you place a ladder safely and see how high it reaches.',
-      roof: 'The roof slope helps shape the roof and choose its supports.',
-      cars: 'Compare the cars: on the steeper ramp, they rise more over a shorter distance.'
+    realExampleSteps: {
+      ladder: {
+        first: 'The wall shows how high the ladder goes.',
+        second: 'The floor shows how far it goes along.',
+        third: 'The angle with the floor shows its slope.'
+      },
+      roof: {
+        first: 'The coloured line follows the roof.',
+        second: 'The arc marks its angle with the horizontal line.',
+        third: 'A bigger angle means a steeper roof.'
+      },
+      cars: {
+        first: 'The wheels rest on the ramp.',
+        second: 'The arc marks the angle between the ramp and the floor.',
+        third: 'A bigger angle means a steeper ramp.'
+      }
     },
     realExampleAria: {
       ladder: 'A ladder with rungs leaning against a wall and resting on the floor.',
-      roof: 'A house with a door and window. A line shows the roof slope.',
-      cars: 'Two cars on ramps: one gentle and one steeper.'
+      roof: 'A house with a door and window. A dashed line shows the horizontal and an arc marks the roof angle.',
+      cars: 'Two cars resting on ramps with different slopes. Arcs mark the angles between the ramps and the floor.'
     },
     realExampleLabel: {
       gentle: 'Gentle',
