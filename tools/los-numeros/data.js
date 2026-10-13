@@ -1,53 +1,39 @@
 /* ============================================================
    Calculia — Los Números — datos
-   Banco de preguntas: identificar el tipo de un número entre
-   Naturales, Enteros, Decimales y Fracciones.
-   El mismo banco sirve para los dos idiomas: los enunciados y
-   las opciones se construyen en app.js a partir de los slugs
-   'natural', 'entero', 'decimal', 'fraccion' y la lista de
-   números/expresiones, y los nombres de cada tipo se traducen
-   con App.i18n.t('gen.natural'), etc.
+   Esta actividad NO tiene test. Su contenido son tres slides
+   de comparación (naturales vs cada uno de los otros tipos) y
+   cuatro tarjetas de "vida real" (una por tipo).
+   Las comparaciones y ejemplos de vida real son contenido
+   textual que vive en strings.<locale>.js, no aquí. Aquí solo
+   queda la ESTRUCTURA: el orden de los slides, el tipo de cada
+   visual (recta numérica, pizza, etc.) y el orden de las
+   tarjetas de vida real. El texto se lee con App.i18n.t() en
+   app.js a partir del id.
+
+   Los visuales se generan en app.js: las rectas numéricas son
+   SVG calculado y la pizza es SVG con un par de `<path>`.
    ============================================================ */
 var DATA = {
-  perRound: 6,
+  /* Orden de los slides. Cada uno tiene:
+       - id: clave estable para resolver el texto en i18n
+       - visual: qué dibujo pintar (recta, zoomDecimal, pizza)
+     El título y el cuerpo se leen como
+     'slide<id>.title' y 'slide<id>.body'. */
+  slides: [
+    { id: 'NaturalesEnteros',  visual: 'rectaNE' },
+    { id: 'NaturalesDecimales', visual: 'rectaND' },
+    { id: 'NaturalesFracciones', visual: 'pizza' }
+  ],
 
-  /* Banco de números/expresiones. Cada item lleva el id del tipo
-     correcto. Para evitar una sola "trampa" repetida 6 veces, la
-     baraja se construye de manera que las 4 categorías aparezcan
-     mezcladas y, salvo en rondas muy cortas, todas salgan. */
-  bank: [
-    /* Naturales: 0, 1, 5, 12, 100, 1000 */
-    { id: 'n0',    tipo: 'natural',  display: '0' },
-    { id: 'n1',    tipo: 'natural',  display: '1' },
-    { id: 'n5',    tipo: 'natural',  display: '5' },
-    { id: 'n12',   tipo: 'natural',  display: '12' },
-    { id: 'n100',  tipo: 'natural',  display: '100' },
-    { id: 'n1000', tipo: 'natural',  display: '1.000' },
-
-    /* Enteros: incluye negativos. -0 no existe como tal. */
-    { id: 'z-1',   tipo: 'entero',   display: '−1' },
-    { id: 'z-5',   tipo: 'entero',   display: '−5' },
-    { id: 'z-12',  tipo: 'entero',   display: '−12' },
-    { id: 'z-100', tipo: 'entero',   display: '−100' },
-    { id: 'z3',    tipo: 'entero',   display: '+3' },
-
-    /* Decimales: con coma en ES, con punto en EN. La traducción de
-       el separador se hace en app.js a partir de la pista i18n
-       'gen.decimalSep' (es -> ',', en -> '.'). El banco ES usa ya
-       coma; el banco EN se construye a partir del mismo. */
-    { id: 'd05',   tipo: 'decimal',  display: '0,5' },
-    { id: 'd125',  tipo: 'decimal',  display: '1,25' },
-    { id: 'd314',  tipo: 'decimal',  display: '3,14' },
-    { id: 'd27',   tipo: 'decimal',  display: '2,7' },
-    { id: 'd001',  tipo: 'decimal',  display: '0,01' },
-
-    /* Fracciones: numerador y denominador enteros positivos, distintos
-       y denominador != 1 (1/1 es un natural). */
-    { id: 'f12',   tipo: 'fraccion', display: '1/2' },
-    { id: 'f34',   tipo: 'fraccion', display: '3/4' },
-    { id: 'f25',   tipo: 'fraccion', display: '2/5' },
-    { id: 'f78',   tipo: 'fraccion', display: '7/8' },
-    { id: 'f13',   tipo: 'fraccion', display: '1/3' },
-    { id: 'f49',   tipo: 'fraccion', display: '4/9' }
+  /* Orden de las tarjetas de vida real. Cada una tiene:
+       - id: 'natural' | 'entero' | 'decimal' | 'fraccion'
+       - emoji: pictograma para la cabecera de la tarjeta
+       - iconKey: clave i18n de la línea corta (ej. "Manzanas")
+       - examplesKey: clave i18n de los ejemplos */
+  real: [
+    { id: 'natural',  emoji: '🧮', iconKey: 'realNaturalIcon',   examplesKey: 'realNaturalExamples' },
+    { id: 'entero',   emoji: '🌡️', iconKey: 'realEnteroIcon',    examplesKey: 'realEnteroExamples' },
+    { id: 'decimal',  emoji: '💰', iconKey: 'realDecimalIcon',   examplesKey: 'realDecimalExamples' },
+    { id: 'fraccion', emoji: '🍕', iconKey: 'realFraccionIcon',  examplesKey: 'realFraccionExamples' }
   ]
 };

@@ -6,10 +6,7 @@
   background: var(--mod-razonamiento);
 }
 
-/* ---- Pantalla de introducción: cuatro tarjetas de los tipos ----
-   Una rejilla de 1/2/4 columnas según el ancho. Cada tarjeta
-   tiene su color de acento (mismo modulo, distinto tono) para
-   que se distingan a simple vista y a bajo contraste. */
+/* ---- Pantalla de introducción: cuatro tarjetas de los tipos ---- */
 .intro-title {
   text-align: center;
   color: var(--color-texto);
@@ -44,9 +41,6 @@
   font-size: var(--texto-pequeno);
 }
 
-/* Colores por tipo. El mismo módulo (--mod-razonamiento) para
-   mantener la coherencia con la cabecera y los botones; cada
-   tarjeta se distingue con su propio nombre. */
 .intro-card-natural { border-color: var(--mod-secuencia); }
 .intro-card-natural h3 { color: var(--mod-secuencia); }
 .intro-card-entero  { border-color: var(--mod-coordinacion); }
@@ -56,42 +50,116 @@
 .intro-card-fraccion { border-color: var(--mod-memoria); }
 .intro-card-fraccion h3 { color: var(--mod-memoria); }
 
-/* ---- Pantalla de juego: número grande, opciones etiquetadas ---- */
-.quiz-card { border-color: var(--mod-razonamiento-suave); }
+/* ---- Pantalla de comparaciones: carrusel de slides ----
+   Cada slide es una tarjeta con título, cuerpo y un SVG. */
+.slide-card {
+  border-color: var(--mod-razonamiento-suave);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio);
+}
 
-.quiz-ask {
+.slide-title {
+  margin: 0;
+  font-size: var(--texto-grande);
+  color: var(--color-texto);
+}
+
+.slide-body {
   margin: 0;
   color: var(--color-texto-suave);
   font-size: var(--texto-base);
+  line-height: 1.4;
+}
+
+.slide-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio);
+  margin-top: var(--espacio);
+}
+.slide-visual svg {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+}
+
+.slide-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--texto-pequeno);
+  color: var(--color-texto-suave);
+}
+.legend-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+  border: 1px solid var(--color-texto);
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio);
+}
+.carousel-controls .btn {
+  min-width: 64px;
+  min-height: 44px;
+}
+.carousel-controls .btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.slide-counter {
+  font-size: var(--texto-base);
+  color: var(--color-texto-suave);
+  min-width: 4ch;
   text-align: center;
 }
 
-.quiz-number {
-  margin: 0;
-  font-size: 4rem;
-  font-weight: 700;
-  text-align: center;
-  color: var(--color-texto);
-  /* Altura mínima para que el "salto" entre un valor de 1 cifra y
-     uno de 4 no mueva la carta del juego. */
-  min-height: 1.2em;
-  line-height: 1.1;
+/* ---- Pantalla de vida real: cuatro tarjetas, una por tipo ---- */
+.real-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio);
+  margin-top: var(--espacio);
+}
+@media (min-width: 560px) {
+  .real-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Cada opción muestra el nombre del tipo con un color que
-   recuerda al de la tarjeta de la introducción, para que la
-   asociación entre tipo y respuesta sea inmediata. */
-.option-tipo {
+.real-card {
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: var(--espacio);
+  background: var(--color-superficie);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   text-align: center;
-  font-size: var(--texto-grande);
-  font-weight: 700;
 }
-.option-tipo-natural  { border-color: var(--mod-secuencia); }
-.option-tipo-entero   { border-color: var(--mod-coordinacion); }
-.option-tipo-decimal  { border-color: var(--mod-emocional); }
-.option-tipo-fraccion { border-color: var(--mod-memoria); }
+.real-card h3 { margin: 0; font-size: var(--texto-grande); }
+.real-card .real-emoji { font-size: 3rem; line-height: 1; }
+.real-card .real-icon { margin: 0; color: var(--color-texto); font-size: var(--texto-base); }
+.real-card .real-examples { margin: 0; font-weight: 700; color: var(--color-texto-suave); font-size: var(--texto-pequeno); }
 
-/* ---- Transfer (reflexión al final de la ronda) ---- */
+.real-card-natural  { border-color: var(--mod-secuencia); }
+.real-card-natural  h3 { color: var(--mod-secuencia); }
+.real-card-entero   { border-color: var(--mod-coordinacion); }
+.real-card-entero   h3 { color: var(--mod-coordinacion); }
+.real-card-decimal  { border-color: var(--mod-emocional); }
+.real-card-decimal  h3 { color: var(--mod-emocional); }
+.real-card-fraccion { border-color: var(--mod-memoria); }
+.real-card-fraccion h3 { color: var(--mod-memoria); }
+
+/* ---- Pantalla final ---- */
 #screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;

@@ -437,7 +437,7 @@ Object.keys(targets).forEach(function (f) {
    assets/js/utils.js. An activity that still defines its own `function
    draw(` or `function spreadRepeats(` is duplicating that helper and
    going around the contract. */
-var NO_SHUFFLE = ['temperature'];
+var NO_SHUFFLE = ['temperature', 'los-numeros'];
 slugs.forEach(function (slug) {
   if (NO_SHUFFLE.indexOf(slug) !== -1) return;
   checks += 1;

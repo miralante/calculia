@@ -18,9 +18,9 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-    <!-- Pantalla de introducción: cuatro tarjetas, una por tipo.
-         Se muestran siempre al entrar. Tocar cada tarjeta no hace
-         nada extra: la lección está en el cuerpo de cada tarjeta. -->
+    <!-- Pantalla 1: cuatro tarjetas con los tipos de números.
+         Tocar cada tarjeta no hace nada extra: la lección está en
+         el cuerpo de cada tarjeta. -->
     <section id="screenIntro" class="stack">
       <div class="row center-row">
         <p class="instruction" data-i18n="introIntro">Toca cada tarjeta para verla con más detalle.</p>
@@ -48,36 +48,46 @@
           <p class="intro-examples" data-i18n="introFraccionExamples">Ejemplos: 1/2 · 3/4 · 2/5 · 7/8</p>
         </article>
       </div>
-      <button type="button" class="btn" id="introContinue" data-i18n="introContinue">Empezar a practicar →</button>
+      <button type="button" class="btn" id="introContinue" data-i18n="introContinue">Ver las comparaciones →</button>
     </section>
 
-    <!-- Pantalla de juego -->
-    <section id="screenGame" class="hidden stack">
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-        <span class="progress-text" id="progressText">0 / 6</span>
-        <span class="difficulty" id="difficulty"></span>
+    <!-- Pantalla 2: tres slides que comparan los naturales con cada
+         uno de los otros tres tipos. Misma mecánica que la galería
+         de Formas: una sola diapositiva visible, botones ←/→. -->
+    <section id="screenSlides" class="hidden stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="slidesIntro">Mira cómo se relaciona cada tipo con los naturales.</p>
       </div>
-
-      <div class="card centered stack quiz-card">
-        <p class="quiz-ask" data-i18n="gen.askType">¿Qué tipo de número es?</p>
-        <p class="quiz-number" id="quizNumber" aria-live="polite"></p>
+      <div class="card slide-card">
+        <h2 class="slide-title" id="slideTitle"></h2>
+        <p class="slide-body" id="slideBody"></p>
+        <div class="slide-visual" id="slideVisual" role="img" aria-hidden="true"></div>
       </div>
-      <div class="stack options" id="options"></div>
-      <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="row explanation hidden" id="explanationWrap">
-        <p id="explanation" aria-live="polite"></p>
+      <div class="carousel-controls">
+        <button type="button" class="btn btn-secondary" id="slidePrev" aria-label="Anterior">←</button>
+        <span class="slide-counter" id="slideCounter">1 / 3</span>
+        <button type="button" class="btn btn-secondary" id="slideNext" aria-label="Siguiente">→</button>
       </div>
-      <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
+      <button type="button" class="btn hidden" id="slidesContinue" data-i18n="slidesContinue">Ver en la vida real →</button>
     </section>
 
-    <!-- Pantalla final -->
+    <!-- Pantalla 3: cuatro tarjetas con ejemplos de la vida real,
+         una por tipo. No es un test: la persona solo mira. -->
+    <section id="screenReal" class="hidden stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="realIntro">Cada tipo aparece en la vida diaria. Mira los ejemplos.</p>
+      </div>
+      <div class="real-grid" id="realGrid"></div>
+      <button type="button" class="btn" id="realContinue" data-i18n="realContinue">Terminar →</button>
+    </section>
+
+    <!-- Pantalla final: sin test, solo se cierra la actividad. -->
     <section id="screenEnd" class="hidden centered stack" aria-live="polite">
       <div class="emoji-large" aria-hidden="true">🎉</div>
-      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+      <h2 data-i18n="endTitle">¡Has terminado!</h2>
       <p id="endSummary"></p>
       <p id="transfer" class="transfer" data-i18n="transfer">Esto te servirá para saber qué tipo de número tienes delante.</p>
-      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="btnRepeat">Ver otra vez</button>
       <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
       <a href="../../" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
