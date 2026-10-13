@@ -14,8 +14,8 @@
   App.i18n.register({
     title: '⛰️ Trigonometry',
     instructionMenu: 'Choose an activity.',
-    contexto: 'Trigonometry links a slope with height and distance. It helps us measure things we cannot reach.',
-    explicacion: '✅ Look at how far a ramp rises and how far it goes. That shows its slope.',
+    contexto: 'Two ladders, the same length.',
+    explicacion: 'Which one reaches higher? Look at how it leans.',
     btnBackToMenu: '← Other activities',
     btnReference: 'See the example',
     btnStartLesson: 'Start practising →',

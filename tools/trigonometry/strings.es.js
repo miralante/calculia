@@ -14,8 +14,8 @@
   App.i18n.register({
     title: '⛰️ Trigonometría',
     instructionMenu: 'Elige una actividad.',
-    contexto: 'La trigonometría relaciona la inclinación con la altura y la distancia. Sirve para medir lo que no podemos alcanzar.',
-    explicacion: '✅ Mira cuánto sube una rampa y cuánto avanza. Así entiendes su inclinación.',
+    contexto: 'Dos escaleras del mismo largo.',
+    explicacion: '¿Cuál llega más alto? Mira cómo se inclina.',
     btnBackToMenu: '← Otras actividades',
     btnReference: 'Ver el ejemplo',
     btnStartLesson: 'Empezar a practicar →',

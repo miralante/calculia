@@ -1001,6 +1001,12 @@
   $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
   $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
 
+  var introPicture = lessonPicture('lados');
+  var menuVisual = $('#menuVisual');
+  menuVisual.innerHTML = introPicture.html;
+  menuVisual.setAttribute('role', 'img');
+  menuVisual.setAttribute('aria-label', introPicture.aria);
+
   paintMenu();
   paintStars();
 })();
