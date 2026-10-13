@@ -778,9 +778,7 @@
     });
     $('#realPrev').setAttribute('aria-label', App.i18n.t('galleryPrevious'));
     $('#realNext').setAttribute('aria-label', App.i18n.t('galleryNext'));
-    $('#realBack').textContent = App.i18n.t('realBack');
-    $('#realContinue').textContent = App.i18n.t(lessonReturnTo === 'menu'
-      ? 'realContinue' : 'btnReturnQuestion');
+    $('#realContinue').textContent = App.i18n.t('realContinue');
   }
 
   /* A short visual reference comes before practice and stays one tap away
@@ -812,10 +810,8 @@
     learnVisualEl.setAttribute('aria-label', picture.aria);
     learnRuleEl.textContent = App.i18n.t('activity.' + activity.id + '.lessonRule');
     $('#btnStartLesson').textContent = App.i18n.t('btnStartLesson');
-    $('#btnReturnQuestion').textContent = App.i18n.t('btnReturnQuestion');
     $('#btnRealExamples').textContent = App.i18n.t('btnRealExamples');
     $('#btnStartLesson').classList.toggle('hidden', returnTo !== 'menu');
-    $('#btnReturnQuestion').classList.toggle('hidden', returnTo !== 'game');
     show(screenLearn);
   }
 
@@ -1023,28 +1019,11 @@
         .replace('{stars}', progress.stars);
     }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
-
-    var idxN = activity.levels.indexOf(level);
-    var nextLevel = (roundCorrect === DATA.perRound && idxN !== -1 && idxN + 1 < activity.levels.length)
-      ? activity.levels[idxN + 1] : null;
-    var btnHarder = $('#btnHarder');
-    if (nextLevel) {
-      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name}', App.i18n.t('level.' + nextLevel.id));
-      btnHarder.classList.remove('hidden');
-      btnHarder.onclick = function () {
-        progress.levelByActivity[activity.id] = idxN + 1;
-        save();
-        startRound(nextLevel);
-      };
-    } else {
-      btnHarder.classList.add('hidden');
-    }
   }
 
   /* ---- Events ---- */
 
   $('#btnStartLesson').addEventListener('click', function () { startRound(levelFromProgress()); });
-  $('#btnReturnQuestion').addEventListener('click', function () { show(screenGame); });
   $('#btnRealExamples').addEventListener('click', showRealExamples);
   $('#realPrev').addEventListener('click', function () {
     realIndex = (realIndex + 2) % 3;
@@ -1054,14 +1033,12 @@
     realIndex = (realIndex + 1) % 3;
     paintRealExample();
   });
-  $('#realBack').addEventListener('click', function () { showLesson(lessonReturnTo); });
   $('#realContinue').addEventListener('click', function () {
     if (lessonReturnTo === 'menu') startRound(levelFromProgress());
     else show(screenGame);
   });
   $('#btnReference').addEventListener('click', function () { showLesson('game'); });
   $('#btnNext').addEventListener('click', next);
-  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
 
 
   activity = DATA.activities.trigonometria;
