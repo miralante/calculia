@@ -20,6 +20,11 @@
   var signedIntroScreen = $('#signedIntroScreen');
   var signedRealScreen = $('#signedRealScreen');
   var signedTempScreen = $('#signedTempScreen');
+  /* Generic exposition + real-life screens, reused by the 5 sub-activities
+     that flag DATA.<act>.hasExpoReal = true. Content painted from strings
+     keyed by the current sub-activity id. */
+  var screenExpo = $('#expoScreen');
+  var screenReal = $('#realScreen');
   var promptEl = $('#prompt');
   var visualEl = $('#visual');
   var legendEl = $('#legend');
@@ -568,7 +573,8 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenGame, screenEnd, signedIntroScreen, signedRealScreen, signedTempScreen].forEach(function (p) {
+    [screenMenu, screenGame, screenEnd, signedIntroScreen, signedRealScreen, signedTempScreen,
+     screenExpo, screenReal].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -613,7 +619,70 @@
       startSignedIntro();
       return;
     }
+    if (activity.hasExpoReal) {
+      startExpoScreen(id);
+      return;
+    }
     startRound(levelFromProgress());
+  }
+
+  /* ---- Exposition + real-life screens for hasExpoReal activities ---- */
+
+  function paintExpo(id) {
+    var block = App.i18n.t('expo.' + id);
+    if (!block) { show(screenMenu); return; }
+    $('#expoTitleEl').textContent = block.title || '';
+    $('#expoIntroEl').textContent = block.intro || '';
+    var bulletsEl = $('#expoBulletsEl');
+    bulletsEl.innerHTML = '';
+    (block.bullets || []).forEach(function (b) {
+      var li = document.createElement('li');
+      li.textContent = b;
+      bulletsEl.appendChild(li);
+    });
+    var noteEl = $('#expoNoteEl');
+    if (block.note) {
+      noteEl.textContent = '💡 ' + block.note;
+      noteEl.classList.remove('hidden');
+    } else {
+      noteEl.textContent = '';
+      noteEl.classList.add('hidden');
+    }
+    screenExpo.setAttribute('aria-label',
+      (block.title || '') + ' — ' + (App.i18n.t('activity.' + id + '.name') || ''));
+  }
+
+  function paintReal(id) {
+    var block = App.i18n.t('real.' + id);
+    if (!block) { show(screenMenu); return; }
+    $('#realTitleEl').textContent = block.title || '';
+    var listEl = $('#realListEl');
+    listEl.innerHTML = '';
+    (block.items || []).forEach(function (item) {
+      var row = document.createElement('div');
+      row.className = 'real-list-item';
+      var icon = document.createElement('span');
+      icon.className = 'real-list-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.textContent = item.icon || '';
+      var para = document.createElement('p');
+      para.textContent = item.text || '';
+      row.appendChild(icon);
+      row.appendChild(para);
+      listEl.appendChild(row);
+    });
+    screenReal.setAttribute('aria-label',
+      (block.title || '') + ' — ' + (App.i18n.t('activity.' + id + '.name') || ''));
+  }
+
+  function startExpoScreen(id) {
+    paintExpo(id);
+    show(screenExpo);
+  }
+
+  function startRealScreen(id) {
+    paintReal(id);
+    show(screenReal);
   }
 
   function startSignedIntro() {
@@ -931,19 +1000,6 @@
         .replace('{stars}', progress.stars);
     }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
-
-    var levelIndex = activity.levels.indexOf(level);
-    var nextLevel = (activity.id !== 'positivos-y-negativos' &&
-      roundCorrect === DATA.perRound && levelIndex !== -1 && levelIndex + 1 < activity.levels.length)
-      ? activity.levels[levelIndex + 1] : null;
-    var btnHarder = $('#btnHarder');
-    if (nextLevel) {
-      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name}', App.i18n.t('level.' + nextLevel.id));
-      btnHarder.classList.remove('hidden');
-      btnHarder.onclick = function () { startRound(nextLevel); };
-    } else {
-      btnHarder.classList.add('hidden');
-    }
   }
 
   /* ============================================================
@@ -1484,17 +1540,36 @@
   var elBtnBackToMenu = $('#btnBackToMenu');
   if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
   $('#btnNext').addEventListener('click', next);
-  $('#btnRepeat').addEventListener('click', function () {
+  /* btnRepeat was removed during the 25-activity batch cleanup (memory
+     entry on 2026-10-13); the screenEnd section no longer has the
+     button, so its handler is gone too. If a future batch re-adds the
+     button, wire this up again with the hasExpoReal/positivos-y-negativos
+     branches restored. */
+  var elBtnRepeat = $('#btnRepeat');
+  if (elBtnRepeat) elBtnRepeat.addEventListener('click', function () {
     if (activity.id === 'positivos-y-negativos') startSignedIntro();
+    else if (activity.hasExpoReal) startExpoScreen(activity.id);
     else startRound(levelFromProgress());
   });
 
+  /* ---- Exposition + real-life buttons (hasExpoReal activities) ---- */
+  $('#expoNext').addEventListener('click', function () {
+    if (!activity) return;
+    startRealScreen(activity.id);
+  });
+  $('#realBack').addEventListener('click', function () {
+    if (!activity) return;
+    startExpoScreen(activity.id);
+  });
+  $('#realNext').addEventListener('click', function () {
+    if (!activity) return;
+    startRound(levelFromProgress());
+  });
 
   $('#signedIntroNext').addEventListener('click', function () {
     paintSignedReal();
     show(signedRealScreen);
   });
-  $('#signedRealBack').addEventListener('click', startSignedIntro);
   $('#signedRealNext').addEventListener('click', startSignedTemperature);
   App.utils.$$('#signedTempScreen .btn-signed-temp[data-step]').forEach(function (button) {
     button.addEventListener('click', function () {

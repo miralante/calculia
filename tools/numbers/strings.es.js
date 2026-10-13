@@ -101,6 +101,117 @@
       endSummary: 'Has practicado los números positivos y negativos. Ahora tienes {stars} estrellas.'
     },
     ordinal: { 1: 'primero', 2: 'segundo', 3: 'tercero', 4: 'cuarto', 5: 'quinto' },
+    /* Exposition + real-life screens for the 5 sub-activities that don't
+       have their own custom lesson (positivos-y-negativos uses the
+       dedicated signed.* flow). Each activity gets a brief theoretical
+       slide (expo.*) followed by everyday examples (real.*), with a
+       "Siguiente" button linking them and from there to the practice. */
+    expo: {
+      ordinales: {
+        title: 'El lugar en la fila',
+        intro: 'Los números ordinales indican el orden. Sirven para decir quién va primero, segundo, tercero…',
+        bullets: [
+          '1.º = primero',
+          '2.º = segundo',
+          '3.º = tercero',
+          '4.º = cuarto',
+          '5.º = quinto'
+        ],
+        note: 'La bandera 🏁 marca el principio. El de al lado es el primero.'
+      },
+      comparar: {
+        title: 'Mayor, menor o igual',
+        intro: 'Para saber qué número es mayor, miramos las cifras de izquierda a derecha.',
+        bullets: [
+          'Si la primera cifra ya es mayor, ese número es mayor.',
+          'Si son iguales en esa cifra, miramos la siguiente.',
+          'Si todas las cifras son iguales, los dos números son iguales.'
+        ],
+        note: 'El signo se abre hacia el número más grande: el lado abierto es el mayor.'
+      },
+      recta: {
+        title: 'La recta de los números',
+        intro: 'Una recta numérica es una línea con números en orden. Van de menor (izquierda) a mayor (derecha).',
+        bullets: [
+          'Los números están separados a la misma distancia.',
+          'Cada muesca vale lo mismo: 1, 5, 10, 50…',
+          'La flecha señala el número que tienes que decir.'
+        ],
+        note: 'Cuenta desde el número escrito más cercano para saber qué número señala la flecha.'
+      },
+      unidades: {
+        title: 'Unidades, decenas y centenas',
+        intro: 'Cada cifra tiene un valor según su lugar. La cifra de la derecha son unidades; la siguiente, decenas; la siguiente, centenas.',
+        bullets: [
+          'Unidades: 1, 2, 3…',
+          'Decenas: 10, 20, 30…',
+          'Centenas: 100, 200, 300…',
+          'En el número 345: 3 centenas + 4 decenas + 5 unidades.'
+        ],
+        note: 'Cada color señala un valor: azul (unidades), verde (decenas), morado (centenas).'
+      },
+      placevalue: {
+        title: 'Cambiar de posición',
+        intro: '10 unidades forman 1 decena. 10 decenas forman 1 centena. 10 centenas forman 1 millar. Y así sigue.',
+        bullets: [
+          '10 × 1 = 1 decena (10)',
+          '10 × 10 = 1 centena (100)',
+          '10 × 100 = 1 millar (1.000)'
+        ],
+        note: 'Multiplicar por 10 mueve la cifra un lugar a la izquierda y añade un cero.'
+      }
+    },
+    real: {
+      ordinales: {
+        title: 'Los ordinales en tu día a día',
+        items: [
+          { icon: '🚶', text: 'En la cola del comedor: «yo soy el tercero».' },
+          { icon: '🏆', text: 'El podio de una carrera: primero, segundo, tercero.' },
+          { icon: '🏢', text: 'La planta de un edificio: primera planta, segunda planta…' },
+          { icon: '🎂', text: '«Es mi quinto cumpleaños» = 5.º.' }
+        ]
+      },
+      comparar: {
+        title: 'Comparar está en todas partes',
+        items: [
+          { icon: '🎒', text: '¿Quién tiene más cromos en la mochila?' },
+          { icon: '🍎', text: '¿Qué bolsa pesa más en la compra?' },
+          { icon: '📅', text: '¿Quién nació antes y quién después?' },
+          { icon: '💰', text: '¿Quién tiene más dinero en la hucha?' }
+        ]
+      },
+      recta: {
+        title: 'La recta en tu día a día',
+        items: [
+          { icon: '📏', text: 'Una regla para medir cosas en centímetros.' },
+          { icon: '🌡️', text: 'Un termómetro señala una temperatura.' },
+          { icon: '🗺️', text: 'La escala de un plano indica las distancias.' },
+          { icon: '⏱️', text: 'Una cinta métrica muestra posiciones en una línea.' }
+        ]
+      },
+      unidades: {
+        title: 'Unidades, decenas y centenas en tu día',
+        items: [
+          { icon: '🥚', text: 'Una caja de huevos tiene 12 unidades (= 1 docena).' },
+          { icon: '👟', text: 'Las tallas de zapatos son números de unidades.' },
+          { icon: '💶', text: '100 céntimos = 1 €. 10 céntimos = 1 décima de euro.' },
+          { icon: '⏱️', text: '60 minutos = 1 hora. 60 segundos = 1 minuto.' }
+        ]
+      },
+      placevalue: {
+        title: 'Los cambios de 10 en tu día',
+        items: [
+          { icon: '🥚', text: '10 huevos sueltos forman 1 docena.' },
+          { icon: '✏️', text: '10 lápices sueltos forman 1 paquete.' },
+          { icon: '💶', text: '10 monedas de 10 céntimos = 1 euro.' },
+          { icon: '⏱️', text: '10 años = 1 década. 10 décadas = 1 siglo (100 años).' }
+        ]
+      }
+    },
+    expoNext: 'Ver ejemplos de la vida real →',
+    expoBack: '← Volver al menú',
+    realBack: '← Volver a la explicación',
+    realNext: 'Empezar a practicar →',
     ordinalPlace: { 1: 'el primer lugar', 2: 'el segundo lugar', 3: 'el tercer lugar', 4: 'el cuarto lugar', 5: 'el quinto lugar' },
     level: { n1: 'Hasta 10', n2: 'Hasta 20', n3: 'Hasta 100', n4: 'Hasta 100, con menos marcas', c1: 'Hasta 9, con bloques', c2: 'Hasta 99, con bloques', c3: 'Hasta 99, sin bloques', c4: 'Hasta 999', c5: 'Hasta 9.999', o1: 'Fila de 3', o2: 'Fila de 5', o3: 'Buscar un lugar', libre: '🏢 Ascensor libre', meta: '🎯 Llegar a un piso', u99: 'Hasta 99', u999: 'Hasta 999', umiles: 'Los miles', umillones: 'Millones y billón', udictado: 'Escucha y elige', counter: 'Contador libre', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
     gen: {

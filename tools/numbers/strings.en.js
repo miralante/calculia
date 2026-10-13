@@ -103,6 +103,117 @@
       endSummary: 'You practised positive and negative numbers. You now have {stars} stars.'
     },
     ordinal: { 1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth' },
+    /* Exposition + real-life screens for the 5 sub-activities that don't
+       have their own custom lesson (positivos-y-negativos uses the
+       dedicated signed.* flow). Each activity gets a brief theoretical
+       slide (expo.*) followed by everyday examples (real.*), with a
+       "Next" button linking them and from there to the practice. */
+    expo: {
+      ordinales: {
+        title: 'Place in the queue',
+        intro: 'Ordinal numbers tell the order. They say who goes first, second, third…',
+        bullets: [
+          '1st = first',
+          '2nd = second',
+          '3rd = third',
+          '4th = fourth',
+          '5th = fifth'
+        ],
+        note: 'The flag 🏁 marks the start. Whoever stands next to it is first.'
+      },
+      comparar: {
+        title: 'Greater, smaller or equal',
+        intro: 'To know which number is greater, look at the digits. Start from the left.',
+        bullets: [
+          'If the first digit is already greater, that number is greater.',
+          'If the digits are the same, look at the next one.',
+          'If all digits are the same, the two numbers are equal.'
+        ],
+        note: 'The sign opens towards the greater number: the open side is greater.'
+      },
+      recta: {
+        title: 'The number line',
+        intro: 'A number line is a line with numbers in order. They go from smaller (left) to larger (right).',
+        bullets: [
+          'Numbers are evenly spaced.',
+          'Each tick is worth the same: 1, 5, 10, 50…',
+          'The arrow points to the number you have to say.'
+        ],
+        note: 'Count from the nearest written number to find which one the arrow points at.'
+      },
+      unidades: {
+        title: 'Ones, tens and hundreds',
+        intro: 'Each digit has a value based on its place. The rightmost digit is ones; the next is tens; the next is hundreds.',
+        bullets: [
+          'Ones: 1, 2, 3…',
+          'Tens: 10, 20, 30…',
+          'Hundreds: 100, 200, 300…',
+          'In the number 345: 3 hundreds + 4 tens + 5 ones.'
+        ],
+        note: 'Each colour signals a value: blue (ones), green (tens), purple (hundreds).'
+      },
+      placevalue: {
+        title: 'Trading places',
+        intro: '10 ones make 1 ten. 10 tens make 1 hundred. 10 hundreds make 1 thousand. And so on.',
+        bullets: [
+          '10 × 1 = 1 ten (10)',
+          '10 × 10 = 1 hundred (100)',
+          '10 × 100 = 1 thousand (1,000)'
+        ],
+        note: 'Multiplying by 10 moves the digit one place to the left and adds a zero.'
+      }
+    },
+    real: {
+      ordinales: {
+        title: 'Ordinal numbers in your daily life',
+        items: [
+          { icon: '🚶', text: 'In the canteen queue: "I am third in line".' },
+          { icon: '🏆', text: 'The podium of a race: first, second, third.' },
+          { icon: '🏢', text: 'The floor of a building: first floor, second floor…' },
+          { icon: '🎂', text: '"It is my fifth birthday" = 5th.' }
+        ]
+      },
+      comparar: {
+        title: 'Comparing is everywhere',
+        items: [
+          { icon: '🎒', text: 'Who has more cards in their backpack?' },
+          { icon: '🍎', text: 'Which bag is heavier at the shop?' },
+          { icon: '📅', text: 'Who was born first and who was born later?' },
+          { icon: '💰', text: 'Who has more money in the piggy bank?' }
+        ]
+      },
+      recta: {
+        title: 'The line in your daily life',
+        items: [
+          { icon: '📏', text: 'A ruler to measure things in centimetres.' },
+          { icon: '🌡️', text: 'A thermometer points to a temperature.' },
+          { icon: '🗺️', text: 'The scale on a map shows distances.' },
+          { icon: '⏱️', text: 'A measuring tape shows positions on a line.' }
+        ]
+      },
+      unidades: {
+        title: 'Ones, tens and hundreds in your day',
+        items: [
+          { icon: '🥚', text: 'A box of eggs has 12 ones (= 1 dozen).' },
+          { icon: '👟', text: 'Shoe sizes are numbers of ones.' },
+          { icon: '💶', text: '100 cents = 1 €. 10 cents = one tenth of a euro.' },
+          { icon: '⏱️', text: '60 minutes = 1 hour. 60 seconds = 1 minute.' }
+        ]
+      },
+      placevalue: {
+        title: 'Trading 10s in your daily life',
+        items: [
+          { icon: '🥚', text: '10 loose eggs make 1 dozen.' },
+          { icon: '✏️', text: '10 loose pencils make 1 pack.' },
+          { icon: '💶', text: '10 coins of 10 cents = 1 euro.' },
+          { icon: '⏱️', text: '10 years = 1 decade. 10 decades = 1 century (100 years).' }
+        ]
+      }
+    },
+    expoNext: 'See real-life examples →',
+    expoBack: '← Back to menu',
+    realBack: '← Back to the explanation',
+    realNext: 'Start practising →',
     ordinalPlace: { 1: 'first place', 2: 'second place', 3: 'third place', 4: 'fourth place', 5: 'fifth place' },
     level: { n1: 'Up to 10', n2: 'Up to 20', n3: 'Up to 100', n4: 'Up to 100, fewer marks', c1: 'Up to 9, with blocks', c2: 'Up to 99, with blocks', c3: 'Up to 99, no blocks', c4: 'Up to 999', c5: 'Up to 9,999', o1: 'Queue of 3', o2: 'Queue of 5', o3: 'Find a place', libre: '🏢 Free elevator', meta: '🎯 Reach a floor', u99: 'Up to 99', u999: 'Up to 999', umiles: 'Thousands', umillones: 'Millions and trillion', udictado: 'Listen and choose', counter: 'Free counter', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
     gen: {

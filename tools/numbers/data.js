@@ -32,6 +32,7 @@ var DATA = {
        and name it → name a place and find who is there). */
     ordinales: {
       picto: '1️⃣',
+      hasExpoReal: true,
       levels: [
         { id: 'o1', tipo: 'ordinal', items: 3, ask: 'position' },
         { id: 'o2', tipo: 'ordinal', items: 5, ask: 'position' },
@@ -50,6 +51,7 @@ var DATA = {
        countable at a glance on a phone, which would defeat their point. */
     comparar: {
       picto: '⚖️',
+      hasExpoReal: true,
       levels: [
         { id: 'c1', tipo: 'comparar', min: 1, max: 9, blocks: true },
         { id: 'c2', tipo: 'comparar', min: 10, max: 99, blocks: true },
@@ -75,6 +77,7 @@ var DATA = {
          n4  each notch is now worth ten, counted from a distant label. */
     recta: {
       picto: '📈',
+      hasExpoReal: true,
       levels: [
         { id: 'n1', tipo: 'numberLine', min: 0, max: 10, tick: 1, label: 1 },
         { id: 'n2', tipo: 'numberLine', min: 0, max: 10, tick: 1, label: 5 },
@@ -84,6 +87,8 @@ var DATA = {
     },
 
     unidades: {
+      hasExpoReal: true,
+      /* Progression (rule 13): order designed so each step changes
       /* Progression (rule 13): order designed so each step changes
          a single thing. u999→udictado only changes 'tipo' (the
          range stays at 999). udictado→umiles changes 'tipo' with
@@ -108,6 +113,8 @@ var DATA = {
     },
 
     placevalue: {
+      hasExpoReal: true,
+      /* Place-value exchange ("10 of these make 1 of those") and the
       /* Place-value exchange ("10 of these make 1 of those") and the
          ×10 ladder up to 10^12. Progression (rule 13): pv1→pv2→pv3
          only change 'lugar' (which exchange). pv3→pv4 changes 'tipo'

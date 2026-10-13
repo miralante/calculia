@@ -46,7 +46,6 @@
         <div class="signed-real-list" id="signedRealList"></div>
       </div>
       <div class="row signed-lesson-actions">
-        <button type="button" class="btn btn-secondary" id="signedRealBack" data-i18n="signed.realBack"></button>
         <button type="button" class="btn" id="signedRealNext" data-i18n="signed.realNext"></button>
       </div>
     </section>
@@ -83,6 +82,41 @@
       </div>
       <div id="activitiesMenu"></div>
       <p class="extra-note" id="noteExtra"></p>
+    </section>
+
+    <!-- Exposition + real-life example screens for the 5 sub-activities
+         (ordinales, comparar, recta, unidades, placevalue). One pair of
+         sections, content painted dynamically from strings keyed by the
+         current sub-activity id. positivos-y-negativos keeps its own
+         dedicated signed.* flow. After the real-life screen, "Empezar a
+         practicar" leads into the existing game/free-exploration UI. -->
+    <section id="expoScreen" class="hidden stack" aria-labelledby="expoTitleEl">
+      <div class="row center-row">
+        <p class="instruction" id="expoInstructionEl" data-i18n="instructionMenu"></p>
+      </div>
+      <div class="card centered stack expo-lesson-card">
+        <h2 id="expoTitleEl"></h2>
+        <div class="expo-lesson">
+          <p id="expoIntroEl"></p>
+          <ul id="expoBulletsEl"></ul>
+        </div>
+        <p class="expo-note" id="expoNoteEl"></p>
+      </div>
+      <button type="button" class="btn" id="expoNext" data-i18n="expoNext"></button>
+    </section>
+
+    <section id="realScreen" class="hidden stack" aria-labelledby="realTitleEl">
+      <div class="row center-row">
+        <p class="instruction" id="realInstructionEl" data-i18n="instructionMenu"></p>
+      </div>
+      <div class="card centered stack expo-lesson-card">
+        <h2 id="realTitleEl"></h2>
+        <div class="real-list" id="realListEl"></div>
+      </div>
+      <div class="row signed-lesson-actions">
+        <button type="button" class="btn btn-secondary" id="realBack" data-i18n="realBack"></button>
+        <button type="button" class="btn" id="realNext" data-i18n="realNext"></button>
+      </div>
     </section>
 
     
@@ -187,11 +221,6 @@
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
       <p id="transfer" class="transfer" data-i18n="transfer"></p>
-      <button type="button" class="btn btn-secondary hidden" id="btnHarder"></button>
-      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
-
-
-      <a href="../../" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>

@@ -592,3 +592,39 @@
   .signed-numberline-tick { width: 30px; height: 34px; font-size: 0.9rem; }
   .signed-numberline-tick.zero { width: 40px; height: 40px; }
 }
+
+/* Generic exposition + real-life screens for the 5 sub-activities.
+   Mirrors the signed-lesson-card layout so the "explanation + life
+   examples" sequence has the same shape on every sub-activity. */
+.expo-lesson-card { max-width: 760px; margin: 0 auto; }
+.expo-lesson { max-width: 620px; text-align: left; }
+.expo-lesson p, .expo-lesson li { font-size: var(--texto-base); line-height: 1.5; }
+.expo-lesson ul { padding-left: 1.5em; }
+.expo-lesson li + li { margin-top: 8px; }
+.expo-note {
+  margin-top: 12px;
+  font-size: var(--texto-base);
+  font-style: italic;
+  color: var(--color-texto-suave);
+  text-align: left;
+  max-width: 620px;
+}
+
+.real-list { display: grid; gap: 14px; width: 100%; text-align: left; }
+.real-list-item {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+.real-list-item p { margin: 0; line-height: 1.45; font-size: var(--texto-base); }
+.real-list-icon { font-size: 40px; text-align: center; }
+
+@media (max-width: 380px) {
+  .real-list-item { grid-template-columns: 44px minmax(0, 1fr); gap: 10px; padding: 10px; }
+  .real-list-icon { font-size: 32px; }
+}
