@@ -10,6 +10,7 @@
   var $ = App.utils.$;
 
   var screenLearn = $('#screenLearn');
+  var screenReal = $('#screenReal');
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
   var promptEl = $('#prompt');
@@ -27,6 +28,8 @@
   var learnContextEl = $('#learnContext');
   var learnVisualEl = $('#learnVisual');
   var learnRuleEl = $('#learnRule');
+  var realVisualEl = $('#realVisual');
+  var realCaptionEl = $('#realCaption');
 
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
@@ -38,6 +41,8 @@
   var activity = null;
   var level = null;
   var roundQuestions = [];
+  var realIndex = 0;
+  var lessonReturnTo = 'menu';
   var index = 0;
   var roundCorrect = 0;
   var answered = false;
@@ -691,9 +696,56 @@
      ============================================================ */
 
   function show(screen) {
-    [screenLearn, screenGame, screenEnd].forEach(function (p) {
+    [screenLearn, screenReal, screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
+  }
+
+  /* Small pictures of everyday places where the rise and run matter. The
+     ladder uses the same scale as the practice drawings; the ramp and roof
+     are simple cross-sections so their slope is easy to see. */
+  function realExamplePicture(id) {
+    if (id === 'ladder') {
+      return {
+        html: laddersSvg([DATA.ladders[1]]),
+        aria: App.i18n.t('realExampleAria.ladder')
+      };
+    }
+    if (id === 'ramp') {
+      return {
+        html: '<svg viewBox="0 0 180 130" class="real-life-svg" aria-hidden="true">' +
+          '<path d="M14 104H150V42h18v80H14Z" class="real-platform"/>' +
+          '<path d="M14 104 150 42" class="real-slope"/>' +
+          '<path d="M14 104h18v-8" class="tri-corner"/>' +
+          '<circle cx="14" cy="104" r="5" class="tri-vertex"/>' +
+          '<circle cx="150" cy="42" r="5" class="tri-vertex"/></svg>',
+        aria: App.i18n.t('realExampleAria.ramp')
+      };
+    }
+    return {
+      html: '<svg viewBox="0 0 180 130" class="real-life-svg" aria-hidden="true">' +
+        '<path d="M38 58v58h104V58" class="real-platform"/>' +
+        '<path d="M20 62 90 12l70 50" class="real-roof"/>' +
+        '<path d="M20 62h70" class="real-guide"/>' +
+        '<path d="M90 62v-12h12" class="tri-corner"/>' +
+        '<circle cx="90" cy="62" r="5" class="tri-vertex"/></svg>',
+      aria: App.i18n.t('realExampleAria.roof')
+    };
+  }
+
+  function paintRealExample() {
+    var examples = ['ladder', 'ramp', 'roof'];
+    var id = examples[realIndex];
+    var picture = realExamplePicture(id);
+    realVisualEl.innerHTML = picture.html;
+    realVisualEl.setAttribute('role', 'img');
+    realVisualEl.setAttribute('aria-label', picture.aria);
+    realCaptionEl.textContent = App.i18n.t('realExample.' + id);
+    $('#realPrev').setAttribute('aria-label', App.i18n.t('galleryPrevious'));
+    $('#realNext').setAttribute('aria-label', App.i18n.t('galleryNext'));
+    $('#realBack').textContent = App.i18n.t('realBack');
+    $('#realContinue').textContent = App.i18n.t(lessonReturnTo === 'menu'
+      ? 'realContinue' : 'btnReturnQuestion');
   }
 
   /* A short visual reference comes before practice and stays one tap away
@@ -716,6 +768,7 @@
   }
 
   function showLesson(returnTo) {
+    lessonReturnTo = returnTo;
     var picture = lessonPicture();
     learnTitleEl.textContent = App.i18n.t('activity.' + activity.id + '.name');
     learnContextEl.textContent = App.i18n.t('activity.' + activity.id + '.instruction');
@@ -725,9 +778,15 @@
     learnRuleEl.textContent = App.i18n.t('activity.' + activity.id + '.lessonRule');
     $('#btnStartLesson').textContent = App.i18n.t('btnStartLesson');
     $('#btnReturnQuestion').textContent = App.i18n.t('btnReturnQuestion');
+    $('#btnRealExamples').textContent = App.i18n.t('btnRealExamples');
     $('#btnStartLesson').classList.toggle('hidden', returnTo !== 'menu');
     $('#btnReturnQuestion').classList.toggle('hidden', returnTo !== 'game');
     show(screenLearn);
+  }
+
+  function showRealExamples() {
+    paintRealExample();
+    show(screenReal);
   }
 
   /* One test contains all the activity's question types. */
@@ -951,6 +1010,20 @@
 
   $('#btnStartLesson').addEventListener('click', function () { startRound(levelFromProgress()); });
   $('#btnReturnQuestion').addEventListener('click', function () { show(screenGame); });
+  $('#btnRealExamples').addEventListener('click', showRealExamples);
+  $('#realPrev').addEventListener('click', function () {
+    realIndex = (realIndex + 2) % 3;
+    paintRealExample();
+  });
+  $('#realNext').addEventListener('click', function () {
+    realIndex = (realIndex + 1) % 3;
+    paintRealExample();
+  });
+  $('#realBack').addEventListener('click', function () { showLesson(lessonReturnTo); });
+  $('#realContinue').addEventListener('click', function () {
+    if (lessonReturnTo === 'menu') startRound(levelFromProgress());
+    else show(screenGame);
+  });
   $('#btnReference').addEventListener('click', function () { showLesson('game'); });
   $('#btnNext').addEventListener('click', next);
   $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });

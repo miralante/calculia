@@ -16,6 +16,22 @@
     btnReference: 'Ver el ejemplo',
     btnStartLesson: 'Empezar a practicar →',
     btnReturnQuestion: 'Volver a la pregunta →',
+    btnRealExamples: 'Ver en la vida real →',
+    realTitle: 'La trigonometría en la vida real',
+    realBack: '← Volver al ejemplo',
+    realContinue: 'Empezar a practicar →',
+    galleryPrevious: 'Anterior',
+    galleryNext: 'Siguiente',
+    realExample: {
+      ladder: 'La inclinación ayuda a colocar la escalera con seguridad y saber hasta dónde llega.',
+      ramp: 'La inclinación ayuda a saber si una rampa es demasiado empinada.',
+      roof: 'La inclinación ayuda a dar forma al tejado y a colocar sus apoyos.'
+    },
+    realExampleAria: {
+      ladder: 'Escalera inclinada apoyada en una pared y sobre el suelo.',
+      ramp: 'Rampa inclinada que sube desde el suelo hasta una plataforma.',
+      roof: 'Casa con tejado inclinado y una línea que muestra la altura.'
+    },
     btnMenu: 'Ver el ejemplo',
     otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',

@@ -16,6 +16,22 @@
     btnReference: 'See the example',
     btnStartLesson: 'Start practising →',
     btnReturnQuestion: 'Back to the question →',
+    btnRealExamples: 'See it in real life →',
+    realTitle: 'Trigonometry in real life',
+    realBack: '← Back to the example',
+    realContinue: 'Start practising →',
+    galleryPrevious: 'Previous',
+    galleryNext: 'Next',
+    realExample: {
+      ladder: 'The slope helps you place a ladder safely and see how high it reaches.',
+      ramp: 'The slope helps you tell whether a ramp is too steep.',
+      roof: 'The slope helps shape a roof and place its supports.'
+    },
+    realExampleAria: {
+      ladder: 'A sloping ladder leaning against a wall and resting on the floor.',
+      ramp: 'A sloping ramp rising from the floor to a platform.',
+      roof: 'A house with a sloping roof and a line showing its height.'
+    },
     btnMenu: 'See the example',
     otherLevel: 'Choose another level',
     endSummary: 'You answered {n} questions of {activity}. Now you have {stars} stars.',
