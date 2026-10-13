@@ -49,20 +49,26 @@
        was just re-loading the same content. */
     famousTitle: 'In real life',
     famousSubtitle: 'Two places where ordinals make sense:',
-    back: '← Back',
-    continue: 'Next →',
+    /* The 'back: ← Back' for screen 2 used to live here: back
+       navigation between screens (1→2→3→4→5) no longer exists. Only
+       the header's '← Volver' is left, which goes to the Calculia
+       home page. The keys back/backToReminder/backToLevels/
+       backToExamples were removed. */
+    continue: 'Remember →',
 
-    /* ---------- Screen 3: the reminder ---------- */
-    backToExamples: '← Back to the examples',
-    reminderTitle: 'Remember the whole series',
+    /* ---------- Screen 3: the reminder ----------
+       Used to be 'Remember the whole series'. 'The whole series' was
+       dropped — the screen is not a series, it is a reference table
+       with all the taught ordinals. The button on screen 2 that
+       takes you here is now 'Remember' so it matches the name of the
+       screen it leads to. */
+    reminderTitle: 'Remember',
     reminderText: 'Each ordinal goes with its number.',
     ruleMatchTitle: 'Each ordinal goes with its number:',
     start: 'Start practising →',
-    backToReminder: '← Back to the reminder',
 
     /* ---------- Screen 4: the steps ---------- */
     chooseLevel: 'Choose a step.',
-    backToLevels: '← Back to the steps',
     chooseAnother: 'Choose another step',
     btnHome: 'Back to the start',
 

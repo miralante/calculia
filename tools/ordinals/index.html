@@ -88,8 +88,7 @@
         </div>
 
         <div class="row intro-buttons">
-          <button type="button" class="btn btn-secondary" id="famousBackBtn" data-i18n="back">← Anterior</button>
-          <button type="button" class="btn" id="famousNextBtn" data-i18n="continue">Siguiente →</button>
+          <button type="button" class="btn" id="famousNextBtn" data-i18n="continue">Recuerda →</button>
         </div>
       </section>
 
@@ -97,12 +96,10 @@
            color (forma corta · palabra · lugar), y las dos reglas con
            ejemplos calculados por app.js. -->
       <section id="screenReminder" class="stack hidden">
-        <div class="row center-row">
-          <!-- Botón de vuelta DENTRO del recorrido, distinto del
-               "← Volver" de la cabecera: dos botones iguales
-               apilados parecen un error en vez de dos niveles. -->
-          <button type="button" class="btn btn-secondary" id="reminderBack" data-i18n="backToExamples">← Volver a los ejemplos</button>
-        </div>
+        <!-- Antes había aquí un botón "← Volver a los ejemplos" que
+             llevaba a Pantalla 1): se ha quitado. La persona usa
+             el "← Volver" global de la cabecera para volver a la
+             portada de Calculia. -->
         <div class="card reference-card stack">
           <h2 class="reference-title" data-i18n="reminderTitle">Recuerda la serie entera</h2>
           <p class="reference-text" data-i18n="reminderText">Cada ordinal va con su número.</p>
@@ -125,18 +122,19 @@
       <!-- Pantalla 4: los grupos de pasos. Tres botones, no cinco:
            cada grupo encadena sus pasos solo. -->
       <section id="screenLevels" class="stack hidden">
-        <div class="row">
-          <button type="button" class="btn btn-secondary" id="levelsBack" data-i18n="backToReminder">← Volver al recordatorio</button>
-        </div>
+        <!-- Antes había aquí un botón "← Volver al recordatorio" que
+             llevaba a Pantalla 3 (Recuerda). Se ha quitado: solo
+             queda el "← Volver" global de la cabecera para volver
+             a la portada de Calculia. -->
         <h2 data-i18n="chooseLevel">Elige un paso.</h2>
         <div class="practice-grid" id="levelsGrid"></div>
       </section>
 
       <!-- Pantalla de juego. -->
       <section id="screenQuiz" class="stack hidden">
-        <div class="row">
-          <button type="button" class="btn btn-secondary" id="backLevelsBtn" data-i18n="backToLevels">← Volver a los pasos</button>
-        </div>
+        <!-- Antes había aquí un botón "← Volver a los pasos" que
+             llevaba a Pantalla 4. Se ha quitado: solo queda el
+             "← Volver" global de la cabecera. -->
         <div class="progress-bar" aria-hidden="true">
           <div class="progress-fill" id="progressFill"></div>
         </div>

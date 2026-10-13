@@ -55,20 +55,26 @@
        era recargar lo mismo. */
     famousTitle: 'En la vida real',
     famousSubtitle: 'Dos sitios donde los ordinales cobran sentido:',
-    back: '← Anterior',
-    continue: 'Siguiente →',
+    /* Antes había aquí un 'back: Anterior' para Pantalla 2: la navegación
+       hacia atrás entre pantallas (1→2→3→4→5) ya no existe. Solo
+       queda el "← Volver" de la cabecera, que va a la portada de
+       Calculia. Las claves back/backToReminder/backToLevels/
+       backToExamples se quitan. */
+    continue: 'Recuerda →',
 
-    /* ---------- Pantalla 3: recordatorio ---------- */
-    backToExamples: '← Volver a los ejemplos',
-    reminderTitle: 'Recuerda la serie entera',
+    /* ---------- Pantalla 3: recordatorio ----------
+       Antes 'Recuerda la serie entera'. Se quita 'la serie entera':
+       la pantalla 3 NO es una serie, es una tabla de referencia
+       con todos los ordinales que se enseñan. El botón de Pantalla 2
+       que lleva aquí se llama ahora 'Recuerda' para que coincida con
+       el nombre de la pantalla a la que se entra. */
+    reminderTitle: 'Recuerda',
     reminderText: 'Cada ordinal va con su número.',
     ruleMatchTitle: 'Cada ordinal va con su número:',
     start: 'Empezar a practicar →',
-    backToReminder: '← Volver al recordatorio',
 
     /* ---------- Pantalla 4: los pasos ---------- */
     chooseLevel: 'Elige un paso.',
-    backToLevels: '← Volver a los pasos',
     chooseAnother: 'Elegir otro paso',
     btnHome: 'Volver al inicio',
 

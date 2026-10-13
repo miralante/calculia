@@ -625,6 +625,6 @@
   .quiz-shown { font-size: 38px; }
   .queue-member, .queue-start, .queue-pointer, .queue-start-spacer { width: 34px; font-size: 1.4rem; }
 }
-/* Centred instead of left-hugging the screen edge. A lone button
-   lands centred; back/next stay side by side. Same as scale. */
+/* Centra el botón de "Recuerda →" (Pantalla 2). Antes convivía
+   con un botón de "← Anterior" que ya no existe. */
 .intro-buttons { justify-content: center; gap: var(--espacio); }

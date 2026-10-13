@@ -891,14 +891,16 @@
     }
   });
   $('#famousNext2').addEventListener('click', function () { famousStep(1); });
-  $('#famousBackBtn').addEventListener('click', function () { switchTo(introScreen); });
+  /* Antes había aquí listeners para los botones "← Anterior" de
+     Pantalla 2 (famousBackBtn), "← Volver a los ejemplos" de
+     Pantalla 3 (reminderBack), "← Volver al recordatorio" de
+     Pantalla 4 (levelsBack) y "← Volver a los pasos" de Pantalla 5
+     (backLevelsBtn). Se quitaron: solo queda el "← Volver" global
+     de la cabecera para volver a la portada de Calculia. */
   $('#famousNextBtn').addEventListener('click', function () { switchTo(reminderScreen); });
 
-  $('#reminderBack').addEventListener('click', function () { switchTo(famousScreen); });
   $('#referenceNext').addEventListener('click', function () { switchTo(levelsScreen); });
 
-  $('#levelsBack').addEventListener('click', function () { switchTo(reminderScreen); });
-  $('#backLevelsBtn').addEventListener('click', function () { switchTo(levelsScreen); });
   $('#next').addEventListener('click', next);
   $('#replayBtn').addEventListener('click', function () { startLevel(currentLevel); });
   $('#btnChooseLevel').addEventListener('click', function () { switchTo(levelsScreen); });
