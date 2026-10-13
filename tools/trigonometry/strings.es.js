@@ -40,8 +40,8 @@
     activity: {
       trigonometria: {
         name: 'Trigonometría',
-        instruction: 'Compara dos escaleras del mismo largo.',
-        lessonRule: 'La más recta llega más alto.'
+        instruction: 'La escalera, la pared y el suelo forman un triángulo. La escalera es el lado inclinado: la hipotenusa.',
+        lessonRule: 'La pared muestra cuánto sube la escalera; el suelo, cuánto avanza. La esquina entre pared y suelo forma un ángulo recto. Compara cuánto sube y cuánto avanza para ver la inclinación: con la misma escalera, cuanto más sube, más recta está.'
       }
     },
     level: {

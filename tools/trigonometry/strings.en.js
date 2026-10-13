@@ -38,8 +38,8 @@
     activity: {
       trigonometria: {
         name: 'Trigonometry',
-        instruction: 'Compare two ladders of the same length.',
-        lessonRule: 'The straighter one reaches higher.'
+        instruction: 'The ladder, wall and floor form a triangle. The ladder is the sloping side: the hypotenuse.',
+        lessonRule: 'The wall shows how high the ladder reaches; the floor shows how far it goes. The corner between the wall and floor is a right angle. Compare how high it reaches with how far it goes to see the steepness: with the same ladder, the higher it reaches, the steeper it is.'
       }
     },
     level: {
