@@ -24,7 +24,7 @@
       },
       rayita: {
         title: 'The mark',
-        text: 'Each mark is worth the same. That is what a step is.'
+        text: 'Each mark is worth the same. Each mark is a unit of measure.'
       },
       llegar: {
         title: 'Reaching the mark',
@@ -32,7 +32,7 @@
       },
       dibujo: {
         title: 'The scale of a drawing',
-        text: 'A plan is smaller than real life. The scale says how much smaller.'
+        text: 'A drawing is smaller than real life. The scale says how much.'
       }
     },
 

@@ -313,8 +313,9 @@
   /* The pencil lying over the ruler between two numbers: what the marks
      it passes are, which is one more than how many marks a person can
      point at when they are careless. */
-  function objectSpanSvg(rec, unit) {
-    var px = RULER.w / rec.to;
+  function objectSpanSvg(rec, unit, rulerTo) {
+    if (rulerTo === undefined || rulerTo < rec.to) rulerTo = Math.max(10, rec.to);
+    var px = RULER.w / rulerTo;
     var fx = RULER.x + rec.from * px;
     var tx = RULER.x + rec.to * px;
     var guides = '<line class="span-guide" x1="' + fx + '" y1="48" x2="' + fx +
@@ -324,7 +325,7 @@
     var pencil = '<rect class="span-object" x="' + fx + '" y="52" width="' + (tx - fx) +
       '" height="24" rx="5"/>';
     return svgWrap(RULE_BOX, rulerUnit(unit) + guides + pencil +
-      rulerFace(0, rec.to, 1, 1, undefined));
+      rulerFace(0, rulerTo, 1, 1, undefined));
   }
 
   /* "The object reaches a mark" as a thing you can see: a pencil LYING
@@ -339,8 +340,9 @@
      and a green block with nothing on it does not read as a pencil. The
      unit sits above the pencil instead of in rulerUnit()'s usual place,
      which is inside the pencil. */
-  function conceptReachSvg(rec, unit) {
-    var px = RULER.w / rec.to;
+  function conceptReachSvg(rec, unit, rulerTo) {
+    if (rulerTo === undefined || rulerTo < rec.to) rulerTo = rec.to;
+    var px = RULER.w / rulerTo;
     var fx = RULER.x + rec.from * px;
     var tx = RULER.x + rec.to * px;
     var yTop = 56;
@@ -358,7 +360,7 @@
       '" y2="' + RULER.top + '"/>';
     return svgWrap(RULE_BOX,
       '<text class="ruler-unit" x="' + RULER.x + '" y="36">' + unit + '</text>' +
-      guides + pencil + rulerFace(0, rec.to, 1, 1, rec.to));
+      guides + pencil + rulerFace(0, rulerTo, 1, 1, rec.to));
   }
 
   /* The idea behind the plan scale, as a picture with THREE rows instead
@@ -485,7 +487,7 @@
          zero and ends on the reached mark, so the sentence "esa rayita
          es su medida" is a thing you can see. The mark it reaches is the
          same taller, coloured one a question uses. */
-      return conceptReachSvg({ from: 0, to: 6 }, 'cm');
+      return conceptReachSvg({ from: 0, to: 6 }, 'cm', 10);
     }
     /* id === 'dibujo': the plan's scale, which is a step too â€” one
        centimetre of the drawing for so much of real life. Here both

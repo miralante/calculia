@@ -24,7 +24,7 @@
       },
       rayita: {
         title: 'La rayita',
-        text: 'Cada rayita vale lo mismo. A eso le llaman un paso.'
+        text: 'Cada rayita vale lo mismo. Cada rayita es una unidad de medida.'
       },
       llegar: {
         title: 'Llegar a la rayita',
@@ -32,7 +32,7 @@
       },
       dibujo: {
         title: 'La escala de un dibujo',
-        text: 'Un plano es más pequeño que la vida de verdad. La escala dice cuánto más pequeño.'
+        text: 'Un dibujo es más pequeño que la vida de verdad. La escala dice cuánto.'
       }
     },
 
