@@ -124,7 +124,7 @@
       planBackAria: 'En el plano, cada centímetro son {key} {unit}. De verdad son {real} {unit}.',
       planBackHint: 'Reparte los {real} {unit} en trozos de {key}.',
       planBackWrong: 'En el plano son {real} cm de verdad.',
-      planLabel: 'Plano',
+      planLabel: 'Mapa',
       planPath: 'El camino',
       planReal: 'Vida real',
       unitCentimetre: 'centímetros',

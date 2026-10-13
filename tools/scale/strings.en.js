@@ -124,7 +124,7 @@
       planBackAria: 'On the plan, each centimetre is {key} {unit}. In real life it is {real} {unit}.',
       planBackHint: 'Share the {real} {unit} into pieces of {key}.',
       planBackWrong: 'On the plan it is {real} cm in real life.',
-      planLabel: 'Plan',
+      planLabel: 'Map',
       planPath: 'The road',
       planReal: 'Real life',
       unitCentimetre: 'centimetres',

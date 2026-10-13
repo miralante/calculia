@@ -492,7 +492,7 @@
     /* id === 'dibujo': the plan's scale, which is a step too â€” one
        centimetre of the drawing for so much of real life. Here both
        halves at once, with the equation that joins them. */
-    return planCompareSvg({ key: 50, unit: 'm', cm: 3, real: 150 });
+    return planCompareSvg({ key: 1, unit: 'km', cm: 3, real: 3 });
   }
 
   function paintConcept() {
