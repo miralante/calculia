@@ -231,7 +231,7 @@
     var corners = { B: B, C: C };
     var body = '';
 
-    if (!o.small) {
+    if (!o.small || o.grid) {
       /* The grid the triangle stands on. It is what makes a leg
          countable, so it is drawn under the triangle and never on top. */
       for (var r = 0; r < t.up; r++) {
@@ -498,29 +498,42 @@
       };
     },
 
-    /* Do these two share the reason? Same lean, different size: counting
-       both shows the two numbers keep their proportion. */
+    /* Compare two candidates with a reference. One has the same rise/run
+       and one does not, so both possibilities are visible at once. */
     sameReasonJudge: function (nv) {
       var pair = App.utils.drawRound(nv.id, DATA.reasonPairs);
-      var wantSame = App.utils.drawRound(nv.id + 'same', [true, false]);
       var other = App.utils.drawRound(nv.id + 'other',
         DATA.triangles.filter(function (t) { return !sameReason(t, pair); }));
-      var right = wantSame ? doubled(pair) : other;
-      var yes = sameReason(pair, right);
+      var candidates = App.utils.shuffle([
+        { triangle: doubled(pair), same: true },
+        { triangle: other, same: false }
+      ]).map(function (candidate, i) {
+        candidate.letter = i === 0 ? 'A' : 'B';
+        return candidate;
+      });
+      var asked = App.utils.drawRound(nv.id + 'asked', [true, false]);
+      var target = candidates.filter(function (candidate) { return candidate.same === asked; })[0];
       return {
-        prompt: App.i18n.t('gen.sameReason'),
+        prompt: App.i18n.t('gen.sameReason').replace(/\{x\}/g, target.letter),
         hint: App.i18n.t('gen.socraticSameReason'),
-        visual: '<div class="tri-stage pair-stage">' +
-          triangleSvg(pair, {}) + triangleSvg(right, {}) + '</div>',
-        visualAria: App.i18n.t('gen.twoAria')
+        visual: '<div class="reason-compare-stage">' +
+          '<div class="reason-example reason-reference"><span class="reason-example-label">' +
+          App.i18n.t('gen.sameInclinationExample') + '</span>' + triangleSvg(pair, {}) + '</div>' +
+          candidates.map(function (candidate) {
+            return '<div class="reason-example"><span class="reason-example-label">' +
+              candidate.letter + '</span>' + triangleSvg(candidate.triangle, { small: true, grid: true }) + '</div>';
+          }).join('') + '</div>',
+        visualAria: App.i18n.t('gen.threeAria')
           .replace(/\{a\}/g, pair.up).replace(/\{b\}/g, pair.along)
-          .replace(/\{c\}/g, right.up).replace(/\{d\}/g, right.along),
+          .replace(/\{c\}/g, candidates[0].triangle.up).replace(/\{d\}/g, candidates[0].triangle.along)
+          .replace(/\{e\}/g, candidates[1].triangle.up).replace(/\{f\}/g, candidates[1].triangle.along)
+          .replace(/\{x\}/g, candidates[0].letter).replace(/\{y\}/g, candidates[1].letter),
         legend: App.i18n.t('gen.sameReasonHint'),
         options: App.utils.shuffle([true, false].map(function (v) {
           return {
             html: '<span class="reason-name">' + App.i18n.t(v ? 'answer.yes' : 'answer.no') + '</span>',
             aria: App.i18n.t(v ? 'answer.yes' : 'answer.no'),
-            correct: v === yes
+            correct: v === target.same
           };
         })),
         inline: true
@@ -563,7 +576,7 @@
         legend: App.i18n.t('gen.whichSameReasonHint'),
         options: App.utils.shuffle([right].concat(wrongs).map(function (t) {
           return {
-            html: triangleSvg(t, { small: true }),
+            html: triangleSvg(t, { small: true, grid: true }),
             aria: App.i18n.t('gen.reasonOf').replace(/\{up\}/g, t.up).replace(/\{along\}/g, t.along),
             correct: sameReason(t, pair)
           };
@@ -575,12 +588,7 @@
     /* Compare two ladders of the same length. Their height on the wall
        makes the difference in steepness visible without a calculation. */
     compareLadders: function (nv) {
-      var pairs = [
-        [DATA.ladders[0], DATA.ladders[1]],
-        [DATA.ladders[0], DATA.ladders[2]],
-        [DATA.ladders[1], DATA.ladders[2]]
-      ];
-      var pair = App.utils.drawRound(nv.id, pairs);
+      var pair = DATA.ladders.filter(function (ladder) { return ladder.run > 0; });
       var letters = App.utils.shuffle(App.i18n.t('gen.ladderLetters').split('')).slice(0, 2);
       var named = pair.map(function (ladder, i) {
         return { ladder: ladder, letter: letters[i] };

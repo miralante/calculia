@@ -78,7 +78,6 @@ var DATA = {
   reasonPairs: [
     { id: 'p34', up: 3, along: 4 },
     { id: 'p23', up: 2, along: 3 },
-    { id: 'p12', up: 1, along: 2 },
-    { id: 'p11', up: 1, along: 1 }
+    { id: 'p12', up: 1, along: 2 }
   ]
 };

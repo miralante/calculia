@@ -50,6 +50,17 @@
    read as two separate drawings, not as one broken one, so the gap is
    generous and each keeps its own box. */
 .pair-stage { gap: 1.5rem; }
+.reason-compare-stage {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  justify-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+.reason-example { display: flex; min-width: 0; flex-direction: column; align-items: center; text-align: center; }
+.reason-reference { grid-column: 1 / -1; }
+.reason-example-label { margin-bottom: 0.35rem; font-weight: 700; }
 
 .tri-svg { overflow: visible; }
 
