@@ -18,70 +18,29 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-    <!-- Pantalla 1: cuatro tarjetas con los tipos de números.
-         Tocar cada tarjeta no hace nada extra: la lección está en
-         el cuerpo de cada tarjeta. -->
-    <section id="screenIntro" class="stack">
+    <!-- Galería única: 7 slides seguidas, sin secciones separadas.
+         Mismo flujo que Formas: una sola card visible, ← / → para
+         cambiar. El último slide muestra el botón "Terminar". -->
+    <section id="screenGallery" class="stack">
       <div class="row center-row">
-        <p class="instruction" data-i18n="introIntro">Toca cada tarjeta para verla con más detalle.</p>
-      </div>
-      <h2 class="intro-title" data-i18n="introTitle">Hay cuatro tipos de números</h2>
-      <div class="intro-grid">
-        <article class="intro-card intro-card-natural" id="introNatural">
-          <h3 data-i18n="introNaturalTitle">Naturales</h3>
-          <p data-i18n="introNaturalBody">Cuentan lo que hay. Empiezan en 0 y suben: 0, 1, 2, 3, 4, 5…</p>
-          <p class="intro-examples" data-i18n="introNaturalExamples">Ejemplos: 0 · 1 · 5 · 12 · 100 · 1.000</p>
-        </article>
-        <article class="intro-card intro-card-entero" id="introEntero">
-          <h3 data-i18n="introEnteroTitle">Enteros</h3>
-          <p data-i18n="introEnteroBody">Como los naturales, pero también bajan por debajo de 0: …−3, −2, −1, 0, 1, 2…</p>
-          <p class="intro-examples" data-i18n="introEnteroExamples">Ejemplos: −5 · −1 · 0 · 3 · −12</p>
-        </article>
-        <article class="intro-card intro-card-decimal" id="introDecimal">
-          <h3 data-i18n="introDecimalTitle">Decimales</h3>
-          <p data-i18n="introDecimalBody">Tienen una parte pequeña después de la coma: 0,5 es "cero y cinco décimas".</p>
-          <p class="intro-examples" data-i18n="introDecimalExamples">Ejemplos: 0,5 · 1,25 · 3,14 · 2,7</p>
-        </article>
-        <article class="intro-card intro-card-fraccion" id="introFraccion">
-          <h3 data-i18n="introFraccionTitle">Fracciones</h3>
-          <p data-i18n="introFraccionBody">Una parte de un todo. Se escriben con un numerador y un denominador: 1/2 es "una de dos partes".</p>
-          <p class="intro-examples" data-i18n="introFraccionExamples">Ejemplos: 1/2 · 3/4 · 2/5 · 7/8</p>
-        </article>
-      </div>
-      <button type="button" class="btn" id="introContinue" data-i18n="introContinue">Ver las comparaciones →</button>
-    </section>
-
-    <!-- Pantalla 2: tres slides que comparan los naturales con cada
-         uno de los otros tres tipos. Misma mecánica que la galería
-         de Formas: una sola diapositiva visible, botones ←/→. -->
-    <section id="screenSlides" class="hidden stack">
-      <div class="row center-row">
-        <p class="instruction" data-i18n="slidesIntro">Mira cómo se relaciona cada tipo con los naturales.</p>
+        <p class="instruction" data-i18n="galleryIntro">Mira y pasa las tarjetas.</p>
       </div>
       <div class="card slide-card">
         <h2 class="slide-title" id="slideTitle"></h2>
-        <p class="slide-body" id="slideBody"></p>
         <div class="slide-visual" id="slideVisual" role="img" aria-hidden="true"></div>
+        <p class="slide-real" id="slideReal"></p>
       </div>
       <div class="carousel-controls">
         <button type="button" class="btn btn-secondary" id="slidePrev" aria-label="Anterior">←</button>
-        <span class="slide-counter" id="slideCounter">1 / 3</span>
+        <span class="slide-counter" id="slideCounter">1 / 7</span>
         <button type="button" class="btn btn-secondary" id="slideNext" aria-label="Siguiente">→</button>
       </div>
-      <button type="button" class="btn hidden" id="slidesContinue" data-i18n="slidesContinue">Ver en la vida real →</button>
+      <button type="button" class="btn hidden" id="slideFinish" data-i18n="finish">Terminar →</button>
     </section>
 
-    <!-- Pantalla 3: cuatro tarjetas con ejemplos de la vida real,
-         una por tipo. No es un test: la persona solo mira. -->
-    <section id="screenReal" class="hidden stack">
-      <div class="row center-row">
-        <p class="instruction" data-i18n="realIntro">Cada tipo aparece en la vida diaria. Mira los ejemplos.</p>
-      </div>
-      <div class="real-grid" id="realGrid"></div>
-      <button type="button" class="btn" id="realContinue" data-i18n="realContinue">Terminar →</button>
-    </section>
-
-    <!-- Pantalla final: sin test, solo se cierra la actividad. -->
+    <!-- Cierre: sin test. +1 estrella por completar la actividad
+         una vez en la sesión; los siguientes "Ver otra vez" ya
+         no suman. -->
     <section id="screenEnd" class="hidden centered stack" aria-live="polite">
       <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="endTitle">¡Has terminado!</h2>

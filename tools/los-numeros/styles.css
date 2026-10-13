@@ -6,78 +6,33 @@
   background: var(--mod-razonamiento);
 }
 
-/* ---- Pantalla de introducción: cuatro tarjetas de los tipos ---- */
-.intro-title {
-  text-align: center;
-  color: var(--color-texto);
-  margin: var(--espacio) 0 0;
-  font-size: var(--texto-grande);
-}
+/* ---- Galería única de 7 slides (mismo flujo que Formas) ----
+   Una sola card visible a la vez. El visual ocupa la mayor
+   parte de la altura: el texto se reduce a un título y, en
+   los slides de tipo, a una sola línea de vida real. */
 
-.intro-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--espacio);
-  margin-top: var(--espacio);
-}
-@media (min-width: 560px) {
-  .intro-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-.intro-card {
-  border: 3px solid var(--color-borde);
-  border-radius: var(--radio);
-  padding: var(--espacio);
-  background: var(--color-superficie);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.intro-card h3 { margin: 0; font-size: var(--texto-grande); }
-.intro-card p { margin: 0; }
-.intro-card .intro-examples {
-  font-weight: 700;
-  color: var(--color-texto-suave);
-  font-size: var(--texto-pequeno);
-}
-
-.intro-card-natural { border-color: var(--mod-secuencia); }
-.intro-card-natural h3 { color: var(--mod-secuencia); }
-.intro-card-entero  { border-color: var(--mod-coordinacion); }
-.intro-card-entero  h3 { color: var(--mod-coordinacion); }
-.intro-card-decimal { border-color: var(--mod-emocional); }
-.intro-card-decimal h3 { color: var(--mod-emocional); }
-.intro-card-fraccion { border-color: var(--mod-memoria); }
-.intro-card-fraccion h3 { color: var(--mod-memoria); }
-
-/* ---- Pantalla de comparaciones: carrusel de slides ----
-   Cada slide es una tarjeta con título, cuerpo y un SVG. */
 .slide-card {
   border-color: var(--mod-razonamiento-suave);
   display: flex;
   flex-direction: column;
   gap: var(--espacio);
+  align-items: center;
+  min-height: 280px;
 }
 
 .slide-title {
   margin: 0;
   font-size: var(--texto-grande);
   color: var(--color-texto);
-}
-
-.slide-body {
-  margin: 0;
-  color: var(--color-texto-suave);
-  font-size: var(--texto-base);
-  line-height: 1.4;
+  text-align: center;
 }
 
 .slide-visual {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: var(--espacio);
-  margin-top: var(--espacio);
+  justify-content: center;
+  width: 100%;
+  margin: var(--espacio) 0;
 }
 .slide-visual svg {
   width: 100%;
@@ -85,24 +40,29 @@
   height: auto;
 }
 
-.slide-legend {
+/* En la comparación N↔E las dos rectas se apilan verticalmente. */
+.slide-visual .comp-stack {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  font-size: var(--texto-pequeno);
-  color: var(--color-texto-suave);
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  max-width: 600px;
 }
-.legend-dot {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  margin-right: 4px;
-  vertical-align: middle;
-  border: 1px solid var(--color-texto);
+.slide-visual .comp-line svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
+.slide-real {
+  margin: 0;
+  font-size: var(--texto-base);
+  color: var(--color-texto-suave);
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ---- Controles del carrusel (← / → / contador) ---- */
 .carousel-controls {
   display: flex;
   align-items: center;
@@ -124,42 +84,7 @@
   text-align: center;
 }
 
-/* ---- Pantalla de vida real: cuatro tarjetas, una por tipo ---- */
-.real-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--espacio);
-  margin-top: var(--espacio);
-}
-@media (min-width: 560px) {
-  .real-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-.real-card {
-  border: 3px solid var(--color-borde);
-  border-radius: var(--radio);
-  padding: var(--espacio);
-  background: var(--color-superficie);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: center;
-}
-.real-card h3 { margin: 0; font-size: var(--texto-grande); }
-.real-card .real-emoji { font-size: 3rem; line-height: 1; }
-.real-card .real-icon { margin: 0; color: var(--color-texto); font-size: var(--texto-base); }
-.real-card .real-examples { margin: 0; font-weight: 700; color: var(--color-texto-suave); font-size: var(--texto-pequeno); }
-
-.real-card-natural  { border-color: var(--mod-secuencia); }
-.real-card-natural  h3 { color: var(--mod-secuencia); }
-.real-card-entero   { border-color: var(--mod-coordinacion); }
-.real-card-entero   h3 { color: var(--mod-coordinacion); }
-.real-card-decimal  { border-color: var(--mod-emocional); }
-.real-card-decimal  h3 { color: var(--mod-emocional); }
-.real-card-fraccion { border-color: var(--mod-memoria); }
-.real-card-fraccion h3 { color: var(--mod-memoria); }
-
-/* ---- Pantalla final ---- */
+/* ---- Cierre ---- */
 #screenEnd .transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
