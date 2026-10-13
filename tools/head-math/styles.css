@@ -1,0 +1,36 @@
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+/* Operation menu (no level picker: all three modes go straight to quiz). */
+.operation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--espacio); }
+.operation-btn { min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: var(--mod-razonamiento); text-align: center; }
+.operation-btn small { font-size: var(--texto-pequeno); font-weight: 400; }
+.operation-icon { font-size: 42px; line-height: 1; }
+
+/* Dots visual */
+.visual-card { display: flex; flex-direction: column; gap: var(--espacio); align-items: flex-start; padding: var(--espacio); border: 3px solid var(--mod-razonamiento-suave); border-radius: var(--radio); background: var(--color-superficie); }
+.visual-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.group-stack { display: flex; flex-direction: column; gap: 8px; }
+.dot-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.dot { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; }
+.dot-removed { opacity: 0.4; position: relative; }
+.dot-removed::after { content: '✕'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--color-texto); font-size: 15px; font-weight: 700; }
+.ten-frame { padding: 6px; border: 3px solid var(--mod-razonamiento); border-radius: var(--radio); background: var(--mod-razonamiento-suave); }
+.visual-sign { font-size: var(--texto-grande); font-weight: 700; color: var(--color-texto-suave); }
+
+/* Quiz */
+.task-card { border-color: var(--mod-razonamiento-suave); }
+.equation { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
+.option-row { display: flex; gap: var(--espacio); justify-content: center; flex-wrap: wrap; }
+.option-btn { min-width: 96px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
+.option-btn:disabled { opacity: 0.45; }
+.explanation { margin: 0; color: var(--color-texto-suave); }
+#nextFact { align-self: center; }
+
+.emoji-large { font-size: 96px; }
+
+@media (max-width: 640px) {
+  .operation-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 400px) {
+  .operation-grid { grid-template-columns: 1fr; }
+}

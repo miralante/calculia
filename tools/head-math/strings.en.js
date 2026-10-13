@@ -1,0 +1,43 @@
+(function () {
+  'use strict';
+
+  App.i18n.register({
+    title: '🧠 Head Math',
+    instruction: 'Count in your head, make 10 first or split into 10s with colored dots.',
+    chooseOperation: 'Choose what you want to practise.',
+    stepsName: 'Count in your head',
+    stepsDetail: 'Add or subtract 1, 2, 3, 5 or 10 without using your fingers.',
+    decomposeName: 'Break numbers apart',
+    decomposeDetail: 'Make 10 first: 7 + 5 is 7 + 3 and 2 more.',
+    divideName: 'Divide by 10',
+    divideDetail: 'Split the dots into rows of 10 and count the rows.',
+    chooseLevel: 'Choose a step.',
+    stepLevel: 'Add and subtract {n}',
+    progress: '{current} of {stars}',
+    hintStepsAdd: 'Hint: start at {a} and count {b} more, one at a time.',
+    hintStepsSubtract: 'Hint: start at {a} and count {b} backwards.',
+    hintStepsAddRow: 'Hint: count in {b}s, like the rows.',
+    hintStepsSubtractRow: 'Hint: take away one row of {b} and count what is left.',
+    hintDecompose: 'Hint: from {a} to 10 you need {toTen}. Make 10 first.',
+    hintDivide: 'Hint: each row has 10 dots. Count the rows.',
+    explainStepsAdd: '{a} and {b} more make {result}.',
+    explainStepsSubtract: '{a} minus {b} is {result}. The crossed-out dots no longer count.',
+    explainStepsAddRow: '{a} and one more row of {b} make {result}.',
+    explainStepsSubtractRow: '{a} minus one row of {b} makes {result}.',
+    explainDecompose: '{a} + {b} is the same as {a} + {toTen} + {rest}. First 10, then {rest} more: {result}.',
+    explainDivide: '{a} dots make {result} rows of 10. {a} ÷ 10 = {result}.',
+    visualStepsAdd: '{a} dots of one color and {b} dots of another color',
+    visualStepsSubtract: '{a} dots, {b} of them crossed out',
+    visualStepsAddRow: '{a} dots in rows of {b} and one more row of {b}',
+    visualStepsSubtractRow: '{a} dots in rows of {b}, with the last row crossed out',
+    visualDecompose: '{a} dots of one color, {toTen} of another to make 10 and {rest} more',
+    visualDivide: '{a} dots split into rows of 10',
+    roundSummary: 'You solved {count} operations. Now you have {stars} stars.',
+    chooseAnotherLevel: 'Choose another step',
+    changeOperation: 'Change activity',
+    "contexto": "You are doing sums in your head. You will add, subtract or break numbers apart with visual help.",
+    "pista": "🤔 Count the dots slowly. How many are there in total?",
+    "explicacion": "✅ That is how to count in your head. Next time you add or subtract, try with fingers or dots.",
+    "transfer": "This will help you with everyday sums: at the shop, sharing things out, counting change or at school."
+  }, 'en');
+})();

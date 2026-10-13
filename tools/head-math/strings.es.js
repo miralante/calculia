@@ -1,0 +1,43 @@
+(function () {
+  'use strict';
+
+  App.i18n.register({
+    title: '🧠 Cálculo de cabeza',
+    instruction: 'Cuenta de cabeza, llega a 10 primero o reparte entre 10 con puntos de colores.',
+    chooseOperation: 'Elige qué quieres practicar.',
+    stepsName: 'Contar de cabeza',
+    stepsDetail: 'Suma o resta 1, 2, 3, 5 o 10 sin usar los dedos.',
+    decomposeName: 'Descomponer números',
+    decomposeDetail: 'Llega primero a 10: 7 + 5 es 7 + 3 y 2 más.',
+    divideName: 'Dividir entre 10',
+    divideDetail: 'Reparte los puntos en filas de 10 y cuenta las filas.',
+    chooseLevel: 'Elige un paso.',
+    stepLevel: 'Sumar y restar {n}',
+    progress: '{current} de {stars}',
+    hintStepsAdd: 'Pista: empieza en {a} y cuenta {b} más, de uno en uno.',
+    hintStepsSubtract: 'Pista: empieza en {a} y cuenta {b} hacia atrás.',
+    hintStepsAddRow: 'Pista: cuenta de {b} en {b}, como las filas.',
+    hintStepsSubtractRow: 'Pista: quita una fila de {b} y cuenta lo que queda.',
+    hintDecompose: 'Pista: de {a} a 10 faltan {toTen}. Llega primero a 10.',
+    hintDivide: 'Pista: cada fila tiene 10 puntos. Cuenta las filas.',
+    explainStepsAdd: '{a} y {b} más son {result}.',
+    explainStepsSubtract: '{a} menos {b} son {result}. Los puntos tachados ya no se cuentan.',
+    explainStepsAddRow: '{a} y una fila más de {b} son {result}.',
+    explainStepsSubtractRow: '{a} menos una fila de {b} son {result}.',
+    explainDecompose: '{a} + {b} es lo mismo que {a} + {toTen} + {rest}. Primero 10, y {rest} más: {result}.',
+    explainDivide: '{a} puntos hacen {result} filas de 10. {a} ÷ 10 = {result}.',
+    visualStepsAdd: '{a} puntos de un color y {b} puntos de otro color',
+    visualStepsSubtract: '{a} puntos, con {b} tachados',
+    visualStepsAddRow: '{a} puntos en filas de {b} y una fila más de {b}',
+    visualStepsSubtractRow: '{a} puntos en filas de {b}, con la última fila tachada',
+    visualDecompose: '{a} puntos de un color, {toTen} de otro para llegar a 10 y {rest} más',
+    visualDivide: '{a} puntos repartidos en filas de 10',
+    roundSummary: 'Has resuelto {count} operaciones. Ahora tienes {stars} estrellas.',
+    chooseAnotherLevel: 'Elegir otro paso',
+    changeOperation: 'Cambiar de actividad',
+    "contexto": "Estás haciendo cuentas de cabeza. Vas a sumar, restar o descomponer números con ayuda visual.",
+    "pista": "🤔 Cuenta los puntos despacio. ¿Cuántos hay en total?",
+    "explicacion": "✅ Así se cuenta de cabeza. La próxima vez que sumes o restes, prueba con los dedos o con puntos.",
+    "transfer": "Esto te servirá para las cuentas del día a día: en la compra, al repartir, al contar el cambio o en el cole."
+  }, 'es');
+})();
