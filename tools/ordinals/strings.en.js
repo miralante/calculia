@@ -41,12 +41,14 @@
     nextArrow: '→',
 
     /* ---------- Screen 2: real life ----------
-       Four slides: two explicit lists (the most common 1-9, the
-       round ones 11/12/20/30) and two scenarios (building, queue).
-       The subtitle reflects that mix: the ones you hear most + two
-       examples in use. */
+       Two direct slides: the queue (the first one is at the front)
+       and the building (floors counted from the bottom up, with
+       up/down arrows to point at the current floor). The explicit
+       lists (1-9 and the round ones) were removed: the reminder on
+       screen 3 already shows the whole series, repeating them here
+       was just re-loading the same content. */
     famousTitle: 'In real life',
-    famousSubtitle: 'The most common ones and two places where they are used:',
+    famousSubtitle: 'Two places where ordinals make sense:',
     back: '← Back',
     continue: 'Next →',
 
@@ -121,20 +123,10 @@
          Same criterion as the Shapes gallery: the figure is shown with
          its name and nothing else.
 
-         The "aria" stays long for screen readers: what is hidden
-         visually is still read aloud. The "text" entries are kept
-         empty so the key is registered and es/en parity does not
+         The lista1a9 / listaRedondos keys were removed: there are no
+         more explicit-list slides here, just building and queue. The
+         "text" entries are kept empty so es/en parity does not
          complain about orphan keys. */
-      lista1a9: {
-        label: 'The most common',
-        text: '',
-        aria: 'The ordinals from first to ninth: {list}.'
-      },
-      listaRedondos: {
-        label: 'The round ones',
-        text: '',
-        aria: 'The round ordinals: {list}.'
-      },
       edificio: '',
       cola: ''
     },

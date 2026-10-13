@@ -231,13 +231,28 @@
      de una escena. */
   var famousIdx = 0;
 
-  /* Edificio: una pila de plantas con flechas arriba/abajo para
+  /* Personas variadas para los vecinos de cada piso y para la cola:
+     antes era siempre 🧑 (mismo emoji cinco veces). Aquí se eligen
+     de un pool pequeño y neutro (sin hombres/mujas sin tono de piel)
+     para que cada planta — y cada puesto de la cola — tenga un
+     vecino distinto. El piso/posición 1 da el primer icono, el
+     siguiente el segundo, etc.; al pasar del pool se vuelve al
+     principio, así la distribución sigue siendo predecible. */
+  var NEIGHBOURS = ['🧑', '👶', '🧒', '🧓', '🧑'];
+
+  /* Edificio: una pila de plantas con dos flechas juntas DEBAJO para
      señalar el piso actual. La flecha de arriba está DESACTIVADA en
      el último piso y la de abajo en el primero: no se puede subir
      más alto del ático ni bajar más abajo de la planta baja. La
      idea de gamificación es la misma que en una app de mapas: el
      usuario navega por las plantas y la actual se queda "encendida"
      mientras las demás quedan en reposo.
+
+     Las dos flechas van abajo, una al lado de la otra, y NO arriba y
+     abajo del edificio: con la flecha arriba en responsive el botón
+     se quedaba colgando del borde superior, separado del contexto.
+     Juntas abajo son un único control ("estás en el piso N,
+     pulsa ▲ o ▼") que sigue al edificio.
 
      El piso 1 lleva siempre la 🥇 como marcador semántico de
      "primer lugar" (igual que en el podio de la pantalla 1): la
@@ -251,17 +266,13 @@
     var upDisabled = currentFloor >= total ? ' disabled' : '';
     var downDisabled = currentFloor <= 1 ? ' disabled' : '';
     var rows = [];
-    rows.push(
-      '<button type="button" class="building-arrow building-arrow--up" id="buildingUp"' +
-      upDisabled + ' aria-label="' + t('buildingArrowUp') + '">▲</button>'
-    );
     for (var i = total; i >= 1; i--) {
       var o = ordinalByN(i);
       var label = t('buildingFloor').replace('{n}', i);
       var isCurrent = i === currentFloor;
       var currentClass = isCurrent ? ' building-floor--current' : '';
       var medal = i === 1 ? ' <span class="building-medal" aria-hidden="true">🥇</span>' : '';
-      var person = ' <span class="building-person" aria-hidden="true">🧑</span>';
+      var person = ' <span class="building-person" aria-hidden="true">' + NEIGHBOURS[(i - 1) % NEIGHBOURS.length] + '</span>';
       rows.push(
         '<div class="building-floor' + currentClass + '">' +
         '<span class="building-floor-ord ' + o.cls + '">' + abbrev(i) + medal + '</span>' +
@@ -270,8 +281,12 @@
       );
     }
     rows.push(
+      '<div class="building-arrows">' +
+      '<button type="button" class="building-arrow building-arrow--up" id="buildingUp"' +
+      upDisabled + ' aria-label="' + t('buildingArrowUp') + '">▲</button>' +
       '<button type="button" class="building-arrow building-arrow--down" id="buildingDown"' +
-      downDisabled + ' aria-label="' + t('buildingArrowDown') + '">▼</button>'
+      downDisabled + ' aria-label="' + t('buildingArrowDown') + '">▼</button>' +
+      '</div>'
     );
     return rows.join('');
   }
@@ -286,7 +301,7 @@
       var o = ordinalByN(i);
       cells.push(
         '<span class="queue-person-cell">' +
-        '<span class="queue-person-emoji" aria-hidden="true">🧑</span>' +
+        '<span class="queue-person-emoji" aria-hidden="true">' + NEIGHBOURS[(i - 1) % NEIGHBOURS.length] + '</span>' +
         '<span class="queue-person-ord ' + o.cls + '">' + abbrev(i) + '</span>' +
         '</span>'
       );

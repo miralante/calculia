@@ -47,11 +47,14 @@
     nextArrow: '→',
 
     /* ---------- Pantalla 2: la vida real ----------
-       Cuatro slides: dos listas (los más conocidos 1-9, los redondos
-       11/12/20/30) y dos escenarios (edificio, cola). El subtítulo
-       refleja esa mezcla: los más oídos + dos ejemplos de uso. */
+       Dos slides directos: la cola (el primero va delante) y el
+       edificio (los pisos se cuentan de abajo arriba, con flechas
+       arriba/abajo para señalar el piso actual). Las listas
+       explícitas (1-9 y redondos) se quitaron: el recordatorio de
+       la pantalla 3 ya muestra la serie entera, y repetirlas aquí
+       era recargar lo mismo. */
     famousTitle: 'En la vida real',
-    famousSubtitle: 'Los más conocidos y dos sitios donde se usan:',
+    famousSubtitle: 'Dos sitios donde los ordinales cobran sentido:',
     back: '← Anterior',
     continue: 'Siguiente →',
 
@@ -125,22 +128,10 @@
          tabla del recordatorio (pantalla 3), que es donde se
          consolidan las cifras, las palabras y los lugares. Mismo
          criterio que la galería de Formas: la figura se muestra con
-         su nombre y nada más.
-
-         La "aria" sigue siendo larga para los lectores de pantalla:
-         lo que se calla visualmente se sigue leyendo. Las "text" se
-         conservan vacías para que la clave quede registrada y la
-         paridad es/en no se queje de claves huérfanas. */
-      lista1a9: {
-        label: 'Los más conocidos',
-        text: '',
-        aria: 'Los ordinales del primero al noveno: {list}.'
-      },
-      listaRedondos: {
-        label: 'Los redondos',
-        text: '',
-        aria: 'Los ordinales redondos: {list}.'
-      },
+         su nombre y nada más. Las claves de las antiguas
+         lista1a9/listaRedondos se quitaron: ya no hay slides-lista,
+         solo edificio y cola. Las "text" se quedan vacías para que
+         la paridad es/en no se queje de claves huérfanas. */
       edificio: '',
       cola: ''
     },

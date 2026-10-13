@@ -169,15 +169,12 @@ var DATA = {
      No es un carrusel de ordinales sueltos: cada escenario muestra
      varios ordinales a la vez para que se vea la serie funcionando.
 
-     Antes de los escenarios, dos slides-lista con los ordinales más
-     conocidos: la serie 1-9 (los que se oyen a diario) y los cuatro
-     redondos (11, 12, 20, 30) que la gente necesita reconocer pero
-     rara vez practica. La lista sirve de "ancla verbal": la persona
-     ve cómo se escribe cada uno y se lo puede llevar al siguiente
-     escenario. */
+     Antes de los escenarios había dos slides-lista con los ordinales
+     más conocidos (1-9 y los redondos 11/12/20/30/40). Se quitaron:
+     el recordatorio de la pantalla 3 ya muestra la serie entera, así
+     que repetirlas aquí era recargar lo mismo. La persona va directa
+     a los dos casos donde los ordinales cobran sentido. */
   famous: [
-    { id: 'lista1a9', type: 'list', ordinals: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
-    { id: 'listaRedondos', type: 'list', ordinals: [11, 12, 20, 30, 40] },
     { id: 'cola', type: 'scenario', n: 5 },
     { id: 'edificio', type: 'scenario', n: 5 }
   ],

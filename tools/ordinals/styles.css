@@ -252,20 +252,10 @@
   min-height: 180px;
 }
 
-/* Slide-lista: una rejilla de fichas (las mismas .ord-chip del
-   recordatorio) para mostrar el subconjunto de ordinales que la
-   persona tiene que reconocer de memoria. La rejilla envuelve a
-   varias columnas según el ancho, así la lista 1-9 cabe en 2-3
-   filas en 375px sin apretarse. */
-.famous-list {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: center;
-  gap: var(--espacio);
-  min-height: 0;
-}
-.famous-list .ord-chip { flex: 0 1 130px; }
+/* Las listas explícitas (1-9, redondos) se quitaron: el recordatorio
+   ya muestra la serie entera, y repetirlas aquí era redundante. El
+   CSS de .famous-list queda solo si reaparecen; por ahora, no se
+   emite. */
 
 /* ----- El edificio -----
    Una pila de plantas, la baja abajo (porque así es como se
@@ -311,7 +301,21 @@
    con el mismo tamaño mínimo táctil que los botones del proyecto
    (48-56px). Se desactivan en los extremos: la flecha de arriba en
    el ático, la de abajo en la planta baja. La transición de scale
-   evita que el cambio de piso se sienta como un "salto". */
+   evita que el cambio de piso se sienta como un "salto".
+
+   Las dos flechas van DENTRO de .building-arrows, una al lado de la
+   otra, SIEMPRE DEBAJO del edificio (no una arriba y una abajo):
+   con la flecha arriba en responsive el botón quedaba colgando del
+   borde superior, separado del contexto; juntas forman el control
+   "estás en el piso N, pulsa ▲ o ▼" que sigue al edificio. */
+.building-arrows {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio);
+  margin-top: 4px;
+}
+
 .building-arrow,
 .building-arrow--up,
 .building-arrow--down {
