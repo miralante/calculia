@@ -13,18 +13,13 @@
 
   App.i18n.register({
     title: '⛰️ Trigonometría',
-    instructionMenu: 'Elige una actividad.',
-    contexto: 'Dos escaleras del mismo largo.',
-    explicacion: '¿Cuál llega más alto? Mira cómo se inclina.',
-    btnBackToMenu: '← Otras actividades',
     btnReference: 'Ver el ejemplo',
     btnStartLesson: 'Empezar a practicar →',
     btnReturnQuestion: 'Volver a la pregunta →',
-    btnMenu: 'Volver al inicio',
+    btnMenu: 'Ver el ejemplo',
     otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
     btnHarder: '¿Quieres probar «{name}»?',
-    btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 Prueba otra vez. Mira el dibujo con calma.',
@@ -43,33 +38,14 @@
       hyp: { name: 'La hipotenusa', gloss: 'la más larga: es la que está inclinada' }
     },
     activity: {
-      lados: {
-        name: 'La inclinación',
-        detail: 'Compara rampas y escaleras a simple vista.',
-        instruction: 'Una escalera forma un triángulo con la pared y el suelo. La forma muestra su inclinación.',
-        lessonRule: 'Si miden lo mismo, la más vertical llega más alto.'
-      },
-      razon: {
-        name: 'Igual de inclinadas',
-        detail: 'Aunque una rampa sea más grande.',
-        instruction: 'La inclinación depende de cuánto sube la rampa frente a cuánto avanza. El tamaño no cambia esa inclinación.',
-        lessonRule: 'Dos rampas pueden tener distinto tamaño y la misma inclinación.'
-      },
-      medir: {
-        name: 'La escalera',
-        detail: 'Ver hasta dónde puede llegar.',
-        instruction: 'Una escalera forma un triángulo con la pared y el suelo. Su inclinación cambia la altura que alcanza.',
-        lessonRule: 'Si dos escaleras miden lo mismo, la más vertical llega más alto.'
+      trigonometria: {
+        name: 'Trigonometría',
+        instruction: 'Compara dos escaleras del mismo largo.',
+        lessonRule: 'La más recta llega más alto.'
       }
     },
     level: {
-      l1: 'Comparar dos inclinaciones',
-      l2: 'Comparar tres inclinaciones',
-      y1: 'Cuánto sube y avanza',
-      y2: '¿La misma inclinación?',
-      y3: 'Busca la misma inclinación',
-      u1: 'La escalera y la pared',
-      u2: 'Cuánto llega'
+      test: 'Prueba completa'
     },
     /* Qué parte de la escalera es cuál, para nombrar el lado inclinado
        con una palabra y no solo con un dibujo. */

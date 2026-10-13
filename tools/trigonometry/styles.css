@@ -7,7 +7,6 @@
 .lesson-visual { display: flex; flex-direction: column; align-items: center; width: 100%; }
 .lesson-rule { margin: 0; font-weight: 700; }
 .btn-reference { align-self: center; }
-.menu-intro p { margin: 0; }
 
 /* ---- The stage ----
    Both drawings (the triangle and the ladder) sit on the same centred

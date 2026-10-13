@@ -13,18 +13,13 @@
 
   App.i18n.register({
     title: '⛰️ Trigonometry',
-    instructionMenu: 'Choose an activity.',
-    contexto: 'Two ladders, the same length.',
-    explicacion: 'Which one reaches higher? Look at how it leans.',
-    btnBackToMenu: '← Other activities',
     btnReference: 'See the example',
     btnStartLesson: 'Start practising →',
     btnReturnQuestion: 'Back to the question →',
-    btnMenu: 'Back to the start',
+    btnMenu: 'See the example',
     otherLevel: 'Choose another level',
     endSummary: 'You answered {n} questions of {activity}. Now you have {stars} stars.',
     btnHarder: 'Do you want to try «{name}»?',
-    btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 Try again. Look at the drawing calmly.',
@@ -41,33 +36,14 @@
       hyp: { name: 'The hypotenuse', gloss: 'the longest one: it is the slanted side' }
     },
     activity: {
-      lados: {
-        name: 'The slope',
-        detail: 'Compare ramps and ladders by looking.',
-        instruction: 'A ladder makes a triangle with the wall and the ground. Its shape shows its slope.',
-        lessonRule: 'If they are the same length, the more upright one reaches higher.'
-      },
-      razon: {
-        name: 'Same slope',
-        detail: 'Even when one ramp is bigger.',
-        instruction: 'A slope depends on how far a ramp rises compared with how far it goes. Its size does not change its slope.',
-        lessonRule: 'Two ramps can be different sizes and have the same slope.'
-      },
-      medir: {
-        name: 'The ladder',
-        detail: 'See how high it can reach.',
-        instruction: 'A ladder makes a triangle with the wall and the ground. Its slope changes how high it reaches.',
-        lessonRule: 'If two ladders are the same length, the more upright one reaches higher.'
+      trigonometria: {
+        name: 'Trigonometry',
+        instruction: 'Compare two ladders of the same length.',
+        lessonRule: 'The straighter one reaches higher.'
       }
     },
     level: {
-      l1: 'Compare two slopes',
-      l2: 'Compare three slopes',
-      y1: 'How far it rises and goes',
-      y2: 'The same slope?',
-      y3: 'Find the same slope',
-      u1: 'The ladder and the wall',
-      u2: 'How high it reaches'
+      test: 'Full test'
     },
     ladderPart: {
       ladder: { name: 'The ladder', gloss: 'the slanted one' },

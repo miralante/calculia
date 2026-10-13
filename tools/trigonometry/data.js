@@ -1,9 +1,8 @@
 /* ============================================================
    Calculia — Trigonometría — datos
    Formato:
-   - DATA.activities[id]: picto y levels[]. Cada nivel: { id, tipo,
-     ...config }. El tipo elige el generador de preguntas en app.js.
-     Object.keys(DATA.activities) fija el orden del menú.
+   - DATA.activities[id]: levels[]. Cada nivel: { id, tipo, ...config }.
+     El tipo elige el generador de preguntas en app.js.
    - DATA.triangles: triángulos rectángulos por sus dos catetos, en
      cuadraditos. La hipotenusa NO está guardada: app.js la saca, y al
      arrancar comprueba que es el lado más largo. Así el dibujo y la
@@ -20,37 +19,22 @@ var DATA = {
   perRound: 6,
 
   activities: {
-    /* Comparar inclinaciones empieza con dos escaleras iguales y luego
-       pasa a tres. La pregunta práctica viene antes que los nombres. */
-    lados: {
-      picto: '📏',
+    /* Una sola actividad reúne la idea práctica de la inclinación y los
+       ejercicios que la explican paso a paso. */
+    trigonometria: {
       levels: [
-        { id: 'l1', tipo: 'compareLadders' },
-        { id: 'l2', tipo: 'ladderTaller' }
-      ]
-    },
-
-    /* La razón: cuánto sube por cada cuanto avanza. Se cuenta primero y
-       solo después se compara entre triángulos de distinto tamaño. */
-    razon: {
-      picto: '📊',
-      levels: [
-        { id: 'y1', tipo: 'countReason' },
-        /* y2 solo dice si dos triángulos la comparten. y3 pide elegir
-           cuál de tres la comparte. Primero se juzga, luego se elige. */
-        { id: 'y2', tipo: 'sameReasonJudge' },
-        { id: 'y3', tipo: 'whichSameReason' }
-      ]
-    },
-
-    /* La inclinación en el mundo real: la escalera apoyada en la pared.
-       Lo que se aprende aquí ya no son triángulos, sino una cosa de
-       cada día. */
-    medir: {
-      picto: '⛰️',
-      levels: [
-        { id: 'u1', tipo: 'ladderSide' },
-        { id: 'u2', tipo: 'ladderTaller' }
+        {
+          id: 'test',
+          tipo: 'mixed',
+          questions: [
+            { id: 'compare-ladders', tipo: 'compareLadders' },
+            { id: 'ladder-height', tipo: 'ladderTaller' },
+            { id: 'rise-and-distance', tipo: 'countReason' },
+            { id: 'same-inclination', tipo: 'sameReasonJudge' },
+            { id: 'find-same-inclination', tipo: 'whichSameReason' },
+            { id: 'ladder-side', tipo: 'ladderSide' }
+          ]
+        }
       ]
     }
   },

@@ -9,7 +9,6 @@
   var TOOL_ID = 'trigonometry';
   var $ = App.utils.$;
 
-  var screenMenu = $('#screenMenu');
   var screenLearn = $('#screenLearn');
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
@@ -38,6 +37,7 @@
   /* Round state */
   var activity = null;
   var level = null;
+  var roundQuestions = [];
   var index = 0;
   var roundCorrect = 0;
   var answered = false;
@@ -691,7 +691,7 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenLearn, screenGame, screenEnd].forEach(function (p) {
+    [screenLearn, screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -699,25 +699,7 @@
   /* A short visual reference comes before practice and stays one tap away
      during the round. It explains what the drawing means before asking a
      question about it. */
-  function lessonPicture(id) {
-    if (id === 'razon') {
-      var pair = DATA.reasonPairs[0];
-      var larger = doubled(pair);
-      return {
-        html: '<div class="tri-stage pair-stage">' + triangleSvg(pair, {}) + triangleSvg(larger, {}) + '</div>',
-        aria: App.i18n.t('gen.twoAria')
-          .replace(/\{a\}/g, pair.up).replace(/\{b\}/g, pair.along)
-          .replace(/\{c\}/g, larger.up).replace(/\{d\}/g, larger.along)
-      };
-    }
-    if (id === 'medir') {
-      var letters = App.i18n.t('gen.ladderLetters').split('');
-      return {
-        html: '<div class="tri-stage">' + laddersSvg(DATA.ladders, { labels: letters, guide: true }) + '</div>',
-        aria: App.i18n.t('gen.ladderAllAria')
-          .replace(/\{a\}/g, letters[0]).replace(/\{b\}/g, letters[1]).replace(/\{c\}/g, letters[2])
-      };
-    }
+  function lessonPicture() {
     var letters = App.i18n.t('gen.ladderLetters').split('');
     var pair = [DATA.ladders[0], DATA.ladders[1]].map(function (ladder, i) {
       return { ladder: ladder, letter: letters[i] };
@@ -734,7 +716,7 @@
   }
 
   function showLesson(returnTo) {
-    var picture = lessonPicture(activity.id);
+    var picture = lessonPicture();
     learnTitleEl.textContent = App.i18n.t('activity.' + activity.id + '.name');
     learnContextEl.textContent = App.i18n.t('activity.' + activity.id + '.instruction');
     learnVisualEl.innerHTML = picture.html;
@@ -745,48 +727,23 @@
     $('#btnReturnQuestion').textContent = App.i18n.t('btnReturnQuestion');
     $('#btnStartLesson').classList.toggle('hidden', returnTo !== 'menu');
     $('#btnReturnQuestion').classList.toggle('hidden', returnTo !== 'game');
-    $('#btnLearnMenu').classList.toggle('hidden', returnTo !== 'game');
     show(screenLearn);
   }
 
-  /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
-  function paintMenu() {
-    var cont = $('#activitiesMenu');
-    cont.innerHTML = '';
-    var grid = document.createElement('div');
-    grid.className = 'menu-grid';
-    Object.keys(DATA.activities).forEach(function (id) {
-      var act = DATA.activities[id];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-actividad';
-      btn.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
-        '<span>' + App.i18n.t('activity.' + id + '.name') + '</span>' +
-        '<span class="detail-card">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
-      btn.addEventListener('click', function () { openActivity(id); });
-      grid.appendChild(btn);
-    });
-    cont.appendChild(grid);
-  }
-
-  /* Each activity has its own saved level. Practising one topic must not
-     skip the first step in another. */
+  /* One test contains all the activity's question types. */
   function levelFromProgress() {
     var levels = activity.levels;
     var savedIndex = Number(progress.levelByActivity[activity.id]) || 0;
     return levels[Math.min(savedIndex, levels.length - 1)];
   }
 
-  function openActivity(id) {
-    activity = DATA.activities[id];
-    activity.id = id;
-    showLesson('menu');
-  }
-
   /* ---- Game ---- */
 
   function startRound(nv) {
     level = nv;
+    roundQuestions = level.tipo === 'mixed'
+      ? App.utils.shuffle(level.questions.slice())
+      : [];
     index = 0;
     roundCorrect = 0;
     App.utils.drawRoundReset();
@@ -814,7 +771,9 @@
   /* Paints one question. `fixed` replays a question from the reinforce
      queue; without it a new one is generated for the current level. */
   function paintQuestion(fixed) {
-    question = fixed || GENERATOR_FOR[level.tipo](level, index);
+    var questionLevel = level;
+    if (!fixed && level.tipo === 'mixed') questionLevel = roundQuestions[index];
+    question = fixed || GENERATOR_FOR[questionLevel.tipo](questionLevel, index);
     /* Every question must have exactly ONE right answer, and the answer
        list must be something the screen can hold. This is the guard that
        catches a generator quietly dropping its own correct option: the
@@ -990,23 +949,15 @@
 
   /* ---- Events ---- */
 
-  var elBtnBackToMenu = $('#btnBackToMenu');
-  if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
   $('#btnStartLesson').addEventListener('click', function () { startRound(levelFromProgress()); });
   $('#btnReturnQuestion').addEventListener('click', function () { show(screenGame); });
-  $('#btnLearnMenu').addEventListener('click', function () { show(screenMenu); });
   $('#btnReference').addEventListener('click', function () { showLesson('game'); });
   $('#btnNext').addEventListener('click', next);
   $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
-  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
+  $('#btnMenu').addEventListener('click', function () { showLesson('menu'); });
 
-  var introPicture = lessonPicture('lados');
-  var menuVisual = $('#menuVisual');
-  menuVisual.innerHTML = introPicture.html;
-  menuVisual.setAttribute('role', 'img');
-  menuVisual.setAttribute('aria-label', introPicture.aria);
-
-  paintMenu();
+  activity = DATA.activities.trigonometria;
+  activity.id = 'trigonometria';
+  showLesson('menu');
   paintStars();
 })();
