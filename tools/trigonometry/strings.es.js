@@ -14,9 +14,12 @@
   App.i18n.register({
     title: '⛰️ Trigonometría',
     instructionMenu: 'Elige una actividad.',
-    contexto: 'Las escaleras, las rampas y los tejados inclinados están en todas las calles. La trigonometría mide esas inclinaciones.',
-    explicacion: '✅ Aquí no hay ni una fórmula. Todo se cuenta y se mira.',
+    contexto: 'La trigonometría relaciona la inclinación con la altura y la distancia. Sirve para medir lo que no podemos alcanzar.',
+    explicacion: '✅ Mira cuánto sube una rampa y cuánto avanza. Así entiendes su inclinación.',
     btnBackToMenu: '← Otras actividades',
+    btnReference: 'Ver el ejemplo',
+    btnStartLesson: 'Empezar a practicar →',
+    btnReturnQuestion: 'Volver a la pregunta →',
     btnMenu: 'Volver al inicio',
     otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
@@ -41,28 +44,30 @@
     },
     activity: {
       lados: {
-        name: 'Los tres lados',
-        detail: 'Los tres lados del triángulo.',
-        instruction: 'Un triángulo rectángulo tiene tres lados. Uno está pegado a la pared, otro pegado al suelo, y el tercero está inclinado. El inclinado es el más largo de todos: ese se llama la hipotenusa.'
+        name: 'La inclinación',
+        detail: 'Compara rampas y escaleras a simple vista.',
+        instruction: 'Una escalera forma un triángulo con la pared y el suelo. La forma muestra su inclinación.',
+        lessonRule: 'Si miden lo mismo, la más vertical llega más alto.'
       },
       razon: {
-        name: 'La razón',
-        detail: 'Cuánto sube por cada cuanto avanza.',
-        instruction: 'La razón dice cuántos cuadraditos sube el triángulo por cada cuadradito que avanza. Se cuenta en el dibujo. Y da igual que el triángulo sea grande o pequeño: si es igual de inclinado, la razón es la misma.'
+        name: 'Igual de inclinadas',
+        detail: 'Aunque una rampa sea más grande.',
+        instruction: 'La inclinación depende de cuánto sube la rampa frente a cuánto avanza. El tamaño no cambia esa inclinación.',
+        lessonRule: 'Dos rampas pueden tener distinto tamaño y la misma inclinación.'
       },
       medir: {
         name: 'La escalera',
-        detail: 'Medir una inclinación de verdad.',
-        instruction: 'Una escalera apoyada en la pared forma un triángulo. Los tres lados son la escalera, la pared y el suelo. La escalera es el único lado que está inclinado, y por eso es la hipotenusa.'
+        detail: 'Ver hasta dónde puede llegar.',
+        instruction: 'Una escalera forma un triángulo con la pared y el suelo. Su inclinación cambia la altura que alcanza.',
+        lessonRule: 'Si dos escaleras miden lo mismo, la más vertical llega más alto.'
       }
     },
     level: {
-      l1: 'La más larga',
-      l2: 'La que está enfrente',
-      l3: 'La que está al lado',
-      y1: 'Contar la razón',
-      y2: '¿La misma razón?',
-      y3: 'Busca la misma razón',
+      l1: 'Comparar dos inclinaciones',
+      l2: 'Comparar tres inclinaciones',
+      y1: 'Cuánto sube y avanza',
+      y2: '¿La misma inclinación?',
+      y3: 'Busca la misma inclinación',
       u1: 'La escalera y la pared',
       u2: 'Cuánto llega'
     },
@@ -84,16 +89,19 @@
       whichAdjacent: 'Mira el ángulo de la esquina {where}. La hipotenusa no cuenta, porque también toca ese ángulo. ¿Cuál de los otros dos lados lo toca?',
       oppositeHint: 'El lado que está enfrente es el que no toca el ángulo marcado.',
       adjacentHint: 'Los dos lados rectos tocan una esquina cada uno. Mira cuál toca el ángulo marcado. El inclinado se queda fuera.',
-      reason: '{up} por cada {along}',
-      countReason: '¿Cuántos cuadraditos sube por cada cuadradito que avanza?',
+      reason: 'Sube {up} y avanza {along}',
+      countReason: 'Cuenta cuánto sube y cuánto avanza la rampa.',
       reasonHint: 'Cuenta los cuadraditos del lado que sube y los del que avanza.',
-      sameReason: '¿Estos dos triángulos suben con la misma razón?',
+      sameReason: '¿Estas dos rampas tienen la misma inclinación?',
       sameReasonHint: 'Uno es más grande que el otro. Cuenta los dos lados de cada uno.',
       twoAria: 'Dos triángulos: uno sube {a} y avanza {b}; el otro sube {c} y avanza {d}.',
-      whichSameReason: 'Este triángulo sube {up} por cada {along}. ¿Cuál de los tres hace lo mismo?',
+      whichSameReason: 'Esta rampa sube {up} y avanza {along}. ¿Cuál tiene la misma inclinación?',
       whichSameReasonHint: 'Uno es el mismo triángulo, pero el doble de grande.',
       reasonOf: 'Sube {up} y avanza {along}.',
       ladderSide: 'Esta escalera está apoyada en la pared. ¿Cuál de los tres lados es la hipotenusa?',
+      compareLadders: '¿Cuál de estas escaleras está más inclinada?',
+      ladderCompareExplanation: 'Está más vertical y llega más alto.',
+      twoLaddersAria: 'Dos escaleras del mismo largo. La {a} sube {b} y avanza {c}. La {d} sube {e} y avanza {f}.',
       ladderSideHint: 'Busca el lado que está inclinado. Los otros dos están rectos.',
       ladderAria: 'Una escalera apoyada en la pared, con el suelo debajo.',
       ladderLetters: 'ABC',
@@ -114,6 +122,7 @@
       socraticSameReason: '🤔 Compara los dos triángulos y mira si los números se repiten igual.',
       socraticWhichSameReason: '🤔 Busca el triángulo que sube y avanza en la misma proporción que el primero.',
       socraticLadderSide: '🤔 Mira cuál de los tres lados es el único que está inclinado.',
+      socraticLadderCompare: '🤔 Compara cuánto sube cada escalera por la pared.',
       socraticLadderTaller: '🤔 Mira hasta dónde sube cada escalera en la pared.'
     },
     transfer: 'Esto te sirve para saber hasta dónde llega una escalera, si una rampa es muy empinada y si un tejado necesita puntales.'

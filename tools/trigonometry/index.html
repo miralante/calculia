@@ -19,10 +19,26 @@
     </header>
 
     <section id="screenMenu" class="stack">
+      <div class="card centered stack menu-intro">
+        <p data-i18n="contexto">La trigonometría relaciona la inclinación con la altura y la distancia.</p>
+        <p data-i18n="explicacion">Mira cuánto sube una rampa y cuánto avanza.</p>
+      </div>
       <div class="row center-row">
         <p class="instruction" id="instruction" data-i18n="instructionMenu">Elige una actividad.</p>
       </div>
       <div id="activitiesMenu"></div>
+    </section>
+
+    <section id="screenLearn" class="hidden stack">
+      <div class="card centered stack lesson-card">
+        <h2 id="learnTitle"></h2>
+        <p class="instruction" id="learnContext"></p>
+        <div class="visual lesson-visual" id="learnVisual"></div>
+        <p class="lesson-rule" id="learnRule"></p>
+      </div>
+      <button type="button" class="btn hidden" id="btnStartLesson"></button>
+      <button type="button" class="btn btn-secondary hidden" id="btnReturnQuestion"></button>
+      <button type="button" class="btn btn-secondary hidden" id="btnLearnMenu" data-i18n="btnBackToMenu">← Otras actividades</button>
     </section>
 
     <section id="screenGame" class="hidden stack">
@@ -31,6 +47,8 @@
         <span class="progress-text" id="progressText">0 / 6</span>
         <span class="difficulty" id="difficulty"></span>
       </div>
+
+      <button type="button" class="btn btn-secondary btn-reference" id="btnReference" data-i18n="btnReference">Ver el ejemplo</button>
 
       <div class="card centered stack">
         <p class="prompt" id="prompt"></p>

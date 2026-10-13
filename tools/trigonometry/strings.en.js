@@ -14,9 +14,12 @@
   App.i18n.register({
     title: '⛰️ Trigonometry',
     instructionMenu: 'Choose an activity.',
-    contexto: 'Ladders, ramps and sloping roofs are on every street. Trigonometry measures those slopes.',
-    explicacion: '✅ There is not one formula here. Everything is counted and looked at.',
+    contexto: 'Trigonometry links a slope with height and distance. It helps us measure things we cannot reach.',
+    explicacion: '✅ Look at how far a ramp rises and how far it goes. That shows its slope.',
     btnBackToMenu: '← Other activities',
+    btnReference: 'See the example',
+    btnStartLesson: 'Start practising →',
+    btnReturnQuestion: 'Back to the question →',
     btnMenu: 'Back to the start',
     otherLevel: 'Choose another level',
     endSummary: 'You answered {n} questions of {activity}. Now you have {stars} stars.',
@@ -39,28 +42,30 @@
     },
     activity: {
       lados: {
-        name: 'The three sides',
-        detail: 'The three sides of the triangle.',
-        instruction: 'A right triangle has three sides. One is next to the wall, one is next to the floor, and the third is slanted. The slanted one is the longest of all: that is called the hypotenuse.'
+        name: 'The slope',
+        detail: 'Compare ramps and ladders by looking.',
+        instruction: 'A ladder makes a triangle with the wall and the ground. Its shape shows its slope.',
+        lessonRule: 'If they are the same length, the more upright one reaches higher.'
       },
       razon: {
-        name: 'The ratio',
-        detail: 'How much it rises for how much it goes.',
-        instruction: 'The ratio says how many squares the triangle rises for every square it goes along. You count it in the drawing. It does not matter whether the triangle is big or small: if it is leaning the same way, the ratio is the same.'
+        name: 'Same slope',
+        detail: 'Even when one ramp is bigger.',
+        instruction: 'A slope depends on how far a ramp rises compared with how far it goes. Its size does not change its slope.',
+        lessonRule: 'Two ramps can be different sizes and have the same slope.'
       },
       medir: {
         name: 'The ladder',
-        detail: 'Measuring a real slope.',
-        instruction: 'A ladder leaning against a wall makes a triangle. The three sides are the ladder, the wall and the floor. The ladder is the only slanted side, so that is the hypotenuse.'
+        detail: 'See how high it can reach.',
+        instruction: 'A ladder makes a triangle with the wall and the ground. Its slope changes how high it reaches.',
+        lessonRule: 'If two ladders are the same length, the more upright one reaches higher.'
       }
     },
     level: {
-      l1: 'The longest one',
-      l2: 'The one across',
-      l3: 'The one next to it',
-      y1: 'Count the ratio',
-      y2: 'The same ratio?',
-      y3: 'Find the same ratio',
+      l1: 'Compare two slopes',
+      l2: 'Compare three slopes',
+      y1: 'How far it rises and goes',
+      y2: 'The same slope?',
+      y3: 'Find the same slope',
       u1: 'The ladder and the wall',
       u2: 'How high it reaches'
     },
@@ -80,16 +85,19 @@
       whichAdjacent: 'Look at the angle in the corner {where}. The hypotenuse does not count, because it touches that angle too. Which of the other two sides touches it?',
       oppositeHint: 'The side across is the one that does not touch the marked angle.',
       adjacentHint: 'Each straight side touches one corner. Look at which one touches the marked angle. The slanted one stays out of it.',
-      reason: '{up} for every {along}',
-      countReason: 'How many squares does it rise for every square it goes along?',
+      reason: 'Rises {up} and goes {along}',
+      countReason: 'Count how far the ramp rises and how far it goes.',
       reasonHint: 'Count the squares on the side that rises and the one that goes along.',
-      sameReason: 'Do these two triangles rise with the same ratio?',
+      sameReason: 'Do these two ramps have the same slope?',
       sameReasonHint: 'One is bigger than the other. Count both sides of each one.',
       twoAria: 'Two triangles: one rises {a} and goes {b}; the other rises {c} and goes {d}.',
-      whichSameReason: 'This triangle rises {up} for every {along}. Which of the three does the same?',
+      whichSameReason: 'This ramp rises {up} and goes {along}. Which one has the same slope?',
       whichSameReasonHint: 'One is the same triangle, but twice as big.',
       reasonOf: 'It rises {up} and goes {along}.',
       ladderSide: 'This ladder is leaning against the wall. Which of the three sides is the hypotenuse?',
+      compareLadders: 'Which of these ladders is steeper?',
+      ladderCompareExplanation: 'It is more upright and reaches higher.',
+      twoLaddersAria: 'Two ladders of the same length. {a} rises {b} and goes {c}. {d} rises {e} and goes {f}.',
       ladderSideHint: 'Look for the slanted side. The other two are straight.',
       ladderAria: 'A ladder leaning against a wall, with the floor below.',
       ladderLetters: 'ABC',
@@ -110,6 +118,7 @@
       socraticSameReason: '🤔 Compare the two triangles and see if the numbers repeat the same way.',
       socraticWhichSameReason: '🤔 Look for the triangle that rises and goes in the same proportion as the first.',
       socraticLadderSide: '🤔 Look for the only one of the three sides that leans.',
+      socraticLadderCompare: '🤔 Compare how high each ladder reaches on the wall.',
       socraticLadderTaller: '🤔 Look how far each ladder climbs up the wall.'
     },
     transfer: 'This helps you know how far a ladder reaches, whether a ramp is too steep, and whether a roof needs supports.'

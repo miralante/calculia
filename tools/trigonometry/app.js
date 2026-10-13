@@ -10,6 +10,7 @@
   var $ = App.utils.$;
 
   var screenMenu = $('#screenMenu');
+  var screenLearn = $('#screenLearn');
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
   var promptEl = $('#prompt');
@@ -23,11 +24,16 @@
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
   var starsEl = $('#stars');
+  var learnTitleEl = $('#learnTitle');
+  var learnContextEl = $('#learnContext');
+  var learnVisualEl = $('#learnVisual');
+  var learnRuleEl = $('#learnRule');
 
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
   if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
+  if (!progress.levelByActivity || typeof progress.levelByActivity !== 'object') progress.levelByActivity = {};
 
   /* Round state */
   var activity = null;
@@ -43,7 +49,7 @@
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      The hypotenuse comes from the two legs, the reason from the two
@@ -162,13 +168,6 @@
     throw new Error('trigonometry: two ladders lean the same way');
   }
 
-  /* Every level needs something to ask about: a pool that cannot be
-     drawn would show an empty option. */
-  DATA.activities.lados.levels.forEach(function (nv) {
-    if (ALL_SIDES.indexOf(sideFor(DATA.triangles[0], nv.tipo === 'whichOpposite' ? 'opposite' : 'adjacent', nv.corner || 'B')) === -1) {
-      throw new Error('trigonometry: level ' + nv.id + ' has no side to look for');
-    }
-  });
   /* The reason pools need a triangle with a DIFFERENT reason, or the
      "do these two match?" question would only ever have one possible
      answer. Nothing needs the reverse: a pair's own reason does not have
@@ -568,6 +567,42 @@
       };
     },
 
+    /* Compare two ladders of the same length. Their height on the wall
+       makes the difference in steepness visible without a calculation. */
+    compareLadders: function (nv) {
+      var pairs = [
+        [DATA.ladders[0], DATA.ladders[1]],
+        [DATA.ladders[0], DATA.ladders[2]],
+        [DATA.ladders[1], DATA.ladders[2]]
+      ];
+      var pair = App.utils.drawRound(nv.id, pairs);
+      var letters = App.utils.shuffle(App.i18n.t('gen.ladderLetters').split('')).slice(0, 2);
+      var named = pair.map(function (ladder, i) {
+        return { ladder: ladder, letter: letters[i] };
+      }).sort(function (a, b) { return a.ladder.run - b.ladder.run; });
+      var right = named.filter(function (item) {
+        return item.ladder.rise === Math.max(pair[0].rise, pair[1].rise);
+      })[0];
+      var text = App.i18n.t('gen.ladderOption').replace(/\{x\}/g, right.letter);
+      return {
+        prompt: App.i18n.t('gen.compareLadders'),
+        hint: App.i18n.t('gen.socraticLadderCompare'),
+        explanation: App.i18n.t('gen.ladderCompareExplanation').replace(/\{x\}/g, right.letter),
+        visual: '<div class="tri-stage">' + laddersSvg(named.map(function (item) { return item.ladder; }), {
+          labels: named.map(function (item) { return item.letter; })
+        }) + '</div>',
+        visualAria: App.i18n.t('gen.twoLaddersAria')
+          .replace(/\{a\}/g, named[0].letter).replace(/\{b\}/g, named[0].ladder.rise)
+          .replace(/\{c\}/g, named[0].ladder.run).replace(/\{d\}/g, named[1].letter)
+          .replace(/\{e\}/g, named[1].ladder.rise).replace(/\{f\}/g, named[1].ladder.run),
+        options: App.utils.shuffle(named.map(function (item) {
+          var optionText = App.i18n.t('gen.ladderOption').replace(/\{x\}/g, item.letter);
+          return { html: '<span class="kind-name">' + optionText + '</span>', aria: optionText, correct: item === right };
+        })),
+        inline: true
+      };
+    },
+
     /* The ladder against the wall. Which of the three is the slanted one?
        Answerable by looking: two of them stand straight up, one leans. */
     ladderSide: function (nv) {
@@ -640,6 +675,7 @@
   /* Levels whose type differs only in which role they ask for share one
      generator; the rest are looked up by their own type. */
   var GENERATOR_FOR = {
+    compareLadders: GENERATORS.compareLadders,
     whichHypotenuse: GENERATORS.whichHypotenuse,
     whichOpposite: GENERATORS.whichSideByAngle,
     whichAdjacent: GENERATORS.whichSideByAngle,
@@ -655,9 +691,62 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenGame, screenEnd].forEach(function (p) {
+    [screenMenu, screenLearn, screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
+  }
+
+  /* A short visual reference comes before practice and stays one tap away
+     during the round. It explains what the drawing means before asking a
+     question about it. */
+  function lessonPicture(id) {
+    if (id === 'razon') {
+      var pair = DATA.reasonPairs[0];
+      var larger = doubled(pair);
+      return {
+        html: '<div class="tri-stage pair-stage">' + triangleSvg(pair, {}) + triangleSvg(larger, {}) + '</div>',
+        aria: App.i18n.t('gen.twoAria')
+          .replace(/\{a\}/g, pair.up).replace(/\{b\}/g, pair.along)
+          .replace(/\{c\}/g, larger.up).replace(/\{d\}/g, larger.along)
+      };
+    }
+    if (id === 'medir') {
+      var letters = App.i18n.t('gen.ladderLetters').split('');
+      return {
+        html: '<div class="tri-stage">' + laddersSvg(DATA.ladders, { labels: letters, guide: true }) + '</div>',
+        aria: App.i18n.t('gen.ladderAllAria')
+          .replace(/\{a\}/g, letters[0]).replace(/\{b\}/g, letters[1]).replace(/\{c\}/g, letters[2])
+      };
+    }
+    var letters = App.i18n.t('gen.ladderLetters').split('');
+    var pair = [DATA.ladders[0], DATA.ladders[1]].map(function (ladder, i) {
+      return { ladder: ladder, letter: letters[i] };
+    }).sort(function (a, b) { return a.ladder.run - b.ladder.run; });
+    return {
+      html: '<div class="tri-stage">' + laddersSvg(pair.map(function (item) { return item.ladder; }), {
+        labels: pair.map(function (item) { return item.letter; })
+      }) + '</div>',
+      aria: App.i18n.t('gen.twoLaddersAria')
+        .replace(/\{a\}/g, pair[0].letter).replace(/\{b\}/g, pair[0].ladder.rise)
+        .replace(/\{c\}/g, pair[0].ladder.run).replace(/\{d\}/g, pair[1].letter)
+        .replace(/\{e\}/g, pair[1].ladder.rise).replace(/\{f\}/g, pair[1].ladder.run)
+    };
+  }
+
+  function showLesson(returnTo) {
+    var picture = lessonPicture(activity.id);
+    learnTitleEl.textContent = App.i18n.t('activity.' + activity.id + '.name');
+    learnContextEl.textContent = App.i18n.t('activity.' + activity.id + '.instruction');
+    learnVisualEl.innerHTML = picture.html;
+    learnVisualEl.setAttribute('role', 'img');
+    learnVisualEl.setAttribute('aria-label', picture.aria);
+    learnRuleEl.textContent = App.i18n.t('activity.' + activity.id + '.lessonRule');
+    $('#btnStartLesson').textContent = App.i18n.t('btnStartLesson');
+    $('#btnReturnQuestion').textContent = App.i18n.t('btnReturnQuestion');
+    $('#btnStartLesson').classList.toggle('hidden', returnTo !== 'menu');
+    $('#btnReturnQuestion').classList.toggle('hidden', returnTo !== 'game');
+    $('#btnLearnMenu').classList.toggle('hidden', returnTo !== 'game');
+    show(screenLearn);
   }
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
@@ -680,17 +769,18 @@
     cont.appendChild(grid);
   }
 
-  /* The level rises one step per completed round, capped at the last
-     one, so a person who comes back continues where they were. */
+  /* Each activity has its own saved level. Practising one topic must not
+     skip the first step in another. */
   function levelFromProgress() {
     var levels = activity.levels;
-    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
+    var savedIndex = Number(progress.levelByActivity[activity.id]) || 0;
+    return levels[Math.min(savedIndex, levels.length - 1)];
   }
 
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    startRound(levelFromProgress());
+    showLesson('menu');
   }
 
   /* ---- Game ---- */
@@ -715,7 +805,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -801,7 +891,8 @@
     var said = plainText(correct.html).replace(/\s+/g, ' ').trim();
     explanationEl.textContent =
       (isCorrect ? App.i18n.t('correctExplanation') : App.i18n.t('incorrectExplanationA')) +
-      (said || correct.aria || '') + '.';
+      (said || correct.aria || '') + '.' +
+      (question.explanation ? ' ' + question.explanation : '');
     explanationWrap.classList.remove('hidden');
   }
 
@@ -887,7 +978,11 @@
     if (nextLevel) {
       btnHarder.textContent = App.i18n.t('btnHarder').replace('{name}', App.i18n.t('level.' + nextLevel.id));
       btnHarder.classList.remove('hidden');
-      btnHarder.onclick = function () { startRound(nextLevel); };
+      btnHarder.onclick = function () {
+        progress.levelByActivity[activity.id] = idxN + 1;
+        save();
+        startRound(nextLevel);
+      };
     } else {
       btnHarder.classList.add('hidden');
     }
@@ -897,6 +992,10 @@
 
   var elBtnBackToMenu = $('#btnBackToMenu');
   if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
+  $('#btnStartLesson').addEventListener('click', function () { startRound(levelFromProgress()); });
+  $('#btnReturnQuestion').addEventListener('click', function () { show(screenGame); });
+  $('#btnLearnMenu').addEventListener('click', function () { show(screenMenu); });
+  $('#btnReference').addEventListener('click', function () { showLesson('game'); });
   $('#btnNext').addEventListener('click', next);
   $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
   $('#btnMenu').addEventListener('click', function () { show(screenMenu); });

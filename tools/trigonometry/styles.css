@@ -2,6 +2,13 @@
 
 .tool-header h1 { font-size: 1.5rem; }
 
+.lesson-card { border-color: var(--mod-secuencia); }
+.lesson-card h2 { margin: 0; }
+.lesson-visual { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.lesson-rule { margin: 0; font-weight: 700; }
+.btn-reference { align-self: center; }
+.menu-intro p { margin: 0; }
+
 /* ---- The stage ----
    Both drawings (the triangle and the ladder) sit on the same centred
    stage, so a question that changes activity keeps its place on the
@@ -12,7 +19,7 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 1rem;
-  min-height: 170px;
+  min-height: 130px;
 }
 /* Two triangles side by side for the "same ratio?" question. They must
    read as two separate drawings, not as one broken one, so the gap is

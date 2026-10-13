@@ -20,17 +20,13 @@ var DATA = {
   perRound: 6,
 
   activities: {
-    /* Los tres lados del triángulo, nombrados por la faena que hacen.
-       Primero el más fácil de ver (el más largo), después los dos que
-       dependen de qué ángulo se está mirando. */
+    /* Comparar inclinaciones empieza con dos escaleras iguales y luego
+       pasa a tres. La pregunta práctica viene antes que los nombres. */
     lados: {
       picto: '📏',
       levels: [
-        { id: 'l1', tipo: 'whichHypotenuse' },
-        /* l2 mira el ángulo de la esquina de abajo. l3 mira el de arriba.
-           Solo cambia dónde está el ángulo marcado: una variable por paso. */
-        { id: 'l2', tipo: 'whichOpposite', corner: 'B' },
-        { id: 'l3', tipo: 'whichAdjacent', corner: 'C' }
+        { id: 'l1', tipo: 'compareLadders' },
+        { id: 'l2', tipo: 'ladderTaller' }
       ]
     },
 
