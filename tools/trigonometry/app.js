@@ -702,39 +702,60 @@
   }
 
   /* Small pictures of everyday places where the rise and run matter. The
-     ladder uses the same scale as the practice drawings; the ramp and roof
-     are simple cross-sections so their slope is easy to see. */
+     rails and rungs make the ladder recognizable; the house and paired
+     ramps keep each example grounded in a familiar object. */
   function realExamplePicture(id) {
     if (id === 'ladder') {
       return {
-        html: laddersSvg([DATA.ladders[1]]),
+        html: '<svg viewBox="0 0 190 170" class="real-life-svg real-ladder-svg" aria-hidden="true">' +
+          '<line x1="34" y1="12" x2="34" y2="151" class="real-wall"/>' +
+          '<line x1="18" y1="151" x2="174" y2="151" class="real-ground"/>' +
+          '<line x1="36" y1="24" x2="119" y2="151" class="real-ladder-rail"/>' +
+          '<line x1="48" y1="24" x2="131" y2="151" class="real-ladder-rail"/>' +
+          '<path d="M48 42h12 M58 58h12 M68 74h12 M78 90h12 M88 106h12 M98 122h12 M108 138h12" class="real-ladder-rung"/>' +
+          '<path d="M34 151h12v-12" class="tri-corner"/></svg>',
         aria: App.i18n.t('realExampleAria.ladder')
       };
     }
-    if (id === 'ramp') {
+    if (id === 'roof') {
       return {
-        html: '<svg viewBox="0 0 180 130" class="real-life-svg" aria-hidden="true">' +
-          '<path d="M14 104H150V42h18v80H14Z" class="real-platform"/>' +
-          '<path d="M14 104 150 42" class="real-slope"/>' +
-          '<path d="M14 104h18v-8" class="tri-corner"/>' +
-          '<circle cx="14" cy="104" r="5" class="tri-vertex"/>' +
-          '<circle cx="150" cy="42" r="5" class="tri-vertex"/></svg>',
-        aria: App.i18n.t('realExampleAria.ramp')
+        html: '<svg viewBox="0 0 200 170" class="real-life-svg" aria-hidden="true">' +
+          '<path d="M42 71v84h116V71" class="real-house"/>' +
+          '<path d="M25 73 100 15l75 58-8 8-67-52-67 52Z" class="real-roof"/>' +
+          '<path d="M34 73h66V22" class="real-guide"/>' +
+          '<path d="M100 73V61h12" class="tri-corner"/>' +
+          '<rect x="56" y="94" width="26" height="27" rx="2" class="real-window"/>' +
+          '<line x1="69" y1="94" x2="69" y2="121" class="real-detail"/>' +
+          '<line x1="56" y1="107" x2="82" y2="107" class="real-detail"/>' +
+          '<path d="M118 155v-43a14 14 0 0 1 28 0v43Z" class="real-door"/>' +
+          '<circle cx="139" cy="135" r="2" class="real-knob"/></svg>',
+        aria: App.i18n.t('realExampleAria.roof')
       };
     }
+    var gentle = App.i18n.t('realExampleLabel.gentle');
+    var steep = App.i18n.t('realExampleLabel.steep');
+    var car = '<path d="M4 23v-6l5-2 6-9h18l9 9 7 2 3 6v4H4Z" class="real-car-body"/>' +
+      '<path d="m18 8-5 7h11V8Zm9 0v7h11l-6-7Z" class="real-car-window"/>' +
+      '<circle cx="14" cy="27" r="5" class="real-car-wheel"/>' +
+      '<circle cx="41" cy="27" r="5" class="real-car-wheel"/>' +
+      '<circle cx="14" cy="27" r="2" class="real-wheel-hub"/>' +
+      '<circle cx="41" cy="27" r="2" class="real-wheel-hub"/>';
     return {
-      html: '<svg viewBox="0 0 180 130" class="real-life-svg" aria-hidden="true">' +
-        '<path d="M38 58v58h104V58" class="real-platform"/>' +
-        '<path d="M20 62 90 12l70 50" class="real-roof"/>' +
-        '<path d="M20 62h70" class="real-guide"/>' +
-        '<path d="M90 62v-12h12" class="tri-corner"/>' +
-        '<circle cx="90" cy="62" r="5" class="tri-vertex"/></svg>',
-      aria: App.i18n.t('realExampleAria.roof')
+      html: '<svg viewBox="0 0 360 180" class="real-life-svg" aria-hidden="true">' +
+          '<line x1="8" y1="137" x2="352" y2="137" class="real-ground"/>' +
+          '<path d="M16 137 166 109v28Z" class="real-ramp"/>' +
+          '<path d="M197 137 337 62v75Z" class="real-ramp"/>' +
+          '<path d="M16 137 166 109 M197 137 337 62" class="real-slope"/>' +
+          '<g transform="translate(77 111) rotate(-11)">' + car + '</g>' +
+          '<g transform="translate(236 88) rotate(-28)">' + car + '</g>' +
+          '<text x="91" y="164" class="real-label">' + gentle + '</text>' +
+          '<text x="267" y="164" class="real-label">' + steep + '</text></svg>',
+      aria: App.i18n.t('realExampleAria.cars')
     };
   }
 
   function paintRealExample() {
-    var examples = ['ladder', 'ramp', 'roof'];
+    var examples = ['ladder', 'roof', 'cars'];
     var id = examples[realIndex];
     var picture = realExamplePicture(id);
     realVisualEl.innerHTML = picture.html;

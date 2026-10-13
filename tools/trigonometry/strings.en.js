@@ -24,13 +24,17 @@
     galleryNext: 'Next',
     realExample: {
       ladder: 'The slope helps you place a ladder safely and see how high it reaches.',
-      ramp: 'The slope helps you tell whether a ramp is too steep.',
-      roof: 'The slope helps shape a roof and place its supports.'
+      roof: 'The roof slope helps shape the roof and choose its supports.',
+      cars: 'Compare the cars: on the steeper ramp, they rise more over a shorter distance.'
     },
     realExampleAria: {
-      ladder: 'A sloping ladder leaning against a wall and resting on the floor.',
-      ramp: 'A sloping ramp rising from the floor to a platform.',
-      roof: 'A house with a sloping roof and a line showing its height.'
+      ladder: 'A ladder with rungs leaning against a wall and resting on the floor.',
+      roof: 'A house with a door and window. A line shows the roof slope.',
+      cars: 'Two cars on ramps: one gentle and one steeper.'
+    },
+    realExampleLabel: {
+      gentle: 'Gentle',
+      steep: 'Steep'
     },
     btnMenu: 'See the example',
     otherLevel: 'Choose another level',

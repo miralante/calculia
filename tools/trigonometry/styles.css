@@ -10,10 +10,25 @@
 .real-card { align-items: center; border-color: var(--mod-razonamiento-suave); }
 .real-visual { display: flex; min-height: 170px; align-items: center; justify-content: center; width: 100%; }
 .real-caption { min-height: 3em; max-width: 560px; margin: 0; text-align: center; font-weight: 700; }
-.real-life-svg { width: min(100%, 280px); height: auto; overflow: visible; }
-.real-platform { fill: var(--color-superficie); stroke: var(--color-texto); stroke-width: 4; stroke-linejoin: round; }
-.real-slope,
-.real-roof { fill: none; stroke: var(--mod-secuencia, var(--color-texto)); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+.real-life-svg { width: min(100%, 360px); height: auto; overflow: visible; }
+.real-ladder-svg { width: min(100%, 230px); }
+.real-wall,
+.real-ground { stroke: var(--color-texto); stroke-width: 5; stroke-linecap: round; }
+.real-ladder-rail { stroke: var(--mod-secuencia, var(--color-texto)); stroke-width: 7; stroke-linecap: round; }
+.real-ladder-rung { fill: none; stroke: var(--color-texto); stroke-width: 4; stroke-linecap: round; }
+.real-house { fill: var(--color-superficie); stroke: var(--color-texto); stroke-width: 4; stroke-linejoin: round; }
+.real-roof { fill: var(--mod-secuencia-suave, var(--color-superficie)); stroke: var(--mod-secuencia, var(--color-texto)); stroke-width: 5; stroke-linejoin: round; }
+.real-window { fill: var(--mod-razonamiento-suave, var(--color-superficie)); stroke: var(--color-texto); stroke-width: 3; }
+.real-detail { stroke: var(--color-texto); stroke-width: 2; }
+.real-door { fill: var(--mod-razonamiento-suave, var(--color-superficie)); stroke: var(--color-texto); stroke-width: 3; }
+.real-knob { fill: var(--color-texto); }
+.real-ramp { fill: var(--mod-secuencia-suave, var(--color-superficie)); stroke: none; }
+.real-slope { fill: none; stroke: var(--mod-secuencia, var(--color-texto)); stroke-width: 6; stroke-linecap: round; }
+.real-car-body { fill: var(--mod-razonamiento); stroke: var(--color-texto); stroke-width: 2; stroke-linejoin: round; }
+.real-car-window { fill: var(--color-superficie); stroke: var(--color-texto); stroke-width: 1.5; stroke-linejoin: round; }
+.real-car-wheel { fill: var(--color-texto); }
+.real-wheel-hub { fill: var(--color-superficie); }
+.real-label { fill: var(--color-texto); font-size: 12px; font-weight: 700; text-anchor: middle; }
 .real-guide { fill: none; stroke: var(--color-borde); stroke-width: 3; stroke-dasharray: 6 5; }
 .carousel-controls { display: flex; justify-content: center; gap: var(--espacio); }
 .carousel-controls .btn { min-width: 44px; min-height: 44px; }

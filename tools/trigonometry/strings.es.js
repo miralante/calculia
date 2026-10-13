@@ -24,13 +24,17 @@
     galleryNext: 'Siguiente',
     realExample: {
       ladder: 'La inclinación ayuda a colocar la escalera con seguridad y saber hasta dónde llega.',
-      ramp: 'La inclinación ayuda a saber si una rampa es demasiado empinada.',
-      roof: 'La inclinación ayuda a dar forma al tejado y a colocar sus apoyos.'
+      roof: 'La inclinación del tejado ayuda a darle forma y a elegir sus apoyos.',
+      cars: 'Compara los coches: en la rampa más empinada, suben más en menos distancia.'
     },
     realExampleAria: {
-      ladder: 'Escalera inclinada apoyada en una pared y sobre el suelo.',
-      ramp: 'Rampa inclinada que sube desde el suelo hasta una plataforma.',
-      roof: 'Casa con tejado inclinado y una línea que muestra la altura.'
+      ladder: 'Escalera con peldaños, apoyada en una pared y sobre el suelo.',
+      roof: 'Casa con puerta y ventana. El tejado tiene una línea que muestra su inclinación.',
+      cars: 'Dos coches sobre rampas: una suave y otra más empinada.'
+    },
+    realExampleLabel: {
+      gentle: 'Suave',
+      steep: 'Empinada'
     },
     btnMenu: 'Ver el ejemplo',
     otherLevel: 'Elegir otro nivel',
