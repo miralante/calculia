@@ -28,6 +28,8 @@
     pointsDetail: 'Separate the thousands with points.',
     groupsName: 'Count in groups',
     groupsDetail: 'Tens, hundreds, thousands and dozens.',
+    parityName: 'Even and odd',
+    parityDetail: 'Look at the dots: one left alone or all paired up?',
 
     /* ---------- Typing practices ----------
        {n} = formatted number. {nRaw} = number without separator. */
@@ -191,6 +193,20 @@
     hintWhichGroup: 'Think about how many groups fit in that number. Look at the colours.',
     hintDozen: 'Remember: a dozen is twelve.',
     hintHowMany: 'Count the groups. Then multiply by what each group is worth.',
+
+    /* ---------- Even and odd ----------
+       The number is shown, the dots form the picture; the user
+       decides whether one dot is left alone (odd) or all dots are
+       in pairs (even). The two short words are the button labels. */
+    parityPrompt: 'Is {a} even or odd?',
+    evenLabel: 'Even',
+    oddLabel: 'Odd',
+    pairsWord: 'pairs',
+    oneLeftWord: 'one left over',
+    hintParity: 'Pair the dots two by two. If one is left alone, it is odd.',
+    explainParity: 'The {a} dots go two by two. If none is left, it is even; if one is left, it is odd.',
+    parityFinalSummary: 'You saw {count} numbers and classified them. Now you have {stars} stars.',
+    parityTransfer: 'Knowing which numbers are even and which are odd helps split into two teams, alternate turns, or cut a list in half.',
 
     groupsTransfer: 'Counting in groups helps you with eggs, boxes, money and big numbers.'
   }, 'en');

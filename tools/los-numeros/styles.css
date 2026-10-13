@@ -1,0 +1,100 @@
+/* Los Números — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+.btn:not(.btn-secondary):not(.btn-audio) {
+  background: var(--mod-razonamiento);
+}
+
+/* ---- Pantalla de introducción: cuatro tarjetas de los tipos ----
+   Una rejilla de 1/2/4 columnas según el ancho. Cada tarjeta
+   tiene su color de acento (mismo modulo, distinto tono) para
+   que se distingan a simple vista y a bajo contraste. */
+.intro-title {
+  text-align: center;
+  color: var(--color-texto);
+  margin: var(--espacio) 0 0;
+  font-size: var(--texto-grande);
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio);
+  margin-top: var(--espacio);
+}
+@media (min-width: 560px) {
+  .intro-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.intro-card {
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: var(--espacio);
+  background: var(--color-superficie);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.intro-card h3 { margin: 0; font-size: var(--texto-grande); }
+.intro-card p { margin: 0; }
+.intro-card .intro-examples {
+  font-weight: 700;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-pequeno);
+}
+
+/* Colores por tipo. El mismo módulo (--mod-razonamiento) para
+   mantener la coherencia con la cabecera y los botones; cada
+   tarjeta se distingue con su propio nombre. */
+.intro-card-natural { border-color: var(--mod-secuencia); }
+.intro-card-natural h3 { color: var(--mod-secuencia); }
+.intro-card-entero  { border-color: var(--mod-coordinacion); }
+.intro-card-entero  h3 { color: var(--mod-coordinacion); }
+.intro-card-decimal { border-color: var(--mod-emocional); }
+.intro-card-decimal h3 { color: var(--mod-emocional); }
+.intro-card-fraccion { border-color: var(--mod-memoria); }
+.intro-card-fraccion h3 { color: var(--mod-memoria); }
+
+/* ---- Pantalla de juego: número grande, opciones etiquetadas ---- */
+.quiz-card { border-color: var(--mod-razonamiento-suave); }
+
+.quiz-ask {
+  margin: 0;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-base);
+  text-align: center;
+}
+
+.quiz-number {
+  margin: 0;
+  font-size: 4rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-texto);
+  /* Altura mínima para que el "salto" entre un valor de 1 cifra y
+     uno de 4 no mueva la carta del juego. */
+  min-height: 1.2em;
+  line-height: 1.1;
+}
+
+/* Cada opción muestra el nombre del tipo con un color que
+   recuerda al de la tarjeta de la introducción, para que la
+   asociación entre tipo y respuesta sea inmediata. */
+.option-tipo {
+  text-align: center;
+  font-size: var(--texto-grande);
+  font-weight: 700;
+}
+.option-tipo-natural  { border-color: var(--mod-secuencia); }
+.option-tipo-entero   { border-color: var(--mod-coordinacion); }
+.option-tipo-decimal  { border-color: var(--mod-emocional); }
+.option-tipo-fraccion { border-color: var(--mod-memoria); }
+
+/* ---- Transfer (reflexión al final de la ronda) ---- */
+#screenEnd .transfer {
+  margin: 8px auto 24px;
+  font-size: 1.1rem;
+  color: var(--color-texto-suave);
+  max-width: 480px;
+}

@@ -1,7 +1,7 @@
 /* ============================================================
    Calculia — Cantidades.
 
-   The activity has two halves.
+   Five practices in the menu:
 
    1) Three typing practices (read / write / points) over big
       numbers: format the number, copy it, hear it and write it, or
@@ -15,6 +15,13 @@
       names each group, real situations where the group appears, a
       colour reminder with worked examples, then chained sub-levels
       that change ONE variable at a time (rule 13).
+
+   3) One 'parity' practice: even or odd. The number is drawn as a
+      row of dots; the user counts them two by two and decides if
+      one is left alone (odd) or every dot has a mate (even).
+      Parity used to live inside math-tables (the old "Las Tablas");
+      it sits in Cantidades now because it is a counting group, not
+      a calculation of sums or products.
 
    Why the old 'decompose' practice is gone: it showed a number with
    coloured digits and asked for the value of one digit. Correct, but
@@ -67,6 +74,8 @@
   var groupsQuizScreen = $('#screenGroupsQuiz');
   var finishScreen = $('#screenFinish');
   var groupsEndScreen = $('#screenGroupsEnd');
+  var parityScreen = $('#screenParity');
+  var parityEndScreen = $('#screenParityFinish');
 
   var starsEl = $('#stars');
 
@@ -498,9 +507,14 @@
     practice = id;
     /* 'groups' is not a typing practice: it has its own screens
        (intro / famous / reminder / levels) and is started from the
-       same menu. */
+       same menu. 'parity' likewise is its own screens (a row of dots
+       and a two-button choice, no typing). */
     if (id === 'groups') {
       switchTo(introScreen);
+      return;
+    }
+    if (id === 'parity') {
+      startParityRound();
       return;
     }
     var lista = DATA.ranges[id];
@@ -1133,12 +1147,174 @@
     App.feedback.celebrate(t('core.roundComplete'));
   }
 
+  /* ============================================================
+     Parity practice (pares / impares) — fifth on the menu
+     ============================================================
+     Paints a number as a stack of dots; everything is paired off in
+     a single colour, and the leftover dot (if any) is in another
+     colour. The user then chooses Par/Impar. The visual signal
+     (leftover or not) is the answer. */
+
+  /* Round state (parity only). Lives outside the typing-practice
+     variables (`round`, `index`, `fixedCase` …) on purpose — parity
+     shares the same storage but a different round shape. */
+  var parityItems = [];
+  var pIdx = 0;
+  var pAttempts = 0;
+
+  function parityRound() {
+    var items = [];
+    var max = DATA.parity.max;
+    var limit = DATA.parity.perRound;
+    /* Mix of evens and odds, alternating roughly, so the user cannot
+       reach for "always Par" by accident. */
+    var forceEven = true;
+    while (items.length < limit) {
+      var candidate = randomInt(0, max);
+      var isEven = candidate % 2 === 0;
+      /* Accept unless the last two picks were the same parity — that
+         keeps a fair balance without preventing any reasonable
+         distribution. */
+      if (items.length >= 2 &&
+          isEven === (items[items.length - 1].a % 2 === 0) &&
+          isEven === (items[items.length - 2].a % 2 === 0)) {
+        continue;
+      }
+      items.push({ a: candidate });
+      forceEven = !forceEven;
+    }
+    return App.utils.shuffle(items);
+  }
+
+  function startParityRound() {
+    parityItems = parityRound();
+    pIdx = 0;
+    pAttempts = 0;
+    switchTo(parityScreen);
+    renderParity();
+  }
+
+  /* Render the dots row(s): every two dots of the same colour go in
+     one row, the leftover dot (if any) goes in its own row in the
+     "leftover" colour. The pairing shape is the visible answer. */
+  function paintParityDots(item) {
+    var cont = $('#parityDots');
+    cont.innerHTML = '';
+    var pairs = Math.floor(item.a / 2);
+    var leftover = item.a % 2;
+    for (var i = 0; i < pairs; i += 1) {
+      var pairRow = document.createElement('div');
+      pairRow.className = 'parity-pair-row';
+      var d1 = document.createElement('span');
+      d1.className = 'parity-dot parity-pair';
+      d1.style.backgroundColor = DATA.parity.pairColor;
+      var d2 = document.createElement('span');
+      d2.className = 'parity-dot parity-pair';
+      d2.style.backgroundColor = DATA.parity.pairColor;
+      pairRow.appendChild(d1);
+      pairRow.appendChild(d2);
+      cont.appendChild(pairRow);
+    }
+    if (leftover) {
+      var singleRow = document.createElement('div');
+      singleRow.className = 'parity-pair-row';
+      var d = document.createElement('span');
+      d.className = 'parity-dot parity-leftover';
+      d.style.backgroundColor = DATA.parity.leftoverColor;
+      singleRow.appendChild(d);
+      cont.appendChild(singleRow);
+    }
+    /* aria-label describes the picture aloud for screen readers; the
+       prompt below already says the number, so the dots line is purely
+       visual. */
+    var aria = items_parityAria(item);
+    cont.setAttribute('aria-label', aria);
+  }
+
+  function items_parityAria(item) {
+    var pairs = Math.floor(item.a / 2);
+    var leftover = item.a % 2;
+    var s = pairs + ' ' + t('pairsWord');
+    if (leftover) s += ', ' + t('oneLeftWord');
+    return s;
+  }
+
+  function renderParity() {
+    var item = parityItems[pIdx];
+    pAttempts = 0;
+    var pct = parityItems.length === 0 ? 0 : (pIdx / parityItems.length) * 100;
+    $('#parityProgressFill').style.width = pct + '%';
+    $('#parityProgressText').textContent = (pIdx + 1) + ' / ' + parityItems.length;
+    /* Prompt: "5 es par o impar" — the number is spoken, the dots
+       give the answer visually. */
+    $('#parityPrompt').textContent = t('parityPrompt').replace('{a}', item.a);
+    paintParityDots(item);
+    var options = $('#parityOptions');
+    options.innerHTML = '';
+    var buttons = [
+      { value: true, label: t('evenLabel') },
+      { value: false, label: t('oddLabel') }
+    ];
+    App.utils.shuffle(buttons).forEach(function (choice) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn option-btn';
+      btn.textContent = choice.label;
+      btn.addEventListener('click', function () { checkParity(item, choice.value, btn); });
+      options.appendChild(btn);
+    });
+    $('#parityFeedback').textContent = '';
+    $('#parityFeedback').className = 'feedback';
+    $('#parityExplanationWrap').classList.add('hidden');
+    $('#parityExplanation').textContent = '';
+    hide($('#parityNext'));
+  }
+
+  function checkParity(item, value, button) {
+    var correct = item.a % 2 === 0;
+    if (value !== correct) {
+      pAttempts += 1;
+      button.disabled = true;
+      App.feedback.encourage($('#parityFeedback'));
+      $('#parityFeedback').textContent += ' ' + t('hintParity');
+      App.feedback.lockUntilAck($('#parityOptions').querySelectorAll('button'), $('#parityFeedback'));
+      return;
+    }
+    progress.stars += 1;
+    save();
+    App.feedback.success($('#parityFeedback'));
+    $('#parityOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+    $('#parityExplanation').textContent = t('explainParity').replace('{a}', item.a);
+    $('#parityExplanationWrap').classList.remove('hidden');
+    show($('#parityNext'));
+    $('#parityNext').focus();
+  }
+
+  function nextParity() {
+    pIdx += 1;
+    if (pIdx < parityItems.length) {
+      renderParity();
+      return;
+    }
+    finishParityRound();
+  }
+
+  function finishParityRound() {
+    var rounds = parityItems.length;
+    $('#parityFinalSummary').textContent = t('parityFinalSummary')
+      .replace('{count}', rounds)
+      .replace('{stars}', progress.stars);
+    App.feedback.celebrate(t('roundComplete'));
+    switchTo(parityEndScreen);
+  }
+
   /* ----------- Screen switching -----------
      One place decides which screen is visible, so the header star
      counter and the scroll position are consistent whichever way the
      person navigates. */
   var ALL_SCREENS = [menuScreen, introScreen, famousScreen, reminderScreen,
-    levelsScreen, taskScreen, groupsQuizScreen, finishScreen, groupsEndScreen];
+    levelsScreen, taskScreen, groupsQuizScreen, finishScreen, groupsEndScreen,
+    parityScreen, parityEndScreen];
 
   function switchTo(screen) {
     ALL_SCREENS.forEach(function (s) { hide(s); });
@@ -1215,6 +1391,12 @@
   $('#groupsReplay').addEventListener('click', function () { startGroupsLevel(currentLevel); });
   $('#groupsChooseLevel').addEventListener('click', function () { switchTo(levelsScreen); });
   $('#groupsEndMenu').addEventListener('click', function () { switchTo(menuScreen); });
+
+  /* ---- Parity: dots quiz → finish ---- */
+  $('#parityBack').addEventListener('click', function () { switchTo(menuScreen); });
+  $('#parityNext').addEventListener('click', nextParity);
+  $('#parityReplay').addEventListener('click', startParityRound);
+  $('#parityChooseAnother').addEventListener('click', function () { switchTo(menuScreen); });
 
   function init() {
     App.i18n.apply();

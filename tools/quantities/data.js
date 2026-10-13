@@ -1,7 +1,7 @@
 /* ============================================================
    Calculia — Cantidades.
 
-   Four practices in the menu:
+   Five practices in the menu:
      - read   : the number is shown and the user copies it.
      - write  : the number is spoken and the user writes it.
      - points : the number is shown WITHOUT separator; the user
@@ -9,6 +9,9 @@
      - groups : place value taught through the counting groups a
                 person meets in real life — unidades, decenas,
                 centenas, millares, media docena and docena.
+     - parity : even or odd. The number is drawn as a small row
+                of dots; the user counts them two by two — if one
+                dot is left alone it's odd, otherwise even.
 
    "Thousand" rule (see ranges below): < 10.000 has no separator;
    >= 10.000 does. In read/write modes the format shown matches
@@ -152,8 +155,19 @@ var DATA = {
     { id: 'read', icon: '👀' },
     { id: 'write', icon: '✍️' },
     { id: 'points', icon: '·' },
-    { id: 'groups', icon: '🧱' }
+    { id: 'groups', icon: '🧱' },
+    { id: 'parity', icon: '🟦' }
   ],
+  /* Parity: dot count from 0 to DATA.parity.max, randomised. */
+  parity: {
+    max: 24,
+    perRound: 10,
+    /* First colour paints every pair. The leftover dot (if any)
+       paints in the second colour, so even numbers only ever
+       show the first colour. */
+    pairColor: '#1565C0',
+    leftoverColor: '#E65100'
+  },
   /* Ranges for the three typing practices (the 'groups' practice
      has its own levels instead of a numeric range). */
   ranges: {

@@ -163,6 +163,39 @@
         <button type="button" class="btn btn-secondary" id="groupsEndMenu" data-i18n="btnMenu">Volver al inicio</button>
       </section>
 
+      <!-- ============ Práctica "pares e impares" ============
+           Visual: el número se pinta como una columna de puntos.
+           Una pareja vale "par"; si sobra un punto solo, es impar.
+           El punto sobrado va en otro color para que se vea. -->
+      <section id="screenParity" class="stack hidden" aria-live="polite">
+        <div class="row">
+          <button type="button" class="btn btn-secondary" id="parityBack" data-i18n="core.backToMenu">Volver al menú</button>
+        </div>
+        <div class="progress-bar" aria-hidden="true">
+          <div class="progress-fill" id="parityProgressFill"></div>
+        </div>
+        <p class="progress-text" id="parityProgressText"></p>
+        <article class="card stack parity-card">
+          <h2 id="parityPrompt"></h2>
+          <div class="parity-dots" id="parityDots" role="img"></div>
+          <div class="parity-options" id="parityOptions" aria-label="Opciones"></div>
+          <p class="feedback" id="parityFeedback" aria-live="polite"></p>
+          <div class="explanation hidden" id="parityExplanationWrap">
+            <p id="parityExplanation" aria-live="polite"></p>
+          </div>
+          <button type="button" class="btn hidden" id="parityNext" data-i18n="core.next">Siguiente →</button>
+        </article>
+      </section>
+
+      <section id="screenParityFinish" class="stack hidden centered">
+        <div class="big-emoji" aria-hidden="true">🎉</div>
+        <h2 data-i18n="roundComplete">¡Ronda terminada!</h2>
+        <p id="parityFinalSummary"></p>
+        <p class="transfer" data-i18n="parityTransfer"></p>
+        <button type="button" class="btn" id="parityReplay" data-i18n="core.playAgain">Jugar otra vez</button>
+        <button type="button" class="btn btn-secondary" id="parityChooseAnother" data-i18n="chooseAnother">Elegir otra práctica</button>
+      </section>
+
       <!-- ============ Prácticas de escritura ============
            Zonas por modo (todas viven aquí, app.js muestra/oculta
            según el modo):

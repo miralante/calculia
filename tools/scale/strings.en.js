@@ -72,7 +72,8 @@
       leer: { name: 'Read the measure', detail: 'See how far it reaches.' },
       paso: { name: 'The step', detail: 'What one mark is worth.' },
       instrumento: { name: 'Other tools', detail: 'The same idea, another shape.' },
-      plano: { name: 'The scale of a plan', detail: 'From the drawing to real life.' }
+      plano: { name: 'The scale of a plan', detail: 'From the drawing to real life.' },
+      test: { name: "Let's practice!", detail: 'A round with questions from everything.' }
     },
     level: {
       l1: 'Marks with numbers',

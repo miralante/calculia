@@ -31,6 +31,8 @@
     pointsDetail: 'Separa los millares con puntos.',
     groupsName: 'Contar en grupos',
     groupsDetail: 'Decenas, centenas, millares y docenas.',
+    parityName: 'Pares e impares',
+    parityDetail: 'Mira los puntos: ¿sobra uno o van todos en parejas?',
 
     /* ---------- Prácticas de escritura ----------
        {n} = número ya formateado. {nRaw} = número sin separador. */
@@ -193,6 +195,21 @@
     hintWhichGroup: 'Piensa en cuántos grupos caben en ese número. Mira los colores.',
     hintDozen: 'Recuerda: una docena son doce.',
     hintHowMany: 'Cuenta los grupos. Luego multiplica por lo que vale cada grupo.',
+
+    /* ---------- Pares e impares ----------
+       El prompt muestra el número y los puntos forman la imagen;
+       el usuario decide si sobra un punto (impar) o todos van de dos
+       en dos (par). Las dos palabras finales son los labels de los
+       botones. */
+    parityPrompt: '¿{a} es par o impar?',
+    evenLabel: 'Par',
+    oddLabel: 'Impar',
+    pairsWord: 'parejas',
+    oneLeftWord: 'uno que sobra',
+    hintParity: 'Empareja los puntos de dos en dos. Si sobra uno, es impar.',
+    explainParity: 'Los {a} puntos van de dos en dos. Si no sobra ninguno, es par; si sobra uno, es impar.',
+    parityFinalSummary: 'Has visto {count} números y los has clasificado. Ahora tienes {stars} estrellas.',
+    parityTransfer: 'Saber qué números son pares y cuáles impares sirve para repartir en dos equipos, alternar turnos o cortar listas por la mitad.',
 
     groupsTransfer: 'Contar en grupos te sirve para los huevos, las cajas, el dinero y los números grandes.'
   }, 'es');

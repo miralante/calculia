@@ -289,7 +289,7 @@
     $('#stars').textContent = '';
     App.feedback.success(feedback);
     renderVisual($('#quizVisual'), item, true);
-    $('#explanation').textContent = '';
+    $('#explanation').textContent = fill('explain' + keySuffix(item), itemValues(item));
     show($('#explanation'));
     $('#options').querySelectorAll('button').forEach(function (option) { option.disabled = true; });
     show($('#nextFact'));

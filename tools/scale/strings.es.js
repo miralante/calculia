@@ -72,7 +72,8 @@
       leer: { name: 'Leer la medida', detail: 'A ver hasta dónde llega.' },
       paso: { name: 'El paso', detail: 'Cuánto vale una rayita.' },
       instrumento: { name: 'Otros instrumentos', detail: 'La misma idea, con otra forma.' },
-      plano: { name: 'La escala de un plano', detail: 'Del dibujo a la vida real.' }
+      plano: { name: 'La escala de un plano', detail: 'Del dibujo a la vida real.' },
+      test: { name: '¡Vamos a practicar!', detail: 'Una ronda con preguntas de todo.' }
     },
     level: {
       l1: 'Rayitas con número',

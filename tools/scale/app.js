@@ -59,6 +59,11 @@
   var inReinforce = false;
   var reinforceList = [];
   var reinforceIndex = 0;
+  /* The mixed round is pre-built once at startRound(): six questions,
+     each taken from a random (activity, level) among the four. paintQuestion
+     reads it by index and never regenerates, so the question in slot 3
+     stays in slot 3 across renders. Set to null for any non-test round. */
+  var mixedRoundQueue = null;
 
   function save() { App.storage.set(TOOL_ID, progress); }
   function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
@@ -723,11 +728,31 @@
     reinforceIndex = 0;
     inReinforce = false;
     App.reinforce.banner.hide();
+    /* Mixed round: pre-build once so the order of questions stays
+       stable across renders. A mixed round never calls a generator
+       twice (one to build, one to paint). */
+    mixedRoundQueue = (nv.tipo === 'mixedTest') ? buildMixedRound() : null;
     /* Registers the callback that runs when the normal round ends with
        pending failures; it mounts the mini-round with just those. */
     App.reinforce.start(function (fallos) { startReinforce(fallos); });
     show(screenGame);
     render();
+  }
+
+  /* A round whose questions come from one (activity, level) pair chosen
+     at random for each round position. The 'test' activity is the only
+     caller, and it's the only thing special about the round: every other
+     round paints straight from its own generator by (level, index). */
+  function buildMixedRound() {
+    var ids = Object.keys(DATA.activities).filter(function (k) { return k !== 'test'; });
+    var out = [];
+    for (var i = 0; i < DATA.perRound; i += 1) {
+      var aid = ids[Math.floor(Math.random() * ids.length)];
+      var act = DATA.activities[aid];
+      var lvl = act.levels[Math.floor(Math.random() * act.levels.length)];
+      out.push(GENERATORS[lvl.tipo](lvl, i));
+    }
+    return out;
   }
 
   function startReinforce(fallos) {
@@ -743,9 +768,16 @@
   }
 
   /* Paints one question. `fixed` replays a question from the reinforce
-     queue; without it a new one is generated for the current level. */
+     queue; without it a new one is generated for the current level, or
+     pulled from the pre-built mixed queue when this is the test round. */
   function paintQuestion(fixed) {
-    question = fixed || GENERATORS[level.tipo](level, index);
+    if (fixed) {
+      question = fixed;
+    } else if (mixedRoundQueue) {
+      question = mixedRoundQueue[index];
+    } else {
+      question = GENERATORS[level.tipo](level, index);
+    }
     answered = false;
     attempts = 0;
 

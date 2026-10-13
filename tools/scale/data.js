@@ -82,6 +82,17 @@ var DATA = {
         { id: 'd1', tipo: 'planToReal' },
         { id: 'd2', tipo: 'realToPlan' }
       ]
+    },
+
+    /* El test que mezcla todo: una ronda de preguntas tomadas al azar
+       entre cualquiera de los niveles de las cuatro actividades. Una
+       vez construido por startRound(), la cola se lee por índice y
+       nunca se regenera, así que la pregunta de la posición 3 sigue
+       siendo la posición 3 si la ronda se vuelve a pintar. La misma
+       forma que el modo 'test' (pool 'random') de números romanos. */
+    test: {
+      picto: '🎯',
+      levels: [{ id: 't1', tipo: 'mixedTest' }]
     }
   },
 

@@ -309,6 +309,43 @@
    no cabe. */
 .option-btn--word { font-size: var(--texto-base); overflow-wrap: break-word; padding: 12px 10px; }
 
+/* ============================================================
+   Práctica "pares e impares" (quinta del menú)
+   ============================================================
+   El número se pinta como puntos individuales. El usuario mira si
+   todos van en parejas (par) o si sobra uno (impar). El sobrado va
+   de un color distinto para que la paridad sea también una señal
+   visual, no sólo aritmética. */
+.parity-card { border-color: var(--mod-razonamiento-suave); }
+.parity-dots {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  max-width: 360px;
+  padding: var(--espacio);
+  border-radius: var(--radio);
+  background: var(--mod-razonamiento-suave);
+}
+/* Two dots side by side with no gap, then the parent .parity-dots
+   uses 6px between pairs — that visual gap is what makes the pairing
+   pattern readable. */
+.parity-pair-row { display: inline-flex; gap: 0; }
+.parity-dot { display: inline-block; width: 24px; height: 24px; border-radius: 50%; }
+.parity-pair   { background: var(--mod-razonamiento); }
+.parity-leftover {
+  background: var(--color-foco);
+  box-shadow: 0 0 0 3px var(--color-foco-suave);
+}
+.parity-options { display: flex; gap: var(--espacio); flex-wrap: wrap; }
+.parity-options .option-btn { min-width: 120px; font-size: var(--texto-grande); }
+.parity-options .option-btn:disabled { opacity: 0.45; }
+#parityPrompt { font-size: var(--texto-grande); color: var(--mod-razonamiento); }
+
+/* En 320px las opciones bajarían a 1×2 en lugar de 2×1 si no forzamos
+   `flex` nowrap. 120px mínimo × 2 + hueco = 256px < 320px. */
+@media (max-width: 360px) {
+  .parity-options { flex-direction: column; }
+  .parity-options .option-btn { min-width: 0; width: 100%; }
+}
+
 /* --- Pantalla final --- */
 .big-emoji { font-size: 96px; }
 

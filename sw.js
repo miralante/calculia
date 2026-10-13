@@ -12,7 +12,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v179';
+var VERSION = 'calculia-v180';
 
 var FILES = [
   './',
@@ -154,6 +154,12 @@ var FILES = [
   './tools/geometry/strings.es.js',
   './tools/geometry/strings.en.js',
   './tools/geometry/styles.css',
+  './tools/los-numeros/',
+  './tools/los-numeros/app.js',
+  './tools/los-numeros/data.js',
+  './tools/los-numeros/strings.es.js',
+  './tools/los-numeros/strings.en.js',
+  './tools/los-numeros/styles.css',
   './tools/numbers/',
   './tools/numbers/app.js',
   './tools/numbers/data.js',

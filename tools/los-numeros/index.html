@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Los Números | Calculia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
+  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v62e5b2c5">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="titleH1">🔢 Los Números</h1>
+      <span class="stars" id="stars">⭐ 0</span>
+    </header>
+
+    <!-- Pantalla de introducción: cuatro tarjetas, una por tipo.
+         Se muestran siempre al entrar. Tocar cada tarjeta no hace
+         nada extra: la lección está en el cuerpo de cada tarjeta. -->
+    <section id="screenIntro" class="stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="introIntro">Toca cada tarjeta para verla con más detalle.</p>
+      </div>
+      <h2 class="intro-title" data-i18n="introTitle">Hay cuatro tipos de números</h2>
+      <div class="intro-grid">
+        <article class="intro-card intro-card-natural" id="introNatural">
+          <h3 data-i18n="introNaturalTitle">Naturales</h3>
+          <p data-i18n="introNaturalBody">Cuentan lo que hay. Empiezan en 0 y suben: 0, 1, 2, 3, 4, 5…</p>
+          <p class="intro-examples" data-i18n="introNaturalExamples">Ejemplos: 0 · 1 · 5 · 12 · 100 · 1.000</p>
+        </article>
+        <article class="intro-card intro-card-entero" id="introEntero">
+          <h3 data-i18n="introEnteroTitle">Enteros</h3>
+          <p data-i18n="introEnteroBody">Como los naturales, pero también bajan por debajo de 0: …−3, −2, −1, 0, 1, 2…</p>
+          <p class="intro-examples" data-i18n="introEnteroExamples">Ejemplos: −5 · −1 · 0 · 3 · −12</p>
+        </article>
+        <article class="intro-card intro-card-decimal" id="introDecimal">
+          <h3 data-i18n="introDecimalTitle">Decimales</h3>
+          <p data-i18n="introDecimalBody">Tienen una parte pequeña después de la coma: 0,5 es "cero y cinco décimas".</p>
+          <p class="intro-examples" data-i18n="introDecimalExamples">Ejemplos: 0,5 · 1,25 · 3,14 · 2,7</p>
+        </article>
+        <article class="intro-card intro-card-fraccion" id="introFraccion">
+          <h3 data-i18n="introFraccionTitle">Fracciones</h3>
+          <p data-i18n="introFraccionBody">Una parte de un todo. Se escriben con un numerador y un denominador: 1/2 es "una de dos partes".</p>
+          <p class="intro-examples" data-i18n="introFraccionExamples">Ejemplos: 1/2 · 3/4 · 2/5 · 7/8</p>
+        </article>
+      </div>
+      <button type="button" class="btn" id="introContinue" data-i18n="introContinue">Empezar a practicar →</button>
+    </section>
+
+    <!-- Pantalla de juego -->
+    <section id="screenGame" class="hidden stack">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+        <span class="progress-text" id="progressText">0 / 6</span>
+        <span class="difficulty" id="difficulty"></span>
+      </div>
+
+      <div class="card centered stack quiz-card">
+        <p class="quiz-ask" data-i18n="gen.askType">¿Qué tipo de número es?</p>
+        <p class="quiz-number" id="quizNumber" aria-live="polite"></p>
+      </div>
+      <div class="stack options" id="options"></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="row explanation hidden" id="explanationWrap">
+        <p id="explanation" aria-live="polite"></p>
+      </div>
+      <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
+    </section>
+
+    <!-- Pantalla final -->
+    <section id="screenEnd" class="hidden centered stack" aria-live="polite">
+      <div class="emoji-large" aria-hidden="true">🎉</div>
+      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+      <p id="endSummary"></p>
+      <p id="transfer" class="transfer" data-i18n="transfer">Esto te servirá para saber qué tipo de número tienes delante.</p>
+      <button type="button" class="btn" id="btnRepeat" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
+      <a href="../../" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
+    </section>
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
+  </div>
+
+  <script src="../../assets/js/utils.js?v=calculia-v37f362d0"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-v3d393c12"></script>
+  <script src="../../assets/js/storage.js?v=calculia-vd97e2550"></script>
+  <script src="../../assets/js/feedback.js?v=calculia-v73bb9e8a"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="../../assets/js/sw-register.js?v=calculia-v58bd4f76"></script>
+</body>
+</html>
