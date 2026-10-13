@@ -91,16 +91,16 @@
        incluye los comentarios. La cifra hace el mismo trabajo sin
        chocar con esa puerta. */
     ord: {
-      /* Antes había aquí 15 claves 'NNNCaption', una por ordinal. Cada
-         caption estaba escrito a mano con su propia frase (algunos
-         incluso variaban la fórmula entre sí). Eran 15 partes. Ahora
-         se construyen todos con captionFor() en app.js, que usa UNA
-         sola plantilla a partir de:
-           - el nombre del ordinal (la clave NName de aquí)
-           - el número escrito con letras (number.N, en strings.i18n)
-           - un ejemplo de uso real (numberUsage.N, si existe)
-         Los nombres y los lugares siguen aquí porque el recordatorio
-         y el carrusel los usan. */
+      /* Los nombres y los lugares siguen aquí porque el recordatorio,
+         los slides-lista y las preguntas del juego los usan. La
+         antigua sección de captions (captionInRow + number.N +
+         numberUsage.N) se quitó: el caption del carrusel se eliminó
+         entero porque "Sexto. seis en fila." repetía la palabra del
+         ordinal una y otra vez. La ficha del recordatorio tampoco
+         usa NPlace, porque "sexto lugar" repetía "sexto" — la pieza
+         3 ahora es el número natural (1, 2, 3…). NPlace se conserva
+         sólo para las preguntas del juego ("¿Quién está en sexto
+         lugar?"), donde "lugar" sí aporta. */
       '1Name': 'primero', '1Place': 'primer lugar',
       '2Name': 'segundo', '2Place': 'segundo lugar',
       '3Name': 'tercero', '3Place': 'tercer lugar',
@@ -112,8 +112,10 @@
       '9Name': 'noveno', '9Place': 'noveno lugar',
       '10Name': 'décimo', '10Place': 'décimo lugar',
       /* Los cinco ordinales "redondos" que sí se enseñan. La palabra
-         sola no se asocia a nada: el uso real (pisos, meses,
-         cumpleaños, edad) viene en numberUsage.N. */
+         sola es la que la persona tiene que aprender de memoria;
+         el uso real se muestra en el escenario de la pantalla 2
+         (edificio: undécimo piso; meses: duodécimo mes;
+         cumpleaños: vigésimo, trigésimo, cuadragésimo). */
       '11Name': 'undécimo', '11Place': 'undécimo lugar',
       '12Name': 'duodécimo', '12Place': 'duodécimo lugar',
       '20Name': 'vigésimo', '20Place': 'vigésimo lugar',
@@ -177,31 +179,6 @@
     /* ---------- La fila ---------- */
     queueHint: 'Cuenta desde la bandera 🏁.',
     queueAria: 'Fila de {n}. La flecha señala el lugar {pos}.',
-
-    /* ---------- Texto unificado de los ordinales ----------
-       Antes había 15 'NNNCaption' separados, uno por ordinal, cada uno
-       escrito a mano. Eso era "partes": la misma fórmula repetida 15
-       veces. Aquí se construye UN SOLO texto a partir de tres piezas
-       mínimas: el nombre del ordinal (ord.NName), el número escrito
-       con letras (number.N) y, si lo tiene, un ejemplo de uso real
-       (number.usage.N). La fórmula es la misma para los 15 ordinales:
-       "{Name}. {Spell} en fila. {Uso}". */
-    captionInRow: 'en fila',
-    number: {
-      1: 'uno', 2: 'dos', 3: 'tres', 4: 'cuatro', 5: 'cinco',
-      6: 'seis', 7: 'siete', 8: 'ocho', 9: 'nueve', 10: 'diez',
-      11: 'once', 12: 'doce', 20: 'veinte', 30: 'treinta', 40: 'cuarenta'
-    },
-    /* Solo los redondos (11, 12, 20, 30, 40) llevan una segunda
-       frase con un ejemplo de uso: la palabra suelta ("undécimo") no
-       se asocia a nada sin el contexto. */
-    numberUsage: {
-      11: 'Se usa para los pisos: "vive en el piso undécimo".',
-      12: 'También se usa para los meses: "el duodécimo mes".',
-      20: 'Se usa para los cumpleaños: "el vigésimo".',
-      30: 'También para los cumpleaños: "el trigésimo".',
-      40: 'Para los 40 años: "el cuadragésimo cumpleaños".'
-    },
 
     /* ---------- El edificio y la cola ---------- */
     /* Etiqueta que aparece sobre el escenario en la pantalla 2. */

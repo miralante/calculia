@@ -33,12 +33,16 @@
    ------------------
    DATA.ordinals — un ordinal por fila. 'n' es su número, 'cls' la
    clase de color. Las palabras viven en strings.<locale>.js como
-   'ord.<n>Name' (primero), 'ord.<n>Place' (primer lugar) y
-   'ord.<n>Caption' (una frase fácil). Los tres primeros llevan
-   además 'medal' con la medalla correspondiente (🥇🥈🥉): la
-   medalla es lo que abre la actividad, porque "primero, segundo,
-   tercero" es la cara que la gente ya reconoce sin tener que
-   aprenderla primero.
+   'ord.<n>Name' (primero, segundo…) y 'ord.<n>Place' (primer
+   lugar, segundo lugar…). La clave NPlace se sigue usando para
+   las preguntas del juego ("¿Quién está en sexto lugar?"); la
+   ficha del recordatorio ya no la usa, porque "sexto lugar"
+   repite "sexto" sin aportar información — la pieza 3 de la ficha
+   es ahora el número natural (1, 2, 3…). Los tres primeros
+   llevan además 'medal' con la medalla correspondiente
+   (🥇🥈🥉): la medalla es lo que abre la actividad, porque
+   "primero, segundo, tercero" es la cara que la gente ya
+   reconoce sin tener que aprenderla primero.
 
    No hay forma abreviada con el signo de grado superíndice, y es
    deliberado: check.js (comprobación 6.1) prohíbe por substring las

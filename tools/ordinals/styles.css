@@ -102,18 +102,25 @@
    misma fila, el 🥇 no parecería el primero: el ojo entiende "el
    primero" como "el que está más alto".
 
-   Dentro de cada pieza, el texto (cifra + nombre) va a la izquierda
-   y la medalla a la derecha: la cifra y la palabra son lo que se lee,
+   Dentro de cada pieza, el texto (cifra + nombre) y la medalla van
+   pegados a la izquierda: la cifra y la palabra son lo que se lee,
    y la medalla es el "sello" que confirma el puesto. Si la medalla
    viviera arriba del número, se leería como un adorno; si viviera
    debajo, como dato separado. El texto se alinea a la derecha de
    su columna para que quede pegado a la medalla — así cifra,
-   palabra y medalla forman una sola unidad visual. */
+   palabra y medalla forman una sola unidad visual.
+
+   Antes este bloque justificaba el contenido a la derecha de la
+   tarjeta (`justify-content: space-between` + `flex: 1 1 auto` en
+   .medal-text). Eso metía texto y medalla en el borde derecho y
+   dejaba un gran hueco a la izquierda, vacío y raro. Ahora todo va
+   pegado a la izquierda: el bloque del texto ocupa su contenido
+   natural, y la medalla se queda justo al lado. */
 .medal-item {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: var(--espacio);
   padding: var(--espacio);
   border-radius: var(--radio);
@@ -123,15 +130,15 @@
 
 /* Bloque de texto (cifra + nombre) a la izquierda de la medalla.
    Las dos piezas en columna, alineadas a la derecha de su columna
-   para que el "primero" (más ancho que "1º") no descuelgue la
-   composición. */
+   para que el "primero" (más ancho que "1º") quede pegado a la
+   medalla y no descolgue la composición. Sin `flex: 1 1 auto`: el
+   bloque ocupa solo su contenido, no se estira hasta el borde
+   derecho de la tarjeta. */
 .medal-text {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 4px;
-  flex: 1 1 auto;
-  min-width: 0;
 }
 .medal-item--1 { grid-row: 1; padding-bottom: calc(var(--espacio) + 8px); }
 .medal-item--2 { grid-row: 2; }
@@ -433,9 +440,12 @@
 
 .ordinals-row { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--espacio); width: 100%; }
 
-/* Cada ficha lleva la cifra, la palabra y el lugar del ordinal,
-   porque el error típico es usar una donde toca otra: la palabra en
-   el sitio donde va la cifra, o al revés. */
+/* Cada ficha lleva la cifra, la palabra y el número natural: la
+   cifra (1.º) y el natural (1) son las dos formas que la persona
+   tiene que aprender a leer e intercambiar en el juego, y la
+   palabra (primero) las conecta. Antes la tercera pieza era
+   "primer lugar" / "sexto lugar" — eso era la palabra + "lugar"
+   y repetía la pieza central sin añadir información. */
 .ord-chip {
   display: flex;
   flex-direction: column;
@@ -457,12 +467,19 @@
 }
 .ord-chip-medal { font-size: 1.4rem; line-height: 1; }
 .ord-chip-name { font-size: var(--texto-base); font-weight: 700; }
+/* Pieza 3 de la ficha: el número natural (1, 2, 3…). El nombre
+   "-place" se conserva por compatibilidad con el CSS responsive
+   más abajo y con los selectores existentes; el contenido ahora
+   es el natural, no "sexto lugar". */
 .ord-chip-place { font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
 
 .rule-card { border-color: var(--mod-razonamiento-suave); }
 .rule-title { font-weight: 700; margin: 0; text-align: center; font-size: var(--texto-base); color: var(--color-texto); }
 
-/* "1 · primero · primer lugar" */
+/* "1.º · primero · 1" — la regla que comparten todas las fichas del
+   recordatorio (cifra, palabra, número natural). El comentario está
+   en CSS porque la regla visual ya está aquí; app.js la pinta con
+   la misma fórmula. */
 .rule-example {
   display: flex;
   align-items: center;
