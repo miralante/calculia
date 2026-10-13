@@ -178,7 +178,7 @@
 
   /* Events */
   btnNext.addEventListener('click', next);
-  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
+  
 
 
   paintStars();
