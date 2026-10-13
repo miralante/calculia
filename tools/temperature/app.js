@@ -437,14 +437,6 @@
   thermoReset.textContent = App.i18n.t('gen.btnReset');
   thermoExit.textContent = App.i18n.t('gen.btnExit');
 
-  /* "Repeat" / "Other level" / "Other activity" wired up to the
-     standard end-of-round actions. */
-  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
-
-
-  var elBtnBackToMenu = $('#btnBackToMenu');
-  if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); paintMenu(); });
-
   /* Initial paint. */
   paintStars();
   paintMenu();
