@@ -60,36 +60,12 @@
     return text !== key ? text : '';
   }
 
-  /* Texto unificado del carrusel de la pantalla 1. Antes había 15
-     claves 'NNNCaption' separadas en strings.<locale>.js, una por
-     ordinal, cada una con su propia frase y todas describiendo el
-     mismo patrón ("el nombre, una coletilla"). Eran partes; ahora es
-     un solo texto construido aquí.
-
-     Fórmula = "{Name capitalizado}. {Número con letras} en fila.
-     {Uso real, si lo tiene}".
-       - Nombre: ord.NName (sigue en strings por i18n)
-       - Número con letras: number.N (nuevo en strings, bilingüe)
-       - "en fila": captionInRow (un único valor bilingüe)
-       - Uso real: numberUsage.N (nuevo en strings, solo para 11/12/20/
-         30/40, donde la palabra suelta no se asocia a nada)
-     Si una pieza falta, se omite sin dejar huecos raros. */
-  function captionFor(n) {
-    var name = t('ord.' + n + 'Name');
-    var spell = t('number.' + n);
-    var usage = t('numberUsage.' + n);
-    var parts = [];
-    if (name && name !== 'ord.' + n + 'Name') {
-      parts.push(name.charAt(0).toUpperCase() + name.slice(1) + '.');
-    }
-    if (spell && spell !== 'number.' + n) {
-      parts.push(spell + ' ' + t('captionInRow') + '.');
-    }
-    if (usage && usage !== 'numberUsage.' + n) {
-      parts.push(usage);
-    }
-    return parts.join(' ');
-  }
+  /* El carrusel de la pantalla 1 NO lleva caption. Antes tenía
+     "{Ordinal}. {número con letras} en fila." — la coletilla "en
+     fila" no aportaba (el carrusel muestra un ordinal solo, no una
+     fila), y "Sexto. seis en fila." repetía la palabra del ordinal
+     una y otra vez. La cifra y el nombre ya van en el visual, así
+     que el caption era redundante y se quita. */
 
   function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
   function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
@@ -210,7 +186,6 @@
        coincide con lo que ve el ojo (la cifra abreviada pegada al
        guion largo y al nombre del ordinal). */
     el.setAttribute('aria-label', abbrev(n) + ' — ' + t('ord.' + n + 'Name'));
-    $('#carouselCaption').textContent = captionFor(n);
   }
 
   function carouselStep(delta) {
@@ -344,8 +319,8 @@
       /* Slide-lista: una rejilla con los ordinales que la persona
          tiene que aprender de memoria (1-9 o los redondos 11/12/20/30).
          Misma ficha que el recordatorio (cifra + medalla si la tiene +
-         nombre + lugar), pero aquí se ve un subconjunto y no la serie
-         entera. */
+         nombre + número natural), pero aquí se ve un subconjunto y no
+         la serie entera. */
       container.className = 'famous-stage famous-list';
       container.innerHTML = renderOrdinalChips(item.ordinals);
       container.setAttribute('aria-hidden', 'true');
@@ -377,7 +352,16 @@
      de ordinales destacados). Las medallas se incluyen si el ordinal
      las tiene (1/2/3): la persona las ha visto en la pantalla 1, pero
      aquí también — el recordatorio NO es donde se quita la medalla,
-     es donde se consolida la serie entera. */
+     es donde se consolida la serie entera.
+
+     La tercera pieza es el número natural al que corresponde el
+     ordinal (1, 2, 3…). Antes era "primer lugar" / "sexto lugar" /
+     "cuadragésimo lugar" — eso era la palabra del ordinal + "lugar"
+     y repetía la pieza central sin aportar información. La regla
+     única del recordatorio ("1.º · primero · 1") ya marcaba la
+     pauta buena: la forma con marcador pegada a la palabra pegada
+     al número natural. La ficha es la misma fórmula, ampliada a 14
+     filas. */
   function renderOrdinalChips(ordinals) {
     var html = '';
     ordinals.forEach(function (n) {
@@ -389,17 +373,18 @@
         '<div class="ord-chip">' +
         '<span class="ord-chip-figure ' + o.cls + '">' + medalHtml + abbrev(n) + '</span>' +
         '<span class="ord-chip-name ' + o.cls + '">' + t('ord.' + n + 'Name') + '</span>' +
-        '<span class="ord-chip-place">' + t('ord.' + n + 'Place') + '</span>' +
+        '<span class="ord-chip-place">' + n + '</span>' +
         '</div>';
     });
     return html;
   }
 
-  /* La serie entera. Cada ficha lleva su forma corta, su palabra y su
-     lugar: los tres van juntos a propósito, porque el error típico es
-     usar la palabra en el sitio donde va la forma corta o al revés.
-     El HTML se delega en renderOrdinalChips para no duplicar la
-     construcción de la ficha entre el recordatorio y los slides-lista. */
+  /* La serie entera. Cada ficha lleva la cifra, la palabra y el
+     número natural: las tres van juntas porque la cifra (1.º) y el
+     natural (1) son las dos formas que se mezclan en el juego, y la
+     palabra (primero) las conecta. El HTML se delega en
+     renderOrdinalChips para no duplicar la construcción de la ficha
+     entre el recordatorio y los slides-lista. */
   function paintOrdinalRow() {
     var el = $('#ordinalsRow');
     el.innerHTML = renderOrdinalChips(DATA.presentedOrdinals);
@@ -909,9 +894,7 @@
   $('#referenceNext').addEventListener('click', function () { switchTo(levelsScreen); });
 
   $('#next').addEventListener('click', next);
-  $('#replayBtn').addEventListener('click', function () { startLevel(currentLevel); });
-  $('#btnChooseLevel').addEventListener('click', function () { switchTo(levelsScreen); });
-  $('#btnHome').addEventListener('click', function () { window.location.href = '../../index.html'; });
+  
 
   function init() {
     App.i18n.apply();
