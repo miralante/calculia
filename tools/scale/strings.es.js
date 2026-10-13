@@ -41,7 +41,7 @@
     introContinue: 'Verlas en la vida real →',
     realTitle: 'Las escalas están a tu alrededor',
     realBack: '← Volver a las ideas',
-    realContinue: 'Hacer el test →',
+    realContinue: 'Empezar a practicar →',
     instructionMenu: 'Elige qué quieres practicar.',
     menuBack: '← Volver a los instrumentos',
 
@@ -54,17 +54,9 @@
         name: 'Un termómetro',
         text: 'Mide la temperatura. Cada rayita es un grado.'
       },
-      jarra: {
-        name: 'Una jarra de la cocina',
-        text: 'Mide los mililitros. Cada rayita son cien.'
-      },
       mapa: {
         name: 'Un mapa',
         text: 'Una ciudad entera cabe en una hoja. La escala lo hace posible.'
-      },
-      agua: {
-        name: 'El contador del agua',
-        text: 'Sus números van de uno en uno. Es una lista de medidas, como la regla.'
       }
     },
 
@@ -125,8 +117,8 @@
       planBackAria: 'En el plano, cada centímetro son {key} {unit}. De verdad son {real} {unit}.',
       planBackHint: 'Reparte los {real} {unit} en trozos de {key}.',
       planBackWrong: 'En el plano son {real} cm de verdad.',
-      planLabel: 'Mapa',
-      planPath: 'El camino',
+      planLabel: 'Escala',
+      planPath: 'El camino en el mapa',
       planReal: 'Vida real',
       unitCentimetre: 'centímetros',
       unitMetre: 'metros',

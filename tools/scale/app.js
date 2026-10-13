@@ -292,10 +292,22 @@
     var w = RULER.w;
     var seg = w / span.gaps;
     var ticks = '';
+    var midNums = '';
     for (var i = 0; i <= span.gaps; i += 1) {
       var x = x0 + seg * i;
       ticks += '<line class="span-tick" x1="' + x + '" y1="' + RULER.top +
         '" x2="' + x + '" y2="' + (RULER.top + 11) + '"/>';
+      /* The marks between the two ends carry their value too, so the
+         slide says "every rayita is 1 unit" out loud instead of asking
+         the child to guess it. The two end numbers (span.from, span.to)
+         stay the largest; the middle ones are smaller and lighter, so
+         the eye still knows where the stretch starts and ends. Without
+         them, the rayita slide showed five ticks with no number on any
+         of them and a kid who could not count to five was stuck. */
+      if (i > 0 && i < span.gaps) {
+        midNums += '<text class="span-num-mid" x="' + x + '" y="' + NUM_Y +
+          '" text-anchor="middle">' + i + '</text>';
+      }
     }
     /* The two end marks are drawn again on top, longer: they carry the
        two numbers, and the length is what tells them apart from the
@@ -312,7 +324,7 @@
       '<rect class="span-face" x="' + x0 + '" y="' + RULER.top + '" width="' + w +
       '" height="' + RULER.h + '" rx="8"/>' +
       '<text class="ruler-unit" x="' + x0 + '" y="' + (RULER.top - 12) + '">' + unit + '</text>' +
-      ticks + ends + nums);
+      ticks + ends + midNums + nums);
   }
 
   /* The pencil lying over the ruler between two numbers: what the marks
@@ -381,7 +393,14 @@
      the same rule planSvg() already follows on its own. */
   function planCompareSvg(cfg) {
     var seg = PLAN.w / PLAN.segs;
-    var barY = 30;
+    /* A small map illustration sits above the scale bar so the "escala
+       de un dibujo" idea has a picture to land on: this is what "the
+       drawing" is. Without it, the scale bar came out of nowhere and
+       "this is a map" had to be told, not shown. The shape, the path,
+       the start and the end are drawn here; the SCALE of the map is
+       the data the three rows below carry. */
+    var MAP = { x: 40, y: 4, w: 240, h: 52 };
+    var barY = MAP.y + MAP.h + 14;
     var parts = '';
     var cmLabels = '';
     for (var i = 1; i <= PLAN.segs; i += 1) {
@@ -423,7 +442,43 @@
       '" text-anchor="middle">' + cfg.real + ' ' + cfg.unit + '</text>' + label('gen.planReal', yReal);
 
     return svgWrap('0 0 320 ' + (yReal + 16),
-      label('gen.planLabel', barY + 10) + parts);
+      planMapSvg(MAP) + label('gen.planLabel', barY + 10) + parts);
+  }
+
+  /* The small map illustration that sits on top of the "dibujo" concept
+     slide: a paper rectangle with a couple of mountains, a river and a
+     curvy dashed path going from a green start dot to a red end dot.
+     Coordinates are relative to the MAP constant planCompareSvg()
+     passes in, so the picture is exactly the size the layout reserves
+     for it. The path is a single Q+T curve: a real road does not bend
+     in two opposite directions on a hand-sized map, and a path that
+     zig-zags reads as a crack in the paper, not as a road. */
+  function planMapSvg(M) {
+    var x0 = M.x, y0 = M.y, w = M.w, h = M.h;
+    return '<g>' +
+      // Paper
+      '<rect class="plan-map-face" x="' + x0 + '" y="' + y0 + '" width="' + w +
+        '" height="' + h + '" rx="6"/>' +
+      // Mountains (subtle terrain in the upper-left third)
+      '<path class="plan-map-terrain" d="M ' + (x0 + 32) + ' ' + (y0 + 30) +
+        ' L ' + (x0 + 48) + ' ' + (y0 + 14) + ' L ' + (x0 + 64) + ' ' + (y0 + 30) + ' Z"/>' +
+      '<path class="plan-map-terrain" d="M ' + (x0 + 52) + ' ' + (y0 + 30) +
+        ' L ' + (x0 + 68) + ' ' + (y0 + 18) + ' L ' + (x0 + 84) + ' ' + (y0 + 30) + ' Z"/>' +
+      // River (a wavy line in the upper-right third)
+      '<path class="plan-map-water" d="M ' + (x0 + 140) + ' ' + (y0 + 10) +
+        ' Q ' + (x0 + 154) + ' ' + (y0 + 24) + ', ' + (x0 + 170) + ' ' + (y0 + 16) +
+        ' T ' + (x0 + 200) + ' ' + (y0 + 18) + '"/>' +
+      // The road: one Q then a smooth T, the second curve in the same
+      // direction as the first. Two opposite curves read as a crack.
+      '<path class="plan-map-route" d="M ' + (x0 + 14) + ' ' + (y0 + 42) +
+        ' Q ' + (x0 + 64) + ' ' + (y0 + 32) + ', ' + (x0 + 114) + ' ' + (y0 + 38) +
+        ' T ' + (x0 + 222) + ' ' + (y0 + 34) + '"/>' +
+      // Start (green) and end (red) markers
+      '<circle class="plan-map-marker plan-map-marker-start" cx="' + (x0 + 14) +
+        '" cy="' + (y0 + 42) + '" r="4.5"/>' +
+      '<circle class="plan-map-marker plan-map-marker-end" cx="' + (x0 + 222) +
+        '" cy="' + (y0 + 34) + '" r="4.5"/>' +
+      '</g>';
   }
 
   /* The scale of a plan: a bar split into four centimetres, which is

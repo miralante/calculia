@@ -134,6 +134,16 @@
   font-size: 14px;
   font-weight: 700;
 }
+/* The numbers on the middle ticks of the rayita slide: smaller and
+   lighter than the two end numbers so the eye still knows where the
+   stretch starts and ends, but visible enough that every tick carries
+   its own value. Without them, the slide asked a kid who could not
+   count to five to count to five. */
+.span-num-mid {
+  fill: var(--color-texto-suave);
+  font-size: 11px;
+  font-weight: 600;
+}
 /* The guides tie the two ends of the pencil to their numbers, and the
    pencil itself is the accent: what is measured is what is coloured. */
 .span-guide {
@@ -185,6 +195,48 @@
   fill: var(--mod-razonamiento);
   stroke: var(--color-superficie);
   stroke-width: 2;
+}
+
+/* ---- The small map illustration on the "dibujo" concept ----
+   A paper rectangle with a couple of mountains, a river and a curvy
+   dashed road going from a green start dot to a red end dot. The
+   picture is what "the drawing" is; the three rows below carry its
+   SCALE. The map paper is a warm off-white so it stands out from the
+   card, and the terrain colours are muted on purpose: the road is the
+   only feature that should be louder than the row labels. */
+.plan-map-face {
+  fill: #F5ECD7;
+  stroke: #B8A076;
+  stroke-width: 1.2;
+}
+.plan-map-terrain {
+  fill: #C8D5B9;
+  stroke: #7E8F70;
+  stroke-width: 0.8;
+  stroke-linejoin: round;
+}
+.plan-map-water {
+  fill: none;
+  stroke: #8FB5CB;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+.plan-map-route {
+  fill: none;
+  stroke: #B85447;
+  stroke-width: 2;
+  stroke-dasharray: 3 2;
+  stroke-linecap: round;
+}
+.plan-map-marker {
+  stroke: #FFFFFF;
+  stroke-width: 1.5;
+}
+.plan-map-marker-start {
+  fill: #4F9D4F;
+}
+.plan-map-marker-end {
+  fill: #B85447;
 }
 
 /* ---- Four answers: two by two when there is room for them ---- */

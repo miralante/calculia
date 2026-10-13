@@ -254,12 +254,12 @@
      Juntas abajo son un único control ("estás en el piso N,
      pulsa ▲ o ▼") que sigue al edificio.
 
-     El piso 1 lleva siempre la 🥇 como marcador semántico de
-     "primer lugar" (igual que en el podio de la pantalla 1): la
-     cuenta de los pisos empieza abajo, y la medalla ayuda a que la
-     cuenta arranque por el sitio correcto. El resaltado del piso
-     actual es independiente: aplica a cualquier piso según las
-     flechas, piso 1 incluido. */
+     El resaltado del piso actual aplica a cualquier piso según las
+     flechas, piso 1 incluido: el edificio se recorre con ▲/▼, y el
+     piso actual se queda "encendido" mientras los demás quedan en
+     reposo. No hace falta ningún marcador extra en el piso 1: el
+     podio de la pantalla 1 ya presentó la 🥇🥈🥉, y la cifra ordinal
+     ("1.º") que precede a cada planta es lo que fija el orden. */
   var currentFloor = 1;
 
   function renderBuilding(total) {
@@ -271,11 +271,10 @@
       var label = t('buildingFloor').replace('{n}', i);
       var isCurrent = i === currentFloor;
       var currentClass = isCurrent ? ' building-floor--current' : '';
-      var medal = i === 1 ? ' <span class="building-medal" aria-hidden="true">🥇</span>' : '';
       var person = ' <span class="building-person" aria-hidden="true">' + NEIGHBOURS[(i - 1) % NEIGHBOURS.length] + '</span>';
       rows.push(
         '<div class="building-floor' + currentClass + '">' +
-        '<span class="building-floor-ord ' + o.cls + '">' + abbrev(i) + medal + '</span>' +
+        '<span class="building-floor-ord ' + o.cls + '">' + abbrev(i) + '</span>' +
         '<span class="building-floor-label">' + label + person + '</span>' +
         '</div>'
       );
@@ -407,24 +406,32 @@
   }
 
   /* Una sola regla en el recordatorio: el ordinal va con su número.
-     "1·primero·primer lugar", "2·segundo·segundo lugar" — los ejemplos
-     se pintan en columna para que la persona vea la misma fórmula
-     repetida. La antigua regla 2 ("la cuenta empieza en el primero,
-     no hay lugar cero") se apoyaba en una miniatura de fila con
-     bandera; era redundante con esta primera regla y se ha quitado:
-     el conteo desde la bandera ya se entiende en el juego. */
+     "1.º · primero · 1", "2.º · segundo · 2" — los ejemplos se pintan
+     en columna para que la persona vea la misma fórmula repetida:
+     cifra ordinal (con el marcador), palabra del ordinal y número
+     natural al que corresponde. La tercera pieza ya NO dice
+     "primer lugar" / "segundo lugar": eso era "primero" + "lugar"
+     y repetía la palabra de la pieza central sin añadir información.
+     La cifra ordinal (1.º) y el número natural (1) enseñan a la vez
+     la forma con marcador y la forma sin él, que es justo lo que
+     luego se mezcla en el juego.
+
+     La antigua regla 2 ("la cuenta empieza en el primero, no hay
+     lugar cero") se apoyaba en una miniatura de fila con bandera;
+     era redundante con esta primera regla y se ha quitado: el
+     conteo desde la bandera ya se entiende en el juego. */
   var RULE_ONE = [1, 2, 3, 4];
 
-  /* "1 · primero · primer lugar": cifra, palabra y lugar unidos por
-     un punto, que es como se leen en un cartel de puerta ("tercer
-     piso") o en una lista de turnos. */
+  /* "1.º · primero · 1": cifra ordinal (abbrev), palabra y número
+     natural unidos por un punto, que es como se leen en un cartel de
+     puerta ("tercer piso") o en una lista de turnos. */
   function exampleFormula(n) {
     var o = ordinalByN(n);
-    return '<span class="ex-figure ' + o.cls + '">' + n + '</span>' +
+    return '<span class="ex-figure ' + o.cls + '">' + abbrev(n) + '</span>' +
       '<span class="ex-op"> · </span>' +
       '<span class="ex-name ' + o.cls + '">' + t('ord.' + n + 'Name') + '</span>' +
       '<span class="ex-op"> · </span>' +
-      '<span class="ex-place">' + t('ord.' + n + 'Place') + '</span>';
+      '<span class="ex-natural">' + n + '</span>';
   }
 
   function paintRuleExamples() {

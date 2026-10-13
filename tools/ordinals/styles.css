@@ -365,8 +365,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.building-medal { font-size: 1.4rem; line-height: 1; }
-
 .building-floor-label {
   flex: 1;
   text-align: right;
@@ -478,7 +476,11 @@
 .rule-example--tight { font-size: var(--texto-base); }
 .ex-figure { font-size: var(--texto-grande); }
 .ex-name { font-size: var(--texto-base); }
-.ex-place { color: var(--color-texto); }
+/* Pieza 3: el número natural al que corresponde el ordinal (1, 2,
+   3...). Tamaño base y forma de cifra: la cifra ordinal (1º) y el
+   natural (1) son las dos formas que la persona tiene que aprender
+   a leer e intercambiar, y se ven igual de importantes en la fila. */
+.ex-natural { font-size: var(--texto-base); font-variant-numeric: tabular-nums; }
 .ex-op { color: var(--color-texto-suave); }
 
 /* Antes del rediseño, debajo de los ejemplos de la regla 1 vivía una

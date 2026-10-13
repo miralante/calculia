@@ -14,7 +14,7 @@
     <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
     <header class="tool-header centered">
       <h1 data-i18n="title">🔢 Las Tablas</h1>
-      <p id="instruction" data-i18n="instruction">Aprende a contar de cabeza, sumar y multiplicar con puntos de colores.</p>
+      <p id="instruction" data-i18n="instruction">Suma, multiplica, resta y divide con puntos de colores.</p>
       <p class="stars" id="stars">⭐ 0</p>
     </header>
 
@@ -53,8 +53,36 @@
         <article class="card task-card stack">
           <h2 class="equation" id="quizPrompt"></h2>
           <div class="visual-card" id="quizVisual" role="img"></div>
+          <!--
+            Two answer shapes live here side by side:
+
+              #options   — three shuffled buttons. Used by add / multiply
+                          / subtract. The "more concrete" operations
+                          where a glance at three numbers is enough to
+                          pick the right one.
+
+              #inputOption — a free-text number entry + a "check"
+                          button. Used only by divide. Division has
+                          no exact multiplication table of its own,
+                          so the user has to compute the quotient
+                          mentally and the remainder shows up in the
+                          feedback, not in the answer box.
+          -->
           <div class="option-row" id="options"></div>
+          <div class="input-row hidden" id="inputOption">
+            <label class="visually-hidden" for="divideInput" data-i18n="inputLabel">Escribe el resultado</label>
+            <input type="number" id="divideInput" min="0" max="999" inputmode="numeric" autocomplete="off">
+            <button type="button" class="btn" id="checkDivide" data-i18n="check">Comprobar</button>
+          </div>
           <p class="feedback" id="feedback" aria-live="polite"></p>
+          <!--
+            restLine lives at feedback-time. When divide has a remainder
+            (> 0), the feedback text is replaced with the explanation
+            and the leftover count is shown here so the user sees both
+            the "this is right" cue and the spare-dot explanation in
+            the same view. Hidden in every other operation.
+          -->
+          <p class="rest-line hidden" id="restLine"></p>
           <p class="explanation hidden" id="explanation" aria-live="polite"></p>
           <button type="button" class="btn hidden" id="nextFact" data-i18n="core.next">Siguiente →</button>
         </article>

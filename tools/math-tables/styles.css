@@ -1,7 +1,13 @@
 .tool-header h1 { color: var(--mod-razonamiento); }
 
-/* Operation and table menus */
-.operation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--espacio); }
+/* Operation menu (4 cards: sumar / multiplicar arriba, restar /
+   dividir abajo). Forzamos 2 columnas fijas, no `auto-fit, minmax`,
+   para que "restar/dividir estén DEBAJO de sumar/multiplicar" en
+   cualquier ancho de pantalla. auto-fit las ponía en una sola fila
+   cuando el viewport era ancho, lo que rompía esa jerarquía visual
+   que el menú de Las Tablas asume (sumar+mult son el "anillo de
+   siempre-entero", restar+div son el "anillo con inverso o resto"). */
+.operation-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--espacio); }
 .operation-btn { min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: var(--mod-razonamiento); text-align: center; }
 .operation-btn small { font-size: var(--texto-pequeno); font-weight: 400; }
 .operation-icon { font-size: 42px; line-height: 1; }
@@ -33,6 +39,63 @@
 .option-btn:disabled { opacity: 0.45; }
 .explanation { margin: 0; color: var(--color-texto-suave); }
 #nextFact { align-self: center; }
+
+/* ---- Division input ----
+   The free-text input is the only answer shape that uses a numeric
+   field. The number goes in the centre; the "Check" button is a
+   plain .btn right next to it. We don't reuse .option-btn because
+   that styling carries the wide-buttons-of-the-shuffle look that
+   doesn't fit a single text input. */
+.input-row {
+  display: flex;
+  gap: var(--espacio);
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.input-row input[type="number"] {
+  width: 7em;
+  text-align: center;
+  font-size: var(--texto-grande);
+  font-variant-numeric: tabular-nums;
+  padding: 8px 10px;
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  /* Browsers render their own arrows for type=number; we let them so
+     desktop users get the same widget as everywhere else. The arrow
+     widgets are explicit per the user's design preference. */
+}
+.input-row input[type="number"]:disabled { opacity: 0.45; }
+.input-row .btn:disabled { opacity: 0.45; }
+
+/* Visually hidden but reachable by screen readers — used on the
+   <label> for the free-text answer so iOS VoiceOver / Android TalkBack
+   announce it without painting it. */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The "sobran R" line lives between the feedback and the explanation
+   on divide answers that have a leftover. We give it a small emoji
+   lead so it reads as a friendly aside rather than a red error. */
+.rest-line {
+  margin: 0;
+  font-size: var(--texto-base);
+  color: var(--color-texto-suave);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.rest-line strong { color: var(--mod-razonamiento); font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
 
 #pantallaFinalScreen .transferencia {
   margin: 8px auto 24px;

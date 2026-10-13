@@ -41,7 +41,7 @@
     introContinue: 'See them in real life →',
     realTitle: 'Scales are all around you',
     realBack: '← Back to the ideas',
-    realContinue: 'Start the test →',
+    realContinue: 'Start practising →',
     instructionMenu: 'Choose what you want to practise.',
     menuBack: '← Back to the tools',
 
@@ -54,17 +54,9 @@
         name: 'A thermometer',
         text: 'It measures temperature. Each mark is one degree.'
       },
-      jarra: {
-        name: 'A jug in the kitchen',
-        text: 'It measures millilitres. Each mark is a hundred.'
-      },
       mapa: {
         name: 'A map',
         text: 'A whole city fits on one sheet of paper. The scale makes it possible.'
-      },
-      agua: {
-        name: 'The water meter',
-        text: 'Its numbers go up one by one. It is a list of measures, like the ruler.'
       }
     },
 
@@ -125,8 +117,8 @@
       planBackAria: 'On the plan, each centimetre is {key} {unit}. In real life it is {real} {unit}.',
       planBackHint: 'Share the {real} {unit} into pieces of {key}.',
       planBackWrong: 'On the plan it is {real} cm in real life.',
-      planLabel: 'Map',
-      planPath: 'The road',
+      planLabel: 'Scale',
+      planPath: 'The road on the map',
       planReal: 'Real life',
       unitCentimetre: 'centimetres',
       unitMetre: 'metres',

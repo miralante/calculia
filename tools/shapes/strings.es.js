@@ -38,7 +38,7 @@
     introContinue: 'Ver en la vida real →',
     realTitle: 'Las formas están a nuestro alrededor',
     realBack: '← Volver a las formas',
-    realContinue: 'Hacer el test →',
+    realContinue: 'Empezar a practicar →',
     instructionMenu: 'Haz una prueba con todos los contenidos.',
     testTitle: 'Una prueba completa',
     testText: 'Una ronda con formas, cuerpos y desarrollos.',

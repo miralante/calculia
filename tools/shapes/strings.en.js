@@ -38,7 +38,7 @@
     introContinue: 'See it in real life →',
     realTitle: 'Shapes are all around us',
     realBack: '← Back to the shapes',
-    realContinue: 'Take the test →',
+    realContinue: 'Start practising →',
     instructionMenu: 'Take one test with all the content.',
     testTitle: 'One complete test',
     testText: 'One round with shapes, solids, and nets.',
