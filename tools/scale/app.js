@@ -1004,8 +1004,8 @@
   $('#btnRepeat').addEventListener('click', function () {
     startRound(levelFromProgress(activity.id));
   });
-  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
+
+
 
   function moveConcept(step) {
     conceptIndex = (conceptIndex + step + CONCEPTS.length) % CONCEPTS.length;

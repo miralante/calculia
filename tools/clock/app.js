@@ -695,10 +695,7 @@
   /* ---- Events ---- */
   $('#btnNext').addEventListener('click', goNext);
   $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
-  $('#btnMenu').addEventListener('click', function () {
-    screenEnd.classList.add('hidden');
-    screenStart.classList.remove('hidden');
-  });
+
   $('#btnOtherMode').addEventListener('click', function () {
     screenEnd.classList.add('hidden');
     screenLearn.classList.add('hidden');

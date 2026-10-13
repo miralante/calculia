@@ -440,11 +440,8 @@
   /* "Repeat" / "Other level" / "Other activity" wired up to the
      standard end-of-round actions. */
   $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
-  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnOtherActivity').addEventListener('click', function () {
-    show(screenMenu);
-    paintMenu();
-  });
+
+
   var elBtnBackToMenu = $('#btnBackToMenu');
   if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); paintMenu(); });
 

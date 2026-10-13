@@ -179,10 +179,7 @@
   /* Events */
   btnNext.addEventListener('click', next);
   $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
-  $('#btnMenu').addEventListener('click', function () {
-    screenEnd.classList.add('hidden');
-    screenStart.classList.remove('hidden');
-  });
+
 
   paintStars();
 })();

@@ -1062,7 +1062,7 @@
   $('#btnReference').addEventListener('click', function () { showLesson('game'); });
   $('#btnNext').addEventListener('click', next);
   $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
-  $('#btnMenu').addEventListener('click', function () { showLesson('menu'); });
+
 
   activity = DATA.activities.trigonometria;
   activity.id = 'trigonometria';

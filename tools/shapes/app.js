@@ -1499,8 +1499,8 @@
   $('#btnRepeat').addEventListener('click', function () {
     startRound(levelFromProgress(activity.id));
   });
-  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
+
+
 
   function moveGallery(step) {
     /* The carousel is a ring of CONCEPT_SLIDES + gallery stops, but the

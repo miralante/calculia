@@ -242,10 +242,7 @@
      el Reloj. */
   $('#btnStart').addEventListener('click', function () { startRound(levelFromProgress()); });
   $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
-  $('#btnMenu').addEventListener('click', function () {
-    screenEnd.classList.add('hidden');
-    screenStart.classList.remove('hidden');
-  });
+
 
   paintStars();
 })();

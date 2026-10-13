@@ -1488,8 +1488,8 @@
     if (activity.id === 'positivos-y-negativos') startSignedIntro();
     else startRound(levelFromProgress());
   });
-  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
+
+
   $('#signedIntroNext').addEventListener('click', function () {
     paintSignedReal();
     show(signedRealScreen);

@@ -287,7 +287,7 @@
   slideNext.addEventListener('click', function () { goSlide(1); });
   slideFinish.addEventListener('click', finishActivity);
   $('#btnRepeat').addEventListener('click', restart);
-  $('#btnMenu').addEventListener('click', restart);
+
 
   /* Estado inicial: arranca en el primer slide. */
   renderSlide();

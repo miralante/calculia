@@ -1441,7 +1441,7 @@
     });
   }
   $('#replayBtn').addEventListener('click', function () { startLevel(currentLevel); });
-  $('#btnMenu').addEventListener('click', function () { show(introScreen); });
+
 
   function init() {
     App.i18n.apply();

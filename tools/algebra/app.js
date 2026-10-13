@@ -958,8 +958,8 @@
   if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
   $('#btnNext').addEventListener('click', next);
   $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
-  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
+
+
 
   paintMenu();
   paintStars();
