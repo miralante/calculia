@@ -371,12 +371,7 @@
     App.i18n.apply();
     $('#stars').textContent = '';
     renderModeMenu();
-    $('#levelsBack').addEventListener('click', function () { showOnly('#screenMenu'); });
-    $('#quizBack').addEventListener('click', function () { showOnly('#screenMenu'); });
     $('#nextFact').addEventListener('click', nextFact);
-    $('#playAgain').addEventListener('click', startRound);
-    $('#anotherLevel').addEventListener('click', function () { showOnly('#screenLevels'); });
-    $('#anotherOperation').addEventListener('click', function () { showOnly('#screenMenu'); });
   }
 
   document.addEventListener('DOMContentLoaded', init);
