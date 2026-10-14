@@ -22,12 +22,10 @@
   gap: var(--espacio);
   align-items: start;
 }
-/* En móvil la lista de hechos (10 filas × 64px = 640px+) puede ocupar
-   toda la pantalla y esconder la visualización de bolas. Permitimos scroll
-   interno en la lista y damos a la tarjeta visual un alto máximo fijo
-   para que las pelotas estén siempre visibles sin scroll. */
+/* Desktop: fact-list a la izquierda, visual a la derecha. El orden
+   depende de quién aparece primero en el DOM (fact-list), así que el
+   visual-card queda a la derecha sin necesidad de order. */
 .learn-layout .visual-card {
-  order: -1;
   max-height: 50vh;
   overflow-y: auto;
 }
@@ -113,11 +111,22 @@
 
 /* ---- Responsive breakpoints ---- */
 @media (max-width: 640px) {
-  /* Learn: columna única, la tarjeta visual arriba para que se vea
-     sin scroll, la lista de hechos debajo con scroll interno. */
-  .learn-layout { grid-template-columns: 1fr; }
-  .learn-layout .visual-card { order: 0; max-height: 40vh; }
-  .learn-layout .fact-list { max-height: none; }
+  /* Learn: side-by-side en móvil vertical. La lista de hechos a la izquierda
+     (fija, con scroll interno si no cabe), la demostración de bolas a la
+     derecha (visible sin scroll). Cada columna ocupa ~50% del ancho. */
+  .learn-layout {
+    grid-template-columns: minmax(140px, 1fr) 1fr;
+    align-items: start;
+  }
+  .learn-layout .visual-card {
+    order: 0;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .learn-layout .fact-list {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
   /* Operación y tabla: 2 columnas si hay espacio. */
   .operation-grid, .table-grid { grid-template-columns: 1fr 1fr; }
 }
