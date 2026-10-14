@@ -1,19 +1,19 @@
-/* ============================================================
+﻿/* ============================================================
    Calculia — Quantities: texts (EN)
    Locale-specific file. Loaded conditionally from index.html
    according to App.i18n.locale().
 
-   Mirrors strings.es.js key for key (scripts/check.js enforces the
-   parity). The 'group.*', 'famous.*' and 'scene.*' keys are the real
-   content of the activity: the number itself lives in data.js and
-   only the word around it is translated, never the figure.
+   Mirrors strings.es.js key for key (scripts/check.js enforces
+   the parity). The "groups" practice moved to Mental Math in
+   2026-10; the "parity" practice moved to tools/parity/ on the
+   same date.
    ============================================================ */
 (function () {
   'use strict';
 
   App.i18n.register({
     title: '👀 Read and Write Numbers',
-    instruction: 'Read big numbers and count in groups.',
+    instruction: 'Read and write big numbers.',
     choosePractice: 'Choose what you want to practise.',
     btnMenu: 'Back to the start',
 
@@ -26,10 +26,6 @@
     writeDetail: 'Listen to the number and write it.',
     pointsName: 'Put the points',
     pointsDetail: 'Separate the thousands with points.',
-    groupsName: 'Count in groups',
-    groupsDetail: 'Tens, hundreds, thousands and dozens.',
-    parityName: 'Even and odd',
-    parityDetail: 'Look at the dots: one left alone or all paired up?',
 
     /* ---------- Typing practices ----------
        {n} = formatted number. {nRaw} = number without separator. */
@@ -63,151 +59,7 @@
 
     /* Transfer: what this is for outside the screen. */
     contexto: 'You read numbers in the shop, in the lift, on money and in the news. Reading and writing big numbers is something you use every day.',
-    explicacion: '✅ Numbers are counted in groups. Each group always means the same: a ten is ten, a hundred is a hundred. If you know the groups, you do not need to count one by one.',
-    transfer: 'This will help you read prices, news or any big number in daily life.',
-
-    /* ============================================================
-       The "groups" practice — the learning walkthrough
-       ============================================================ */
-
-    /* Screen 1: what counting in groups is. */
-    groupsIntroTitle: 'We count in groups',
-    groupsIntroText: 'Counting one by one is very slow. So people count in groups.',
-    groupsIntroNext: 'In real life →',
-    groupsPrev: '←',
-    groupsNext: '→',
-
-    /* Screen 2: groups in real life. */
-    groupsFamousTitle: 'A group from real life',
-    groupsFamousSubtitle: 'Look at this example:',
-    groupsBack: '← Back',
-    groupsBackToExamples: '← Back to the examples',
-    groupsContinue: 'Next →',
-
-    /* Screen 3: the reminder. */
-    groupsReminderTitle: 'Remember what each group is worth',
-    groupsReminderText: 'Each group is always worth the same.',
-    ruleMultiplyTitle: 'To know how many there are: count the groups and multiply.',
-    ruleDozenTitle: 'Careful: a dozen is twelve, not ten.',
-    groupsStart: 'Start practising →',
-
-    /* Screen 4: the steps. */
-    groupsChooseLevel: 'Choose a step.',
-    groupsBackReminder: '← Back to the reminder',
-    groupsBackLevels: '← Back to the steps',
-    groupsChooseAnother: 'Choose another step',
-
-    /* ---------- The groups ----------
-       FLAT keys inside 'group': app.js builds them as
-       'group.' + id + 'Name', so one more level of nesting
-       ('group.unit.Name') would break resolution at runtime without
-       check.js noticing — the validator only sees literal t() calls,
-       never the concatenated ones. Per group:
-       Name = singular ("a dozen"), Label = carries its {n}
-       ("2 dozens"), Plural = bare plural ("dozens"), and
-       Caption = one easy sentence about that group.
-       Colour never travels alone: the name is always written. */
-    group: {
-      unitName: 'unit',
-      unitLabel: '{n} units',
-      unitPlural: 'units',
-      unitCaption: 'One single thing. It is the smallest group.',
-
-      tenName: 'ten',
-      tenLabel: '{n} tens',
-      tenPlural: 'tens',
-      tenCaption: 'Ten things together. A ten is ten.',
-
-      hundredName: 'hundred',
-      hundredLabel: '{n} hundreds',
-      hundredPlural: 'hundreds',
-      hundredCaption: 'A hundred things. A hundred is one hundred.',
-
-      thousandName: 'thousand',
-      thousandLabel: '{n} thousands',
-      thousandPlural: 'thousands',
-      thousandCaption: 'A thousand things. A thousand is one thousand.',
-
-      halfDozenName: 'half dozen',
-      halfDozenLabel: '{n} half dozens',
-      halfDozenPlural: 'half dozens',
-      halfDozenCaption: 'Six things. It is half of a dozen.',
-
-      dozenName: 'dozen',
-      dozenLabel: '{n} dozens',
-      dozenPlural: 'dozens',
-      dozenCaption: 'Twelve things. Careful: a dozen is not ten.'
-    },
-
-    /* ---------- Real-life examples ----------
-       Every sentence ends with ':' because app.js appends the
-       coloured count after it ("dozen = 12"). If the sentence
-       brought its own full stop, the two halves would fight over
-       the punctuation. */
-    famous: {
-      huevos: 'At the market, eggs are sold by the dozen. A small box holds one:',
-      medioHuevos: 'Half a box is six eggs. That is a half dozen:',
-      dedos: 'Both hands together have ten fingers. That is a ten:',
-      siglo: 'A century lasts one hundred years. A hundred is a hundred:',
-      concierto: 'A big concert brings together a thousand people. A thousand is a thousand:'
-    },
-
-    /* ---------- Situations ----------
-       Shown under the question as support, so the round is not
-       abstract: "2 dozens" is a box of eggs, not a loose
-       exercise. */
-    scene: {
-      huevos: 'It is a box of eggs from the market.',
-      cajaMedia: 'It is half a box of eggs.',
-      manos: 'They are the fingers of both hands.',
-      siglo: 'It is the number of years a century lasts.',
-      gradas: 'It is the number of people at a big concert.'
-    },
-
-    /* ---------- The steps ----------
-       Flat too: app.js asks for 'level.' + id + 'Name' / 'Detail'. */
-    level: {
-      learnName: 'Learn the groups',
-      learnDetail: 'Look at a group and say how many there are.',
-      applyName: 'Use the groups',
-      applyDetail: 'Read a big number and count in dozens.',
-      testName: 'Everything',
-      testDetail: 'A bit of everything, in no fixed order.'
-    },
-    levelDone: 'Done',
-    starsCount: 'Difficulty {n}',
-    stepLabel: 'Step {n} of {total} · {name}',
-    chainNext: 'Next step: {name}',
-
-    /* ---------- The game ---------- */
-    qHowMany: 'How many things are there?',
-    qWhichGroup: 'Which group is it counted in?',
-    qDigitValue: 'What is the {digit} in the {plural} worth?',
-
-    groupsCorrect: '✅ That is how you count it.',
-    groupsFinal: 'You got {n} of {total} right. Now you have {stars} stars.',
-    groupsHintPrefix: '💡 ',
-    groupsWrongPrefix: 'The answer is: ',
-
-    hintDigitValue: 'Look at the colour of the digit. Each colour is a group.',
-    hintWhichGroup: 'Think about how many groups fit in that number. Look at the colours.',
-    hintDozen: 'Remember: a dozen is twelve.',
-    hintHowMany: 'Count the groups. Then multiply by what each group is worth.',
-
-    /* ---------- Even and odd ----------
-       The number is shown, the dots form the picture; the user
-       decides whether one dot is left alone (odd) or all dots are
-       in pairs (even). The two short words are the button labels. */
-    parityPrompt: 'Is {a} even or odd?',
-    evenLabel: 'Even',
-    oddLabel: 'Odd',
-    pairsWord: 'pairs',
-    oneLeftWord: 'one left over',
-    hintParity: 'Pair the dots two by two. If one is left alone, it is odd.',
-    explainParity: 'The {a} dots go two by two. If none is left, it is even; if one is left, it is odd.',
-    parityFinalSummary: 'You saw {count} numbers and classified them. Now you have {stars} stars.',
-    parityTransfer: 'Knowing which numbers are even and which are odd helps split into two teams, alternate turns, or cut a list in half.',
-
-    groupsTransfer: 'Counting in groups helps you with eggs, boxes, money and big numbers.'
+    explicacion: '✅ Reading and writing big numbers comes with practice: each digit sits in its place and the separator groups the thousands. You know the groups and you no longer have to count one by one.',
+    transfer: 'This will help you read prices, news or any big number in daily life.'
   }, 'en');
 })();

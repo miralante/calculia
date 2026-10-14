@@ -55,6 +55,142 @@
       <p id="endSummary"></p>
       <p id="transfer" class="transfer" data-i18n="transfer"></p>
     </section>
+
+    <!-- ============ Práctica "Contar en grupos" ============
+         Antes vivía en Cantidades. Sigue el método de números
+         romanos: un carrusel presenta cada grupo, los ejemplos
+         reales lo aterrizan, el recordatorio cromático resume las
+         reglas, y el cuestionario encadena los pasos sin volver al
+         menú. Las pantallas terminan en el cuestionario, que
+         vive en #screenGroupsQuiz con sus propios ids (groups*)
+         para no chocar con #screenGame del flujo flat. -->
+
+    <!-- Pantalla 1: qué es un grupo (carrusel). -->
+    <section id="screenGroupsIntro" class="stack hidden">
+      <div class="card reference-card stack intro-card">
+        <h2 class="reference-title" data-i18n="groupsIntroTitle">Contamos en grupos</h2>
+        <p class="reference-text" data-i18n="groupsIntroText">Contar de uno en uno es lento. Por eso la gente cuenta en grupos.</p>
+      </div>
+
+      <div class="card stack carousel-card">
+        <div class="carousel-display" id="carouselDisplay" role="button" tabindex="0"></div>
+        <p class="carousel-caption" id="carouselCaption"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="carouselPrev" data-i18n="groupsPrev">←</button>
+          <button type="button" class="btn btn-secondary" id="carouselNext" data-i18n="groupsNext">→</button>
+        </div>
+      </div>
+
+      <div class="row intro-buttons">
+        <button type="button" class="btn" id="introNext" data-i18n="groupsIntroNext">Siguiente →</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 2: los grupos en la vida real. -->
+    <section id="screenGroupsFamous" class="stack hidden">
+      <div class="card famosos-card stack" aria-labelledby="famousTitle">
+        <h2 class="reference-title" id="famousTitle" data-i18n="groupsFamousTitle">Un grupo de la vida real</h2>
+        <p class="reference-text" data-i18n="groupsFamousSubtitle">Fíjate en este ejemplo:</p>
+        <div class="famoso-ejemplo-row">
+          <div class="famoso-ejemplo" id="famousExample"></div>
+        </div>
+        <p class="famous-text" id="famousText"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="famousPrev2" data-i18n="groupsPrev">←</button>
+          <button type="button" class="btn btn-secondary" id="famousNext2" data-i18n="groupsNext">→</button>
+        </div>
+      </div>
+
+      <div class="row intro-buttons">
+        <button type="button" class="btn btn-secondary" id="famousPrevBtn" data-i18n="groupsBack">← Anterior</button>
+        <button type="button" class="btn" id="famousNextBtn" data-i18n="groupsContinue">Siguiente →</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 3: recordatorio. Tabla de colores con el valor de
+         cada grupo + las dos reglas con ejemplos calculados por
+         app.js, para que el ejemplo y el ejercicio no puedan
+         discrepar. -->
+    <section id="screenGroupsReminder" class="stack hidden">
+      <div class="row center-row">
+        <!-- Ojo: la actividad ya tiene un "← Volver" arriba del todo
+             (el .back-link a la portada). Este botón vuelve ATRÁS
+             DENTRO del recorrido — a los ejemplos reales — y por eso
+             lleva su propia etiqueta: dos botones iguales apilados
+             parecen un error en vez de dos niveles de vuelta atrás. -->
+        <button type="button" class="btn btn-secondary" id="reminderBack" data-i18n="groupsBackToExamples">← Volver a los ejemplos</button>
+      </div>
+      <div class="card reference-card stack">
+        <h2 class="reference-title" data-i18n="groupsReminderTitle">Recuerda cuánto vale cada grupo</h2>
+        <p class="reference-text" data-i18n="groupsReminderText">Cada grupo siempre vale lo mismo.</p>
+      </div>
+
+      <div class="card stack symbols-card">
+        <div class="groups-row" id="groupsRow"></div>
+      </div>
+
+      <div class="card stack rule-card">
+        <p class="rule-title" data-i18n="ruleMultiplyTitle">Para saber cuánto hay: cuenta los grupos y multiplica:</p>
+        <div id="ruleMultiply"></div>
+        <p class="rule-title" data-i18n="ruleDozenTitle">Cuidado: una docena son doce, no diez:</p>
+        <div id="ruleDozen"></div>
+      </div>
+
+      <div class="row reminder-buttons">
+        <button type="button" class="btn" id="referenceNext" data-i18n="groupsStart">Empezar a practicar →</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 4: los grupos de niveles. Tres botones, no
+         siete: cada grupo encadena sus pasos solo. -->
+    <section id="screenGroupsLevels" class="stack hidden">
+      <div class="row">
+        <button type="button" class="btn btn-secondary" id="levelsBack" data-i18n="groupsBackReminder">← Volver al recordatorio</button>
+      </div>
+      <h2 data-i18n="groupsChooseLevel">Elige un paso.</h2>
+      <div class="practice-grid" id="levelsGrid"></div>
+      <div class="row center-row">
+        <button type="button" class="btn btn-secondary" id="levelsBackToMenu" data-i18n="core.backToMenu">Volver al menú</button>
+      </div>
+    </section>
+
+    <!-- Pantalla de juego de "grupos". -->
+    <section id="screenGroupsQuiz" class="stack hidden">
+      <div class="row">
+        <button type="button" class="btn btn-secondary" id="groupsBackLevels" data-i18n="groupsBackLevels">← Volver a los pasos</button>
+      </div>
+      <div class="progress-bar" aria-hidden="true">
+        <div class="progress-fill" id="groupsProgressFill"></div>
+      </div>
+      <div class="groups-progress-row">
+        <span class="progress-text" id="groupsProgressText"></span>
+        <span class="progress-step" id="groupsStep"></span>
+      </div>
+      <p class="round-header hidden" id="groupsChainBanner" aria-live="polite"></p>
+      <div class="card centered stack quiz-card">
+        <div class="quiz-shown" id="groupsShown"></div>
+        <p class="context-text hidden" id="groupsContext"></p>
+      </div>
+      <h2 class="question centered" id="groupsQuestion"></h2>
+      <div class="options-grid" id="groupsOptions" aria-label="Opciones"></div>
+      <div class="feedback" id="groupsFeedback" aria-live="polite"></div>
+      <div class="explanation hidden" id="groupsExplanationWrap">
+        <p id="groupsExplanation" aria-live="polite"></p>
+      </div>
+      <button type="button" class="btn hidden" id="groupsNext" data-i18n="core.next">Siguiente →</button>
+    </section>
+
+    <!-- Pantalla final de "grupos". -->
+    <section id="screenGroupsEnd" class="stack hidden centered">
+      <div class="big-emoji" aria-hidden="true">🎉</div>
+      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+      <p id="groupsFinalSummary"></p>
+      <p class="transfer-groups" data-i18n="groupsTransfer"></p>
+      <button type="button" class="btn" id="groupsReplay" data-i18n="core.playAgain">Jugar otra vez</button>
+      <button type="button" class="btn btn-secondary" id="groupsChooseLevel" data-i18n="groupsChooseAnother">Elegir otro paso</button>
+      <button type="button" class="btn btn-secondary" id="groupsEndMenu" data-i18n="btnMenu">Volver al inicio</button>
+    </section>
+
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
 

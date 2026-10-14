@@ -8,8 +8,8 @@
   'use strict';
 
   App.i18n.register({
-    title: 'Numbers',
-    titleH1: '🔢 Numbers',
+    title: 'Number Types',
+    titleH1: '🔢 Number Types',
 
     galleryIntro: 'Look and flip the cards.',
 
@@ -24,19 +24,12 @@
     slideEnterosReal: '🌡️ −5 °C · basement −1 · 3 floors',
     slideDecimalesTitle: 'Decimals',
     slideDecimalesReal: '💰 $1.99 · 1.5 m · 3.14',
-    slideFraccionesTitle: 'Fractions',
-    slideFraccionesReal: '🍕 1/2 pizza · 1/4 hour',
     /* Eyebrow shown above the list of real-life examples. */
     realEyebrow: 'In real life:',
 
     /* ---- Comparison slides: title only ---- */
     slideVsEnterosTitle: 'Natural and Integers',
     slideVsDecimalesTitle: 'Natural and Decimals',
-    slideVsFraccionesTitle: 'Natural and Fractions',
-
-    /* Label inside the pizza SVG. */
-    fraccionOneHalf: '1/2',
-    fraccionOneFourth: '1/4',
 
     /* ---- End ---- */
     finish: 'Finish →',
