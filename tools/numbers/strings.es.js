@@ -50,8 +50,6 @@
       'positivos-y-negativos': { name: 'Positivos y negativos', detail: 'Comprende los signos y practica con el termómetro y el ascensor.', instruction: 'Los números pueden estar por encima o por debajo de cero. Mira los ejemplos y practica con el termómetro y el ascensor.' },
       unidades: { name: 'Unidades y decenas', detail: '¿Qué número es?', instruction: 'Cada color ayuda a leer el número. Azul: unidades. Verde: decenas. Morado: centenas.' },
       placevalue: { name: 'Cambiar de posición', detail: '10 pequeños se cambian por 1 grande.', instruction: 'Cuando juntas 10 iguales, forman 1 del grupo siguiente. La cifra se mueve una posición a la izquierda.' },
-      ordinales: { name: 'El lugar en la fila', detail: 'Primero, segundo, tercero…', instruction: 'Los números ordinales dicen qué lugar ocupa cada uno. La fila empieza en la bandera 🏁. El de al lado de la bandera es el primero.' },
-      recta: { name: 'La recta de los números', detail: '¿Qué número señala la flecha?', instruction: 'Los números van en fila y en orden. La recta los coloca de menor a mayor. Cuenta desde la marca más cercana para saber cuál señala la flecha.' },
       comparar: { name: 'Mayor, menor o igual', detail: 'Los signos <, > y =.', instruction: 'Mira los dos números. El signo se abre hacia el número más grande. Si los dos son iguales, el signo es =.' }
     },
     signed: {
@@ -100,25 +98,12 @@
       tempNext: 'Siguiente reto →',
       endSummary: 'Has practicado los números positivos y negativos. Ahora tienes {stars} estrellas.'
     },
-    ordinal: { 1: 'primero', 2: 'segundo', 3: 'tercero', 4: 'cuarto', 5: 'quinto' },
-    /* Exposition + real-life screens for the 5 sub-activities that don't
+    /* Exposition + real-life screens for the 3 sub-activities that don't
        have their own custom lesson (positivos-y-negativos uses the
        dedicated signed.* flow). Each activity gets a brief theoretical
        slide (expo.*) followed by everyday examples (real.*), with a
        "Siguiente" button linking them and from there to the practice. */
     expo: {
-      ordinales: {
-        title: 'El lugar en la fila',
-        intro: 'Los números ordinales indican el orden. Sirven para decir quién va primero, segundo, tercero…',
-        bullets: [
-          '1.º = primero',
-          '2.º = segundo',
-          '3.º = tercero',
-          '4.º = cuarto',
-          '5.º = quinto'
-        ],
-        note: 'La bandera 🏁 marca el principio. El de al lado es el primero.'
-      },
       comparar: {
         title: 'Mayor, menor o igual',
         intro: 'Para saber qué número es mayor, miramos las cifras de izquierda a derecha.',
@@ -128,16 +113,6 @@
           'Si todas las cifras son iguales, los dos números son iguales.'
         ],
         note: 'El signo se abre hacia el número más grande: el lado abierto es el mayor.'
-      },
-      recta: {
-        title: 'La recta de los números',
-        intro: 'Una recta numérica es una línea con números en orden. Van de menor (izquierda) a mayor (derecha).',
-        bullets: [
-          'Los números están separados a la misma distancia.',
-          'Cada muesca vale lo mismo: 1, 5, 10, 50…',
-          'La flecha señala el número que tienes que decir.'
-        ],
-        note: 'Cuenta desde el número escrito más cercano para saber qué número señala la flecha.'
       },
       unidades: {
         title: 'Unidades, decenas y centenas',
@@ -162,15 +137,6 @@
       }
     },
     real: {
-      ordinales: {
-        title: 'Los ordinales en tu día a día',
-        items: [
-          { icon: '🚶', text: 'En la cola del comedor: «yo soy el tercero».' },
-          { icon: '🏆', text: 'El podio de una carrera: primero, segundo, tercero.' },
-          { icon: '🏢', text: 'La planta de un edificio: primera planta, segunda planta…' },
-          { icon: '🎂', text: '«Es mi quinto cumpleaños» = 5.º.' }
-        ]
-      },
       comparar: {
         title: 'Comparar está en todas partes',
         items: [
@@ -178,15 +144,6 @@
           { icon: '🍎', text: '¿Qué bolsa pesa más en la compra?' },
           { icon: '📅', text: '¿Quién nació antes y quién después?' },
           { icon: '💰', text: '¿Quién tiene más dinero en la hucha?' }
-        ]
-      },
-      recta: {
-        title: 'La recta en tu día a día',
-        items: [
-          { icon: '📏', text: 'Una regla para medir cosas en centímetros.' },
-          { icon: '🌡️', text: 'Un termómetro señala una temperatura.' },
-          { icon: '🗺️', text: 'La escala de un plano indica las distancias.' },
-          { icon: '⏱️', text: 'Una cinta métrica muestra posiciones en una línea.' }
         ]
       },
       unidades: {
@@ -212,22 +169,14 @@
     expoBack: '← Volver al menú',
     realBack: '← Volver a la explicación',
     realNext: 'Empezar a practicar →',
-    ordinalPlace: { 1: 'el primer lugar', 2: 'el segundo lugar', 3: 'el tercer lugar', 4: 'el cuarto lugar', 5: 'el quinto lugar' },
-    level: { n1: 'Hasta 10', n2: 'Hasta 20', n3: 'Hasta 100', n4: 'Hasta 100, con menos marcas', c1: 'Hasta 9, con bloques', c2: 'Hasta 99, con bloques', c3: 'Hasta 99, sin bloques', c4: 'Hasta 999', c5: 'Hasta 9.999', o1: 'Fila de 3', o2: 'Fila de 5', o3: 'Buscar un lugar', libre: '🏢 Ascensor libre', meta: '🎯 Llegar a un piso', u99: 'Hasta 99', u999: 'Hasta 999', umiles: 'Los miles', umillones: 'Millones y billón', udictado: 'Escucha y elige', counter: 'Contador libre', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
+    level: { c1: 'Hasta 9, con bloques', c2: 'Hasta 99, con bloques', c3: 'Hasta 99, sin bloques', c4: 'Hasta 999', c5: 'Hasta 9.999', libre: '🏢 Ascensor libre', meta: '🎯 Llegar a un piso', u99: 'Hasta 99', u999: 'Hasta 999', umiles: 'Los miles', umillones: 'Millones y billón', udictado: 'Escucha y elige', counter: 'Contador libre', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
     gen: {
-      numberLinePrompt: '¿Qué número señala la flecha?',
-      numberLineHint: 'Cuenta desde el número escrito más cercano.',
-      numberLineAria: 'Recta numérica de {min} a {max}.',
       compararEnunciado: '¿Qué signo falta?',
       compararPista: 'El signo se abre hacia el número más grande.',
       compararAria: 'Compara {a} y {b}.',
       signLess: 'es más pequeño que',
       signGreater: 'es más grande que',
       signEqual: 'es igual a',
-      ordinalPositionPrompt: '¿Qué lugar señala la flecha?',
-      ordinalMemberPrompt: '¿Quién está en {place}?',
-      ordinalHint: 'Cuenta desde la bandera 🏁.',
-      ordinalVisualAria: 'Fila de {n}. La flecha señala el lugar {pos}.',
       bloquesEnunciado: '¿Qué número forman los bloques?',
       bloquesVisualAria: 'Bloques: {texto}',
       blocksPrompt: '¿Qué número forman los bloques?',
@@ -301,9 +250,6 @@
          dice qué mirar en el dibujo o en el número de delante: la frase
          única de antes («Prueba otra vez. Piensa con calma») era la misma
          para todas. No dan la respuesta, dan la estrategia. */
-      socraticOrdinalPlace: '🤔 Empieza en la bandera y cuenta hasta la flecha, uno por uno.',
-      socraticOrdinalMember: '🤔 Empieza en la bandera y cuenta hasta el lugar que te piden.',
-      socraticNumberLine: '🤔 Cuenta las muescas desde el número escrito más cercano hasta la flecha.',
       socraticCompare: '🤔 Mira las cifras de los dos números y compara primero las de más sitio.',
       socraticBlocks: '🤔 Cuenta los bloques de cada grupo y después junta los resultados.',
       socraticSayNumber: '🤔 Mira el número pintado y léelo por partes, de izquierda a derecha.',
