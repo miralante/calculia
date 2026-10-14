@@ -53,24 +53,33 @@ var DATA = {
       hasExpoReal: true,
       /* Progression (rule 13): order designed so each step changes
       /* Progression (rule 13): order designed so each step changes
-         a single thing. u999→udictado only changes 'tipo' (the
-         range stays at 999). udictado→umiles changes 'tipo' with
-         a minimal magnitude jump (999→thousands, the next natural
-         scale). umiles→umillones only changes 'lista'.
-         umillones→counter introduces a different *mode* (free
+         a single thing. u999→escribirNumeros only changes 'tipo' (the
+         range grows from 999 to 1–10 digits and the modality flips
+         from "see + multiple-choice" to "listen + typed input").
+         escribirNumeros→leerNumeros only changes the modality back
+         to visual: same typed input, same digit range, but the
+         number is shown in words instead of spoken. The two
+         "read" and "write" levels are siblings that share the
+         same UI (Generar / input / Comprobar / Ver resultado) and
+         the user can move between them in either order.
+         leerNumeros→counter introduces a different *mode* (free
          exploration up to 10^12 with ±1/±10/±100/±1000 buttons
          instead of a quiz): the consolidation step after the
          reading rounds, where the person uses everything they
          just saw to navigate the full range. The 'max' field
          here is the upper bound (inclusive); 10^12 = un billón
-         (es) / one trillion (en). */
+         (es) / one trillion (en). The old umiles/umillones levels
+         were a fixed-list multiple-choice quiz; leerNumeros
+         replaces both with a single typed input + "Generate"
+         button, on demand, for 1–10 digits. udictado was the
+         same "see + multiple-choice" pattern and is now replaced
+         by escribirNumeros (listen + typed input, 1–10 digits). */
       picto: '🧱',
       levels: [
         { id: 'u99', tipo: 'bloques', max: 99 },
         { id: 'u999', tipo: 'bloques', max: 999 },
-        { id: 'udictado', tipo: 'dictado', max: 999 },
-        { id: 'umiles', tipo: 'lectura', lista: 'miles' },
-        { id: 'umillones', tipo: 'lectura', lista: 'millones' },
+        { id: 'escribirNumeros', tipo: 'escribirInput', minDigits: 1, maxDigits: 10 },
+        { id: 'leerNumeros', tipo: 'lecturaInput', minDigits: 1, maxDigits: 10 },
         { id: 'counter', tipo: 'counter', max: 1000000000000 }
       ]
     },

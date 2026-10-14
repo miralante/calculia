@@ -142,6 +142,71 @@
       </div>
       <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
 
+      <!-- Interactive "leer números" level (data.js: 'lecturaInput').
+           Shown only when level.tipo === 'lecturaInput'. The quiz card,
+           options and standard #btnNext are hidden by app.js in this
+           mode; this panel owns the surface. The number in words is
+           painted into #lecturaWords when the user clicks
+           #lecturaGenerate, the user types the numeric form into
+           #lecturaInput, then either #lecturaCheck or #lecturaReveal
+           advances the round. #lecturaHint nudges the user to click
+           "Generar" first. -->
+      <div id="lecturaUI" class="hidden stack">
+        <div class="card centered stack lectura-card">
+          <p class="lectura-words hidden" id="lecturaWords" aria-live="polite"></p>
+          <p class="lectura-hint" id="lecturaHint"></p>
+          <input type="text"
+                 id="lecturaInput"
+                 class="answer-input lectura-input hidden"
+                 inputmode="numeric"
+                 autocomplete="off"
+                 autocapitalize="off"
+                 autocorrect="off"
+                 spellcheck="false"
+                 maxlength="20"
+                 aria-label="Escribe el número">
+          <div class="lectura-actions">
+            <button type="button" class="btn lectura-btn-generate" id="lecturaGenerate">🎲 Generar número</button>
+            <button type="button" class="btn hidden" id="lecturaCheck">✅ Comprobar</button>
+            <button type="button" class="btn btn-secondary hidden" id="lecturaReveal">👁 Ver resultado</button>
+            <button type="button" class="btn hidden" id="lecturaNext">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive "escribir números" level (data.js: 'escribirInput').
+           Sibling of #lecturaUI with the same shape (Generar / input /
+           Comprobar / Ver resultado / Siguiente) but NO visual number:
+           "Generar" plays the number aloud via Web Speech, and a
+           "🔊 Reproducir" button replays the same audio so the user
+           can hear it again before answering. "Ver resultado" reveals
+           the digits by filling the input, just like #lecturaUI. The
+           quiz card and standard #btnNext are hidden by app.js in
+           this mode. -->
+      <div id="escribirUI" class="hidden stack">
+        <div class="card centered stack lectura-card">
+          <p class="lectura-words hidden" id="escribirNumber" aria-live="polite"></p>
+          <p class="lectura-hint" id="escribirHint"></p>
+          <input type="text"
+                 id="escribirInput"
+                 class="answer-input lectura-input hidden"
+                 inputmode="numeric"
+                 autocomplete="off"
+                 autocapitalize="off"
+                 autocorrect="off"
+                 spellcheck="false"
+                 maxlength="20"
+                 aria-label="Escribe el número que has oído">
+          <div class="lectura-actions">
+            <button type="button" class="btn lectura-btn-generate" id="escribirGenerate">🎲 Generar número</button>
+            <button type="button" class="btn btn-secondary hidden" id="escribirReplay">🔊 Reproducir</button>
+            <button type="button" class="btn hidden" id="escribirCheck">✅ Comprobar</button>
+            <button type="button" class="btn btn-secondary hidden" id="escribirReveal">👁 Ver resultado</button>
+            <button type="button" class="btn hidden" id="escribirNext">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Free-exploration counter level. Shown only when level.tipo === 'counter'.
            The quiz card, progress bar, options and feedback are hidden by app.js
            in this mode. No question is asked; the person moves the number with
@@ -230,6 +295,7 @@
   <script src="../../assets/js/i18n.js?v=calculia-v3d393c12"></script>
   <script src="../../assets/js/storage.js?v=calculia-vd97e2550"></script>
   <script src="../../assets/js/feedback.js?v=calculia-v73bb9e8a"></script>
+  <script src="../../assets/js/tts.js"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>

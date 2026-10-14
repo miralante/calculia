@@ -171,7 +171,8 @@
     expoBack: '← Back to menu',
     realBack: '← Back to the explanation',
     realNext: 'Start practising →',
-    level: { c1: 'Up to 9, with blocks', c2: 'Up to 99, with blocks', c3: 'Up to 99, no blocks', c4: 'Up to 999', c5: 'Up to 9,999', libre: '🏢 Free elevator', meta: '🎯 Reach a floor', u99: 'Up to 99', u999: 'Up to 999', umiles: 'Thousands', umillones: 'Millions and trillion', udictado: 'Listen and choose', counter: 'Free counter', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
+    level: { c1: 'Up to 9, with blocks', c2: 'Up to 99, with blocks', c3: 'Up to 99, no blocks', c4: 'Up to 999', c5: 'Up to 9,999', libre: '🏢 Free elevator', meta: '🎯 Reach a floor', u99: 'Up to 99', u999: 'Up to 999', escribirNumeros: 'Write numbers (audio, 1-10 digits)',
+    leerNumeros: 'Read and write (1-10 digits)', counter: 'Free counter', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
     gen: {
       compararEnunciado: 'Which sign is missing?',
       compararPista: 'The sign opens towards the bigger number.',
@@ -260,8 +261,37 @@
       socraticTradeUp: '🤔 Look at the blocks and group them in tens: count the groups.',
       socraticTradeDown: '🤔 Look at each big block and count how many small ones fit inside.',
       socraticLadder: '🤔 Look at the number: it is a one followed by zeros, count how many.',
-      socraticDictation: '🤔 Read the number drawn slowly and compare it with the options.'
+      socraticDictation: '🤔 Read the number drawn slowly and compare it with the options.',
+      /* Interactive "escribir números" — typed-input practice with
+         audio. "Generar" plays the number aloud, "Reproducir"
+         replays it, "Comprobar" validates, "Ver resultado" reveals. */
+      escribirInputPrompt: 'Listen to the number and write it down.',
+      escribirInputGenerate: '🎲 Generate number',
+      escribirInputReplay: '🔊 Replay',
+      escribirInputCheck: '✅ Check',
+      escribirInputReveal: '👁 Show result',
+      escribirInputIdleHint: 'Press «Generate» to hear the number.',
+      escribirInputNoAudio: 'Audio is not available in this browser — the number will be revealed when you tap «Show result».',
+      /* Interactive "leer números" — typed-input practice. The number
+         is generated on demand, shown in words; the user types the
+         numeric form. "Comprobar" validates, "Ver resultado" reveals. */
+      lecturaInputPrompt: 'Read the number and write it down.',
+      lecturaInputGenerate: '🎲 Generate number',
+      lecturaInputCheck: '✅ Check',
+      lecturaInputReveal: '👁 Show result',
+      lecturaInputIdleHint: 'Press «Generate» to start.'
     },
     transfer: 'This will help you read large numbers, understand the elevator of a building, or know which digit changes when you add 100.'
-  }, 'en');
+  
+    /* Feedback for the interactive "leer números" practice. The
+       success / reveal messages live at the root so app.js can
+       look them up the same way it does for explicacionCorrecta. */
+    lecturaInputCorrect: '✅ Correct! The number is {n}.',
+    lecturaInputRevealed: '👁 The answer is {n}. You can correct it in the box.'
+
+    /* Feedback for the interactive "escribir números" practice.
+       Same shape as lecturaInputCorrect / lecturaInputRevealed. */
+    escribirInputCorrect: '✅ Correct! The number is {n}.',
+    escribirInputRevealed: '👁 The answer is {n}. You can correct it in the box.'
+});
 })();

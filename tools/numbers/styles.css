@@ -552,3 +552,90 @@
   .real-list-item { grid-template-columns: 44px minmax(0, 1fr); gap: 10px; padding: 10px; }
   .real-list-icon { font-size: 32px; }
 }
+
+/* ============================================================
+   Interactive "leer números" (data.js: 'lecturaInput')
+   The number in words is painted big; the user types the numeric
+   form into a wide input. Two action buttons: "Comprobar" to
+   validate the answer, "Ver resultado" to fill the input with the
+   canonical answer (so the user can study it before moving on).
+   ============================================================ */
+.lectura-card {
+  /* Same card vocabulary as .task-card in tools/quantities so the
+     typing practices look like siblings across the suite. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio);
+  text-align: center;
+  border-color: var(--mod-razonamiento-suave);
+}
+
+.lectura-words {
+  /* The number painted in words. Big enough to read on a phone,
+     and the words are broken on whitespace so even a 10-digit
+     number in words wraps inside the card. */
+  font-size: clamp(28px, 6vw, 44px);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--mod-razonamiento);
+  margin: 0;
+  padding: 8px 4px;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.lectura-hint {
+  /* The faint "click Generate" hint shown before the number is
+     generated, and the "no words yet" idle state. */
+  margin: 0;
+  font-size: var(--texto-base);
+  color: var(--color-texto-suave);
+}
+
+.lectura-input {
+  /* The user asked for a wider input so the 10-digit numbers
+     fit. min-width: 320px comfortably fits "9.999.999.999"
+     (13 chars incl. separators) on desktop; on small screens the
+     responsive rule below takes the full width. The monospace-
+     adjacent tabular numerals keep the input text aligned while
+     the user is typing. */
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  padding: 14px 18px;
+  min-width: 320px;
+  width: min(100%, 480px);
+  min-height: var(--boton-min);
+  border: 3px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-family: inherit;
+}
+
+.lectura-input:focus {
+  outline: 3px solid var(--mod-razonamiento);
+  outline-offset: 2px;
+}
+
+.lectura-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.lectura-btn-generate {
+  /* The big "Generate" button is the entry point of the question
+     — wider than the others so it reads as "click me first". */
+  min-width: 220px;
+  font-size: var(--texto-grande);
+}
+
+@media (max-width: 480px) {
+  .lectura-input { min-width: 0; width: 100%; }
+  .lectura-btn-generate { min-width: 0; width: 100%; }
+}

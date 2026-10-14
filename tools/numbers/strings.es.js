@@ -169,7 +169,8 @@
     expoBack: '← Volver al menú',
     realBack: '← Volver a la explicación',
     realNext: 'Empezar a practicar →',
-    level: { c1: 'Hasta 9, con bloques', c2: 'Hasta 99, con bloques', c3: 'Hasta 99, sin bloques', c4: 'Hasta 999', c5: 'Hasta 9.999', libre: '🏢 Ascensor libre', meta: '🎯 Llegar a un piso', u99: 'Hasta 99', u999: 'Hasta 999', umiles: 'Los miles', umillones: 'Millones y billón', udictado: 'Escucha y elige', counter: 'Contador libre', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
+    level: { c1: 'Hasta 9, con bloques', c2: 'Hasta 99, con bloques', c3: 'Hasta 99, sin bloques', c4: 'Hasta 999', c5: 'Hasta 9.999', libre: '🏢 Ascensor libre', meta: '🎯 Llegar a un piso', u99: 'Hasta 99', u999: 'Hasta 999', escribirNumeros: 'Escribir números (audio, 1-10 cifras)',
+    leerNumeros: 'Leer y escribir (1-10 cifras)', counter: 'Contador libre', pv1: 'De unidades a decenas', pv2: 'De decenas a centenas', pv3: 'De centenas a miles', pv4: 'Escalera del 10: hasta el millón', pv5: 'Escalera del 10: hasta el billón' },
     gen: {
       compararEnunciado: '¿Qué signo falta?',
       compararPista: 'El signo se abre hacia el número más grande.',
@@ -257,8 +258,38 @@
       socraticTradeUp: '🤔 Mira los bloques y agrúpalos de diez en diez: cuenta los grupos.',
       socraticTradeDown: '🤔 Mira cada bloque grande y cuenta cuántos pequeños entran dentro.',
       socraticLadder: '🤔 Mira el número: es un uno seguido de ceros, cuenta cuántos hay.',
-      socraticDictation: '🤔 Lee el número pintado despacio y compáralo con las opciones.'
+      socraticDictation: '🤔 Lee el número pintado despacio y compáralo con las opciones.',
+      /* Práctica interactiva de "escribir números" — el número se
+         genera y se reproduce en audio. "Generar" lo dice en voz
+         alta, "Reproducir" lo repite, "Comprobar" valida, "Ver
+         resultado" lo muestra. */
+      escribirInputPrompt: 'Escucha el número y escríbelo.',
+      escribirInputGenerate: '🎲 Generar número',
+      escribirInputReplay: '🔊 Reproducir',
+      escribirInputCheck: '✅ Comprobar',
+      escribirInputReveal: '👁 Ver resultado',
+      escribirInputIdleHint: 'Pulsa «Generar» para escuchar el número.',
+      escribirInputNoAudio: 'El audio no está disponible en este navegador — el número se mostrará al pulsar «Ver resultado».',
+      /* Práctica interactiva de "leer números" — el número se genera
+         al pulsar un botón, se muestra en palabras; el usuario escribe
+         la forma numérica. "Comprobar" valida, "Ver resultado" revela. */
+      lecturaInputPrompt: 'Lee el número y escríbelo.',
+      lecturaInputGenerate: '🎲 Generar número',
+      lecturaInputCheck: '✅ Comprobar',
+      lecturaInputReveal: '👁 Ver resultado',
+      lecturaInputIdleHint: 'Pulsa «Generar» para empezar.'
     },
     transfer: 'Esto te servirá para leer números grandes, entender el ascensor de un edificio o saber qué cifra cambia al sumar 100.'
-  }, 'es');
+  
+    /* Mensajes para la práctica interactiva de "leer números". Los
+       textos de acierto / revelación viven en la raíz para que app.js
+       los busque igual que busca explicacionCorrecta. */
+    lecturaInputCorrect: '✅ ¡Correcto! El número es {n}.',
+    lecturaInputRevealed: '👁 La respuesta es {n}. Puedes corregirla en la casilla.'
+
+    /* Mensajes para la práctica interactiva de "escribir números".
+       Misma forma que lecturaInputCorrect / lecturaInputRevealed. */
+    escribirInputCorrect: '✅ ¡Correcto! El número es {n}.',
+    escribirInputRevealed: '👁 La respuesta es {n}. Puedes corregirla en la casilla.'
+});
 })();
