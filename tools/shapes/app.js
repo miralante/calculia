@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Shapes
+   Calculia — Shapes
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -22,14 +22,12 @@
   var realCaption = $('#realCaption');
   var realPrev = $('#realPrev');
   var realNext = $('#realNext');
-  var promptEl = $('#prompt');
-  var visualEl = $('#visual');
-  var legendEl = $('#legend');
-  var optionsEl = $('#options');
-  var feedbackEl = $('#feedback');
-  var explanationWrap = $('#explanationWrap');
-  var explanationEl = $('#explanation');
-  var btnNext = $('#btnNext');
+  /* Hoja de prueba: el #screenGame ya no muestra una pregunta a la vez,
+     sino todas las preguntas de la ronda en tarjetas. Los botones son
+     "Comprobar" (verifica todo) y "Otra ronda" (re-baraja y empieza). */
+  var testSheetEl = $('#testSheet');
+  var btnCheck = $('#btnCheck');
+  var btnNewRound = $('#btnNewRound');
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
   var starsEl = $('#stars');
@@ -44,27 +42,18 @@
   /* Round state */
   var activity = null;
   var level = null;
-  var index = 0;
   var roundCorrect = 0;
-  var answered = false;
-  var resolved = false;
-  var attempts = 0;
-  var question = null;
-  var roundQuestions = [];
+  /* Cada entrada de roundSheets es una pregunta de la ronda actual con
+     la opción que la persona ha elegido (selected, null si todavía no)
+     y si la verificación la dio por buena (correct, null hasta que se
+     pulsa "Comprobar"). La ronda termina cuando todas tienen
+     correct !== null. */
+  var roundSheets = [];
   var galleryIndex = -1;
   var realIndex = 0;
-  /* Reinforcement: see core in assets/js/feedback.js (App.reinforce).
-     fixedQuestion allows reusing render() with an external question
-     (the reinforcement one); if null, render() generates a new one
-     as before. inReinforce controls the mini-round flow. */
-  var fixedQuestion = null;
-  var inReinforce = false;
-  var reinforceList = [];
-  var reinforceIndex = 0;
-  var reinforceTotal = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Utilidades ---- */
 
@@ -141,25 +130,30 @@
   }
 
   /* `marks` puts a dot on every corner, so corners can be counted by
-     looking instead of from memory. */
-  function shapeSvg(id, marks) {
+     looking instead of from memory. `thin` swaps the 4px outline for a
+     1.5px one, which is what the perimeter question needs: the shape
+     must be visible, but the four corners must not look like "painted
+     vertices" sitting on top of the figure. The default 4px stroke is
+     what the rest of the test wants. */
+  function shapeSvg(id, marks, thin) {
     var POLY = { triangle: 3, pentagon: 5, hexagon: 6, octagon: 8 };
+    var SW = thin ? '1.5' : '4';
     var body = '';
     var dots = '';
 
     if (id === 'circle') {
       body = '<circle cx="60" cy="60" r="46" fill="' + SHAPE_FILL +
-        '" stroke="var(--color-texto)" stroke-width="4"/>';
+        '" stroke="var(--color-texto)" stroke-width="' + SW + '"/>';
     } else if (id === 'square') {
       body = '<rect x="18" y="18" width="84" height="84" fill="' + SHAPE_FILL +
-        '" stroke="var(--color-texto)" stroke-width="4"/>';
+        '" stroke="var(--color-texto)" stroke-width="' + SW + '"/>';
       if (marks) {
         dots = cornerDots([{ x: 18, y: 18 }, { x: 102, y: 18 },
           { x: 102, y: 102 }, { x: 18, y: 102 }]);
       }
     } else if (id === 'rectangle') {
       body = '<rect x="8" y="32" width="104" height="56" fill="' + SHAPE_FILL +
-        '" stroke="var(--color-texto)" stroke-width="4"/>';
+        '" stroke="var(--color-texto)" stroke-width="' + SW + '"/>';
       if (marks) {
         dots = cornerDots([{ x: 8, y: 32 }, { x: 112, y: 32 },
           { x: 112, y: 88 }, { x: 8, y: 88 }]);
@@ -171,14 +165,14 @@
       body = '<polygon points="' + quad.map(function (p) {
         return p.x + ',' + p.y;
       }).join(' ') + '" fill="' + SHAPE_FILL +
-        '" stroke="var(--color-texto)" stroke-width="4"/>';
+        '" stroke="var(--color-texto)" stroke-width="' + SW + '"/>';
       if (marks) dots = cornerDots(quad);
     } else {
       var pts = polygonPoints(POLY[id], 60, 62, 48);
       body = '<polygon points="' + pts.map(function (p) {
         return p.x.toFixed(1) + ',' + p.y.toFixed(1);
       }).join(' ') + '" fill="' + SHAPE_FILL +
-        '" stroke="var(--color-texto)" stroke-width="4"/>';
+        '" stroke="var(--color-texto)" stroke-width="' + SW + '"/>';
       if (marks) dots = cornerDots(pts);
     }
     return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
@@ -236,7 +230,7 @@
      background it sits on does not change with the theme either. */
   function realObjectSvg(id) {
     if (id === 'square') {
-      /* A window with four panes. It used to be left to the ðŸªŸ emoji, and
+      /* A window with four panes. It used to be left to the 🪟 emoji, and
          that emoji is a tall narrow strip: on the carousel it read as a
          scratch on the card rather than as a window, which is a poor way to
          introduce the square when the very next slide says "the door is a
@@ -284,7 +278,7 @@
     }
     if (id === 'octagon') {
       /* Red and white like every stop sign on the road, so the octagon is
-         eight sides with the word inside it â€” not a blank red octagon. */
+         eight sides with the word inside it — not a blank red octagon. */
       var stop = polygonPoints(8, 60, 58, 46, Math.PI / 8);
       return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
         '<polygon points="' + pointsAttr(stop) + '" fill="#C62828" ' +
@@ -296,13 +290,13 @@
       /* The same prism the gallery draws, standing upright instead of on
          its side: a cereal box is taller than it is wide, and the caption
          promises a cereal box. The gallery keeps the long face square to
-         the viewer on purpose â€” that is the rectangular face the activity
-         is about â€” so the two drawings differ in proportion and agree in
+         the viewer on purpose — that is the rectangular face the activity
+         is about — so the two drawings differ in proportion and agree in
          shape.
          Both proportions come off a real box, about 19 x 27 x 6 cm: the
          front is a bit over half as wide as it is tall, and the thickness
          is a third of the width. Drawn deeper than that it stops being a
-         cereal box and becomes a crate â€” which is what the earlier
+         cereal box and becomes a crate — which is what the earlier
          version was, with a thickness near half the width.
          The label and the bowl of cereal are on the front panel: a bare
          carton could be any box. */
@@ -388,7 +382,7 @@
     if (id === 'triangularPrism') {
       /* A tent: the triangular gable at the front, the ridge running back
          to the right, and the door open. Drawn as a prism with its length
-         visible on purpose â€” a flat triangle would read as the flat shape,
+         visible on purpose — a flat triangle would read as the flat shape,
          not as the solid the caption names.
          The front gable is the pale one and the long side is the dark one.
          With both faces in the same pale colour the tent does not read as
@@ -407,9 +401,9 @@
       /* Corner-on, the way a pyramid is photographed: two triangular faces
          meeting at the front edge, standing on a square base.
          The proportions are the point. The Great Pyramid of Giza is 230 m
-         on a side and 146 m tall, so each face leans at about 52Â° and the
+         on a side and 146 m tall, so each face leans at about 52° and the
          whole thing reads as a broad mass. The previous drawing leaned at
-         65Â°, which is a ridge tent, not a pyramid: narrow and steep was
+         65°, which is a ridge tent, not a pyramid: narrow and steep was
          the one shape nobody mistakes for Giza.
          The masonry is what makes it something people built rather than
          something somebody pitched: the courses of stone run level all the
@@ -423,7 +417,7 @@
          the brown of the mortar between the blocks. Fixed ink, like the
          yellow of the warning sign: a teal pyramid is a piece of glass, and
          this one is supposed to be Giza.
-         Two faces only â€” the back edges would have to cross the front
+         Two faces only — the back edges would have to cross the front
          ones to be drawn, which no solid does.
          No ground line: the mass ends on its own footprint, and a
          horizontal rule under it reads as a bar of the layout, not as
@@ -481,7 +475,7 @@
          than the one below it, because the light comes from above and a
          swirl drawn in one flat colour reads as a stack of rings.
          The cone keeps its bowed sides and its rolled rim, and the wafer
-         is scored in a diamond lattice â€” the ridges of a real waffle run
+         is scored in a diamond lattice — the ridges of a real waffle run
          across the cone, not up to the tip, and the earlier radial version
          looked like a basket. The lattice is clipped to the cone so it
          follows its curve instead of hanging over the card.
@@ -493,7 +487,7 @@
          directly on top of the body fill and before every ice cream
          shape: a full-size "inside of the cone" path drawn after it
          covers the whole silhouette, and the lattice is then in the DOM,
-         correctly clipped, correctly coloured â€” and invisible, because
+         correctly clipped, correctly coloured — and invisible, because
          it is simply painted over. Nothing in the markup says which
          layer wins; the same markup in another order shows the waffle
          perfectly. The mouth is now an ellipse and the front rim an arc,
@@ -502,7 +496,7 @@
          The wafer is two families of parallel diagonals, the way a cone is
          actually pressed, and not a handful of lines that happen to
          cross: too few ridges and it reads as scratches on a plain cone.
-         The ends run past the cone on purpose â€” the clip is what cuts
+         The ends run past the cone on purpose — the clip is what cuts
          them, so the lattice follows the bowed sides instead of stopping
          short of them. */
       var CONE = 'M35 52Q41 82 60 106Q79 82 85 52A25 9 0 0 1 35 52Z';
@@ -521,7 +515,7 @@
          line that curls, and a curl is a stroked arc. Each turn is narrower
          and higher than the one below it, so the stack tapers into a tip
          instead of repeating. The mound underneath joins the turns into one
-         mass â€” without it they are a pile of separate rings. */
+         mass — without it they are a pile of separate rings. */
       var turns = ['M40 47Q60 62 80 47', 'M45 38.5Q60 50 75 38.5',
         'M50 31Q60 40 70 31', 'M55 24Q60 31 65 24'];
       var turnsWide = [9, 7.5, 6, 4.5];
@@ -562,7 +556,7 @@
   /* ---- Concept slides ----
      More than one, and the number is CONCEPT_SLIDES: both the carousel
      arithmetic and the smoke read it from here, so adding a concept slide is
-     adding one entry and nothing else. The count is arithmetic, not data â€”
+     adding one entry and nothing else. The count is arithmetic, not data —
      it has to match the branches below or the carousel wraps into a
      gallery slide it should never show. */
   var CONCEPT_SLIDES = 4;
@@ -598,7 +592,7 @@
     for (var i = -60; i < 200; i += 16) {
       hatch.push('<line x1="' + i + '" y1="0" x2="' + (i + 120) + '" y2="120"/>');
     }
-    return '<svg viewBox="0 0 120 120" aria-hidden="true">' +
+    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
       '<defs><clipPath id="shapesAreaClip"><polygon points="' +
       pointsAttr(pts) + '"/></clipPath></defs>' +
       '<polygon points="' + pointsAttr(pts) + '" fill="var(--mod-razonamiento)" ' +
@@ -611,7 +605,7 @@
      the whole space it would fill, so "there is room inside" is the thing
      on screen and not a word in the caption. */
   function volumeSvg() {
-    return '<svg viewBox="0 0 120 120" aria-hidden="true">' +
+    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
       '<rect x="8" y="8" width="104" height="104" rx="8" class="intro-space-mark"/>' +
       '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
       '<polygon points="28,42 64,24 96,42 60,60" class="solid-top"/>' +
@@ -622,9 +616,9 @@
 
   /* Similarity: the same figure at two sizes, side by side. Both are
      equilateral triangles from the same helper, so they differ in size and
-     in nothing else â€” which is the whole point of the concept. */
+     in nothing else — which is the whole point of the concept. */
   function similaritySvg() {
-    return '<svg viewBox="0 0 120 120" aria-hidden="true">' +
+    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
       '<polygon points="' + pointsAttr(polygonPoints(3, 36, 62, 32)) +
       '" fill="var(--mod-razonamiento)" stroke="var(--color-texto)" stroke-width="4" ' +
       'stroke-linejoin="round"/>' +
@@ -675,7 +669,7 @@
       /* The edges of a flat figure, in the order they build on each other: a
          side, the vertex where two of them meet, and the perimeter, which
          is all the sides added up. The perimeter is not a third thing
-         parallel to the other two â€” it is what they are for â€” so it takes
+         parallel to the other two — it is what they are for — so it takes
          its own row underneath. */
       return {
         layout: 'parts',
@@ -814,7 +808,7 @@
 
   /* The perimeter options. The mistake this question produces is not a wild
      number: it is leaving the last side out, or counting one twice. So the
-     two wrong answers are exactly one side short and one side long â€” the
+     two wrong answers are exactly one side short and one side long — the
      same "out by one" the counting questions produce, one level up. */
   function perimeterOptions(total, side) {
     return App.utils.shuffle([total - side, total, total + side].map(function (v) {
@@ -959,7 +953,7 @@
   /* Three axes for a figure that has exactly one: straight up, straight
      across, and at an angle. Every shape this question is asked of has one
      vertical fold line and neither of the other two, so exactly one option
-     can be right â€” a square would have all three and the question would
+     can be right — a square would have all three and the question would
      have no answer. app.js checks that at start-up. */
   var AXES = {
     vertical: '<line x1="60" y1="4" x2="60" y2="116" class="axis-mark"/>',
@@ -1049,8 +1043,7 @@
       var counting = nv.count === 'corners';
       return {
         prompt: App.i18n.t(counting ? 'gen.cornersPrompt' : 'gen.sidesPrompt'),
-        visual: '<div class="shape-stage">' + shapeSvg(id, true) + '</div>' +
-          (counting ? '' : '<p class="hint">' + App.i18n.t('gen.sidesHint') + '</p>'),
+        visual: '<div class="shape-stage">' + shapeSvg(id, true) + '</div>',
         visualAria: shapeName(id),
         hint: App.i18n.t(counting ? 'gen.socraticCorners' : 'gen.socraticSides'),
         options: buildCounts(DATA.sides[id][nv.count])
@@ -1058,7 +1051,7 @@
     },
 
     /* The perimeter: going all the way round the shape. The answer is
-       never stored â€” it is the length of a side times the number of sides,
+       never stored — it is the length of a side times the number of sides,
        read from the same DATA.sides the drawing and the counting questions
        use, so the picture, the caption and the right answer cannot drift
        apart. The side length travels in the question (it is the one number
@@ -1067,12 +1060,14 @@
       var total = DATA.sides[nv.shape].sides * nv.side;
       return {
         prompt: App.i18n.t('gen.perimeterPrompt').replace(/\{side\}/g, nv.side),
-        visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false) + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.perimeterHint') + '</p>',
-        /* The shape name only, like the counting questions: the drawing is
-           a role="img", so its label replaces the hint inside it, and the
-           length of a side is already in the prompt, which is read out
-           on its own. */
+        /* The figure is drawn with a thin 1.5px outline (`thin=true`) so the
+           four corners of the square, pentagon, etc. don't look like
+           painted vertices sitting on top of an already visible figure.
+           The visible "sum all the sides" line used to live under the
+           drawing; it was a duplicate of the prompt and made the screen
+           noisy, so it moved to the socratic hint, which only fires on
+           a wrong answer. */
+        visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false, true) + '</div>',
         visualAria: shapeName(nv.shape),
         hint: App.i18n.t('gen.socraticPerimeter'),
         options: perimeterOptions(total, nv.side)
@@ -1087,8 +1082,7 @@
     shapeArea: function () {
       return {
         prompt: App.i18n.t('gen.areaPrompt'),
-        visual: '<div class="shape-stage">' + areaSvg() + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.areaHint') + '</p>',
+        visual: '<div class="shape-stage">' + areaSvg() + '</div>',
         visualAria: App.i18n.t('gen.areaAria'),
         hint: App.i18n.t('gen.socraticArea'),
         options: App.utils.shuffle([
@@ -1113,7 +1107,10 @@
       });
       return {
         prompt: App.i18n.t('gen.volumePrompt'),
-        visual: '<p class="hint">' + App.i18n.t('gen.volumeHint') + '</p>',
+        /* The visible "compare the three solids" reminder used to live
+           under the prompt; the three big/mini thumbs are already on
+           screen, so the line was repeating the picture. It moved to
+           the socratic hint, which only fires on a wrong answer. */
         visualAria: App.i18n.t('gen.volumeAria').replace(/\{name\}/g, solidName(nv.solid)),
         hint: App.i18n.t('gen.socraticVolume'),
         options: App.utils.shuffle(others.concat([{
@@ -1133,8 +1130,7 @@
       var keys = App.utils.shuffle(['vertical', 'horizontal', 'diagonal']);
       return {
         prompt: App.i18n.t('gen.symmetryPrompt').replace(/\{name\}/g, shapeName(nv.shape)),
-        visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false) + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.symmetryHint') + '</p>',
+        visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false) + '</div>',
         visualAria: shapeName(nv.shape),
         hint: App.i18n.t('gen.socraticSymmetry'),
         options: keys.map(function (key) {
@@ -1149,13 +1145,12 @@
     },
 
     /* Similarity: the same shape at another size. All three options are
-       drawn at the same small size, so only the shape tells them apart â€”
+       drawn at the same small size, so only the shape tells them apart —
        picking the biggest or the smallest would be a different question. */
     shapeSimilar: function (nv) {
       return {
         prompt: App.i18n.t('gen.similarPrompt').replace(/\{name\}/g, shapeName(nv.shape)),
-        visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false) + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.similarHint') + '</p>',
+        visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false) + '</div>',
         visualAria: shapeName(nv.shape),
         hint: App.i18n.t('gen.socraticSimilar'),
         options: App.utils.shuffle(
@@ -1192,7 +1187,11 @@
       if (nv.dir === 'toObject') {
         return {
           prompt: App.i18n.t('gen.solidToObjectPrompt').replace('{name}', nameOf(solid)),
-          visual: '<p class="hint">' + App.i18n.t('gen.solidHint') + '</p>',
+          /* The visible "think about the shape, not what it's for"
+             reminder used to live under the prompt; the three object
+             thumbs are already on screen, so the line was repeating
+             the picture. It moved to the socratic hint, which only
+             fires on a wrong answer. */
           visualAria: nameOf(solid),
           hint: App.i18n.t('gen.socraticSolid'),
           options: App.utils.shuffle(
@@ -1210,8 +1209,20 @@
       }
       return {
         prompt: App.i18n.t('gen.solidToNamePrompt'),
-        visual: '<div class="shape-stage"><span class="solid-object solid-big">' +
-          object + '</span></div>',
+        /* The pyramid (🏜️ → cactus) and the triangular prism
+           (⛺ → camping scene with trees, fire and moon) are drawn
+           instead of being left to their emoji: both render on the
+           platforms that matter here as something a child can't read
+           as a solid. solidSvg() is the same drawing the gallery
+           uses, so the test and the carousel agree on what those two
+           solids look like. The rest (🎲 cube, ⚽ sphere, 🥫
+           cylinder, 📦 prism, 🍦 cone) ride the emoji because those
+           read unambiguously. */
+        visual: '<div class="shape-stage">' +
+          (solid.id === 'pyramid' || solid.id === 'triangularPrism'
+            ? solidSvg(solid.id)
+            : '<span class="solid-object solid-big">' + object + '</span>') +
+          '</div>',
         visualAria: nameOf(solid),
         hint: App.i18n.t('gen.socraticSolid'),
         options: App.utils.shuffle(
@@ -1276,7 +1287,7 @@
   /* "Hacer el test" only asks which test when there is more than one.
      With a single test the menu said "Elige un test" above a grid with
      exactly one button, so the child paid a tap for a decision there was
-     no way to make â€” and the button's own promise ("do the test") was not
+     no way to make — and the button's own promise ("do the test") was not
      kept on the press. The menu is not removed: the moment DATA grows a
      second activity it comes back by itself, and it is still how the end
      screen gets back to the list. */
@@ -1286,202 +1297,221 @@
     show(screenMenu);
   }
 
-  /* ---- Game ---- */
+  /* ---- Game (test-sheet) ----
+     The whole round is on one screen. Every question in the level is
+     pre-generated when the round starts, the order of the questions
+     and the order of the options inside each one are both shuffled
+     (so two rounds never look the same), and the user picks an
+     option for each question. A single "Comprobar" button checks
+     them all at once and paints inline feedback per question; an
+     "Otra ronda" button re-shuffles and starts again.
+
+     The previous per-question flow (one card at a time, with
+     "Siguiente" between questions and a reinforce mini-round at
+     the end) is gone. The pieces are still here — `GENERATORS`,
+     `App.reinforce`, the `plainText` helper — so a future activity
+     that wants the old mechanic can bring it back without a
+     refactor. */
 
   function startRound(nv) {
     level = nv;
     App.utils.drawRoundReset();
-    roundQuestions = level.tipo === 'mixed'
-      ? App.utils.shuffle(level.questions.slice())
-      : [];
-    index = 0;
-    roundCorrect = 0;
-    reinforceList = [];
-    reinforceIndex = 0;
-    inReinforce = false;
-    App.reinforce.banner.hide();
-    /* Registers the callback that runs when the normal round ends with
-       pending failures; it mounts the mini-round with just those. */
-    App.reinforce.start(function (fallos) { startReinforce(fallos); });
-    show(screenGame);
-    render();
-  }
-
-  function startReinforce(fallos) {
-    reinforceList = fallos.map(function (f) { return f.payload; });
-    reinforceIndex = 0;
-    inReinforce = true;
-    attempts = 0;
-    App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
-      App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
-    );
-    showReinforceQuestion(reinforceList[0]);
-  }
-
-  /* Paints one question. `fixed` replays a question from the reinforce
-     queue; without it a new one is generated for the current level. */
-  function paintQuestion(fixed) {
-    var questionLevel = level;
-    if (!fixed && level.tipo === 'mixed') {
-      questionLevel = roundQuestions[index];
-    }
-    question = fixed || GENERATORS[questionLevel.tipo](questionLevel, index);
-    answered = false;
-    attempts = 0;
-
-    promptEl.textContent = question.prompt;
-    visualEl.innerHTML = question.visual || '';
-    if (question.visualAria) {
-      visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', question.visualAria);
+    if (level.tipo === 'mixed') {
+      var generated = level.questions.map(function (q, i) {
+        return GENERATORS[q.tipo](q, i);
+      });
+      App.utils.shuffle(generated);
+      roundSheets = generated.map(function (q) {
+        return { question: q, selected: null, correct: null };
+      });
     } else {
-      visualEl.removeAttribute('role');
-      visualEl.removeAttribute('aria-label');
+      roundSheets = [];
     }
-    legendEl.innerHTML = question.legend || '';
-    legendEl.classList.toggle('hidden', !question.legend);
+    roundCorrect = 0;
+    show(screenGame);
+    renderSheet();
+  }
 
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('hidden');
-    explanationEl.textContent = '';
-    btnNext.classList.add('hidden');
+  /* Paints the whole round at once: one card per question, in the
+     shuffled order, with the options also in their shuffled order.
+     The user can change their selection on any question until
+     "Comprobar" is pressed; from that moment the buttons are
+     disabled and the right answer is shown alongside the wrong
+     one for the questions that were missed. */
+  function renderSheet() {
+    testSheetEl.innerHTML = '';
+    roundSheets.forEach(function (sheet, i) {
+      var card = document.createElement('article');
+      card.className = 'card stack test-sheet-card';
+      card.dataset.sheet = String(i);
 
-    optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('options-row', !!question.inline);
-    question.options.forEach(function (op) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'option-btn';
-      btn.innerHTML = op.html;
-      if (op.aria) btn.setAttribute('aria-label', op.aria);
-      btn.addEventListener('click', function () { answer(op, btn); });
-      optionsEl.appendChild(btn);
+      var promptEl = document.createElement('p');
+      promptEl.className = 'prompt';
+      promptEl.textContent = sheet.question.prompt;
+      card.appendChild(promptEl);
+
+      if (sheet.question.visual) {
+        var visualEl = document.createElement('div');
+        visualEl.className = 'visual';
+        visualEl.innerHTML = sheet.question.visual;
+        if (sheet.question.visualAria) {
+          visualEl.setAttribute('role', 'img');
+          visualEl.setAttribute('aria-label', sheet.question.visualAria);
+        } else {
+          visualEl.setAttribute('aria-hidden', 'true');
+        }
+        card.appendChild(visualEl);
+      }
+
+      if (sheet.question.legend) {
+        var legendEl = document.createElement('p');
+        legendEl.className = 'legend';
+        legendEl.innerHTML = sheet.question.legend;
+        card.appendChild(legendEl);
+      }
+
+      var optionsEl = document.createElement('div');
+      optionsEl.className = 'stack options';
+      if (sheet.question.inline) optionsEl.classList.add('options-row');
+      sheet.question.options.forEach(function (op, j) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-btn';
+        btn.innerHTML = op.html;
+        if (op.aria) btn.setAttribute('aria-label', op.aria);
+        btn.addEventListener('click', function () { selectOption(i, j); });
+        optionsEl.appendChild(btn);
+      });
+      card.appendChild(optionsEl);
+
+      var feedbackEl = document.createElement('p');
+      feedbackEl.className = 'feedback hidden';
+      feedbackEl.setAttribute('aria-live', 'polite');
+      card.appendChild(feedbackEl);
+
+      testSheetEl.appendChild(card);
     });
 
-    progressFill.style.width = (inReinforce
-      ? ((reinforceIndex + 1) / reinforceList.length)
-      : (index / roundLength())) * 100 + '%';
-    progressText.textContent = '';
-    paintStars();
+    btnCheck.classList.remove('hidden');
+    btnCheck.disabled = false;
+    btnNewRound.classList.add('hidden');
+    paintSheetProgress();
   }
 
-  function showReinforceQuestion(p) { paintQuestion(p); }
+  function selectOption(sheetIdx, optionIdx) {
+    var sheet = roundSheets[sheetIdx];
+    if (sheet.correct !== null) return; /* already verified, ignore */
+    sheet.selected = optionIdx;
+    var card = testSheetEl.querySelectorAll('.test-sheet-card')[sheetIdx];
+    var options = card.querySelectorAll('.option-btn');
+    options.forEach(function (b, j) {
+      b.classList.toggle('selected', j === optionIdx);
+    });
+    paintSheetProgress();
+  }
 
-  function render() { paintQuestion(null); }
+  function checkAnswers() {
+    var firstUnanswered = -1;
+    for (var i = 0; i < roundSheets.length; i += 1) {
+      if (roundSheets[i].selected === null) { firstUnanswered = i; break; }
+    }
+    if (firstUnanswered !== -1) {
+      /* No se verifica a medias: si falta alguna, se hace scroll a la
+         primera sin contestar y se le sacude la tarjeta para que se
+         note. La ronda sigue sin contar. */
+      var target = testSheetEl.querySelectorAll('.test-sheet-card')[firstUnanswered];
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.add('shake');
+      setTimeout(function () { target.classList.remove('shake'); }, 500);
+      return;
+    }
 
-  /* Visible text of an option (its html may wrap spans). */
+    roundCorrect = 0;
+    var cards = testSheetEl.querySelectorAll('.test-sheet-card');
+    roundSheets.forEach(function (sheet, i) {
+      var card = cards[i];
+      var options = card.querySelectorAll('.option-btn');
+      var selected = sheet.question.options[sheet.selected];
+      var correctOption = sheet.question.options.filter(function (o) { return o.correct; })[0];
+      sheet.correct = selected.correct;
+      if (selected.correct) roundCorrect += 1;
+
+      options.forEach(function (b, j) {
+        b.disabled = true;
+        b.classList.remove('selected');
+        var op = sheet.question.options[j];
+        if (op.correct) b.classList.add('correct');
+        else if (j === sheet.selected) b.classList.add('incorrect');
+      });
+
+      var feedbackEl = card.querySelector('.feedback');
+      feedbackEl.classList.remove('hidden');
+      if (selected.correct) {
+        feedbackEl.textContent = '✅';
+        feedbackEl.classList.add('success');
+      } else {
+        feedbackEl.textContent =
+          App.i18n.t('incorrectExplanationA') + plainText(correctOption.html) + '.';
+        feedbackEl.classList.add('error');
+      }
+    });
+
+    /* Stars y contadores de ronda se actualizan aquí, no en una pantalla
+       de fin: la persona ya ve el resultado pregunta a pregunta y
+       "Otra ronda" empieza la siguiente. */
+    progress.stars += roundCorrect;
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
+    progress.roundsByActivity[activity.id] =
+      (progress.roundsByActivity[activity.id] || 0) + 1;
+    save();
+    paintStars();
+
+    btnCheck.classList.add('hidden');
+    btnNewRound.classList.remove('hidden');
+    btnNewRound.focus();
+    paintSheetProgress();
+  }
+
+  function nextRound() {
+    startRound(level);
+  }
+
+  /* Barra de progreso: antes de verificar cuenta cuántas preguntas
+     tienen ya una opción marcada; después de verificar, cuántas
+     se han acertado. La cifra siempre es "x / total". */
+  function paintSheetProgress() {
+    var total = roundSheets.length;
+    if (total === 0) {
+      progressFill.style.width = '0%';
+      progressText.textContent = '0 / 0';
+      return;
+    }
+    var checked = roundSheets[0].correct !== null;
+    var numerator = checked
+      ? roundSheets.filter(function (s) { return s.correct === true; }).length
+      : roundSheets.filter(function (s) { return s.selected !== null; }).length;
+    progressFill.style.width = (numerator / total * 100) + '%';
+    progressText.textContent = numerator + ' / ' + total;
+  }
+
+  /* Visible text of an option (its html may wrap spans). Still
+     used by the incorrect-answer feedback in checkAnswers(). */
   function plainText(html) {
     var div = document.createElement('div');
     div.innerHTML = html;
     return div.textContent;
   }
 
-  function showExplanation(isCorrect) {
-    if (isCorrect && inReinforce) {
-      explanationEl.textContent = '';
-      explanationWrap.classList.add('hidden');
-      return;
-    }
-    var correct = question.options.filter(function (o) { return o.correct; })[0];
-    explanationEl.textContent =
-      (isCorrect ? App.i18n.t('correctExplanation') : App.i18n.t('incorrectExplanationA')) +
-      plainText(correct.html) + '.';
-    explanationWrap.classList.remove('hidden');
-  }
-
-  /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”which is what
-     to do with the figure in front of youâ€” and not the same sentence for
-     every question. The generic line is only the fallback, for a question
-     that forgot to bring its own. */
-  function showHint() {
-    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
-    explanationWrap.classList.remove('hidden');
-  }
-
-  function answer(op, btn) {
-    if (answered) return;
-    if (op.correct) {
-      showExplanation(true);
-      answered = true;
-      btn.classList.add('correct');
-      App.feedback.success(feedbackEl);
-      /* The reinforcement mini-round replays questions this round already
-         asked, so counting it here reported more correct answers than the
-         round has â€” "Has resuelto 11 preguntas" for a 6-question round â€”
-         and pushed `roundCorrect` past DATA.perRound, which is the exact
-         value endRound() compares against to offer the next level. The
-         button therefore vanished for anyone who had to repeat a question,
-         which is precisely the person who should be moving up. Stars move
-         with the score so the two numbers stay consistent. */
-      if (!inReinforce) {
-        progress.stars += 1;
-        roundCorrect += 1;
-      }
-      save();
-      paintStars();
-      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
-      btnNext.classList.remove('hidden');
-      btnNext.focus();
-    } else {
-      attempts += 1;
-      App.reinforce.add(level.id + ':' + index, question);
-      var respuestaTrasPista = attempts > 1;
-      showHint();
-      /* Reveal the explanation only after the hint is acknowledged. */
-      btn.classList.add('encourage');
-      btn.disabled = true;
-      App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(false); });
-    }
-  }
-
-  function next() {
-    if (inReinforce) {
-      reinforceIndex += 1;
-      if (reinforceIndex >= reinforceList.length) {
-        inReinforce = false;
-        App.reinforce.clear();
-        App.reinforce.banner.hide();
-        endRound();
-      } else {
-        showReinforceQuestion(reinforceList[reinforceIndex]);
-      }
-      return;
-    }
-    index += 1;
-    if (index >= roundLength()) {
-      /* consume() returns [] when nothing was failed; otherwise it fires
-         the callback that mounts the mini-round, which ends the round
-         itself, so endRound must not also run here. */
-      if (App.reinforce.consume().length === 0) endRound();
-    } else {
-      render();
-    }
-  }
-
-  function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    progress.roundsByActivity[activity.id] =
-      (progress.roundsByActivity[activity.id] || 0) + 1;
-    save();
-    show(screenEnd);
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
-        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
-        .replace('{stars}', progress.stars);
-    }
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
-  }
-
   /* ---- Events ---- */
 
-  $('#btnNext').addEventListener('click', next);
+  $('#btnCheck').addEventListener('click', checkAnswers);
+  $('#btnNewRound').addEventListener('click', nextRound);
+  /* End screen: the only button is "Volver al inicio", which goes back
+     to the Calculia landing. The end screen is a closing card, not a
+     second menu: picking another activity is a tap away on the home
+     page, so it does not need its own button here. */
+  var endBackToStart = $('#endBackToStart');
+  if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
 
 
 
@@ -1490,7 +1520,7 @@
        index is not a ring: the concept slides count backwards from -1 and
        the gallery items count up from 0, so -1 and 0 are neighbours in the
        ring and nothing like each other in the index. Walking the ring with
-       one offset put the wrap in the wrong place â€” it jumped from the last
+       one offset put the wrap in the wrong place — it jumped from the last
        gallery item to the LAST concept slide instead of back to the
        opening. Converting through a linear position is the only way to get
        both ends right. */

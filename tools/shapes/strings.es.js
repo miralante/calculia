@@ -28,7 +28,7 @@
     introVolumeTitle: 'Volumen',
     introVolumeText: 'Es el hueco que hay dentro y que se puede llenar de cosas.',
     introSymmetryTitle: 'Simetría',
-    introSymmetryText: 'Es que la forma se dobla en dos mitades que coinciden exactamente.',
+    introSymmetryText: 'Es que la forma se dobla en dos mitades iguales.',
     introSimilarityTitle: 'Semejanza',
     introSimilarityText: 'Es la misma forma a otro tamaño: más grande o más pequeña.',
     introSolidTitle: 'Cuerpo',
@@ -42,6 +42,12 @@
     instructionMenu: 'Haz una prueba con todos los contenidos.',
     testTitle: 'Una prueba completa',
     testText: 'Una ronda con formas, cuerpos y desarrollos.',
+    /* La hoja de prueba muestra todas las preguntas a la vez. La persona
+       va eligiendo una opción por pregunta y al final pulsa "Comprobar"
+       para que se verifique todo. "Otra ronda" re-baraja y vuelve a
+       empezar sin pasar por la pantalla de fin. */
+    check: 'Comprobar',
+    newRound: 'Otra ronda →',
     menuBack: '← Volver a los ejemplos',
     contexto: 'Una señal de tráfico, una ventana, una pelota, una lata. Las formas están en todo lo que tocas y ves.',
     explicacion: '✅ Reconocer las formas te ayuda a describir las cosas y a entender señales, planos y dibujos.',
@@ -176,19 +182,19 @@
          dicen qué hacer con la figura que se está mirando: la frase
          única que había antes («Prueba otra vez. Mira el dibujo con
          calma») era la misma para las 50 preguntas, así que no decía
-         nada. Estas no dan la respuesta —dan la estrategia—, que es lo
-         que distingue una pista socrática de un spoiler. */
-      socraticSides: '🤔 Mira la figura otra vez y cuenta sus lados uno por uno.',
-      socraticCorners: '🤔 Mira la figura otra vez, cuenta los puntos marcados uno por uno.',
-      socraticName: '🤔 Fíjate en su forma: no todas las figuras tienen los mismos lados.',
-      socraticPerimeter: '🤔 El perímetro es la vuelta entera: súmale todos los lados.',
-      socraticArea: '🤔 Piensa en la parte de la figura que pisas cuando te pones encima.',
-      socraticVolume: '🤔 Compara los tres cuerpos: mira cuál ocupa más sitio de verdad.',
-      socraticSymmetry: '🤔 Dobla la figura por cada raya y mira en cuál las dos mitades quedan iguales.',
-      socraticSimilar: '🤔 Busca la figura que se parece a esta; no hace falta que sea igual de grande.',
-      socraticFaces: '🤔 Cuenta las piezas del dibujo: cada una es una cara.',
-      socraticNet: '🤔 Dobla las piezas mentalmente y mira qué cuerpo sale.',
-      socraticSolid: '🤔 Piensa en la forma del objeto, no en para qué sirve.'
+         nada. Estas no dan la respuesta —dan la estrategia concreta—,
+         que es lo que distingue una pista socrática de un spoiler. */
+      socraticSides: '🤔 Cuenta los lados uno por uno, sin saltarte ninguno.',
+      socraticCorners: '🤔 Cuenta los puntos marcados uno por uno, sin saltarte ninguno.',
+      socraticName: '🤔 Cuenta los lados de la figura uno por uno. El número que te salga es el nombre de la forma.',
+      socraticPerimeter: '🤔 El perímetro es la suma de todos los lados. Si cada lado mide lo mismo, multiplica lado por lados.',
+      socraticArea: '🤔 El área es todo lo que está dentro del borde, no el borde de fuera ni los vértices.',
+      socraticVolume: '🤔 Mira el tamaño de los tres cuerpos: el más grande es el que más sitio ocupa.',
+      socraticSymmetry: '🤔 Dobla por cada raya y mira en cuál quedan las dos mitades exactamente iguales.',
+      socraticSimilar: '🤔 La figura semejante tiene la misma forma, no hace falta que sea del mismo tamaño.',
+      socraticFaces: '🤔 Cuenta las piezas del dibujo una por una: cada pieza es una cara del cuerpo.',
+      socraticNet: '🤔 Dobla cada pieza en la cabeza: ¿qué cuerpo sale cuando se cierra?',
+      socraticSolid: '🤔 Fíjate en la forma del objeto, no en para qué se usa ni en su color.'
     },
     transfer: 'Esto te servirá para entender señales y dibujos, y para decir cómo es algo cuando lo tengas que explicar.'
   }, 'es');

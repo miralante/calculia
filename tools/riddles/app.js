@@ -245,5 +245,12 @@
 
   /* Start the game on load */
   startRound();
+  /* End screen: the only button is "Volver al inicio", which goes back
+     to the Calculia landing. The end screen is a closing card, not a
+     second menu: picking another activity is a tap away on the home
+     page, so it does not need its own button here. */
+  var endBackToStart = $('#endBackToStart');
+  if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
+
 })();
 

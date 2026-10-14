@@ -73,10 +73,10 @@ var DATA = {
                mismo—, porque en un rectángulo o un trapecio el lado no
                es uno solo: app.js lo comprueba al arrancar y avisa. */
             { id: 'perimeter-triangle', tipo: 'shapePerimeter', shape: 'triangle', side: 2 },
-            { id: 'perimeter-square', tipo: 'shapePerimeter', shape: 'square', side: 3 },
+            { id: 'perimeter-square', tipo: 'shapePerimeter', shape: 'square', side: 2 },
             { id: 'perimeter-rhombus', tipo: 'shapePerimeter', shape: 'rhombus', side: 2 },
             { id: 'perimeter-pentagon', tipo: 'shapePerimeter', shape: 'pentagon', side: 2 },
-            { id: 'perimeter-hexagon', tipo: 'shapePerimeter', shape: 'hexagon', side: 3 },
+            { id: 'perimeter-hexagon', tipo: 'shapePerimeter', shape: 'hexagon', side: 2 },
             { id: 'perimeter-octagon', tipo: 'shapePerimeter', shape: 'octagon', side: 2 },
             /* Los cuatro conceptos nuevos se preguntan aquí en su forma de
                reconocer, no de calcular: contar cuadraditos es de
@@ -109,11 +109,24 @@ var DATA = {
             { id: 'solid-pyramid', tipo: 'solidName', dir: 'toName', solid: 'pyramid' },
             { id: 'solid-cone', tipo: 'solidName', dir: 'toName', solid: 'cone' },
             { id: 'faces-cube', tipo: 'solidParts', net: 'cube' },
-            { id: 'faces-prism', tipo: 'solidParts', net: 'prism' },
-            { id: 'faces-pyramid', tipo: 'solidParts', net: 'pyramid' },
-            { id: 'net-cube', tipo: 'fromNet', net: 'cube' },
-            { id: 'net-prism', tipo: 'fromNet', net: 'prism' },
-            { id: 'net-pyramid', tipo: 'fromNet', net: 'pyramid' }
+            { id: 'faces-prism', tipo: 'solidParts', net: 'prism' }
+            /* "Si doblas este dibujo, ¿qué cuerpo sale?" (fromNet) y
+               "¿Cuántas caras tiene este [cuerpo] abierto?" sobre la
+               pirámide (solidParts con `net: pyramid`) se quitaron de
+               la prueba porque para el usuario tipo resultaban
+               demasiado difíciles: el desarrollo está abierto, hay
+               que imaginarse el pliegue —en fromNet para identificar
+               el cuerpo, en solidParts-pyramid para contar 4
+               triángulos iguales y 1 cuadrado y no liarse con los
+               lados que parecen 5 caras distintas— y la cabeza no
+               siempre lo gira con la misma facilidad. El cubo y el
+               prisma se quedaron porque su red es más reconocible
+               (cuadrados y rectángulos, no triángulos y cuadrados
+               alternando). Las piezas (generador fromNet, app.js
+               `netSvg()`, `gen.fromNet`/`gen.netHint`/
+               `gen.netPiecesAria`) siguen en su sitio por si una
+               actividad futura quiere traer la mecánica de vuelta
+               sin refactorizar. */
           ]
         }
       ]

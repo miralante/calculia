@@ -25,7 +25,7 @@
         <div class="visual lesson-visual" id="learnVisual"></div>
         <p class="lesson-rule" id="learnRule"></p>
       </div>
-      <button type="button" class="btn" id="btnRealExamples"></button>
+      <button type="button" class="btn btn-secondary" id="btnRealExamples"></button>
       <button type="button" class="btn" id="btnStartLesson"></button>
     </section>
 
@@ -70,11 +70,12 @@
       <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
-    <section id="screenEnd" class="hidden centered stack" aria-live="polite">
+    <section id="screenEnd"
       <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
       <p id="transfer" class="transfer" data-i18n="transfer"></p>
+      <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>
     </section>
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
