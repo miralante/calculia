@@ -29,7 +29,7 @@
     "money": { "name": "Money", "detail": "Count, pay and work out change." },
     "divisibility": { "name": "Exact groups", "detail": "Multiples, primes and squares." },
     "operations": { "name": "Big sums", "detail": "Cutting, sharing and order." },
-    "quantities": { "name": "Quantities", "detail": "Read big numbers and count in groups." },
+    "quantities": { "name": "Read and Write Numbers", "detail": "Read big numbers and count in groups." },
     "ordinals": { "name": "Ordinal Numbers", "detail": "First, second, third…" },
     "mathtables": { "name": "Math Tables", "detail": "Add and multiply with colors." },
     "headmath": { "name": "Head Math", "detail": "Count, make 10 first and split into 10s with colored dots." },

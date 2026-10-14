@@ -67,7 +67,7 @@
         "daily": 'Count together at home: "there are 4 plates on the table", "3 is between 2 and 4". Play cards by who has the higher number.'
       },
       "quantities": {
-        "name": 'Quantities',
+        "name": 'Read and Write Numbers',
         "does": 'Compares sets ("where are there more?"), measures weights and lengths, and picks the amount that answers a question.',
         "works": 'Comparing quantities, first measures, vocabulary more/less/same/a lot/a little.',
         "daily": 'At the shop, ask "how many apples do we take? What if we take 2 more?" Weigh fruit together.'

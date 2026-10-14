@@ -85,16 +85,17 @@
        indistinguishable from a school-grade marker. The figure does
        the same job without fighting that gate. */
     ord: {
-      /* Before this entry held 15 hand-written 'NNNCaption' keys, one
-         per ordinal. That was "parts": the same shape repeated 15
-         times, with some of them even drifting apart from each other.
-         The captions are now built by captionFor() in app.js, which
-         uses ONE template from three minimal pieces:
-           - the ordinal's name (the NName key here)
-           - the number spelled out (number.N, in strings.i18n)
-           - a real-life usage example (numberUsage.N, if any)
-         The names and places stay here because the reminder and the
-         carousel still need them. */
+      /* The names and places stay here because the reminder, the
+         list slides, and the quiz questions use them. The old caption
+         block (captionInRow, number.N, numberUsage.N, the "N. Nth
+         in a row." template built by captionFor in app.js) was
+         removed: the carousel carries the figure and the name in the
+         visual itself, and repeating the ordinal's word in a caption
+         ("Sixth. six in a row.") did not help. The reminder chip's
+         third piece is the natural number (1, 2, 3…) — NPlace ("sixth
+         place") would just repeat "sixth". NPlace is still used by
+         the quiz prompt ("Who's in sixth place?"), where "place" is
+         informative. */
       '1Name': 'first', '1Place': 'first place',
       '2Name': 'second', '2Place': 'second place',
       '3Name': 'third', '3Place': 'third place',
@@ -106,8 +107,10 @@
       '9Name': 'ninth', '9Place': 'ninth place',
       '10Name': 'tenth', '10Place': 'tenth place',
       /* The five "round" ordinals that are actually taught. The bare
-         word does not ring a bell: the real-life usage (floors, months,
-         birthdays, age) comes from numberUsage.N. */
+         word is the one the learner memorises; the real-life usage
+         lives in the screen-2 scenarios (building: eleventh floor;
+         months: twelfth month; birthdays: twentieth, thirtieth,
+         fortieth). */
       '11Name': 'eleventh', '11Place': 'eleventh place',
       '12Name': 'twelfth', '12Place': 'twelfth place',
       '20Name': 'twentieth', '20Place': 'twentieth place',
@@ -172,32 +175,6 @@
     /* ---------- The queue ---------- */
     queueHint: 'Count from the flag 🏁.',
     queueAria: 'Queue of {n}. The arrow points at place {pos}.',
-
-    /* ---------- Unified ordinal text ----------
-       Before this entry held 15 separate 'NNNCaption' keys, one per
-       ordinal, each hand-written. That was "parts": the same shape
-       repeated 15 times, with some drifting apart. Now there is ONE
-       template (used by captionFor() in app.js) built from three
-       minimal pieces: the ordinal's name (ord.NName), the number
-       spelled out (number.N) and, if it has one, a real-life usage
-       example (numberUsage.N). The formula is the same for all 15
-       ordinals: "{Name}. {Spell} in a row. {Usage}". */
-    captionInRow: 'in a row',
-    number: {
-      1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five',
-      6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten',
-      11: 'eleven', 12: 'twelve', 20: 'twenty', 30: 'thirty', 40: 'forty'
-    },
-    /* Only the round ones (11, 12, 20, 30, 40) get a second sentence
-       with a real-life example: the bare word ("eleventh") does not
-       ring a bell without context. */
-    numberUsage: {
-      11: 'Used for floors: "lives on the eleventh floor".',
-      12: 'Also used for months: "the twelfth month".',
-      20: 'Used for birthdays: "the twentieth".',
-      30: 'Also for birthdays: "the thirtieth".',
-      40: 'For the 40th birthday: "the fortieth birthday".'
-    },
 
     /* ---------- The building and the queue (screen 2) ---------- */
     /* Label that appears above the scenario on screen 2. */

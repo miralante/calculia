@@ -20,6 +20,11 @@
   var signedIntroScreen = $('#signedIntroScreen');
   var signedRealScreen = $('#signedRealScreen');
   var signedTempScreen = $('#signedTempScreen');
+  /* Generic exposition + real-life screens, reused by the 5 sub-activities
+     that flag DATA.<act>.hasExpoReal = true. Content painted from strings
+     keyed by the current sub-activity id. */
+  var screenExpo = $('#expoScreen');
+  var screenReal = $('#realScreen');
   var promptEl = $('#prompt');
   var visualEl = $('#visual');
   var legendEl = $('#legend');
@@ -256,117 +261,9 @@
       };
     },
 
-    /* Ordinal numbers on a queue. The flag at the front settles which end
-       counts as first, so the only thing being asked is the ordinal
-       itself. `ask: 'position'` points at someone and asks which place
-       that is; `ask: 'member'` names a place and asks who is standing
-       there. */
-    ordinal: function (nv) {
-      var row = App.utils.shuffle(DATA.queueMembers.slice()).slice(0, nv.items);
-      var target = randInt(1, nv.items);
-      var askingPosition = nv.ask === 'position';
+    
 
-      /* Off-by-one is the real mistake here (counting from the wrong end,
-         or starting at zero), so the alternatives are the neighbouring
-         places rather than random ones. */
-      var nearby = [target - 1, target + 1, target + 2, target - 2]
-        .filter(function (p) { return p >= 1 && p <= nv.items && p !== target; })
-        .slice(0, 2);
-
-      var pointerRow = '';
-      if (askingPosition) {
-        pointerRow = '<div class="queue-row queue-pointers" aria-hidden="true">' +
-          '<span class="queue-start-spacer"></span>' +
-          row.map(function (_, idx) {
-            return '<span class="queue-pointer">' + (idx + 1 === target ? '—!️' : '') + '</span>';
-          }).join('') + '</div>';
-      }
-
-      var queue = '<div class="queue-row" aria-hidden="true">' +
-        '<span class="queue-start">—x——</span>' +
-        row.map(function (m) { return '<span class="queue-member">' + m + '</span>'; }).join('') +
-        '</div>';
-
-      var visual = pointerRow + queue +
-        '<p class="hint">' + App.i18n.t('gen.ordinalHint') + '</p>';
-
-      if (askingPosition) {
-        return {
-          prompt: App.i18n.t('gen.ordinalPositionPrompt'),
-          visual: visual,
-          visualAria: App.i18n.t('gen.ordinalVisualAria')
-            .replace('{n}', nv.items).replace('{pos}', target),
-          hint: App.i18n.t('gen.socraticOrdinalPlace'),
-          options: App.utils.shuffle(
-            [{ html: App.i18n.t('ordinal.' + target), correct: true }].concat(
-              nearby.map(function (p) {
-                return { html: App.i18n.t('ordinal.' + p), correct: false };
-              })
-            ))
-        };
-      }
-      return {
-        prompt: App.i18n.t('gen.ordinalMemberPrompt')
-          .replace('{place}', App.i18n.t('ordinalPlace.' + target)),
-        visual: visual,
-        visualAria: App.i18n.t('gen.ordinalVisualAria')
-          .replace('{n}', nv.items).replace('{pos}', target),
-        hint: App.i18n.t('gen.socraticOrdinalMember'),
-        options: App.utils.shuffle(
-          [{ html: '<span class="queue-member">' + row[target - 1] + '</span>', correct: true }].concat(
-            nearby.map(function (p) {
-              return { html: '<span class="queue-member">' + row[p - 1] + '</span>', correct: false };
-            })
-          )),
-        inline: true
-      };
-    },
-
-    /* The number line: a mark sits between two labelled
-       ticks and the question is which number it is. `sparse` hides the
-       intermediate ticks so the answer has to be worked out from the
-       labelled ones instead of counting every notch. */
-    numberLine: function (nv) {
-      var span = nv.max - nv.min;
-      function isLabelled(v) { return (v - nv.min) % nv.label === 0; }
-
-      /* Candidates are the inner notches. Once the labels thin out, a
-         labelled notch is excluded: reading its number off the line would
-         be the answer rather than a count. */
-      var candidates = [];
-      for (var v = nv.min + nv.tick; v < nv.max; v += nv.tick) {
-        if (nv.label === nv.tick || !isLabelled(v)) candidates.push(v);
-      }
-      /* Drawn from the no-repeat bag, not at random: with only eight
-         notches to choose from, pure chance hands out the same notch
-         twice in a row often enough to read as a dead "Siguiente". */
-      var target = App.utils.drawRound(nv.id, candidates);
-
-      var ticks = '';
-      for (var w = nv.min; w <= nv.max; w += nv.tick) {
-        ticks += '<span class="line-tick" style="left:' +
-          (((w - nv.min) / span) * 100).toFixed(2) + '%">' +
-          (isLabelled(w) ? '<span class="line-label">' + w + '</span>' : '') +
-          '</span>';
-      }
-      var mark = '<span class="line-mark" style="left:' +
-        (((target - nv.min) / span) * 100).toFixed(2) + '%">——</span>';
-
-      return {
-        prompt: App.i18n.t('gen.numberLinePrompt'),
-        visual: '<div class="number-line" aria-hidden="true">' +
-          '<span class="line-rule"></span>' + ticks + mark + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.numberLineHint') + '</p>',
-        visualAria: App.i18n.t('gen.numberLineAria')
-          .replace('{min}', nv.min).replace('{max}', nv.max),
-        hint: App.i18n.t('gen.socraticNumberLine'),
-        /* Landing on the neighbouring notch is the real mistake (one notch
-           miscounted), so those are the alternatives. */
-        options: buildOptions(target,
-          [target - nv.tick, target + nv.tick, target + nv.tick * 2],
-          function (x) { return paintNumber(x); })
-      };
-    },
+    
 
     /* The signs <, > and =. The relation is picked FIRST
        and the pair built to match it, so the three signs come up equally
@@ -568,7 +465,8 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenGame, screenEnd, signedIntroScreen, signedRealScreen, signedTempScreen].forEach(function (p) {
+    [screenMenu, screenGame, screenEnd, signedIntroScreen, signedRealScreen, signedTempScreen,
+     screenExpo, screenReal].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -613,7 +511,70 @@
       startSignedIntro();
       return;
     }
+    if (activity.hasExpoReal) {
+      startExpoScreen(id);
+      return;
+    }
     startRound(levelFromProgress());
+  }
+
+  /* ---- Exposition + real-life screens for hasExpoReal activities ---- */
+
+  function paintExpo(id) {
+    var block = App.i18n.t('expo.' + id);
+    if (!block) { show(screenMenu); return; }
+    $('#expoTitleEl').textContent = block.title || '';
+    $('#expoIntroEl').textContent = block.intro || '';
+    var bulletsEl = $('#expoBulletsEl');
+    bulletsEl.innerHTML = '';
+    (block.bullets || []).forEach(function (b) {
+      var li = document.createElement('li');
+      li.textContent = b;
+      bulletsEl.appendChild(li);
+    });
+    var noteEl = $('#expoNoteEl');
+    if (block.note) {
+      noteEl.textContent = '💡 ' + block.note;
+      noteEl.classList.remove('hidden');
+    } else {
+      noteEl.textContent = '';
+      noteEl.classList.add('hidden');
+    }
+    screenExpo.setAttribute('aria-label',
+      (block.title || '') + ' — ' + (App.i18n.t('activity.' + id + '.name') || ''));
+  }
+
+  function paintReal(id) {
+    var block = App.i18n.t('real.' + id);
+    if (!block) { show(screenMenu); return; }
+    $('#realTitleEl').textContent = block.title || '';
+    var listEl = $('#realListEl');
+    listEl.innerHTML = '';
+    (block.items || []).forEach(function (item) {
+      var row = document.createElement('div');
+      row.className = 'real-list-item';
+      var icon = document.createElement('span');
+      icon.className = 'real-list-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.textContent = item.icon || '';
+      var para = document.createElement('p');
+      para.textContent = item.text || '';
+      row.appendChild(icon);
+      row.appendChild(para);
+      listEl.appendChild(row);
+    });
+    screenReal.setAttribute('aria-label',
+      (block.title || '') + ' — ' + (App.i18n.t('activity.' + id + '.name') || ''));
+  }
+
+  function startExpoScreen(id) {
+    paintExpo(id);
+    show(screenExpo);
+  }
+
+  function startRealScreen(id) {
+    paintReal(id);
+    show(screenReal);
   }
 
   function startSignedIntro() {
@@ -931,19 +892,6 @@
         .replace('{stars}', progress.stars);
     }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
-
-    var levelIndex = activity.levels.indexOf(level);
-    var nextLevel = (activity.id !== 'positivos-y-negativos' &&
-      roundCorrect === DATA.perRound && levelIndex !== -1 && levelIndex + 1 < activity.levels.length)
-      ? activity.levels[levelIndex + 1] : null;
-    var btnHarder = $('#btnHarder');
-    if (nextLevel) {
-      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name}', App.i18n.t('level.' + nextLevel.id));
-      btnHarder.classList.remove('hidden');
-      btnHarder.onclick = function () { startRound(nextLevel); };
-    } else {
-      btnHarder.classList.add('hidden');
-    }
   }
 
   /* ============================================================
@@ -1484,17 +1432,36 @@
   var elBtnBackToMenu = $('#btnBackToMenu');
   if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
   $('#btnNext').addEventListener('click', next);
-  $('#btnRepeat').addEventListener('click', function () {
+  /* btnRepeat was removed during the 25-activity batch cleanup (memory
+     entry on 2026-10-13); the screenEnd section no longer has the
+     button, so its handler is gone too. If a future batch re-adds the
+     button, wire this up again with the hasExpoReal/positivos-y-negativos
+     branches restored. */
+  var elBtnRepeat = $('#btnRepeat');
+  if (elBtnRepeat) elBtnRepeat.addEventListener('click', function () {
     if (activity.id === 'positivos-y-negativos') startSignedIntro();
+    else if (activity.hasExpoReal) startExpoScreen(activity.id);
     else startRound(levelFromProgress());
   });
-  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
+
+  /* ---- Exposition + real-life buttons (hasExpoReal activities) ---- */
+  $('#expoNext').addEventListener('click', function () {
+    if (!activity) return;
+    startRealScreen(activity.id);
+  });
+  $('#realBack').addEventListener('click', function () {
+    if (!activity) return;
+    startExpoScreen(activity.id);
+  });
+  $('#realNext').addEventListener('click', function () {
+    if (!activity) return;
+    startRound(levelFromProgress());
+  });
+
   $('#signedIntroNext').addEventListener('click', function () {
     paintSignedReal();
     show(signedRealScreen);
   });
-  $('#signedRealBack').addEventListener('click', startSignedIntro);
   $('#signedRealNext').addEventListener('click', startSignedTemperature);
   App.utils.$$('#signedTempScreen .btn-signed-temp[data-step]').forEach(function (button) {
     button.addEventListener('click', function () {

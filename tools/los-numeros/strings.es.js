@@ -13,7 +13,11 @@
 
     galleryIntro: 'Mira y pasa las tarjetas.',
 
-    /* ---- Slides de tipo: título + vida real ---- */
+    /* ---- Slides de tipo: título + vida real ----
+       Cada tipo de número se enseña en dos cards consecutivas:
+       una de exposición (visual) y otra de vida real (los ejemplos
+       cotidianos). La frase de vida real puede tener varios
+       ejemplos separados por « · »; el JS los rompe en una lista. */
     slideNaturalesTitle: 'Naturales',
     slideNaturalesReal: '🧮 3 manzanas · 5 dedos · 10 años',
     slideEnterosTitle: 'Enteros',
@@ -22,6 +26,8 @@
     slideDecimalesReal: '💰 1,99 € · 1,5 m · 3,14',
     slideFraccionesTitle: 'Fracciones',
     slideFraccionesReal: '🍕 1/2 pizza · 1/4 de hora',
+    /* Eyebrow que aparece sobre la lista de ejemplos de vida real. */
+    realEyebrow: 'En la vida real:',
 
     /* ---- Slides de comparación: solo título ---- */
     slideVsEnterosTitle: 'Naturales y Enteros',

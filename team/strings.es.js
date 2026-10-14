@@ -67,7 +67,7 @@
         "daily": 'Contad juntos en casa: "hay 4 platos en la mesa", "el 3 está entre el 2 y el 4". Jugad a las cartas que tengan número mayor.'
       },
       "quantities": {
-        "name": 'Cantidades',
+        "name": 'Leer y Escribir Números',
         "does": 'Compara conjuntos ("¿dónde hay más?"), mide pesos y longitudes y elige la cantidad que corresponde a una pregunta.',
         "works": 'Comparación de cantidades, primeras medidas, vocabulario más/menos/igual/mucho/poco.',
         "daily": 'En la compra, preguntadle "¿cuántas manzanas cogemos? ¿y si cogemos 2 más?". Pesad juntos la fruta.'

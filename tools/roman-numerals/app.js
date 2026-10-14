@@ -91,12 +91,10 @@
   var famousText = $('#famousText');
   var famousPrev2 = $('#famousPrev2');
   var famousNext2 = $('#famousNext2');
-  var famousPrevBtn = $('#famousPrevBtn');
   var famousNextBtn = $('#famousNextBtn');
   var btnListenFamous = $('#btnListenFamous');
 
   /* ---------- Screen 3: reminder ---------- */
-  var reminderBack = $('#reminderBack'); // back to the famous numbers screen
   var symbolsRow = $('#symbolsRow');
   var exampleSubtractRoman = $('#exampleSubtractRoman');
   var exampleSubtractEquals = $('#exampleSubtractEquals');
@@ -1423,11 +1421,9 @@
   }
   introNext.addEventListener('click', function () { show(famousScreen); });
 
-  famousPrevBtn.addEventListener('click', function () { show(introScreen); });
   famousNextBtn.addEventListener('click', function () { show(reminderScreen); });
 
-  reminderBack.addEventListener('click', function () { show(famousScreen); });
-  referenceNext.addEventListener('click', function () {
+    referenceNext.addEventListener('click', function () {
     startLevel(levelFromProgress());
   });
 
@@ -1440,8 +1436,8 @@
       speakWithButton(btnListenPrompt, speakForQuiz(currentEntry));
     });
   }
-  $('#replayBtn').addEventListener('click', function () { startLevel(currentLevel); });
-  $('#btnMenu').addEventListener('click', function () { show(introScreen); });
+  $('#btnNext').addEventListener('click', next);
+
 
   function init() {
     App.i18n.apply();

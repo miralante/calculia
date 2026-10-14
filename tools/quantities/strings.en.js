@@ -12,7 +12,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '👀 Quantities',
+    title: '👀 Read and Write Numbers',
     instruction: 'Read big numbers and count in groups.',
     choosePractice: 'Choose what you want to practise.',
     btnMenu: 'Back to the start',

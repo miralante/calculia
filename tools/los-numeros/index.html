@@ -27,8 +27,15 @@
       </div>
       <div class="card slide-card">
         <h2 class="slide-title" id="slideTitle"></h2>
+        <!-- Eyebrow above the list of real-life examples. Visible
+             only on the "real" cards (kind: 'real'); hidden on
+             exposition and comparison cards. -->
+        <p class="slide-eyebrow hidden" id="slideEyebrow" data-i18n="realEyebrow"></p>
         <div class="slide-visual" id="slideVisual" role="img" aria-hidden="true"></div>
-        <p class="slide-real" id="slideReal"></p>
+        <!-- Real-life examples rendered as a list on "real" cards;
+             hidden on exposition and comparison cards. Items come
+             from strings.<id>Real, split on ' · '. -->
+        <ul class="slide-real hidden" id="slideReal"></ul>
       </div>
       <div class="carousel-controls">
         <button type="button" class="btn btn-secondary" id="slidePrev" aria-label="Anterior">←</button>
@@ -46,9 +53,6 @@
       <h2 data-i18n="endTitle">¡Has terminado!</h2>
       <p id="endSummary"></p>
       <p id="transfer" class="transfer" data-i18n="transfer">Esto te servirá para saber qué tipo de número tienes delante.</p>
-      <button type="button" class="btn" id="btnRepeat" data-i18n="btnRepeat">Ver otra vez</button>
-      <button type="button" class="btn btn-secondary" id="btnMenu" data-i18n="btnMenu">Volver al inicio</button>
-      <a href="../../" class="btn btn-secondary" data-i18n="core.backToMenu">Volver al menú</a>
     </section>
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>

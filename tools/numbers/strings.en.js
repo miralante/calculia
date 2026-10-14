@@ -52,8 +52,6 @@
       'positivos-y-negativos': { name: 'Positives and negatives', detail: 'Learn the signs with a thermometer and an elevator.', instruction: 'Numbers can be above or below zero. Look at the examples and practise with the thermometer and the elevator.' },
       unidades: { name: 'Ones and tens', detail: 'What number is it?', instruction: 'Each colour helps read the number. Blue: ones. Green: tens. Purple: hundreds.' },
       placevalue: { name: 'Changing position', detail: '10 small ones become 1 big one.', instruction: 'When you put 10 of the same together, they form 1 of the next group. The digit moves one position to the left.' },
-      ordinales: { name: 'Your place in the queue', detail: 'First, second, third…', instruction: 'Ordinal numbers say which place each one is in. The queue starts at the flag 🏁. The one next to the flag is first.' },
-      recta: { name: 'The number line', detail: 'Which number is the arrow pointing at?', instruction: 'Numbers go in a row, in order. The line puts them from smallest to biggest. Count from the nearest mark to find the one the arrow points at.' },
       comparar: { name: 'Greater, smaller or equal', detail: 'The signs <, > and =.', instruction: 'Look at the two numbers. The sign opens towards the bigger number. If both are the same, the sign is =.' }
     },
     signed: {
@@ -102,23 +100,85 @@
       tempNext: 'Next challenge →',
       endSummary: 'You practised positive and negative numbers. You now have {stars} stars.'
     },
-    ordinal: { 1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth' },
-    ordinalPlace: { 1: 'first place', 2: 'second place', 3: 'third place', 4: 'fourth place', 5: 'fifth place' },
-    level: { n1: 'Up to 10', n2: 'Up to 20', n3: 'Up to 100', n4: 'Up to 100, fewer marks', c1: 'Up to 9, with blocks', c2: 'Up to 99, with blocks', c3: 'Up to 99, no blocks', c4: 'Up to 999', c5: 'Up to 9,999', o1: 'Queue of 3', o2: 'Queue of 5', o3: 'Find a place', libre: '🏢 Free elevator', meta: '🎯 Reach a floor', u99: 'Up to 99', u999: 'Up to 999', umiles: 'Thousands', umillones: 'Millions and trillion', udictado: 'Listen and choose', counter: 'Free counter', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
+    /* Exposition + real-life screens for the 3 sub-activities that don't
+       have their own custom lesson (positivos-y-negativos uses the
+       dedicated signed.* flow). Each activity gets a brief theoretical
+       slide (expo.*) followed by everyday examples (real.*), with a
+       "Next" button linking them and from there to the practice. */
+    expo: {
+      comparar: {
+        title: 'Greater, smaller or equal',
+        intro: 'To know which number is greater, look at the digits. Start from the left.',
+        bullets: [
+          'If the first digit is already greater, that number is greater.',
+          'If the digits are the same, look at the next one.',
+          'If all digits are the same, the two numbers are equal.'
+        ],
+        note: 'The sign opens towards the greater number: the open side is greater.'
+      },
+      unidades: {
+        title: 'Ones, tens and hundreds',
+        intro: 'Each digit has a value based on its place. The rightmost digit is ones; the next is tens; the next is hundreds.',
+        bullets: [
+          'Ones: 1, 2, 3…',
+          'Tens: 10, 20, 30…',
+          'Hundreds: 100, 200, 300…',
+          'In the number 345: 3 hundreds + 4 tens + 5 ones.'
+        ],
+        note: 'Each colour signals a value: blue (ones), green (tens), purple (hundreds).'
+      },
+      placevalue: {
+        title: 'Trading places',
+        intro: '10 ones make 1 ten. 10 tens make 1 hundred. 10 hundreds make 1 thousand. And so on.',
+        bullets: [
+          '10 × 1 = 1 ten (10)',
+          '10 × 10 = 1 hundred (100)',
+          '10 × 100 = 1 thousand (1,000)'
+        ],
+        note: 'Multiplying by 10 moves the digit one place to the left and adds a zero.'
+      }
+    },
+    real: {
+      comparar: {
+        title: 'Comparing is everywhere',
+        items: [
+          { icon: '🎒', text: 'Who has more cards in their backpack?' },
+          { icon: '🍎', text: 'Which bag is heavier at the shop?' },
+          { icon: '📅', text: 'Who was born first and who was born later?' },
+          { icon: '💰', text: 'Who has more money in the piggy bank?' }
+        ]
+      },
+      unidades: {
+        title: 'Ones, tens and hundreds in your day',
+        items: [
+          { icon: '🥚', text: 'A box of eggs has 12 ones (= 1 dozen).' },
+          { icon: '👟', text: 'Shoe sizes are numbers of ones.' },
+          { icon: '💶', text: '100 cents = 1 €. 10 cents = one tenth of a euro.' },
+          { icon: '⏱️', text: '60 minutes = 1 hour. 60 seconds = 1 minute.' }
+        ]
+      },
+      placevalue: {
+        title: 'Trading 10s in your daily life',
+        items: [
+          { icon: '🥚', text: '10 loose eggs make 1 dozen.' },
+          { icon: '✏️', text: '10 loose pencils make 1 pack.' },
+          { icon: '💶', text: '10 coins of 10 cents = 1 euro.' },
+          { icon: '⏱️', text: '10 years = 1 decade. 10 decades = 1 century (100 years).' }
+        ]
+      }
+    },
+    expoNext: 'See real-life examples →',
+    expoBack: '← Back to menu',
+    realBack: '← Back to the explanation',
+    realNext: 'Start practising →',
+    level: { c1: 'Up to 9, with blocks', c2: 'Up to 99, with blocks', c3: 'Up to 99, no blocks', c4: 'Up to 999', c5: 'Up to 9,999', libre: '🏢 Free elevator', meta: '🎯 Reach a floor', u99: 'Up to 99', u999: 'Up to 999', umiles: 'Thousands', umillones: 'Millions and trillion', udictado: 'Listen and choose', counter: 'Free counter', pv1: 'Ones to tens', pv2: 'Tens to hundreds', pv3: 'Hundreds to thousands', pv4: 'Ladder of 10: up to one million', pv5: 'Ladder of 10: up to one trillion' },
     gen: {
-      numberLinePrompt: 'Which number is the arrow pointing at?',
-      numberLineHint: 'Count from the nearest written number.',
-      numberLineAria: 'Number line from {min} to {max}.',
       compararEnunciado: 'Which sign is missing?',
       compararPista: 'The sign opens towards the bigger number.',
       compararAria: 'Compare {a} and {b}.',
       signLess: 'is smaller than',
       signGreater: 'is bigger than',
       signEqual: 'is equal to',
-      ordinalPositionPrompt: 'Which place is the arrow pointing at?',
-      ordinalMemberPrompt: 'Who is in {place}?',
-      ordinalHint: 'Count from the flag 🏁.',
-      ordinalVisualAria: 'Queue of {n}. The arrow points at place {pos}.',
       bloquesEnunciado: 'What number do the blocks make?',
       bloquesVisualAria: 'Blocks: {texto}',
       blocksPrompt: 'What number do the blocks make?',
@@ -193,9 +253,6 @@
          number in front of you: the single old sentence ("Try again.
          Think calmly.") was the same for all of them. They give the
          strategy, never the answer. */
-      socraticOrdinalPlace: '🤔 Start at the flag and count up to the arrow, one by one.',
-      socraticOrdinalMember: '🤔 Start at the flag and count up to the place they ask about.',
-      socraticNumberLine: '🤔 Count the marks from the nearest written number up to the arrow.',
       socraticCompare: '🤔 Look at the digits of both numbers and compare the biggest places first.',
       socraticBlocks: '🤔 Count the blocks in each group, then put the totals together.',
       socraticSayNumber: '🤔 Look at the number drawn and read it in parts, from left to right.',

@@ -22,68 +22,36 @@ var DATA = {
   perRound: 6,
 
   activities: {
-    /* Ordinal numbers (see TODO.md, not served to the browser). Framed as
-       a queue because waiting your turn and knowing which place you are
-       in is a real daily-living skill, not a classroom abstraction. The
-       flag marks where the queue starts, so "first" never depends on
-       guessing which end counts.
-       Progression (rule 13): o1→o2 only changes the queue length;
-       o2→o3 only flips the direction of the question (point at a place
-       and name it → name a place and find who is there). */
-    ordinales: {
-      picto: '1️⃣',
+    /* Positive and negative numbers via an elevator (floors below ground
+       = negative, floors above ground = positive, ground floor = 0).
+       Free-exploration mode: same mechanic as the water-temperature
+       tool (−1/+1 buttons, the visual reacts on every step). The
+       person drives the elevator from the ground floor to the
+       basement and back, watching the floor number change. Two
+       missions (rule 13, only one variable changes between them):
+       libre  → meta. libre has no target, just explore. meta adds a
+       single target floor (the elevator starts somewhere else and
+       has to be navigated to the goal, crossing zero in the
+       process). Range (−3/+3): a small, realistic building — 3
+       parking floors below ground, 3 floors above it — small
+       enough that every floor fits on screen at once and moving
+       one floor at a time (the only button) always reaches the
+       target in a few taps, no ±10 jump needed.
+       First in the menu because the elevator visual ties the rest
+       of the tool together: every other practice lives on the same
+       number line, and meeting the relatives one can already read
+       what "above zero" and "below zero" mean. */
+    "positivos-y-negativos": {
+      picto: '🏢',
       levels: [
-        { id: 'o1', tipo: 'ordinal', items: 3, ask: 'position' },
-        { id: 'o2', tipo: 'ordinal', items: 5, ask: 'position' },
-        { id: 'o3', tipo: 'ordinal', items: 5, ask: 'member' }
-      ]
-    },
-
-    /* The comparison signs (see TODO.md, not served to the browser).
-       Progression (rule 13), exactly one variable per step:
-         c1→c2  magnitude grows, blocks stay.
-         c2→c3  same numbers, the blocks go away — the comparison has to
-                be made on the digits alone. This is the abstraction step.
-         c3→c4  magnitude grows again.
-         c4→c5  magnitude grows again.
-       Blocks only exist below 100: two sides of ~27 blocks stop being
-       countable at a glance on a phone, which would defeat their point. */
-    comparar: {
-      picto: '⚖️',
-      levels: [
-        { id: 'c1', tipo: 'comparar', min: 1, max: 9, blocks: true },
-        { id: 'c2', tipo: 'comparar', min: 10, max: 99, blocks: true },
-        { id: 'c3', tipo: 'comparar', min: 10, max: 99, blocks: false },
-        { id: 'c4', tipo: 'comparar', min: 100, max: 999, blocks: false },
-        { id: 'c5', tipo: 'comparar', min: 1000, max: 9999, blocks: false }
-      ]
-    },
-
-    /* The number line (see TODO.md, not served to the browser). The elevator
-       already draws a number line, but only to make sense of negatives;
-       this one is about placing a number among its neighbours, which is
-       what placing a number on a line actually asks for.
-       The mark ALWAYS sits on a notch, so the number can be counted
-       exactly instead of estimated — a mark floating between notches
-       would have no determinable answer.
-       `tick` is the value of one notch, `label` how often a notch carries
-       a printed number. The variable that grows is how much help the
-       labels give, which is the real number-line skill:
-         n1  every notch is labelled — just read the one under the arrow.
-         n2  labels every 5, so units are counted from the nearest one.
-         n3  same, on a longer line.
-         n4  each notch is now worth ten, counted from a distant label. */
-    recta: {
-      picto: '📈',
-      levels: [
-        { id: 'n1', tipo: 'numberLine', min: 0, max: 10, tick: 1, label: 1 },
-        { id: 'n2', tipo: 'numberLine', min: 0, max: 10, tick: 1, label: 5 },
-        { id: 'n3', tipo: 'numberLine', min: 0, max: 20, tick: 1, label: 5 },
-        { id: 'n4', tipo: 'numberLine', min: 0, max: 100, tick: 10, label: 50 }
+        { id: 'libre', tipo: 'ascensorLibre', min: -3, max: 3 },
+        { id: 'meta',  tipo: 'ascensorMeta',  min: -3, max: 3, meta: -1, inicio: 2 }
       ]
     },
 
     unidades: {
+      hasExpoReal: true,
+      /* Progression (rule 13): order designed so each step changes
       /* Progression (rule 13): order designed so each step changes
          a single thing. u999→udictado only changes 'tipo' (the
          range stays at 999). udictado→umiles changes 'tipo' with
@@ -108,6 +76,8 @@ var DATA = {
     },
 
     placevalue: {
+      hasExpoReal: true,
+      /* Place-value exchange ("10 of these make 1 of those") and the
       /* Place-value exchange ("10 of these make 1 of those") and the
          ×10 ladder up to 10^12. Progression (rule 13): pv1→pv2→pv3
          only change 'lugar' (which exchange). pv3→pv4 changes 'tipo'
@@ -123,29 +93,24 @@ var DATA = {
       ]
     },
 
-    /* Positive and negative numbers via an elevator (floors below ground
-       = negative, floors above ground = positive, ground floor = 0).
-       Free-exploration mode: same mechanic as the water-temperature
-       tool (−1/+1 buttons, the visual reacts on every step). The
-       person drives the elevator from the ground floor to the
-       basement and back, watching the floor number change. Two
-       missions (rule 13, only one variable changes between them):
-       libre  → meta. libre has no target, just explore. meta adds a
-       single target floor (the elevator starts somewhere else and
-       has to be navigated to the goal, crossing zero in the
-       process). Range (−3/+3): a small, realistic building — 3
-       parking floors below ground, 3 floors above it — small
-       enough that every floor fits on screen at once and moving
-       one floor at a time (the only button) always reaches the
-       target in a few taps, no ±10 jump needed.
-       Last in the menu because negative numbers are the most advanced
-       idea in this tool, while naming a place in a queue and comparing
-       two numbers are the most approachable ones. */
-    "positivos-y-negativos": {
-      picto: '🏢',
+    /* The comparison signs (see TODO.md, not served to the browser).
+       Progression (rule 13), exactly one variable per step:
+         c1→c2  magnitude grows, blocks stay.
+         c2→c3  same numbers, the blocks go away — the comparison has to
+                be made on the digits alone. This is the abstraction step.
+         c3→c4  magnitude grows again.
+         c4→c5  magnitude grows again.
+       Blocks only exist below 100: two sides of ~27 blocks stop being
+       countable at a glance on a phone, which would defeat their point. */
+    comparar: {
+      picto: '⚖️',
+      hasExpoReal: true,
       levels: [
-        { id: 'libre', tipo: 'ascensorLibre', min: -3, max: 3 },
-        { id: 'meta',  tipo: 'ascensorMeta',  min: -3, max: 3, meta: -1, inicio: 2 }
+        { id: 'c1', tipo: 'comparar', min: 1, max: 9, blocks: true },
+        { id: 'c2', tipo: 'comparar', min: 10, max: 99, blocks: true },
+        { id: 'c3', tipo: 'comparar', min: 10, max: 99, blocks: false },
+        { id: 'c4', tipo: 'comparar', min: 100, max: 999, blocks: false },
+        { id: 'c5', tipo: 'comparar', min: 1000, max: 9999, blocks: false }
       ]
     }
   },
@@ -239,14 +204,6 @@ var DATA = {
       'one hundred thousand', 'one million', 'ten million', 'one hundred million',
       'one billion', 'ten billion', 'one hundred billion', 'one trillion']
   },
-
-  /* Who stands in the queue for the 'ordinal' levels. Emoji only, so the
-     list needs no locale split (same reasoning as the pattern series in
-     tools/patterns/). Animals rather than people: no gender or skin-tone
-     to pick, and the ordinal then agrees with "lugar" in Spanish, which
-     avoids asking the person to track grammatical gender on top of the
-     actual skill. */
-  queueMembers: ['🐶', '🐱', '🐭', '🐰', '🦊', '🐻', '🐼', '🐯'],
 
   /* Shared config for the elevator free-exploration missions
      ('positivos-y-negativos'). Centralised here so the visual range

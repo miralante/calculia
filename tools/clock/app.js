@@ -301,7 +301,6 @@
     screenEnd.classList.add('hidden');
     screenLearn.classList.remove('hidden');
     $('#learnStart').classList.toggle('hidden', learnFromGame);
-    $('#learnBack').classList.toggle('hidden', !learnFromGame);
   }
 
   /* 3 o'clock: the long hand sits on the 12, which is the first rule
@@ -694,24 +693,10 @@
 
   /* ---- Events ---- */
   $('#btnNext').addEventListener('click', goNext);
-  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
-  $('#btnMenu').addEventListener('click', function () {
-    screenEnd.classList.add('hidden');
-    screenStart.classList.remove('hidden');
-  });
-  $('#btnOtherMode').addEventListener('click', function () {
-    screenEnd.classList.add('hidden');
-    screenLearn.classList.add('hidden');
-    screenStart.classList.remove('hidden');
-  });
-  $('#btnLearn').addEventListener('click', function () { showLearn(true); });
+
   $('#learnStart').addEventListener('click', function () {
     screenLearn.classList.add('hidden');
     startRound(levelFromProgress());
-  });
-  $('#learnBack').addEventListener('click', function () {
-    screenLearn.classList.add('hidden');
-    screenGame.classList.remove('hidden');
   });
   if (listenBtn) {
     listenBtn.addEventListener('click', function () {

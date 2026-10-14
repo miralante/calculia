@@ -710,7 +710,6 @@
   });
   var elBtnBackToMenuLevels = $('#btnBackToMenuLevels');
   if (elBtnBackToMenuLevels) elBtnBackToMenuLevels.addEventListener('click', function () { show('screenMenu'); });
-  $('#btnBackToMenuEnd').addEventListener('click', function () { show('screenMenu'); });
 
   btnNextQuiz.addEventListener('click', nextQuiz);
   btnCheck.addEventListener('click', check);
@@ -718,13 +717,6 @@
   $('#btnClear').addEventListener('click', clearAll);
   btnNextPay.addEventListener('click', nextPay);
   $('#btnPayHint').addEventListener('click', requestPayHint);
-  $('#btnRepeat').addEventListener('click', function () {
-    if (currentConfig().isQuiz) startQuizRound(levelQ);
-    else startPayRound(levelP);
-  });
-  var elBtnAnotherLevelEnd = $('#btnAnotherLevelEnd');
-  if (elBtnAnotherLevelEnd) elBtnAnotherLevelEnd.addEventListener('click', function () { openActivity(currentActivity); });
-  $('#btnMenu').addEventListener('click', function () { show('screenMenu'); });
 
   paintStars();
 })();

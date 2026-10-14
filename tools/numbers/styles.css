@@ -341,38 +341,6 @@
 }
 
 
-/* ---- Ordinal numbers: the queue ----
-   The flag column and the arrow column use the same track width as the
-   members so the arrow always lands exactly over the one it points at. */
-.queue-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: nowrap;
-}
-.queue-member,
-.queue-start,
-.queue-pointer,
-.queue-start-spacer {
-  flex: 0 0 auto;
-  width: 44px;
-  text-align: center;
-  font-size: 2rem;
-  line-height: 1.1;
-}
-.queue-start {
-  font-size: 1.6rem;
-}
-/* The pointer row is only a position marker, so it must not add height
-   when no arrow is shown. */
-.queue-pointers {
-  min-height: 2.2rem;
-}
-.queue-pointer {
-  font-size: 1.5rem;
-}
-
 /* ---- Comparison: two numbers and the missing sign ---- */
 .compare-row {
   display: flex;
@@ -409,50 +377,6 @@
 .compare-sign {
   font-size: 2.2rem;
   font-weight: 700;
-}
-
-/* ---- The number line ----
-   Ticks and the mark are positioned along the rule by percentage, so the
-   line keeps its proportions at any width (down to a 320px phone). */
-.number-line {
-  position: relative;
-  height: 76px;
-  margin: 18px 10px 6px;
-}
-.line-rule {
-  position: absolute;
-  top: 34px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--color-texto);
-}
-.line-tick {
-  position: absolute;
-  top: 28px;
-  width: 0;
-  border-left: 3px solid var(--color-texto);
-  height: 16px;
-  transform: translateX(-50%);
-}
-.line-label {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  transform: translateX(-50%);
-  font-size: 1rem;
-  font-weight: 700;
-  white-space: nowrap;
-}
-/* The mark sits above the rule so it never covers a label. */
-.line-mark {
-  position: absolute;
-  top: 0;
-  transform: translateX(-50%);
-  font-size: 1.6rem;
-  line-height: 1;
-  color: var(--color-foco);
 }
 
 /* Signed-number lesson */
@@ -591,4 +515,40 @@
   .signed-real-icon { font-size: 34px; }
   .signed-numberline-tick { width: 30px; height: 34px; font-size: 0.9rem; }
   .signed-numberline-tick.zero { width: 40px; height: 40px; }
+}
+
+/* Generic exposition + real-life screens for the 5 sub-activities.
+   Mirrors the signed-lesson-card layout so the "explanation + life
+   examples" sequence has the same shape on every sub-activity. */
+.expo-lesson-card { max-width: 760px; margin: 0 auto; }
+.expo-lesson { max-width: 620px; text-align: left; }
+.expo-lesson p, .expo-lesson li { font-size: var(--texto-base); line-height: 1.5; }
+.expo-lesson ul { padding-left: 1.5em; }
+.expo-lesson li + li { margin-top: 8px; }
+.expo-note {
+  margin-top: 12px;
+  font-size: var(--texto-base);
+  font-style: italic;
+  color: var(--color-texto-suave);
+  text-align: left;
+  max-width: 620px;
+}
+
+.real-list { display: grid; gap: 14px; width: 100%; text-align: left; }
+.real-list-item {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+.real-list-item p { margin: 0; line-height: 1.45; font-size: var(--texto-base); }
+.real-list-icon { font-size: 40px; text-align: center; }
+
+@media (max-width: 380px) {
+  .real-list-item { grid-template-columns: 44px minmax(0, 1fr); gap: 10px; padding: 10px; }
+  .real-list-icon { font-size: 32px; }
 }

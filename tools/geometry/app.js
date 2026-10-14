@@ -1343,27 +1343,13 @@
     }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
 
-    var idxN = activity.levels.indexOf(level);
-    var nextLevel = (roundCorrect === DATA.perRound && idxN !== -1 && idxN + 1 < activity.levels.length)
-      ? activity.levels[idxN + 1] : null;
-    var btnHarder = $('#btnHarder');
-    if (nextLevel) {
-      btnHarder.textContent = App.i18n.t('btnHarder').replace('{name}', App.i18n.t('level.' + nextLevel.id));
-      btnHarder.classList.remove('hidden');
-      btnHarder.onclick = function () { startRound(nextLevel); };
-    } else {
-      btnHarder.classList.add('hidden');
-    }
   }
 
   /* ---- Events ---- */
 
-  var elBtnBackToMenu = $('#btnBackToMenu');
-  if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
   $('#btnNext').addEventListener('click', next);
-  $('#btnRepeat').addEventListener('click', function () { startRound(levelFromProgress()); });
-  $('#btnMenu').addEventListener('click', function () { show(screenMenu); });
-  $('#btnOtherActivity').addEventListener('click', function () { show(screenMenu); });
+
+
 
   paintMenu();
   paintStars();

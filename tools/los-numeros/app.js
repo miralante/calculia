@@ -1,10 +1,16 @@
 /* ============================================================
    Calculia — Los Números
-   Actividad sin test. Una sola galería de 7 slides (4 tipos +
-   3 comparaciones), en el mismo flujo que Formas: una card
-   visible, ← / → para cambiar. El visual es la lección: el
-   texto se reduce a un título, una sola línea de "vida real"
-   en los slides de tipo, y la transferencia al final.
+   Actividad sin test. Una sola galería de 11 slides (4 tipos,
+   cada uno en dos cards — exposición + vida real — más 3
+   comparaciones), en el mismo flujo que Formas: una card
+   visible, ← / → para cambiar.
+     • kind: 'expo'    → title + visual (number line, pizza…)
+     • kind: 'real'    → title + eyebrow «En la vida real:» +
+                         lista de ejemplos cotidianos (sin visual)
+     • kind: 'compare' → title + visual, sin parte de vida real
+   La frase de vida real viene como una sola línea con ejemplos
+   separados por « · » y se renderiza como <ul> para que cada
+   ejemplo viva en su propio <li>.
    Persistencia: App.storage con clave 'los-numeros'. La primera
    vez que se llega al final suma 1 estrella; "Ver otra vez"
    no duplica el contador (awardedThisRun).
@@ -23,6 +29,7 @@
   var slideTitle = $('#slideTitle');
   var slideVisual = $('#slideVisual');
   var slideReal = $('#slideReal');
+  var slideEyebrow = $('#slideEyebrow');
   var slidePrev = $('#slidePrev');
   var slideNext = $('#slideNext');
   var slideCounter = $('#slideCounter');
@@ -225,23 +232,61 @@
   }
 
   /* ---- Pintado del slide actual ---- */
+  /* La misma card (slideTitle, slideEyebrow, slideVisual, slideReal)
+     se rellena según el kind del slide:
+       • expo:    muestra solo título y visual. Eyebrow y lista
+                  de vida real quedan ocultos.
+       • real:    muestra título, eyebrow «En la vida real:» y la
+                  lista de ejemplos. Visual oculto (la exposición
+                  ya se vio en el slide anterior del mismo tipo).
+       • compare: muestra título y visual (la comparación no tiene
+                  parte de vida real separada).
+     El título del slide es siempre el mismo para los dos slides
+     del mismo tipo («Naturales», «Enteros», …), así la persona
+     sabe que los dos pertenecen a la misma lección. */
   function renderSlide() {
     var s = DATA.slides[slideIndex];
     slideTitle.textContent = App.i18n.t('slide' + s.id + 'Title') || '';
-    slideVisual.innerHTML = renderVisual(s.visual);
-    /* Los <text data-i18n> dentro de los SVG se traducen con
-       App.i18n.apply cuando se inyectan por innerHTML. */
-    if (App.i18n && typeof App.i18n.apply === 'function') {
-      App.i18n.apply(slideVisual);
+
+    /* Eyebrow «En la vida real:» solo en kind: 'real'. */
+    if (s.kind === 'real') {
+      slideEyebrow.classList.remove('hidden');
+    } else {
+      slideEyebrow.classList.add('hidden');
     }
-    /* "Vida real" solo aparece en los slides de tipo. */
-    if (s.kind === 'type') {
-      slideReal.textContent = App.i18n.t('slide' + s.id + 'Real') || '';
+
+    /* Visual en expo y compare; oculto en real. */
+    if (s.kind === 'real') {
+      slideVisual.innerHTML = '';
+      slideVisual.classList.add('hidden');
+    } else {
+      slideVisual.innerHTML = renderVisual(s.visual);
+      slideVisual.classList.remove('hidden');
+      /* Los <text data-i18n> dentro de los SVG se traducen con
+         App.i18n.apply cuando se inyectan por innerHTML. */
+      if (App.i18n && typeof App.i18n.apply === 'function') {
+        App.i18n.apply(slideVisual);
+      }
+    }
+
+    /* Lista de vida real solo en kind: 'real'. La cadena viene como
+       una sola línea con « · » entre ejemplos; aquí se rompe. */
+    slideReal.innerHTML = '';
+    if (s.kind === 'real') {
+      var raw = App.i18n.t('slide' + s.id + 'Real') || '';
+      var parts = raw.split(/\s*·\s*/).filter(function (p) { return p.length > 0; });
+      parts.forEach(function (p) {
+        var li = document.createElement('li');
+        /* textContent evita cualquier escape problemático del
+           primer emoji de la cadena. */
+        li.textContent = p;
+        slideReal.appendChild(li);
+      });
       slideReal.classList.remove('hidden');
     } else {
-      slideReal.textContent = '';
       slideReal.classList.add('hidden');
     }
+
     slideCounter.textContent = (slideIndex + 1) + ' / ' + TOTAL;
     slidePrev.disabled = slideIndex === 0;
     slideNext.disabled = slideIndex === TOTAL - 1;
@@ -286,8 +331,12 @@
   slidePrev.addEventListener('click', function () { goSlide(-1); });
   slideNext.addEventListener('click', function () { goSlide(1); });
   slideFinish.addEventListener('click', finishActivity);
-  $('#btnRepeat').addEventListener('click', restart);
-  $('#btnMenu').addEventListener('click', restart);
+  /* btnRepeat was removed during the 25-activity end-stage cleanup
+     (memory entry 2026-10-13). If a future batch re-adds the button,
+     wire it back to restart(). */
+  var elBtnRepeat = $('#btnRepeat');
+  if (elBtnRepeat) elBtnRepeat.addEventListener('click', restart);
+
 
   /* Estado inicial: arranca en el primer slide. */
   renderSlide();
