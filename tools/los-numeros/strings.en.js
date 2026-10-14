@@ -13,7 +13,11 @@
 
     galleryIntro: 'Look and flip the cards.',
 
-    /* ---- Type slides: title + real life ---- */
+    /* ---- Type slides: title + real life ----
+       Each number type is taught in two consecutive cards:
+       one for exposition (visual) and one for real life
+       (everyday examples). The real-life string can hold several
+       examples split by « · »; the JS splits them into a list. */
     slideNaturalesTitle: 'Natural',
     slideNaturalesReal: '🧮 3 apples · 5 fingers · 10 years',
     slideEnterosTitle: 'Integers',
@@ -22,6 +26,8 @@
     slideDecimalesReal: '💰 $1.99 · 1.5 m · 3.14',
     slideFraccionesTitle: 'Fractions',
     slideFraccionesReal: '🍕 1/2 pizza · 1/4 hour',
+    /* Eyebrow shown above the list of real-life examples. */
+    realEyebrow: 'In real life:',
 
     /* ---- Comparison slides: title only ---- */
     slideVsEnterosTitle: 'Natural and Integers',

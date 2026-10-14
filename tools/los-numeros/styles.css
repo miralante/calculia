@@ -54,13 +54,36 @@
   height: auto;
 }
 
+/* Eyebrow de la card de «vida real» (aparece solo en kind: 'real').
+   Se diferencia del título y del visual en peso y color. */
+.slide-eyebrow {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mod-razonamiento);
+  text-align: center;
+}
+
+/* Lista de ejemplos de la vida real. Solo visible en kind: 'real'.
+   Cada chunk separado por « · » en strings.js se rompe en su
+   propio <li>. Centrada y con espacio para leerse sin prisa. */
 .slide-real {
   margin: 0;
+  padding: 0;
+  list-style: none;
   font-size: var(--texto-base);
-  color: var(--color-texto-suave);
+  color: var(--color-texto);
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
+  max-width: 28em;
 }
+.slide-real li {
+  margin: 0.5em 0;
+}
+.slide-real li:first-child { margin-top: 0; }
+.slide-real li:last-child { margin-bottom: 0; }
 
 /* ---- Controles del carrusel (← / → / contador) ---- */
 .carousel-controls {
