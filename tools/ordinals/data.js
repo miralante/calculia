@@ -58,18 +58,20 @@
    ordinal —eso lo hacen la cifra y la palabra, que siempre están
    escritas al lado—, sino que ayuda a seguir la serie.
 
-   DATA.famous — los DOS escenarios de la vida real. Son dos, no un
+   DATA.famous — los CUATRO escenarios de la vida real. No son un
    carrusel de ordinales sueltos: la pantalla 2 ("En la vida real")
-   recorre uno a uno los dos casos que la RAE y la vida cotidiana
-   asocian a los ordinales, "el edificio" y "la cola", que son los
-   dos contextos donde alguien escucha de verdad "vivo en el tercer
-   piso" o "es el primero de la cola". Cada escenario muestra
-   varios ordinales a la vez (5 pisos o 5 personas) para que se vea
-   la serie funcionando, no un ordinal suelto.
+   recorre uno a uno los casos que la RAE y la vida cotidiana asocian
+   a los ordinales, "el podio", "la clasificación", "la cola" y "el
+   edificio", que son los contextos donde alguien escucha de verdad
+   "quedó en el primer lugar", "va el tercero en la clasificación",
+   "es el primero de la cola" o "vivo en el tercer piso". Cada
+   escenario muestra varios ordinales a la vez (3 en el podio, 5 en
+   los demás) para que se vea la serie funcionando, no un ordinal
+   suelto.
 
    DATA.scenes — apoyo bajo el enunciado del juego: "tercero" no es
-   solo una palabra, es el piso en el que vive alguien o el puesto
-   que quedó en una carrera.
+   solo una palabra, es el piso en el que vive alguien, el puesto
+   que quedó en una carrera o su lugar en una clasificación.
 
    DATA.levels — dos grupos visibles que encadenan sus sub-niveles
    sin volver al menú (regla 13, un cambio de variable cada vez),
@@ -166,10 +168,13 @@ var DATA = {
      no se pinta. */
   carousel: [4, 5, 6, 7, 8, 9, 10, 11, 12, 20, 30, 40],
 
-  /* Los DOS escenarios de la vida real. La pantalla 2 ("En la vida
-     real") recorre uno a uno estos dos casos: la cola (el primero va
-     delante) y el edificio (los pisos se cuentan de abajo arriba,
-     con flechas arriba/abajo para señalar el piso actual).
+  /* Los CUATRO escenarios de la vida real. La pantalla 2 ("En la vida
+     real") recorre uno a uno estos casos: el podio (los tres primeros
+     suben a una tarima con sus medallas 🥇🥈🥉), la clasificación
+     (una tabla con los puestos del 1 al 5 y un nombre al lado), la
+     cola (el primero va delante) y el edificio (los pisos se cuentan
+     de abajo arriba, con flechas arriba/abajo para señalar el piso
+     actual).
      No es un carrusel de ordinales sueltos: cada escenario muestra
      varios ordinales a la vez para que se vea la serie funcionando.
 
@@ -177,14 +182,25 @@ var DATA = {
      más conocidos (1-9 y los redondos 11/12/20/30/40). Se quitaron:
      el recordatorio de la pantalla 3 ya muestra la serie entera, así
      que repetirlas aquí era recargar lo mismo. La persona va directa
-     a los dos casos donde los ordinales cobran sentido. */
+     a los casos donde los ordinales cobran sentido.
+
+     El podio muestra 3 posiciones (no 5): el podio olímpico es de
+     tres puestos por definición, y añadir más filas ya no parecería
+     un podio. La clasificación sí muestra 5, como la cola y el
+     edificio, para que la serie se vea entera funcionando. */
   famous: [
+    { id: 'podio', type: 'scenario', n: 3 },
+    { id: 'clasificacion', type: 'scenario', n: 5 },
     { id: 'cola', type: 'scenario', n: 5 },
     { id: 'edificio', type: 'scenario', n: 5 }
   ],
 
   /* Situaciones de apoyo en el juego, para que el ordinal nombre
-     algo y no sea una palabra suelta. */
+     algo y no sea una palabra suelta. Repartidas entre los cuatro
+     escenarios de la pantalla 2: el edificio (1-5), la cola (1-5),
+     la clasificación (1-5) y el podio (1-3, que es lo que tiene un
+     podio olímpico). Si la pantalla 2 enseña un escenario, el juego
+     puede apoyarse en él al preguntar el ordinal. */
   scenes: [
     { id: 'piso', n: 1 },
     { id: 'piso2', n: 2 },
@@ -195,7 +211,15 @@ var DATA = {
     { id: 'cola2', n: 2 },
     { id: 'cola3', n: 3 },
     { id: 'cola4', n: 4 },
-    { id: 'cola5', n: 5 }
+    { id: 'cola5', n: 5 },
+    { id: 'clasificacion', n: 1 },
+    { id: 'clasificacion2', n: 2 },
+    { id: 'clasificacion3', n: 3 },
+    { id: 'clasificacion4', n: 4 },
+    { id: 'clasificacion5', n: 5 },
+    { id: 'podio', n: 1 },
+    { id: 'podio2', n: 2 },
+    { id: 'podio3', n: 3 }
   ],
 
   levels: [
