@@ -15,7 +15,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '👀 Cantidades',
+    title: '👀 Leer y Escribir Números',
     instruction: 'Lee números grandes y cuenta en grupos.',
     choosePractice: 'Elige qué quieres practicar.',
     btnMenu: 'Volver al inicio',

@@ -152,11 +152,11 @@ var DATA = {
      group; we do not introduce "billón". */
   ceiling: 999999999,
   practices: [
+    { id: 'parity', icon: '🟦' },
     { id: 'read', icon: '👀' },
     { id: 'write', icon: '✍️' },
     { id: 'points', icon: '·' },
-    { id: 'groups', icon: '🧱' },
-    { id: 'parity', icon: '🟦' }
+    { id: 'groups', icon: '🧱' }
   ],
   /* Parity: dot count from 0 to DATA.parity.max, randomised. */
   parity: {

@@ -29,7 +29,7 @@
     "money": { "name": "Dinero", "detail": "Cuenta, paga y calcula el cambio." },
     "divisibility": { "name": "Grupos exactos", "detail": "Múltiplos, primos y cuadrados." },
     "operations": { "name": "Cuentas grandes", "detail": "Partir, repartir y el orden." },
-    "quantities": { "name": "Cantidades", "detail": "Lee números grandes y cuenta en grupos." },
+    "quantities": { "name": "Leer y Escribir Números", "detail": "Lee números grandes y cuenta en grupos." },
     "ordinals": { "name": "Números ordinales", "detail": "Primero, segundo, tercero…" },
     "mathtables": { "name": "Las Tablas", "detail": "Suma y multiplica con colores." },
     "headmath": { "name": "Cálculo de cabeza", "detail": "Contar, llegar a 10 y dividir entre 10 con puntos de colores." },
