@@ -1,15 +1,15 @@
-/* ============================================================
-   Calculia — Los Números
-   Actividad sin test. Una sola galería de 11 slides (4 tipos,
-   cada uno en dos cards — exposición + vida real — más 3
+﻿/* ============================================================
+   Calculia â€” Los NÃºmeros
+   Actividad sin test. Una sola galerÃ­a de 11 slides (4 tipos,
+   cada uno en dos cards â€” exposiciÃ³n + vida real â€” mÃ¡s 3
    comparaciones), en el mismo flujo que Formas: una card
-   visible, ← / → para cambiar.
-     • kind: 'expo'    → title + visual (number line, pizza…)
-     • kind: 'real'    → title + eyebrow «En la vida real:» +
+   visible, â† / â†’ para cambiar.
+     â€¢ kind: 'expo'    â†’ title + visual (number line, pizzaâ€¦)
+     â€¢ kind: 'real'    â†’ title + eyebrow Â«En la vida real:Â» +
                          lista de ejemplos cotidianos (sin visual)
-     • kind: 'compare' → title + visual, sin parte de vida real
-   La frase de vida real viene como una sola línea con ejemplos
-   separados por « · » y se renderiza como <ul> para que cada
+     â€¢ kind: 'compare' â†’ title + visual, sin parte de vida real
+   La frase de vida real viene como una sola lÃ­nea con ejemplos
+   separados por Â« Â· Â» y se renderiza como <ul> para que cada
    ejemplo viva en su propio <li>.
    Persistencia: App.storage con clave 'los-numeros'. La primera
    vez que se llega al final suma 1 estrella; "Ver otra vez"
@@ -25,7 +25,7 @@
   var screenGallery = $('#screenGallery');
   var screenEnd = $('#screenEnd');
 
-  /* ---- Elementos de la galería ---- */
+  /* ---- Elementos de la galerÃ­a ---- */
   var slideTitle = $('#slideTitle');
   var slideVisual = $('#slideVisual');
   var slideReal = $('#slideReal');
@@ -42,7 +42,7 @@
   var awardedThisRun = false;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
 
   var starsEl = $('#stars');
 
@@ -51,14 +51,14 @@
   var TOTAL = DATA.slides.length;
 
   /* ---- Visuales SVG ----
-     Cada función pinta el visual de un slide. Devuelven el HTML
+     Cada funciÃ³n pinta el visual de un slide. Devuelven el HTML
      (svg + leyenda opcional) que se inyecta con innerHTML. Las
-     marcas usan las variables CSS de cada módulo para que el
+     marcas usan las variables CSS de cada mÃ³dulo para que el
      tema (claro / oscuro / contraste) siga funcionando. */
 
   function lineTicks(min, max, labels, color) {
     /* Dibuja el eje horizontal y, para cada label, un tick + texto
-       + círculo en la posición correspondiente. labels es un
+       + cÃ­rculo en la posiciÃ³n correspondiente. labels es un
        array de { n, isMain, color, label } donde isMain agranda
        el tick. */
     var x0 = 60, x1 = 540;
@@ -119,38 +119,10 @@
     return lineTicks(0, 2, labels, 'var(--mod-emocional)');
   }
 
-  /* Tipo 4: Fracciones. Una pizza sola, con 1/2 y 1/4 marcados
-     (un cuarto entero en morado, medio en otro color). */
-  function visualTypeFraccion() {
-    var cx = 300, cy = 110, r = 90;
-    function slice(start, end, fill) {
-      var sx = cx + r * Math.cos(start);
-      var sy = cy + r * Math.sin(start);
-      var ex = cx + r * Math.cos(end);
-      var ey = cy + r * Math.sin(end);
-      return 'M ' + cx + ' ' + cy + ' L ' + sx + ' ' + sy +
-             ' A ' + r + ' ' + r + ' 0 0 1 ' + ex + ' ' + ey + ' Z';
-    }
-    /* 4 cuartos, dos marcados como fracción. */
-    var slices = '';
-    var fill = ['#FFE5C2', '#FFE5C2', '#FFE5C2', '#FFE5C2'];
-    fill[0] = 'var(--mod-memoria)'; /* 1/4 (cuarto superior) */
-    fill[1] = 'var(--mod-memoria)'; /* 1/2 = dos cuartos consecutivos (cuarto superior + derecho) */
-    for (var i = 0; i < 4; i++) {
-      var start = -Math.PI / 2 + i * (Math.PI / 2);
-      var end = start + Math.PI / 2;
-      slices += '<path d="' + slice(start, end, fill[i]) + '" fill="' + fill[i] + '" stroke="var(--color-texto)" stroke-width="2"/>';
-    }
-    return '' +
-      '<svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg">' +
-        slices +
-        '<text x="' + cx + '" y="' + (cy + r + 32) + '" text-anchor="middle" font-size="24" font-weight="700" fill="var(--color-texto)" data-i18n="fraccionOneHalf">1/2</text>' +
-      '</svg>';
-  }
 
-  /* Comparación 1: Naturales y Enteros. Dos rectas paralelas:
+  /* ComparaciÃ³n 1: Naturales y Enteros. Dos rectas paralelas:
      arriba los naturales (0..5), abajo los enteros (-3..3).
-     El ojo ve que la de los enteros es "más grande". */
+     El ojo ve que la de los enteros es "mÃ¡s grande". */
   function visualCompNE() {
     var natLabels = [0, 1, 2, 3, 4, 5].map(function (n) {
       return { n: n, isMain: true, color: 'var(--mod-secuencia)' };
@@ -166,7 +138,7 @@
       '</div>';
   }
 
-  /* Comparación 2: Naturales y Decimales. Una sola recta 0..2
+  /* ComparaciÃ³n 2: Naturales y Decimales. Una sola recta 0..2
      con naturales en verde y decimales en morado. Los decimales
      "rellenan" los huecos entre naturales. */
   function visualCompND() {
@@ -180,45 +152,6 @@
     return lineTicks(0, 2, labels, 'var(--mod-emocional)');
   }
 
-  /* Comparación 3: Naturales y Fracciones. Dos pizzas: una entera
-     (1, natural) y una dividida en 4 con un cuarto marcado
-     (1/4, fracción). */
-  function visualCompNF() {
-    var r = 80;
-    function pizza(cx, cy) {
-      return 'M ' + cx + ' ' + (cy - r) +
-             ' A ' + r + ' ' + r + ' 0 1 1 ' + cx + ' ' + (cy + r) +
-             ' A ' + r + ' ' + r + ' 0 1 1 ' + cx + ' ' + (cy - r) + ' Z';
-    }
-    function slice(cx, cy, start, end) {
-      var sx = cx + r * Math.cos(start);
-      var sy = cy + r * Math.sin(start);
-      var ex = cx + r * Math.cos(end);
-      var ey = cy + r * Math.sin(end);
-      return 'M ' + cx + ' ' + cy + ' L ' + sx + ' ' + sy +
-             ' A ' + r + ' ' + r + ' 0 0 1 ' + ex + ' ' + ey + ' Z';
-    }
-    var cx1 = 150, cy = 110;
-    var cx2 = 450;
-    /* Pizza 1: entera. */
-    var p1 = '<path d="' + pizza(cx1, cy) + '" fill="#FFD9A8" stroke="var(--color-texto)" stroke-width="2"/>';
-    /* Pizza 2: 4 cuartos, el de arriba coloreado. */
-    var quarters = '';
-    var ang = -Math.PI / 2;
-    for (var i = 0; i < 4; i++) {
-      var start = ang + i * (Math.PI / 2);
-      var end = start + Math.PI / 2;
-      var fill = (i === 0) ? 'var(--mod-memoria)' : '#FFE5C2';
-      quarters += '<path d="' + slice(cx2, cy, start, end) + '" fill="' + fill + '" stroke="var(--color-texto)" stroke-width="2"/>';
-    }
-    /* Etiquetas debajo de cada pizza. */
-    var lbl1 = '<text x="' + cx1 + '" y="' + (cy + r + 32) + '" text-anchor="middle" font-size="24" font-weight="700" fill="var(--color-texto)">1</text>';
-    var lbl2 = '<text x="' + cx2 + '" y="' + (cy + r + 32) + '" text-anchor="middle" font-size="24" font-weight="700" fill="var(--color-texto)" data-i18n="fraccionOneFourth">1/4</text>';
-    return '' +
-      '<svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg">' +
-        p1 + lbl1 + quarters + lbl2 +
-      '</svg>';
-  }
 
   function renderVisual(kind) {
     if (kind === 'typeNatural')  return visualTypeNatural();
@@ -233,22 +166,22 @@
 
   /* ---- Pintado del slide actual ---- */
   /* La misma card (slideTitle, slideEyebrow, slideVisual, slideReal)
-     se rellena según el kind del slide:
-       • expo:    muestra solo título y visual. Eyebrow y lista
+     se rellena segÃºn el kind del slide:
+       â€¢ expo:    muestra solo tÃ­tulo y visual. Eyebrow y lista
                   de vida real quedan ocultos.
-       • real:    muestra título, eyebrow «En la vida real:» y la
-                  lista de ejemplos. Visual oculto (la exposición
+       â€¢ real:    muestra tÃ­tulo, eyebrow Â«En la vida real:Â» y la
+                  lista de ejemplos. Visual oculto (la exposiciÃ³n
                   ya se vio en el slide anterior del mismo tipo).
-       • compare: muestra título y visual (la comparación no tiene
+       â€¢ compare: muestra tÃ­tulo y visual (la comparaciÃ³n no tiene
                   parte de vida real separada).
-     El título del slide es siempre el mismo para los dos slides
-     del mismo tipo («Naturales», «Enteros», …), así la persona
-     sabe que los dos pertenecen a la misma lección. */
+     El tÃ­tulo del slide es siempre el mismo para los dos slides
+     del mismo tipo (Â«NaturalesÂ», Â«EnterosÂ», â€¦), asÃ­ la persona
+     sabe que los dos pertenecen a la misma lecciÃ³n. */
   function renderSlide() {
     var s = DATA.slides[slideIndex];
     slideTitle.textContent = App.i18n.t('slide' + s.id + 'Title') || '';
 
-    /* Eyebrow «En la vida real:» solo en kind: 'real'. */
+    /* Eyebrow Â«En la vida real:Â» solo en kind: 'real'. */
     if (s.kind === 'real') {
       slideEyebrow.classList.remove('hidden');
     } else {
@@ -270,14 +203,14 @@
     }
 
     /* Lista de vida real solo en kind: 'real'. La cadena viene como
-       una sola línea con « · » entre ejemplos; aquí se rompe. */
+       una sola lÃ­nea con Â« Â· Â» entre ejemplos; aquÃ­ se rompe. */
     slideReal.innerHTML = '';
     if (s.kind === 'real') {
       var raw = App.i18n.t('slide' + s.id + 'Real') || '';
-      var parts = raw.split(/\s*·\s*/).filter(function (p) { return p.length > 0; });
+      var parts = raw.split(/\s*Â·\s*/).filter(function (p) { return p.length > 0; });
       parts.forEach(function (p) {
         var li = document.createElement('li');
-        /* textContent evita cualquier escape problemático del
+        /* textContent evita cualquier escape problemÃ¡tico del
            primer emoji de la cadena. */
         li.textContent = p;
         slideReal.appendChild(li);
@@ -341,4 +274,11 @@
   /* Estado inicial: arranca en el primer slide. */
   renderSlide();
   paintStars();
+  /* End screen: the only button is "Volver al inicio", which goes back
+     to the Calculia landing. The end screen is a closing card, not a
+     second menu: picking another activity is a tap away on the home
+     page, so it does not need its own button here. */
+  var endBackToStart = $('#endBackToStart');
+  if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
+
 })();

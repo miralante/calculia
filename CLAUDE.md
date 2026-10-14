@@ -266,6 +266,129 @@ Spanish mirror in `doc/es/SPEC.md`) references this baseline using the
 literal phrase **"WCAG AA minimum, AAA whenever possible"**, mirroring
 the suite-wide rule in the metaproject's `apptonomia/CLAUDE.md`.
 
+## Stage navigation outranks transition to a sub-stage (2026-10-14)
+
+When a screen has its own gallery navigation (a `.carousel-controls` row
+with ← / → arrows), any primary button on that same screen that leads
+to a **sub-stage** of the activity (e.g. `Ver en la vida real`,
+`Siguiente` to the next carousel, `Recuerda` to the reminder panel)
+must be styled as `btn-secondary`, not `btn`. The carousel arrows are
+the natural interaction of the current stage; a primary "jump to the
+sub-stage" button outshines them and short-circuits the gallery
+browsing — observed repeatedly in user testing.
+
+The rule, expressed as a decision:
+
+- **Screen has `.carousel-controls` AND the primary button is a
+  transition to a sub-stage** → demote that primary button to
+  `btn-secondary`. Examples: `introContinue` / `introNext` in
+  `shapes`, `scale`, `ordinals`; `famousNextBtn` in `ordinals`,
+  `mental-math`, `roman-numerals`; `btnRealExamples` in
+  `trigonometry`; `introNext` in `mental-math`, `roman-numerals`.
+- **Screen has `.carousel-controls` AND the primary button is the
+  start of the actual game** (e.g. `realContinue` / `Empezar a
+  practicar →`) → keep it `btn`. The kid has finished the carousel
+  and is choosing to begin the test; that is the right moment for a
+  primary CTA.
+- **Screen has no `.carousel-controls`** → keep primary buttons
+  primary. Examples: `referenceNext` in `ordinals` / `mental-math` /
+  `roman-numerals` (the reminder panel before the game), the
+  `btnStart` family in `odd-one-out` / `patterns` / `stories`,
+  `learnStart` in `clock`, `startPractice` in `math-tables`.
+
+The check is structural, not label-based: count `.carousel-controls`
+in the same `<section>` as the primary button. If the count is ≥ 1
+and the button is a sub-stage transition, demote it. The HTML
+classes are `class="btn btn-secondary"` (the rule is in
+`assets/css/components.css:46`); the buttons to demote are not
+shareable as a custom class, so each activity's `index.html` lists
+the affected button by id.
+
+## Test sheet (Formas, 2026-10-14)
+
+`tools/shapes/` is the first activity in the suite where the test
+stage shows **all questions at once** instead of one at a time. The
+shape is a stack of cards (one per question, in shuffled order) plus
+two buttons at the bottom: **Comprobar** verifies every answer in
+place (each card flips to inline ✅/❌ feedback, options lock), and
+**Otra ronda** re-shuffles and starts again without going through a
+`screenEnd`.
+
+The driver for this change: `fromNet` ("Si doblas este dibujo, ¿qué
+cuerpo sale?") and `solidParts` with `net: 'pyramid'` ("¿Cuántas
+caras tiene este pirámide abierto?") were too hard for the target
+user — both ask the kid to mentally fold an open net, and the
+pyramid is the worst offender because its 4 triangles and 1 square
+are easy to miscount. Pulling them left a 41-question round that
+doesn't fit a one-at-a-time flow. The remaining questions are 41:
+9 `shapeName` + 6 `sides` + 1 `corners` + 6 `perimeter` + 1 `area` +
+3 `solidVolume` + 3 `shapeSymmetry` + 3 `shapeSimilar` + 7
+`solidName` + 2 `solidParts` (cube and prism only). The
+`fromNet` generator and its strings (`gen.fromNet`, `gen.netHint`,
+`gen.netPiecesAria`) are kept in place in case a future activity
+wants the fold-the-net mechanic back. See the comment block at
+`tools/shapes/data.js:111` for the rationale on each dropped
+question.
+
+Implementation invariants:
+
+- `startRound` pre-generates **all** questions for the level via
+  `GENERATORS` and shuffles them once. The order of the options
+  inside each question is already randomized by the generators, so
+  the test sheet's randomness has two layers: question order
+  (per round) and option order (per question, fixed at
+  generation time). Same key for `App.utils.drawRoundReset()` at the
+  start of each round.
+- `checkAnswers` refuses to verify when at least one question is
+  unanswered: it scrolls to the first unanswered card, shakes it
+  (`.test-sheet-card.shake`, `test-sheet-shake` keyframes in
+  `tools/shapes/styles.css`), and returns without updating
+  `progress.stars` or `progress.completedRounds`.
+- `progress.stars` increments by `roundCorrect` (the number of
+  correct answers, not the number of answered questions) once
+  `checkAnswers` succeeds. `progress.completedRounds` increments
+  by 1 on the same event. The end screen (`#screenEnd`) is no
+  longer reached between rounds; the sheet is the only test UI.
+- `children` is a banned word in this repo (see §Public-facing
+  wording below and the `children` term in `scripts/check.js`),
+  so DOM access uses `querySelectorAll('.test-sheet-card')`
+  rather than `.children`. Don't reintroduce the property name.
+
+## End screen: only "Volver al inicio" (2026-10-14)
+
+Across all 30 activities of the suite, the round-complete screen
+(`<section id="screenEnd">` in most, `screenFinish` in
+`math-tables` / `quantities` / `head-math`, `screenParityFinish`
+in `parity`) carries exactly **one** button: a primary
+`#endBackToStart` whose label comes from the per-activity
+`btnMenu` string ("Volver al inicio"). The click navigates to
+`../../` (the Calculia landing). No "Jugar otra vez", no "Otra
+actividad", no "Volver al menú" — picking another activity is
+one tap on the landing page, and the end screen is a closing
+card, not a second menu.
+
+The reason: in user testing the four-button end screen pulled
+the child's eye away from the next step (the landing, where
+the activity choice lives) and onto a "stay inside this
+activity" choice that did not need to exist. One button, top
+of the card, big. The end-screen section must not add a second
+`<button>` to compete with it; if the activity really needs a
+replay path, the right place is a small "Otra ronda" inside
+the test, not a "Jugar otra vez" on the close.
+
+The wire is shared and lives in the activity's `app.js` near
+the other addEventListener calls:
+
+```js
+var endBackToStart = $('#endBackToStart');
+if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
+```
+
+The `if (endBackToStart)` guard is for the Formas flow specifically,
+where the test sheet never reaches the end screen at all (it has
+"Otra ronda" inline instead); the other 29 activities always
+have the button in the DOM.
+
 ## Public-facing wording: "usuario/a tipo" euphemism
 
 This directive applies across the entire Miralante suite (Apptonomia,

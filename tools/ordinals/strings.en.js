@@ -41,14 +41,15 @@
     nextArrow: '→',
 
     /* ---------- Screen 2: real life ----------
-       Two direct slides: the queue (the first one is at the front)
-       and the building (floors counted from the bottom up, with
-       up/down arrows to point at the current floor). The explicit
-       lists (1-9 and the round ones) were removed: the reminder on
-       screen 3 already shows the whole series, repeating them here
-       was just re-loading the same content. */
+       Four direct slides: the podium (🥇🥈🥉 on a stand), the ranking
+       (a table with places 1 to 5), the queue (the first one is at
+       the front), and the building (floors counted from the bottom
+       up, with up/down arrows to point at the current floor). The
+       explicit lists (1-9 and the round ones) were removed: the
+       reminder on screen 3 already shows the whole series, repeating
+       them here was just re-loading the same content. */
     famousTitle: 'In real life',
-    famousSubtitle: 'Two places where ordinals make sense:',
+    famousSubtitle: 'Four places where ordinals make sense:',
     /* The 'back: ← Back' for screen 2 used to live here: back
        navigation between screens (1→2→3→4→5) no longer exists. Only
        the header's '← Volver' is left, which goes to the Calculia
@@ -119,11 +120,12 @@
     },
 
     /* ---------- Real-life examples ----------
-       Only TWO: the building and the queue. The sentences end with
-       ':' because each scenario is rendered as a whole (the stack of
-       floors or the row of people), not as "1 = first ... = third"
-       one piece at a time; the sentence is the lead-in and the
-       ordinals are read inside. */
+       FOUR: the podium, the ranking, the queue, and the building.
+       The sentences end with ':' because each scenario is rendered
+       as a whole (the stand, the table, the row of people, or the
+       stack of floors), not as "1 = first ... = third" one piece at
+       a time; the sentence is the lead-in and the ordinals are read
+       inside. */
     famous: {
       /* "In real life" slides: each one is just a title (label, painted
          by #famousLabel) and the visual. No explanatory text below —
@@ -133,9 +135,11 @@
          its name and nothing else.
 
          The lista1a9 / listaRedondos keys were removed: there are no
-         more explicit-list slides here, just building and queue. The
+         more explicit-list slides here, just the four scenarios. The
          "text" entries are kept empty so es/en parity does not
          complain about orphan keys. */
+      podio: '',
+      clasificacion: '',
       edificio: '',
       cola: ''
     },
@@ -143,8 +147,10 @@
     /* ---------- Support situations ----------
        So the ordinal names something instead of being a bare word.
        After the redesign of screen 2, the in-game support scenarios
-       are split between floors (1st–5th) and queue (1st–5th) — the
-       two contexts screen 2 has just introduced. */
+       are split across the four contexts screen 2 has just
+       introduced: floors (1st–5th), queue (1st–5th), ranking
+       (1st–5th) and podium (1st–3rd, since the podium is three
+       positions by Olympic definition). */
     scene: {
       piso: 'It is the floor they live on.',
       piso2: 'It is the floor they live on.',
@@ -155,7 +161,15 @@
       cola2: 'It is the place in the queue.',
       cola3: 'It is the place in the queue.',
       cola4: 'It is the place in the queue.',
-      cola5: 'It is the place in the queue.'
+      cola5: 'It is the place in the queue.',
+      clasificacion: 'It is the place in the ranking.',
+      clasificacion2: 'It is the place in the ranking.',
+      clasificacion3: 'It is the place in the ranking.',
+      clasificacion4: 'It is the place in the ranking.',
+      clasificacion5: 'It is the place in the ranking.',
+      podio: 'It is the place on the podium.',
+      podio2: 'It is the place on the podium.',
+      podio3: 'It is the place on the podium.'
     },
 
     /* ---------- The steps ---------- */
@@ -171,6 +185,13 @@
     starsCount: 'Difficulty {n}',
     stepLabel: 'Step {n} of {total} · {name}',
     chainNext: 'Next step: {name}',
+    /* Third piece of the reminder chip and the rule-1 examples: the
+       natural number with the word "Position" in front, so the figure
+       is tied to its role without repeating the ordinal's word
+       ("tenth place" repeated "tenth"). The number goes at the end
+       because it is the data — "Position 10" reads more like "place
+       number 10" than "10 position". */
+    placePrefix: 'Position {n}',
 
     /* ---------- The queue ---------- */
     queueHint: 'Count from the flag 🏁.',
@@ -193,6 +214,20 @@
     queuePosition: '{n}th',
     queueAriaLabel: 'Queue of {n} people. The first one is at the front; the last one, at the back.',
 
+    /* ---------- The podium and the ranking ---------- */
+    /* Labels that appear above the two new scenarios on screen 2.
+       The podium does not need an "n" because it always has three
+       positions (Olympic definition); the ranking does, because its
+       length matches the queue and the building. */
+    podiumLabel: 'The podium',
+    /* The aria describes the three places by medal (gold, silver,
+       bronze) and by ordinal, in the same order as the visual: first
+       in the centre on top, second to the left, third to the right.
+       A screen reader hears the same reading the eye does. */
+    podiumAria: 'Olympic podium. First place in the centre, with the gold medal; second to the left, with silver; third to the right, with bronze.',
+    classificationLabel: 'The ranking',
+    classificationAria: 'Ranking of {n} participants, from first to last.',
+
     /* ---------- The game ---------- */
     qPosition: 'Which place does the arrow point at?',
     qMember: 'Who is in {place}?',
@@ -211,6 +246,6 @@
     hintDigitToOrdinal: 'Think which place that number takes in the queue.',
 
     finalSummary: 'You got {n} of {total} right. Now you have {stars} stars.',
-    transfer: 'Ordinals are used for turns, floors, dates and lists. Knowing which place each one takes helps in daily life.'
+    transfer: 'Ordinals are used for podiums, rankings, queues, floors, turns, dates and lists. Knowing which place each one takes helps in daily life.'
   }, 'en');
 })();

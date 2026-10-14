@@ -155,27 +155,37 @@ async function main() {
   await shot('01-intro');
 
   // --- Ejemplos reales ---
-  /* La pantalla 2 ("En la vida real") tiene DOS escenarios fijos:
-     el edificio y la cola. Antes había cinco ejemplos sueltos; ahora
-     son los dos contextos donde la gente oye "tercer piso" y "el
-     primero de la cola" de verdad. Si la sonda encuentra más o
-     menos de dos, casi siempre es que DATA.famous se quedó a
+  /* La pantalla 2 ("En la vida real") tiene CUATRO escenarios fijos:
+     el podio, la clasificación, el edificio y la cola. Antes había
+     cinco ejemplos sueltos; después fueron dos (edificio y cola), y
+     ahora son los cuatro contextos donde la gente oye "quedó en
+     primer lugar", "va el tercero en la clasificación", "tercer piso"
+     y "el primero de la cola" de verdad. Si la sonda encuentra más o
+     menos de cuatro, casi siempre es que DATA.famous se quedó a
      medias. */
   step('ejemplos reales');
   await page.locator('#introNext').click();
   if (!(await visible('#screenFamous'))) fail.push('no se abre la pantalla de ejemplos');
-  const facts = [];
-  for (let i = 0; i < 2; i++) {
-    facts.push((await page.locator('#famousText').innerText()).trim());
+  /* La etiqueta del escenario se lee DENTRO del bucle, antes del
+     click siguiente: si la sonda leyera después de las 4 vueltas,
+     #famousLabel mostraría el último escenario recorrido (vuelta
+     completa de 4 → vuelve al primero) y daría la falsa sensación
+     de que sólo hay un escenario. Cada iteración captura el label
+     que está en pantalla en ese momento. */
+  const labels = [];
+  for (let i = 0; i < 4; i++) {
+    labels.push((await page.locator('#famousLabel').innerText()).trim());
     await page.locator('#famousNext2').click();
   }
-  if (facts.some((f) => !f)) fail.push('algún ejemplo se quedó sin texto');
-  if (facts.some((f) => !f.endsWith(':'))) fail.push('una frase de ejemplo no termina en ":" (rompería la cuenta con color)');
-  /* Las dos frases que aparecen: "En un edificio..." y "En una
-     cola...". Si las dos se quedan en una sola, casi siempre es
-     que la pantalla 2 ya no recorre los DOS escenarios. */
-  const uniqFacts = Array.from(new Set(facts));
-  if (uniqFacts.length !== 2) fail.push(`la pantalla 2 debería tener 2 escenarios distintos (edificio y cola), hay ${uniqFacts.length}`);
+  /* Las etiquetas que aparecen en los cuatro escenarios:
+     "El podio", "La clasificación", "La cola", "El edificio". Si
+     las cuatro se quedan en menos, casi siempre es que la pantalla
+     2 ya no recorre los CUATRO escenarios. */
+  const uniqueLabels = Array.from(new Set(labels));
+  if (uniqueLabels.length !== 4) fail.push(`la pantalla 2 debería tener 4 escenarios distintos, hay ${uniqueLabels.length}: ${JSON.stringify(uniqueLabels)}`);
+  if (labels.some((l) => /level\.|ord\.|scene\.|famous\./.test(l))) {
+    fail.push('se está viendo una clave i18n literal en alguna etiqueta: ' + JSON.stringify(labels));
+  }
   await shot('02-ejemplos');
 
   // --- Recordatorio ---

@@ -42,6 +42,12 @@
     instructionMenu: 'Take one test with all the content.',
     testTitle: 'One complete test',
     testText: 'One round with shapes, solids, and nets.',
+    /* The test sheet shows every question at once. The person picks an
+       option for each one, then taps "Check" to verify them all.
+       "New round" re-shuffles and starts again without going through
+       the end screen. */
+    check: 'Check',
+    newRound: 'New round →',
     menuBack: '← Back to the examples',
     contexto: 'A road sign, a window, a ball, a tin. Shapes are in everything you touch and see.',
     explicacion: '✅ Recognising shapes helps you describe things and understand signs, plans and drawings.',
@@ -175,20 +181,20 @@
       /* The hint shown after a mistake. One per question type, and each one
          says what to do with the figure being looked at: the single
          sentence it replaced ("Try again. Look at the picture calmly") was
-         the same for all 50 questions, so it said nothing. These never
-         give the answer away — they give the strategy, which is what
-         separates a Socratic hint from a spoiler. */
-      socraticSides: '🤔 Look at the figure again and count its sides one by one.',
-      socraticCorners: '🤔 Look at the figure again and count the marked dots one by one.',
-      socraticName: '🤔 Look at its shape: not every figure has the same sides.',
-      socraticPerimeter: '🤔 The perimeter is the whole way round: add up all the sides.',
-      socraticArea: '🤔 Think of the part of the figure you stand on when you step on it.',
-      socraticVolume: '🤔 Compare the three solids: see which one really takes up more room.',
-      socraticSymmetry: '🤔 Fold the figure along each line and see which one leaves both halves the same.',
-      socraticSimilar: '🤔 Look for the figure that looks like this one; it does not have to be as big.',
-      socraticFaces: '🤔 Count the pieces in the drawing: each one is a face.',
-      socraticNet: '🤔 Fold the pieces in your mind and see which solid comes out.',
-      socraticSolid: '🤔 Think about the shape of the object, not what it is for.'
+         the same for all 50 questions, so it said nothing. These give the
+         concrete strategy for the figure on screen, never the answer —
+         which is what separates a Socratic hint from a spoiler. */
+      socraticSides: '🤔 Count the sides one by one, without skipping any.',
+      socraticCorners: '🤔 Count the marked dots one by one, without skipping any.',
+      socraticName: '🤔 Count the sides of the figure one by one. The number you get is the name of the shape.',
+      socraticPerimeter: '🤔 The perimeter is the sum of all the sides. If every side is the same length, multiply side × sides.',
+      socraticArea: '🤔 The area is everything inside the border, not the outside edge or the corners.',
+      socraticVolume: '🤔 Look at the size of the three solids: the biggest one takes up the most space.',
+      socraticSymmetry: '🤔 Fold along each line and see which one leaves both halves exactly the same.',
+      socraticSimilar: '🤔 The similar figure has the same shape, it does not have to be the same size.',
+      socraticFaces: '🤔 Count the pieces in the drawing one by one: each piece is one face of the solid.',
+      socraticNet: '🤔 Fold each piece in your head: what solid comes out when it closes up?',
+      socraticSolid: '🤔 Look at the shape of the object, not what it is used for or its colour.'
     },
     transfer: 'This will help you understand signs and drawings, and describe what something is like when you need to explain it.'
   }, 'en');

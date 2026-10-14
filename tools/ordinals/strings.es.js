@@ -47,14 +47,15 @@
     nextArrow: '→',
 
     /* ---------- Pantalla 2: la vida real ----------
-       Dos slides directos: la cola (el primero va delante) y el
-       edificio (los pisos se cuentan de abajo arriba, con flechas
-       arriba/abajo para señalar el piso actual). Las listas
-       explícitas (1-9 y redondos) se quitaron: el recordatorio de
-       la pantalla 3 ya muestra la serie entera, y repetirlas aquí
-       era recargar lo mismo. */
+       Cuatro slides directos: el podio (🥇🥈🥉 en una tarima), la
+       clasificación (una tabla con los puestos del 1 al 5), la cola
+       (el primero va delante) y el edificio (los pisos se cuentan
+       de abajo arriba, con flechas arriba/abajo para señalar el piso
+       actual). Las listas explícitas (1-9 y redondos) se quitaron: el
+       recordatorio de la pantalla 3 ya muestra la serie entera, y
+       repetirlas aquí era recargar lo mismo. */
     famousTitle: 'En la vida real',
-    famousSubtitle: 'Dos sitios donde los ordinales cobran sentido:',
+    famousSubtitle: 'Cuatro sitios donde los ordinales cobran sentido:',
     /* Antes había aquí un 'back: Anterior' para Pantalla 2: la navegación
        hacia atrás entre pantallas (1→2→3→4→5) ya no existe. Solo
        queda el "← Volver" de la cabecera, que va a la portada de
@@ -124,11 +125,11 @@
     },
 
     /* ---------- Ejemplos de la vida real ----------
-       Sólo hay DOS: el edificio y la cola. Las frases terminan en
-       ':' porque cada escenario se pinta como un todo (la pila de
-       pisos o la fila de gente), no como "1= primero ... = tercero"
-       pieza a pieza; la frase es la introducción y los ordinales se
-       leen dentro. */
+       Hay CUATRO: el podio, la clasificación, la cola y el edificio.
+       Las frases terminan en ':' porque cada escenario se pinta como
+       un todo (la tarima, la tabla, la fila de gente o la pila de
+       pisos), no como "1= primero ... = tercero" pieza a pieza; la
+       frase es la introducción y los ordinales se leen dentro. */
     famous: {
       /* Slides de "En la vida real": cada uno se compone solo de un
          titular (label, pintado por #famousLabel) y el visual. Sin
@@ -138,8 +139,10 @@
          criterio que la galería de Formas: la figura se muestra con
          su nombre y nada más. Las claves de las antiguas
          lista1a9/listaRedondos se quitaron: ya no hay slides-lista,
-         solo edificio y cola. Las "text" se quedan vacías para que
-         la paridad es/en no se queje de claves huérfanas. */
+         solo los cuatro escenarios. Las "text" se quedan vacías
+         para que la paridad es/en no se queje de claves huérfanas. */
+      podio: '',
+      clasificacion: '',
       edificio: '',
       cola: ''
     },
@@ -147,8 +150,9 @@
     /* ---------- Situaciones de apoyo ----------
        Para que el ordinal nombre algo y no sea una palabra suelta.
        Después del rediseño de la pantalla 2, las situaciones de
-       apoyo del juego se reparten entre pisos (1°-5°) y cola (1°-5°)
-       —los dos contextos que la pantalla 2 acaba de presentar. */
+       apoyo del juego se reparten entre los cuatro escenarios
+       que la pantalla 2 acaba de presentar: pisos (1°-5°), cola
+       (1°-5°), clasificación (1°-5°) y podio (1°-3°). */
     scene: {
       piso: 'Es el piso en el que vive.',
       piso2: 'Es el piso en el que vive.',
@@ -159,7 +163,15 @@
       cola2: 'Es el puesto en la cola.',
       cola3: 'Es el puesto en la cola.',
       cola4: 'Es el puesto en la cola.',
-      cola5: 'Es el puesto en la cola.'
+      cola5: 'Es el puesto en la cola.',
+      clasificacion: 'Es el puesto en la clasificación.',
+      clasificacion2: 'Es el puesto en la clasificación.',
+      clasificacion3: 'Es el puesto en la clasificación.',
+      clasificacion4: 'Es el puesto en la clasificación.',
+      clasificacion5: 'Es el puesto en la clasificación.',
+      podio: 'Es el puesto en el podio.',
+      podio2: 'Es el puesto en el podio.',
+      podio3: 'Es el puesto en el podio.'
     },
 
     /* ---------- Los pasos ---------- */
@@ -175,6 +187,13 @@
     starsCount: 'Dificultad {n}',
     stepLabel: 'Paso {n} de {total} · {name}',
     chainNext: 'Siguiente paso: {name}',
+    /* Pieza 3 de la ficha del recordatorio y de los ejemplos de la
+       regla 1: el número natural con la palabra "posición" delante,
+       para que la cifra quede ligada a su papel sin repetir la
+       palabra del ordinal ("décimo lugar" repetía "décimo"). El
+       número va al final porque es el dato — "Posición 10" suena
+       más a "el puesto número 10" que "10 posición". */
+    placePrefix: 'Posición {n}',
 
     /* ---------- La fila ---------- */
     queueHint: 'Cuenta desde la bandera 🏁.',
@@ -196,6 +215,22 @@
     queuePosition: '{n}º',
     queueAriaLabel: 'Cola de {n} personas. La primera está delante; la última, detrás.',
 
+    /* ---------- El podio y la clasificación ---------- */
+    /* Etiquetas que aparecen sobre los dos escenarios nuevos en la
+       pantalla 2. El podio no necesita "n" porque siempre tiene
+       tres posiciones (es la definición de podio olímpico); la
+       clasificación sí, porque tiene la misma longitud que la cola
+       y el edificio. */
+    podiumLabel: 'El podio',
+    /* La aria describe los tres puestos por su medalla (oro, plata,
+       bronce) y por su cifra ordinal, en el mismo orden que el
+       visual: primero en el centro arriba, segundo a su izquierda,
+       tercero a su derecha. Un lector de pantalla oye la misma
+       lectura que el ojo. */
+    podiumAria: 'Podio olímpico. El primero en el centro, con la medalla de oro; el segundo a la izquierda, con la de plata; el tercero a la derecha, con la de bronce.',
+    classificationLabel: 'La clasificación',
+    classificationAria: 'Clasificación de {n} participantes, del primero al último.',
+
     /* ---------- El juego ---------- */
     qPosition: '¿Qué lugar ocupa el que señala la flecha?',
     qMember: '¿Quién está en {place}?',
@@ -214,6 +249,6 @@
     hintDigitToOrdinal: 'Piensa qué puesto ocupa ese número en la fila.',
 
     finalSummary: 'Has acertado {n} de {total}. Ahora tienes {stars} estrellas.',
-    transfer: 'Los ordinales se usan en los turnos, en los pisos, en las fechas y en las listas. Saber el puesto de cada uno ayuda en el día a día.'
+    transfer: 'Los ordinales se usan en los podios, en las clasificaciones, en las colas, en los pisos, en las fechas y en las listas. Saber el puesto de cada uno ayuda en el día a día.'
   }, 'es');
 })();

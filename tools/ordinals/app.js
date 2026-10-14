@@ -8,10 +8,11 @@
                    primero/segundo/tercero, seguida de un carrusel
                    que recorre la serie completa con la cifra siempre
                    escrita al lado.
-     2. famous   : DOS escenarios de la vida real —el edificio y la
-                   cola de personas—, uno por slide, con cinco
-                   ordinales pintados a la vez en cada uno. El
-                   escenario es el que dice qué lugar es cada uno.
+     2. famous   : CUATRO escenarios de la vida real —el podio, la
+                   clasificación, la cola y el edificio—, uno por slide.
+                   El podio muestra 3 posiciones (🥇🥈🥉); los otros
+                   tres muestran 5 (5 filas o 5 personas). El escenario
+                   es el que dice qué lugar es cada uno.
      3. reminder : tabla de color con la serie entera y las dos
                    reglas que explican los errores de verdad.
      4. quiz     : pasos encadenados que cambian UNA variable cada
@@ -194,25 +195,29 @@
   }
 
   /* ============================================================
-     Pantalla 2: DOS escenarios de la vida real
+     Pantalla 2: CUATRO escenarios de la vida real
      ============================================================ */
 
-  /* El edificio y la cola se renderizan a la vez, no como un
-     carrusel de ordinales sueltos. La razón está en la actividad:
-     cuando alguien oye "vivo en el tercer piso", los ordinales
-     están rodeados de contexto (el resto de los pisos del edificio),
-     y ese contexto es lo que le da sentido a la palabra. Un ordinal
-     aislado — "tercero = 3" — se recuerda peor que la palabra dentro
-     de una escena. */
+  /* Los cuatro escenarios (podio, clasificación, cola y edificio) se
+     renderizan como un escenario a la vez — uno por slide —, no como
+     un carrusel de ordinales sueltos. La razón está en la actividad:
+     cuando alguien oye "vivo en el tercer piso", los ordinales están
+     rodeados de contexto (el resto de los pisos del edificio), y ese
+     contexto es lo que le da sentido a la palabra. Un ordinal aislado
+     — "tercero = 3" — se recuerda peor que la palabra dentro de una
+     escena. Mismo razonamiento para "quedó en el primer lugar",
+     "va el tercero en la clasificación" o "es el primero de la
+     cola": el escenario es lo que vuelve el ordinal algo reconocible. */
   var famousIdx = 0;
 
-  /* Personas variadas para los vecinos de cada piso y para la cola:
-     antes era siempre 🧑 (mismo emoji cinco veces). Aquí se eligen
-     de un pool pequeño y neutro (sin hombres/mujas sin tono de piel)
-     para que cada planta — y cada puesto de la cola — tenga un
-     vecino distinto. El piso/posición 1 da el primer icono, el
-     siguiente el segundo, etc.; al pasar del pool se vuelve al
-     principio, así la distribución sigue siendo predecible. */
+  /* Personas variadas para los vecinos de cada piso, la cola, la
+     clasificación y el podio: antes era siempre 🧑 (mismo emoji cinco
+     veces). Aquí se eligen de un pool pequeño y neutro (sin hombres/
+     mujeres ni tono de piel) para que cada planta — y cada puesto
+     de los otros escenarios — tenga un vecino distinto. La
+     posición 1 da el primer icono, la siguiente el segundo, etc.;
+     al pasar del pool se vuelve al principio, así la distribución
+     sigue siendo predecible. */
   var NEIGHBOURS = ['🧑', '👶', '🧒', '🧓', '🧑'];
 
   /* Edificio: una pila de plantas con dos flechas juntas DEBAJO para
@@ -283,6 +288,65 @@
     return cells.join('');
   }
 
+  /* Clasificación: una tabla con los puestos del 1 al N y un
+     participante al lado (emoji). Es la lectura natural de los
+     ordinales en una carrera, una liga o cualquier lista de "del
+     primero al último": cada fila es "1.º · 🐶", "2.º · 🐱", etc.
+     Igual que la cola, no hace falta interacción: la persona ve la
+     serie entera de una vez. Los emojis se toman del mismo pool
+     NEIGHBOURS que el edificio y la cola, para que el visual sea
+     reconocible al cambiar de slide. */
+  function renderClasificacion(total) {
+    var rows = [];
+    for (var i = 1; i <= total; i++) {
+      var o = ordinalByN(i);
+      var emoji = NEIGHBOURS[(i - 1) % NEIGHBOURS.length];
+      rows.push(
+        '<div class="classification-row">' +
+        '<span class="classification-ord ' + o.cls + '">' + abbrev(i) + '</span>' +
+        '<span class="classification-emoji" aria-hidden="true">' + emoji + '</span>' +
+        '</div>'
+      );
+    }
+    return rows.join('');
+  }
+
+  /* Podio: una tarima con los tres primeros 🥇🥈🥉. El podio olímpico
+     tiene tres puestos por definición: el primero arriba en el
+     centro, el segundo a su izquierda, el tercero a su derecha. El
+     escenario no es interactivo: una vez que alguien ve "el de oro,
+     el de plata, el de bronce", ya entiende que "primero/segundo/
+     tercero" se reparten así. La cifra ordinal (1.º, 2.º, 3.º) va
+     DEBAJO de cada posición, no encima: si la cifra viviera arriba,
+     leería "2.º 🥈" como "el segundo se llama 🥈"; al revés, la
+     medalla es lo que "marca el puesto" y la cifra es la lectura
+     que lo nombra. Los emojis de participante van al lado de la
+     cifra, igual que en el edificio y la clasificación. */
+  function renderPodium() {
+    /* ORDEN VISUAL en pantalla: 🥈 🥇 🥉 (segundo a la izquierda,
+       primero en el centro arriba, tercero a la derecha). El
+       "primero" sube más arriba que los otros dos: la altura es lo
+       que dice "ganó la carrera". Si los tres quedaran a la misma
+       altura, dejaría de parecer un podio. */
+    var positions = [
+      { n: 2, medal: '🥈', cls: 'podium-pos--2' },
+      { n: 1, medal: '🥇', cls: 'podium-pos--1' },
+      { n: 3, medal: '🥉', cls: 'podium-pos--3' }
+    ];
+    var html = positions.map(function (p) {
+      var o = ordinalByN(p.n);
+      var emoji = NEIGHBOURS[(p.n - 1) % NEIGHBOURS.length];
+      return '<div class="podium-pos ' + p.cls + '">' +
+        '<div class="podium-medal" aria-hidden="true">' + p.medal + '</div>' +
+        '<div class="podium-block">' +
+          '<span class="podium-emoji" aria-hidden="true">' + emoji + '</span>' +
+          '<span class="podium-ord ' + o.cls + '">' + abbrev(p.n) + '</span>' +
+        '</div>' +
+        '</div>';
+    }).join('');
+    return html;
+  }
+
   function paintFamous() {
     var item = DATA.famous[famousIdx];
     var container = $('#famousScene');
@@ -315,6 +379,19 @@
       labelEl.textContent = t('queueLabel');
       ariaEl.setAttribute('aria-label', t('queueAriaLabel')
         .replace('{n}', item.n));
+    } else if (item.id === 'clasificacion') {
+      container.className = 'famous-stage famous-classification';
+      container.innerHTML = renderClasificacion(item.n);
+      container.setAttribute('aria-hidden', 'true');
+      labelEl.textContent = t('classificationLabel');
+      ariaEl.setAttribute('aria-label', t('classificationAria')
+        .replace('{n}', item.n));
+    } else if (item.id === 'podio') {
+      container.className = 'famous-stage famous-podium';
+      container.innerHTML = renderPodium();
+      container.setAttribute('aria-hidden', 'true');
+      labelEl.textContent = t('podiumLabel');
+      ariaEl.setAttribute('aria-label', t('podiumAria'));
     } else if (item.type === 'list') {
       /* Slide-lista: una rejilla con los ordinales que la persona
          tiene que aprender de memoria (1-9 o los redondos 11/12/20/30).
@@ -354,14 +431,13 @@
      aquí también — el recordatorio NO es donde se quita la medalla,
      es donde se consolida la serie entera.
 
-     La tercera pieza es el número natural al que corresponde el
-     ordinal (1, 2, 3…). Antes era "primer lugar" / "sexto lugar" /
-     "cuadragésimo lugar" — eso era la palabra del ordinal + "lugar"
-     y repetía la pieza central sin aportar información. La regla
-     única del recordatorio ("1.º · primero · 1") ya marcaba la
-     pauta buena: la forma con marcador pegada a la palabra pegada
-     al número natural. La ficha es la misma fórmula, ampliada a 14
-     filas. */
+     La tercera pieza es "Posición N": el número natural al que
+     corresponde el ordinal con la palabra "Posición" delante.
+     Antes era "primer lugar" / "sexto lugar" / "cuadragésimo lugar"
+     — eso era la palabra del ordinal + "lugar" y repetía la pieza
+     central sin aportar información. Con "Posición N" el número
+     queda ligado a su papel ("el puesto número N") sin repetir
+     "primero/segundo/…". */
   function renderOrdinalChips(ordinals) {
     var html = '';
     ordinals.forEach(function (n) {
@@ -373,7 +449,7 @@
         '<div class="ord-chip">' +
         '<span class="ord-chip-figure ' + o.cls + '">' + medalHtml + abbrev(n) + '</span>' +
         '<span class="ord-chip-name ' + o.cls + '">' + t('ord.' + n + 'Name') + '</span>' +
-        '<span class="ord-chip-place">' + n + '</span>' +
+        '<span class="ord-chip-place">' + t('placePrefix').replace('{n}', n) + '</span>' +
         '</div>';
     });
     return html;
@@ -407,16 +483,20 @@
      conteo desde la bandera ya se entiende en el juego. */
   var RULE_ONE = [1, 2, 3, 4];
 
-  /* "1.º · primero · 1": cifra ordinal (abbrev), palabra y número
-     natural unidos por un punto, que es como se leen en un cartel de
-     puerta ("tercer piso") o en una lista de turnos. */
+  /* "1.º · primero · Posición 1": cifra ordinal (abbrev), palabra y
+     número natural (con "Posición" delante) unidos por un punto,
+     que es como se leen en un cartel de puerta ("tercer piso") o
+     en una lista de turnos. "Posición N" en la tercera pieza — y
+     no "Nº lugar" — es lo que fija que las tres formas son la
+     misma: cifra, palabra y "el puesto que ocupa", sin repetir
+     "primero/segundo/…" en la última pieza. */
   function exampleFormula(n) {
     var o = ordinalByN(n);
     return '<span class="ex-figure ' + o.cls + '">' + abbrev(n) + '</span>' +
       '<span class="ex-op"> · </span>' +
       '<span class="ex-name ' + o.cls + '">' + t('ord.' + n + 'Name') + '</span>' +
       '<span class="ex-op"> · </span>' +
-      '<span class="ex-natural">' + n + '</span>';
+      '<span class="ex-natural">' + t('placePrefix').replace('{n}', n) + '</span>';
   }
 
   function paintRuleExamples() {
@@ -909,4 +989,11 @@
   }
 
   document.addEventListener('DOMContentLoaded', init);
+  /* End screen: the only button is "Volver al inicio", which goes back
+     to the Calculia landing. The end screen is a closing card, not a
+     second menu: picking another activity is a tap away on the home
+     page, so it does not need its own button here. */
+  var endBackToStart = $('#endBackToStart');
+  if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
+
 })();

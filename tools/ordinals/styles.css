@@ -433,6 +433,133 @@
 
 .famous-text { margin: 0; color: var(--color-texto); text-align: center; }
 
+/* ----- La clasificación -----
+   Una tabla vertical con los puestos del 1 al 5: cifra ordinal a la
+   izquierda, participante (emoji) a la derecha. Es la lectura
+   natural de "del primero al último" en una carrera o en una liga.
+
+   El color del ordinal es el mismo que el de la cola y el edificio,
+   así la persona ve que es la misma serie funcionando en un escenario
+   nuevo. La cifra va a la izquierda y el emoji a la derecha para que
+   el ojo recorra los puestos en orden: si fuera al revés (emoji a la
+   izquierda, cifra a la derecha), el emoji distraería y la cifra
+   dejaría de ser la protagonista. */
+
+.famous-classification {
+  gap: 6px;
+  align-items: stretch;
+}
+
+.classification-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--espacio);
+  padding: 8px 14px;
+  border: 2px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-fondo);
+  font-weight: 700;
+  min-height: 44px;
+  min-width: 180px;
+}
+
+.classification-ord {
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  line-height: 1.1;
+  min-width: 2.5ch;
+  font-variant-numeric: tabular-nums;
+}
+
+.classification-emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+/* ----- El podio -----
+   Una tarima con tres posiciones: 🥇 arriba en el centro, 🥈 a la
+   izquierda, 🥉 a la derecha. El podio olímpico tiene esta forma y
+   se reconoce al primer vistazo; por eso se respeta aunque el
+   responsive lo aplane después.
+
+   Alturas distintas: la pieza 1 es la más alta (es quien ganó), las
+   piezas 2 y 3 son más bajas y a la misma altura (segundo y tercero
+   son el mismo "subió al podio" sin importar el orden). Si las tres
+   tuvieran la misma altura, dejaría de parecer un podio y pasaría a
+   parecerse a una fila de tres.
+
+   La medalla va ENCIMA del bloque (no al lado): la medalla es lo que
+   "marca el puesto" y debe verse primero; debajo va el bloque con
+   el emoji del participante y la cifra ordinal. Si la medalla
+   viviera al lado del emoji, se leería como un adorno. */
+
+.famous-podium {
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--espacio);
+  flex-wrap: nowrap;
+  padding-top: var(--espacio);
+}
+
+.podium-pos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 84px;
+}
+
+.podium-medal {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.podium-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  padding: 10px 6px;
+  border: 2px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-fondo);
+}
+
+/* Altura del bloque: el primero es el más alto (ganó la carrera), el
+   segundo y el tercero comparten altura (ambos "subieron al podio"
+   sin importar el orden). Esto es lo que da la silueta de podio: si
+   los tres tuvieran la misma altura, parecerían una fila. */
+.podium-pos--1 .podium-block { min-height: 110px; }
+.podium-pos--2 .podium-block,
+.podium-pos--3 .podium-block { min-height: 78px; }
+
+.podium-emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.podium-ord {
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 360px) {
+  .classification-row { min-width: 0; padding: 6px 10px; min-height: 36px; }
+  .classification-ord { font-size: var(--texto-base); }
+  .classification-emoji { font-size: 1.3rem; }
+  .podium-pos { min-width: 64px; }
+  .podium-medal { font-size: 32px; }
+  .podium-pos--1 .podium-block { min-height: 88px; }
+  .podium-pos--2 .podium-block,
+  .podium-pos--3 .podium-block { min-height: 64px; }
+  .podium-emoji { font-size: 1.3rem; }
+}
+
 /* ============================================================
    Pantalla 3: recordatorio
    ============================================================ */
@@ -467,10 +594,12 @@
 }
 .ord-chip-medal { font-size: 1.4rem; line-height: 1; }
 .ord-chip-name { font-size: var(--texto-base); font-weight: 700; }
-/* Pieza 3 de la ficha: el número natural (1, 2, 3…). El nombre
-   "-place" se conserva por compatibilidad con el CSS responsive
-   más abajo y con los selectores existentes; el contenido ahora
-   es el natural, no "sexto lugar". */
+/* Pieza 3 de la ficha: "Posición N" — el número natural (1, 2, 3…)
+   con la palabra "Posición" delante, que es lo que dice qué papel
+   juega el número sin repetir la palabra del ordinal ("décimo
+   lugar" repetía "décimo"; "décimo · Posición 10" ya no). El nombre
+   "-place" se conserva por compatibilidad con los selectores
+   existentes y con el CSS responsive. */
 .ord-chip-place { font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
 
 .rule-card { border-color: var(--mod-razonamiento-suave); }
@@ -493,10 +622,11 @@
 .rule-example--tight { font-size: var(--texto-base); }
 .ex-figure { font-size: var(--texto-grande); }
 .ex-name { font-size: var(--texto-base); }
-/* Pieza 3: el número natural al que corresponde el ordinal (1, 2,
-   3...). Tamaño base y forma de cifra: la cifra ordinal (1º) y el
-   natural (1) son las dos formas que la persona tiene que aprender
-   a leer e intercambiar, y se ven igual de importantes en la fila. */
+/* Pieza 3: "Posición N" — el número natural al que corresponde el
+   ordinal (1, 2, 3...) con "Posición" delante. Tamaño base y forma
+   de cifra: la cifra ordinal (1º) y el número natural (1) son las
+   dos formas que la persona tiene que aprender a leer e
+   intercambiar, y se ven igual de importantes en la fila. */
 .ex-natural { font-size: var(--texto-base); font-variant-numeric: tabular-nums; }
 .ex-op { color: var(--color-texto-suave); }
 

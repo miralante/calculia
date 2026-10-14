@@ -33,7 +33,7 @@
           <button type="button" class="btn btn-secondary" id="galleryNext" aria-label="Siguiente">→</button>
         </div>
       </div>
-      <button type="button" class="btn" id="introContinue" data-i18n="introContinue">Verlas en la vida real →</button>
+      <button type="button" class="btn btn-secondary" id="introContinue" data-i18n="introContinue">Verlas en la vida real →</button>
     </section>
 
     <section id="screenReal" class="hidden stack">
@@ -75,19 +75,16 @@
         <span class="difficulty" id="difficulty"></span>
       </div>
 
-      <div class="card centered stack">
-        <p class="prompt" id="prompt"></p>
-        <div class="visual" id="visual"></div>
-        <p class="legend hidden" id="legend"></p>
-      </div>
+      <!-- Hoja de prueba: app.js pinta una tarjeta por pregunta
+           con su prompt, visual, opciones y feedback inline. La
+           persona va eligiendo opción y al final pulsa "Comprobar"
+           para que se verifiquen todas a la vez. -->
+      <div class="stack test-sheet" id="testSheet" aria-live="polite"></div>
 
-      <div class="stack options" id="options"></div>
-
-      <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="row explanation hidden" id="explanationWrap">
-        <p id="explanation" aria-live="polite"></p>
+      <div class="row sheet-actions">
+        <button type="button" class="btn" id="btnCheck" data-i18n="check">Comprobar</button>
+        <button type="button" class="btn hidden" id="btnNewRound" data-i18n="newRound">Otra ronda →</button>
       </div>
-      <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
     <section id="screenEnd" class="hidden centered stack" aria-live="polite">
@@ -95,6 +92,12 @@
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>
       <p id="transfer" class="transfer" data-i18n="transfer"></p>
+      <!-- Un solo botón y arriba: la ronda ya pasó y la pantalla de fin es
+           el "y ahora qué", no un menú de actividades. "Volver al inicio"
+           lleva a la portada de Calculia; las otras acciones (jugar otra
+           vez, otra actividad, otro menú) viven donde se eligen
+           actividades, no aquí. -->
+      <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>
     </section>
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
