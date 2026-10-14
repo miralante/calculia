@@ -1,21 +1,40 @@
 .tool-header h1 { color: var(--mod-razonamiento); }
 
 /* Operation menu (4 cards: sumar / multiplicar arriba, restar /
-   dividir abajo). Forzamos 2 columnas fijas, no `auto-fit, minmax`,
-   para que "restar/dividir estén DEBAJO de sumar/multiplicar" en
-   cualquier ancho de pantalla. auto-fit las ponía en una sola fila
-   cuando el viewport era ancho, lo que rompía esa jerarquía visual
-   que el menú de Las Tablas asume (sumar+mult son el "anillo de
-   siempre-entero", restar+div son el "anillo con inverso o resto"). */
+   dividir abajo). 2 columnas fijas en desktop, adapts en móvil. */
 .operation-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--espacio); }
-.operation-btn { min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: var(--mod-razonamiento); text-align: center; }
+/* En pantallas estrechas (< 375px) las tarjetas de 150px de alto no caben
+   bien; bajamos a 100px para que las 4 operaciones (+ − × ÷) quepan en
+   un viewport típico de móvil sin hacer scroll. */
+.operation-btn { min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: var(--mod-razonamiento); text-align: center; padding: 8px; }
 .operation-btn small { font-size: var(--texto-pequeno); font-weight: 400; }
-.operation-icon { font-size: 42px; line-height: 1; }
-.table-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--espacio); }
+.operation-icon { font-size: 36px; line-height: 1; }
+
+/* Tabla grid: 10 tablas (1-10) en autofit. minmax(140px,1fr) força 2 cols
+   a partir de ~300px; en móvil muy estrecho (< 320px) se reduce a 120px. */
+.table-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--espacio); }
 .table-btn { min-height: var(--boton-min); background: var(--mod-razonamiento); }
 
 /* Learn screen */
-.learn-layout { display: grid; grid-template-columns: minmax(180px, auto) 1fr; gap: var(--espacio); align-items: start; }
+.learn-layout {
+  display: grid;
+  grid-template-columns: minmax(160px, auto) 1fr;
+  gap: var(--espacio);
+  align-items: start;
+}
+/* En móvil la lista de hechos (10 filas × 64px = 640px+) puede ocupar
+   toda la pantalla y esconder la visualización de bolas. Permitimos scroll
+   interno en la lista y damos a la tarjeta visual un alto máximo fijo
+   para que las pelotas estén siempre visibles sin scroll. */
+.learn-layout .visual-card {
+  order: -1;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.learn-layout .fact-list {
+  max-height: 50vh;
+  overflow-y: auto;
+}
 .fact-list { display: flex; flex-direction: column; gap: 8px; }
 .fact-row { font-variant-numeric: tabular-nums; justify-content: flex-start; }
 .fact-row.activa { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
@@ -40,12 +59,7 @@
 .explanation { margin: 0; color: var(--color-texto-suave); }
 #nextFact { align-self: center; }
 
-/* ---- Division input ----
-   The free-text input is the only answer shape that uses a numeric
-   field. The number goes in the centre; the "Check" button is a
-   plain .btn right next to it. We don't reuse .option-btn because
-   that styling carries the wide-buttons-of-the-shuffle look that
-   doesn't fit a single text input. */
+/* ---- Division input ---- */
 .input-row {
   display: flex;
   gap: var(--espacio);
@@ -63,16 +77,11 @@
   border-radius: var(--radio);
   background: var(--color-superficie);
   color: var(--color-texto);
-  /* Browsers render their own arrows for type=number; we let them so
-     desktop users get the same widget as everywhere else. The arrow
-     widgets are explicit per the user's design preference. */
 }
 .input-row input[type="number"]:disabled { opacity: 0.45; }
 .input-row .btn:disabled { opacity: 0.45; }
 
-/* Visually hidden but reachable by screen readers — used on the
-   <label> for the free-text answer so iOS VoiceOver / Android TalkBack
-   announce it without painting it. */
+/* Visually hidden but reachable by screen readers */
 .visually-hidden {
   position: absolute;
   width: 1px; height: 1px;
@@ -83,9 +92,7 @@
   border: 0;
 }
 
-/* The "sobran R" line lives between the feedback and the explanation
-   on divide answers that have a leftover. We give it a small emoji
-   lead so it reads as a friendly aside rather than a red error. */
+/* The "sobran R" line on divide with remainder */
 .rest-line {
   margin: 0;
   font-size: var(--texto-base);
@@ -104,12 +111,21 @@
   max-width: 480px;
 }
 
+/* ---- Responsive breakpoints ---- */
 @media (max-width: 640px) {
+  /* Learn: columna única, la tarjeta visual arriba para que se vea
+     sin scroll, la lista de hechos debajo con scroll interno. */
   .learn-layout { grid-template-columns: 1fr; }
+  .learn-layout .visual-card { order: 0; max-height: 40vh; }
+  .learn-layout .fact-list { max-height: none; }
+  /* Operación y tabla: 2 columnas si hay espacio. */
   .operation-grid, .table-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 400px) {
+  /* Móvil muy estrecho: operación en 1 columna, tarjetas más compactas. */
   .operation-grid { grid-template-columns: 1fr; }
+  .operation-btn { min-height: 80px; }
+  .operation-icon { font-size: 28px; }
 }
 
 .emoji-large { font-size: 96px; }
