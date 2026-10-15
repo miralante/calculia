@@ -36,7 +36,7 @@
              - #numberShown: número coloreado por posición (leer).
              - #pointsZone: juego de los puntos. #pointsBoard son las cifras
                con los huecos para tocar; #pointsTray son los puntos que
-               quedan por colocar; #pointsLeft lo dice con texto.
+               quedan por colocar.
              - #answerInput: input de texto para leer/escribir.
              - #listenBtn: botón de audio (escribir). -->
       <section id="screenTask" class="stack hidden" aria-live="polite">
@@ -50,9 +50,10 @@
           <div class="number-shown" id="numberShown" aria-live="polite"></div>
 
           <div class="points-zone hidden" id="pointsZone">
-            <div class="points-board" id="pointsBoard" role="group" data-i18n-aria="pointsBoardAria" aria-label="Número para colocar los puntos"></div>
-            <div class="points-tray" id="pointsTray" aria-hidden="true"></div>
-            <p class="points-left" id="pointsLeft" aria-live="polite"></p>
+            <div class="points-row">
+              <div class="points-board" id="pointsBoard" role="group" data-i18n-aria="pointsBoardAria" aria-label="Número para colocar los puntos"></div>
+              <div class="points-tray" id="pointsTray" aria-hidden="true"></div>
+            </div>
           </div>
 
           <button type="button" class="btn hidden" id="listenBtn" data-i18n="core.listen">🔊 Escuchar</button>

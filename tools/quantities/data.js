@@ -5,9 +5,9 @@
      - read   : the number is shown and the user copies it.
      - write  : the number is spoken and the user writes it.
      - points : a game. The number is shown with no separators and
-                the user places the points (dots in Spanish, commas
-                in English) in the right gaps, from thousands up to
-                billions. See app.js.
+                the user drags the points (dots in Spanish, commas
+                in English) from the right into the gaps between
+                the digits. See app.js.
 
    "Thousand" rule (see ranges below): < 10.000 has no separator;
    >= 10.000 does. In read/write modes the format shown matches
@@ -47,20 +47,14 @@ var DATA = {
       { id: 'e3', min: 10000,     max: 99999 },
       { id: 'e4', min: 100000,    max: 999999 },
       { id: 'e5', min: 1000000,   max: 999999999 }
-    ],
-    /* Levels of the points game, by number of digits. A number with
-       N digits has (N - 1) / 3 points, rounded down, so each level
-       fixes how many points the user must place:
-         p1 = thousands  (1 point):  1.000 to 999.999
-         p2 = millions   (2 points): 1.000.000 to 999.999.999
-         p3 = billions   (3 points): 1.000.000.000 to 999.999.999.999 */
-    points: [
-      { id: 'p1', minDigits: 4,  maxDigits: 6 },
-      { id: 'p2', minDigits: 7,  maxDigits: 9 },
-      { id: 'p3', minDigits: 10, maxDigits: 12 }
     ]
   },
-  /* Order of the points rounds: one random number per entry, going
-     up from thousands to billions. Not shuffled on purpose. */
-  pointsSequence: ['p1', 'p1', 'p2', 'p2', 'p3', 'p3']
+  /* Points game: the digit count of each number, one entry per round
+     item, going up one digit at a time. A number with N digits has
+     (N - 1) / 3 points, rounded down:
+       4 to 6 digits   -> 1 point   (thousands)
+       7 to 9 digits   -> 2 points  (millions)
+       10 to 12 digits -> 3 points  (billions)
+     Not shuffled on purpose: the numbers get bigger as the round goes on. */
+  pointsDigits: [4, 5, 6, 7, 8, 9, 10, 11, 12]
 };

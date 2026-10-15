@@ -6,9 +6,10 @@
      - read   : the number is shown and the user copies it.
      - write  : the number is spoken and the user writes it.
      - points : a game. The number is shown with no separator; the
-                user taps the gaps between the digits to place the
-                points (dots in Spanish, commas in English). The
-                numbers go up from thousands to billions.
+                user drags the points from the right into the gaps
+                between the digits (dots in Spanish, commas in
+                English). The numbers start at 4 digits and go up
+                one digit at a time, with one point more every three.
 
    They share the menu, the task card and the reinforcement
    mini-round. Progressive ranges (see data.js) raise the size of
@@ -331,17 +332,9 @@
   }
 
   /* ----------- The points game -----------
-     Each round entry names a level from DATA.ranges.points (thousands,
-     millions, billions). The number gets a random digit count inside
-     that level, so it always has the right number of points. */
-
-  function levelFor(id) {
-    var levels = DATA.ranges.points;
-    for (var i = 0; i < levels.length; i++) {
-      if (levels[i].id === id) return levels[i];
-    }
-    return levels[0];
-  }
+     Each round entry gives the digit count of its number (see
+     DATA.pointsDigits), so the points go up one at a time: first
+     one point, then two, then three. The digits are random. */
 
   /* Gap i (after digit i, counted from the left) is a place for a
      point when the digits to its right come in full groups of three. */
@@ -355,8 +348,7 @@
   }
 
   function genPoints() {
-    var level = levelFor(round[index].level);
-    var digits = randomInt(level.minDigits, level.maxDigits);
+    var digits = round[index].digits;
     var n = randomInt(Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
     var gaps = correctGaps(n);
     return {
@@ -420,7 +412,7 @@
       mark.textContent = '✗';
       btn.appendChild(mark);
     }
-    btn.addEventListener('click', function () { toggleGap(i); });
+    btn.addEventListener('click', function () { if (!justDragged) toggleGap(i); });
     return btn;
   }
 
@@ -434,7 +426,140 @@
       chip.textContent = separator();
       tray.appendChild(chip);
     }
-    $('#pointsLeft').textContent = t('pointsLeft').replace('{n}', left);
+  }
+
+  /* ----------- Dragging the points -----------
+     A point can be dragged from the tray to an empty gap, or moved
+     from one gap to another. Dropped anywhere else, it goes back to
+     the tray. Pointer events cover mouse, touch and pen. A plain tap
+     still works (see toggleGap): a drag starts only after a few
+     pixels of movement. */
+  var DRAG_START_PX = 6;
+  var drag = null;          /* { from, ghost, moved, startX, startY } */
+  var justDragged = false;  /* swallows the click that follows a drop */
+
+  function startDrag(e, from) {
+    if (!waitingCheck || e.button !== 0) return;
+    drag = { from: from, ghost: null, moved: false, startX: e.clientX, startY: e.clientY };
+    document.addEventListener('pointermove', moveDrag);
+    document.addEventListener('pointerup', endDrag);
+    document.addEventListener('pointercancel', cancelDrag);
+  }
+
+  function onBoardPointerDown(e) {
+    var point = e.target.closest ? e.target.closest('.pt-point') : null;
+    if (point) startDrag(e, Number(point.parentNode.getAttribute('data-gap')));
+  }
+
+  function onTrayPointerDown(e) {
+    var chip = e.target.closest ? e.target.closest('.tray-chip') : null;
+    if (chip) startDrag(e, null);
+  }
+
+  /* The gap under the pointer, or null. An empty gap is a target; so
+     is the gap the point was lifted from (dropping it back is a no-op). */
+  function gapUnder(x, y) {
+    var el = document.elementFromPoint(x, y);
+    var gap = el && el.closest ? el.closest('#pointsBoard .pt-gap') : null;
+    if (!gap) return null;
+    var g = Number(gap.getAttribute('data-gap'));
+    if (placed.indexOf(g) === -1 || g === drag.from) return g;
+    return null;
+  }
+
+  function moveDrag(e) {
+    if (!drag) return;
+    if (!drag.moved) {
+      if (Math.abs(e.clientX - drag.startX) + Math.abs(e.clientY - drag.startY) < DRAG_START_PX) return;
+      drag.moved = true;
+      drag.ghost = document.createElement('span');
+      drag.ghost.className = 'pt-ghost';
+      drag.ghost.setAttribute('aria-hidden', 'true');
+      drag.ghost.textContent = separator();
+      document.body.appendChild(drag.ghost);
+    }
+    drag.ghost.style.left = e.clientX + 'px';
+    drag.ghost.style.top = e.clientY + 'px';
+    var over = gapUnder(e.clientX, e.clientY);
+    var gaps = document.querySelectorAll('#pointsBoard .pt-gap');
+    for (var k = 0; k < gaps.length; k++) {
+      gaps[k].classList.toggle('is-target', Number(gaps[k].getAttribute('data-gap')) === over && over !== drag.from);
+    }
+  }
+
+  function endDrag(e) {
+    var d = drag;
+    /* Read the target before stopDrag clears the drag state. */
+    var g = d && d.moved ? gapUnder(e.clientX, e.clientY) : null;
+    stopDrag();
+    if (!d || !d.moved) return;   /* a tap: the click does the work */
+    justDragged = true;
+    setTimeout(function () { justDragged = false; }, 300);
+    if (g !== null && d.ghost) {
+      /* Glide the point into its gap, then settle it there. */
+      glideTo(d.ghost, gapCenter(g), function () { settleDrop(d, g); });
+    } else {
+      if (d.ghost) d.ghost.remove();
+      settleDrop(d, null);
+    }
+  }
+
+  function settleDrop(d, g) {
+    if (g !== null) {
+      if (d.from === null) {
+        placed.push(g);
+      } else if (g !== d.from) {
+        placed.splice(placed.indexOf(d.from), 1);
+        placed.push(g);
+      }
+    } else if (d.from !== null) {
+      /* Dropped outside any gap: the point goes back to the tray. */
+      placed.splice(placed.indexOf(d.from), 1);
+    }
+    wrongGaps = [];
+    $('#feedback').textContent = '';
+    renderPointsBoard(g !== null ? g : undefined);
+    renderPointsTray();
+  }
+
+  function gapCenter(g) {
+    var r = document.querySelector('#pointsBoard [data-gap="' + g + '"]').getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+
+  /* Moves an element to a point on screen, then runs done(). */
+  function glideTo(el, to, done) {
+    el.style.transition = 'left 0.18s ease-out, top 0.18s ease-out';
+    el.style.left = to.x + 'px';
+    el.style.top = to.y + 'px';
+    setTimeout(function () { el.remove(); done(); }, 190);
+  }
+
+  /* A point placed with a tap comes flying from the tray (rect), so it
+     reads as moving from right to left into its gap. */
+  function flyIn(g, from) {
+    var pt = document.querySelector('#pointsBoard [data-gap="' + g + '"] .pt-point');
+    if (!pt) return;
+    var to = pt.getBoundingClientRect();
+    pt.style.transition = 'none';
+    pt.style.transform = 'translate(' + (from.left - to.left) + 'px, ' + (from.top - to.top) + 'px)';
+    void pt.offsetWidth;
+    pt.style.transition = 'transform 0.25s ease-out';
+    pt.style.transform = '';
+  }
+
+  function cancelDrag() {
+    if (drag && drag.ghost) drag.ghost.remove();
+    stopDrag();
+  }
+
+  function stopDrag() {
+    document.removeEventListener('pointermove', moveDrag);
+    document.removeEventListener('pointerup', endDrag);
+    document.removeEventListener('pointercancel', cancelDrag);
+    drag = null;
+    var marked = document.querySelectorAll('#pointsBoard .is-target');
+    for (var k = 0; k < marked.length; k++) marked[k].classList.remove('is-target');
   }
 
   /* Tap an empty gap to put a point from the tray; tap a placed point
@@ -442,9 +567,13 @@
   function toggleGap(i) {
     if (!waitingCheck) return;
     var at = placed.indexOf(i);
+    var fromRect = null;
     if (at !== -1) {
       placed.splice(at, 1);
     } else if (placed.length < case_.gaps.length) {
+      /* Where the point leaves the tray from, before the tray is redrawn. */
+      var chips = document.querySelectorAll('#pointsTray .tray-chip');
+      if (chips.length) fromRect = chips[chips.length - 1].getBoundingClientRect();
       placed.push(i);
     } else {
       $('#feedback').textContent = t('pointsNoneLeft');
@@ -455,6 +584,7 @@
     $('#feedback').textContent = '';
     renderPointsBoard(i);
     renderPointsTray();
+    if (fromRect) flyIn(i, fromRect);
   }
 
   function checkPoints() {
@@ -615,9 +745,9 @@
     practice = id;
     round = [];
     if (id === 'points') {
-      /* One entry per number, from thousands up to billions. Not
-         shuffled on purpose: the size of the numbers goes up. */
-      round = DATA.pointsSequence.map(function (level) { return { level: level }; });
+      /* One entry per number, from 4 digits up to 12. Not shuffled on
+         purpose: the numbers get bigger as the round goes on. */
+      round = DATA.pointsDigits.map(function (digits) { return { digits: digits }; });
     } else {
       var lista = DATA.ranges[id];
       var min = lista[0].min;
@@ -715,6 +845,8 @@
     if (e.key === 'Enter') check();
   });
   $('#nextTask').addEventListener('click', goNext);
+  $('#pointsBoard').addEventListener('pointerdown', onBoardPointerDown);
+  $('#pointsTray').addEventListener('pointerdown', onTrayPointerDown);
   var elListenBtn = $('#listenBtn');
   if (elListenBtn) elListenBtn.addEventListener('click', function () {
     if (case_ && case_.audio) if (false && App.tts && App.tts.speak) App.tts.speak(case_.audio);

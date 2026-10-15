@@ -97,7 +97,6 @@
   margin: 0;
   padding: 0;
   border: none;
-  border-bottom: 3px dashed var(--mod-razonamiento);
   border-radius: 0;
   background: none;
   color: var(--mod-razonamiento);
@@ -117,25 +116,32 @@
   border-radius: 4px;
 }
 
-.pt-gap:disabled { cursor: default; }
-
-.pt-gap.is-placed {
-  border-bottom-style: solid;
-  overflow: visible;
+/* Empty gaps have no line or circle: the hover tint shows where a
+   point can go. */
+.pt-gap:hover:not(:disabled) {
+  background: var(--mod-razonamiento-suave);
+  border-radius: 6px;
 }
 
+.pt-gap:disabled { cursor: default; }
+
+.pt-gap.is-placed { overflow: visible; }
+
 .pt-point {
+  display: inline-block;
   font-size: 1.2em;
   font-weight: 900;
   line-height: 1;
   white-space: nowrap;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
 }
 
 /* Punto mal colocado: fondo, borde macizo y una marca ✗. El color no
    es lo único que lo dice (WCAG 1.4.1). */
 .pt-gap.is-wrong {
   background: var(--color-animo-suave);
-  border-bottom-style: solid;
   border-radius: 6px;
 }
 
@@ -149,12 +155,47 @@
   line-height: 1;
 }
 
-.points-tray {
+/* The number and the tray of points sit side by side; on a narrow
+   screen the tray wraps under the number. */
+.points-row {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+  gap: var(--espacio);
+  width: 100%;
+}
+
+.points-tray {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 8px;
+  min-width: 44px;
   min-height: 44px;
+}
+
+/* A point being dragged: it follows the pointer. */
+.pt-ghost {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--mod-razonamiento);
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* The gap a dragged point would drop into. */
+.pt-gap.is-target {
+  background: var(--mod-razonamiento-suave);
+  border-radius: 6px;
 }
 
 .tray-chip {
@@ -163,20 +204,15 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  border-radius: 50%;
-  border: 3px solid var(--mod-razonamiento);
-  background: var(--mod-razonamiento-suave);
   color: var(--mod-razonamiento);
   font-size: 28px;
   font-weight: 900;
   line-height: 1;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
 }
 
-.points-left {
-  margin: 0;
-  color: var(--color-texto-suave);
-  font-weight: 700;
-}
 
 .answer-input {
   font-size: 32px;
@@ -232,4 +268,5 @@
   .number-shown { min-width: 0; width: 100%; font-size: 40px; }
   .answer-input { min-width: 0; width: 100%; }
   .big-emoji { font-size: 64px; }
+  .points-tray { flex-direction: row; flex-wrap: wrap; justify-content: center; }
 }

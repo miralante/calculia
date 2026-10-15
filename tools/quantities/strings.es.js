@@ -40,12 +40,10 @@
     detailWrite: 'Pulsa 🔊 si necesitas escucharlo otra vez.',
 
     /* ---------- Juego de los puntos ----------
-       {count} = puntos que faltan por colocar en este número.
-       {n} = cuántos puntos quedan en la bandeja. */
+       {count} = puntos que faltan por colocar en este número. */
     promptPoints: 'Pon {count} puntos en este número.',
     promptPointsOne: 'Pon 1 punto en este número.',
-    detailPoints: 'Toca un hueco para poner un punto. Toca un punto para quitarlo.',
-    pointsLeft: 'Puntos por colocar: {n}',
+    detailPoints: 'Arrastra un punto al hueco donde va. Toca un punto para quitarlo.',
     pointsMissing: 'Todavía quedan puntos por colocar.',
     pointsNoneLeft: 'Ya no quedan puntos. Toca uno de los colocados para quitarlo.',
     pointsWrongMarked: 'Revisa los puntos marcados con ✗.',

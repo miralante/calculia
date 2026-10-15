@@ -37,12 +37,10 @@
     detailWrite: 'Press 🔊 if you need to hear it again.',
 
     /* ---------- Commas game ----------
-       {count} = commas still to place in this number.
-       {n} = how many commas are left in the tray. */
+       {count} = commas still to place in this number. */
     promptPoints: 'Put {count} commas in this number.',
     promptPointsOne: 'Put 1 comma in this number.',
-    detailPoints: 'Tap a gap to put a comma. Tap a comma to remove it.',
-    pointsLeft: 'Commas left to place: {n}',
+    detailPoints: 'Drag a comma to its gap. Tap a placed comma to remove it.',
     pointsMissing: 'Some commas are still to be placed.',
     pointsNoneLeft: 'There are no commas left. Tap a placed comma to remove it.',
     pointsWrongMarked: 'Check the commas marked with ✗.',
