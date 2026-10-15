@@ -1,16 +1,18 @@
-﻿/* ============================================================
+/* ============================================================
    Calculia — Cantidades.
 
-   Three typing practices share this file:
+   Three practices share this file:
 
      - read   : the number is shown and the user copies it.
      - write  : the number is spoken and the user writes it.
-     - points : the number is shown WITHOUT separator; the user
-                must type it WITH the separator in the right place.
+     - points : a game. The number is shown with no separator; the
+                user taps the gaps between the digits to place the
+                points (dots in Spanish, commas in English). The
+                numbers go up from thousands to billions.
 
    They share the menu, the task card and the reinforcement
-   mini-round. Progressive ranges (see data.js) raise the cap
-   with the user's progress.
+   mini-round. Progressive ranges (see data.js) raise the size of
+   the numbers with the user's progress.
 
    The 'groups' practice (counting in tens/hundreds/thousands/half
    dozen/dozen) moved to Mental Math in 2026-10. Its screens, data
@@ -20,12 +22,12 @@
 
    "Thousand" rule (see data.js): < 10.000 has no separator;
    >= 10.000 does. In read/write modes the format shown matches what
-   the user must type; in "points" mode that match is broken on
+   the user must type; in the points game that match is broken on
    purpose — the exercise is precisely to put the separator back.
 
    The reading in words uses a custom algorithm (not a lookup table)
-   so the typing practices can generate any number in the range
-   0..999,999,999. Localized to es and en.
+   so the read and write practices can generate any number in the
+   range 0..999,999,999. Localized to es and en.
    ============================================================ */
 (function () {
   'use strict';
@@ -50,10 +52,10 @@
   var starsEl = $('#stars');
 
   /* ============================================================
-     Part 1 â€” the three typing practices
+     Part 1 — the practices
      ============================================================ */
 
-  /* Round state (typing practices) */
+  /* Round state */
   var practice = null;
   var round = [];
   var index = 0;
@@ -68,12 +70,18 @@
   var reinforceList = [];
   var reinforceIndex = 0;
   var reinforceTotal = 0;
+  /* Points game: the gaps the user has filled, and the ones the last
+     check marked as wrong. A gap is numbered from the left: gap i
+     sits after digit i. */
+  var placed = [];
+  var wrongGaps = [];
 
   function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
-  /* Picks a case from the practice pool without repeating in the round. */
+  /* Picks a case from the practice pool without repeating in the round
+     (read and write only; the points game has its own generator). */
   function drawCase(p) {
     var lista = DATA.ranges[p];
     var min = lista[0].min, max = lista[lista.length - 1].max;
@@ -104,10 +112,8 @@
     }
     parts.unshift(s);
     var out = parts.join(sep);
-    return negative ? 'âˆ’' + out : out;
+    return negative ? '−' + out : out;
   }
-
-  function withoutSeparator(n) { return String(n); }
 
   /* ----------- Digit position -----------
      Absolute position 0 = units, 1 = tens, ..., 9 = units of
@@ -115,18 +121,14 @@
   /* CSS class per absolute position. The first four are the GROUP
      classes (grp-unit / grp-ten / grp-hundred / grp-thousand), so a
      digit in a big number wears exactly the colour the carousel, the
-     reminder and the worked examples gave to its group â€” one colour
+     reminder and the worked examples gave to its group — one colour
      per group across the whole activity. Positions 4 and up (the
-     millions the typing practices can reach) fall back to the old
+     millions the read practice can reach) fall back to the old
      per-position scheme. */
   var POS_CLASS = ['grp-unit', 'grp-ten', 'grp-hundred', 'grp-thousand',
     'digit-u cifra-mil', 'digit-d cifra-mil', 'digit-c cifra-mil',
     'digit-u cifra-millon', 'digit-d cifra-millon', 'digit-c cifra-millon',
     'digit-u cifra-mil-millones'];
-
-  function digitAtPosition(n, pos) {
-    return Math.floor(Math.abs(n) / Math.pow(10, pos)) % 10;
-  }
 
   function coloredDigits(n) {
     var s = String(Math.abs(n));
@@ -144,13 +146,13 @@
       if (g > 0) htmlOut += '<span class="digit-sep">' + sep + '</span>';
       htmlOut += cuerpo;
     }
-    if (n < 0) htmlOut = '<span class="sign">âˆ’</span>' + htmlOut;
+    if (n < 0) htmlOut = '<span class="sign">−</span>' + htmlOut;
     return htmlOut;
   }
 
-  /* ----------- Reading in words (es / en, up to 10â¹) -----------
-     Custom algorithm. Handles the two large groups: thousands (10Â³
-     separator) and millions (10â¶ separator). The top range
+  /* ----------- Reading in words (es / en, up to 10⁹) -----------
+     Custom algorithm. Handles the two large groups: thousands (10³
+     separator) and millions (10⁶ separator). The top range
      (999,999,999) stays inside "thousand millions" in Spanish and
      "one billion" in English, never touching "trillion" etc. */
   var UNITS_ES = ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
@@ -158,10 +160,10 @@
   var TENS_ES = ['', '', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
   var TENS_EN = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
   /* Special 11-19 (es): diez, once, doce, trece, catorce, quince,
-     diecisÃ©is, diecisiete, dieciocho, diecinueve. Kept here as data so
+     dieciséis, diecisiete, dieciocho, diecinueve. Kept here as data so
      the algorithm below can read them directly; they are not a
      comment translation. */
-  var TEENS_ES = ['diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'diecisÃ©is', 'diecisiete', 'dieciocho', 'diecinueve'];
+  var TEENS_ES = ['diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve'];
   var TEENS_EN = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
   /* Hundreds (es): 100 cien, 200 doscientos, ..., 900 novecientos
      (apocopated). Hundreds (en): no apocope. */
@@ -193,39 +195,39 @@
     /* ES */
     if (n === 0) return 'cero';
     if (n === 100) return 'cien';
-    var parts = [];
-    var c = Math.floor(n / 100);
-    var rest = n % 100;
-    if (c) parts.push(HUNDREDS_ES[c]);
-    if (rest < 10) {
-      if (rest) parts.push(UNITS_ES[rest]);
-    } else if (rest < 20) {
-      parts.push(TEENS_ES[rest - 10]);
-    } else if (rest < 30) {
+    var partsES = [];
+    var cES = Math.floor(n / 100);
+    var restES = n % 100;
+    if (cES) partsES.push(HUNDREDS_ES[cES]);
+    if (restES < 10) {
+      if (restES) partsES.push(UNITS_ES[restES]);
+    } else if (restES < 20) {
+      partsES.push(TEENS_ES[restES - 10]);
+    } else if (restES < 30) {
       /* 21-29: veinti + uno/dos/... (with accent on 22-29) */
-      var u = rest - 20;
-      var txt = 'veinti';
-      if (u === 1) txt += 'uno';
-      else if (u === 2) txt += 'dÃ³s';
-      else if (u === 3) txt += 'trÃ©s';
-      else if (u === 4) txt += 'cuatro';
-      else if (u === 5) txt += 'cinco';
-      else if (u === 6) txt += 'seis';
-      else if (u === 7) txt += 'siete';
-      else if (u === 8) txt += 'ocho';
-      else if (u === 9) txt += 'nueve';
-      parts.push(txt);
+      var uES = restES - 20;
+      var txtES = 'veinti';
+      if (uES === 1) txtES += 'uno';
+      else if (uES === 2) txtES += 'dós';
+      else if (uES === 3) txtES += 'trés';
+      else if (uES === 4) txtES += 'cuatro';
+      else if (uES === 5) txtES += 'cinco';
+      else if (uES === 6) txtES += 'séis';
+      else if (uES === 7) txtES += 'siete';
+      else if (uES === 8) txtES += 'ocho';
+      else if (uES === 9) txtES += 'nueve';
+      partsES.push(txtES);
     } else {
-      var d = Math.floor(rest / 10);
-      var uu = rest % 10;
-      var txt = TENS_ES[d];
-      if (uu) txt += ' y ' + UNITS_ES[uu];
-      parts.push(txt);
+      var dES = Math.floor(restES / 10);
+      var uuES = restES % 10;
+      var tES = TENS_ES[dES];
+      if (uuES) tES += ' y ' + UNITS_ES[uuES];
+      partsES.push(tES);
     }
-    return parts.join(' ');
+    return partsES.join(' ');
   }
 
-  /* Apocope: "veintiÃºn" / "veintiuna" is used before "millones". To
+  /* Apocope: "veintiún" / "veintiuna" is used before "millones". To
      keep it simple and because the user hears the audio, we keep
      the full forms ("veintiuno millones"). Valid in standard Spanish
      for reading aloud. */
@@ -274,7 +276,7 @@
     var unitsES = restES % 1000;
     var partsES = [];
     if (millionsES) {
-      partsES.push(readGroup(millionsES, 'es', 'millÃ³n', 'millones'));
+      partsES.push(readGroup(millionsES, 'es', 'millón', 'millones'));
       var restFullES = '';
       if (thousandsES) {
         restFullES += (thousandsES === 1 ? 'mil' : threeDigits(thousandsES, 'es') + ' mil');
@@ -294,7 +296,7 @@
     return negative ? 'menos ' + outES : outES;
   }
 
-  /* ----------- Generators for the typing practices ----------- */
+  /* ----------- Generators ----------- */
 
   function genRead() {
     var n = drawCase('read');
@@ -319,7 +321,7 @@
       n: n,
       tipo: 'typing',
       /* In "write" the number is NOT shown, only spoken.
-         The show field stays empty; the ðŸ”Š button appears. */
+         The show field stays empty; the 🔊 button appears. */
       show: '',
       correct: format(n),
       prompt: t('promptWrite'),
@@ -328,16 +330,41 @@
     };
   }
 
+  /* ----------- The points game -----------
+     Each round entry names a level from DATA.ranges.points (thousands,
+     millions, billions). The number gets a random digit count inside
+     that level, so it always has the right number of points. */
+
+  function levelFor(id) {
+    var levels = DATA.ranges.points;
+    for (var i = 0; i < levels.length; i++) {
+      if (levels[i].id === id) return levels[i];
+    }
+    return levels[0];
+  }
+
+  /* Gap i (after digit i, counted from the left) is a place for a
+     point when the digits to its right come in full groups of three. */
+  function correctGaps(n) {
+    var digits = String(n);
+    var gaps = [];
+    for (var i = 0; i < digits.length - 1; i++) {
+      if ((digits.length - 1 - i) % 3 === 0) gaps.push(i);
+    }
+    return gaps;
+  }
+
   function genPoints() {
-    var n = drawCase('points');
+    var level = levelFor(round[index].level);
+    var digits = randomInt(level.minDigits, level.maxDigits);
+    var n = randomInt(Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
+    var gaps = correctGaps(n);
     return {
       n: n,
-      tipo: 'typing',
-      /* Shown without separator (even if >= 10.000). The user
-         must type the version WITH separator. */
-      show: withoutSeparator(n),
+      tipo: 'points',
+      gaps: gaps,
       correct: format(n),
-      prompt: t('promptPoints').replace('{nRaw}', withoutSeparator(n)),
+      prompt: gaps.length === 1 ? t('promptPointsOne') : t('promptPoints').replace('{count}', gaps.length),
       detail: t('detailPoints'),
       audio: ''
     };
@@ -349,11 +376,111 @@
     points: genPoints
   };
 
-  /* ----------- Paint the typing task ----------- */
+  /* ----------- Points game: board and tray ----------- */
+
+  function renderPointsBoard(focusGap) {
+    var board = $('#pointsBoard');
+    var digits = String(case_.n);
+    board.innerHTML = '';
+    for (var i = 0; i < digits.length; i++) {
+      var digit = document.createElement('span');
+      digit.className = 'pt-digit';
+      digit.textContent = digits.charAt(i);
+      board.appendChild(digit);
+      if (i < digits.length - 1) board.appendChild(gapButton(i));
+    }
+    /* The board is rebuilt on every tap; give the focus back to the
+       gap that was tapped so keyboard users do not lose their place. */
+    if (focusGap !== undefined) {
+      var again = board.querySelector('[data-gap="' + focusGap + '"]');
+      if (again) again.focus();
+    }
+  }
+
+  function gapButton(i) {
+    var isPlaced = placed.indexOf(i) !== -1;
+    var isWrong = wrongGaps.indexOf(i) !== -1;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pt-gap' + (isPlaced ? ' is-placed' : '') + (isWrong ? ' is-wrong' : '');
+    btn.setAttribute('data-gap', String(i));
+    btn.setAttribute('aria-label', t(isPlaced ? 'gapFilledAria' : 'gapEmptyAria'));
+    btn.disabled = !waitingCheck;
+    if (isPlaced) {
+      var point = document.createElement('span');
+      point.className = 'pt-point';
+      point.textContent = separator();
+      btn.appendChild(point);
+    }
+    if (isWrong) {
+      /* The mark is a shape as well as the colour (WCAG 1.4.1). */
+      var mark = document.createElement('span');
+      mark.className = 'pt-mark';
+      mark.setAttribute('aria-hidden', 'true');
+      mark.textContent = '✗';
+      btn.appendChild(mark);
+    }
+    btn.addEventListener('click', function () { toggleGap(i); });
+    return btn;
+  }
+
+  function renderPointsTray() {
+    var tray = $('#pointsTray');
+    var left = case_.gaps.length - placed.length;
+    tray.innerHTML = '';
+    for (var k = 0; k < left; k++) {
+      var chip = document.createElement('span');
+      chip.className = 'tray-chip';
+      chip.textContent = separator();
+      tray.appendChild(chip);
+    }
+    $('#pointsLeft').textContent = t('pointsLeft').replace('{n}', left);
+  }
+
+  /* Tap an empty gap to put a point from the tray; tap a placed point
+     to take it back. */
+  function toggleGap(i) {
+    if (!waitingCheck) return;
+    var at = placed.indexOf(i);
+    if (at !== -1) {
+      placed.splice(at, 1);
+    } else if (placed.length < case_.gaps.length) {
+      placed.push(i);
+    } else {
+      $('#feedback').textContent = t('pointsNoneLeft');
+      return;
+    }
+    /* Any change clears the marks of the last check. */
+    wrongGaps = [];
+    $('#feedback').textContent = '';
+    renderPointsBoard(i);
+    renderPointsTray();
+  }
+
+  function checkPoints() {
+    if (placed.length < case_.gaps.length) {
+      App.feedback.encourage($('#feedback'));
+      $('#feedback').textContent = t('pointsMissing');
+      return;
+    }
+    wrongGaps = placed.filter(function (g) { return case_.gaps.indexOf(g) === -1; });
+    if (wrongGaps.length === 0) {
+      correct();
+      return;
+    }
+    attempts += 1;
+    /* Reinforcement: register the first miss of the item. */
+    if (attempts === 1) App.reinforce.add(practice + ':' + case_.correct, case_);
+    App.feedback.encourage($('#feedback'));
+    $('#feedback').textContent = t('pointsWrongMarked') + ' ' + t('hintPoints');
+    renderPointsBoard();
+  }
+
+  /* ----------- Paint the task ----------- */
 
   function hideAllZones() {
     hide($('#numberShown'));
-    hide($('#numberWithSep'));
+    hide($('#pointsZone'));
     hide($('#answerInput'));
     hide($('#listenBtn'));
     $('#answerInput').value = '';
@@ -365,6 +492,8 @@
        reinforcement. */
     if (fixedCase) case_ = fixedCase;
     fixedCase = null;
+    waitingCheck = true;
+    attempts = 0;
     hideAllZones();
     $('#prompt').textContent = case_.prompt;
     $('#taskDetail').textContent = case_.detail;
@@ -376,19 +505,23 @@
     } else if (practice === 'write') {
       show($('#listenBtn'));
     } else if (practice === 'points') {
-      $('#numberWithSep').textContent = case_.show;
-      show($('#numberWithSep'));
+      placed = [];
+      wrongGaps = [];
+      renderPointsBoard();
+      renderPointsTray();
+      show($('#pointsZone'));
     }
-    show($('#answerInput'));
 
     $('#progressFill').style.width = ((index / round.length) * 100) + '%';
     $('#progressText').textContent = '';
     $('#feedback').textContent = '';
     show($('#checkAnswer'));
     hide($('#nextTask'));
-    attempts = 0;
-    waitingCheck = true;
 
+    /* The points game is tap-driven: there is nothing to type. */
+    if (practice === 'points') return;
+
+    show($('#answerInput'));
     /* Focus the input: the typing practices are always keyboard
        driven. */
     $('#answerInput').focus();
@@ -396,6 +529,10 @@
 
   function check() {
     if (!waitingCheck) return;
+    if (practice === 'points') {
+      checkPoints();
+      return;
+    }
     var raw = $('#answerInput').value;
     /* Normalise: strip whitespace, map the other separator to the
        locale's one (the person may hesitate). The number itself
@@ -424,6 +561,7 @@
     App.feedback.success($('#feedback'));
     $('#feedback').textContent += ' ' + t('correctFormat').replace('{n}', case_.correct);
     waitingCheck = false;
+    if (practice === 'points') renderPointsBoard();
     hide($('#checkAnswer'));
     show($('#nextTask'));
     $('#nextTask').focus();
@@ -471,30 +609,36 @@
     switchTo(finishScreen);
   }
 
-  /* ----------- Start a typing practice ----------- */
+  /* ----------- Start a practice ----------- */
 
   function startPractice(id) {
     practice = id;
-    var lista = DATA.ranges[id];
-    var min = lista[0].min;
-    var max = lista[lista.length - 1].max;
-    var rounds = DATA.perRound;
     round = [];
-    var usedNums = {};
-    while (round.length < rounds) {
-      var n = randomInt(min, max);
-      /* Allow repetition after 4 distinct numbers in a row. */
-      if (!usedNums[n] || Object.keys(usedNums).length > 4) {
-        round.push({ n: n });
-        usedNums[n] = true;
-        if (Object.keys(usedNums).length > 6) usedNums = {};
+    if (id === 'points') {
+      /* One entry per number, from thousands up to billions. Not
+         shuffled on purpose: the size of the numbers goes up. */
+      round = DATA.pointsSequence.map(function (level) { return { level: level }; });
+    } else {
+      var lista = DATA.ranges[id];
+      var min = lista[0].min;
+      var max = lista[lista.length - 1].max;
+      var rounds = DATA.perRound;
+      var usedNums = {};
+      while (round.length < rounds) {
+        var n = randomInt(min, max);
+        /* Allow repetition after 4 distinct numbers in a row. */
+        if (!usedNums[n] || Object.keys(usedNums).length > 4) {
+          round.push({ n: n });
+          usedNums[n] = true;
+          if (Object.keys(usedNums).length > 6) usedNums = {};
+        }
       }
+      /* The dedup loop above does not visit rounds in random order; calling
+         shuffle here makes the round order present the activity as an
+         unguessable sequence (the contract in doc/<locale>/tecnico.md
+         §2.2.1: every activity shuffles its questions and options). */
+      round = App.utils.shuffle(round);
     }
-    /* The dedup loop above does not visit rounds in random order; calling
-       shuffle here makes the round order present the activity as an
-       unguessable sequence (the contract in doc/<locale>/tecnico.md
-       §2.2.1: every activity shuffles its questions and options). */
-    round = App.utils.shuffle(round);
     index = 0;
     inReinforce = false;
     fixedCase = null;
@@ -513,7 +657,7 @@
     reinforceIndex = 0;
     inReinforce = true;
     App.reinforce.banner.set(
-      t('reinforceTitle') + ' â€” ' +
+      t('reinforceTitle') + ' — ' +
       t('reinforceIntro').replace('{n}', reinforceTotal)
     );
     showReinforce(reinforceList[0]);
@@ -565,7 +709,7 @@
     });
   })();
 
-  /* ---- Typing practices ---- */
+  /* ---- Typing practices and the points game ---- */
   $('#checkAnswer').addEventListener('click', check);
   $('#answerInput').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') check();
@@ -575,8 +719,6 @@
   if (elListenBtn) elListenBtn.addEventListener('click', function () {
     if (case_ && case_.audio) if (false && App.tts && App.tts.speak) App.tts.speak(case_.audio);
   });
-  $('#playAgain').addEventListener('click', function () { startPractice(practice); });
-  $('#chooseAnother').addEventListener('click', function () { switchTo(menuScreen); });
   $('#backToMenu').addEventListener('click', function () { switchTo(menuScreen); });
 
   function init() {

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-i18n-title="title">
 <head>
   <meta charset="UTF-8">
@@ -11,32 +11,34 @@
 </head>
 <body>
   <div class="container">
-    <a href="../../" class="back-link" data-i18n="core.back">â† Volver</a>
+    <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
     <header class="tool-header centered">
-      <h1 data-i18n="title">ðŸ‘€ Leer y Escribir NÃºmeros</h1>
+      <h1 data-i18n="title">👀 Leer y Escribir Números</h1>
       <div class="row center-row">
       <p id="instruction" data-i18n="instruction">Lee y escribe números grandes.</p>
       </div>
-      <p class="stars" id="stars">â­ 0</p>
+      <p class="stars" id="stars">⭐ 0</p>
     </header>
 
     <main>
-      <!-- Menú principal: las tres prácticas de escritura (leer / escribir / puntos).
+      <!-- Menú principal: las tres prácticas (leer / escribir / poner los puntos).
            Es la ÚNICA pantalla sin "hidden" en el marcado: si app.js no llegara a pintarse,
            la persona ve el menú en vez de una página en blanco. app.js la elige igualmente en init(). -->
       <section id="screenMenu" class="stack" aria-labelledby="menuTitle">
-        <h2 id="menuTitle" data-i18n="choosePractice">Elige quÃ© quieres practicar.</h2>
+        <h2 id="menuTitle" data-i18n="choosePractice">Elige qué quieres practicar.</h2>
         <div class="practice-grid" id="practiceGrid"></div>
       </section>
 
 
-      <!-- ============ PrÃ¡cticas de escritura ============
-           Zonas por modo (todas viven aquÃ­, app.js muestra/oculta
-           segÃºn el modo):
-             - #numberShown: nÃºmero coloreado por posiciÃ³n (leer).
-             - #numberWithSep: nÃºmero SIN separador (puntos).
-             - #answerInput: input de texto para leer/escribir/puntos.
-             - #listenBtn: botÃ³n de audio (escribir). -->
+      <!-- ============ Prácticas ============
+           Zonas por modo (todas viven aquí, app.js muestra/oculta
+           según el modo):
+             - #numberShown: número coloreado por posición (leer).
+             - #pointsZone: juego de los puntos. #pointsBoard son las cifras
+               con los huecos para tocar; #pointsTray son los puntos que
+               quedan por colocar; #pointsLeft lo dice con texto.
+             - #answerInput: input de texto para leer/escribir.
+             - #listenBtn: botón de audio (escribir). -->
       <section id="screenTask" class="stack hidden" aria-live="polite">
         <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
         <p class="progress-text" id="progressText"></p>
@@ -47,24 +49,28 @@
 
           <div class="number-shown" id="numberShown" aria-live="polite"></div>
 
-          <div class="number-shown number-shown--raw" id="numberWithSep" aria-live="polite"></div>
+          <div class="points-zone hidden" id="pointsZone">
+            <div class="points-board" id="pointsBoard" role="group" data-i18n-aria="pointsBoardAria" aria-label="Número para colocar los puntos"></div>
+            <div class="points-tray" id="pointsTray" aria-hidden="true"></div>
+            <p class="points-left" id="pointsLeft" aria-live="polite"></p>
+          </div>
 
-          <button type="button" class="btn hidden" id="listenBtn" data-i18n="core.listen">ðŸ”Š Escuchar</button>
+          <button type="button" class="btn hidden" id="listenBtn" data-i18n="core.listen">🔊 Escuchar</button>
 
           <input type="text" id="answerInput" class="answer-input hidden"
                  inputmode="numeric" autocomplete="off" autocapitalize="off"
                  autocorrect="off" spellcheck="false"
-                 data-i18n-aria="answerInputAria" aria-label="Escribe el nÃºmero">
+                 data-i18n-aria="answerInputAria" aria-label="Escribe el número">
 
           <p class="feedback" id="feedback" aria-live="polite"></p>
           <button type="button" class="btn" id="checkAnswer" data-i18n="check">Comprobar</button>
-          <button type="button" class="btn hidden" id="nextTask" data-i18n="core.next">Siguiente â†’</button>
+          <button type="button" class="btn hidden" id="nextTask" data-i18n="core.next">Siguiente →</button>
         </article>
-        <button type="button" class="btn btn-secondary" id="backToMenu" data-i18n="core.backToMenu">Volver al menÃº</button>
+        <button type="button" class="btn btn-secondary" id="backToMenu" data-i18n="core.backToMenu">Volver al menú</button>
       </section>
 
       <section id="screenFinish" class="stack hidden centered">
-        <h2 data-i18n="roundComplete">Â¡Ronda terminada!</h2>
+        <h2 data-i18n="roundComplete">¡Ronda terminada!</h2>
         <p id="finishText"></p>
         <p id="contexto" class="contexto"></p>
         <p id="explanation" class="explanation"></p>

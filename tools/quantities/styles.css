@@ -1,8 +1,8 @@
 /* Quantities — tool-specific styles.
 
-   Three typing practices (read / write / points) plus the
-   'pares/impares' practice. The 'groups' practice moved to
-   mental-math in 2026-10: its CSS and screens travelled with it.
+   Three practices: read, write and the points game. The 'groups'
+   practice moved to mental-math in 2026-10: its CSS and screens
+   travelled with it.
 
    Contract "actividad aislada": no styles are imported from other
    tools/, so every class used here is defined here. Only .btn,
@@ -50,12 +50,132 @@
   word-break: break-word;
 }
 
-.number-shown--raw {
-  /* Modo "puntos": lo que se ve NO tiene separador; el usuario debe
-     añadirlo. Fondo neutro y borde discontinuo para que se note que
-     "aquí falta algo". */
+/* ============================================================
+   Juego de los puntos
+   El número se ve SIN separadores. La persona toca los huecos
+   entre cifras para poner los puntos que tiene en la bandeja.
+   ============================================================ */
+.points-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio);
+  width: 100%;
+}
+
+.points-board {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radio);
+  border: 3px solid var(--mod-razonamiento);
   background: var(--color-superficie);
-  border-style: dashed;
+  font-size: clamp(22px, 6.8vw, 46px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.pt-digit {
+  display: inline-block;
+  min-width: 0.6em;
+  text-align: center;
+}
+
+/* Hueco entre dos cifras. El dibujo es estrecho. El área de toque
+   crece sobre todo en alto: en horizontal no puede invadir al hueco
+   vecino (las cifras de un número largo están muy juntas en un móvil). */
+.pt-gap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.45em;
+  height: 1.4em;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-bottom: 3px dashed var(--mod-razonamiento);
+  border-radius: 0;
+  background: none;
+  color: var(--mod-razonamiento);
+  font: inherit;
+  cursor: pointer;
+}
+
+.pt-gap::before {
+  content: '';
+  position: absolute;
+  inset: -14px -6px;
+}
+
+.pt-gap:focus-visible {
+  outline: 3px solid var(--mod-razonamiento);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.pt-gap:disabled { cursor: default; }
+
+.pt-gap.is-placed {
+  border-bottom-style: solid;
+  overflow: visible;
+}
+
+.pt-point {
+  font-size: 1.2em;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Punto mal colocado: fondo, borde macizo y una marca ✗. El color no
+   es lo único que lo dice (WCAG 1.4.1). */
+.pt-gap.is-wrong {
+  background: var(--color-animo-suave);
+  border-bottom-style: solid;
+  border-radius: 6px;
+}
+
+.pt-mark {
+  position: absolute;
+  top: -0.9em;
+  right: -0.3em;
+  font-size: 0.5em;
+  font-weight: 800;
+  color: var(--color-texto);
+  line-height: 1;
+}
+
+.points-tray {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.tray-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid var(--mod-razonamiento);
+  background: var(--mod-razonamiento-suave);
+  color: var(--mod-razonamiento);
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.points-left {
+  margin: 0;
+  color: var(--color-texto-suave);
+  font-weight: 700;
 }
 
 .answer-input {

@@ -1,10 +1,11 @@
-﻿/* ============================================================
+/* ============================================================
    Calculia — Cantidades: textos (ES)
    Archivo específico del idioma. Se carga condicionalmente
    desde index.html según App.i18n.locale().
 
-   El diccionario cubre las tres prácticas de escritura
-   (leer / escribir / puntos).
+   El diccionario cubre las tres prácticas (leer / escribir /
+   poner los puntos). El juego de los puntos sube de miles a miles
+   de millones: la persona coloca los puntos en los huecos del número.
    La antigua práctica "contar en grupos" se mudó a Cálculo
    Mental en 2026-10: sus textos viven ahora en
    tools/mental-math/strings.es.js.
@@ -28,23 +29,35 @@
     writeName: 'Escribir números',
     writeDetail: 'Escucha el número y escríbelo.',
     pointsName: 'Poner los puntos',
-    pointsDetail: 'Separa los millares con puntos.',
+    pointsDetail: 'Coloca los puntos. De miles a miles de millones.',
 
     /* ---------- Prácticas de escritura ----------
-       {n} = número ya formateado. {nRaw} = número sin separador. */
+       {n} = número ya formateado. */
     promptRead: 'Escribe este número: {n}',
     promptWrite: 'Escribe el número que oyes.',
-    promptPoints: 'Escribe este número con sus puntos: {nRaw}',
 
     detailRead: 'Copia las cifras. Añade el punto cada tres, si toca.',
     detailWrite: 'Pulsa 🔊 si necesitas escucharlo otra vez.',
-    detailPoints: 'Cuenta tres cifras desde la derecha y pon el punto.',
+
+    /* ---------- Juego de los puntos ----------
+       {count} = puntos que faltan por colocar en este número.
+       {n} = cuántos puntos quedan en la bandeja. */
+    promptPoints: 'Pon {count} puntos en este número.',
+    promptPointsOne: 'Pon 1 punto en este número.',
+    detailPoints: 'Toca un hueco para poner un punto. Toca un punto para quitarlo.',
+    pointsLeft: 'Puntos por colocar: {n}',
+    pointsMissing: 'Todavía quedan puntos por colocar.',
+    pointsNoneLeft: 'Ya no quedan puntos. Toca uno de los colocados para quitarlo.',
+    pointsWrongMarked: 'Revisa los puntos marcados con ✗.',
+    gapEmptyAria: 'Hueco vacío: toca para poner un punto.',
+    gapFilledAria: 'Punto: toca para quitarlo.',
+    pointsBoardAria: 'Número para colocar los puntos',
 
     /* Pistas socráticas: enseñan el mecanismo, nunca dan la
        respuesta (ver SPEC: la anatomía socrática completa). */
     hintRead: 'Cuenta las cifras. Si hay cuatro o más, agrúpalas de tres desde la derecha.',
     hintWrite: 'Pulsa 🔊 y escribe lo que oigas.',
-    hintPoints: 'El punto va cada tres cifras, empezando por la derecha.',
+    hintPoints: 'Cuenta las cifras de tres en tres, desde la derecha. Entre un grupo y el siguiente va un punto.',
 
     /* Refuerzo: al terminar la ronda, los fallos se repiten en una
        mini-ronda. Las estrellas ya ganadas no se quitan. */

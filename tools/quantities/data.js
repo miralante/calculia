@@ -4,8 +4,10 @@
    Three practices in the menu:
      - read   : the number is shown and the user copies it.
      - write  : the number is spoken and the user writes it.
-     - points : the number is shown WITHOUT separator; the user
-                must type it WITH the separator in the right place.
+     - points : a game. The number is shown with no separators and
+                the user places the points (dots in Spanish, commas
+                in English) in the right gaps, from thousands up to
+                billions. See app.js.
 
    "Thousand" rule (see ranges below): < 10.000 has no separator;
    >= 10.000 does. In read/write modes the format shown matches
@@ -21,7 +23,7 @@
 
 var DATA = {
   perRound: 6,
-  /* Absolute ceiling of the read/write/points practices.
+  /* Absolute ceiling of the read/write practices.
      The ceiling is 999,999,999, which falls in the "mil millones"
      group; we do not introduce "billón". */
   ceiling: 999999999,
@@ -30,7 +32,7 @@ var DATA = {
     { id: 'write', icon: '✍️' },
     { id: 'points', icon: '·' }
   ],
-  /* Ranges for the three typing practices. */
+  /* Ranges for the read and write practices. */
   ranges: {
     read: [
       { id: 'l1', min: 0,         max: 99 },
@@ -46,15 +48,19 @@ var DATA = {
       { id: 'e4', min: 100000,    max: 999999 },
       { id: 'e5', min: 1000000,   max: 999999999 }
     ],
+    /* Levels of the points game, by number of digits. A number with
+       N digits has (N - 1) / 3 points, rounded down, so each level
+       fixes how many points the user must place:
+         p1 = thousands  (1 point):  1.000 to 999.999
+         p2 = millions   (2 points): 1.000.000 to 999.999.999
+         p3 = billions   (3 points): 1.000.000.000 to 999.999.999.999 */
     points: [
-      /* For the exercise to make sense the number must be >= 10.000.
-         In "points" mode the separator is removed; the user must
-         put it back. */
-      { id: 'p1', min: 10000,     max: 99999 },
-      { id: 'p2', min: 100000,    max: 999999 },
-      { id: 'p3', min: 1000000,   max: 9999999 },
-      { id: 'p4', min: 10000000,  max: 99999999 },
-      { id: 'p5', min: 100000000, max: 999999999 }
+      { id: 'p1', minDigits: 4,  maxDigits: 6 },
+      { id: 'p2', minDigits: 7,  maxDigits: 9 },
+      { id: 'p3', minDigits: 10, maxDigits: 12 }
     ]
-  }
+  },
+  /* Order of the points rounds: one random number per entry, going
+     up from thousands to billions. Not shuffled on purpose. */
+  pointsSequence: ['p1', 'p1', 'p2', 'p2', 'p3', 'p3']
 };
