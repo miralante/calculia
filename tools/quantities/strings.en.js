@@ -42,6 +42,7 @@
     promptPointsOne: 'Put 1 comma in this number.',
     detailPoints: 'Drag a comma to its gap. Tap a placed comma to remove it.',
     pointsMissing: 'Some commas are still to be placed.',
+    pointsWrongPlace: 'Wrong place. Move the comma to another gap.',
     pointsNoneLeft: 'There are no commas left. Tap a placed comma to remove it.',
     pointsWrongMarked: 'Check the commas marked with ✗.',
     gapEmptyAria: 'Empty gap: tap to put a comma.',

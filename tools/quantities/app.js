@@ -446,9 +446,16 @@
     document.addEventListener('pointercancel', cancelDrag);
   }
 
+  /* Any part of a placed gap picks its point up, not only the dot. */
   function onBoardPointerDown(e) {
-    var point = e.target.closest ? e.target.closest('.pt-point') : null;
-    if (point) startDrag(e, Number(point.parentNode.getAttribute('data-gap')));
+    var gap = e.target.closest ? e.target.closest('.pt-gap.is-placed') : null;
+    if (gap) startDrag(e, Number(gap.getAttribute('data-gap')));
+  }
+
+  /* The gap element under the pointer, placed or not, or null. */
+  function gapAt(x, y) {
+    var el = document.elementFromPoint(x, y);
+    return el && el.closest ? el.closest('#pointsBoard .pt-gap') : null;
   }
 
   function onTrayPointerDown(e) {
@@ -490,7 +497,13 @@
   function endDrag(e) {
     var d = drag;
     /* Read the target before stopDrag clears the drag state. */
-    var g = d && d.moved ? gapUnder(e.clientX, e.clientY) : null;
+    var g = null;
+    if (d && d.moved) {
+      g = gapUnder(e.clientX, e.clientY);
+      /* A point dropped on a gap that already holds one goes back to
+         where it was, instead of leaving the board. */
+      if (g === null && d.from !== null && gapAt(e.clientX, e.clientY)) g = d.from;
+    }
     stopDrag();
     if (!d || !d.moved) return;   /* a tap: the click does the work */
     justDragged = true;
@@ -516,10 +529,17 @@
       /* Dropped outside any gap: the point goes back to the tray. */
       placed.splice(placed.indexOf(d.from), 1);
     }
-    wrongGaps = [];
-    $('#feedback').textContent = '';
+    refreshWrong(g);
     renderPointsBoard(g !== null ? g : undefined);
     renderPointsTray();
+  }
+
+  /* Marks every placed point that is not in a right gap, and says so
+     when the point just placed (lastGap) is one of them. */
+  function refreshWrong(lastGap) {
+    wrongGaps = placed.filter(function (p) { return case_.gaps.indexOf(p) === -1; });
+    var wrongNow = lastGap !== null && wrongGaps.indexOf(lastGap) !== -1;
+    $('#feedback').textContent = wrongNow ? t('pointsWrongPlace') : '';
   }
 
   function gapCenter(g) {
@@ -579,9 +599,7 @@
       $('#feedback').textContent = t('pointsNoneLeft');
       return;
     }
-    /* Any change clears the marks of the last check. */
-    wrongGaps = [];
-    $('#feedback').textContent = '';
+    refreshWrong(at === -1 ? i : null);
     renderPointsBoard(i);
     renderPointsTray();
     if (fromRect) flyIn(i, fromRect);

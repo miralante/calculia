@@ -45,6 +45,7 @@
     promptPointsOne: 'Pon 1 punto en este número.',
     detailPoints: 'Arrastra un punto al hueco donde va. Toca un punto para quitarlo.',
     pointsMissing: 'Todavía quedan puntos por colocar.',
+    pointsWrongPlace: 'Posición incorrecta. Mueve el punto a otro hueco.',
     pointsNoneLeft: 'Ya no quedan puntos. Toca uno de los colocados para quitarlo.',
     pointsWrongMarked: 'Revisa los puntos marcados con ✗.',
     gapEmptyAria: 'Hueco vacío: toca para poner un punto.',

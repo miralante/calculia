@@ -140,9 +140,25 @@
 
 /* Punto mal colocado: fondo, borde macizo y una marca ✗. El color no
    es lo único que lo dice (WCAG 1.4.1). */
-.pt-gap.is-wrong {
-  background: var(--color-animo-suave);
+/* Wrong place: the gap turns red and the point sits in a red circle.
+   The ✗ mark and the text say it too, not only the colour. */
+.pt-gap.is-wrong,
+.pt-gap.is-wrong:hover:not(:disabled) {
+  background: #FDECEA;
   border-radius: 6px;
+}
+
+.pt-gap.is-wrong .pt-point {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 1.3em;
+  height: 1.3em;
+  border: 3px solid #C62828;
+  border-radius: 50%;
+  color: #C62828;
 }
 
 .pt-mark {
@@ -151,7 +167,7 @@
   right: -0.3em;
   font-size: 0.5em;
   font-weight: 800;
-  color: var(--color-texto);
+  color: #C62828;
   line-height: 1;
 }
 
