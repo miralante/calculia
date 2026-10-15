@@ -2,8 +2,11 @@
    Calculia — Cantidades.
 
    Three practices in the menu:
-     - read   : the number is shown and the user copies it.
-     - write  : the number is spoken and the user writes it.
+     - read   : the number is shown in digits, coloured by group of
+                three, and the user writes it IN WORDS.
+     - write  : the number is only spoken (🔊) and the user writes it
+                IN WORDS.
+     Read and write go up in the round: from 4 digits (thousands) to 9.
      - points : a game. The number is shown with no separators and
                 the user drags the points (dots in Spanish, commas
                 in English) from the right into the gaps between
@@ -32,23 +35,10 @@ var DATA = {
     { id: 'write', icon: '✍️' },
     { id: 'points', icon: '·' }
   ],
-  /* Ranges for the read and write practices. */
-  ranges: {
-    read: [
-      { id: 'l1', min: 0,         max: 99 },
-      { id: 'l2', min: 100,       max: 9999 },
-      { id: 'l3', min: 10000,     max: 99999 },
-      { id: 'l4', min: 100000,    max: 999999 },
-      { id: 'l5', min: 1000000,   max: 999999999 }
-    ],
-    write: [
-      { id: 'e1', min: 0,         max: 99 },
-      { id: 'e2', min: 100,       max: 9999 },
-      { id: 'e3', min: 10000,     max: 99999 },
-      { id: 'e4', min: 100000,    max: 999999 },
-      { id: 'e5', min: 1000000,   max: 999999999 }
-    ]
-  },
+  /* Read and write practices: one entry per number, going up one digit
+     at a time, from thousands (4 digits) to 9 digits. Not shuffled on
+     purpose: the numbers get bigger as the round goes on. */
+  wordDigits: [4, 5, 6, 7, 8, 9],
   /* Points game: the digit count of each number, one entry per round
      item, going up one digit at a time. A number with N digits has
      (N - 1) / 3 points, rounded down:

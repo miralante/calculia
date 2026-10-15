@@ -58,10 +58,10 @@
 
           <button type="button" class="btn hidden" id="listenBtn" data-i18n="core.listen">🔊 Escuchar</button>
 
-          <input type="text" id="answerInput" class="answer-input hidden"
-                 inputmode="numeric" autocomplete="off" autocapitalize="off"
+          <textarea id="answerInput" class="answer-input write-input hidden"
+                 rows="2" maxlength="200" autocomplete="off" autocapitalize="off"
                  autocorrect="off" spellcheck="false"
-                 data-i18n-aria="answerInputAria" aria-label="Escribe el número">
+                 data-i18n-aria="answerInputAria" aria-label="Escribe el número con letras"></textarea>
 
           <p class="feedback" id="feedback" aria-live="polite"></p>
           <button type="button" class="btn" id="checkAnswer" data-i18n="check">Comprobar</button>

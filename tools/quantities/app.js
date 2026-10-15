@@ -3,8 +3,10 @@
 
    Three practices share this file:
 
-     - read   : the number is shown and the user copies it.
-     - write  : the number is spoken and the user writes it.
+     - read   : the number is shown in digits, coloured by group, and
+                the user writes it in words.
+     - write  : the number is spoken (🔊) and the user writes it in
+                words. Read and write go from 4 digits up to 9.
      - points : a game. The number is shown with no separator; the
                 user drags the points from the right into the gaps
                 between the digits (dots in Spanish, commas in
@@ -81,20 +83,6 @@
 
   function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
-  /* Picks a case from the practice pool without repeating in the round
-     (read and write only; the points game has its own generator). */
-  function drawCase(p) {
-    var lista = DATA.ranges[p];
-    var min = lista[0].min, max = lista[lista.length - 1].max;
-    var n;
-    var avoidTries = 0;
-    do {
-      n = randomInt(min, max);
-      avoidTries += 1;
-    } while (round.length > 0 && round[round.length - 1].n === n && avoidTries < 5);
-    return n;
-  }
-
   /* ----------- Number formatting ----------- */
 
   /* Project rule: below 10.000 NO separator is used; from 10.000 up
@@ -116,36 +104,24 @@
     return negative ? '−' + out : out;
   }
 
-  /* ----------- Digit position -----------
-     Absolute position 0 = units, 1 = tens, ..., 9 = units of
-     thousand millions. */
-  /* CSS class per absolute position. The first four are the GROUP
-     classes (grp-unit / grp-ten / grp-hundred / grp-thousand), so a
-     digit in a big number wears exactly the colour the carousel, the
-     reminder and the worked examples gave to its group — one colour
-     per group across the whole activity. Positions 4 and up (the
-     millions the read practice can reach) fall back to the old
-     per-position scheme. */
-  var POS_CLASS = ['grp-unit', 'grp-ten', 'grp-hundred', 'grp-thousand',
-    'digit-u cifra-mil', 'digit-d cifra-mil', 'digit-c cifra-mil',
-    'digit-u cifra-millon', 'digit-d cifra-millon', 'digit-c cifra-millon',
-    'digit-u cifra-mil-millones'];
+  /* ----------- Colour by group -----------
+     One colour per group of three digits. The groups are the ones the
+     separator (dot in Spanish, comma in English) makes: units,
+     thousands, millions... Every digit of a group shares its colour
+     and the next group changes it, so the colour says which group a
+     digit belongs to. Classes: dot-group-0..3 in styles.css. */
+  var GROUP_CLASS = ['dot-group-0', 'dot-group-1', 'dot-group-2', 'dot-group-3'];
 
   function coloredDigits(n) {
     var s = String(Math.abs(n));
     var sep = separator();
-    var groups = [];
-    for (var i = s.length; i > 0; i -= 3) groups.unshift(s.slice(Math.max(0, i - 3), i));
     var htmlOut = '';
-    for (var g = 0; g < groups.length; g++) {
-      var cuerpo = '';
-      for (var j = 0; j < groups[g].length; j++) {
-        var posAbs = (groups.length - 1 - g) * 3 + (groups[g].length - 1 - j);
-        var clase = POS_CLASS[posAbs] || 'digit-u';
-        cuerpo += '<span class="' + clase + '">' + groups[g][j] + '</span>';
-      }
-      if (g > 0) htmlOut += '<span class="digit-sep">' + sep + '</span>';
-      htmlOut += cuerpo;
+    for (var i = 0; i < s.length; i++) {
+      var fromRight = s.length - 1 - i;
+      /* The separator goes in front of the first digit of each new group. */
+      if (i > 0 && fromRight % 3 === 2) htmlOut += '<span class="digit-sep">' + sep + '</span>';
+      var group = Math.floor(fromRight / 3);
+      htmlOut += '<span class="' + GROUP_CLASS[group % GROUP_CLASS.length] + '">' + s.charAt(i) + '</span>';
     }
     if (n < 0) htmlOut = '<span class="sign">−</span>' + htmlOut;
     return htmlOut;
@@ -208,7 +184,8 @@
       /* 21-29: veinti + uno/dos/... (with accent on 22-29) */
       var uES = restES - 20;
       var txtES = 'veinti';
-      if (uES === 1) txtES += 'uno';
+      if (uES === 0) txtES = 'veinte';
+      else if (uES === 1) txtES += 'uno';
       else if (uES === 2) txtES += 'dós';
       else if (uES === 3) txtES += 'trés';
       else if (uES === 4) txtES += 'cuatro';
@@ -228,14 +205,26 @@
     return partsES.join(' ');
   }
 
-  /* Apocope: "veintiún" / "veintiuna" is used before "millones". To
-     keep it simple and because the user hears the audio, we keep
-     the full forms ("veintiuno millones"). Valid in standard Spanish
-     for reading aloud. */
+  /* Apocope (es): a number that ends in "uno" loses the "o" before a
+     masculine noun (mil, millón, millones): "veintiún mil", "treinta y
+     un millones". The written form is what the person must type, so
+     it follows the spelling rules, not the spoken shortcut. */
+  function apocopeES(txt) {
+    if (/veintiuno$/.test(txt)) return txt.replace(/veintiuno$/, 'veintiún');
+    return txt.replace(/\buno$/, 'un');
+  }
+
+  /* Words are compared without case, spaces, hyphens, commas or dots:
+     "Veinte-y-dos" and "veinte y dos" are the same answer. Accents are
+     NOT ignored: they are part of the spelling being practised. */
+  function normaliseWords(s) {
+    return s.toLowerCase().replace(/[-,.]/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
   function readGroup(n, locale, singular, plural) {
-    if (n === 1) return locale === 'en' ? 'one ' + singular : singular;
-    var num = threeDigits(n, locale);
-    return num + ' ' + (locale === 'en' ? plural : (n === 1 ? singular : plural));
+    if (n === 1) return locale === 'en' ? 'one ' + singular : 'un ' + singular;
+    var num = locale === 'en' ? threeDigits(n, 'en') : apocopeES(threeDigits(n, 'es'));
+    return num + ' ' + plural;
   }
 
   function readNumber(n, locale) {
@@ -291,7 +280,7 @@
       partsES.push(readGroup(millionsES, 'es', 'millón', 'millones'));
       var restFullES = '';
       if (thousandsES) {
-        restFullES += (thousandsES === 1 ? 'mil' : threeDigits(thousandsES, 'es') + ' mil');
+        restFullES += (thousandsES === 1 ? 'mil' : apocopeES(threeDigits(thousandsES, 'es')) + ' mil');
       }
       if (unitsES) {
         if (thousandsES) restFullES += ' ';
@@ -299,7 +288,7 @@
       }
       if (restFullES) partsES.push(restFullES);
     } else if (thousandsES) {
-      partsES.push(thousandsES === 1 ? 'mil' : threeDigits(thousandsES, 'es') + ' mil');
+      partsES.push(thousandsES === 1 ? 'mil' : apocopeES(threeDigits(thousandsES, 'es')) + ' mil');
       if (unitsES) partsES.push(threeDigits(unitsES, 'es'));
     } else {
       partsES.push(threeDigits(unitsES, 'es'));
@@ -310,35 +299,24 @@
 
   /* ----------- Generators ----------- */
 
-  function genRead() {
-    var n = drawCase('read');
+  /* Read and write share one generator. The digit count comes from the
+     round (see DATA.writeDigits): thousands first, up to 9 digits. The
+     answer is always the number spelled out in words.
+       read : the number is shown in digits, coloured by group.
+       write: the number is only spoken (🔊); nothing is shown. */
+  function genWords() {
+    var digits = round[index].digits;
+    var n = randomInt(Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
+    var words = readNumber(n, App.i18n.locale());
+    var reading = practice === 'read';
     return {
       n: n,
       tipo: 'typing',
-      /* The number is shown already formatted (with separator if
-         applicable). The user must copy it EXACTLY: with separator
-         if >= 10.000, without it if < 10.000. This trains reading
-         the sign. */
-      show: format(n),
-      correct: format(n),
-      prompt: t('promptRead').replace('{n}', format(n)),
-      detail: t('detailRead'),
-      audio: readNumber(n, App.i18n.locale())
-    };
-  }
-
-  function genWrite() {
-    var n = drawCase('write');
-    return {
-      n: n,
-      tipo: 'typing',
-      /* In "write" the number is NOT shown, only spoken.
-         The show field stays empty; the 🔊 button appears. */
-      show: '',
-      correct: format(n),
-      prompt: t('promptWrite'),
-      detail: t('detailWrite'),
-      audio: readNumber(n, App.i18n.locale())
+      show: reading ? format(n) : '',
+      correct: words,
+      prompt: t(reading ? 'promptRead' : 'promptWrite'),
+      detail: t(reading ? 'detailRead' : 'detailWrite'),
+      audio: words
     };
   }
 
@@ -374,8 +352,8 @@
   }
 
   var GENERATORS = {
-    read: genRead,
-    write: genWrite,
+    read: genWords,
+    write: genWords,
     points: genPoints
   };
 
@@ -665,9 +643,11 @@
     $('#taskIcon').textContent = '';
 
     if (practice === 'read') {
+      /* Read: the number is shown in digits, coloured by group. */
       $('#numberShown').innerHTML = coloredDigits(case_.n);
       show($('#numberShown'));
     } else if (practice === 'write') {
+      /* Write: nothing is shown; the person listens with 🔊. */
       show($('#listenBtn'));
     } else if (practice === 'points') {
       placed = [];
@@ -699,13 +679,8 @@
       return;
     }
     var raw = $('#answerInput').value;
-    /* Normalise: strip whitespace, map the other separator to the
-       locale's one (the person may hesitate). The number itself
-       must match. */
-    var sepLocal = separator();
-    var sepOther = sepLocal === '.' ? ',' : '.';
-    var clean = raw.trim().replace(/\s/g, '').replace(sepOther, sepLocal);
-    if (clean === case_.correct) {
+    /* Read and write both ask for the number in words. */
+    if (normaliseWords(raw) === normaliseWords(case_.correct)) {
       correct();
     } else {
       attempts += 1;
@@ -726,7 +701,9 @@
     App.feedback.success($('#feedback'));
     $('#feedback').textContent += ' ' + t('correctFormat').replace('{n}', case_.correct);
     waitingCheck = false;
-    if (practice === 'points') renderPointsBoard();
+    /* Challenge met: the number is shown with each group of three in its
+       own colour, so it is easier to see its groups. */
+    if (practice === 'points') $('#pointsBoard').innerHTML = coloredDigits(case_.n);
     hide($('#checkAnswer'));
     /* After a right answer the person can hear the number read aloud. */
     if (App.tts && App.tts.available) show($('#hearNumber'));
@@ -786,25 +763,10 @@
          purpose: the numbers get bigger as the round goes on. */
       round = DATA.pointsDigits.map(function (digits) { return { digits: digits }; });
     } else {
-      var lista = DATA.ranges[id];
-      var min = lista[0].min;
-      var max = lista[lista.length - 1].max;
-      var rounds = DATA.perRound;
-      var usedNums = {};
-      while (round.length < rounds) {
-        var n = randomInt(min, max);
-        /* Allow repetition after 4 distinct numbers in a row. */
-        if (!usedNums[n] || Object.keys(usedNums).length > 4) {
-          round.push({ n: n });
-          usedNums[n] = true;
-          if (Object.keys(usedNums).length > 6) usedNums = {};
-        }
-      }
-      /* The dedup loop above does not visit rounds in random order; calling
-         shuffle here makes the round order present the activity as an
-         unguessable sequence (the contract in doc/<locale>/tecnico.md
-         §2.2.1: every activity shuffles its questions and options). */
-      round = App.utils.shuffle(round);
+      /* Read and write: one entry per number, from 4 digits (thousands)
+         up to 9. Not shuffled on purpose: the numbers get bigger as the
+         round goes on, like the points game. */
+      round = DATA.wordDigits.map(function (digits) { return { digits: digits }; });
     }
     index = 0;
     inReinforce = false;
@@ -878,8 +840,13 @@
 
   /* ---- Typing practices and the points game ---- */
   $('#checkAnswer').addEventListener('click', check);
+  /* The answer box is a textarea (it wraps like a word processor), so
+     Enter checks the answer and Shift+Enter starts a new line. */
   $('#answerInput').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') check();
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      check();
+    }
   });
   $('#nextTask').addEventListener('click', goNext);
   $('#pointsBoard').addEventListener('pointerdown', onBoardPointerDown);

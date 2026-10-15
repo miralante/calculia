@@ -3,6 +3,7 @@
 
   App.i18n.register({
     title: '🧠 Head Math',
+    btnMenu: 'Back to the start',
     instruction: 'Count in your head, make 10 first or split into 10s with colored dots.',
     chooseOperation: 'Choose what you want to practise.',
     stepsName: 'Count in your head',

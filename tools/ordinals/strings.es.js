@@ -26,6 +26,7 @@
 
   App.i18n.register({
     title: '🥇 Números ordinales',
+    btnMenu: 'Volver al inicio',
     instruction: 'Aprende qué lugar ocupa cada uno.',
 
     /* ---------- Pantalla 1: la serie ---------- */

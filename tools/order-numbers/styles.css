@@ -1,0 +1,165 @@
+/* Order numbers — tool-specific styles.
+
+   Contract "actividad aislada": no styles are imported from other
+   tools/, so every class used here is defined here. Only .btn,
+   .card, .stack, .feedback and .explanation come from the shared
+   sheets. */
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+/* ============================================================
+   Tarjeta de la ronda
+   ============================================================ */
+.task-card { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); text-align: center; border-color: var(--mod-razonamiento-suave); }
+.task-card h2 { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); }
+.task-detail { margin: 0; color: var(--color-texto-suave); }
+
+.contexto, .explanation, .transfer { color: var(--color-texto-suave); }
+.transfer { max-width: 480px; }
+
+/* ============================================================
+   Huecos y números. Sin rayas ni círculos fuera de lo necesario:
+   el círculo solo aparece en un número fuera del tablero y en un
+   número mal colocado.
+   ============================================================ */
+.order-zone { width: 100%; }
+
+.order-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--espacio);
+  width: 100%;
+}
+
+.order-board {
+  flex: 1 1 260px;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.order-tray {
+  flex: 0 1 200px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Hueco vacío: una caja suave, sin raya ni borde. */
+.order-slot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 52px;
+  padding: 6px 10px;
+  margin: 0;
+  border: none;
+  border-radius: var(--radio);
+  background: var(--mod-razonamiento-suave);
+  color: var(--color-texto);
+  font: inherit;
+  font-size: clamp(18px, 5vw, 26px);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.order-slot:hover:not(:disabled) { filter: brightness(0.96); }
+.order-slot:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 3px; }
+.order-slot:disabled { cursor: default; }
+.order-slot.is-target { filter: brightness(0.9); }
+
+/* Número bien colocado: se queda fijo, sin círculo. */
+.order-slot.is-locked { background: var(--color-acierto-suave); color: var(--color-acierto); }
+
+/* Número mal colocado: el hueco se pone rojo y el número va en un
+   círculo rojo con ✗. El color no es lo único que lo dice (WCAG 1.4.1). */
+.order-slot.is-wrong { background: #FDECEA; }
+.order-slot.is-wrong .order-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0.15em 0.5em;
+  border: 3px solid #C62828;
+  border-radius: 999px;
+  background: var(--color-superficie);
+  color: #C62828;
+}
+
+.order-value { line-height: 1; white-space: nowrap; }
+
+.order-mark {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 0.5em;
+  font-weight: 800;
+  line-height: 1;
+  color: #C62828;
+}
+.order-slot.is-locked .order-mark { color: var(--color-acierto); }
+
+/* Número fuera del tablero: burbuja con borde, en la bandeja. */
+.order-piece {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  min-height: 44px;
+  padding: 6px 14px;
+  box-sizing: border-box;
+  border: 3px solid var(--mod-razonamiento);
+  border-radius: 999px;
+  background: var(--mod-razonamiento-suave);
+  color: var(--mod-razonamiento);
+  font: inherit;
+  font-size: clamp(18px, 5vw, 24px);
+  font-weight: 900;
+  line-height: 1;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.order-piece:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 3px; }
+.order-piece.is-selected { background: var(--mod-razonamiento); color: var(--color-superficie); }
+.order-piece:disabled { cursor: default; opacity: 0.6; }
+
+/* Número que se arrastra: sigue al puntero. */
+.order-ghost {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  height: 44px;
+  padding: 6px 14px;
+  box-sizing: border-box;
+  border: 3px solid var(--mod-razonamiento);
+  border-radius: 999px;
+  background: var(--mod-razonamiento-suave);
+  color: var(--mod-razonamiento);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* ============================================================
+   Responsive — 320 / 375 / 768 / desktop
+   ============================================================ */
+@media (max-width: 480px) {
+  .task-card { padding: var(--espacio); }
+  .order-board { flex-basis: 100%; }
+  .order-tray { flex-basis: 100%; }
+}

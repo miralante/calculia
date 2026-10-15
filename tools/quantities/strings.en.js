@@ -22,19 +22,19 @@
        Keys '<id>Name' / '<id>Detail': one entry per entry in
        DATA.practices. */
     readName: 'Read numbers',
-    readDetail: 'Look at the number and write it.',
+    readDetail: 'Look at the number and write it in words.',
     writeName: 'Write numbers',
-    writeDetail: 'Listen to the number and write it.',
+    writeDetail: 'Listen to the number and write it in words.',
     pointsName: 'Put the commas',
     pointsDetail: 'Place the commas. From thousands to billions.',
 
     /* ---------- Reading and writing practices ----------
        {n} = formatted number. */
-    promptRead: 'Write this number: {n}',
-    promptWrite: 'Write the number you hear.',
+    promptRead: 'Write this number in words.',
+    promptWrite: 'Write in words the number you hear.',
 
-    detailRead: 'Copy the digits. Add the comma every three, if needed.',
-    detailWrite: 'Press 🔊 if you need to hear it again.',
+    detailRead: 'Each group of three digits is separated by a comma. Write it in words.',
+    detailWrite: 'Press 🔊 if you need to hear it again. You do not see the number, only hear it.',
 
     /* ---------- Commas game ----------
        {count} = commas still to place in this number. */
@@ -43,7 +43,7 @@
     detailPoints: 'Drag a comma to its gap. Tap a placed comma to remove it.',
     pointsMissing: 'Some commas are still to be placed.',
     pointsWrongPlace: 'Wrong place.',
-    pointsWrongHint: 'There are {k} digits to the right of this gap. Look for a gap with 3, 6 or 9 digits to its right.',
+    pointsWrongHint: 'There must be a comma after three digits, counting from the right.',
     pointsNoneLeft: 'There are no commas left. Tap a placed comma to remove it.',
     pointsWrongMarked: 'Check the commas marked with ✗.',
     gapEmptyAria: 'Empty gap: tap to put a comma.',
@@ -52,8 +52,8 @@
 
     /* Socratic hints: they teach the mechanic, they never give the
        answer away (see SPEC: full socratic anatomy). */
-    hintRead: 'Count the digits. If there are four or more, group them in threes from the right.',
-    hintWrite: 'Press 🔊 and write what you hear.',
+    hintRead: 'Group the digits in threes from the right. Read each group on its own, then add "thousand" or "million" when it applies.',
+    hintWrite: 'Press 🔊 and write in words what you hear.',
     hintPoints: 'Count the digits in threes, from the right. Between one group and the next there is a comma.',
 
     /* Reinforcement: after the round, the missed exercises are
@@ -68,7 +68,7 @@
     progress: '{current} of {stars}',
     correctFormat: 'It is written: {n}',
 
-    answerInputAria: 'Write the number',
+    answerInputAria: 'Write the number in words',
 
     /* Transfer: what this is for outside the screen. */
     contexto: 'You read numbers in the shop, in the lift, on money and in the news. Reading and writing big numbers is something you use every day.',

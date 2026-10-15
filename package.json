@@ -4,6 +4,7 @@
     "scripts": {
     "test:contrast": "powershell -ExecutionPolicy Bypass -File ..\\contrast\\check-contrast.ps1",
         "test:ui": "node scripts/ui-smoke.js",
+        "test:quantities": "node scripts/quantities-points-test.js",
         "test:sw": "node scripts/smoke-sw.js",
             "test:sw-redirects": "node scripts/check-sw-redirects.js"
     },

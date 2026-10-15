@@ -279,17 +279,17 @@
       lecturaInputReveal: '👁 Ver resultado',
       lecturaInputIdleHint: 'Pulsa «Generar» para empezar.'
     },
-    transfer: 'Esto te servirá para leer números grandes, entender el ascensor de un edificio o saber qué cifra cambia al sumar 100.'
-  
+    transfer: 'Esto te servirá para leer números grandes, entender el ascensor de un edificio o saber qué cifra cambia al sumar 100.',
+
     /* Mensajes para la práctica interactiva de "leer números". Los
        textos de acierto / revelación viven en la raíz para que app.js
        los busque igual que busca explicacionCorrecta. */
     lecturaInputCorrect: '✅ ¡Correcto! El número es {n}.',
-    lecturaInputRevealed: '👁 La respuesta es {n}. Puedes corregirla en la casilla.'
+    lecturaInputRevealed: '👁 La respuesta es {n}. Puedes corregirla en la casilla.',
 
     /* Mensajes para la práctica interactiva de "escribir números".
        Misma forma que lecturaInputCorrect / lecturaInputRevealed. */
     escribirInputCorrect: '✅ ¡Correcto! El número es {n}.',
     escribirInputRevealed: '👁 La respuesta es {n}. Puedes corregirla en la casilla.'
-});
+}, 'es');
 })();

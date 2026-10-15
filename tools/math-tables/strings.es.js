@@ -3,6 +3,7 @@
 
   App.i18n.register({
     title: '🔢 Las Tablas',
+    btnMenu: 'Volver al inicio',
     instruction: 'Suma, multiplica, resta y divide con puntos de colores.',
     chooseOperation: 'Elige qué quieres practicar.',
     addName: 'Tablas de sumar',

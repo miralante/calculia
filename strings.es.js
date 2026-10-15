@@ -31,6 +31,8 @@
     "operations": { "name": "Cuentas grandes", "detail": "Partir, repartir y el orden." },
     "quantities": { "name": "Leer y Escribir Números", "detail": "Lee y escribe números grandes." },
     "ordinals": { "name": "Números ordinales", "detail": "Primero, segundo, tercero…" },
+    "order-numbers": { "name": "Ordenar números", "detail": "Pon los números de menor a mayor." },
+    "decimal": { "name": "Poner la coma decimal", "detail": "Coloca la coma entre la parte entera y los decimales." },
     "parity": { "name": "Pares e impares", "detail": "Mira los puntos: ¿sobra uno o van todos en parejas?" },
     "mathtables": { "name": "Las Tablas", "detail": "Suma y multiplica con colores." },
     "headmath": { "name": "Cálculo de cabeza", "detail": "Contar, llegar a 10 y dividir entre 10 con puntos de colores." },

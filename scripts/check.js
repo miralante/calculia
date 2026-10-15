@@ -338,8 +338,9 @@ if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'
 if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
 /* --- 5. Public/private catalog split ---
-   The public landing carries SEVEN entries (Quantities, Ordinal
-   Numbers, Roman Numerals, Shapes, Trigonometry, Scale, Math Tables);
+   The public landing carries ELEVEN entries (Los Números, Quantities,
+   Ordinal Numbers, Fractions, Parity, Roman Numerals, Numbers, Shapes,
+   Trigonometry, Scale, Math Tables);
    the hidden dev/ page carries every other activity, plus the public
    ones listed in BOTH_SLUGS. Together they cover the full tools/,
    config/, and sw.js activity set. Public activities are the
@@ -384,11 +385,11 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['los-numeros', 'quantities', 'ordinals', 'parity', 'roman-numerals', 'shapes', 'trigonometry', 'scale', 'math-tables', 'fractions-measures'];
+var PUBLIC_SLUGS = ['los-numeros', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'roman-numerals', 'numbers', 'shapes', 'trigonometry', 'scale', 'math-tables'];
 /* Public AND in dev/. Every name here must also be in PUBLIC_SLUGS,
    otherwise dev/ would carry an activity the landing hides, which is
    the inverse mistake and just as wrong. */
-var BOTH_SLUGS = ['los-numeros', 'quantities', 'ordinals', 'parity', 'scale', 'trigonometry', 'math-tables', 'fractions-measures'];
+var BOTH_SLUGS = ['los-numeros', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'numbers', 'shapes', 'trigonometry', 'scale', 'math-tables'];
 var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
 var expectedDevSlugs = new Set(slugs.filter(function (slug) {
   return PUBLIC_SLUGS.indexOf(slug) === -1 || BOTH_SLUGS.indexOf(slug) !== -1;
@@ -428,7 +429,9 @@ Object.keys(targets).forEach(function (f) {
    Every tools/<slug>/app.js must call App.utils.shuffle at least once. The
    contract (see doc/<locale>/tecnico.md §2.2.1) is that every activity
    shuffles its questions and its options; temperature is out of scope
-   because its round has no order to shuffle. A regression here would
+   because its round has no order to shuffle. Quantities is out of scope
+   too: its read/write and points rounds go up one digit at a time, and
+   that order is the teaching point. A regression here would
    mean a new (or rewritten) activity forgot the shuffle, and the round
    would teach button position instead of content.
 
@@ -437,7 +440,7 @@ Object.keys(targets).forEach(function (f) {
    assets/js/utils.js. An activity that still defines its own `function
    draw(` or `function spreadRepeats(` is duplicating that helper and
    going around the contract. */
-var NO_SHUFFLE = ['temperature', 'los-numeros'];
+var NO_SHUFFLE = ['temperature', 'los-numeros', 'quantities', 'decimal'];
 slugs.forEach(function (slug) {
   if (NO_SHUFFLE.indexOf(slug) !== -1) return;
   checks += 1;

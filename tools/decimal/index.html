@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculia</title>
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
+  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v62e5b2c5">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
+    <header class="tool-header centered">
+      <h1 data-i18n="title">🔢 Poner la coma decimal</h1>
+      <p id="instruction" data-i18n="instruction">Pon la coma en su sitio.</p>
+      <p class="stars" id="stars">⭐ 0</p>
+    </header>
+
+    <main>
+      <!-- Pantalla de inicio: una tarjeta y el botón de empezar. Es la única
+           pantalla visible en el marcado, así que si app.js no llega a
+           pintarse la persona ve una invitación y no una página en blanco. -->
+      <section id="screenMenu" class="stack" aria-labelledby="menuTitle">
+        <article class="card task-card">
+          <h2 id="menuTitle" data-i18n="menuTitle">Pon la coma decimal en su sitio.</h2>
+          <p class="task-detail" data-i18n="menuDetail">Empiezas con números de un decimal. Cada ronda sube un poco.</p>
+          <button type="button" class="btn" id="btnStart" data-i18n="btnStart">Empezar</button>
+        </article>
+      </section>
+
+      <!-- Ronda: el número sin separadores, con un hueco entre cada cifra.
+           #commaBoard son las cifras y los huecos (botones); #commaTray es la
+           coma que todavía no tiene sitio. -->
+      <section id="screenTask" class="stack hidden" aria-live="polite">
+        <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+        <p class="progress-text" id="progressText"></p>
+        <article class="card task-card">
+          <h2 id="prompt"></h2>
+          <p class="task-detail" id="taskDetail"></p>
+
+          <div class="comma-zone">
+            <div class="comma-row">
+              <div class="comma-board" id="commaBoard" role="group" data-i18n-aria="boardAria" aria-label="Número para colocar la coma decimal"></div>
+              <div class="comma-tray" id="commaTray" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <p class="feedback" id="feedback" aria-live="polite"></p>
+          <button type="button" class="btn" id="checkAnswer" data-i18n="check">Comprobar</button>
+          <button type="button" class="btn btn-secondary hidden" id="hearNumber" data-i18n="core.listen">🔊 Escuchar</button>
+          <button type="button" class="btn hidden" id="nextTask" data-i18n="core.next">Siguiente →</button>
+        </article>
+        <button type="button" class="btn btn-secondary" id="backToMenu" data-i18n="core.backToMenu">Volver al menú</button>
+      </section>
+
+      <section id="screenFinish" class="stack hidden centered">
+        <h2 data-i18n="roundComplete">¡Ronda terminada!</h2>
+        <p id="finishText"></p>
+        <p id="contexto" class="contexto"></p>
+        <p id="explanation" class="explanation"></p>
+        <p class="transfer" id="transfer" data-i18n="transfer"></p>
+        <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>
+      </section>
+    </main>
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
+  </div>
+
+  <script src="../../assets/js/utils.js?v=calculia-v37f362d0"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-v3d393c12"></script>
+  <script src="../../assets/js/tts.js?v=calculia-va9046a0d"></script>
+  <script src="../../assets/js/storage.js?v=calculia-vd97e2550"></script>
+  <script src="../../assets/js/feedback.js?v=calculia-v73bb9e8a"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -22,6 +22,7 @@
 
   App.i18n.register({
     title: '🥇 Ordinal Numbers',
+    btnMenu: 'Back to the start',
     instruction: 'Learn which place each one takes.',
 
     /* ---------- Screen 1: the series ---------- */

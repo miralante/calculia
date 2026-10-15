@@ -3,6 +3,7 @@
 
   App.i18n.register({
     title: '🔢 Math Tables',
+    btnMenu: 'Back to the start',
     instruction: 'Add, multiply, subtract and divide with colored dots.',
     chooseOperation: 'Choose what you want to practise.',
     addName: 'Addition tables',

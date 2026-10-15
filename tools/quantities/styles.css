@@ -265,17 +265,31 @@
   align-self: center;
 }
 
-/* Color de cifras por posición. Solo las cuatro primeras posiciones
-   las pinta la práctica de grupos (unidades a millares); las de
-   millones se conservan para que el lector de números grandes siga
-   coloreando igual que antes. */
-.digit-u { color: var(--mod-cuerpo); }
-.digit-d { color: var(--mod-coordinacion); }
-.digit-c { color: var(--mod-secuencia); }
+/* Color por grupo de tres cifras (los que separa el punto): todas las
+   cifras de un grupo llevan el mismo color y el grupo siguiente cambia.
+   Así el color dice a qué grupo pertenece cada cifra. */
+.dot-group-0 { color: var(--mod-cuerpo); }
+.dot-group-1 { color: var(--mod-coordinacion); }
+.dot-group-2 { color: var(--mod-secuencia); }
+.dot-group-3 { color: var(--mod-emocional); }
 .digit-sep { color: var(--color-texto-suave); }
 .sign { color: var(--mod-memoria); }
 
-.cifra-mil, .cifra-millon, .cifra-mil-millones { /* placeholder para diferenciación futura */ }
+/* Caja de la respuesta en palabras: ancha, como un procesador de
+   texto. Las palabras de un número de 9 cifras son largas: el texto
+   va a la izquierda y salta de línea. */
+.write-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: clamp(18px, 4.8vw, 24px);
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.5;
+  text-align: left;
+  min-height: 3.2em;
+  resize: vertical;
+}
 
 /* --- Pantalla final de las prácticas de escritura --- */
 .big-emoji { font-size: 96px; }

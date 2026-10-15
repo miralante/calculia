@@ -281,17 +281,17 @@
       lecturaInputReveal: '👁 Show result',
       lecturaInputIdleHint: 'Press «Generate» to start.'
     },
-    transfer: 'This will help you read large numbers, understand the elevator of a building, or know which digit changes when you add 100.'
-  
+    transfer: 'This will help you read large numbers, understand the elevator of a building, or know which digit changes when you add 100.',
+
     /* Feedback for the interactive "leer números" practice. The
        success / reveal messages live at the root so app.js can
        look them up the same way it does for explicacionCorrecta. */
     lecturaInputCorrect: '✅ Correct! The number is {n}.',
-    lecturaInputRevealed: '👁 The answer is {n}. You can correct it in the box.'
+    lecturaInputRevealed: '👁 The answer is {n}. You can correct it in the box.',
 
     /* Feedback for the interactive "escribir números" practice.
        Same shape as lecturaInputCorrect / lecturaInputRevealed. */
     escribirInputCorrect: '✅ Correct! The number is {n}.',
     escribirInputRevealed: '👁 The answer is {n}. You can correct it in the box.'
-});
+}, 'en');
 })();

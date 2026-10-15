@@ -25,19 +25,19 @@
        Claves '<id>Name' / '<id>Detail': una entrada por práctica
        de DATA.practices. */
     readName: 'Leer números',
-    readDetail: 'Mira el número y escríbelo.',
+    readDetail: 'Mira el número y escríbelo con letras.',
     writeName: 'Escribir números',
-    writeDetail: 'Escucha el número y escríbelo.',
+    writeDetail: 'Escucha el número y escríbelo con letras.',
     pointsName: 'Poner los puntos',
     pointsDetail: 'Coloca los puntos. De miles a miles de millones.',
 
     /* ---------- Prácticas de escritura ----------
        {n} = número ya formateado. */
-    promptRead: 'Escribe este número: {n}',
-    promptWrite: 'Escribe el número que oyes.',
+    promptRead: 'Escribe este número con letras.',
+    promptWrite: 'Escribe con letras el número que oyes.',
 
-    detailRead: 'Copia las cifras. Añade el punto cada tres, si toca.',
-    detailWrite: 'Pulsa 🔊 si necesitas escucharlo otra vez.',
+    detailRead: 'Cada grupo de tres cifras va separado por un punto. Escríbelo con palabras.',
+    detailWrite: 'Pulsa 🔊 si necesitas escucharlo otra vez. No se ve el número: solo se oye.',
 
     /* ---------- Juego de los puntos ----------
        {count} = puntos que faltan por colocar en este número. */
@@ -46,7 +46,7 @@
     detailPoints: 'Arrastra un punto al hueco donde va. Toca un punto para quitarlo.',
     pointsMissing: 'Todavía quedan puntos por colocar.',
     pointsWrongPlace: 'Posición incorrecta.',
-    pointsWrongHint: 'A la derecha de este hueco hay {k} cifras. Busca un hueco con 3, 6 o 9 cifras a su derecha.',
+    pointsWrongHint: 'Tiene que haber un punto después de tres cifras, contando desde la derecha.',
     pointsNoneLeft: 'Ya no quedan puntos. Toca uno de los colocados para quitarlo.',
     pointsWrongMarked: 'Revisa los puntos marcados con ✗.',
     gapEmptyAria: 'Hueco vacío: toca para poner un punto.',
@@ -55,8 +55,8 @@
 
     /* Pistas socráticas: enseñan el mecanismo, nunca dan la
        respuesta (ver SPEC: la anatomía socrática completa). */
-    hintRead: 'Cuenta las cifras. Si hay cuatro o más, agrúpalas de tres desde la derecha.',
-    hintWrite: 'Pulsa 🔊 y escribe lo que oigas.',
+    hintRead: 'Agrupa las cifras de tres en tres desde la derecha. Cada grupo se lee aparte y, si es de miles o de millones, lleva su palabra.',
+    hintWrite: 'Pulsa 🔊 y escribe con palabras lo que oigas.',
     hintPoints: 'Cuenta las cifras de tres en tres, desde la derecha. Entre un grupo y el siguiente va un punto.',
 
     /* Refuerzo: al terminar la ronda, los fallos se repiten en una
@@ -71,7 +71,7 @@
     progress: '{current} de {stars}',
     correctFormat: 'Se escribe: {n}',
 
-    answerInputAria: 'Escribe el número',
+    answerInputAria: 'Escribe el número con letras',
 
     /* Transferencia: para qué sirve esto fuera de la pantalla. */
     contexto: 'Lees números en la tienda, en el ascensor, en el dinero y en la prensa. Leer y escribir números grandes se usa a cada rato.',
