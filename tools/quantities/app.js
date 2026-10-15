@@ -242,6 +242,17 @@
     if (n === 0) return locale === 'en' ? 'zero' : 'cero';
     var negative = n < 0;
     var abs = Math.abs(n);
+    if (abs >= 1000000000) {
+      /* Billions: "X mil millones" in Spanish, "X billion" in English.
+         What is left under a billion is read by the rules below. */
+      var bn = Math.floor(abs / 1000000000);
+      var restBn = abs % 1000000000;
+      var headBn = locale === 'en'
+        ? (bn === 1 ? 'one' : threeDigits(bn, 'en')) + ' billion'
+        : (bn === 1 ? '' : threeDigits(bn, 'es') + ' ') + 'mil millones';
+      var outBn = restBn ? headBn + ' ' + readNumber(restBn, locale) : headBn;
+      return negative ? (locale === 'en' ? 'negative ' : 'menos ') + outBn : outBn;
+    }
     if (locale === 'en') {
       var millionsEN = Math.floor(abs / 1000000);
       var restEN = abs % 1000000;
@@ -358,7 +369,7 @@
       correct: format(n),
       prompt: gaps.length === 1 ? t('promptPointsOne') : t('promptPoints').replace('{count}', gaps.length),
       detail: t('detailPoints'),
-      audio: ''
+      audio: readNumber(n, App.i18n.locale())
     };
   }
 
@@ -539,7 +550,12 @@
   function refreshWrong(lastGap) {
     wrongGaps = placed.filter(function (p) { return case_.gaps.indexOf(p) === -1; });
     var wrongNow = lastGap !== null && wrongGaps.indexOf(lastGap) !== -1;
-    $('#feedback').textContent = wrongNow ? t('pointsWrongPlace') : '';
+    /* Socratic hint: how many digits are to the right of the gap, and
+       where the right gaps are. It does not name the gap itself. */
+    var digitsToRight = String(case_.n).length - 1 - lastGap;
+    $('#feedback').textContent = wrongNow
+      ? t('pointsWrongPlace') + ' ' + t('pointsWrongHint').replace('{k}', digitsToRight)
+      : '';
   }
 
   function gapCenter(g) {
@@ -631,6 +647,7 @@
     hide($('#pointsZone'));
     hide($('#answerInput'));
     hide($('#listenBtn'));
+    hide($('#hearNumber'));
     $('#answerInput').value = '';
   }
 
@@ -711,6 +728,8 @@
     waitingCheck = false;
     if (practice === 'points') renderPointsBoard();
     hide($('#checkAnswer'));
+    /* After a right answer the person can hear the number read aloud. */
+    if (App.tts && App.tts.available) show($('#hearNumber'));
     show($('#nextTask'));
     $('#nextTask').focus();
   }
@@ -865,10 +884,14 @@
   $('#nextTask').addEventListener('click', goNext);
   $('#pointsBoard').addEventListener('pointerdown', onBoardPointerDown);
   $('#pointsTray').addEventListener('pointerdown', onTrayPointerDown);
+  /* Audio: reads the current number aloud. Used by the write practice
+     (listen before writing) and by the button shown after a right answer. */
+  function speakCase() {
+    if (case_ && case_.audio && App.tts) App.tts.speak(case_.audio);
+  }
   var elListenBtn = $('#listenBtn');
-  if (elListenBtn) elListenBtn.addEventListener('click', function () {
-    if (case_ && case_.audio) if (false && App.tts && App.tts.speak) App.tts.speak(case_.audio);
-  });
+  if (elListenBtn) elListenBtn.addEventListener('click', speakCase);
+  $('#hearNumber').addEventListener('click', speakCase);
   $('#backToMenu').addEventListener('click', function () { switchTo(menuScreen); });
 
   function init() {

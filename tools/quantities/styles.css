@@ -202,6 +202,10 @@
   justify-content: center;
   width: 44px;
   height: 44px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 3px solid var(--mod-razonamiento);
+  background: var(--mod-razonamiento-suave);
   color: var(--mod-razonamiento);
   font-size: 28px;
   font-weight: 900;
@@ -220,6 +224,10 @@
   justify-content: center;
   width: 44px;
   height: 44px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 3px solid var(--mod-razonamiento);
+  background: var(--mod-razonamiento-suave);
   color: var(--mod-razonamiento);
   font-size: 28px;
   font-weight: 900;
