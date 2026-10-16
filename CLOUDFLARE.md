@@ -137,10 +137,11 @@ uploaded, "Deployments" lists the commit — but the dashboard shows
 
 ## Service worker cache
 
-`sw.js` is **cache-first** — the same strategy used by every PWA
-sibling of the suite (`memofun`, `okeymoney`, `routime`,
-`sinonimia`; `teclatlon` uses network-first, and `apptonomia`
-ships no SW).
+`sw.js` is **network-first with a cache fallback** — the same strategy used
+by every PWA sibling of the suite (`memofun`, `okeymoney`, `routime`,
+`sinonimia`, `teclatlon`); `apptonomia` ships no SW. The server copy wins
+while the device is online, so a deploy reaches installed copies; the cache
+answers only when the network is unreachable.
 
 - `sw.js` declares a `VERSION` string (e.g. `calculia-vN`).
 - `sw.js` declares a `FILES` (or `ARCHIVOS`) array listing every file

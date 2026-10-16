@@ -71,19 +71,17 @@ HTML/CSS/JS served as static files.
 
 ## Service worker cache (read this before touching any cached file)
 
-`sw.js` is cache-first for the app shell — every HTML/CSS/JS file listed
-in `ARCHIVOS` is served from the cache. **Any change to a cached file
-without bumping `VERSION` is invisible to users with the PWA installed.**
-The bug is silent: the developer sees the change on a hard refresh,
-but the user sees the old version until they manually unregister the SW
-or the cache expires.
+`sw.js` is network-first with a cache fallback for the app shell: every
+request goes to the network first, so the server copy wins while the device
+is online. The cache (every file in `ARCHIVOS`, plus every response fetched
+so far) answers only when the network is unreachable.
 
-**Rule**: when you edit any file listed in `ARCHIVOS` (or any new file
-that should be cached), bump `VERSION` in `sw.js` (e.g. `calculia-v21`
-→ `calculia-v22`). The `install` handler will re-fetch every file into
-the new cache and the `activate` handler will delete the old one. This
-is also called out in `doc/en/technical.md` § 4 and in
-`doc/en/I18N.md` step 6.
+**Rule**: when you edit any file listed in `ARCHIVOS` (or any new file that
+should be cached), bump `VERSION` in `sw.js` (e.g. `calculia-v21` →
+`calculia-v22`). The offline copy is re-precached only when `VERSION`
+changes, so a file changed without a bump stays stale offline and the
+installed worker does not re-install. This is also called out in
+`doc/en/technical.md` § 4 and in `doc/en/I18N.md` step 6.
 
 ### Asset version tokens (`?v=`) — never hand-edit these
 

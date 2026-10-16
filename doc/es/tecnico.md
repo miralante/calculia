@@ -18,8 +18,8 @@
 - **Sin CDNs de JS.** Las fuentes están autoalojadas en `assets/fonts/`.
 - **Persistencia solo en `localStorage`.** Sin login, sin cookies, sin
   datos personales, sin analítica.
-- **PWA offline-first**: `manifest.json` + `sw.js` (caché cache-first de
-  la app shell).
+- **PWA offline-first**: `manifest.json` + `sw.js` (network-first con caché
+  de respaldo para la app shell).
 - **Estilo de código**: JS estilo ES5 (`var`, funciones clásicas, IIFE
   con `'use strict'`); identificadores, comentarios y mensajes de commit
   siempre en inglés. El texto de interfaz (`strings.es.js` /
@@ -233,7 +233,7 @@ generalizar al añadir un tercer idioma (mapa `BCP47` en `i18n.js`,
 
 ## 4. PWA y service worker
 
-- `sw.js` es cache-first para la app shell. Contrato al tocar archivos:
+- `sw.js` es network-first con caché de respaldo para la app shell. Contrato al tocar archivos:
   1. Archivo nuevo → añádelo a la lista `ARCHIVOS`.
   2. Cualquier cambio a un archivo cacheado → sube `VERSION`
      (`calculia-vN`), o quienes tengan la PWA instalada no recibirán el cambio.

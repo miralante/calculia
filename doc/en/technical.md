@@ -17,8 +17,8 @@
 - **No JS CDNs.** Fonts are self-hosted in `assets/fonts/`.
 - **Persistence only in `localStorage`.** No login, no cookies, no
   personal data, no analytics.
-- **Offline-first PWA**: `manifest.json` + `sw.js` (cache-first of the
-  app shell).
+- **Offline-first PWA**: `manifest.json` + `sw.js` (network-first with a
+  cache fallback for the app shell).
 - **Code style**: ES5-style JS (`var`, classic functions, IIFE with
   `'use strict'`); identifiers, comments and commit messages always in
   English. UI text (`strings.es.js` / `strings.en.js`, activity content
@@ -223,7 +223,7 @@ adding a third language (`BCP47` map in `i18n.js`, `DECIMAL_SEP` in
 
 ## 4. PWA and service worker
 
-- `sw.js` is cache-first for the app shell. Contract when touching files:
+- `sw.js` is network-first with a cache fallback for the app shell. Contract when touching files:
   1. New file → add it to the `ARCHIVOS` list.
   2. Any change to a cached file → bump `VERSION` (`calculia-vN`),
      otherwise users with the installed PWA won't receive the change.
