@@ -467,9 +467,6 @@
     $('#quizBack').addEventListener('click', function () { showOnly('#screenTables'); });
     $('#startPractice').addEventListener('click', startPractice);
     $('#nextFact').addEventListener('click', nextFact);
-    $('#playAgain').addEventListener('click', startPractice);
-    $('#anotherTable').addEventListener('click', function () { showOnly('#screenTables'); });
-    $('#anotherOperation').addEventListener('click', function () { showOnly('#screenMenu'); });
 
     /* Division input-row wiring. The input's "Enter" key counts as a
        click on the check button so keyboard-only users are not stuck

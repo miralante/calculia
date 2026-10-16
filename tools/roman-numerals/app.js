@@ -1436,7 +1436,6 @@
       speakWithButton(btnListenPrompt, speakForQuiz(currentEntry));
     });
   }
-  $('#btnNext').addEventListener('click', next);
 
 
   function init() {

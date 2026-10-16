@@ -1335,9 +1335,9 @@
   /* Paints the whole round at once: one card per question, in the
      shuffled order, with the options also in their shuffled order.
      The user can change their selection on any question until
-     "Comprobar" is pressed; from that moment the buttons are
-     disabled and the right answer is shown alongside the wrong
-     one for the questions that were missed. */
+     "Comprobar" is pressed. The right answers lock; a missed question
+     shows its socratic hint (never the answer) and stays open for
+     another try. */
   function renderSheet() {
     testSheetEl.innerHTML = '';
     roundSheets.forEach(function (sheet, i) {
@@ -1400,12 +1400,13 @@
 
   function selectOption(sheetIdx, optionIdx) {
     var sheet = roundSheets[sheetIdx];
-    if (sheet.correct !== null) return; /* already verified, ignore */
+    if (sheet.correct === true) return; /* already right: locked */
     sheet.selected = optionIdx;
     var card = testSheetEl.querySelectorAll('.test-sheet-card')[sheetIdx];
     var options = card.querySelectorAll('.option-btn');
     options.forEach(function (b, j) {
       b.classList.toggle('selected', j === optionIdx);
+      b.classList.remove('incorrect');
     });
     paintSheetProgress();
   }
@@ -1413,7 +1414,10 @@
   function checkAnswers() {
     var firstUnanswered = -1;
     for (var i = 0; i < roundSheets.length; i += 1) {
-      if (roundSheets[i].selected === null) { firstUnanswered = i; break; }
+      if (roundSheets[i].correct !== true && roundSheets[i].selected === null) {
+        firstUnanswered = i;
+        break;
+      }
     }
     if (firstUnanswered !== -1) {
       /* No se verifica a medias: si falta alguna, se hace scroll a la
@@ -1426,49 +1430,55 @@
       return;
     }
 
-    roundCorrect = 0;
+    /* La primera comprobación de la ronda es la que puntúa. Las siguientes
+       solo recorren las preguntas que siguen falladas: no suman estrellas. */
+    var firstCheck = roundSheets.every(function (sheet) { return sheet.correct === null; });
+    var rightFirstTry = 0;
     var cards = testSheetEl.querySelectorAll('.test-sheet-card');
     roundSheets.forEach(function (sheet, i) {
+      if (sheet.correct === true) return; /* ya acertada: sigue bloqueada */
       var card = cards[i];
       var options = card.querySelectorAll('.option-btn');
       var selected = sheet.question.options[sheet.selected];
-      var correctOption = sheet.question.options.filter(function (o) { return o.correct; })[0];
       sheet.correct = selected.correct;
-      if (selected.correct) roundCorrect += 1;
+      if (selected.correct && firstCheck) rightFirstTry += 1;
 
-      options.forEach(function (b, j) {
-        b.disabled = true;
-        b.classList.remove('selected');
-        var op = sheet.question.options[j];
-        if (op.correct) b.classList.add('correct');
-        else if (j === sheet.selected) b.classList.add('incorrect');
-      });
-
+      options.forEach(function (b) { b.classList.remove('selected'); });
       var feedbackEl = card.querySelector('.feedback');
-      feedbackEl.classList.remove('hidden');
+      feedbackEl.classList.remove('hidden', 'success', 'error', 'encourage');
       if (selected.correct) {
+        /* Acertada: se bloquea y se ve en verde. */
+        options.forEach(function (b) { b.disabled = true; });
+        options[sheet.selected].classList.add('correct');
         feedbackEl.textContent = '✅';
         feedbackEl.classList.add('success');
       } else {
-        feedbackEl.textContent =
-          App.i18n.t('incorrectExplanationA') + plainText(correctOption.html) + '.';
+        /* Fallada: se marca la opción elegida y sale la pista socrática,
+           sin decir cuál era la respuesta (SPEC §3.8). La tarjeta sigue
+           abierta para volver a intentarlo. */
+        options[sheet.selected].classList.add('incorrect');
+        App.feedback.encourage(feedbackEl);
+        feedbackEl.textContent += ' ' + (sheet.question.hint || App.i18n.t('hint'));
         feedbackEl.classList.add('error');
       }
     });
 
     /* Stars y contadores de ronda se actualizan aquí, no en una pantalla
-       de fin: la persona ya ve el resultado pregunta a pregunta y
-       "Otra ronda" empieza la siguiente. */
-    progress.stars += roundCorrect;
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    progress.roundsByActivity[activity.id] =
-      (progress.roundsByActivity[activity.id] || 0) + 1;
-    save();
-    paintStars();
+       de fin, y solo en la primera comprobación. */
+    if (firstCheck) {
+      roundCorrect = rightFirstTry;
+      progress.stars += roundCorrect;
+      progress.completedRounds = (progress.completedRounds || 0) + 1;
+      progress.roundsByActivity[activity.id] =
+        (progress.roundsByActivity[activity.id] || 0) + 1;
+      save();
+      paintStars();
+    }
 
-    btnCheck.classList.add('hidden');
+    var allRight = roundSheets.every(function (sheet) { return sheet.correct === true; });
+    btnCheck.classList.toggle('hidden', allRight);
     btnNewRound.classList.remove('hidden');
-    btnNewRound.focus();
+    if (allRight) btnNewRound.focus();
     paintSheetProgress();
   }
 
@@ -1492,14 +1502,6 @@
       : roundSheets.filter(function (s) { return s.selected !== null; }).length;
     progressFill.style.width = (numerator / total * 100) + '%';
     progressText.textContent = numerator + ' / ' + total;
-  }
-
-  /* Visible text of an option (its html may wrap spans). Still
-     used by the incorrect-answer feedback in checkAnswers(). */
-  function plainText(html) {
-    var div = document.createElement('div');
-    div.innerHTML = html;
-    return div.textContent;
   }
 
   /* ---- Events ---- */

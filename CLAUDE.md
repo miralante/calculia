@@ -311,9 +311,11 @@ the affected button by id.
 stage shows **all questions at once** instead of one at a time. The
 shape is a stack of cards (one per question, in shuffled order) plus
 two buttons at the bottom: **Comprobar** verifies every answer in
-place (each card flips to inline ✅/❌ feedback, options lock), and
-**Otra ronda** re-shuffles and starts again without going through a
-`screenEnd`.
+place (right answers lock with ✅; a missed question shows its
+socratic hint, never the correct answer, and stays open for another
+try, SPEC §3.8), and **Otra ronda** re-shuffles and starts again
+without going through a `screenEnd`. Stars and round counters are
+scored on the first **Comprobar** only; retries do not add stars.
 
 The driver for this change: `fromNet` ("Si doblas este dibujo, ¿qué
 cuerpo sale?") and `solidParts` with `net: 'pyramid'` ("¿Cuántas

@@ -184,9 +184,7 @@
 
   /* ----------- Wiring ----------- */
   $('#parityBack').addEventListener('click', function () { window.location.href = '../../'; });
-  $('#parityReplay').addEventListener('click', startRound);
   $('#parityNext').addEventListener('click', next);
-  $('#parityChooseAnother').addEventListener('click', function () { window.location.href = '../../'; });
 
   /* ----------- Boot ----------- */
   function init() {

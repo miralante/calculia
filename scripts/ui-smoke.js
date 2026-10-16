@@ -1490,7 +1490,9 @@ async function exerciseShapes(page, baseUrl) {
     return { id: level.id, length: level.questions.length, counts };
   });
   assert.equal(testSpec.id, 'test');
-  assert.equal(testSpec.length, 45);
+  /* 41 preguntas: la hoja de la prueba única quitó "fromNet" y la
+     pirámide de "solidParts" (ver CLAUDE.md, sección Test sheet). */
+  assert.equal(testSpec.length, 41);
   assert.deepEqual(testSpec.counts, {
     shapeName: 9,
     shapeCount: 7,
@@ -1500,22 +1502,39 @@ async function exerciseShapes(page, baseUrl) {
     shapeSymmetry: 3,
     shapeSimilar: 3,
     solidName: 7,
-    solidParts: 3,
-    fromNet: 3,
+    solidParts: 2,
   }, 'La prueba única no incluye todos los tipos de contenido');
   /* Con un solo test el recorrido ya venía dentro desde "Hacer el test". */
   if (testCount > 1) await menuButtons.click();
-  const firstPrompt = await page.locator('#prompt').innerText();
-  assert.ok(firstPrompt.trim(),
-    'La prueba única no presenta ninguna pregunta');
+  /* La prueba única es una hoja: todas las preguntas a la vez, cada una
+     en su tarjeta. Se contesta cada tarjeta (la primera opción), se
+     verifica todo con "Comprobar" y no hay pantalla de fin entre rondas
+     (ver CLAUDE.md, sección Test sheet). */
+  await page.waitForSelector('#testSheet .test-sheet-card', { timeout: NAV_TIMEOUT });
+  const cards = page.locator('#testSheet .test-sheet-card');
+  assert.equal(await cards.count(), testSpec.length,
+    'La hoja no muestra todas las preguntas de la prueba única');
+  const starsBefore = Number((await page.locator('#stars').innerText()).replace(/\D/g, ''));
   actions += 1;
   for (let question = 0; question < testSpec.length; question += 1) {
-    await chooseCorrectAnswer('formas', 'test');
-    actions += 2;
+    await cards.nth(question).locator('.option-btn').nth(0).click();
+    actions += 1;
   }
-  await page.waitForSelector('#screenEnd:not(.hidden)', { timeout: NAV_TIMEOUT });
-  assert.match(await page.locator('#endSummary').innerText(), /45 preguntas|45 questions/,
-    'El resumen no incluye todas las preguntas de la ronda única');
+  await page.locator('#btnCheck').click();
+  actions += 1;
+  await page.waitForSelector('#btnNewRound:not(.hidden)', { timeout: NAV_TIMEOUT });
+  const verdicts = await cards.evaluateAll(list => list.map(card => ({
+    correct: card.querySelectorAll('.option-btn')[0].classList.contains('correct'),
+    feedback: card.querySelector('.feedback').className,
+  })));
+  assert.ok(verdicts.every(verdict => /success|error/.test(verdict.feedback)),
+    'Alguna tarjeta de la hoja no muestra su resultado');
+  const rightCount = verdicts.filter(verdict => verdict.correct).length;
+  const starsAfter = Number((await page.locator('#stars').innerText()).replace(/\D/g, ''));
+  assert.equal(starsAfter - starsBefore, rightCount,
+    'Las estrellas no suben lo que dicen las respuestas correctas de la hoja');
+  assert.ok(await page.locator('#screenEnd').isHidden(),
+    'La hoja no debe pasar a una pantalla de fin entre rondas');
   assert.ok(await page.locator('#btnHarder').isHidden(),
     'La prueba única ofrece niveles separados como otros tests');
 
@@ -1571,7 +1590,9 @@ async function exerciseShapes(page, baseUrl) {
     assert.ok(captionText.length > 0,
       `El ejemplo cotidiano está vacío en ${locale}`);
   }
-  await page.locator('#realBack').click();
+  /* La pantalla de ejemplos reales no tiene botón de volver: se vuelve a
+     la introducción recargando, igual que en el bucle de idiomas. */
+  await page.reload();
   await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
 
   /* La pista socrática dice qué hacer con la figura de ESTA pregunta.
@@ -1597,46 +1618,65 @@ async function exerciseShapes(page, baseUrl) {
   await page.locator('#realContinue').click();
   assert.ok(await page.locator('#screenGame').isVisible(),
     'La pista socrática no se puede comprobar: el test no arranca desde "Hacer el test"');
+  /* La hoja de la prueba no trae una pregunta cada vez: se contesta todo
+     a la vez y "Comprobar" revisa. Una pregunta fallada tiene que mostrar
+     su pista (la de su tipo), nunca la respuesta, y dejar reintentar. */
   const pistasVistas = new Set();
-  for (let question = 0; question < 8; question += 1) {
-    const correctIndex = await correctOptionIndex('formas', 'test');
-    const options = page.locator('#options .option-btn');
-    const total = await options.count();
-    await options.nth((correctIndex + 1) % total).click();
-    await page.waitForSelector('#explanationWrap:not(.hidden)', { timeout: NAV_TIMEOUT });
-    /* La pareja pregunta→pista se resuelve dentro de la página, en el
-       idioma que esté puesto, y por la parte fija del prompt: los huecos
-       {name} y {side} llegan ya rellenados. */
-    const shown = await page.evaluate(pairs => {
-      const t = key => window.App.i18n.t(key);
-      const prompt = document.querySelector('#prompt').textContent.trim();
-      const found = pairs.find(pair => prompt.indexOf(t(pair[0]).split('{')[0]) === 0);
-      return {
-        prompt,
-        expected: found ? t(found[1]) : null,
-        generic: t('hint'),
-        text: document.querySelector('#explanation').textContent.trim(),
-      };
-    }, SOCRATIC);
-    assert.ok(shown.expected, 'Una pregunta del test no trae pista socrática: ' + shown.prompt);
-    assert.notEqual(shown.text, shown.generic,
-      'La pista socrática vuelve a ser la misma frase para todas las preguntas: ' + shown.prompt);
-    assert.equal(shown.text, shown.expected,
-      'La pista socrática no es la de esta pregunta ("' + shown.prompt + '"): ' + shown.text);
-    pistasVistas.add(shown.expected);
-    /* Y ahora sí, la respuesta buena. La pista deja las opciones
-       bloqueadas hasta que se pulsa "Entendido", igual que se las deja a
-       un niño: el recorrido tiene que pasar por ahí también. */
-    await page.locator('#explanationWrap .btn-understood').click();
-    await options.nth(correctIndex).click();
-    await page.waitForSelector('#btnNext:not(.hidden)', { timeout: NAV_TIMEOUT });
-    await page.locator('#btnNext').click();
-    actions += 3;
+  const hintCards = page.locator('#testSheet .test-sheet-card');
+  const cardCount = await hintCards.count();
+  actions += 1;
+  for (let question = 0; question < cardCount; question += 1) {
+    await hintCards.nth(question).locator('.option-btn').nth(0).click();
+    actions += 1;
   }
-  /* Si las ocho preguntas falladas hubieran salido del mismo tipo, la
-     comprobación de arriba no habría visto nada nuevo. */
-  assert.ok(pistasVistas.size > 1,
-    'Las ocho preguntas felladas eran del mismo tipo: la puerta no ha visto dos pistas distintas');
+  await page.locator('#btnCheck').click();
+  await page.waitForSelector('#btnNewRound:not(.hidden)', { timeout: NAV_TIMEOUT });
+  actions += 1;
+  const pairsByPrompt = await page.evaluate(pairs => pairs.map(([promptKey, hintKey]) => ({
+    promptStart: window.App.i18n.t(promptKey).split('{')[0],
+    hint: window.App.i18n.t(hintKey),
+  })), SOCRATIC);
+  const afterFirstCheck = await hintCards.evaluateAll(list => list.map(card => ({
+    prompt: card.querySelector('.prompt').textContent.trim(),
+    feedback: card.querySelector('.feedback').textContent.trim(),
+    missed: card.querySelector('.option-btn.incorrect') !== null,
+    revealed: card.querySelector('.option-btn.correct') !== null,
+    lockedOptions: card.querySelectorAll('.option-btn:disabled').length,
+    options: card.querySelectorAll('.option-btn').length,
+  })));
+  const missedCards = afterFirstCheck.filter(card => card.missed);
+  assert.ok(missedCards.length > 0,
+    'La hoja no tiene ninguna pregunta fallada para comprobar las pistas');
+  for (const card of missedCards) {
+    assert.ok(!card.revealed,
+      'Una pregunta fallada muestra la respuesta correcta: ' + card.prompt);
+    assert.equal(card.lockedOptions, 0,
+      'Una pregunta fallada no deja reintentar: ' + card.prompt);
+    const pair = pairsByPrompt.find(item => card.prompt.indexOf(item.promptStart) === 0);
+    assert.ok(pair, 'Una pregunta de la hoja no trae pista socrática: ' + card.prompt);
+    assert.notEqual(pair.hint, '',
+      'La pista socrática de esta pregunta está vacía: ' + card.prompt);
+    assert.ok(card.feedback.includes(pair.hint),
+      'La pista no es la de esta pregunta ("' + card.prompt + '"): ' + card.feedback);
+    pistasVistas.add(pair.hint);
+  }
+  /* Si todas las falladas hubieran salido del mismo tipo, la comprobación
+     de arriba no habría visto nada nuevo. */
+  if (missedCards.length > 1) {
+    assert.ok(pistasVistas.size > 1,
+      'Las preguntas falladas eran del mismo tipo: no se ha visto más de una pista');
+  }
+  /* Reintento: la segunda comprobación no suma estrellas, solo recorre las
+     falladas, y las que se acierten quedan bloqueadas. */
+  const starsBeforeRetry = Number((await page.locator('#stars').innerText()).replace(/\D/g, ''));
+  const firstMissed = hintCards.nth(afterFirstCheck.findIndex(card => card.missed));
+  await firstMissed.locator('.option-btn').nth(1).click();
+  await page.locator('#btnCheck').click();
+  actions += 2;
+  await page.waitForTimeout(100);
+  const starsAfterRetry = Number((await page.locator('#stars').innerText()).replace(/\D/g, ''));
+  assert.equal(starsAfterRetry, starsBeforeRetry,
+    'El reintento de una pregunta fallada suma estrellas');
 
   return actions ? 1 : 0;
 }
@@ -1657,8 +1697,11 @@ async function exerciseNumbers(page, baseUrl) {
      muestra Números Romanos y Formas, y Números vive en la página oculta
      dev/. Se comprueba en las dos rutas, para que el reparto no vuelva a
      romperse en silencio por un lado o por otro. */
-  assert.equal(await page.locator('a[href="tools/numbers/"]').count(), 0,
-    'La portada pública vuelve a mostrar Números');
+  /* Números es tarjeta de la portada pública y también de dev/ (ver las
+     listas PUBLIC_SLUGS y BOTH_SLUGS de scripts/check.js, que siguen a las
+     dos páginas). Si una de las dos deja de enlazarla, esta prueba falla. */
+  assert.equal(await page.locator('a[href="tools/numbers/"]').count(), 1,
+    'La portada pública ya no muestra Números');
   /* Positivos y negativos dejó de ser una herramienta propia y se
      integró en Números (commit "feat(numbers): integrate positive and
      negative practice"), así que ya no existe tools/posneg/: ese
@@ -1806,7 +1849,8 @@ async function exerciseNumbers(page, baseUrl) {
   assert.ok((await page.locator('#signedRealList').innerText()).includes('The thermometer'),
     'Los ejemplos cotidianos no están traducidos al inglés');
   actions += 2;
-  await page.locator('#signedRealBack').click();
+  /* La pantalla de ejemplos reales no tiene botón de volver: es el último
+     paso de esta comprobación, así que no hay nada más que recorrer. */
 
   return actions ? 1 : 0;
 }
