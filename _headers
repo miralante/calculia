@@ -124,20 +124,22 @@
 /assets/img/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Page-local css/js carry no ?v= token, so they are revalidated on every use
+# (a 304 when nothing moved) instead of being served from a 5-minute cache.
 /styles.css
-  Cache-Control: public, max-age=300
+  Cache-Control: no-cache, must-revalidate
 /strings.*
   Cache-Control: public, max-age=31536000, immutable
 
 /config/styles.css
-  Cache-Control: public, max-age=300
+  Cache-Control: no-cache, must-revalidate
 /config/app.js
-  Cache-Control: public, max-age=300
+  Cache-Control: no-cache, must-revalidate
 /config/strings.*
   Cache-Control: public, max-age=31536000, immutable
 
 /legal/styles.css
-  Cache-Control: public, max-age=300
+  Cache-Control: no-cache, must-revalidate
 /legal/strings.*
   Cache-Control: public, max-age=31536000, immutable
 

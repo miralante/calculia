@@ -1,7 +1,10 @@
 /* ============================================================
    Calculia â€” Service Worker
-   Cache-first strategy for the app shell (works offline).
-   When adding new files: add them to FILES and bump VERSION.
+   Network-first strategy with a cache fallback (works offline).
+   The server copy wins whenever the device is online, so a deploy
+   reaches installed PWAs without anyone bumping VERSION by hand.
+   When adding new files: add them to ARCHIVOS and bump VERSION (the
+   precache still needs the list for offline use).
 
    Canonical URLs only. List "./about/", never "./about/":
    Cloudflare answers the index.html form with a 307 to the directory.
@@ -12,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v199';
+var VERSION = 'calculia-v200';
 
 var FILES = [
   './',
@@ -321,26 +324,30 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function (event) {
   if (event.request.method !== 'GET') return;
+  /* Network-first, cache fallback. Cache-first pinned installed clients to
+     the first copy of every file, so deploys stayed invisible until the
+     site data was cleared. The cache answers only when the network is
+     unreachable. */
   event.respondWith(
-    caches.match(event.request).then(function (response) {
-      /* A cache hit can come from a precache written by an older worker, so it
-         is sanitised here too rather than trusted. */
-      if (response) return deRedirect(response);
-      return fetch(event.request).then(function (r) {
-        /* Cache same-origin resources, but never a redirect. Following one
-           still yields status 200 with redirected === true, which is exactly
-           the poisoned entry the precache comment above describes. */
-        if (r.status === 200) {
-          caches.open(VERSION).then(function (cache) {
-            cache.put(event.request, deRedirect(r.clone()));
-          });
-        }
-        return deRedirect(r);
-      }).catch(function () {
-        /* Offline / network failure: don't serve the landing page here,
-           its relative paths only resolve correctly at the site root, and
-           the URL we are answering may be a deep activity path. Reply
-           with a tiny inline HTML that stays at the current URL. */
+    fetch(event.request).then(function (r) {
+      /* Cache same-origin resources, but never a redirect. Following one
+         still yields status 200 with redirected === true, which is exactly
+         the poisoned entry the precache comment above describes. */
+      if (r.status === 200) {
+        caches.open(VERSION).then(function (cache) {
+          cache.put(event.request, deRedirect(r.clone()));
+        });
+      }
+      return deRedirect(r);
+    }).catch(function () {
+      return caches.match(event.request).then(function (cached) {
+        /* A cached copy can come from a precache written by an older worker,
+           so it is sanitised here too rather than trusted. */
+        if (cached) return deRedirect(cached);
+        /* Offline and not cached: don't serve the landing page here, its
+           relative paths only resolve correctly at the site root, and the
+           URL we are answering may be a deep activity path. Reply with a
+           tiny inline HTML that stays at the current URL. */
         return new Response(
           '<!doctype html><html lang="es"><head><meta charset="utf-8">' +
           '<meta name="viewport" content="width=device-width,initial-scale=1">' +
