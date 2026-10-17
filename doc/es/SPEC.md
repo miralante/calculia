@@ -201,6 +201,13 @@ pasos, en este orden, y con la misma función pedagógica.
    la explicación completa solo a partir del segundo fallo
    (regla 12 de §6). La pista nunca se construye como respuesta
    escondida: no dice "es 7", dice "cuenta otra vez despacio".
+   **Excepción: números escritos a mano** (Números: «leer y
+   escribir» y «escribir números»). Una pista no ayuda a escribir
+   una cifra: al fallar, la actividad muestra la solución (la cifra
+   y cómo se lee) en lugar de una pista, y bloquea la casilla y los
+   botones de respuesta hasta que se pulsa «Entendido». Al pulsarlo,
+   la solución desaparece y la casilla vuelve a abrirse para que la
+   persona escriba el número de nuevo.
 3. **Explicación** — cuando se acierta, o cuando se falla la
    segunda vez, la actividad publica la explicación de por qué la
    respuesta correcta es esa: la regla, la operación, la analogía
@@ -393,7 +400,9 @@ siendo dinámico y accesible para tecnologías de asistencia.
 11. Preguntas tipo quiz: máximo 3 opciones, siempre con explicación.
 12. Ritmo socrático ante errores: pista antes que la respuesta, ánimo
     nunca castigo (`App.feedback.encourage()` /
-    `App.feedback.lockUntilAck()`), reintentos ilimitados.
+    `App.feedback.lockUntilAck()`), reintentos ilimitados. Excepción:
+    números escritos a mano (§3.8) muestran la solución en lugar de
+    una pista.
 13. Progresión gradual: cada nivel cambia solo una variable cada vez.
 
 ### 6.1 Baseline WCAG AAA (común a toda la suite)

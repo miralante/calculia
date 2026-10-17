@@ -257,11 +257,9 @@
       socraticCompare: '🤔 Look at the digits of both numbers and compare the biggest places first.',
       socraticBlocks: '🤔 Count the blocks in each group, then put the totals together.',
       socraticSayNumber: '🤔 Look at the number drawn and read it in parts, from left to right.',
-      socraticWriteNumber: '🤔 Look at how it is written and see which groups of ten it is split into.',
       socraticTradeUp: '🤔 Look at the blocks and group them in tens: count the groups.',
       socraticTradeDown: '🤔 Look at each big block and count how many small ones fit inside.',
       socraticLadder: '🤔 Look at the number: it is a one followed by zeros, count how many.',
-      socraticDictation: '🤔 Read the number drawn slowly and compare it with the options.',
       /* Interactive "escribir números" — typed-input practice with
          audio. "Generar" plays the number aloud, "Reproducir"
          replays it, "Comprobar" validates, "Ver resultado" reveals. */
@@ -292,6 +290,11 @@
     /* Feedback for the interactive "escribir números" practice.
        Same shape as lecturaInputCorrect / lecturaInputRevealed. */
     escribirInputCorrect: '✅ Correct! The number is {n}.',
-    escribirInputRevealed: '👁 The answer is {n}. You can correct it in the box.'
+    escribirInputRevealed: '👁 The answer is {n}. You can correct it in the box.',
+
+    /* Solution shown on a wrong answer in "read" and "write numbers".
+       A number is not solved with a hint: it shows how it is written
+       and the person writes it again after pressing "Got it". */
+    typedSolution: '👀 This is how it is written: {n}. It is read: {words}. Write it yourself in the box.'
 }, 'en');
 })();

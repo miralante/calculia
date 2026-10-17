@@ -198,6 +198,13 @@ with the same pedagogical function.
    explanation is unlocked only from the second failure onwards
    (rule 12 of §6). The hint is never built as a hidden answer:
    it does not say "it is 7", it says "count again, slowly".
+   **Exception: numbers typed by hand** (Numbers: "read and write"
+   and "write numbers"). A hint does not help to write a figure: on
+   a failure, the activity shows the solution (the figure and how it
+   is read) instead of a hint, and locks the box and the answer
+   buttons until "Got it" is pressed. When it is pressed, the
+   solution is hidden and the box opens again so the learner writes
+   the number once more.
 3. **Explanation** — when the learner answers correctly, or when
    they fail the second time, the activity publishes the
    explanation of *why* the correct answer is what it is: the
@@ -384,7 +391,8 @@ remains dynamic and accessible to assistive technologies.
 11. Quiz-type questions: maximum 3 options, always with an explanation.
 12. Socratic pacing on mistakes: a hint before the answer, encouragement
     never punishment (`App.feedback.encourage()` /
-    `App.feedback.lockUntilAck()`), unlimited retries.
+    `App.feedback.lockUntilAck()`), unlimited retries. Exception: numbers
+    typed by hand (§3.8) show the solution instead of a hint.
 13. Gradual progression: each level changes only one variable at a time.
 
 ### 6.1 WCAG AAA baseline (suite-wide)

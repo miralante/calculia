@@ -254,11 +254,9 @@
       socraticCompare: '🤔 Mira las cifras de los dos números y compara primero las de más sitio.',
       socraticBlocks: '🤔 Cuenta los bloques de cada grupo y después junta los resultados.',
       socraticSayNumber: '🤔 Mira el número pintado y léelo por partes, de izquierda a derecha.',
-      socraticWriteNumber: '🤔 Mira cómo está escrito y fíjate en qué grupos de diez está dividido.',
       socraticTradeUp: '🤔 Mira los bloques y agrúpalos de diez en diez: cuenta los grupos.',
       socraticTradeDown: '🤔 Mira cada bloque grande y cuenta cuántos pequeños entran dentro.',
       socraticLadder: '🤔 Mira el número: es un uno seguido de ceros, cuenta cuántos hay.',
-      socraticDictation: '🤔 Lee el número pintado despacio y compáralo con las opciones.',
       /* Práctica interactiva de "escribir números" — el número se
          genera y se reproduce en audio. "Generar" lo dice en voz
          alta, "Reproducir" lo repite, "Comprobar" valida, "Ver
@@ -290,6 +288,11 @@
     /* Mensajes para la práctica interactiva de "escribir números".
        Misma forma que lecturaInputCorrect / lecturaInputRevealed. */
     escribirInputCorrect: '✅ ¡Correcto! El número es {n}.',
-    escribirInputRevealed: '👁 La respuesta es {n}. Puedes corregirla en la casilla.'
+    escribirInputRevealed: '👁 La respuesta es {n}. Puedes corregirla en la casilla.',
+
+    /* Solución que se muestra al fallar en "leer" y "escribir números".
+       Un número no se resuelve con una pista: se enseña cómo se escribe
+       y la persona lo escribe otra vez tras pulsar «Entendido». */
+    typedSolution: '👀 Así se escribe: {n}. Se lee: {words}. Escríbelo tú en la casilla.'
 }, 'es');
 })();

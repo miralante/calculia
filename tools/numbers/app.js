@@ -1096,6 +1096,24 @@
      fresh. */
   var lecturaAnswered = false;
 
+  /* Wrong typed answer (lecturaInput and escribirInput). A hint does
+     not help with a number, so the solution is shown instead: the
+     digits and how they are read in words. The input and the answer
+     buttons are locked until "Entendido" is pressed
+     (App.feedback.lockUntilAck). Then the solution is hidden and the
+     input opens again so the user writes the number. */
+  function showTypedSolution(input, buttons) {
+    explanationEl.textContent = App.i18n.t("typedSolution")
+      .replace("{n}", question.correct)
+      .replace("{words}", question.words);
+    explanationWrap.classList.remove("hidden");
+    App.feedback.lockUntilAck([input].concat(buttons), explanationWrap, function () {
+      explanationWrap.classList.add("hidden");
+      explanationEl.textContent = "";
+      input.focus();
+    });
+  }
+
   function renderLecturaInput(q) {
     /* Standard quiz parts are hidden - this level owns its own
        panel. progressBar stays visible so the user can see how
@@ -1197,14 +1215,9 @@
         App.reinforce.add(level.id + ":" + index, question);
       }
       App.feedback.encourage(feedbackEl);
-      /* Socratic hint specific to this level: tells the user to
-         read the number in parts. Reuses the socraticWriteNumber
-         key, which already says "fíjate en qué grupos de diez
-         está dividido" - exactly the strategy here. */
-      feedbackEl.textContent += " " + App.i18n.t("gen.socraticWriteNumber");
-      /* Keep the input editable so the user can correct and
-         press "Comprobar" again. */
-      lecturaInput.focus();
+      /* No hint here: the solution is shown and the user writes the
+         number again after pressing "Entendido". */
+      showTypedSolution(lecturaInput, [lecturaCheck, lecturaReveal]);
     }
   }
 
@@ -1397,8 +1410,9 @@
         App.reinforce.add(level.id + ":" + index, question);
       }
       App.feedback.encourage(feedbackEl);
-      feedbackEl.textContent += " " + App.i18n.t("gen.socraticDictation");
-      escribirInput.focus();
+      /* No hint here: the solution is shown and the user writes the
+         number again after pressing "Entendido". */
+      showTypedSolution(escribirInput, [escribirCheck, escribirReveal]);
     }
   }
 
