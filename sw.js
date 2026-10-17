@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v200';
+var VERSION = 'calculia-v202';
 
 var FILES = [
   './',
@@ -288,14 +288,17 @@ function deRedirect(res) {
 }
 
 /* addAll() stores the followed response as-is, so precache entry by entry and
-   sanitise. Still all-or-nothing: a missing file rejects, as addAll did. */
+   sanitise. Not all-or-nothing: a listed file that is missing on the server
+   must not fail install, because a failed install leaves every client on its
+   old worker and no deploy would reach them. A file that cannot be fetched
+   here is fetched on demand later. */
 function precache(cache, files) {
   return Promise.all(files.map(function (file) {
     /* cache: 'reload' avoids storing stale copies from the browser HTTP cache */
     return fetch(new Request(file, { cache: 'reload' })).then(function (res) {
-      if (!res || !res.ok) throw new Error('precache failed: ' + file);
+      if (!res || !res.ok) return;
       return cache.put(file, deRedirect(res));
-    });
+    }).catch(function () {});
   }));
 }
 
