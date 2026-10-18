@@ -1,6 +1,6 @@
 'use strict';
 
-/* Browser test for the points game of tools/quantities ("Poner los puntos").
+/* Browser test for the points game of tools/quantities ("Escribir con cifras y puntos").
    Drives the real page with Chromium through Playwright, using real mouse
    events for the drags, so the pointer code is exercised as a person would
    use it. Runs in Spanish (es-ES). Run with: npm run test:quantities */
@@ -53,7 +53,7 @@ function correctGaps(digits) {
 
 async function openPointsGame(page, base) {
   await page.goto(base + PAGE);
-  await page.locator('#practiceGrid button', { hasText: 'Poner los puntos' }).click();
+  await page.locator('#practiceGrid button', { hasText: 'Escribir con cifras y puntos' }).click();
   await page.waitForSelector('#pointsBoard .pt-digit');
 }
 
@@ -126,8 +126,10 @@ async function testProgressionAndAudio(browser, base) {
       await page.locator('#checkAnswer').click();
       const feedback = await page.textContent('#feedback');
       assert.match(feedback, /Se escribe:/, `item ${i + 1}: correct answer should be confirmed`);
-      assert.equal(await page.locator('#hearNumber').isVisible(), true,
-        `item ${i + 1}: the 🔊 button should show after a right answer`);
+      assert.equal(await page.locator('#hearNumber').count(), 0,
+        `item ${i + 1}: there should be no second 🔊 button after a right answer`);
+      assert.equal(await page.locator('#listenBtn').isVisible(), true,
+        `item ${i + 1}: the single 🔊 button should stay visible after a right answer`);
       /* Right answer: the gaps are gone and every digit wears its group colour. */
       assert.equal(await page.locator('#pointsBoard .pt-gap').count(), 0,
         `item ${i + 1}: the gaps should be replaced by the coloured number`);

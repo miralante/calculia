@@ -625,7 +625,6 @@
     hide($('#pointsZone'));
     hide($('#answerInput'));
     hide($('#listenBtn'));
-    hide($('#hearNumber'));
     $('#answerInput').value = '';
   }
 
@@ -643,9 +642,12 @@
     $('#taskIcon').textContent = '';
 
     if (practice === 'read') {
-      /* Read: the number is shown in digits, coloured by group. */
+      /* Read: the number is shown in digits, coloured by group. The
+         listen button is always there too, so the number can be heard
+         at any time during the challenge. */
       $('#numberShown').innerHTML = coloredDigits(case_.n);
       show($('#numberShown'));
+      show($('#listenBtn'));
     } else if (practice === 'write') {
       /* Write: nothing is shown; the person listens with 🔊. */
       show($('#listenBtn'));
@@ -655,6 +657,8 @@
       renderPointsBoard();
       renderPointsTray();
       show($('#pointsZone'));
+      /* The listen button is always there, as in the read practice. */
+      show($('#listenBtn'));
     }
 
     $('#progressFill').style.width = ((index / round.length) * 100) + '%';
@@ -705,8 +709,6 @@
        own colour, so it is easier to see its groups. */
     if (practice === 'points') $('#pointsBoard').innerHTML = coloredDigits(case_.n);
     hide($('#checkAnswer'));
-    /* After a right answer the person can hear the number read aloud. */
-    if (App.tts && App.tts.available) show($('#hearNumber'));
     show($('#nextTask'));
     $('#nextTask').focus();
   }
@@ -851,14 +853,13 @@
   $('#nextTask').addEventListener('click', goNext);
   $('#pointsBoard').addEventListener('pointerdown', onBoardPointerDown);
   $('#pointsTray').addEventListener('pointerdown', onTrayPointerDown);
-  /* Audio: reads the current number aloud. Used by the write practice
-     (listen before writing) and by the button shown after a right answer. */
+  /* Audio: reads the current number aloud. The single listen button
+     (#listenBtn) is shown in the read, write and points practices. */
   function speakCase() {
     if (case_ && case_.audio && App.tts) App.tts.speak(case_.audio);
   }
   var elListenBtn = $('#listenBtn');
   if (elListenBtn) elListenBtn.addEventListener('click', speakCase);
-  $('#hearNumber').addEventListener('click', speakCase);
   $('#backToMenu').addEventListener('click', function () { switchTo(menuScreen); });
 
   function init() {

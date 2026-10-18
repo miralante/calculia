@@ -23,10 +23,10 @@
        DATA.practices. */
     readName: 'Read numbers',
     readDetail: 'Look at the number and write it in words.',
-    writeName: 'Write numbers',
+    writeName: 'Write in words',
     writeDetail: 'Listen to the number and write it in words.',
-    pointsName: 'Put the commas',
-    pointsDetail: 'Place the commas. From thousands to billions.',
+    pointsName: 'Write in digits with commas',
+    pointsDetail: 'Write the number in digits and place its commas. From thousands to billions.',
 
     /* ---------- Reading and writing practices ----------
        {n} = formatted number. */

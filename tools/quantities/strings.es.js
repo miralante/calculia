@@ -26,10 +26,10 @@
        de DATA.practices. */
     readName: 'Leer números',
     readDetail: 'Mira el número y escríbelo con letras.',
-    writeName: 'Escribir números',
+    writeName: 'Escribir con letras',
     writeDetail: 'Escucha el número y escríbelo con letras.',
-    pointsName: 'Poner los puntos',
-    pointsDetail: 'Coloca los puntos. De miles a miles de millones.',
+    pointsName: 'Escribir con cifras y puntos',
+    pointsDetail: 'Escribe el número con cifras y coloca sus puntos. De miles a miles de millones.',
 
     /* ---------- Prácticas de escritura ----------
        {n} = número ya formateado. */
