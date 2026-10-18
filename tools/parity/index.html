@@ -22,17 +22,70 @@
     </header>
 
     <main>
-      <!-- Pantalla de juego: el número se pinta como una columna de
-           puntos. Una pareja vale "par"; si sobra un punto solo, es
-           impar. El punto sobrado va en otro color para que se vea. -->
-      <section id="screenParity" class="stack">
+      <!-- Pantalla 1: qué es par e impar. Dos montones de puntos
+           con su etiqueta: el primero va en parejas, el segundo
+           deja uno suelto. -->
+      <section id="screenParityIntro" class="stack">
+        <div class="card reference-card stack">
+          <h2 class="reference-title" data-i18n="introTitle">¿Qué es par y qué es impar?</h2>
+          <p class="reference-text" data-i18n="introText">Un número es par si sus puntos van de dos en dos y no sobra ninguno. Si sobra uno, es impar.</p>
+        </div>
+
+        <div class="card parity-demo">
+          <figure class="parity-demo-item">
+            <div class="parity-dots parity-dots-small" id="introDemoEven" role="img"></div>
+            <figcaption data-i18n="introEvenCaption">Par: 4 puntos, dos parejas</figcaption>
+          </figure>
+          <figure class="parity-demo-item">
+            <div class="parity-dots parity-dots-small" id="introDemoOdd" role="img"></div>
+            <figcaption data-i18n="introOddCaption">Impar: 5 puntos, sobra uno</figcaption>
+          </figure>
+        </div>
+
+        <div class="row intro-buttons">
+          <button type="button" class="btn" id="parityIntroNext" data-i18n="introNext">Ver en la vida real →</button>
+        </div>
+      </section>
+
+      <!-- Pantalla 2: la vida real. Cuatro ejemplos cotidianos. -->
+      <section id="screenParityReal" class="stack hidden">
+        <div class="card reference-card stack">
+          <h2 class="reference-title" data-i18n="realTitle">En la vida real</h2>
+          <p class="reference-text" data-i18n="realText">Fíjate: lo par va en parejas y lo impar deja uno suelto.</p>
+        </div>
+        <div class="stack" id="realCards"></div>
+        <div class="row intro-buttons">
+          <button type="button" class="btn" id="parityRealNext" data-i18n="realNext">Elegir un nivel →</button>
+        </div>
+      </section>
+
+      <!-- Pantalla 3: niveles, en orden de dificultad. La lista se
+           pinta desde app.js (renderLevels). -->
+      <section id="screenParityLevels" class="stack hidden">
         <div class="row">
-          <button type="button" class="btn btn-secondary" id="parityBack" data-i18n="btnMenu">Volver al inicio</button>
+          <button type="button" class="btn btn-secondary" id="parityLevelsBack" data-i18n="levelsBack">← Volver</button>
+        </div>
+        <h2 class="reference-title" data-i18n="levelsTitle">Elige un nivel</h2>
+        <p class="reference-text" data-i18n="levelsText">Empieza por el 1 y sigue en orden.</p>
+        <div class="stack" id="parityLevelList"></div>
+      </section>
+
+      <!-- Pantalla 4: práctica. El punto sobrante de la columna va
+           en otro color para que se vea. -->
+      <section id="screenParity" class="stack hidden">
+        <div class="row">
+          <button type="button" class="btn btn-secondary" id="parityBack" data-i18n="backLevels">← Niveles</button>
         </div>
         <div class="progress-bar" aria-hidden="true">
           <div class="progress-fill" id="parityProgressFill"></div>
         </div>
         <p class="progress-text" id="parityProgressText"></p>
+
+        <details class="parity-rule" id="parityRuleBox">
+          <summary data-i18n="ruleTitle">Recuerda la regla</summary>
+          <p id="parityRule"></p>
+        </details>
+
         <article class="card stack parity-card">
           <h2 id="parityPrompt"></h2>
           <div class="parity-dots" id="parityDots" role="img"></div>
@@ -45,13 +98,14 @@
         </article>
       </section>
 
+      <!-- Pantalla final: un único botón, como en el resto del catálogo. -->
       <section id="screenParityFinish" class="stack hidden centered">
         <div class="big-emoji" aria-hidden="true">🎉</div>
         <h2 data-i18n="core.roundComplete">¡Ronda terminada!</h2>
         <p id="parityFinalSummary"></p>
         <p class="transfer" data-i18n="parityTransfer"></p>
-      <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>
-    </section>
+        <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>
+      </section>
     </main>
 
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>

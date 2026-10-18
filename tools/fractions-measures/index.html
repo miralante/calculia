@@ -27,6 +27,46 @@
 
     
 
+    <!-- Explanation before the first round: what a fraction is, in three slides. -->
+    <section id="screenIntro" class="hidden stack">
+      <div class="row center-row">
+        <p class="instruction" id="introInstruction">Antes de jugar, mira cómo se lee una fracción.</p>
+      </div>
+      <div class="card reference-card stack">
+        <h2 class="reference-title" id="introTitle">Qué es una fracción</h2>
+        <p class="reference-text" id="introText">Una fracción dice qué parte de algo tomas. Se escribe con dos números, uno encima del otro.</p>
+      </div>
+      <div class="card stack carousel-card">
+        <div class="intro-visual" id="introVisual"></div>
+        <p class="carousel-caption" id="introCaption"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="introPrev">←</button>
+          <button type="button" class="btn btn-secondary" id="introNext">→</button>
+        </div>
+      </div>
+      <div class="row intro-buttons">
+        <button type="button" class="btn btn-secondary" id="introReal">Verlo en la vida real →</button>
+      </div>
+    </section>
+
+    <!-- Real-life examples, shown before the first round. -->
+    <section id="screenReal" class="hidden stack">
+      <div class="row center-row">
+        <p class="instruction" id="realTitle">Las fracciones están en la vida real.</p>
+      </div>
+      <div class="card centered stack real-card">
+        <div class="real-object" id="realObject" aria-hidden="true"></div>
+        <p class="carousel-caption" id="realCaption"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="realPrev">←</button>
+          <button type="button" class="btn btn-secondary" id="realNext">→</button>
+        </div>
+      </div>
+      <div class="row intro-buttons">
+        <button type="button" class="btn" id="realContinue">Empezar a practicar →</button>
+      </div>
+    </section>
+
     <section id="screenGame" class="hidden stack">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
@@ -49,7 +89,32 @@
       <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
-    <section id="screenEnd"
+    <!-- Poner la coma decimal (actividad 'coma'): el número sin separadores,
+         con un hueco entre cada cifra. #commaBoard son las cifras y los huecos
+         (botones); #commaTray es la coma que todavía no tiene sitio. -->
+    <section id="screenComma" class="hidden stack" aria-live="polite">
+      <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="comaProgressFill"></div></div>
+      <p class="progress-text" id="comaProgressText"></p>
+      <article class="card task-card">
+        <h2 id="comaPrompt"></h2>
+        <p class="task-detail" id="comaDetail"></p>
+
+        <div class="comma-zone">
+          <div class="comma-row">
+            <div class="comma-board" id="commaBoard" role="group" data-i18n-aria="coma.boardAria" aria-label="Número para colocar la coma decimal"></div>
+            <div class="comma-tray" id="commaTray" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <p class="feedback" id="comaFeedback" aria-live="polite"></p>
+        <button type="button" class="btn" id="comaCheck" data-i18n="coma.check">Comprobar</button>
+        <button type="button" class="btn btn-secondary hidden" id="comaHear" data-i18n="core.listen">🔊 Escuchar</button>
+        <button type="button" class="btn hidden" id="comaNext" data-i18n="core.next">Siguiente →</button>
+      </article>
+      <button type="button" class="btn btn-secondary" id="comaBack" data-i18n="btnBackToMenu">← Otras actividades</button>
+    </section>
+
+    <section id="screenEnd" class="stack hidden centered"
       <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>

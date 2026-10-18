@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Measures
+   Calculia — Measures
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -50,7 +50,7 @@
   var reinforceTotal = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Utilidades ---- */
 
@@ -100,7 +100,7 @@
       }
       html += '<span class="rung' + (mark ? ' is-marked' : '') +
         '" style="margin-left:' + (i * 7) + 'px">' +
-        (mark ? '<span class="rung-mark" aria-hidden="true">ðŸ‘‰</span>' : '') +
+        (mark ? '<span class="rung-mark" aria-hidden="true">👉</span>' : '') +
         '<span class="rung-symbol">' + u + '</span>' +
         '<span class="rung-name">' + unitName(u) + '</span></span>';
     });
@@ -289,7 +289,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -365,8 +365,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”which is what
-     to do with the figure in front of youâ€” and not the same sentence for
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

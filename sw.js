@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Service Worker
+   Calculia — Service Worker
    Network-first strategy with a cache fallback (works offline).
    The server copy wins whenever the device is online, so a deploy
    reaches installed PWAs without anyone bumping VERSION by hand.
@@ -10,7 +10,7 @@
    Cloudflare answers the index.html form with a 307 to the directory.
    cache.addAll() follows that redirect and stores the final response
    under the ORIGINAL key with `redirected: true`, and a redirected
-   response may not be handed to a top-level navigation â€” Chrome kills
+   response may not be handed to a top-level navigation — Chrome kills
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
@@ -223,12 +223,6 @@ var FILES = [
   './tools/order-numbers/strings.es.js',
   './tools/order-numbers/strings.en.js',
   './tools/order-numbers/styles.css',
-  './tools/decimal/',
-  './tools/decimal/app.js',
-  './tools/decimal/data.js',
-  './tools/decimal/strings.es.js',
-  './tools/decimal/strings.en.js',
-  './tools/decimal/styles.css',
   './tools/riddles/',
   './tools/riddles/app.js',
   './tools/riddles/data.js',

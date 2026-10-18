@@ -1693,15 +1693,10 @@ async function exerciseNumbers(page, baseUrl) {
   });
   await page.reload();
 
-  /* Números ya no es una tarjeta de portada: el catálogo público solo
-     muestra Números Romanos y Formas, y Números vive en la página oculta
-     dev/. Se comprueba en las dos rutas, para que el reparto no vuelva a
-     romperse en silencio por un lado o por otro. */
-  /* Números es tarjeta de la portada pública y también de dev/ (ver las
-     listas PUBLIC_SLUGS y BOTH_SLUGS de scripts/check.js, que siguen a las
-     dos páginas). Si una de las dos deja de enlazarla, esta prueba falla. */
-  assert.equal(await page.locator('a[href="tools/numbers/"]').count(), 1,
-    'La portada pública ya no muestra Números');
+  /* Números ya no es tarjeta de la portada pública: vive solo en la página
+     oculta dev/ (ver PUBLIC_SLUGS de scripts/check.js). */
+  assert.equal(await page.locator('a[href="tools/numbers/"]').count(), 0,
+    'La portada pública vuelve a mostrar Números');
   /* Positivos y negativos dejó de ser una herramienta propia y se
      integró en Números (commit "feat(numbers): integrate positive and
      negative practice"), así que ya no existe tools/posneg/: ese

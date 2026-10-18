@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Cuentas grandes
+   Calculia — Cuentas grandes
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -43,7 +43,7 @@
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Data invariants ----
      Nothing that can be worked out is stored, so the only thing that can
@@ -137,7 +137,7 @@
       '<span class="block-caption">' + caption + '</span></span>';
   }
 
-  function times(a, b) { return a + ' Ã— ' + b; }
+  function times(a, b) { return a + ' × ' + b; }
 
   /* Groups of things, for the two ways of dividing. */
   function groupsHtml(count, per, tone) {
@@ -152,8 +152,8 @@
 
   function expression(o, parens) {
     return parens
-      ? '( ' + o.a + ' + ' + o.b + ' ) Ã— ' + o.c
-      : o.a + ' + ' + o.b + ' Ã— ' + o.c;
+      ? '( ' + o.a + ' + ' + o.b + ' ) × ' + o.c
+      : o.a + ' + ' + o.b + ' × ' + o.c;
   }
 
   var GENERATORS = {
@@ -173,7 +173,7 @@
         var isStart = v === w.from;
         html += '<span class="line-stop' + (isStart ? ' is-start' : '') +
           (v === 0 ? ' is-zero' : '') + '">' +
-          (isStart ? '<span class="line-you" aria-hidden="true">ðŸ“</span>' : '') +
+          (isStart ? '<span class="line-you" aria-hidden="true">📍</span>' : '') +
           '<span class="stop-num">' + v + '</span></span>';
       }
       return {
@@ -302,7 +302,7 @@
     whatFirst: function (nv) {
       var o = App.utils.drawRound(nv.id, DATA.orders);
       var parens = App.utils.drawRound(nv.id + 'p', [true, false]);
-      var mul = o.b + ' Ã— ' + o.c;
+      var mul = o.b + ' × ' + o.c;
       var add = o.a + ' + ' + o.b;
       return {
         prompt: App.i18n.t('gen.whatFirst'),
@@ -403,7 +403,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -481,8 +481,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”which is what
-     to do with the figure in front of youâ€” and not the same sentence for
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

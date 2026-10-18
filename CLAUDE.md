@@ -57,9 +57,9 @@ HTML/CSS/JS served as static files.
   ```
   It checks JS syntax, activity folder structure, es/en key parity
   (`tools/`, the site root, `config/`, `legal/`), `sw.js` ↔ disk parity, and
-  catalog lock: the public landing (`index.html`) shows eleven cards —
+  catalog lock: the public landing (`index.html`) shows ten cards —
   Los Números, Quantities, Ordinal Numbers, Fractions, Parity, Roman
-  Numerals, Numbers, Shapes, Trigonometry, Scale and Math Tables. Ten of
+  Numerals, Shapes, Trigonometry, Scale and Math Tables. Nine of
   them are listed in `dev/index.html` as well (all except Roman Numerals;
   the `BOTH_SLUGS` list). The hidden `dev/` page lists every other
   activity, and the combined set plus `config/` and `sw.js` must cover

@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Grupos exactos
+   Calculia — Grupos exactos
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -43,7 +43,7 @@
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Everything is worked out, nothing is stored ---- */
   var PRIME_TESTS = [2, 3, 5];
@@ -89,7 +89,7 @@
       throw new Error('divisibility: ' + i.base + ' to the ' + i.n + ' is not a power');
     }
     /* Past three figures the number stops being something to hold on to,
-       and the sign â€” which is what this level is for â€” gets lost in it. */
+       and the sign — which is what this level is for — gets lost in it. */
     if (Math.pow(i.base, i.n) > 999) {
       throw new Error('divisibility: ' + i.base + ' to the ' + i.n + ' is too big to read');
     }
@@ -180,10 +180,10 @@
     var html = '<span class="minus-row">';
     var pairs = Math.floor(n / 2);
     for (var i = 0; i < pairs; i++) {
-      html += '<span class="minus-pair"><span class="minus">âˆ’</span>' +
-        '<span class="minus">âˆ’</span></span>';
+      html += '<span class="minus-pair"><span class="minus">−</span>' +
+        '<span class="minus">−</span></span>';
     }
-    if (n % 2) html += '<span class="minus-pair is-lonely"><span class="minus">âˆ’</span></span>';
+    if (n % 2) html += '<span class="minus-pair is-lonely"><span class="minus">−</span></span>';
     return html + '</span>';
   }
 
@@ -201,7 +201,7 @@
     var value = 1;
     for (var i = 0; i <= n; i++) {
       if (i > 0) {
-        html += '<span class="chain-step" aria-hidden="true">Ã—' + base + '</span>';
+        html += '<span class="chain-step" aria-hidden="true">×' + base + '</span>';
         value *= base;
       }
       html += '<span class="chain-box">' + value + '</span>';
@@ -247,7 +247,7 @@
         var on = t % step === 0;
         html += '<span class="tick' + (on ? ' is-on' : '') +
           (on && t === meetAt ? ' is-meet' : '') + '">' +
-          (t === meetAt ? '<span class="meet-mark" aria-hidden="true">â˜…</span>' : '') +
+          (t === meetAt ? '<span class="meet-mark" aria-hidden="true">★</span>' : '') +
           '</span>';
       }
       return html + '</span>';
@@ -469,7 +469,7 @@
         var fits = n % t === 0;
         html += '<span class="try' + (fits ? ' is-fit' : '') + '">' +
           '<span class="try-label">' + App.i18n.t('gen.inRowsOf').replace(/\{t\}/g, t) +
-          ' <span class="try-verdict" aria-hidden="true">' + (fits ? 'âœ”' : 'âœ–') + '</span></span>' +
+          ' <span class="try-verdict" aria-hidden="true">' + (fits ? '✔' : '✖') + '</span></span>' +
           rowsOf(n, t, fits ? 1 : 2) + '</span>';
       });
       return {
@@ -546,12 +546,12 @@
       var item = App.utils.drawRound(nv.id, DATA.negPowers);
       var answer = negativePowerOf(item.base, item.n);
       var written = [];
-      for (var i = 0; i < item.n; i++) written.push('(âˆ’' + item.base + ')');
+      for (var i = 0; i < item.n; i++) written.push('(−' + item.base + ')');
       return {
         prompt: App.i18n.t('gen.negativePower')
           .replace(/\{times\}/g, item.n).replace(/\{base\}/g, item.base),
         visual: '<div class="calc-stage"><p class="long-number">' +
-          written.join(' Ã— ') + '</p>' + minusPairs(item.n) + '</div>',
+          written.join(' × ') + '</p>' + minusPairs(item.n) + '</div>',
         visualAria: App.i18n.t('gen.negativeAria')
           .replace(/\{base\}/g, item.base).replace(/\{times\}/g, item.n),
         legend: App.i18n.t('gen.negativeHint'),
@@ -566,7 +566,7 @@
 
     /* How many times a number was multiplied by itself to get here. That
        count is what the index of a root says, and it is counted off the
-       chain â€” which works for four times or six, not only two or three. */
+       chain — which works for four times or six, not only two or three. */
     rootIndex: function (nv) {
       var item = App.utils.drawRound(nv.id, DATA.powerChains);
       var result = Math.pow(item.base, item.n);
@@ -663,7 +663,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -741,8 +741,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”which is what
-     to do with the figure in front of youâ€” and not the same sentence for
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

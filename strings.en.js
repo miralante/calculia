@@ -32,7 +32,6 @@
     "quantities": { "name": "Read and Write Numbers", "detail": "Read and write big numbers." },
     "ordinals": { "name": "Ordinal Numbers", "detail": "First, second, third…" },
     "order-numbers": { "name": "Order numbers", "detail": "Put the numbers from smallest to biggest." },
-    "decimal": { "name": "Put the decimal point", "detail": "Place the decimal point between the whole part and the decimals." },
     "parity": { "name": "Even and odd", "detail": "Look at the dots: one left alone or all paired up?" },
     "mathtables": { "name": "Math Tables", "detail": "Add and multiply with colors." },
     "headmath": { "name": "Head Math", "detail": "Count, make 10 first and split into 10s with colored dots." },

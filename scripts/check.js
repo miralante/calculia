@@ -338,8 +338,8 @@ if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'
 if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
 /* --- 5. Public/private catalog split ---
-   The public landing carries ELEVEN entries (Los Números, Quantities,
-   Ordinal Numbers, Fractions, Parity, Roman Numerals, Numbers, Shapes,
+   The public landing carries TEN entries (Los Números, Quantities,
+   Ordinal Numbers, Fractions, Parity, Roman Numerals, Shapes,
    Trigonometry, Scale, Math Tables);
    the hidden dev/ page carries every other activity, plus the public
    ones listed in BOTH_SLUGS. Together they cover the full tools/,
@@ -385,11 +385,11 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['los-numeros', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'roman-numerals', 'numbers', 'shapes', 'trigonometry', 'scale', 'math-tables'];
+var PUBLIC_SLUGS = ['los-numeros', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'roman-numerals', 'shapes', 'trigonometry', 'scale', 'math-tables'];
 /* Public AND in dev/. Every name here must also be in PUBLIC_SLUGS,
    otherwise dev/ would carry an activity the landing hides, which is
    the inverse mistake and just as wrong. */
-var BOTH_SLUGS = ['los-numeros', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'numbers', 'shapes', 'trigonometry', 'scale', 'math-tables'];
+var BOTH_SLUGS = ['los-numeros', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'shapes', 'trigonometry', 'scale', 'math-tables'];
 var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
 var expectedDevSlugs = new Set(slugs.filter(function (slug) {
   return PUBLIC_SLUGS.indexOf(slug) === -1 || BOTH_SLUGS.indexOf(slug) !== -1;
@@ -440,7 +440,7 @@ Object.keys(targets).forEach(function (f) {
    assets/js/utils.js. An activity that still defines its own `function
    draw(` or `function spreadRepeats(` is duplicating that helper and
    going around the contract. */
-var NO_SHUFFLE = ['temperature', 'los-numeros', 'quantities', 'decimal'];
+var NO_SHUFFLE = ['temperature', 'los-numeros', 'quantities'];
 slugs.forEach(function (slug) {
   if (NO_SHUFFLE.indexOf(slug) !== -1) return;
   checks += 1;

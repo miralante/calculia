@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Datos y grÃ¡ficos
+   Calculia — Datos y gráficos
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -43,7 +43,7 @@
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Data invariants ----
      Every "which has most / least" question needs a single winner, and
@@ -137,7 +137,7 @@
     set.cats.forEach(function (c) {
       html += '<div class="chart-row' + (c.id === markId ? ' is-asked' : '') + '">' +
         '<span class="row-label">' +
-        (c.id === markId ? '<span class="row-mark" aria-hidden="true">ðŸ‘‰</span>' : '') +
+        (c.id === markId ? '<span class="row-mark" aria-hidden="true">👉</span>' : '') +
         catName(c.id) + '</span>' +
         '<span class="row-pictos">' + tokensHtml(c.n, c.picto) + '</span>' +
         '</div>';
@@ -152,7 +152,7 @@
     set.cats.forEach(function (c) {
       html += '<div class="bar-row' + (c.id === markId ? ' is-asked' : '') + '">' +
         '<span class="row-label">' +
-        (c.id === markId ? '<span class="row-mark" aria-hidden="true">ðŸ‘‰</span>' : '') +
+        (c.id === markId ? '<span class="row-mark" aria-hidden="true">👉</span>' : '') +
         catName(c.id) + '</span>' +
         '<span class="bar-track"><span class="bar-fill" style="width:' +
         ((c.n / DATA.barMax) * 100) + '%"></span></span>' +
@@ -226,7 +226,7 @@
       var n = values.filter(function (x) { return x === v; }).length;
       html += '<span class="spread-slot">' +
         (n ? '<span class="spread-mark" data-count="' + n + '">' +
-          new Array(n + 1).join('â—') + '</span>' : '') + '</span>';
+          new Array(n + 1).join('●') + '</span>' : '') + '</span>';
     }
     return html + '</span></span>';
   }
@@ -821,7 +821,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -897,8 +897,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”which is what
-     to do with the figure in front of youâ€” and not the same sentence for
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

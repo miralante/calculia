@@ -1,19 +1,20 @@
 /* ============================================================
    Calculia — Pares e impares: app.
 
-   Una mecánica. Una pantalla. La respuesta es la imagen:
-   cada par en un color, y el posible punto sobrante en otro.
-   El usuario mira los puntos y elige Par / Impar; la duda se
-   resuelve en un vistazo si están bien coloreados, y ese es
-   exactamente el punto: la paridad se ve, no se calcula.
+   Fases, en el orden de la anatomía de Calculia (SPEC §3.6 y
+   §3.8): primero se explica (qué es par y qué es impar), luego
+   se muestra en la vida real, después se elige nivel y se
+   practica. Cada respuesta correcta publica su explicación; cada
+   fallo publica una pista que no revela la respuesta.
 
-   Antes este bloque vivía dentro de Cantidades (tools/quantities/
-   app.js). En 2026-10 salió a su propia herramienta al nivel
-   superior de la suite.
+   Los niveles van de lo visible a lo abstracto: puntos, número
+   escrito, última cifra, lados de una forma y número romano. La
+   regla es la misma en todos: par si se puede repartir en
+   parejas sin que sobre nada; impar si sobra uno.
 
-   Bandera del módulo: mod-racional (el "razonamiento" del
+   Bandera del módulo: mod-razonamiento (el "razonamiento" del
    agrupamiento). El punto sobrante usa color-foco-suave como
-   halo: el orphan dot se lee como el singular.
+   halo: el punto suelto se lee como el singular.
    ============================================================ */
 (function () {
   'use strict';
@@ -24,77 +25,83 @@
   /* Persistent state */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (!progress.done || typeof progress.done !== 'object') progress.done = {};
 
   function save() { App.storage.set(TOOL_ID, progress); }
   function show(el) { if (el) el.classList.remove('hidden'); }
   function hide(el) { if (el) el.classList.add('hidden'); }
   function t(key) { return App.i18n.t(key); }
 
+  /* Replaces every {name} in text with values[name]. Replacing
+     all occurrences (not only the first) keeps the helper safe for
+     texts that repeat a placeholder, such as "{n} es {p}". */
+  function fill(text, values) {
+    Object.keys(values).forEach(function (name) {
+      text = text.split('{' + name + '}').join(String(values[name]));
+    });
+    return text;
+  }
+
+  function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  function isEven(n) { return n % 2 === 0; }
+  function wordFor(n) { return t(isEven(n) ? 'wordEven' : 'wordOdd'); }
+  function format(n) { return n.toLocaleString(App.i18n.locale() === 'en' ? 'en-US' : 'es-ES'); }
+
+  var ROMAN = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
+  function toRoman(n) {
+    var out = '';
+    ROMAN.forEach(function (pair) {
+      while (n >= pair[0]) { out += pair[1]; n -= pair[0]; }
+    });
+    return out;
+  }
+
   /* ----------- Elements ----------- */
-  var gameScreen = $('#screenParity');
-  var finishScreen = $('#screenParityFinish');
+  var screens = {
+    intro: $('#screenParityIntro'),
+    real: $('#screenParityReal'),
+    levels: $('#screenParityLevels'),
+    game: $('#screenParity'),
+    finish: $('#screenParityFinish')
+  };
   var starsEl = $('#stars');
 
   function paintStars() {
     starsEl.textContent = '⭐ ' + progress.stars;
   }
 
-  function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
-
-  /* ----------- Round state ----------- */
-  var items = [];
-  var idx = 0;
-
-  /* Mix of evens and odds, alternating roughly, so the user
-     cannot reach for "always Par" by accident. */
-  function makeRound() {
-    var out = [];
-    var max = DATA.max;
-    var limit = DATA.perRound;
-    while (out.length < limit) {
-      var candidate = randomInt(0, max);
-      var isEven = candidate % 2 === 0;
-      /* Accept unless the last two picks were the same parity —
-         that keeps a fair balance without preventing any
-         reasonable distribution. */
-      if (out.length >= 2 &&
-          isEven === (out[out.length - 1].a % 2 === 0) &&
-          isEven === (out[out.length - 2].a % 2 === 0)) {
-        continue;
-      }
-      out.push({ a: candidate });
+  /* Moves between the stages of the activity. Focus goes to the
+     stage heading so a screen reader announces the new stage. */
+  function goTo(name) {
+    Object.keys(screens).forEach(function (key) { hide(screens[key]); });
+    show(screens[name]);
+    window.scrollTo(0, 0);
+    var heading = screens[name].querySelector('h2');
+    if (heading) {
+      heading.setAttribute('tabindex', '-1');
+      heading.focus();
     }
-    return App.utils.shuffle(out);
   }
 
-  function startRound() {
-    items = makeRound();
-    idx = 0;
-    show(gameScreen);
-    hide(finishScreen);
-    renderItem();
-  }
+  /* ----------- Explanation stage: intro demo and real examples ----------- */
 
-  /* Render the dots row(s): every two dots of the same colour go
-     in one row, the leftover dot (if any) goes in its own row
-     in the "leftover" colour. The pairing shape IS the visible
-     answer. */
-  function paintDots(item) {
-    var cont = $('#parityDots');
+  /* Paints a column of dots: every two dots of one colour sit in a
+     row, the leftover dot (if any) sits alone in the second colour.
+     The pairing shape IS the visible answer. Returns nothing; sets
+     an aria-label on the container that says the same thing aloud. */
+  function paintDots(cont, n) {
     cont.innerHTML = '';
-    var pairs = Math.floor(item.a / 2);
-    var leftover = item.a % 2;
+    var pairs = Math.floor(n / 2);
+    var leftover = n % 2;
     for (var i = 0; i < pairs; i += 1) {
       var pairRow = document.createElement('div');
       pairRow.className = 'parity-pair-row';
-      var d1 = document.createElement('span');
-      d1.className = 'parity-dot parity-pair';
-      d1.style.backgroundColor = DATA.pairColor;
-      var d2 = document.createElement('span');
-      d2.className = 'parity-dot parity-pair';
-      d2.style.backgroundColor = DATA.pairColor;
-      pairRow.appendChild(d1);
-      pairRow.appendChild(d2);
+      for (var j = 0; j < 2; j += 1) {
+        var dot = document.createElement('span');
+        dot.className = 'parity-dot parity-pair';
+        dot.style.backgroundColor = DATA.pairColor;
+        pairRow.appendChild(dot);
+      }
       cont.appendChild(pairRow);
     }
     if (leftover) {
@@ -106,11 +113,183 @@
       singleRow.appendChild(d);
       cont.appendChild(singleRow);
     }
-    /* aria-label describes the picture aloud; the prompt below
-       already says the number, so the dots line is purely visual. */
-    var s = pairs + ' ' + t('pairsWord');
-    if (leftover) s += ', ' + t('oneLeftWord');
-    cont.setAttribute('aria-label', s);
+    var label = pairs + ' ' + t('pairsWord');
+    if (leftover) label += ', ' + t('oneLeftWord');
+    cont.setAttribute('aria-label', label);
+  }
+
+  function renderIntroDemo() {
+    paintDots($('#introDemoEven'), 4);
+    paintDots($('#introDemoOdd'), 5);
+  }
+
+  function renderRealCards() {
+    var list = $('#realCards');
+    list.innerHTML = '';
+    DATA.examples.forEach(function (icon, i) {
+      var card = document.createElement('article');
+      card.className = 'card parity-example';
+
+      var iconEl = document.createElement('span');
+      iconEl.className = 'parity-example-icon';
+      iconEl.setAttribute('aria-hidden', 'true');
+      iconEl.textContent = icon;
+
+      var body = document.createElement('div');
+      var title = document.createElement('h3');
+      title.textContent = t('real.' + i + '.title');
+      var text = document.createElement('p');
+      text.textContent = t('real.' + i + '.text');
+      body.appendChild(title);
+      body.appendChild(text);
+
+      card.appendChild(iconEl);
+      card.appendChild(body);
+      list.appendChild(card);
+    });
+  }
+
+  /* ----------- Level selection ----------- */
+  function renderLevels() {
+    var list = $('#parityLevelList');
+    list.innerHTML = '';
+    DATA.levels.forEach(function (level, i) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn level-btn';
+
+      var name = document.createElement('span');
+      name.className = 'level-name';
+      name.textContent = (i + 1) + '. ' + t('levels.' + level.id + '.name');
+
+      var detail = document.createElement('span');
+      detail.className = 'level-detail';
+      detail.textContent = t('levels.' + level.id + '.detail');
+
+      btn.appendChild(name);
+      btn.appendChild(detail);
+      if (progress.done[level.id]) {
+        var done = document.createElement('span');
+        done.className = 'level-done';
+        done.textContent = t('levelDone');
+        btn.appendChild(done);
+      }
+      btn.addEventListener('click', function () { startRound(level); });
+      list.appendChild(btn);
+    });
+  }
+
+  /* ----------- Round state ----------- */
+  var currentLevel = null;
+  var items = [];
+  var idx = 0;
+
+  /* Numbers are drawn at random from the level's range, without
+     repeats inside a round. Even and odd numbers come in any order,
+     so a round can have several of the same kind in a row and the
+     user cannot predict the next one. A range smaller than perRound
+     (the shapes level) gives one question per value instead. */
+  function makeRound(level) {
+    var out = [];
+    var used = {};
+    var span = level.max - level.min + 1;
+    var count = Math.min(level.perRound, span);
+    while (out.length < count) {
+      var candidate = randomInt(level.min, level.max);
+      if (used[candidate]) continue;
+      used[candidate] = true;
+      out.push({ a: candidate });
+    }
+    return out;
+  }
+
+  function startRound(level) {
+    currentLevel = level;
+    items = makeRound(level);
+    idx = 0;
+    $('#parityRule').textContent = t('levels.' + level.id + '.rule');
+    $('#parityRuleBox').open = false;
+    goTo('game');
+    renderItem();
+  }
+
+  /* ----------- Question text, visual and explanation ----------- */
+
+  function promptFor(level, item) {
+    if (level.kind === 'shape') return t('shapePrompt');
+    var shown = level.kind === 'roman' ? toRoman(item.a) : format(item.a);
+    return fill(t('parityPrompt'), { a: shown });
+  }
+
+  /* A regular polygon with n sides, drawn as an SVG. Each corner
+     is a dot so the sides are easy to count one by one. */
+  function shapeSvg(n) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 160 160');
+    svg.setAttribute('class', 'parity-shape');
+    svg.setAttribute('focusable', 'false');
+    svg.setAttribute('aria-hidden', 'true');
+
+    var corners = [];
+    for (var i = 0; i < n; i += 1) {
+      var angle = -Math.PI / 2 + (2 * Math.PI * i) / n;
+      corners.push({
+        x: 80 + 64 * Math.cos(angle),
+        y: 80 + 64 * Math.sin(angle)
+      });
+    }
+
+    var body = document.createElementNS(NS, 'polygon');
+    body.setAttribute('points', corners.map(function (c) {
+      return c.x.toFixed(1) + ',' + c.y.toFixed(1);
+    }).join(' '));
+    body.setAttribute('class', 'parity-shape-body');
+    svg.appendChild(body);
+
+    corners.forEach(function (c) {
+      var dot = document.createElementNS(NS, 'circle');
+      dot.setAttribute('cx', c.x.toFixed(1));
+      dot.setAttribute('cy', c.y.toFixed(1));
+      dot.setAttribute('r', '6');
+      dot.setAttribute('class', 'parity-shape-corner');
+      svg.appendChild(dot);
+    });
+    return svg;
+  }
+
+  /* Only the dots and shapes levels draw a picture. The number
+     levels show the number in the prompt and nothing else. */
+  function paintVisual(level, item) {
+    var cont = $('#parityDots');
+    cont.innerHTML = '';
+    if (level.kind === 'dots') {
+      show(cont);
+      paintDots(cont, item.a);
+    } else if (level.kind === 'shape') {
+      show(cont);
+      cont.appendChild(shapeSvg(item.a));
+      cont.setAttribute('aria-label', t('shapeAria'));
+    } else {
+      hide(cont);
+      cont.removeAttribute('aria-label');
+    }
+  }
+
+  function explanationFor(level, item) {
+    var n = item.a;
+    var p = wordFor(n);
+    if (level.kind === 'dots') return fill(t('explainParity'), { a: n });
+    if (level.kind === 'shape') {
+      return fill(t('explainShape'), { name: t('shapeName.' + n), n: n, p: p });
+    }
+    if (level.kind === 'roman') {
+      return fill(t('explainRoman'), { roman: toRoman(n), n: n, p: p });
+    }
+    if (level.id === 'big') {
+      return fill(t('explainLast'), { a: format(n), d: n % 10, p: p });
+    }
+    return fill(t(isEven(n) ? 'explainPairsEven' : 'explainPairsOdd'), { a: format(n) });
   }
 
   function renderItem() {
@@ -118,10 +297,9 @@
     var pct = items.length === 0 ? 0 : (idx / items.length) * 100;
     $('#parityProgressFill').style.width = pct + '%';
     $('#parityProgressText').textContent = (idx + 1) + ' / ' + items.length;
-    /* Prompt: "5 es par o impar" — the number is spoken, the
-       dots give the answer visually. */
-    $('#parityPrompt').textContent = t('parityPrompt').replace('{a}', item.a);
-    paintDots(item);
+    $('#parityPrompt').textContent = promptFor(currentLevel, item);
+    paintVisual(currentLevel, item);
+
     var options = $('#parityOptions');
     options.innerHTML = '';
     var buttons = [
@@ -144,11 +322,11 @@
   }
 
   function answer(item, value, button) {
-    var correct = item.a % 2 === 0;
-    if (value !== correct) {
+    var correct = isEven(item.a) === value;
+    if (!correct) {
       button.disabled = true;
       App.feedback.encourage($('#parityFeedback'));
-      $('#parityFeedback').textContent += ' ' + t('hintParity');
+      $('#parityFeedback').textContent += ' ' + t('levels.' + currentLevel.id + '.hint');
       App.feedback.lockUntilAck($('#parityOptions').querySelectorAll('button'), $('#parityFeedback'));
       return;
     }
@@ -156,7 +334,7 @@
     save();
     App.feedback.success($('#parityFeedback'));
     $('#parityOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
-    $('#parityExplanation').textContent = t('explainParity').replace('{a}', item.a);
+    $('#parityExplanation').textContent = explanationFor(currentLevel, item);
     $('#parityExplanationWrap').classList.remove('hidden');
     show($('#parityNext'));
     $('#parityNext').focus();
@@ -172,25 +350,32 @@
   }
 
   function finishRound() {
-    var rounds = items.length;
-    $('#parityFinalSummary').textContent = t('parityFinalSummary')
-      .replace('{count}', rounds)
-      .replace('{stars}', progress.stars);
-    hide(gameScreen);
-    show(finishScreen);
+    progress.done[currentLevel.id] = true;
+    save();
+    $('#parityFinalSummary').textContent = fill(t('parityFinalSummary'), {
+      level: t('levels.' + currentLevel.id + '.name'),
+      count: items.length,
+      stars: progress.stars
+    });
+    goTo('finish');
     App.feedback.celebrate(t('core.roundComplete'));
     paintStars();
   }
 
   /* ----------- Wiring ----------- */
-  $('#parityBack').addEventListener('click', function () { window.location.href = '../../'; });
+  $('#parityIntroNext').addEventListener('click', function () { goTo('real'); });
+  $('#parityRealNext').addEventListener('click', function () { renderLevels(); goTo('levels'); });
+  $('#parityLevelsBack').addEventListener('click', function () { goTo('real'); });
+  $('#parityBack').addEventListener('click', function () { renderLevels(); goTo('levels'); });
   $('#parityNext').addEventListener('click', next);
 
   /* ----------- Boot ----------- */
   function init() {
     App.i18n.apply();
     paintStars();
-    startRound();
+    renderIntroDemo();
+    renderRealCards();
+    goTo('intro');
   }
 
   document.addEventListener('DOMContentLoaded', init);

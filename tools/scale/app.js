@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Escala
+   Calculia — Escala
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -66,7 +66,7 @@
   var mixedRoundQueue = null;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Utilities ---- */
 
@@ -114,7 +114,7 @@
     return { left: left, right: right };
   }
 
-  /* Words for the unit in the question text: "Â¿cuÃ¡ntos metros?" needs the
+  /* Words for the unit in the question text: "¿cuántos metros?" needs the
      word, while the rule and the options carry the symbol. */
   function unitWord(symbol) {
     if (symbol === 'km') return App.i18n.t('gen.unitKm');
@@ -169,8 +169,8 @@
       var isLabel = i % labelStep === 0;
       /* Only the TICK of the reached mark is left out; its NUMBER is
          still printed. Skipping the number as well left the ruler with
-         a hole exactly where the pencil points â€” on the third slide the
-         pencil reached 6 and the 6 was not written â€” and in l1, where
+         a hole exactly where the pencil points — on the third slide the
+         pencil reached 6 and the 6 was not written — and in l1, where
          every mark carries a number, it happened on every question. The
          number sits 40px below the mark, so the taller reached tick does
          not touch it: both can be drawn. */
@@ -212,7 +212,7 @@
   /* The same reading on a vertical instrument. Both shapes fill from the
      bottom and carry their marks on the same side, so once the rule has
      been read the second instrument is only a change of vessel and
-     unit â€” which is the whole point of putting it in the same activity.
+     unit — which is the whole point of putting it in the same activity.
      The mark reached is drawn longer as well as in a different colour,
      for the same reason it is on the horizontal rule. */
   function gaugeSvg(cfg) {
@@ -280,12 +280,12 @@
   }
 
   /* A stretch of ruler with only its two end numbers written, so the
-     marks between them can be counted â€” the picture of "a step". */
+     marks between them can be counted — the picture of "a step". */
   function spanSvg(span, unit) {
     /* The SAME x and the SAME width as every other ruler in the
        activity. This stretch used to start at 44 and be 232 wide while
        the rest of the app draws from RULER.x over RULER.w, so the
-       second slide showed a rule that was not the rule of the first â€”
+       second slide showed a rule that was not the rule of the first —
        same marks, different ruler, and nothing in the drawing said so.
        One ruler everywhere: the eye learns it once. */
     var x0 = RULER.x;
@@ -349,7 +349,7 @@
      on the ruler, starting on zero and ending its tip on the reached
      mark, with both ends tied to their numbers by a guide. The mark it
      reaches is the same taller, differently coloured one a question
-     uses, and the number under it is still written â€” the whole point is
+     uses, and the number under it is still written — the whole point is
      that you need that number to know how long the pencil is.
 
      Its own body and tip, not the plain bar objectSpanSvg() draws: that
@@ -383,8 +383,8 @@
   /* The idea behind the plan scale, as a picture with THREE rows instead
      of the two a question needs: the scale bar with the equation it
      stands for, the same thing measured on the plan, and the same thing
-     measured in real life. One question never shows both at once â€”they
-     are the two directions of the same activityâ€” but the IDEA is the
+     measured in real life. One question never shows both at once —they
+     are the two directions of the same activity— but the IDEA is the
      comparison, and the comparison is what the fourth slide is for.
 
      The real row is longer and carries no marks on purpose. Long, so
@@ -549,7 +549,7 @@
          same taller, coloured one a question uses. */
       return conceptReachSvg({ from: 0, to: 6 }, 'cm', 10);
     }
-    /* id === 'dibujo': the plan's scale, which is a step too â€” one
+    /* id === 'dibujo': the plan's scale, which is a step too — one
        centimetre of the drawing for so much of real life. Here both
        halves at once, with the equation that joins them. */
     return planCompareSvg({ key: 1, unit: 'km', cm: 3, real: 3 });
@@ -581,7 +581,7 @@
     /* The same question on the ruler and on the other two instruments:
        the object reaches a mark, say how much it measures. The wrong
        answers are the marks next to it on that very instrument, so
-       they are the numbers a person reads by mistake â€” the number
+       they are the numbers a person reads by mistake — the number
        printed to the left, the one to the right, and the neighbouring
        marks themselves. */
     /* What is reached, depends on the instrument: the length of a pencil,
@@ -618,7 +618,7 @@
 
     /* What one mark is worth. The answer is the stretch divided by the
        number of marks, and it only comes out right if the marks were
-       counted right â€” which is why the two numbers are printed and
+       counted right — which is why the two numbers are printed and
        every mark between them is drawn. */
     stepValue: function (nv) {
       var span = App.utils.drawRound(nv.id, DATA.spans);
@@ -666,7 +666,7 @@
       /* The pool key carries the plan it came from. A single pool for
          the whole level would hand a centimetre count over from one
          scale to another, and "3 cm at 1:50" would come out as the
-         same 3 cm at 1:5 â€” two different questions wearing the same
+         same 3 cm at 1:5 — two different questions wearing the same
          number. */
       var cm = App.utils.drawRound('d1:' + plano.key + ':' + plano.unit, plano.cm);
       var answer = cm * plano.key;
@@ -681,7 +681,7 @@
           .replace(/\{cm\}/g, cm),
         /* The key and then the advice, in that order: the drawing does not
            carry the numbers, so the sentence that states them has to be
-           there. The advice does not repeat them â€” saying "each
+           there. The advice does not repeat them — saying "each
            centimetre is 10 m" twice on one screen is two readings of
            the same line. */
         legend: App.i18n.t('gen.planKey')
@@ -816,7 +816,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -898,9 +898,9 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”whether it
+     The invitation is the one written for THIS question —whether it
      asks to read a ruler, to value one mark, to count the marks an
-     object crosses, or to go from a plan to real lifeâ€” and not the
+     object crosses, or to go from a plan to real life— and not the
      same sentence for every question. The generic line is only the
      fallback, for a question that forgot to bring its own. */
   function showHint() {
@@ -917,7 +917,7 @@
       App.feedback.success(feedbackEl);
       /* The reinforcement mini-round replays questions this round already
          asked, so counting it here reported more correct answers than the
-         round has â€” "Has resuelto 11 preguntas" for a 6-question round â€”
+         round has — "Has resuelto 11 preguntas" for a 6-question round —
          and pushed roundCorrect past DATA.perRound, which is the exact
          value endRound() compares against to offer the next level. The
          button therefore vanished for anyone who had to repeat a

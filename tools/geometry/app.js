@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” GeometrÃ­a
+   Calculia — Geometría
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -43,7 +43,7 @@
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      The kind of an angle comes from its degrees, the perimeter and the
@@ -77,7 +77,7 @@
     });
     /* The fold line is drawn down the middle of the grid, so an empty
        first or last column would put it off-centre from the figure the
-       person actually sees â€” and folding along the wrong line teaches
+       person actually sees — and folding along the wrong line teaches
        the wrong thing. */
     var usesEdges = f.rows.some(function (row) { return row[0] === '#'; }) &&
       f.rows.some(function (row) { return row[width - 1] === '#'; });
@@ -112,7 +112,7 @@
      and App.utils.drawRound refills the bag when it runs out. */
 
   /* The real name is what the angle is called everywhere else, so it is
-     what gets taught â€” with its plain-words gloss next to it, never
+     what gets taught — with its plain-words gloss next to it, never
      instead of it. */
   function range(from, to) {
     var list = [];
@@ -314,7 +314,7 @@
 
   /* Squares near this one, to offer as the wrong answers. The swapped pair
      comes first because saying the two numbers the other way round is the
-     mistake this activity is about â€” but only when that really is another
+     mistake this activity is about — but only when that really is another
      square, which it is not on the diagonal. Every candidate is checked to
      be on the grid and different, so a corner square never ends up offering
      itself twice. */
@@ -1190,7 +1190,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -1270,8 +1270,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”which is what
-     to do with the figure in front of youâ€” and not the same sentence for
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” La balanza
+   Calculia — La balanza
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -43,7 +43,7 @@
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      What the bag weighs, what several bags come to, and whether the graph
@@ -230,7 +230,7 @@
      x long and 1 wide, and a little 1. A pile of them written down is a
      polynomial; a square built out of them is an identity; and looking
      for the missing side of a rectangle is factorising. The writing is
-     never stored â€” it is built here from the counts, and the picture is
+     never stored — it is built here from the counts, and the picture is
      built from the same ones.
 
      The big square is drawn 2.6 little squares wide on purpose: a whole
@@ -372,7 +372,7 @@
     },
 
     /* The same pieces put together into a square. Its side is x plus the
-       little ones along one edge â€” which is the identity, seen whole
+       little ones along one edge — which is the identity, seen whole
        instead of remembered. */
     squareSide: function (nv) {
       var a = App.utils.drawRound(nv.id, DATA.tileSquares);
@@ -502,7 +502,7 @@
       }
       return {
         prompt: App.i18n.t('gen.squareEquation').replace(/\{n\}/g, total),
-        visual: html + '</span><span class="letter-expr">x Ã— x = ' + total +
+        visual: html + '</span><span class="letter-expr">x × x = ' + total +
           '</span></div>',
         visualAria: App.i18n.t('gen.squareEqAria')
           .replace(/\{n\}/g, total).replace(/\{side\}/g, side),
@@ -788,7 +788,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -866,8 +866,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”which is what
-     to do with the picture in front of youâ€” and not the same sentence for
+     The invitation is the one written for THIS question —which is what
+     to do with the picture in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

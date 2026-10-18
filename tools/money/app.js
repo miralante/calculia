@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Money (enough money?, change, and prices)
+   Calculia — Money (enough money?, change, and prices)
    Data and levels in data.js. Shared modules in assets/js/.
    Amounts use euros and cents, with the decimal separator and
    cents painted in orange. Questions are generated on the fly
@@ -53,7 +53,7 @@
   var reinforceTotal = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Utilidades ---- */
 
@@ -64,7 +64,7 @@
      and App.utils.drawRound refills the bag when it runs out. */
 
   /* Separador decimal (',' es / '.' en). No es solo estilo: intercambiar
-     el separador entre idiomas es obligatorio (ver I18N.md Â§2). */
+     el separador entre idiomas es obligatorio (ver I18N.md §2). */
   function decimalSeparator() { return App.i18n.locale() === 'en' ? '.' : ','; }
 
   var POS_CLASS = ['digit-u', 'digit-d', 'digit-c'];
@@ -83,7 +83,7 @@
   }
 
   function legendPrice() {
-    return '<span class="digit-u">' + App.i18n.t('leyendaEurosTxt') + '</span> Â· ' +
+    return '<span class="digit-u">' + App.i18n.t('leyendaEurosTxt') + '</span> · ' +
       '<span class="digit-comma">' + App.i18n.t('leyendaComaTxt') + '</span>';
   }
 
@@ -92,7 +92,7 @@
     var c = cent % 100;
     var cc = (c < 10 ? '0' : '') + c;
     return '<span class="num-color">' + digits(e) +
-      '<span class="digit-comma">' + decimalSeparator() + '</span><span class="digit-dec">' + cc + '</span> â‚¬</span>';
+      '<span class="digit-comma">' + decimalSeparator() + '</span><span class="digit-dec">' + cc + '</span> €</span>';
   }
 
   function wordsPrice(cent) {
@@ -297,7 +297,7 @@
     reinforceIndex = 0;
     inReinforce = true;
     App.reinforce.banner.set(
-      App.i18n.t('refuerzoTitulo') + ' â€” ' +
+      App.i18n.t('refuerzoTitulo') + ' — ' +
       App.i18n.t('refuerzoIntro').replace('{n}', reinforceTotal)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -378,7 +378,7 @@
      the person is encouraged to look at the question/visual again.
      Only on the second mistake is the correct answer explained
      (showExplanation). The invitation is the one written for THIS
-     question â€”which is what to do with the figure in front of youâ€” and
+     question —which is what to do with the figure in front of you— and
      not the same sentence for every question. The generic line is only
      the fallback, for a question that forgot to bring its own. */
   function showHint() {

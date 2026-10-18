@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” TrigonometrÃ­a
+   Calculia — Trigonometría
    Data and levels in data.js. Shared modules in assets/js/.
    Every question is generated on the fly from the level type.
    ============================================================ */
@@ -72,7 +72,7 @@
 
   /* The ladder length, over the fields a ladder actually has. Reading
      `up`/`along` here returned NaN, and a comparison of NaN is always
-     false â€” so the "all three ladders are the same length" check below
+     false — so the "all three ladders are the same length" check below
      would have passed no matter what the data said. */
   function ladderLen(l) {
     return hypOfParts(l.rise, l.run);
@@ -85,7 +85,7 @@
 
   /* "3 for every 4", reduced: 6 for every 8 is still 3 for every 4. Two
      triangles share the reason exactly when this string matches, which is
-     the whole claim of the `razon` levels â€” so it is computed, never
+     the whole claim of the `razon` levels — so it is computed, never
      listed.
      It takes the two numbers rather than the object, because two different
      things are compared with it and they name their legs differently: a
@@ -129,7 +129,7 @@
   function sideGloss(side) { return App.i18n.t('side.' + side + '.gloss'); }
 
   /* A picture option that also says the name of the side it marks, with
-     its plain-words gloss underneath â€” the same shape geometry uses to
+     its plain-words gloss underneath — the same shape geometry uses to
      teach right/acute/obtuse. The word is taught beside the drawing it
      belongs to, never instead of it, and never on its own. */
   function sideOptionHtml(t, side, opts) {
@@ -146,7 +146,7 @@
       throw new Error('trigonometry: triangle "' + t.id + '" has a leg below one square');
     }
     /* "Which side is the hypotenuse" is answerable only if the slanted
-       side really is the STRICTLY longest one â€” an equal match would
+       side really is the STRICTLY longest one — an equal match would
        leave that question with no single answer.
        Equal legs are deliberately ALLOWED, though: a triangle with both
        legs the same length is a shape people recognise, and it is the
@@ -363,7 +363,7 @@
   function ratioOptions(t) {
     /* Build the right answer FIRST and never drop it. An earlier version
        shuffled all four candidates and then cut to three, which quietly
-       removed the correct answer from one question in four â€” the page
+       removed the correct answer from one question in four — the page
        then had no right answer at all, and clicking any option threw
        while trying to explain itself. Taking the correct one first and
        filling the rest makes that impossible. */
@@ -399,7 +399,7 @@
 
   var GENERATORS = {
 
-    /* Which side is the slanted one â€” the longest. Every option is the
+    /* Which side is the slanted one — the longest. Every option is the
        same triangle with a different side drawn heavier, so the answer
        is which marked side reaches furthest: counting and looking, not
        remembering a word. */
@@ -450,7 +450,7 @@
        something to recall.
        The wording has to rule the hypotenuse out explicitly. "Which side
        touches that angle?" would have TWO right answers, because the
-       slanted side touches it too â€” and a question with two right
+       slanted side touches it too — and a question with two right
        answers is not something the person can get wrong, only something
        the activity looks broken doing. */
     whichSideByAngle: function (nv) {
@@ -560,7 +560,7 @@
       /* Never pad with the right answer. The start-up invariant already
          guarantees two distinct wrong reasons exist, so falling back to
          `doubled(pair)` here could only have produced a second correct
-         option â€” a question nobody can get wrong. Fail loudly instead. */
+         option — a question nobody can get wrong. Fail loudly instead. */
       if (wrongs.length < 2) {
         throw new Error('trigonometry: level "' + nv.id + '" could only offer ' +
           wrongs.length + ' wrong answer(s) for pair "' + pair.id + '"');
@@ -639,7 +639,7 @@
     },
 
     /* The same ladder, three ways of standing it up. Which reaches
-       highest? More upright, higher â€” and all three are exactly the same
+       highest? More upright, higher — and all three are exactly the same
        length, so nothing else is being compared.
        Each is named by a letter drawn on it, and the letters are handed
        out in a different order every question: if the letters followed
@@ -648,7 +648,7 @@
       var all = DATA.ladders;
       var tallest = Math.max.apply(null, all.map(function (l) { return l.rise; }));
       /* Shuffled, not drawn from the bag. `App.utils.drawRound()` hands out ONE item of a
-         list, so calling it here returned a single letter â€” and then
+         list, so calling it here returned a single letter — and then
          `letters[1]` and `letters[2]` were undefined, which put "La
          escalera undefined" on two of the three answers. */
       var letters = App.utils.shuffle(App.i18n.t('gen.ladderLetters').split(''));
@@ -947,8 +947,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”which is what
-     to do with the figure in front of youâ€” and not the same sentence for
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

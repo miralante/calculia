@@ -45,7 +45,7 @@ arquitectura de tres niveles que Apptonomia (núcleo compartido en
 `assets/js/`, una carpeta por actividad en `tools/<slug>/`, una
 portada en la raíz del sitio), más una página de ajustes para ver el progreso.
 
-- 🧮 **11 actividades** — Los Números, Cantidades, Las Tablas, Números
+- 🧮 **10 actividades** — Cantidades, Las Tablas, Números
   Romanos, Adivinanzas, Patrones, El Monedero, El Reloj, Historias,
   ¿Qué no encaja? y Puzzle.
 - 🪶 **Cero dependencias en tiempo de ejecución** — HTML/CSS/JS puros,

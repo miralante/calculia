@@ -1,15 +1,15 @@
 ﻿/* ============================================================
-   Calculia â€” Los NÃºmeros
-   Actividad sin test. Una sola galerÃ­a de 11 slides (4 tipos,
-   cada uno en dos cards â€” exposiciÃ³n + vida real â€” mÃ¡s 3
+   Calculia — Los Números
+   Actividad sin test. Una sola galería de 11 slides (4 tipos,
+   cada uno en dos cards — exposición + vida real — más 3
    comparaciones), en el mismo flujo que Formas: una card
-   visible, â† / â†’ para cambiar.
-     â€¢ kind: 'expo'    â†’ title + visual (number line, pizzaâ€¦)
-     â€¢ kind: 'real'    â†’ title + eyebrow Â«En la vida real:Â» +
+   visible, ← / → para cambiar.
+     • kind: 'expo'    → title + visual (number line, pizza…)
+     • kind: 'real'    → title + eyebrow «En la vida real:» +
                          lista de ejemplos cotidianos (sin visual)
-     â€¢ kind: 'compare' â†’ title + visual, sin parte de vida real
-   La frase de vida real viene como una sola lÃ­nea con ejemplos
-   separados por Â« Â· Â» y se renderiza como <ul> para que cada
+     • kind: 'compare' → title + visual, sin parte de vida real
+   La frase de vida real viene como una sola línea con ejemplos
+   separados por « · » y se renderiza como <ul> para que cada
    ejemplo viva en su propio <li>.
    Persistencia: App.storage con clave 'los-numeros'. La primera
    vez que se llega al final suma 1 estrella; "Ver otra vez"
@@ -25,7 +25,7 @@
   var screenGallery = $('#screenGallery');
   var screenEnd = $('#screenEnd');
 
-  /* ---- Elementos de la galerÃ­a ---- */
+  /* ---- Elementos de la galería ---- */
   var slideTitle = $('#slideTitle');
   var slideVisual = $('#slideVisual');
   var slideReal = $('#slideReal');
@@ -42,7 +42,7 @@
   var awardedThisRun = false;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   var starsEl = $('#stars');
 
@@ -51,14 +51,14 @@
   var TOTAL = DATA.slides.length;
 
   /* ---- Visuales SVG ----
-     Cada funciÃ³n pinta el visual de un slide. Devuelven el HTML
+     Cada función pinta el visual de un slide. Devuelven el HTML
      (svg + leyenda opcional) que se inyecta con innerHTML. Las
-     marcas usan las variables CSS de cada mÃ³dulo para que el
+     marcas usan las variables CSS de cada módulo para que el
      tema (claro / oscuro / contraste) siga funcionando. */
 
   function lineTicks(min, max, labels, color) {
     /* Dibuja el eje horizontal y, para cada label, un tick + texto
-       + cÃ­rculo en la posiciÃ³n correspondiente. labels es un
+       + círculo en la posición correspondiente. labels es un
        array de { n, isMain, color, label } donde isMain agranda
        el tick. */
     var x0 = 60, x1 = 540;
@@ -120,9 +120,9 @@
   }
 
 
-  /* ComparaciÃ³n 1: Naturales y Enteros. Dos rectas paralelas:
+  /* Comparación 1: Naturales y Enteros. Dos rectas paralelas:
      arriba los naturales (0..5), abajo los enteros (-3..3).
-     El ojo ve que la de los enteros es "mÃ¡s grande". */
+     El ojo ve que la de los enteros es "más grande". */
   function visualCompNE() {
     var natLabels = [0, 1, 2, 3, 4, 5].map(function (n) {
       return { n: n, isMain: true, color: 'var(--mod-secuencia)' };
@@ -138,7 +138,7 @@
       '</div>';
   }
 
-  /* ComparaciÃ³n 2: Naturales y Decimales. Una sola recta 0..2
+  /* Comparación 2: Naturales y Decimales. Una sola recta 0..2
      con naturales en verde y decimales en morado. Los decimales
      "rellenan" los huecos entre naturales. */
   function visualCompND() {
@@ -166,22 +166,22 @@
 
   /* ---- Pintado del slide actual ---- */
   /* La misma card (slideTitle, slideEyebrow, slideVisual, slideReal)
-     se rellena segÃºn el kind del slide:
-       â€¢ expo:    muestra solo tÃ­tulo y visual. Eyebrow y lista
+     se rellena según el kind del slide:
+       • expo:    muestra solo título y visual. Eyebrow y lista
                   de vida real quedan ocultos.
-       â€¢ real:    muestra tÃ­tulo, eyebrow Â«En la vida real:Â» y la
-                  lista de ejemplos. Visual oculto (la exposiciÃ³n
+       • real:    muestra título, eyebrow «En la vida real:» y la
+                  lista de ejemplos. Visual oculto (la exposición
                   ya se vio en el slide anterior del mismo tipo).
-       â€¢ compare: muestra tÃ­tulo y visual (la comparaciÃ³n no tiene
+       • compare: muestra título y visual (la comparación no tiene
                   parte de vida real separada).
-     El tÃ­tulo del slide es siempre el mismo para los dos slides
-     del mismo tipo (Â«NaturalesÂ», Â«EnterosÂ», â€¦), asÃ­ la persona
-     sabe que los dos pertenecen a la misma lecciÃ³n. */
+     El título del slide es siempre el mismo para los dos slides
+     del mismo tipo («Naturales», «Enteros», …), así la persona
+     sabe que los dos pertenecen a la misma lección. */
   function renderSlide() {
     var s = DATA.slides[slideIndex];
     slideTitle.textContent = App.i18n.t('slide' + s.id + 'Title') || '';
 
-    /* Eyebrow Â«En la vida real:Â» solo en kind: 'real'. */
+    /* Eyebrow «En la vida real:» solo en kind: 'real'. */
     if (s.kind === 'real') {
       slideEyebrow.classList.remove('hidden');
     } else {
@@ -203,14 +203,14 @@
     }
 
     /* Lista de vida real solo en kind: 'real'. La cadena viene como
-       una sola lÃ­nea con Â« Â· Â» entre ejemplos; aquÃ­ se rompe. */
+       una sola línea con « · » entre ejemplos; aquí se rompe. */
     slideReal.innerHTML = '';
     if (s.kind === 'real') {
       var raw = App.i18n.t('slide' + s.id + 'Real') || '';
-      var parts = raw.split(/\s*Â·\s*/).filter(function (p) { return p.length > 0; });
+      var parts = raw.split(/\s*·\s*/).filter(function (p) { return p.length > 0; });
       parts.forEach(function (p) {
         var li = document.createElement('li');
-        /* textContent evita cualquier escape problemÃ¡tico del
+        /* textContent evita cualquier escape problemático del
            primer emoji de la cadena. */
         li.textContent = p;
         slideReal.appendChild(li);

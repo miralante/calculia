@@ -34,7 +34,8 @@
     legendTotalPartsTxt: 'partes en total',
     activity: {
       fracciones: { name: 'Fracciones', detail: 'Las partes de algo.', instruction: 'Una fracción es una parte de algo. Mira las partes pintadas de la figura.' },
-      decimales: { name: 'Decimales', detail: 'Los números con coma.', instruction: 'Un número decimal lleva una coma. Antes de la coma van las unidades enteras. Después de la coma van las partes. Si la tarta tiene 10 partes, cada parte es 0,1. Media tarta es 0,5. Lo ves en los precios (1,50 €) y en las medidas (0,5 litros).' }
+      decimales: { name: 'Decimales', detail: 'Los números con coma.', instruction: 'Un número decimal lleva una coma. Antes de la coma van las unidades enteras. Después de la coma van las partes. Si la tarta tiene 10 partes, cada parte es 0,1. Media tarta es 0,5. Lo ves en los precios (1,50 €) y en las medidas (0,5 litros).' },
+      coma: { name: 'Poner la coma decimal', detail: 'Coloca la coma entre la parte entera y los decimales.', instruction: 'Toca un hueco para poner la coma. Cuenta las cifras desde la derecha: la coma va dejando tantas cifras decimales como diga el número.' }
     },
     level: { f1: 'Mitades y cuartos', f2: 'Tercios y sextos', f3: '¿Cuál es más grande?', f4: 'Valen lo mismo', f5: 'Sumar fracciones', f6: 'Restar fracciones', d1: 'De la tarta al número', d2: 'Del número a la tarta', d3: 'La mitad y los cuartos' ,       f7: 'Sumar trozos distintos',
       f8: 'Restar trozos distintos',
@@ -104,12 +105,76 @@
       socraticMixedOp: '🤔 Los dos números están en diez partes: mira las tartas.',
       socraticFracVsDecimal: '🤔 Cuenta los trozos pintados de cada tarta, no los números.',
       socraticDecimalOp: '🤔 Cuenta las partes de cada tarta y mira cuánto suman.',
-      socraticFracciones: '🤔 Cuenta las partes de la tarta que están pintadas.',
+      socraticFracciones: '🤔 Cuenta cuántas partes están pintadas y cuántas partes tiene la tarta en total. Arriba va lo pintado; abajo, el total.',
       socraticComparaFrac: '🤔 Compara las dos tartas y fíjate en cuál tiene más pintada.',
       socraticEquivalentes: '🤔 Compara cuánto se pinta en las dos figuras, parte por parte.',
       socraticSumaFrac: '🤔 Las dos tartas están cortadas en el mismo número de trozos.',
       socraticDecimalToPicture: '🤔 Busca la tarta que tenga pintada esa misma cantidad.',
       socraticDecimalToNumber: '🤔 Mira cuánta parte de la tarta está pintada y ponle su número.'
+    },
+    intro: {
+      fracciones: {
+        instruction: 'Antes de jugar, mira cómo se lee una fracción.',
+        title: 'Qué es una fracción',
+        text: 'Una fracción dice qué parte de algo tomas. Se escribe con dos números, uno encima del otro.',
+        parts: 'Esta tarta tiene 4 partes iguales. Tres están pintadas: son tres cuartos.',
+        notation: 'El número de arriba cuenta las partes pintadas. El de abajo cuenta todas las partes.',
+        size: 'Cuantas más partes hay, más pequeña es cada una. Un medio es más grande que un cuarto.',
+        toReal: 'Verlo en la vida real →',
+        prev: 'Anterior',
+        next: 'Siguiente'
+      },
+      decimales: {
+        instruction: 'Antes de jugar, mira cómo se escribe un decimal.',
+        title: 'Qué es un número decimal',
+        text: 'Un decimal es otra forma de escribir una parte. Lleva una coma: lo que va antes son unidades enteras y lo que va después son partes.',
+        tenths: 'Una tarta tiene 10 partes iguales. Cada parte es 0,1. Tres partes son 0,3.',
+        point: 'La coma separa las unidades de las partes. El 0 son las unidades y el 3 son décimas.',
+        half: '0,5 es la mitad de la tarta. 0,25 es un cuarto.',
+        toReal: 'Verlo en la vida real →',
+        prev: 'Anterior',
+        next: 'Siguiente'
+      }
+    },
+    real: {
+      fracciones: {
+        title: 'Las fracciones están en la vida real.',
+        pizza: 'Una pizza tiene 4 trozos. Si te comes 1, te comes un cuarto: 1/4.',
+        clock: 'Un cuarto de hora son 15 minutos. Media hora son 30 minutos.',
+        money: 'La mitad de 10 € son 5 €.',
+        bottle: 'Una botella de un litro llena hasta la mitad tiene medio litro: 1/2.',
+        continue: 'Empezar a practicar →',
+        prev: 'Anterior',
+        next: 'Siguiente'
+      },
+      decimales: {
+        title: 'Los decimales están en la vida real.',
+        price: 'Un pan cuesta 1,50 €. Es un euro y cincuenta céntimos.',
+        milk: 'Medio litro de leche son 0,5 litros.',
+        ribbon: 'Una cinta de 2,5 metros mide dos metros y medio.',
+        candy: 'Un caramelo cuesta 0,20 €. Son veinte céntimos.',
+        continue: 'Empezar a practicar →',
+        prev: 'Anterior',
+        next: 'Siguiente'
+      }
+    },
+    /* Poner la coma decimal (actividad 'coma'). {count} = cifras decimales
+       del número; {k} = cifras a la derecha de la coma puesta. */
+    coma: {
+      boardAria: 'Número para colocar la coma decimal',
+      gapEmptyAria: 'Hueco vacío: toca para poner la coma.',
+      gapFilledAria: 'Coma: toca para quitarla o moverla a otro hueco.',
+      check: 'Comprobar',
+      promptDecimal: 'Pon la coma decimal: este número tiene {count} cifras decimales.',
+      promptDecimalOne: 'Pon la coma decimal: este número tiene 1 cifra decimal.',
+      detailDecimal: 'Toca un hueco para poner la coma. Toca otro hueco para moverla, o la coma para quitarla.',
+      missing: 'Todavía no has puesto la coma.',
+      wrongMarked: 'Revisa la coma marcada con ✗.',
+      wrongHint: 'A la derecha de esta coma hay {k} cifras. Cuenta cuántas cifras decimales tiene el número.',
+      correctFormat: 'Se escribe: {n}',
+      roundProgress: '{current} de {total}',
+      reinforceTitle: 'Refuerzo',
+      reinforceIntro: 'Vamos a repetir los {n} ejercicios que has fallado hasta acertarlos todos.'
     },
     transfer: 'Esto te servirá para repartir algo en partes iguales, entender media hora o leer un precio con coma.'
   }, 'es');

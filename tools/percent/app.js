@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Porcentajes y proporciÃ³n
+   Calculia — Porcentajes y proporción
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -43,7 +43,7 @@
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      The percentage, the discount, the doubled recipe and the real-world
@@ -138,7 +138,7 @@
   function coins(total, part) {
     var html = '<div class="coin-row">';
     for (var i = 0; i < total; i++) {
-      html += '<span class="coin' + (i < part ? ' is-part' : '') + '">â‚¬</span>';
+      html += '<span class="coin' + (i < part ? ' is-part' : '') + '">€</span>';
     }
     return html + '</div>';
   }
@@ -168,17 +168,17 @@
     var html = '<div class="limit-stage">' + coins(b.budget, 0) +
       '<p class="price-tag"><span class="tag-picto" aria-hidden="true">' +
       b.picto + '</span>';
-    for (var i = 0; i < b.price; i++) html += '<span class="coin is-price">â‚¬</span>';
+    for (var i = 0; i < b.price; i++) html += '<span class="coin is-price">€</span>';
     return html + '</p></div>';
   }
 
   /* The same job in rows: one row per person, one block per hour. The
-     blocks are the work, and there are always the same number of them â€”
+     blocks are the work, and there are always the same number of them —
      which is why more rows means shorter rows. */
   function workRows(people, hoursEach, picto) {
     var html = '<div class="work-stage">';
     for (var p = 0; p < people; p++) {
-      html += '<span class="work-row"><span class="worker" aria-hidden="true">ðŸ™‚</span>';
+      html += '<span class="work-row"><span class="worker" aria-hidden="true">🙂</span>';
       for (var h = 0; h < hoursEach; h++) {
         html += '<span class="hour-block" aria-hidden="true">' + picto + '</span>';
       }
@@ -422,7 +422,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -500,8 +500,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”which is what
-     to do with the figure in front of youâ€” and not the same sentence for
+     The invitation is the one written for THIS question —which is what
+     to do with the figure in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

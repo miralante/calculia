@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Formas parecidas
+   Calculia — Formas parecidas
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -43,7 +43,7 @@
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      Whether two rectangles are the same shape, how many little squares
@@ -132,10 +132,10 @@
   function trianglePic(a, b) {
     var big = a * a + b * b;
     return '<div class="tri-stage">' +
-      '<span class="tri-part"><span class="tri-label">' + a + ' Ã— ' + a + '</span>' +
+      '<span class="tri-part"><span class="tri-label">' + a + ' × ' + a + '</span>' +
       squareOf(a) + '</span>' +
       '<span class="tri-plus" aria-hidden="true">+</span>' +
-      '<span class="tri-part"><span class="tri-label">' + b + ' Ã— ' + b + '</span>' +
+      '<span class="tri-part"><span class="tri-label">' + b + ' × ' + b + '</span>' +
       squareOf(b) + '</span>' +
       '<span class="tri-plus" aria-hidden="true">=</span>' +
       '<span class="tri-part"><span class="tri-label">?</span>' +
@@ -356,7 +356,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -434,9 +434,9 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”what to do
+     The invitation is the one written for THIS question —what to do
      with the pair of figures, the squares or the ramps in front of
-     youâ€” and not the same sentence for every question. The generic
+     you— and not the same sentence for every question. The generic
      line is only the fallback, for a question that forgot to bring
      its own. */
   function showHint() {

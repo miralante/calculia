@@ -34,7 +34,8 @@
     legendTotalPartsTxt: 'parts in total',
     activity: {
       fracciones: { name: 'Fractions', detail: 'Parts of something.', instruction: 'A fraction is a part of something. Look at the painted parts of the figure.' },
-      decimales: { name: 'Decimals', detail: 'Numbers with a point.', instruction: 'A decimal number has a point. Before the point are the whole units. After the point are the parts. If the pie has 10 parts, each part is 0.1. Half a pie is 0.5. You see this on prices (1.50 €) and on measures (0.5 litres).' }
+      decimales: { name: 'Decimals', detail: 'Numbers with a point.', instruction: 'A decimal number has a point. Before the point are the whole units. After the point are the parts. If the pie has 10 parts, each part is 0.1. Half a pie is 0.5. You see this on prices (1.50 €) and on measures (0.5 litres).' },
+      coma: { name: 'Put the decimal point', detail: 'Place the decimal point between the whole part and the decimals.', instruction: 'Tap a gap to put the point. Count the digits from the right: the point goes after the whole part.' }
     },
     level: { f1: 'Halves and quarters', f2: 'Thirds and sixths', f3: 'Which is bigger?', f4: 'Worth the same', f5: 'Add fractions', f6: 'Subtract fractions', d1: 'From pie to number', d2: 'From number to pie', d3: 'Halves and quarters' ,       f7: 'Adding different slices',
       f8: 'Taking away different slices',
@@ -104,12 +105,76 @@
       socraticMixedOp: '🤔 Both numbers are in tenths: look at the pies.',
       socraticFracVsDecimal: '🤔 Count the painted slices in each pie, not the numbers.',
       socraticDecimalOp: '🤔 Count the slices in each pie and see how much they make.',
-      socraticFracciones: '🤔 Count the slices of the pie that are painted.',
+      socraticFracciones: '🤔 Count how many parts are painted and how many parts the pie has in total. The top number is the painted part; the bottom one is the total.',
       socraticComparaFrac: '🤔 Compare the two pies and see which one has more painted.',
       socraticEquivalentes: '🤔 Compare how much is painted in the two figures, part by part.',
       socraticSumaFrac: '🤔 Both pies are cut into the same number of slices.',
       socraticDecimalToPicture: '🤔 Look for the pie with exactly that amount painted.',
       socraticDecimalToNumber: '🤔 Look at how much of the pie is painted and give it its number.'
+    },
+    intro: {
+      fracciones: {
+        instruction: 'Before you play, look at how a fraction is read.',
+        title: 'What a fraction is',
+        text: 'A fraction tells you which part of something you take. It is written with two numbers, one above the other.',
+        parts: 'This pie has 4 equal parts. Three are painted: that is three quarters.',
+        notation: 'The top number counts the painted parts. The bottom number counts all the parts.',
+        size: 'The more parts there are, the smaller each one is. A half is bigger than a quarter.',
+        toReal: 'See it in real life →',
+        prev: 'Previous',
+        next: 'Next'
+      },
+      decimales: {
+        instruction: 'Before you play, look at how a decimal is written.',
+        title: 'What a decimal number is',
+        text: 'A decimal is another way of writing a part. It has a point: what comes before it are whole units, and what comes after are parts.',
+        tenths: 'A pie has 10 equal parts. Each part is 0.1. Three parts are 0.3.',
+        point: 'The point separates the whole units from the parts. The 0 is the whole units and the 3 is tenths.',
+        half: '0.5 is half of the pie. 0.25 is a quarter.',
+        toReal: 'See it in real life →',
+        prev: 'Previous',
+        next: 'Next'
+      }
+    },
+    real: {
+      fracciones: {
+        title: 'Fractions are all around us.',
+        pizza: 'A pizza has 4 slices. If you eat 1, you eat a quarter: 1/4.',
+        clock: 'A quarter of an hour is 15 minutes. Half an hour is 30 minutes.',
+        money: 'Half of 10 € is 5 €.',
+        bottle: 'A one-litre bottle filled to half has half a litre: 1/2.',
+        continue: 'Start practising →',
+        prev: 'Previous',
+        next: 'Next'
+      },
+      decimales: {
+        title: 'Decimals are all around us.',
+        price: 'A loaf of bread costs 1.50 €. That is one euro and fifty cents.',
+        milk: 'Half a litre of milk is 0.5 litres.',
+        ribbon: 'A ribbon of 2.5 metres is two and a half metres.',
+        candy: 'A sweet costs 0.20 €. That is twenty cents.',
+        continue: 'Start practising →',
+        prev: 'Previous',
+        next: 'Next'
+      }
+    },
+    /* Put the decimal point (activity 'coma'). {count} = decimal digits of
+       the number; {k} = digits to the right of the point placed. */
+    coma: {
+      boardAria: 'Number to place the decimal point in',
+      gapEmptyAria: 'Empty gap: tap to put the decimal point.',
+      gapFilledAria: 'Decimal point: tap to remove it or move it to another gap.',
+      check: 'Check',
+      promptDecimal: 'Put the decimal point in this number. It has {count} decimal digits.',
+      promptDecimalOne: 'Put the decimal point in this number. It has 1 decimal digit.',
+      detailDecimal: 'Tap a gap to put the point. Tap another gap to move it, or the point to remove it.',
+      missing: 'You have not placed the decimal point yet.',
+      wrongMarked: 'Check the point marked with ✗.',
+      wrongHint: 'There are {k} digits to the right of this point. Count how many decimal digits the number has.',
+      correctFormat: 'It is written: {n}',
+      roundProgress: '{current} of {total}',
+      reinforceTitle: 'Extra practice',
+      reinforceIntro: 'Let us repeat the {n} exercises you got wrong until you get them all right.'
     },
     transfer: 'This will help you share something in equal parts, understand half an hour or read a price with a point.'
   }, 'en');

@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia â€” Problemas
+   Calculia — Problemas
    Data and levels in data.js. Shared modules in assets/js/.
    Questions are generated on the fly based on the level type.
    ============================================================ */
@@ -43,7 +43,7 @@
   var reinforceIndex = 0;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = 'â­ ' + progress.stars; }
+  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* A subtraction that goes below zero would be a different topic (and
      this activity never asks for one), so a bad data row must be loud
@@ -124,7 +124,7 @@
     var html = '';
     for (var i = 0; i < n; i++) {
       html += '<span class="token' + (gone ? ' is-gone' : '') + '">' + picto +
-        (gone ? '<span class="cross" aria-hidden="true">âœ–</span>' : '') + '</span>';
+        (gone ? '<span class="cross" aria-hidden="true">✖</span>' : '') + '</span>';
     }
     return html;
   }
@@ -170,7 +170,7 @@
       var pool = DATA.problems.filter(function (p) { return p.cue === nv.cue; });
       var p = App.utils.drawRound(nv.id, pool);
       var label = function (op) {
-        return '<span class="op-icon" aria-hidden="true">' + (op === 'add' ? 'âž•' : 'âž–') +
+        return '<span class="op-icon" aria-hidden="true">' + (op === 'add' ? '➕' : '➖') +
           '</span><span class="op-name">' + App.i18n.t('op.' + op) + '</span>';
       };
       return {
@@ -205,7 +205,7 @@
     },
 
     /* Two things happen, one after the other. The picture shows how it
-       ends up, so the count is still possible â€” what has to be held in
+       ends up, so the count is still possible — what has to be held in
        mind is only that there were two steps, not one. */
     twoStep: function (nv) {
       var pool = DATA.twoStep.filter(function (p) {
@@ -295,7 +295,7 @@
     inReinforce = true;
     attempts = 0;
     App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' â€” ' +
+      App.i18n.t('reinforceTitle') + ' — ' +
       App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
     );
     showReinforceQuestion(reinforceList[0]);
@@ -371,8 +371,8 @@
 
   /* Socratic method: the first mistake does not give the answer away,
      it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question â€”which is what
-     to do with the picture in front of youâ€” and not the same sentence for
+     The invitation is the one written for THIS question —which is what
+     to do with the picture in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function showHint() {

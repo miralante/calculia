@@ -21,6 +21,9 @@ var DATA = {
          is the comparing skill, not new fractions adding to the
          load. */
       picto: '🍕',
+      /* Opens with the explanation and the real-life examples before the
+         first round (screenIntro and screenReal in index.html). */
+      intro: true,
       levels: [
         {
           id: 'f1', tipo: 'fracciones',
@@ -120,6 +123,7 @@ var DATA = {
        turn up on a price tag or a bottle). */
     decimales: {
       picto: '🔢',
+      intro: true,
       levels: [
         {
           id: 'd1', tipo: 'decimalPie', dir: 'toNumber',
@@ -179,6 +183,28 @@ var DATA = {
           ]
         }
       ]
+    },
+
+    /* Poner la coma decimal: el mismo número escrito sin coma, con un hueco
+       entre cada cifra. La persona toca el hueco donde va la coma. Va justo
+       después de Decimales: es la misma idea, ahora escrita. Como «Poner los
+       puntos» en Leer y Escribir Números, es un juego de colocar, no de
+       elegir: no tiene niveles, sino una lista de pasos.
+       Cada paso es { enteras, decimales }: cifras antes y después de la coma.
+       Se cambia una cosa a la vez: primero la parte entera, luego los
+       decimales. La parte entera queda por debajo de 1.000 para que el
+       separador de miles no se confunda con la coma. */
+    coma: {
+      picto: '🔢',
+      game: 'comma',
+      steps: [
+        { enteras: 1, decimales: 1 },
+        { enteras: 2, decimales: 1 },
+        { enteras: 2, decimales: 2 },
+        { enteras: 3, decimales: 2 },
+        { enteras: 3, decimales: 3 }
+      ],
+      levels: []
     }
   }
 };
