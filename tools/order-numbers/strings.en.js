@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Order numbers: texts (EN)
+   Calculia — Order numbers (positives): texts (EN)
    Language-specific file. Loaded from index.html.
    ============================================================ */
 (function () {
@@ -7,49 +7,63 @@
 
   App.i18n.register({
     title: '🔢 Order numbers',
-    instruction: 'Put the numbers from smallest to biggest.',
-    btnStart: 'Start',
-    menuTitle: 'Put each number in its place.',
-    menuDetail: 'You start with few numbers. Each round goes up a little.',
-    btnMenu: 'Back to start',
+    instructionIntro: 'See how numbers are compared.',
+    realTitle: 'These numbers are in real life.',
+    transfer: 'You use this every time you look for the lowest price or the highest score on a list.',
 
-    /* ---------- Round ----------
-       {count} = how many numbers are in this set. */
-    promptOrder: 'Put these {count} numbers in order. Start with the smallest.',
-    detailOrder: 'Drag each number to its gap. If you cannot drag, tap the number and then the gap.',
-    boardAria: 'Gaps to order the numbers',
-    trayAria: 'Numbers to place',
-    pieceAria: 'Number {n}. Tap it and then the gap where it goes.',
-    slotEmptyAria: 'Gap {n} of {total}, empty.',
-    slotLockedAria: 'Gap {n}: {v}, in the right place.',
-    slotWrongAria: 'Gap {n}: {v}, wrong place.',
-    orderSelected: 'You picked {n}. Tap the gap where it goes.',
-    orderLocked: 'That gap already has its number.',
+    ui: {
+      prev: 'Previous',
+      next: 'Next',
+      conceptCount: '{i} of {n}',
+      introContinue: 'See real examples →',
+      realContinue: 'Start practising →',
+      instructionMenu: 'Choose a level.',
+      levelLocked: 'Finish the level before to open it.',
+      levelDone: 'Rounds done: {n}',
+      check: 'Check',
+      newRound: 'Another round →',
+      chooseLevel: 'Change level'
+    },
 
-    /* ---------- Wrong place ----------
-       Socratic hints: they ask about the neighbour, never give the
-       answer. */
-    orderWrongPlace: 'Wrong place.',
-    orderHintLeft: 'This number is smaller than the one on your left.',
-    orderHintRight: 'This number is bigger than the one on your right.',
-    orderHintCount: 'Count the free gaps. Which of the numbers left goes right here?',
-    orderHintDigits: 'Look at the digits. A number with more digits is bigger.',
-    orderHintFirst: 'They all have the same number of digits. Look at the first digit of each number.',
+    /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */
+    q: {
+      promptSmallest: 'Which is the smallest number?',
+      promptLargest: 'Which is the largest number?',
+      promptOrder: 'Which row goes from smallest to largest?',
+      promptBetween: 'Which of these numbers is between {a} and {b}?',
+      promptMissing: 'Which number is missing from the row?',
+      rowAria: 'Row of numbers: {row}. The gap needs a number.',
+      hintSmallest: 'Count the digits of each number. The one with fewer digits is usually the smallest. If they tie, compare the first digit.',
+      hintLargest: 'Count the digits of each number. The one with more digits is usually the largest. If they tie, compare the first digit.',
+      hintOrder: 'Find the smallest number in the list first. Which row puts it at the start?',
+      hintBetween: 'Look for the number that is bigger than {a} and smaller than {b}.',
+      hintMissing: 'Look at the number on the left and the one on the right of the gap. Which one fits between them?',
+      explainSmallest: '{v} is the smallest.',
+      explainLargest: '{v} is the largest.',
+      explainOrder: 'From smallest to largest: {list}.',
+      explainBetween: '{v} is between {a} and {b}.',
+      explainMissing: 'It goes {v}. The row, from smallest to largest: {list}.'
+    },
 
-    /* {list} = the numbers already in order, smallest to biggest. */
-    orderCorrect: 'They are in order: {list}.',
+    level: {
+      simple: { name: 'Simple digits', detail: 'From 1 to 9.' },
+      round: { name: 'Round numbers', detail: '10, 30, 200, 500, 1000…' },
+      lessRound: { name: 'Less round', detail: '110, 120, 220, 1100, 1200…' },
+      all: { name: 'All numbers', detail: 'Any number, with any number of digits.' }
+    },
 
-    /* Reinforcement: at the end of the round, the failed sets are repeated. */
-    reinforceTitle: 'Practice',
-    reinforceIntro: 'We will repeat the {n} sets you missed until you get them all right.',
+    concept: {
+      1: { title: 'More digits, bigger', text: 'A number with more digits is bigger. 9 is less than 10, and 10 is less than 100.' },
+      2: { title: 'Look at the first digit', text: 'If they have the same number of digits, look at the first one. 213 is less than 301, because 2 is less than 3.' },
+      3: { title: 'If they tie, go on', text: 'If the first digit is the same, look at the second one. 245 is less than 263.' },
+      4: { title: 'From smallest to largest', text: 'To order is to put the smallest first and the largest last. On a line, the one on the left is smaller.' }
+    },
 
-    roundComplete: 'Round finished!',
-    roundSummary: 'You ordered {count} sets of numbers. You now have {stars} stars.',
-    progress: '{current} of {stars}',
-
-    /* Transfer: where this is used outside the screen. */
-    contexto: 'Ordering numbers helps you compare prices, ages or distances and know which is the biggest.',
-    explicacion: '✅ To order, look at the digits first. The number with more digits is usually the bigger one.',
-    transfer: 'You use it every time you look for the lowest price or the biggest number in a list.'
+    real: {
+      price: 'Prices: the cheapest one goes first when you order them.',
+      house: 'House numbers: on a street, number 12 comes before number 25.',
+      score: 'Scores: the one with more points is higher up.',
+      pages: 'Book pages: page 150 comes after page 99.'
+    }
   }, 'en');
 })();

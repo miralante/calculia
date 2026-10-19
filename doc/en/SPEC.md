@@ -253,7 +253,11 @@ blocks in the right order:
 | temperature        | ✅ | ✅ | ✅ | ✅ | ✅ |
 | wallet             | ✅ | ✅ | ✅ | ✅ | ✅ |
 | puzzle             | — | — | ✅ | ✅ | ✅ |
-| quantities         | ✅ | ✅ | ✅ | ✅ | ✅ |
+| quantities         | ✅ | ✅ | ✅ | ✅ | ✅ |
+| order-numbers      | ✅ | ✅ | ✅ | ✅ | ✅ |
+| order-negatives    | ✅ | ✅ | ✅ | ✅ | ✅ |
+| order-decimals     | ✅ | ✅ | ✅ | ✅ | ✅ |
+| number-challenge   | — | ✅ | ✅ | ✅ | ✅ |
 
 > The em-dash `—` in Puzzle means "not applicable": the activity
 > is spatial and has no right/wrong question, so there is no

@@ -255,7 +255,11 @@ bloques en el orden correcto:
 | temperature      | ✅ | ✅ | ✅ | ✅ | ✅ |
 | wallet           | ✅ | ✅ | ✅ | ✅ | ✅ |
 | puzzle           | — | — | ✅ | ✅ | ✅ |
-| quantities       | ✅ | ✅ | ✅ | ✅ | ✅ |
+| quantities       | ✅ | ✅ | ✅ | ✅ | ✅ |
+| order-numbers    | ✅ | ✅ | ✅ | ✅ | ✅ |
+| order-negatives  | ✅ | ✅ | ✅ | ✅ | ✅ |
+| order-decimals   | ✅ | ✅ | ✅ | ✅ | ✅ |
+| number-challenge | — | ✅ | ✅ | ✅ | ✅ |
 
 > El guion largo `—` en Puzzle significa "no aplicable": la
 > actividad es espacial y no tiene pregunta con respuesta correcta

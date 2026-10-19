@@ -80,6 +80,7 @@ calculia/
 │   ├── js/storage.js      #   window.App.storage
 │   ├── js/feedback.js     #   window.App.feedback
 │   ├── js/dinero.js       #   window.App.dinero (usado por El Monedero)
+│   ├── js/number-sort.js  #   window.App.numberSort (las actividades de ordenar)
 │   ├── fonts/              #   woff2 autoalojadas (Atkinson Hyperlegible, Nunito)
 │   └── img/icono.svg       #   icono de la app (también icono PWA)
 ├── tools/<slug>/          # Nivel 2: una carpeta por ACTIVIDAD (28 en total)

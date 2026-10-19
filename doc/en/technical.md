@@ -74,6 +74,7 @@ calculia/
 │   ├── js/storage.js      #   window.App.storage
 │   ├── js/feedback.js     #   window.App.feedback
 │   ├── js/dinero.js       #   window.App.dinero (used by The Wallet)
+│   ├── js/number-sort.js  #   window.App.numberSort (the ordering activities)
 │   ├── fonts/              #   self-hosted woff2 (Atkinson Hyperlegible, Nunito)
 │   └── img/icono.svg       #   app icon (also the PWA icon)
 ├── tools/<slug>/          # Level 2: one folder per ACTIVITY (30 total)

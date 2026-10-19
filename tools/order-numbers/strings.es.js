@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Ordenar números: textos (ES)
+   Calculia — Ordenar números (positivos): textos (ES)
    Archivo específico del idioma. Se carga desde index.html.
    ============================================================ */
 (function () {
@@ -7,49 +7,63 @@
 
   App.i18n.register({
     title: '🔢 Ordenar números',
-    instruction: 'Pon los números de menor a mayor.',
-    btnStart: 'Empezar',
-    menuTitle: 'Pon cada número en su sitio.',
-    menuDetail: 'Empiezas con pocos números. Cada ronda sube un poco.',
-    btnMenu: 'Volver al inicio',
+    instructionIntro: 'Mira cómo se comparan los números.',
+    realTitle: 'Estos números están en la vida real.',
+    transfer: 'Lo usas cada vez que buscas el precio más bajo o la puntuación más alta de una lista.',
 
-    /* ---------- Ronda ----------
-       {count} = cuántos números hay en esta tanda. */
-    promptOrder: 'Ordena estos {count} números. Empieza por el menor.',
-    detailOrder: 'Arrastra cada número a su hueco. Si no puedes arrastrar, toca el número y luego el hueco.',
-    boardAria: 'Huecos para ordenar los números',
-    trayAria: 'Números para colocar',
-    pieceAria: 'Número {n}. Tócalo y luego el hueco donde va.',
-    slotEmptyAria: 'Hueco {n} de {total}, vacío.',
-    slotLockedAria: 'Hueco {n}: {v}, bien colocado.',
-    slotWrongAria: 'Hueco {n}: {v}, posición incorrecta.',
-    orderSelected: 'Has elegido {n}. Toca el hueco donde va.',
-    orderLocked: 'Ese hueco ya tiene su número.',
+    ui: {
+      prev: 'Anterior',
+      next: 'Siguiente',
+      conceptCount: '{i} de {n}',
+      introContinue: 'Ver ejemplos reales →',
+      realContinue: 'Empezar a practicar →',
+      instructionMenu: 'Elige un nivel.',
+      levelLocked: 'Termina el nivel anterior para abrirlo.',
+      levelDone: 'Rondas hechas: {n}',
+      check: 'Comprobar',
+      newRound: 'Otra ronda →',
+      chooseLevel: 'Cambiar de nivel'
+    },
 
-    /* ---------- Posición incorrecta ----------
-       Pistas socráticas: preguntan por el vecino, nunca dan la
-       respuesta. */
-    orderWrongPlace: 'Posición incorrecta.',
-    orderHintLeft: 'Este número es más pequeño que el de tu izquierda.',
-    orderHintRight: 'Este número es más grande que el de tu derecha.',
-    orderHintCount: 'Cuenta los huecos libres. ¿Cuál de los números que faltan va justo aquí?',
-    orderHintDigits: 'Mira las cifras. Un número con más cifras es más grande.',
-    orderHintFirst: 'Todos tienen las mismas cifras. Mira la primera cifra de cada número.',
+    /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */
+    q: {
+      promptSmallest: '¿Cuál es el número más pequeño?',
+      promptLargest: '¿Cuál es el número más grande?',
+      promptOrder: '¿Qué fila va de menor a mayor?',
+      promptBetween: '¿Cuál de estos números va entre {a} y {b}?',
+      promptMissing: '¿Qué número falta en la fila?',
+      rowAria: 'Fila de números: {row}. Falta el número del hueco.',
+      hintSmallest: 'Mira cuántas cifras tiene cada número. El que tiene menos cifras suele ser el más pequeño. Si empatan, compara la primera cifra.',
+      hintLargest: 'Mira cuántas cifras tiene cada número. El que tiene más cifras suele ser el más grande. Si empatan, compara la primera cifra.',
+      hintOrder: 'Busca primero el número más pequeño de la lista. ¿Qué fila lo pone al principio?',
+      hintBetween: 'Busca el número que es más grande que {a} y más pequeño que {b}.',
+      hintMissing: 'Mira el número de la izquierda y el de la derecha del hueco. ¿Cuál cabe entre los dos?',
+      explainSmallest: '{v} es el más pequeño.',
+      explainLargest: '{v} es el más grande.',
+      explainOrder: 'De menor a mayor: {list}.',
+      explainBetween: '{v} está entre {a} y {b}.',
+      explainMissing: 'Va {v}. La fila, de menor a mayor: {list}.'
+    },
 
-    /* {list} = los números ya en orden, de menor a mayor. */
-    orderCorrect: 'Están en orden: {list}.',
+    level: {
+      simple: { name: 'Cifras sencillas', detail: 'Del 1 al 9.' },
+      round: { name: 'Números redondos', detail: '10, 30, 200, 500, 1000…' },
+      lessRound: { name: 'Menos redondos', detail: '110, 120, 220, 1100, 1200…' },
+      all: { name: 'Todos los números', detail: 'Cualquier número, con cualquier cantidad de cifras.' }
+    },
 
-    /* Refuerzo: al terminar la ronda, las tandas falladas se repiten. */
-    reinforceTitle: 'Refuerzo',
-    reinforceIntro: 'Vamos a repetir las {n} tandas que has fallado hasta acertarlas todas.',
+    concept: {
+      1: { title: 'Más cifras, más grande', text: 'Un número con más cifras es más grande. 9 es más pequeño que 10, y 10 es más pequeño que 100.' },
+      2: { title: 'Mira la primera cifra', text: 'Si tienen las mismas cifras, mira la primera. 213 es más pequeño que 301, porque 2 es más pequeño que 3.' },
+      3: { title: 'Si empatan, sigue', text: 'Si la primera cifra es igual, mira la segunda. 245 es más pequeño que 263.' },
+      4: { title: 'De menor a mayor', text: 'Ordenar es poner primero el más pequeño y al final el más grande. En la recta, lo que está a la izquierda es más pequeño.' }
+    },
 
-    roundComplete: '¡Ronda terminada!',
-    roundSummary: 'Has ordenado {count} tandas de números. Ahora tienes {stars} estrellas.',
-    progress: '{current} de {stars}',
-
-    /* Transferencia: para qué sirve esto fuera de la pantalla. */
-    contexto: 'Ordenar números sirve para comparar precios, edades o distancias y saber cuál es el mayor.',
-    explicacion: '✅ Para ordenar, mira primero las cifras. El número con más cifras suele ser el mayor.',
-    transfer: 'Lo usas cada vez que buscas el precio más bajo o el número más grande de una lista.'
+    real: {
+      price: 'Precios: el más barato es el que va primero al ordenar.',
+      house: 'Números de casa: en una calle, el 12 va antes que el 25.',
+      score: 'Puntuaciones: el que tiene más puntos está más arriba.',
+      pages: 'Páginas de un libro: la página 150 va después de la 99.'
+    }
   }, 'es');
 })();
