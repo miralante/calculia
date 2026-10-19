@@ -4,8 +4,8 @@
    according to App.i18n.locale().
 
    Mirrors strings.es.js key for key (scripts/check.js enforces
-   the parity). Same four steps: intro, real life, levels, and
-   practice.
+   the parity). Same three steps: intro, real life, and the test
+   in three parts (dots, numbers, big numbers by their last digit).
    ============================================================ */
 (function () {
   'use strict';
@@ -24,7 +24,6 @@
     /* ---------- Screen 1: what is even and what is odd ---------- */
     introTitle: 'What is even and what is odd?',
     introText: 'A number is even if its dots go two by two and none is left over. If one is left over, it is odd.',
-    introSeqCaption: 'Look: the balls go two by two, one above the other. If one is left alone, the number is odd.',
     /* Captions for the 0 to 10 slides. {p} = even or odd. */
     seqZero: 'No balls: it is {p}.',
     seqEven: '{n} balls, all in pairs: it is {p}.',
@@ -55,36 +54,29 @@
       }
     },
 
-    /* ---------- Screen 3: the test ----------
-       Each question kind has its rule (levels.<id>.rule, in the
-       "Remember the rule" box) and its hint (levels.<id>.hint). */
-    levels: {
+    /* ---------- Screen 3: the test, in three parts ----------
+       Each part has its name (label), its rule (rule, in the
+       "Remember the rule" box) and its hint (hint). */
+    blocks: {
       dots: {
+        label: 'Part 1: dots',
         rule: 'The dots go two by two. If none is left over, it is even. If one is left over, it is odd.',
         hint: 'Pair the dots two by two. If one is left alone, it is odd.'
       },
       numbers: {
+        label: 'Part 2: numbers from 0 to 99',
         rule: 'A number is even if it can be split into pairs with none left over. If one is left over, it is odd.',
         hint: 'Picture the dots two by two. Is one left over?'
       },
       big: {
+        label: 'Part 3: big numbers',
         rule: 'Look at the last digit: 0, 2, 4, 6 or 8 → even. 1, 3, 5, 7 or 9 → odd.',
         hint: 'Look only at the last digit.'
-      },
-      shapes: {
-        rule: 'Count the sides one by one. If they go in pairs and one is left over, it is odd.',
-        hint: 'Count the sides one by one, slowly.'
-      },
-      romans: {
-        rule: 'Turn the Roman numeral into normal digits (XIV = 14) and look at the last digit.',
-        hint: 'Turn it into normal digits (XIV = 14) and look at the last digit.'
       }
     },
 
-    /* ---------- Screen 4: practice ---------- */
+    /* ---------- Screen 3: question texts ---------- */
     parityPrompt: 'Is {a} even or odd?',
-    shapePrompt: 'This shape: does it have an even or odd number of sides?',
-    shapeAria: 'Polygon shape',
     evenLabel: 'Even',
     oddLabel: 'Odd',
     wordEven: 'even',
@@ -92,22 +84,12 @@
     pairsWord: 'pairs',
     oneLeftWord: 'one left over',
 
-    /* Explanations: shown on a right answer. Each level's hint is
-       in levels.<id>.hint. */
+    /* Explanations: shown on a right answer. Each part's hint is
+       in blocks.<id>.hint. */
     explainParity: 'The {a} dots go two by two. If none is left, it is even; if one is left, it is odd.',
     explainPairsEven: '{a} is even: two by two, none is left over.',
     explainPairsOdd: '{a} is odd: two by two, one is left over.',
     explainLast: 'The last digit of {a} is {d}. So {a} is {p}.',
-    explainShape: 'It is {name}: it has {n} sides. {n} is {p}.',
-    explainRoman: '{roman} is {n}. {n} is {p}.',
-    shapeName: {
-      3: 'a triangle',
-      4: 'a square',
-      5: 'a pentagon',
-      6: 'a hexagon',
-      7: 'a heptagon',
-      8: 'an octagon'
-    },
 
     /* ---------- Closing ---------- */
     parityFinalSummary: 'You finished {count} questions. You have {stars} stars now.',

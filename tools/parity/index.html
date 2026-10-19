@@ -31,8 +31,6 @@
           <p class="reference-text" data-i18n="introText">Un número es par si sus puntos van de dos en dos y no sobra ninguno. Si sobra uno, es impar.</p>
         </div>
 
-        <p class="reference-text" data-i18n="introSeqCaption">Fíjate: las bolas van de dos en dos, una encima de otra. Si una se queda sola, el número es impar.</p>
-
         <!-- Diapositivas del 0 al 10: un número por vez. -->
         <div class="card stack parity-carousel-card">
           <div class="parity-carousel-display" id="seqDisplay" role="button" tabindex="0"></div>
@@ -60,7 +58,7 @@
         </div>
       </section>
 
-      <!-- Pantalla 3: el test. Mezcla puntos, números, formas y romanos.
+      <!-- Pantalla 3: el test, en tres partes: puntos, números y números grandes.
            El punto sobrante de la columna va en otro color para que se vea. -->
       <section id="screenParity" class="stack hidden">
         <div class="progress-bar" aria-hidden="true">
@@ -74,6 +72,7 @@
         </details>
 
         <article class="card stack parity-card">
+          <p class="parity-block" id="parityBlock"></p>
           <h2 id="parityPrompt"></h2>
           <div class="parity-dots" id="parityDots" role="img"></div>
           <div class="parity-options" id="parityOptions" aria-label="Opciones"></div>

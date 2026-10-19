@@ -4,14 +4,14 @@
    Fases, en el orden de la anatomía de Calculia (SPEC §3.6 y
    §3.8): primero se explica (qué es par y qué es impar, con los
    números del 0 al 10), luego se muestra en la vida real, y por
-   último un único test, "Empezar a practicar", igual que en
-   Formas. El test mezcla los cinco tipos de pregunta: puntos,
-   número escrito, última cifra, lados de una forma y número
-   romano. Cada respuesta correcta publica su explicación; cada
-   fallo publica una pista que no revela la respuesta.
+   último un único test, "Empezar a practicar". El test tiene tres
+   partes, en orden: puntos, números del 0 al 99 y números grandes
+   por su última cifra. Cada respuesta correcta publica su
+   explicación; cada fallo publica una pista que no revela la
+   respuesta.
 
-   La regla es la misma en todos: par si se puede repartir en
-   parejas sin que sobre nada; impar si sobra uno.
+   La regla es la misma en todas las partes: par si se puede repartir
+   en parejas sin que sobre nada; impar si sobra uno.
 
    Bandera del módulo: mod-razonamiento (el "razonamiento" del
    agrupamiento). El punto sobrante usa color-foco-suave como
@@ -47,15 +47,6 @@
   function wordFor(n) { return t(isEven(n) ? 'wordEven' : 'wordOdd'); }
   function format(n) { return n.toLocaleString(App.i18n.locale() === 'en' ? 'en-US' : 'es-ES'); }
 
-  var ROMAN = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
-  function toRoman(n) {
-    var out = '';
-    ROMAN.forEach(function (pair) {
-      while (n >= pair[0]) { out += pair[1]; n -= pair[0]; }
-    });
-    return out;
-  }
-
   /* ----------- Elements ----------- */
   var screens = {
     intro: $('#screenParityIntro'),
@@ -82,7 +73,7 @@
     }
   }
 
-  /* ----------- Explanation stage: intro sequence and real examples ----------- */
+  /* ----------- Explanation stage: dots, slides and real examples ----------- */
 
   /* One ball: a circle with its number inside. */
   function ball(number, leftover) {
@@ -123,7 +114,7 @@
      0 to 10. Each slide shows that number as balls in pairs (one
      above the other), and a caption that says whether it is even or
      odd and why. Arrows (and a click on the balls) move through the
-     slides; the order wraps around like the Roman numerals carousel. */
+     slides; the order wraps around. */
   var SEQ_MAX = 10;
   var seqIdx = 0;
 
@@ -139,7 +130,16 @@
     var display = $('#seqDisplay');
     display.innerHTML = '';
     display.classList.add('parity-carousel-balls');
-    paintDots(display, seqIdx);
+    if (seqIdx === 0) {
+      /* No balls: one outlined "0" stands in for the empty set, so the
+         even reference is visible on the slide. */
+      var zero = document.createElement('span');
+      zero.className = 'parity-ball parity-zero';
+      zero.textContent = '0';
+      display.appendChild(zero);
+    } else {
+      paintDots(display, seqIdx);
+    }
     display.setAttribute('aria-label', seqIdx + ': ' + seqCaptionFor(seqIdx));
     $('#seqCaption').textContent = seqCaptionFor(seqIdx);
   }
@@ -302,28 +302,25 @@
     });
   }
 
-  /* ----------- Round state ----------- */
+  /* ----------- Test: three parts, in order ----------- */
   var items = [];
   var idx = 0;
 
-  /* One test for the whole round, like Formas. Each question picks a
-     kind at random (dots, number, big number, shape or Roman numeral)
-     and a value of that kind. Values never repeat within the same
-     kind, so the round does not ask the same question twice. Even and
-     odd numbers come in any order. */
+  /* Builds the test from DATA.blocks, in order: the dots first, then
+     the numbers, then the big numbers. Inside each part the values
+     never repeat, so no question is asked twice. Even and odd numbers
+     come in any order within a part. */
   function makeRound() {
     var out = [];
-    var used = {};
-    while (out.length < DATA.perRound) {
-      var level = DATA.levels[randomInt(0, DATA.levels.length - 1)];
-      var taken = used[level.id] || (used[level.id] = {});
-      var span = level.max - level.min + 1;
-      if (Object.keys(taken).length >= span) continue;
-      var value;
-      do { value = randomInt(level.min, level.max); } while (taken[value]);
-      taken[value] = true;
-      out.push({ level: level, a: value });
-    }
+    DATA.blocks.forEach(function (block) {
+      var taken = {};
+      for (var i = 0; i < block.count; i += 1) {
+        var value;
+        do { value = randomInt(block.min, block.max); } while (taken[value]);
+        taken[value] = true;
+        out.push({ block: block, a: value });
+      }
+    });
     return out;
   }
 
@@ -338,60 +335,17 @@
   /* ----------- Question text, visual and explanation ----------- */
 
   function promptFor(item) {
-    if (item.level.kind === 'shape') return t('shapePrompt');
-    var shown = item.level.kind === 'roman' ? toRoman(item.a) : format(item.a);
-    return fill(t('parityPrompt'), { a: shown });
+    return fill(t('parityPrompt'), { a: format(item.a) });
   }
 
-  /* A regular polygon with n sides, drawn as an SVG. Each corner
-     is a dot so the sides are easy to count one by one. */
-  function shapeSvg(n) {
-    var NS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 160 160');
-    svg.setAttribute('class', 'parity-shape');
-    svg.setAttribute('focusable', 'false');
-    svg.setAttribute('aria-hidden', 'true');
-
-    var corners = [];
-    for (var i = 0; i < n; i += 1) {
-      var angle = -Math.PI / 2 + (2 * Math.PI * i) / n;
-      corners.push({
-        x: 80 + 64 * Math.cos(angle),
-        y: 80 + 64 * Math.sin(angle)
-      });
-    }
-
-    var body = document.createElementNS(NS, 'polygon');
-    body.setAttribute('points', corners.map(function (c) {
-      return c.x.toFixed(1) + ',' + c.y.toFixed(1);
-    }).join(' '));
-    body.setAttribute('class', 'parity-shape-body');
-    svg.appendChild(body);
-
-    corners.forEach(function (c) {
-      var dot = document.createElementNS(NS, 'circle');
-      dot.setAttribute('cx', c.x.toFixed(1));
-      dot.setAttribute('cy', c.y.toFixed(1));
-      dot.setAttribute('r', '6');
-      dot.setAttribute('class', 'parity-shape-corner');
-      svg.appendChild(dot);
-    });
-    return svg;
-  }
-
-  /* Only the dots and shapes questions draw a picture. The number
-     questions show the number in the prompt and nothing else. */
+  /* Only the dots part draws a picture. The number parts show the
+     number in the prompt and nothing else. */
   function paintVisual(item) {
     var cont = $('#parityDots');
     cont.innerHTML = '';
-    if (item.level.kind === 'dots') {
+    if (item.block.kind === 'dots') {
       show(cont);
       paintDots(cont, item.a);
-    } else if (item.level.kind === 'shape') {
-      show(cont);
-      cont.appendChild(shapeSvg(item.a));
-      cont.setAttribute('aria-label', t('shapeAria'));
     } else {
       hide(cont);
       cont.removeAttribute('aria-label');
@@ -400,16 +354,9 @@
 
   function explanationFor(item) {
     var n = item.a;
-    var p = wordFor(n);
-    if (item.level.kind === 'dots') return fill(t('explainParity'), { a: n });
-    if (item.level.kind === 'shape') {
-      return fill(t('explainShape'), { name: t('shapeName.' + n), n: n, p: p });
-    }
-    if (item.level.kind === 'roman') {
-      return fill(t('explainRoman'), { roman: toRoman(n), n: n, p: p });
-    }
-    if (item.level.id === 'big') {
-      return fill(t('explainLast'), { a: format(n), d: n % 10, p: p });
+    if (item.block.kind === 'dots') return fill(t('explainParity'), { a: n });
+    if (item.block.id === 'big') {
+      return fill(t('explainLast'), { a: format(n), d: n % 10, p: wordFor(n) });
     }
     return fill(t(isEven(n) ? 'explainPairsEven' : 'explainPairsOdd'), { a: format(n) });
   }
@@ -419,9 +366,10 @@
     var pct = items.length === 0 ? 0 : (idx / items.length) * 100;
     $('#parityProgressFill').style.width = pct + '%';
     $('#parityProgressText').textContent = (idx + 1) + ' / ' + items.length;
+    $('#parityBlock').textContent = t('blocks.' + item.block.id + '.label');
     $('#parityPrompt').textContent = promptFor(item);
-    /* The rule box follows the kind of the current question. */
-    $('#parityRule').textContent = t('levels.' + item.level.id + '.rule');
+    /* The rule box follows the part the current question belongs to. */
+    $('#parityRule').textContent = t('blocks.' + item.block.id + '.rule');
     paintVisual(item);
 
     var options = $('#parityOptions');
@@ -450,7 +398,7 @@
     if (!correct) {
       button.disabled = true;
       App.feedback.encourage($('#parityFeedback'));
-      $('#parityFeedback').textContent += ' ' + t('levels.' + item.level.id + '.hint');
+      $('#parityFeedback').textContent += ' ' + t('blocks.' + item.block.id + '.hint');
       App.feedback.lockUntilAck($('#parityOptions').querySelectorAll('button'), $('#parityFeedback'));
       return;
     }

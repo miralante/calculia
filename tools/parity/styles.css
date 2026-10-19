@@ -65,6 +65,11 @@
 .parity-carousel-display:focus-visible { outline: 3px solid var(--color-foco); outline-offset: 2px; }
 .parity-carousel-balls .parity-ball { width: 44px; height: 44px; font-size: 18px; }
 .parity-carousel-balls .parity-ball-pair { gap: 8px; }
+/* The "0" of slide 0: an empty outlined ball in the pair colour. */
+.parity-carousel-balls .parity-zero {
+  box-sizing: border-box; background: #fff; color: #1565C0;
+  border: 3px dashed #1565C0;
+}
 .parity-carousel-caption {
   margin: 0; min-height: 1.2em; text-align: center;
   font-size: var(--texto-grande); color: var(--color-texto);
@@ -99,15 +104,8 @@
 }
 .parity-rule p { margin: var(--espacio) 0 0; }
 
-/* dibujo de un polígono: contorno y esquinas */
-.parity-shape { width: 160px; height: 160px; }
-.parity-shape-body {
-  fill: var(--mod-razonamiento-suave);
-  stroke: var(--mod-razonamiento);
-  stroke-width: 4;
-  stroke-linejoin: round;
-}
-.parity-shape-corner { fill: var(--mod-razonamiento); }
+/* nombre de la parte del test (dots, numbers, big numbers) */
+.parity-block { margin: 0; font-weight: 700; color: var(--mod-razonamiento); text-align: center; }
 
 /* pantalla final */
 .big-emoji { font-size: 96px; }

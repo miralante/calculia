@@ -8,14 +8,13 @@
                        del 0 al 10 y sus bolas en parejas.
      2. realScreen   — ejemplos de la vida real (zapatos, huevos,
                        triciclo, trébol), con el número dibujado.
-     3. parityScreen — un único test, «Empezar a practicar», que
-                       mezcla puntos, números, última cifra, formas
-                       y números romanos. Cada acierto publica su
-                       explicación; cada fallo, una pista.
+     3. parityScreen — un único test, «Empezar a practicar», en tres
+                       partes: puntos, números del 0 al 99 y números
+                       grandes por su última cifra. Cada acierto
+                       publica su explicación; cada fallo, una pista.
 
-   Las claves de cada tipo de pregunta viven bajo levels.<id>.* y
-   las de las formas bajo shapeName.<lados>. Mismas claves que
-   strings.en.js.
+   Las claves de cada parte viven bajo blocks.<id>.*. Mismas claves
+   que strings.en.js.
    ============================================================ */
 (function () {
   'use strict';
@@ -34,7 +33,6 @@
     /* ---------- Pantalla 1: qué es par y qué es impar ---------- */
     introTitle: '¿Qué es par y qué es impar?',
     introText: 'Un número es par si sus puntos van de dos en dos y no sobra ninguno. Si sobra uno, es impar.',
-    introSeqCaption: 'Fíjate: las bolas van de dos en dos, una encima de otra. Si una se queda sola, el número es impar.',
     /* Pies de las diapositivas del 0 al 10. {p} = par o impar. */
     seqZero: 'Ninguna bola: es {p}.',
     seqEven: '{n} bolas, todas en parejas: es {p}.',
@@ -65,36 +63,29 @@
       }
     },
 
-    /* ---------- Pantalla 3: el test ----------
-       Cada tipo de pregunta tiene su regla (levels.<id>.rule, en el
-       recuadro «Recuerda la regla») y su pista (levels.<id>.hint). */
-    levels: {
+    /* ---------- Pantalla 3: el test, en tres partes ----------
+       Cada parte tiene su nombre (label), su regla (rule, en el
+       recuadro «Recuerda la regla») y su pista (hint). */
+    blocks: {
       dots: {
+        label: 'Parte 1: puntos',
         rule: 'Los puntos van de dos en dos. Si no sobra ninguno, es par. Si sobra uno, es impar.',
         hint: 'Empareja los puntos de dos en dos. Si sobra uno, es impar.'
       },
       numbers: {
+        label: 'Parte 2: números del 0 al 99',
         rule: 'Un número es par si se puede repartir en parejas sin que sobre nada. Si sobra uno, es impar.',
         hint: 'Imagina los puntos de dos en dos. ¿Sobra uno?'
       },
       big: {
+        label: 'Parte 3: números grandes',
         rule: 'Mira la última cifra: 0, 2, 4, 6 u 8 → par. 1, 3, 5, 7 o 9 → impar.',
         hint: 'Mira solo la última cifra.'
-      },
-      shapes: {
-        rule: 'Cuenta los lados uno a uno. Si se agrupan de dos en dos y sobra uno, es impar.',
-        hint: 'Cuenta los lados uno a uno, despacio.'
-      },
-      romans: {
-        rule: 'Pasa el número romano a cifras normales (XIV = 14) y mira la última cifra.',
-        hint: 'Pásalo a cifras normales (XIV = 14) y mira la última cifra.'
       }
     },
 
-    /* ---------- Pantalla 4: práctica ---------- */
+    /* ---------- Pantalla 3: textos de las preguntas ---------- */
     parityPrompt: '¿{a} es par o impar?',
-    shapePrompt: 'Este dibujo, ¿tiene un número par o impar de lados?',
-    shapeAria: 'Dibujo de un polígono',
     evenLabel: 'Par',
     oddLabel: 'Impar',
     wordEven: 'par',
@@ -102,22 +93,12 @@
     pairsWord: 'parejas',
     oneLeftWord: 'uno que sobra',
 
-    /* Explicaciones: se publican al acertar. Las pistas de cada
-       nivel están en levels.<id>.hint. */
+    /* Explicaciones: se publican al acertar. Las pistas de cada parte
+       están en blocks.<id>.hint. */
     explainParity: 'Los {a} puntos van de dos en dos. Si no sobra ninguno, es par; si sobra uno, es impar.',
     explainPairsEven: '{a} es par: de dos en dos no sobra ninguno.',
     explainPairsOdd: '{a} es impar: de dos en dos, sobra uno.',
     explainLast: 'La última cifra de {a} es {d}. Así que {a} es {p}.',
-    explainShape: 'Es {name}: tiene {n} lados. {n} es {p}.',
-    explainRoman: '{roman} vale {n}. {n} es {p}.',
-    shapeName: {
-      3: 'un triángulo',
-      4: 'un cuadrado',
-      5: 'un pentágono',
-      6: 'un hexágono',
-      7: 'un heptágono',
-      8: 'un octógono'
-    },
 
     /* ---------- Cierre ---------- */
     parityFinalSummary: 'Has terminado {count} preguntas. Ya tienes {stars} estrellas.',

@@ -4,26 +4,17 @@
    Una idea que se repite: un número es par si sus puntos van
    de dos en dos y no sobra ninguno; es impar si sobra uno.
 
-   Hay un único test, "Empezar a practicar", con perRound
-   preguntas. Cada pregunta elige al azar uno de estos tipos
-   (levels) y un valor dentro de su rango:
+   El test tiene tres partes, en este orden, y cada una enseña
+   un paso más:
 
-     dots    — se cuentan puntos a la vista (0..24).
-     numbers — el mismo criterio, con el número escrito (0..99).
-     big     — números grandes: basta con mirar la última cifra
-               (100..9999).
-     shapes  — formas: contar los lados de un polígono (3..8).
-     romans  — números romanos: pasarlos a cifras y decidir (1..20).
+     1. dots    — puntos a la vista: se agrupan de dos en dos (0..24).
+     2. numbers — el mismo criterio con el número escrito, sin dibujo
+                  (0..99).
+     3. big     — números grandes: no hace falta contar, basta con
+                  mirar la última cifra (100..9999).
 
-   kind decide cómo se pinta la pregunta:
-     dots  → columna de puntos (parejas y el punto sobrante)
-     text  → sólo el número en el enunciado
-     shape → dibujo de un polígono con n lados
-     roman → sólo el número romano en el enunciado
-
-   Dentro de cada tipo los valores no se repiten en la misma
-   ronda; los tipos se mezclan, así que pares e impares pueden
-   salir en cualquier orden, sin patrón que memorizar.
+   Dentro de cada parte los valores no se repiten. Las formas y los
+   números romanos son de sus propias actividades, no de esta.
    ============================================================ */
 
 var DATA = {
@@ -40,15 +31,11 @@ var DATA = {
      bajo real.<índice>. */
   examples: ['shoes', 'eggs', 'trike', 'clover'],
 
-  /* Preguntas en el test único. */
-  perRound: 10,
-
-  /* Tipos de pregunta. min/max es el rango de valores de cada tipo. */
-  levels: [
-    { id: 'dots',    kind: 'dots',  min: 0,   max: 24 },
-    { id: 'numbers', kind: 'text',  min: 0,   max: 99 },
-    { id: 'big',     kind: 'text',  min: 100, max: 9999 },
-    { id: 'shapes',  kind: 'shape', min: 3,   max: 8 },
-    { id: 'romans',  kind: 'roman', min: 1,   max: 20 }
+  /* Partes del test. count = preguntas de la parte; min/max = rango
+     de valores. Las partes se hacen en el orden de esta lista. */
+  blocks: [
+    { id: 'dots',    kind: 'dots', count: 4, min: 0,   max: 24 },
+    { id: 'numbers', kind: 'text', count: 3, min: 0,   max: 99 },
+    { id: 'big',     kind: 'text', count: 3, min: 100, max: 9999 }
   ]
 };
