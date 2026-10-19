@@ -361,7 +361,12 @@
        buildRound(level) -> questions (the activity shuffles them)
      } */
   function setup(config) {
+    /* An activity that moved to a new slug keeps the stars of its old one. */
     var progress = App.storage.get(config.toolId);
+    if (typeof progress.stars !== 'number' && config.legacyToolId) {
+      var legacy = App.storage.get(config.legacyToolId);
+      if (typeof legacy.stars === 'number') progress = legacy;
+    }
     if (typeof progress.stars !== 'number') progress.stars = 0;
     if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
     if (!progress.roundsByLevel || typeof progress.roundsByLevel !== 'object') progress.roundsByLevel = {};

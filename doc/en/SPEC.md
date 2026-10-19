@@ -254,7 +254,7 @@ blocks in the right order:
 | wallet             | ✅ | ✅ | ✅ | ✅ | ✅ |
 | puzzle             | — | — | ✅ | ✅ | ✅ |
 | quantities         | ✅ | ✅ | ✅ | ✅ | ✅ |
-| order-numbers      | ✅ | ✅ | ✅ | ✅ | ✅ |
+| order-positives    | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-negatives    | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-decimals     | ✅ | ✅ | ✅ | ✅ | ✅ |
 | number-challenge   | — | ✅ | ✅ | ✅ | ✅ |

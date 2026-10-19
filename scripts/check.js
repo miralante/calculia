@@ -385,11 +385,11 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['los-numeros', 'order-numbers', 'order-negatives', 'order-decimals', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'roman-numerals', 'shapes', 'trigonometry', 'scale', 'math-tables'];
+var PUBLIC_SLUGS = ['los-numeros', 'order-numbers', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'roman-numerals', 'shapes', 'trigonometry', 'scale', 'math-tables'];
 /* Public AND in dev/. Every name here must also be in PUBLIC_SLUGS,
    otherwise dev/ would carry an activity the landing hides, which is
    the inverse mistake and just as wrong. */
-var BOTH_SLUGS = ['los-numeros', 'order-numbers', 'order-negatives', 'order-decimals', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'shapes', 'trigonometry', 'scale', 'math-tables'];
+var BOTH_SLUGS = ['los-numeros', 'order-numbers', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'shapes', 'trigonometry', 'scale', 'math-tables'];
 var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
 var expectedDevSlugs = new Set(slugs.filter(function (slug) {
   return PUBLIC_SLUGS.indexOf(slug) === -1 || BOTH_SLUGS.indexOf(slug) !== -1;
@@ -440,7 +440,7 @@ Object.keys(targets).forEach(function (f) {
    assets/js/utils.js. An activity that still defines its own `function
    draw(` or `function spreadRepeats(` is duplicating that helper and
    going around the contract. */
-var NO_SHUFFLE = ['temperature', 'los-numeros', 'quantities'];
+var NO_SHUFFLE = ['temperature', 'los-numeros', 'quantities', 'order-numbers'];
 slugs.forEach(function (slug) {
   if (NO_SHUFFLE.indexOf(slug) !== -1) return;
   checks += 1;

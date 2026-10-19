@@ -1,7 +1,6 @@
 /* ============================================================
-   Calculia — Ordering numbers (positives): activity styles.
-   The shared stages and the test sheet are in
-   assets/css/number-sort.css.
+   Calculia — Ordering numbers (group page): styles.
+   The menu cards are the shared .menu-grid / .btn-actividad.
    ============================================================ */
 
 .tool-header h1 { color: var(--mod-razonamiento); }

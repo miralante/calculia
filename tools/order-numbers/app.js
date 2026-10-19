@@ -1,18 +1,22 @@
 /* ============================================================
-   Calculia — Ordering numbers (positives).
-   Levels, slides and examples are in data.js; the three stages and
-   the questions are shared in assets/js/number-sort.js.
+   Calculia — Ordering numbers (group page).
+   Lists the three ordering activities as links. Nothing is
+   practised here: each activity has its own round.
    ============================================================ */
 (function () {
   'use strict';
 
-  App.numberSort.setup({
-    toolId: 'order-numbers',
-    levels: DATA.levels,
-    concepts: DATA.concepts,
-    examples: DATA.examples,
-    buildRound: function (level) {
-      return App.utils.shuffle(App.numberSort.makeRound(level, DATA.perRound));
-    }
+  var menu = App.utils.$('#activitiesMenu');
+  var grid = document.createElement('div');
+  grid.className = 'menu-grid';
+  DATA.activities.forEach(function (act) {
+    var link = document.createElement('a');
+    link.className = 'btn-actividad';
+    link.href = '../' + act.slug + '/';
+    link.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
+      '<span>' + App.i18n.t(act.name) + '</span>' +
+      '<span class="detail-card">' + App.i18n.t(act.detail) + '</span>';
+    grid.appendChild(link);
   });
+  menu.appendChild(grid);
 })();

@@ -256,7 +256,7 @@ bloques en el orden correcto:
 | wallet           | ✅ | ✅ | ✅ | ✅ | ✅ |
 | puzzle           | — | — | ✅ | ✅ | ✅ |
 | quantities       | ✅ | ✅ | ✅ | ✅ | ✅ |
-| order-numbers    | ✅ | ✅ | ✅ | ✅ | ✅ |
+| order-positives  | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-negatives  | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-decimals   | ✅ | ✅ | ✅ | ✅ | ✅ |
 | number-challenge | — | ✅ | ✅ | ✅ | ✅ |
