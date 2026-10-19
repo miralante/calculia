@@ -276,7 +276,13 @@
 
 .comma-gap:disabled { cursor: default; }
 
-.comma-gap.is-placed { overflow: visible; }
+.comma-gap.is-placed { overflow: visible; cursor: grab; touch-action: none; }
+
+/* The gap a dragged comma would drop into. */
+.comma-gap.is-target {
+  background: var(--mod-razonamiento-suave);
+  border-radius: 6px;
+}
 
 .comma-point {
   display: inline-block;
@@ -330,6 +336,30 @@
 
 .comma-chip {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 3px solid var(--mod-razonamiento);
+  background: var(--mod-razonamiento-suave);
+  color: var(--mod-razonamiento);
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+/* The comma being dragged: it follows the pointer. */
+.comma-ghost {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 44px;

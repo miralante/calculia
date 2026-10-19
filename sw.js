@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v212';
+var VERSION = 'calculia-v216';
 
 var FILES = [
   './',

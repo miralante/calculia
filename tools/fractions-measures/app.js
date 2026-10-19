@@ -967,9 +967,11 @@
      A whole number is shown with no separator (452567). The person taps the
      gap where the decimal comma goes (452,567). The prompt says how many
      decimal digits the number has, so the comma is found by counting from
-     the right. Tap rules (one comma only, so no dragging): an empty gap puts
-     the comma there, another gap moves it, the comma itself removes it.
-     English shows a point. Stars and rounds go to this tool's shared progress,
+     the right. The comma can be dragged from the tray to a gap, or from one
+     gap to another; dropped anywhere else it goes back to the tray. A tap
+     works too: an empty gap puts the comma there, the comma itself removes
+     it. The Escuchar button reads the question and the digits. English shows
+     a point. Stars and rounds go to this tool's shared progress,
      like every other activity here. Data in data.js (activities.coma.steps). */
   var comaCase = null;
   var comaPlaced = null;      /* gap the comma sits in, or null */
@@ -1046,13 +1048,20 @@
     var fraction = digits.slice(step.enteras);
     var words = (locale === 'en' ? COMA_WORDS.en : COMA_WORDS.es).units;
     var spokenFraction = fraction.split('').map(function (d) { return words[Number(d)]; }).join(' ');
+    /* Read before the comma is placed: the question and the digits one by one.
+       It never says where the comma goes. */
+    var spokenDigits = digits.split('').map(function (d) { return words[Number(d)]; }).join(' ');
+    var prompt = step.decimales === 1
+      ? comaT('promptDecimalOne')
+      : comaT('promptDecimal').replace('{count}', step.decimales);
     return {
       n: n,
       gap: step.enteras - 1,
       correct: whole + comaSeparator() + fraction,
-      prompt: step.decimales === 1
-        ? comaT('promptDecimalOne')
-        : comaT('promptDecimal').replace('{count}', step.decimales),
+      decimals: step.decimales,
+      prompt: prompt,
+      listen: prompt + ' ' + spokenDigits,
+      /* Read after a right answer: the whole number with its comma. */
       audio: comaSpeakWhole(Number(whole), locale) + (locale === 'en' ? ' point ' : ' coma ') + spokenFraction
     };
   }
@@ -1093,7 +1102,7 @@
       mark.textContent = '✗';
       btn.appendChild(mark);
     }
-    btn.addEventListener('click', function () { comaTapGap(i); });
+    btn.addEventListener('click', function () { if (!comaJustDragged) comaTapGap(i); });
     return btn;
   }
 
@@ -1121,6 +1130,108 @@
     if (again) again.focus();
   }
 
+  /* ---- Dragging the comma ----
+     The comma can be dragged from the tray to a gap, or from one gap to
+     another. Dropped anywhere else, it goes back to the tray (or is removed
+     when it was in a gap). Pointer events cover mouse, touch and pen. A
+     drag starts only after a few pixels of movement, so a tap is never a
+     drag; the click that follows a drop is swallowed (comaJustDragged). */
+  var COMA_DRAG_PX = 6;
+  var comaDrag = null;          /* { from, ghost, moved, startX, startY } */
+  var comaJustDragged = false;
+
+  function comaStartDrag(e, from) {
+    if (!comaWaiting || e.button !== 0) return;
+    comaDrag = { from: from, ghost: null, moved: false, startX: e.clientX, startY: e.clientY };
+    document.addEventListener('pointermove', comaMoveDrag);
+    document.addEventListener('pointerup', comaEndDrag);
+    document.addEventListener('pointercancel', comaCancelDrag);
+  }
+
+  /* The gap under the pointer, or null. */
+  function comaGapUnder(x, y) {
+    var el = document.elementFromPoint(x, y);
+    var gap = el && el.closest ? el.closest('#commaBoard .comma-gap') : null;
+    return gap ? Number(gap.getAttribute('data-gap')) : null;
+  }
+
+  function comaMoveDrag(e) {
+    var d = comaDrag;
+    if (!d) return;
+    if (!d.moved) {
+      if (Math.abs(e.clientX - d.startX) + Math.abs(e.clientY - d.startY) < COMA_DRAG_PX) return;
+      d.moved = true;
+      d.ghost = document.createElement('span');
+      d.ghost.className = 'comma-ghost';
+      d.ghost.setAttribute('aria-hidden', 'true');
+      d.ghost.textContent = comaSeparator();
+      document.body.appendChild(d.ghost);
+    }
+    d.ghost.style.left = e.clientX + 'px';
+    d.ghost.style.top = e.clientY + 'px';
+    var over = comaGapUnder(e.clientX, e.clientY);
+    var gaps = document.querySelectorAll('#commaBoard .comma-gap');
+    for (var k = 0; k < gaps.length; k++) {
+      gaps[k].classList.toggle('is-target', Number(gaps[k].getAttribute('data-gap')) === over && over !== d.from);
+    }
+  }
+
+  function comaEndDrag(e) {
+    var d = comaDrag;
+    if (!d) return;
+    /* Read the target before comaStopDrag clears the drag state. */
+    var target = d.moved ? comaGapUnder(e.clientX, e.clientY) : null;
+    comaStopDrag();
+    if (!d.moved) return;   /* a tap: the click does the work */
+    comaJustDragged = true;
+    setTimeout(function () { comaJustDragged = false; }, 300);
+    if (target !== null && d.ghost) {
+      /* Glide the comma into the gap, then settle it there. */
+      comaGlide(d.ghost, comaGapCenter(target), function () { comaDrop(d.from, target); });
+    } else {
+      if (d.ghost) d.ghost.remove();
+      comaDrop(d.from, null);
+    }
+  }
+
+  /* from: the gap the comma was lifted from, or null when it came from the
+     tray. to: the gap it landed on, or null when it was dropped elsewhere. */
+  function comaDrop(from, to) {
+    if (to !== null) comaPlaced = to;
+    else if (from !== null) comaPlaced = null;
+    comaWrongGap = null;
+    $('#comaFeedback').textContent = '';
+    renderComaBoard();
+    renderComaTray();
+  }
+
+  function comaGapCenter(g) {
+    var r = document.querySelector('#commaBoard [data-gap="' + g + '"]').getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+
+  /* Moves an element to a point on screen, then runs done(). */
+  function comaGlide(el, to, done) {
+    el.style.transition = 'left 0.18s ease-out, top 0.18s ease-out';
+    el.style.left = to.x + 'px';
+    el.style.top = to.y + 'px';
+    setTimeout(function () { el.remove(); done(); }, 190);
+  }
+
+  function comaCancelDrag() {
+    if (comaDrag && comaDrag.ghost) comaDrag.ghost.remove();
+    comaStopDrag();
+  }
+
+  function comaStopDrag() {
+    document.removeEventListener('pointermove', comaMoveDrag);
+    document.removeEventListener('pointerup', comaEndDrag);
+    document.removeEventListener('pointercancel', comaCancelDrag);
+    comaDrag = null;
+    var marked = document.querySelectorAll('#commaBoard .is-target');
+    for (var k = 0; k < marked.length; k++) marked[k].classList.remove('is-target');
+  }
+
   function comaCheckAnswer() {
     if (!comaWaiting) return;
     var feedbackEl = $('#comaFeedback');
@@ -1137,10 +1248,21 @@
     /* Reinforcement: register the first miss of the item. */
     if (comaAttempts === 1) App.reinforce.add('coma:' + comaCase.correct, comaCase);
     comaWrongGap = comaPlaced;
-    /* Socratic hint: how many digits are to the right of the comma placed. */
+    /* Socratic hint with the exact move. The comma must have comaCase.decimals
+       digits to its right. Each gap moves it one digit, so the number of gaps
+       to move is the difference, and the direction follows its sign: too many
+       digits to the right means move right, too few means move left. */
     var digitsToRight = String(comaCase.n).length - 1 - comaPlaced;
+    var gapsToMove = Math.abs(digitsToRight - comaCase.decimals);
+    var moves = gapsToMove === 1 ? comaT('oneGap') : comaT('manyGaps').replace('{n}', gapsToMove);
+    var direction = digitsToRight > comaCase.decimals ? comaT('moveRight') : comaT('moveLeft');
+    var digits = digitsToRight === 1 ? comaT('oneDigit') : comaT('manyDigits').replace('{n}', digitsToRight);
     App.feedback.encourage(feedbackEl);
-    feedbackEl.textContent = comaT('wrongMarked') + ' ' + comaT('wrongHint').replace('{k}', digitsToRight);
+    feedbackEl.textContent = comaT('wrongMarked') + ' ' + comaT('wrongHint')
+      .replace('{digits}', digits)
+      .replace('{d}', comaCase.decimals)
+      .replace('{moves}', moves)
+      .replace('{direction}', direction);
     renderComaBoard();
   }
 
@@ -1155,8 +1277,6 @@
     comaWaiting = false;
     renderComaBoard();
     $('#comaCheck').classList.add('hidden');
-    /* After a right answer the person can hear the number read aloud. */
-    if (App.tts && App.tts.available) $('#comaHear').classList.remove('hidden');
     $('#comaNext').classList.remove('hidden');
     $('#comaNext').focus();
   }
@@ -1176,7 +1296,8 @@
     renderComaTray();
     $('#comaCheck').classList.remove('hidden');
     $('#comaNext').classList.add('hidden');
-    $('#comaHear').classList.add('hidden');
+    /* Escuchar is there from the start: it reads the question, then the number. */
+    $('#comaHear').classList.toggle('hidden', !(App.tts && App.tts.available));
     var fillEl = $('#comaProgressFill');
     var textEl = $('#comaProgressText');
     var current = comaInReinforce ? comaReinforceIndex : comaIndex;
@@ -1241,9 +1362,17 @@
   $('#comaCheck').addEventListener('click', comaCheckAnswer);
   $('#comaNext').addEventListener('click', comaNext);
   $('#comaHear').addEventListener('click', function () {
-    if (comaCase && App.tts) App.tts.speak(comaCase.audio);
+    if (comaCase && App.tts) App.tts.speak(comaWaiting ? comaCase.listen : comaCase.audio);
   });
   $('#comaBack').addEventListener('click', function () { show(screenMenu); });
+  $('#commaBoard').addEventListener('pointerdown', function (e) {
+    var gap = e.target.closest ? e.target.closest('.comma-gap.is-placed') : null;
+    if (gap) comaStartDrag(e, Number(gap.getAttribute('data-gap')));
+  });
+  $('#commaTray').addEventListener('pointerdown', function (e) {
+    var chip = e.target.closest ? e.target.closest('.comma-chip') : null;
+    if (chip) comaStartDrag(e, null);
+  });
 
   $('#btnNext').addEventListener('click', next);
 
