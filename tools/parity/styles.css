@@ -26,14 +26,18 @@
   border-radius: var(--radio);
   background: var(--mod-razonamiento-suave);
 }
-/* Two dots side by side with no gap, then the parent .parity-dots
-   uses 6px between pairs — that visual gap is what makes the pairing
-   pattern readable. */
-.parity-pair-row { display: inline-flex; gap: 0; }
-.parity-dot { display: inline-block; width: 24px; height: 24px; border-radius: 50%; }
-.parity-pair   { background: var(--mod-razonamiento); }
+/* A pair is a column: its two balls stack vertically, and the parent
+   .parity-dots puts 6px between pairs — that gap is what makes the
+   pairing readable. Each ball carries its number inside. */
+.parity-ball-pair { display: flex; flex-direction: column; gap: 4px; }
+.parity-ball {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  color: #fff; font-size: 13px; font-weight: 700; line-height: 1;
+}
+/* Dark text on the orange ball keeps its contrast above AA. */
 .parity-leftover {
-  background: var(--color-foco);
+  color: #111;
   box-shadow: 0 0 0 3px var(--color-foco-suave);
 }
 .parity-options { display: flex; gap: var(--espacio); flex-wrap: wrap; }
@@ -48,27 +52,41 @@
   .parity-options .option-btn { min-width: 0; width: 100%; }
 }
 
-/* pantalla 1: dos montones de puntos, uno en parejas y otro con uno suelto */
-.parity-demo { display: flex; flex-wrap: wrap; gap: var(--espacio); justify-content: center; }
-.parity-demo-item { margin: 0; display: grid; justify-items: center; gap: 8px; }
-.parity-demo-item figcaption { color: var(--color-texto-suave); text-align: center; }
-.parity-dots-small { gap: 4px; padding: 12px; }
-.parity-dots-small .parity-dot { width: 16px; height: 16px; }
+/* pantalla 1: 0 a 10, una fila por número, con sus bolas en parejas
+   verticales y la etiqueta par/impar al final de cada fila. Dos
+   columnas desde 560px; una en teléfonos. */
+.parity-seq { display: grid; grid-template-columns: 1fr; gap: var(--espacio); }
+@media (min-width: 560px) {
+  .parity-seq { grid-template-columns: 1fr 1fr; }
+}
+.parity-seq-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 8px 12px;
+  border: 1px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+}
+.parity-seq-num {
+  min-width: 2ch; font-size: var(--texto-grande); font-weight: 700;
+  color: var(--mod-razonamiento);
+}
+.parity-seq-balls { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; min-height: 30px; }
+.parity-seq-balls .parity-ball { width: 26px; height: 26px; font-size: 11px; }
+.parity-seq-tag { font-weight: 700; color: var(--color-texto-suave); }
 
-/* pantalla 2: un ejemplo de la vida real por tarjeta */
-.parity-example { display: grid; grid-template-columns: auto 1fr; gap: var(--espacio); align-items: center; }
-.parity-example-icon { font-size: 40px; line-height: 1; }
+/* pantalla 2: un ejemplo por tarjeta, dibujo arriba y texto debajo.
+   El dibujo muestra el número que dice el texto. */
+.parity-example { display: grid; gap: var(--espacio); }
+.parity-real-visual { display: flex; justify-content: center; align-items: center; min-height: 64px; }
+.parity-real-row { gap: 8px; }
+.parity-real-emoji { font-size: 40px; line-height: 1; }
+.parity-real-eggs {
+  display: grid; grid-template-columns: repeat(6, auto);
+  gap: 2px 6px; justify-content: center;
+}
+.parity-real-eggs .parity-real-emoji { font-size: 30px; }
+.parity-real-svg { width: 160px; height: auto; color: var(--color-texto-suave); }
 .parity-example h3 { margin: 0; color: var(--mod-razonamiento); }
 .parity-example p { margin: 4px 0 0; }
-
-/* pantalla 3: un botón por nivel, con su nombre y una línea de apoyo */
-.level-btn {
-  display: flex; flex-direction: column; align-items: flex-start;
-  width: 100%; min-height: 64px; text-align: left;
-}
-.level-name { font-weight: 700; }
-.level-detail { font-weight: 400; }
-.level-done { font-size: 0.9em; }
 
 /* pantalla 4: la regla, plegada para no distraer durante la práctica */
 .parity-rule {

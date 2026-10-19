@@ -14,7 +14,6 @@
     title: '🟦 Even and odd',
     instruction: 'Look at the dots: one left alone or all paired up?',
     btnMenu: 'Back to the start',
-    backLevels: '← Levels',
     ruleTitle: 'Remember the rule',
 
     /* Root-menu key: the "Pares e impares" / "Even and odd"
@@ -25,14 +24,13 @@
     /* ---------- Screen 1: what is even and what is odd ---------- */
     introTitle: 'What is even and what is odd?',
     introText: 'A number is even if its dots go two by two and none is left over. If one is left over, it is odd.',
-    introEvenCaption: 'Even: 4 dots, two pairs',
-    introOddCaption: 'Odd: 5 dots, one left over',
+    introSeqCaption: 'Look: the balls go two by two, one above the other. If one is left alone, the number is odd.',
     introNext: 'See it in real life →',
 
     /* ---------- Screen 2: real life ---------- */
     realTitle: 'In real life',
     realText: 'Look: even things go in pairs, and odd things leave one alone.',
-    realNext: 'Choose a level →',
+    realNext: 'Start practising →',
     real: {
       0: {
         title: 'Shoes',
@@ -43,48 +41,36 @@
         text: 'A dozen has 12 eggs: 6 exact pairs. If there are 7, one is left on its own.'
       },
       2: {
-        title: 'Dancing in pairs',
-        text: 'If the group is even, everyone has a partner. If it is odd, one person is always left without one.'
+        title: 'Tricycle',
+        text: 'Two back wheels, as a pair, and one front wheel on its own. Three wheels: odd.'
       },
       3: {
-        title: 'A die',
-        text: 'On a die, the even numbers are 2, 4 and 6. The odd numbers are 1, 3 and 5.'
+        title: 'Clover',
+        text: 'Two leaves below, as a pair, and one leaf on top on its own. Three leaves: odd.'
       }
     },
 
-    /* ---------- Screen 3: levels ---------- */
-    levelsTitle: 'Choose a level',
-    levelsText: 'Start with 1 and go in order.',
-    levelsBack: '← Back',
-    levelDone: '✔ Done',
+    /* ---------- Screen 3: the test ----------
+       Each question kind has its rule (levels.<id>.rule, in the
+       "Remember the rule" box) and its hint (levels.<id>.hint). */
     levels: {
       dots: {
-        name: 'Dots',
-        detail: 'Count the dots two by two.',
         rule: 'The dots go two by two. If none is left over, it is even. If one is left over, it is odd.',
         hint: 'Pair the dots two by two. If one is left alone, it is odd.'
       },
       numbers: {
-        name: 'Numbers from 0 to 99',
-        detail: 'Picture the dots and decide.',
         rule: 'A number is even if it can be split into pairs with none left over. If one is left over, it is odd.',
         hint: 'Picture the dots two by two. Is one left over?'
       },
       big: {
-        name: 'Big numbers',
-        detail: 'No need to count: look at the last digit.',
         rule: 'Look at the last digit: 0, 2, 4, 6 or 8 → even. 1, 3, 5, 7 or 9 → odd.',
         hint: 'Look only at the last digit.'
       },
       shapes: {
-        name: 'Shapes',
-        detail: 'Count the sides of each shape.',
         rule: 'Count the sides one by one. If they go in pairs and one is left over, it is odd.',
         hint: 'Count the sides one by one, slowly.'
       },
       romans: {
-        name: 'Roman numerals',
-        detail: 'Turn them into digits and decide.',
         rule: 'Turn the Roman numeral into normal digits (XIV = 14) and look at the last digit.',
         hint: 'Turn it into normal digits (XIV = 14) and look at the last digit.'
       }
@@ -119,7 +105,7 @@
     },
 
     /* ---------- Closing ---------- */
-    parityFinalSummary: 'Level "{level}" done: {count} questions. You have {stars} stars now.',
+    parityFinalSummary: 'You finished {count} questions. You have {stars} stars now.',
     parityTransfer: 'Knowing which numbers are even and which are odd helps split into two teams, alternate turns, or cut a list in half.'
   }, 'en');
 })();

@@ -2,14 +2,15 @@
    Calculia — Pares e impares: app.
 
    Fases, en el orden de la anatomía de Calculia (SPEC §3.6 y
-   §3.8): primero se explica (qué es par y qué es impar), luego
-   se muestra en la vida real, después se elige nivel y se
-   practica. Cada respuesta correcta publica su explicación; cada
+   §3.8): primero se explica (qué es par y qué es impar, con los
+   números del 0 al 10), luego se muestra en la vida real, y por
+   último un único test, "Empezar a practicar", igual que en
+   Formas. El test mezcla los cinco tipos de pregunta: puntos,
+   número escrito, última cifra, lados de una forma y número
+   romano. Cada respuesta correcta publica su explicación; cada
    fallo publica una pista que no revela la respuesta.
 
-   Los niveles van de lo visible a lo abstracto: puntos, número
-   escrito, última cifra, lados de una forma y número romano. La
-   regla es la misma en todos: par si se puede repartir en
+   La regla es la misma en todos: par si se puede repartir en
    parejas sin que sobre nada; impar si sobra uno.
 
    Bandera del módulo: mod-razonamiento (el "razonamiento" del
@@ -25,7 +26,6 @@
   /* Persistent state */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
-  if (!progress.done || typeof progress.done !== 'object') progress.done = {};
 
   function save() { App.storage.set(TOOL_ID, progress); }
   function show(el) { if (el) el.classList.remove('hidden'); }
@@ -60,7 +60,6 @@
   var screens = {
     intro: $('#screenParityIntro'),
     real: $('#screenParityReal'),
-    levels: $('#screenParityLevels'),
     game: $('#screenParity'),
     finish: $('#screenParityFinish')
   };
@@ -83,57 +82,156 @@
     }
   }
 
-  /* ----------- Explanation stage: intro demo and real examples ----------- */
+  /* ----------- Explanation stage: intro sequence and real examples ----------- */
 
-  /* Paints a column of dots: every two dots of one colour sit in a
-     row, the leftover dot (if any) sits alone in the second colour.
-     The pairing shape IS the visible answer. Returns nothing; sets
-     an aria-label on the container that says the same thing aloud. */
+  /* One ball: a circle with its number inside. */
+  function ball(number, leftover) {
+    var el = document.createElement('span');
+    el.className = leftover ? 'parity-ball parity-leftover' : 'parity-ball parity-pair';
+    el.style.backgroundColor = leftover ? DATA.leftoverColor : DATA.pairColor;
+    el.textContent = String(number);
+    return el;
+  }
+
+  /* Paints n balls numbered 1..n. Each pair is a column: the ball
+     with the lower number sits on top, the one above it below, so
+     "1 con 2" reads as one pair. The leftover ball (odd n) stands
+     alone in the second colour. The pairing shape IS the answer.
+     Sets an aria-label on the container that says it aloud. */
   function paintDots(cont, n) {
     cont.innerHTML = '';
     var pairs = Math.floor(n / 2);
-    var leftover = n % 2;
     for (var i = 0; i < pairs; i += 1) {
-      var pairRow = document.createElement('div');
-      pairRow.className = 'parity-pair-row';
-      for (var j = 0; j < 2; j += 1) {
-        var dot = document.createElement('span');
-        dot.className = 'parity-dot parity-pair';
-        dot.style.backgroundColor = DATA.pairColor;
-        pairRow.appendChild(dot);
-      }
-      cont.appendChild(pairRow);
+      var pair = document.createElement('div');
+      pair.className = 'parity-ball-pair';
+      pair.appendChild(ball(2 * i + 1, false));
+      pair.appendChild(ball(2 * i + 2, false));
+      cont.appendChild(pair);
     }
-    if (leftover) {
-      var singleRow = document.createElement('div');
-      singleRow.className = 'parity-pair-row';
-      var d = document.createElement('span');
-      d.className = 'parity-dot parity-leftover';
-      d.style.backgroundColor = DATA.leftoverColor;
-      singleRow.appendChild(d);
-      cont.appendChild(singleRow);
+    if (n % 2) {
+      var single = document.createElement('div');
+      single.className = 'parity-ball-pair';
+      single.appendChild(ball(n, true));
+      cont.appendChild(single);
     }
     var label = pairs + ' ' + t('pairsWord');
-    if (leftover) label += ', ' + t('oneLeftWord');
+    if (n % 2) label += ', ' + t('oneLeftWord');
     cont.setAttribute('aria-label', label);
   }
 
-  function renderIntroDemo() {
-    paintDots($('#introDemoEven'), 4);
-    paintDots($('#introDemoOdd'), 5);
+  /* The explanation stage: 0 to 10, one row per number, each with
+     its balls in pairs and its parity word. Reading down the list
+     shows the pattern: pairs of balls, and the odd number leaves
+     one ball alone. */
+  function renderIntroSequence() {
+    var list = $('#introSeq');
+    list.innerHTML = '';
+    for (var n = 0; n <= 10; n += 1) {
+      var row = document.createElement('div');
+      row.className = 'parity-seq-row';
+
+      var num = document.createElement('span');
+      num.className = 'parity-seq-num';
+      num.textContent = String(n);
+
+      var balls = document.createElement('div');
+      balls.className = 'parity-seq-balls';
+      balls.setAttribute('role', 'img');
+      paintDots(balls, n);
+
+      var tag = document.createElement('span');
+      tag.className = 'parity-seq-tag';
+      tag.textContent = t(n % 2 === 0 ? 'evenLabel' : 'oddLabel');
+
+      row.appendChild(num);
+      row.appendChild(balls);
+      row.appendChild(tag);
+      list.appendChild(row);
+    }
+  }
+
+  /* SVG helper for the real-life drawings. */
+  function svgNode(name, attrs) {
+    var el = document.createElementNS('http://www.w3.org/2000/svg', name);
+    Object.keys(attrs).forEach(function (key) { el.setAttribute(key, attrs[key]); });
+    return el;
+  }
+
+  /* Each drawing shows exactly the number its text names. Pairs are
+     drawn in the pair colour; the one left alone is drawn in the
+     leftover colour, so the odd example is visible at a glance. */
+
+  /* Shoes: two shoes, one pair. */
+  function shoesDrawing() {
+    var box = document.createElement('div');
+    box.className = 'parity-real-visual parity-real-row';
+    for (var i = 0; i < 2; i += 1) {
+      var shoe = document.createElement('span');
+      shoe.className = 'parity-real-emoji';
+      shoe.textContent = '👟';
+      box.appendChild(shoe);
+    }
+    return box;
+  }
+
+  /* A dozen eggs in a carton: two rows of six, so each column of
+     the carton is a pair of eggs. */
+  function eggsDrawing() {
+    var box = document.createElement('div');
+    box.className = 'parity-real-visual parity-real-eggs';
+    for (var i = 0; i < 12; i += 1) {
+      var egg = document.createElement('span');
+      egg.className = 'parity-real-emoji';
+      egg.textContent = '🥚';
+      box.appendChild(egg);
+    }
+    return box;
+  }
+
+  /* Tricycle: two back wheels (a pair) and one front wheel alone,
+     in the leftover colour. Three wheels: odd. */
+  function trikeDrawing() {
+    var svg = svgNode('svg', { viewBox: '0 0 180 120', class: 'parity-real-svg', focusable: 'false' });
+    svg.appendChild(svgNode('line', { x1: 40, y1: 92, x2: 140, y2: 92, stroke: 'currentColor', 'stroke-width': 4 }));
+    svg.appendChild(svgNode('path', { d: 'M 90 56 L 40 92 M 90 56 L 140 92', stroke: 'currentColor', 'stroke-width': 4, fill: 'none' }));
+    svg.appendChild(svgNode('rect', { x: 78, y: 46, width: 24, height: 9, rx: 3, fill: 'currentColor' }));
+    svg.appendChild(svgNode('line', { x1: 90, y1: 22, x2: 90, y2: 46, stroke: 'currentColor', 'stroke-width': 4 }));
+    svg.appendChild(svgNode('circle', { cx: 40, cy: 92, r: 20, fill: DATA.pairColor }));
+    svg.appendChild(svgNode('circle', { cx: 140, cy: 92, r: 20, fill: DATA.pairColor }));
+    svg.appendChild(svgNode('circle', { cx: 90, cy: 92, r: 18, fill: DATA.leftoverColor }));
+    [[40, 92], [140, 92], [90, 92]].forEach(function (c) {
+      svg.appendChild(svgNode('circle', { cx: c[0], cy: c[1], r: 5, fill: '#fff' }));
+    });
+    return svg;
+  }
+
+  /* Clover: two leaves below (a pair) and one leaf on top alone, in
+     the leftover colour. Three leaves: odd. */
+  function cloverDrawing() {
+    var svg = svgNode('svg', { viewBox: '0 0 160 170', class: 'parity-real-svg', focusable: 'false' });
+    svg.appendChild(svgNode('line', { x1: 80, y1: 118, x2: 80, y2: 166, stroke: 'currentColor', 'stroke-width': 5 }));
+    svg.appendChild(svgNode('circle', { cx: 56, cy: 100, r: 30, fill: DATA.pairColor }));
+    svg.appendChild(svgNode('circle', { cx: 104, cy: 100, r: 30, fill: DATA.pairColor }));
+    svg.appendChild(svgNode('circle', { cx: 80, cy: 46, r: 30, fill: DATA.leftoverColor }));
+    return svg;
+  }
+
+  function drawingFor(id) {
+    if (id === 'shoes') return shoesDrawing();
+    if (id === 'eggs') return eggsDrawing();
+    if (id === 'trike') return trikeDrawing();
+    return cloverDrawing();
   }
 
   function renderRealCards() {
     var list = $('#realCards');
     list.innerHTML = '';
-    DATA.examples.forEach(function (icon, i) {
+    DATA.examples.forEach(function (id, i) {
       var card = document.createElement('article');
       card.className = 'card parity-example';
 
-      var iconEl = document.createElement('span');
-      iconEl.className = 'parity-example-icon';
-      iconEl.setAttribute('aria-hidden', 'true');
-      iconEl.textContent = icon;
+      var visual = drawingFor(id);
+      visual.setAttribute('aria-hidden', 'true');
 
       var body = document.createElement('div');
       var title = document.createElement('h3');
@@ -143,71 +241,40 @@
       body.appendChild(title);
       body.appendChild(text);
 
-      card.appendChild(iconEl);
+      card.appendChild(visual);
       card.appendChild(body);
       list.appendChild(card);
     });
   }
 
-  /* ----------- Level selection ----------- */
-  function renderLevels() {
-    var list = $('#parityLevelList');
-    list.innerHTML = '';
-    DATA.levels.forEach(function (level, i) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn level-btn';
-
-      var name = document.createElement('span');
-      name.className = 'level-name';
-      name.textContent = (i + 1) + '. ' + t('levels.' + level.id + '.name');
-
-      var detail = document.createElement('span');
-      detail.className = 'level-detail';
-      detail.textContent = t('levels.' + level.id + '.detail');
-
-      btn.appendChild(name);
-      btn.appendChild(detail);
-      if (progress.done[level.id]) {
-        var done = document.createElement('span');
-        done.className = 'level-done';
-        done.textContent = t('levelDone');
-        btn.appendChild(done);
-      }
-      btn.addEventListener('click', function () { startRound(level); });
-      list.appendChild(btn);
-    });
-  }
-
   /* ----------- Round state ----------- */
-  var currentLevel = null;
   var items = [];
   var idx = 0;
 
-  /* Numbers are drawn at random from the level's range, without
-     repeats inside a round. Even and odd numbers come in any order,
-     so a round can have several of the same kind in a row and the
-     user cannot predict the next one. A range smaller than perRound
-     (the shapes level) gives one question per value instead. */
-  function makeRound(level) {
+  /* One test for the whole round, like Formas. Each question picks a
+     kind at random (dots, number, big number, shape or Roman numeral)
+     and a value of that kind. Values never repeat within the same
+     kind, so the round does not ask the same question twice. Even and
+     odd numbers come in any order. */
+  function makeRound() {
     var out = [];
     var used = {};
-    var span = level.max - level.min + 1;
-    var count = Math.min(level.perRound, span);
-    while (out.length < count) {
-      var candidate = randomInt(level.min, level.max);
-      if (used[candidate]) continue;
-      used[candidate] = true;
-      out.push({ a: candidate });
+    while (out.length < DATA.perRound) {
+      var level = DATA.levels[randomInt(0, DATA.levels.length - 1)];
+      var taken = used[level.id] || (used[level.id] = {});
+      var span = level.max - level.min + 1;
+      if (Object.keys(taken).length >= span) continue;
+      var value;
+      do { value = randomInt(level.min, level.max); } while (taken[value]);
+      taken[value] = true;
+      out.push({ level: level, a: value });
     }
     return out;
   }
 
-  function startRound(level) {
-    currentLevel = level;
-    items = makeRound(level);
+  function startRound() {
+    items = makeRound();
     idx = 0;
-    $('#parityRule').textContent = t('levels.' + level.id + '.rule');
     $('#parityRuleBox').open = false;
     goTo('game');
     renderItem();
@@ -215,9 +282,9 @@
 
   /* ----------- Question text, visual and explanation ----------- */
 
-  function promptFor(level, item) {
-    if (level.kind === 'shape') return t('shapePrompt');
-    var shown = level.kind === 'roman' ? toRoman(item.a) : format(item.a);
+  function promptFor(item) {
+    if (item.level.kind === 'shape') return t('shapePrompt');
+    var shown = item.level.kind === 'roman' ? toRoman(item.a) : format(item.a);
     return fill(t('parityPrompt'), { a: shown });
   }
 
@@ -258,15 +325,15 @@
     return svg;
   }
 
-  /* Only the dots and shapes levels draw a picture. The number
-     levels show the number in the prompt and nothing else. */
-  function paintVisual(level, item) {
+  /* Only the dots and shapes questions draw a picture. The number
+     questions show the number in the prompt and nothing else. */
+  function paintVisual(item) {
     var cont = $('#parityDots');
     cont.innerHTML = '';
-    if (level.kind === 'dots') {
+    if (item.level.kind === 'dots') {
       show(cont);
       paintDots(cont, item.a);
-    } else if (level.kind === 'shape') {
+    } else if (item.level.kind === 'shape') {
       show(cont);
       cont.appendChild(shapeSvg(item.a));
       cont.setAttribute('aria-label', t('shapeAria'));
@@ -276,17 +343,17 @@
     }
   }
 
-  function explanationFor(level, item) {
+  function explanationFor(item) {
     var n = item.a;
     var p = wordFor(n);
-    if (level.kind === 'dots') return fill(t('explainParity'), { a: n });
-    if (level.kind === 'shape') {
+    if (item.level.kind === 'dots') return fill(t('explainParity'), { a: n });
+    if (item.level.kind === 'shape') {
       return fill(t('explainShape'), { name: t('shapeName.' + n), n: n, p: p });
     }
-    if (level.kind === 'roman') {
+    if (item.level.kind === 'roman') {
       return fill(t('explainRoman'), { roman: toRoman(n), n: n, p: p });
     }
-    if (level.id === 'big') {
+    if (item.level.id === 'big') {
       return fill(t('explainLast'), { a: format(n), d: n % 10, p: p });
     }
     return fill(t(isEven(n) ? 'explainPairsEven' : 'explainPairsOdd'), { a: format(n) });
@@ -297,8 +364,10 @@
     var pct = items.length === 0 ? 0 : (idx / items.length) * 100;
     $('#parityProgressFill').style.width = pct + '%';
     $('#parityProgressText').textContent = (idx + 1) + ' / ' + items.length;
-    $('#parityPrompt').textContent = promptFor(currentLevel, item);
-    paintVisual(currentLevel, item);
+    $('#parityPrompt').textContent = promptFor(item);
+    /* The rule box follows the kind of the current question. */
+    $('#parityRule').textContent = t('levels.' + item.level.id + '.rule');
+    paintVisual(item);
 
     var options = $('#parityOptions');
     options.innerHTML = '';
@@ -326,7 +395,7 @@
     if (!correct) {
       button.disabled = true;
       App.feedback.encourage($('#parityFeedback'));
-      $('#parityFeedback').textContent += ' ' + t('levels.' + currentLevel.id + '.hint');
+      $('#parityFeedback').textContent += ' ' + t('levels.' + item.level.id + '.hint');
       App.feedback.lockUntilAck($('#parityOptions').querySelectorAll('button'), $('#parityFeedback'));
       return;
     }
@@ -334,7 +403,7 @@
     save();
     App.feedback.success($('#parityFeedback'));
     $('#parityOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
-    $('#parityExplanation').textContent = explanationFor(currentLevel, item);
+    $('#parityExplanation').textContent = explanationFor(item);
     $('#parityExplanationWrap').classList.remove('hidden');
     show($('#parityNext'));
     $('#parityNext').focus();
@@ -350,10 +419,7 @@
   }
 
   function finishRound() {
-    progress.done[currentLevel.id] = true;
-    save();
     $('#parityFinalSummary').textContent = fill(t('parityFinalSummary'), {
-      level: t('levels.' + currentLevel.id + '.name'),
       count: items.length,
       stars: progress.stars
     });
@@ -364,16 +430,14 @@
 
   /* ----------- Wiring ----------- */
   $('#parityIntroNext').addEventListener('click', function () { goTo('real'); });
-  $('#parityRealNext').addEventListener('click', function () { renderLevels(); goTo('levels'); });
-  $('#parityLevelsBack').addEventListener('click', function () { goTo('real'); });
-  $('#parityBack').addEventListener('click', function () { renderLevels(); goTo('levels'); });
+  $('#parityRealNext').addEventListener('click', startRound);
   $('#parityNext').addEventListener('click', next);
 
   /* ----------- Boot ----------- */
   function init() {
     App.i18n.apply();
     paintStars();
-    renderIntroDemo();
+    renderIntroSequence();
     renderRealCards();
     goTo('intro');
   }
