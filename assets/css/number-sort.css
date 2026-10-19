@@ -105,6 +105,22 @@
   font-size: 1.3rem;
   font-weight: 800;
 }
+.ns-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.ns-column .ns-chip {
+  min-width: 72px;
+  min-height: 40px;
+  font-size: 1.1rem;
+}
+.ns-column .ns-chip.ns-column-mark {
+  border-color: var(--mod-razonamiento);
+  background: var(--mod-razonamiento-suave);
+  color: var(--mod-razonamiento);
+}
 .ns-line {
   width: 100%;
   max-width: 320px;

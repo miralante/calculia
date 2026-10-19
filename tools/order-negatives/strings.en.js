@@ -9,7 +9,7 @@
     title: '➖ Order negatives',
     instructionIntro: 'See how numbers below zero are ordered.',
     realTitle: 'Negative numbers are in real life.',
-    transfer: 'You use this to read a thermometer, the floors of a car park or how deep the sea is.',
+    transfer: 'You use this to read a thermometer or the floors of a car park.',
 
     ui: {
       prev: 'Previous',
@@ -17,12 +17,8 @@
       conceptCount: '{i} of {n}',
       introContinue: 'See real examples →',
       realContinue: 'Start practising →',
-      instructionMenu: 'Choose a level.',
-      levelLocked: 'Finish the level before to open it.',
-      levelDone: 'Rounds done: {n}',
       check: 'Check',
       newRound: 'Another round →',
-      chooseLevel: 'Change level'
     },
 
     /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */
@@ -61,14 +57,13 @@
       1: { title: 'Below zero', text: 'Negative numbers are on the left of zero. They are less than zero.' },
       2: { title: 'Further away, smaller', text: 'Among negatives, the one furthest from zero is the smallest. −9 is less than −2.' },
       3: { title: 'More digits, further away', text: 'If a negative has more digits, it is further from zero. So −100 is less than −20.' },
-      4: { title: 'Zero in the middle', text: 'Any negative is less than zero, and zero is less than any positive number.' }
+      4: { title: 'The < sign', text: 'The < sign is like a beak that always points to the smaller number. In −30 < −5, the beak points to −30.' },
+      5: { title: 'Zero in the middle', text: 'Any negative is less than zero, and zero is less than any positive number.' }
     },
 
     real: {
-      thermometer: 'Thermometer: −10 °C is colder than −2 °C.',
-      parking: 'Car park: basement level −3 is lower than level −1.',
-      dive: 'Diving: −30 metres is deeper than −5 metres.',
-      freezer: 'Freezer: −18 °C is colder than −5 °C.'
+      thermometer: 'Thermometer: −10 °C shows a lower temperature than −2 °C.',
+      parking: 'Car park: basement −3 is at a lower level than −1.'
     }
   }, 'en');
 })();

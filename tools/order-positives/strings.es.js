@@ -17,12 +17,8 @@
       conceptCount: '{i} de {n}',
       introContinue: 'Ver ejemplos reales →',
       realContinue: 'Empezar a practicar →',
-      instructionMenu: 'Elige un nivel.',
-      levelLocked: 'Termina el nivel anterior para abrirlo.',
-      levelDone: 'Rondas hechas: {n}',
       check: 'Comprobar',
       newRound: 'Otra ronda →',
-      chooseLevel: 'Cambiar de nivel'
     },
 
     /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */
@@ -56,13 +52,13 @@
       1: { title: 'Más cifras, más grande', text: 'Un número con más cifras es más grande. 9 es más pequeño que 10, y 10 es más pequeño que 100.' },
       2: { title: 'Mira la primera cifra', text: 'Si tienen las mismas cifras, mira la primera. 213 es más pequeño que 301, porque 2 es más pequeño que 3.' },
       3: { title: 'Si empatan, sigue', text: 'Si la primera cifra es igual, mira la segunda. 245 es más pequeño que 263.' },
-      4: { title: 'De menor a mayor', text: 'Ordenar es poner primero el más pequeño y al final el más grande. En la recta, lo que está a la izquierda es más pequeño.' }
+      4: { title: 'El signo <', text: 'El signo < es como un pico que siempre apunta al número más pequeño. En 2 < 5, el pico apunta al 2.' },
+      5: { title: 'De menor a mayor', text: 'Ordenar es poner primero el más pequeño y al final el más grande. En la recta, lo que está a la izquierda es más pequeño.' }
     },
 
     real: {
-      price: 'Precios: el más barato es el que va primero al ordenar.',
-      house: 'Números de casa: en una calle, el 12 va antes que el 25.',
-      score: 'Puntuaciones: el que tiene más puntos está más arriba.',
+      price: 'Precios: el más barato es el número más pequeño.',
+      score: 'Campeonato: el que tiene más puntos está más arriba.',
       pages: 'Páginas de un libro: la página 150 va después de la 99.'
     }
   }, 'es');

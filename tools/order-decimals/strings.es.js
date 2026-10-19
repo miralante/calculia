@@ -17,12 +17,8 @@
       conceptCount: '{i} de {n}',
       introContinue: 'Ver ejemplos reales →',
       realContinue: 'Empezar a practicar →',
-      instructionMenu: 'Elige un nivel.',
-      levelLocked: 'Termina el nivel anterior para abrirlo.',
-      levelDone: 'Rondas hechas: {n}',
       check: 'Comprobar',
       newRound: 'Otra ronda →',
-      chooseLevel: 'Cambiar de nivel'
     },
 
     /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */

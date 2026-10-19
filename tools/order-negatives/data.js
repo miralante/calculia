@@ -34,13 +34,13 @@ var DATA = {
     { title: 'concept.3.title', text: 'concept.3.text',
       visual: { kind: 'chips', dec: 0, values: [-100, -20] } },
     { title: 'concept.4.title', text: 'concept.4.text',
+      visual: { kind: 'chips', dec: 0, values: [-30, -5] } },
+    { title: 'concept.5.title', text: 'concept.5.text',
       visual: { kind: 'line', from: -3, to: 3, step: 1, dec: 0, marks: [-2, 2] } }
   ],
 
   examples: [
     { emoji: '🌡️', caption: 'real.thermometer' },
-    { emoji: '🏢', caption: 'real.parking' },
-    { emoji: '🌊', caption: 'real.dive' },
-    { emoji: '❄️', caption: 'real.freezer' }
+    { emoji: '🏢', caption: 'real.parking', column: { values: [2, 1, 0, -1, -2, -3], mark: -3 } }
   ]
 };

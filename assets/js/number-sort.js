@@ -349,6 +349,15 @@
     }).join('') + '</div>';
   }
 
+  /* A vertical column of values (for example floors of a building), with one
+     of them marked. Listed top to bottom, as the values are given. */
+  function columnHtml(spec) {
+    return '<div class="ns-column">' + spec.values.map(function (v) {
+      var mark = v === spec.mark ? ' ns-column-mark' : '';
+      return '<span class="ns-chip' + mark + '">' + fmtPlain(v, 0) + '</span>';
+    }).join('') + '</div>';
+  }
+
   function visualHtml(spec) {
     if (!spec) return '';
     return spec.kind === 'line' ? lineSvg(spec) : chipsHtml(spec);
@@ -377,9 +386,7 @@
 
     var screenIntro = $('#screenIntro');
     var screenReal = $('#screenReal');
-    var screenMenu = $('#screenMenu');
     var screenGame = $('#screenGame');
-    var levelsMenu = $('#levelsMenu');
     var testSheet = $('#testSheet');
     var btnCheck = $('#btnCheck');
     var btnNewRound = $('#btnNewRound');
@@ -397,48 +404,23 @@
     function save() { App.storage.set(config.toolId, progress); }
     function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
     function showScreen(screen) {
-      [screenIntro, screenReal, screenMenu, screenGame].forEach(function (p) {
+      [screenIntro, screenReal, screenGame].forEach(function (p) {
         p.classList.toggle('hidden', p !== screen);
       });
     }
 
-    /* Levels open one after another: the next one unlocks once the one
-       before it has a round completed. The menu is the way to choose any
-       open level, so nobody is held on a level they want to leave. */
-    function unlocked(i) {
-      if (i === 0) return true;
-      return (progress.roundsByLevel[levels[i - 1].id] || 0) >= 1;
-    }
-
-    function paintLevels() {
-      levelsMenu.innerHTML = '';
-      var grid = document.createElement('div');
-      grid.className = 'menu-grid';
-      levels.forEach(function (lv, i) {
-        var open = unlocked(i);
-        var done = progress.roundsByLevel[lv.id] || 0;
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'btn-actividad';
-        btn.disabled = !open;
-        var detail = open
-          ? t(lv.detail) + (done > 0 ? ' · ' + fill(t('ui.levelDone'), { n: String(done) }) : '')
-          : t('ui.levelLocked');
-        btn.innerHTML = '<span class="picto" aria-hidden="true">' + (i + 1) + '</span>' +
-          '<span>' + t(lv.name) + '</span>' +
-          '<span class="detail-card">' + detail + '</span>';
-        btn.addEventListener('click', function () { openLevel(i); });
-        grid.appendChild(btn);
-      });
-      levelsMenu.appendChild(grid);
-    }
-
-    function openLevel(i) {
-      level = levels[i];
-      startRound();
+    /* One test for the whole activity. It starts at the first level that
+       has no completed round yet, so the level rises by itself as rounds
+       are finished. The last level stays once it is reached. */
+    function currentLevel() {
+      for (var i = 0; i < levels.length; i += 1) {
+        if ((progress.roundsByLevel[levels[i].id] || 0) < 1) return levels[i];
+      }
+      return levels[levels.length - 1];
     }
 
     function startRound() {
+      level = currentLevel();
       sheets = config.buildRound(level).map(function (q) {
         return { question: q, selected: null, correct: null };
       });
@@ -546,7 +528,8 @@
 
     function paintExample() {
       var ex = examples[exampleIndex];
-      $('#realObject').textContent = ex.emoji;
+      if (ex.column) $('#realObject').innerHTML = columnHtml(ex.column);
+      else $('#realObject').textContent = ex.emoji;
       $('#realCaption').textContent = t(ex.caption);
     }
 
@@ -566,8 +549,7 @@
       exampleIndex = (exampleIndex + 1) % examples.length;
       paintExample();
     });
-    $('#realContinue').addEventListener('click', function () { paintLevels(); showScreen(screenMenu); });
-    $('#btnLevels').addEventListener('click', function () { paintLevels(); showScreen(screenMenu); });
+    $('#realContinue').addEventListener('click', startRound);
     btnCheck.addEventListener('click', checkAnswers);
     btnNewRound.addEventListener('click', startRound);
 

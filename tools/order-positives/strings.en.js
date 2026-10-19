@@ -17,12 +17,8 @@
       conceptCount: '{i} of {n}',
       introContinue: 'See real examples →',
       realContinue: 'Start practising →',
-      instructionMenu: 'Choose a level.',
-      levelLocked: 'Finish the level before to open it.',
-      levelDone: 'Rounds done: {n}',
       check: 'Check',
       newRound: 'Another round →',
-      chooseLevel: 'Change level'
     },
 
     /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */
@@ -56,13 +52,13 @@
       1: { title: 'More digits, bigger', text: 'A number with more digits is bigger. 9 is less than 10, and 10 is less than 100.' },
       2: { title: 'Look at the first digit', text: 'If they have the same number of digits, look at the first one. 213 is less than 301, because 2 is less than 3.' },
       3: { title: 'If they tie, go on', text: 'If the first digit is the same, look at the second one. 245 is less than 263.' },
-      4: { title: 'From smallest to largest', text: 'To order is to put the smallest first and the largest last. On a line, the one on the left is smaller.' }
+      4: { title: 'The < sign', text: 'The < sign is like a beak that always points to the smaller number. In 2 < 5, the beak points to 2.' },
+      5: { title: 'From smallest to largest', text: 'To order is to put the smallest first and the largest last. On a line, the one on the left is smaller.' }
     },
 
     real: {
-      price: 'Prices: the cheapest one goes first when you order them.',
-      house: 'House numbers: on a street, number 12 comes before number 25.',
-      score: 'Scores: the one with more points is higher up.',
+      price: 'Prices: the cheapest one is the smallest number.',
+      score: 'Championship: the one with more points is higher up.',
       pages: 'Book pages: page 150 comes after page 99.'
     }
   }, 'en');

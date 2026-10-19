@@ -37,12 +37,13 @@ var DATA = {
     { title: 'concept.3.title', text: 'concept.3.text',
       visual: { kind: 'chips', dec: 0, values: [245, 263] } },
     { title: 'concept.4.title', text: 'concept.4.text',
+      visual: { kind: 'chips', dec: 0, values: [2, 5] } },
+    { title: 'concept.5.title', text: 'concept.5.text',
       visual: { kind: 'line', from: 0, to: 10, step: 1, dec: 0, marks: [2, 5, 9] } }
   ],
 
   examples: [
     { emoji: '🏷️', caption: 'real.price' },
-    { emoji: '🏠', caption: 'real.house' },
     { emoji: '🏆', caption: 'real.score' },
     { emoji: '📚', caption: 'real.pages' }
   ]
