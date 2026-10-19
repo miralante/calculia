@@ -34,7 +34,7 @@ var DATA = {
     { title: 'concept.3.title', text: 'concept.3.text',
       visual: { kind: 'chips', dec: 1, values: [3.4, 3.7] } },
     { title: 'concept.4.title', text: 'concept.4.text',
-      visual: { kind: 'line', from: 0, to: 2, step: 0.5, dec: 1, marks: [0.5, 1.5] } }
+      visual: { kind: 'chips', dec: 2, values: [2.46, 2.49] } }
   ],
 
   examples: [

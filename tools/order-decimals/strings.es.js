@@ -56,8 +56,8 @@
     concept: {
       1: { title: 'La coma separa', text: 'La coma separa la parte entera de la parte decimal. 2,5 está en medio, entre el 2 y el 3.' },
       2: { title: 'Primero la parte entera', text: 'Mira primero lo que hay antes de la coma. 3,9 es más pequeño que 4,1, aunque tenga más décimas.' },
-      3: { title: 'Si empatan, las décimas', text: 'Si la parte entera es igual, mira las décimas. 3,4 es más pequeño que 3,7. Después, las centésimas.' },
-      4: { title: 'Redondos primero', text: 'Los decimales redondos, como 0,5 · 1,5 · 2,0, se colocan fácilmente en la recta. Luego vienen las décimas y las centésimas.' }
+      3: { title: 'Si empatan, las décimas', text: 'Si la parte entera es igual, mira las décimas. 3,4 es más pequeño que 3,7.' },
+      4: { title: 'Si empatan, las centésimas', text: 'Si también empatan las décimas, mira las centésimas. 2,46 es más pequeño que 2,49.' }
     },
 
     real: {

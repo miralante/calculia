@@ -56,8 +56,8 @@
     concept: {
       1: { title: 'The point separates', text: 'The decimal point separates the whole part from the decimal part. 2.5 is in the middle, between 2 and 3.' },
       2: { title: 'Whole part first', text: 'Look first at what is before the point. 3.9 is less than 4.1, even though it has more tenths.' },
-      3: { title: 'If they tie, tenths', text: 'If the whole part is the same, look at the tenths. 3.4 is less than 3.7. Then the hundredths.' },
-      4: { title: 'Round ones first', text: 'Round decimals, like 0.5 · 1.5 · 2.0, are easy to place on a line. Then come the tenths and the hundredths.' }
+      3: { title: 'If they tie, tenths', text: 'If the whole part is the same, look at the tenths. 3.4 is less than 3.7.' },
+      4: { title: 'If they tie, hundredths', text: 'If the tenths tie too, look at the hundredths. 2.46 is less than 2.49.' }
     },
 
     real: {
