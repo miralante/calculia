@@ -25,6 +25,11 @@
     introTitle: 'What is even and what is odd?',
     introText: 'A number is even if its dots go two by two and none is left over. If one is left over, it is odd.',
     introSeqCaption: 'Look: the balls go two by two, one above the other. If one is left alone, the number is odd.',
+    /* Captions for the 0 to 10 slides. {p} = even or odd. */
+    seqZero: 'No balls: it is {p}.',
+    seqEven: '{n} balls, all in pairs: it is {p}.',
+    seqOne: 'One ball, left alone: it is {p}.',
+    seqOdd: '{n} balls: one is left alone and the rest go in pairs: it is {p}.',
     introNext: 'See it in real life →',
 
     /* ---------- Screen 2: real life ---------- */

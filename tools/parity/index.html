@@ -31,13 +31,20 @@
           <p class="reference-text" data-i18n="introText">Un número es par si sus puntos van de dos en dos y no sobra ninguno. Si sobra uno, es impar.</p>
         </div>
 
-        <div class="card stack">
-          <p class="reference-text" data-i18n="introSeqCaption">Fíjate: las bolas van de dos en dos, una encima de otra. Si una se queda sola, el número es impar.</p>
-          <div class="parity-seq" id="introSeq"></div>
+        <p class="reference-text" data-i18n="introSeqCaption">Fíjate: las bolas van de dos en dos, una encima de otra. Si una se queda sola, el número es impar.</p>
+
+        <!-- Diapositivas del 0 al 10: un número por vez. -->
+        <div class="card stack parity-carousel-card">
+          <div class="parity-carousel-display" id="seqDisplay" role="button" tabindex="0"></div>
+          <p class="parity-carousel-caption" id="seqCaption" aria-live="polite"></p>
+          <div class="parity-carousel-controls">
+            <button type="button" class="btn btn-secondary" id="seqPrev">←</button>
+            <button type="button" class="btn btn-secondary" id="seqNext">→</button>
+          </div>
         </div>
 
         <div class="row intro-buttons">
-          <button type="button" class="btn" id="parityIntroNext" data-i18n="introNext">Ver en la vida real →</button>
+          <button type="button" class="btn btn-secondary" id="parityIntroNext" data-i18n="introNext">Ver en la vida real →</button>
         </div>
       </section>
 

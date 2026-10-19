@@ -52,26 +52,25 @@
   .parity-options .option-btn { min-width: 0; width: 100%; }
 }
 
-/* pantalla 1: 0 a 10, una fila por número, con sus bolas en parejas
-   verticales y la etiqueta par/impar al final de cada fila. Dos
-   columnas desde 560px; una en teléfonos. */
-.parity-seq { display: grid; grid-template-columns: 1fr; gap: var(--espacio); }
-@media (min-width: 560px) {
-  .parity-seq { grid-template-columns: 1fr 1fr; }
+/* pantalla 1: diapositivas del 0 al 10, un número por vez. Las bolas
+   de cada número van en parejas verticales, en grande, y el pie dice
+   si el número es par o impar y por qué. */
+.parity-carousel-card { border-color: var(--mod-razonamiento-suave); align-items: center; }
+.parity-carousel-display {
+  display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center;
+  gap: 12px; width: 100%; min-height: 110px; padding: var(--espacio);
+  border-radius: var(--radio); background: var(--mod-razonamiento-suave);
+  cursor: pointer;
 }
-.parity-seq-row {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  padding: 8px 12px;
-  border: 1px solid var(--mod-razonamiento-suave);
-  border-radius: var(--radio);
+.parity-carousel-display:focus-visible { outline: 3px solid var(--color-foco); outline-offset: 2px; }
+.parity-carousel-balls .parity-ball { width: 44px; height: 44px; font-size: 18px; }
+.parity-carousel-balls .parity-ball-pair { gap: 8px; }
+.parity-carousel-caption {
+  margin: 0; min-height: 1.2em; text-align: center;
+  font-size: var(--texto-grande); color: var(--color-texto);
 }
-.parity-seq-num {
-  min-width: 2ch; font-size: var(--texto-grande); font-weight: 700;
-  color: var(--mod-razonamiento);
-}
-.parity-seq-balls { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; min-height: 30px; }
-.parity-seq-balls .parity-ball { width: 26px; height: 26px; font-size: 11px; }
-.parity-seq-tag { font-weight: 700; color: var(--color-texto-suave); }
+.parity-carousel-controls { display: flex; justify-content: center; gap: var(--espacio); width: 100%; }
+.parity-carousel-controls .btn { min-width: 64px; }
 
 /* pantalla 2: un ejemplo por tarjeta, dibujo arriba y texto debajo.
    El dibujo muestra el número que dice el texto. */
@@ -84,7 +83,7 @@
   gap: 2px 6px; justify-content: center;
 }
 .parity-real-eggs .parity-real-emoji { font-size: 30px; }
-.parity-real-svg { width: 160px; height: auto; color: var(--color-texto-suave); }
+.parity-real-svg { width: 170px; height: auto; }
 .parity-example h3 { margin: 0; color: var(--mod-razonamiento); }
 .parity-example p { margin: 4px 0 0; }
 

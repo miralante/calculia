@@ -1048,7 +1048,7 @@
     var fraction = digits.slice(step.enteras);
     var words = (locale === 'en' ? COMA_WORDS.en : COMA_WORDS.es).units;
     var spokenFraction = fraction.split('').map(function (d) { return words[Number(d)]; }).join(' ');
-    /* Read before the comma is placed: the question and the digits one by one.
+    /* Read before the comma is placed: the number itself, digit by digit.
        It never says where the comma goes. */
     var spokenDigits = digits.split('').map(function (d) { return words[Number(d)]; }).join(' ');
     var prompt = step.decimales === 1
@@ -1060,7 +1060,7 @@
       correct: whole + comaSeparator() + fraction,
       decimals: step.decimales,
       prompt: prompt,
-      listen: prompt + ' ' + spokenDigits,
+      listen: spokenDigits,
       /* Read after a right answer: the whole number with its comma. */
       audio: comaSpeakWhole(Number(whole), locale) + (locale === 'en' ? ' point ' : ' coma ') + spokenFraction
     };

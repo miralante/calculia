@@ -119,42 +119,83 @@
     cont.setAttribute('aria-label', label);
   }
 
-  /* The explanation stage: 0 to 10, one row per number, each with
-     its balls in pairs and its parity word. Reading down the list
-     shows the pattern: pairs of balls, and the odd number leaves
-     one ball alone. */
-  function renderIntroSequence() {
-    var list = $('#introSeq');
-    list.innerHTML = '';
-    for (var n = 0; n <= 10; n += 1) {
-      var row = document.createElement('div');
-      row.className = 'parity-seq-row';
+  /* The explanation stage is a set of slides, one number at a time:
+     0 to 10. Each slide shows that number as balls in pairs (one
+     above the other), and a caption that says whether it is even or
+     odd and why. Arrows (and a click on the balls) move through the
+     slides; the order wraps around like the Roman numerals carousel. */
+  var SEQ_MAX = 10;
+  var seqIdx = 0;
 
-      var num = document.createElement('span');
-      num.className = 'parity-seq-num';
-      num.textContent = String(n);
-
-      var balls = document.createElement('div');
-      balls.className = 'parity-seq-balls';
-      balls.setAttribute('role', 'img');
-      paintDots(balls, n);
-
-      var tag = document.createElement('span');
-      tag.className = 'parity-seq-tag';
-      tag.textContent = t(n % 2 === 0 ? 'evenLabel' : 'oddLabel');
-
-      row.appendChild(num);
-      row.appendChild(balls);
-      row.appendChild(tag);
-      list.appendChild(row);
-    }
+  function seqCaptionFor(n) {
+    var p = wordFor(n);
+    if (n === 0) return fill(t('seqZero'), { p: p });
+    if (n === 1) return fill(t('seqOne'), { p: p });
+    if (isEven(n)) return fill(t('seqEven'), { n: n, p: p });
+    return fill(t('seqOdd'), { n: n, p: p });
   }
 
-  /* SVG helper for the real-life drawings. */
-  function svgNode(name, attrs) {
-    var el = document.createElementNS('http://www.w3.org/2000/svg', name);
-    Object.keys(attrs).forEach(function (key) { el.setAttribute(key, attrs[key]); });
-    return el;
+  function paintSlide() {
+    var display = $('#seqDisplay');
+    display.innerHTML = '';
+    display.classList.add('parity-carousel-balls');
+    paintDots(display, seqIdx);
+    display.setAttribute('aria-label', seqIdx + ': ' + seqCaptionFor(seqIdx));
+    $('#seqCaption').textContent = seqCaptionFor(seqIdx);
+  }
+
+  function seqStep(delta) {
+    seqIdx = (seqIdx + delta + (SEQ_MAX + 1)) % (SEQ_MAX + 1);
+    paintSlide();
+  }
+
+  function renderIntroSequence() {
+    paintSlide();
+    $('#seqPrev').addEventListener('click', function () { seqStep(-1); });
+    $('#seqNext').addEventListener('click', function () { seqStep(1); });
+    var display = $('#seqDisplay');
+    display.addEventListener('click', function () { seqStep(1); });
+    display.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        seqStep(1);
+      }
+    });
+  }
+
+  /* Turns an SVG string into a node. */
+  function svgFrom(markup) {
+    var wrap = document.createElement('div');
+    wrap.innerHTML = markup;
+    return wrap.firstElementChild;
+  }
+
+  /* One wheel as SVG: a dark tyre, a coloured rim (the colour says
+     whether the wheel is part of the pair or the one left alone),
+     eight spokes and a hub. */
+  function wheelMarkup(cx, cy, r, rim) {
+    var spokes = '';
+    for (var i = 0; i < 8; i += 1) {
+      var a = (Math.PI * 2 * i) / 8;
+      var x = cx + (r - 5) * Math.cos(a);
+      var y = cy + (r - 5) * Math.sin(a);
+      spokes += '<line x1="' + cx + '" y1="' + cy + '" x2="' + x.toFixed(1) +
+        '" y2="' + y.toFixed(1) + '" stroke="#CFD8DC" stroke-width="1.5"/>';
+    }
+    return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#263238"/>' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r - 3) + '" fill="none" stroke="' + rim + '" stroke-width="4"/>' +
+      spokes +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="4" fill="#90A4AE"/>';
+  }
+
+  /* One clover leaf: a heart with its notch outwards and its point
+     towards the centre, turned by "rotation" degrees. The light vein
+     makes it read as a real leaf. */
+  function leafMarkup(cx, cy, rotation, fill) {
+    return '<g transform="translate(' + cx + ' ' + cy + ') rotate(' + rotation + ') scale(0.62)">' +
+      '<path d="M0,-20 C-12,-38 -40,-22 -38,2 C-36,22 -14,34 0,46 C14,34 36,22 38,2 C40,-22 12,-38 0,-20 Z" fill="' + fill + '"/>' +
+      '<path d="M0,-12 L0,30" stroke="#fff" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>' +
+      '</g>';
   }
 
   /* Each drawing shows exactly the number its text names. Pairs are
@@ -191,29 +232,43 @@
   /* Tricycle: two back wheels (a pair) and one front wheel alone,
      in the leftover colour. Three wheels: odd. */
   function trikeDrawing() {
-    var svg = svgNode('svg', { viewBox: '0 0 180 120', class: 'parity-real-svg', focusable: 'false' });
-    svg.appendChild(svgNode('line', { x1: 40, y1: 92, x2: 140, y2: 92, stroke: 'currentColor', 'stroke-width': 4 }));
-    svg.appendChild(svgNode('path', { d: 'M 90 56 L 40 92 M 90 56 L 140 92', stroke: 'currentColor', 'stroke-width': 4, fill: 'none' }));
-    svg.appendChild(svgNode('rect', { x: 78, y: 46, width: 24, height: 9, rx: 3, fill: 'currentColor' }));
-    svg.appendChild(svgNode('line', { x1: 90, y1: 22, x2: 90, y2: 46, stroke: 'currentColor', 'stroke-width': 4 }));
-    svg.appendChild(svgNode('circle', { cx: 40, cy: 92, r: 20, fill: DATA.pairColor }));
-    svg.appendChild(svgNode('circle', { cx: 140, cy: 92, r: 20, fill: DATA.pairColor }));
-    svg.appendChild(svgNode('circle', { cx: 90, cy: 92, r: 18, fill: DATA.leftoverColor }));
-    [[40, 92], [140, 92], [90, 92]].forEach(function (c) {
-      svg.appendChild(svgNode('circle', { cx: c[0], cy: c[1], r: 5, fill: '#fff' }));
-    });
-    return svg;
+    var markup =
+      '<svg viewBox="0 0 240 180" class="parity-real-svg" focusable="false">' +
+      '<ellipse cx="120" cy="170" rx="96" ry="6" fill="#000" opacity="0.12"/>' +
+      '<path d="M120 92 L58 132 M120 92 L182 132 M120 92 L120 140" stroke="#C62828" stroke-width="7" stroke-linecap="round" fill="none"/>' +
+      '<line x1="58" y1="132" x2="182" y2="132" stroke="#455A64" stroke-width="6" stroke-linecap="round"/>' +
+      '<line x1="120" y1="92" x2="120" y2="40" stroke="#455A64" stroke-width="6" stroke-linecap="round"/>' +
+      '<line x1="98" y1="40" x2="142" y2="40" stroke="#455A64" stroke-width="6" stroke-linecap="round"/>' +
+      '<rect x="104" y="78" width="32" height="11" rx="5" fill="#4E342E"/>' +
+      '<path d="M109 78 L109 50 Q120 44 131 50 L131 78 Z" fill="#6D4C41"/>' +
+      '<rect x="91" y="34" width="10" height="12" rx="5" fill="#212121"/>' +
+      '<rect x="139" y="34" width="10" height="12" rx="5" fill="#212121"/>' +
+      wheelMarkup(58, 132, 26, DATA.pairColor) +
+      wheelMarkup(182, 132, 26, DATA.pairColor) +
+      wheelMarkup(120, 140, 24, DATA.leftoverColor) +
+      '</svg>';
+    return svgFrom(markup);
   }
 
   /* Clover: two leaves below (a pair) and one leaf on top alone, in
      the leftover colour. Three leaves: odd. */
   function cloverDrawing() {
-    var svg = svgNode('svg', { viewBox: '0 0 160 170', class: 'parity-real-svg', focusable: 'false' });
-    svg.appendChild(svgNode('line', { x1: 80, y1: 118, x2: 80, y2: 166, stroke: 'currentColor', 'stroke-width': 5 }));
-    svg.appendChild(svgNode('circle', { cx: 56, cy: 100, r: 30, fill: DATA.pairColor }));
-    svg.appendChild(svgNode('circle', { cx: 104, cy: 100, r: 30, fill: DATA.pairColor }));
-    svg.appendChild(svgNode('circle', { cx: 80, cy: 46, r: 30, fill: DATA.leftoverColor }));
-    return svg;
+    var markup =
+      '<svg viewBox="0 0 200 210" class="parity-real-svg" focusable="false">' +
+      '<defs>' +
+        '<linearGradient id="parity-leaf-green" x1="0" y1="0" x2="0" y2="1">' +
+          '<stop offset="0" stop-color="#7CB342"/><stop offset="1" stop-color="#2E7D32"/>' +
+        '</linearGradient>' +
+        '<linearGradient id="parity-leaf-odd" x1="0" y1="0" x2="0" y2="1">' +
+          '<stop offset="0" stop-color="#FFB74D"/><stop offset="1" stop-color="' + DATA.leftoverColor + '"/>' +
+        '</linearGradient>' +
+      '</defs>' +
+      '<path d="M100 96 C104 140 96 170 102 204" stroke="#33691E" stroke-width="6" stroke-linecap="round" fill="none"/>' +
+      leafMarkup(70.6, 107, 240, 'url(#parity-leaf-green)') +
+      leafMarkup(129.4, 107, 120, 'url(#parity-leaf-green)') +
+      leafMarkup(100, 56, 0, 'url(#parity-leaf-odd)') +
+      '</svg>';
+    return svgFrom(markup);
   }
 
   function drawingFor(id) {

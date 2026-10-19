@@ -35,6 +35,11 @@
     introTitle: '¿Qué es par y qué es impar?',
     introText: 'Un número es par si sus puntos van de dos en dos y no sobra ninguno. Si sobra uno, es impar.',
     introSeqCaption: 'Fíjate: las bolas van de dos en dos, una encima de otra. Si una se queda sola, el número es impar.',
+    /* Pies de las diapositivas del 0 al 10. {p} = par o impar. */
+    seqZero: 'Ninguna bola: es {p}.',
+    seqEven: '{n} bolas, todas en parejas: es {p}.',
+    seqOne: 'Una bola, y se queda sola: es {p}.',
+    seqOdd: '{n} bolas: una se queda sola y las demás van en parejas: es {p}.',
     introNext: 'Ver en la vida real →',
 
     /* ---------- Pantalla 2: la vida real ---------- */
