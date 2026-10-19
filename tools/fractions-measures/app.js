@@ -1121,8 +1121,7 @@
     if (!comaWaiting) return;
     /* Tapping the placed comma removes it; tapping another gap moves it. */
     comaPlaced = comaPlaced === i ? null : i;
-    comaWrongGap = null;
-    $('#comaFeedback').textContent = '';
+    comaRefreshWrong();
     renderComaBoard();
     renderComaTray();
     /* Keep the keyboard user's place on the gap they just used. */
@@ -1199,8 +1198,7 @@
   function comaDrop(from, to) {
     if (to !== null) comaPlaced = to;
     else if (from !== null) comaPlaced = null;
-    comaWrongGap = null;
-    $('#comaFeedback').textContent = '';
+    comaRefreshWrong();
     renderComaBoard();
     renderComaTray();
   }
@@ -1232,6 +1230,26 @@
     for (var k = 0; k < marked.length; k++) marked[k].classList.remove('is-target');
   }
 
+  /* The short socratic hint for a comma in a wrong gap: the exact move. Each
+     gap moves the comma one digit, so the number of gaps is the difference
+     between the digits to the right now and the decimals the number has. Too
+     many digits to the right means move right; too few means move left. */
+  function comaMoveHint(gap) {
+    var digitsToRight = String(comaCase.n).length - 1 - gap;
+    var gapsToMove = Math.abs(digitsToRight - comaCase.decimals);
+    var moves = gapsToMove === 1 ? comaT('oneGap') : comaT('manyGaps').replace('{n}', gapsToMove);
+    var direction = digitsToRight > comaCase.decimals ? comaT('moveRight') : comaT('moveLeft');
+    return comaT('wrongHint').replace('{moves}', moves).replace('{direction}', direction);
+  }
+
+  /* Marks a comma in a wrong gap at once, with its move, as the points game
+     does. The check button still decides the answer. */
+  function comaRefreshWrong() {
+    var wrong = comaPlaced !== null && comaPlaced !== comaCase.gap;
+    comaWrongGap = wrong ? comaPlaced : null;
+    $('#comaFeedback').textContent = wrong ? comaMoveHint(comaPlaced) : '';
+  }
+
   function comaCheckAnswer() {
     if (!comaWaiting) return;
     var feedbackEl = $('#comaFeedback');
@@ -1248,21 +1266,8 @@
     /* Reinforcement: register the first miss of the item. */
     if (comaAttempts === 1) App.reinforce.add('coma:' + comaCase.correct, comaCase);
     comaWrongGap = comaPlaced;
-    /* Socratic hint with the exact move. The comma must have comaCase.decimals
-       digits to its right. Each gap moves it one digit, so the number of gaps
-       to move is the difference, and the direction follows its sign: too many
-       digits to the right means move right, too few means move left. */
-    var digitsToRight = String(comaCase.n).length - 1 - comaPlaced;
-    var gapsToMove = Math.abs(digitsToRight - comaCase.decimals);
-    var moves = gapsToMove === 1 ? comaT('oneGap') : comaT('manyGaps').replace('{n}', gapsToMove);
-    var direction = digitsToRight > comaCase.decimals ? comaT('moveRight') : comaT('moveLeft');
-    var digits = digitsToRight === 1 ? comaT('oneDigit') : comaT('manyDigits').replace('{n}', digitsToRight);
     App.feedback.encourage(feedbackEl);
-    feedbackEl.textContent = comaT('wrongMarked') + ' ' + comaT('wrongHint')
-      .replace('{digits}', digits)
-      .replace('{d}', comaCase.decimals)
-      .replace('{moves}', moves)
-      .replace('{direction}', direction);
+    feedbackEl.textContent = comaMoveHint(comaPlaced);
     renderComaBoard();
   }
 
