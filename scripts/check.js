@@ -1128,14 +1128,14 @@ checks += 1;
        about this project. */
     require('node:child_process').execFileSync(
       process.execPath,
-      [path.join(ROOT, '..', 'scripts', 'asset-tokens.js'), '--check', 'calculia'],
+      [path.join(ROOT, 'scripts', 'asset-tokens.js'), '--check', 'calculia'],
       { cwd: ROOT, encoding: 'utf8' }
     );
   } catch (e) {
     /* Non-zero exit means the tokens are stale: surface its report
        verbatim instead of a generic failure. */
     failures.push('assets/css|js|img: token ?v= desactualizado (ejecuta '
-      + '`node ../scripts/asset-tokens.js calculia`)\n'
+      + '`node scripts/asset-tokens.js calculia`)\n'
       + String(e.stdout || e.message).trim());
   }
 })();
