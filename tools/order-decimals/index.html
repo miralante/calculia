@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
   <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
   <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v62e5b2c5">
-  <link rel="stylesheet" href="../../assets/css/number-sort.css?v=calculia-v05d6affe">
+  <link rel="stylesheet" href="../../assets/css/number-sort.css?v=calculia-v5953f612">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -55,8 +55,8 @@
       </div>
     </section>
 
-    <!-- The test: one sheet for the whole activity, checked all at once. The
-         level rises by itself as rounds are finished. -->
+    <!-- The test: one question at a time, checked with "Comprobar" and
+         continued with "Siguiente". The level rises by itself as rounds finish. -->
     <section id="screenGame" class="hidden stack">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
@@ -67,6 +67,7 @@
       <p class="transfer hidden" id="transfer" data-i18n="transfer"></p>
       <div class="row sheet-actions">
         <button type="button" class="btn" id="btnCheck" data-i18n="ui.check">Comprobar</button>
+        <button type="button" class="btn hidden" id="btnNext" data-i18n="ui.next">Siguiente →</button>
         <button type="button" class="btn hidden" id="btnNewRound" data-i18n="ui.newRound">Otra ronda →</button>
       </div>
     </section>
@@ -81,7 +82,7 @@
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
-  <script src="../../assets/js/number-sort.js?v=calculia-va8065aa0"></script>
+  <script src="../../assets/js/number-sort.js?v=calculia-va4ad4e9f"></script>
   <script src="app.js"></script>
   <script src="../../assets/js/sw-register.js?v=calculia-v4a242865"></script>
 </body>

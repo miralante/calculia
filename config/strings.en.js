@@ -28,9 +28,9 @@
     module2: '🧩 Reasoning and logic',
 
     activity: {
-      'los-numeros': 'Number Types', 'shapes': 'Shapes', 'trigonometry': 'Trigonometry', 'geometry': 'Geometry', 'similar': 'Same shapes', 'numbers': 'Numbers', 'fractions-measures': 'Fractions', 'measures': 'Measures', 'scale': 'Scale',
+      'los-numeros': 'Number Types', 'shapes': 'Shapes', 'trigonometry': 'Trigonometry', 'geometry': 'Geometry', 'numbers': 'Numbers', 'fractions-measures': 'Fractions', 'measures': 'Measures', 'scale': 'Scale',
       'mental-math': 'Subtraction and Mental Math', 'percent': 'Percentages', 'money': 'Money',
-      'divisibility': 'Exact groups', 'operations': 'Big sums', 'quantities': 'Read and Write Numbers', 'order-numbers': 'Order numbers', 'order-positives': 'Order positives', 'order-negatives': 'Order negatives', 'order-decimals': 'Order decimals', 'number-challenge': 'Climb the ladder', 'ordinals': 'Ordinal Numbers', 'parity': 'Even and odd', 'math-tables': 'Math Tables', 'head-math': 'Head Math',
+      'divisibility': 'Exact groups', 'operations': 'Big sums', 'quantities': 'Read and Write Numbers', 'order-numbers': 'Order numbers', 'order-positives': 'Order positives', 'order-negatives': 'Order negatives', 'order-decimals': 'Order decimals', 'ordinals': 'Ordinal Numbers', 'parity': 'Even and odd', 'math-tables': 'Math Tables', 'head-math': 'Head Math',
       'roman-numerals': 'Roman Numerals', 'riddles': 'Riddles', 'patterns': 'Patterns',
       'problems': 'Problems', 'temperature': 'Water Temperature',
       'wallet': 'The Wallet', 'algebra': 'The balance', 'charts': 'Data and charts', 'calendar': 'The Calendar', 'clock': 'The Clock', 'stories': 'Stories',

@@ -28,6 +28,13 @@
       promptOrder: '¿Qué fila va de menor a mayor?',
       promptBetween: '¿Cuál de estos números va entre {a} y {b}?',
       promptMissing: '¿Qué número falta en la fila?',
+      promptCompare: '¿Qué signo va entre los dos números?',
+      relLess: 'más pequeño que',
+      relGreater: 'más grande que',
+      relEqual: 'igual a',
+      compareAria: 'Dos números: {a} y {b}. ¿Qué signo va entre ellos?',
+      explainCompare: '{a} es {rel} {b}.',
+      hintCompare: '🤔 Mira cuál de los dos está más a la derecha en la recta de números. Con negativos, el que está más cerca del cero es el mayor.',
       rowAria: 'Fila de números: {row}. Falta el número del hueco.',
       hintSmallest: 'Mira primero la parte entera, lo que va antes de la coma. Si es igual, compara las décimas, y después las centésimas.',
       hintSmallestNeg: 'Todos son negativos. El que está más lejos del cero es el más pequeño.',
@@ -54,14 +61,15 @@
     },
 
     concept: {
-      1: { title: 'La coma separa', text: 'La coma separa la parte entera de la parte decimal. 2,5 está en medio, entre el 2 y el 3.' },
-      2: { title: 'Primero la parte entera', text: 'Mira primero lo que hay antes de la coma. 3,9 es más pequeño que 4,1, aunque tenga más décimas.' },
-      3: { title: 'Si empatan, las décimas', text: 'Si la parte entera es igual, mira las décimas. 3,4 es más pequeño que 3,7.' },
-      4: { title: 'Si empatan, las centésimas', text: 'Si también empatan las décimas, mira las centésimas. 2,46 es más pequeño que 2,49.' }
+      1: { title: 'La parte entera y la decimal', text: 'En 3,47, la parte entera es 3: lo que va antes de la coma. La parte decimal es 47: 4 décimas y 7 centésimas. Cada cifra decimal vale menos que la anterior.' },
+      2: { title: 'La coma separa', text: 'La coma separa la parte entera de la parte decimal. 2,5 está en medio, entre el 2 y el 3.' },
+      3: { title: 'Primero la parte entera', text: 'Mira primero lo que hay antes de la coma. 3,9 es más pequeño que 4,1, aunque tenga más décimas.' },
+      4: { title: 'Si empatan, las décimas', text: 'Si la parte entera es igual, mira las décimas. 3,4 es más pequeño que 3,7.' },
+      5: { title: 'Si empatan, las centésimas', text: 'Si también empatan las décimas, mira las centésimas. 2,46 es más pequeño que 2,49.' }
     },
 
     real: {
-      race: 'Carrera: 9,85 segundos gana a 9,92 segundos.',
+      race: 'Carrera: 9,85 segundos tarda menos que 9,92 segundos.',
       price: 'Precios: 1,25 € es menos que 1,5 €.',
       weight: 'Pesos: 2,75 kg pesa menos que 2,8 kg.',
       milk: 'Litros: 0,5 litros es menos que 0,75 litros.'

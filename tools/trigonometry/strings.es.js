@@ -73,7 +73,8 @@
       trigonometria: {
         name: 'Trigonometría',
         instruction: 'La escalera, la pared y el suelo forman un triángulo. La escalera es el lado inclinado: la hipotenusa.',
-        lessonRule: 'La pared muestra cuánto sube la escalera; el suelo, cuánto avanza. La esquina entre pared y suelo forma un ángulo recto. Compara cuánto sube y cuánto avanza para ver la inclinación: con la misma escalera, cuanto más sube, más recta está.'
+        lessonRule: 'La pared muestra cuánto sube la escalera; el suelo, cuánto avanza. La esquina entre pared y suelo forma un ángulo recto. Compara cuánto sube y cuánto avanza para ver la inclinación: con la misma escalera, cuanto más sube, más recta está.',
+        lessonRampRule: 'Mira cuánto sube cada rampa por cada paso que avanza. La que sube más por cada paso sube más rápido.'
       }
     },
     level: {
@@ -133,7 +134,14 @@
       socraticWhichSameReason: '🤔 Busca el triángulo que sube y avanza en la misma proporción que el primero.',
       socraticLadderSide: '🤔 Mira cuál de los tres lados es el único que está inclinado.',
       socraticLadderCompare: '🤔 Compara cuánto sube cada escalera por la pared.',
-      socraticLadderTaller: '🤔 Mira hasta dónde sube cada escalera en la pared.'
+      socraticLadderTaller: '🤔 Mira hasta dónde sube cada escalera en la pared.',
+      steeperRamp: '¿Cuál de las dos rampas sube más rápido?',
+      steeperRampHint: 'Mira cuánto sube cada una por cada paso que avanza.',
+      steeperRampAria: 'Dos rampas. La {x} sube {a} y avanza {b}. La {y} sube {c} y avanza {d}.',
+      steeperRampKey: 'sube {up}, avanza {along}',
+      steeperRampOption: 'La rampa {x}',
+      steeperRampExplanation: 'Por cada paso que avanza, sube más.',
+      socraticSteeperRamp: '🤔 Compara cuánto sube cada rampa por cada paso que avanza.'
     },
     transfer: 'Esto te sirve para saber hasta dónde llega una escalera, si una rampa es muy empinada y si un tejado necesita puntales.'
   }, 'es');

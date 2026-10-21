@@ -700,6 +700,14 @@
     },
     decimales: {
       slides: [
+        { key: 'whole', visual: function () {
+          return '<div class="intro-notation"><span class="decimal-value">' +
+            '<span class="digit-u">3</span>' + decimalSeparator() + '47</span></div>';
+        } },
+        { key: 'decimal', visual: function () {
+          return '<div class="intro-notation"><span class="decimal-value">3' + decimalSeparator() +
+            '<span class="digit-d">47</span></span></div>';
+        } },
         { key: 'tenths', visual: function () {
           return '<div class="intro-notation">' + svgFraccion(3, 10, 170) +
             '<span class="decimal-value">' + decimalText([3, 10]) + '</span></div>';
@@ -719,6 +727,8 @@
         } }
       ],
       real: [
+        { key: 'height', picto: '🧍' },
+        { key: 'coins', picto: '💰' },
         { key: 'price', picto: '💶' },
         { key: 'milk', picto: '🥛' },
         { key: 'ribbon', picto: '📏' },

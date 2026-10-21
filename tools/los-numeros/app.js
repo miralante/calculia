@@ -1,7 +1,7 @@
 ﻿/* ============================================================
    Calculia — Los Números
-   Actividad sin test. Una sola galería de 11 slides (4 tipos,
-   cada uno en dos cards — exposición + vida real — más 3
+   Actividad sin test. Una sola galería de 10 slides (5 tipos,
+   cada uno en dos cards — exposición + vida real — más 2
    comparaciones), en el mismo flujo que Formas: una card
    visible, ← / → para cambiar.
      • kind: 'expo'    → title + visual (number line, pizza…)
@@ -119,6 +119,35 @@
     return lineTicks(0, 2, labels, 'var(--mod-emocional)');
   }
 
+
+  /* Tipo 4: Fracciones. Una pizza sola, con 1/2 y 1/4 marcados
+     (un cuarto entero en morado, medio en otro color). */
+  function visualTypeFraccion() {
+    var cx = 300, cy = 110, r = 90;
+    function slice(start, end) {
+      var sx = cx + r * Math.cos(start);
+      var sy = cy + r * Math.sin(start);
+      var ex = cx + r * Math.cos(end);
+      var ey = cy + r * Math.sin(end);
+      return 'M ' + cx + ' ' + cy + ' L ' + sx + ' ' + sy +
+             ' A ' + r + ' ' + r + ' 0 0 1 ' + ex + ' ' + ey + ' Z';
+    }
+    /* 4 cuartos, dos marcados como fracción. */
+    var slices = '';
+    var fill = ['#FFE5C2', '#FFE5C2', '#FFE5C2', '#FFE5C2'];
+    fill[0] = 'var(--mod-memoria)'; /* 1/4 (cuarto superior) */
+    fill[1] = 'var(--mod-memoria)'; /* 1/2 = dos cuartos consecutivos (cuarto superior + derecho) */
+    for (var i = 0; i < 4; i++) {
+      var start = -Math.PI / 2 + i * (Math.PI / 2);
+      var end = start + Math.PI / 2;
+      slices += '<path d="' + slice(start, end) + '" fill="' + fill[i] + '" stroke="var(--color-texto)" stroke-width="2"/>';
+    }
+    return '' +
+      '<svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg">' +
+        slices +
+        '<text x="' + cx + '" y="' + (cy + r + 32) + '" text-anchor="middle" font-size="24" font-weight="700" fill="var(--color-texto)" data-i18n="fraccionOneHalf">1/2</text>' +
+      '</svg>';
+  }
 
   /* Comparación 1: Naturales y Enteros. Dos rectas paralelas:
      arriba los naturales (0..5), abajo los enteros (-3..3).

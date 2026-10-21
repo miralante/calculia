@@ -28,6 +28,13 @@
       promptOrder: 'Which row goes from smallest to largest?',
       promptBetween: 'Which of these numbers is between {a} and {b}?',
       promptMissing: 'Which number is missing from the row?',
+      promptCompare: 'Which sign goes between the two numbers?',
+      relLess: 'less than',
+      relGreater: 'greater than',
+      relEqual: 'equal to',
+      compareAria: 'Two numbers: {a} and {b}. Which sign goes between them?',
+      explainCompare: '{a} is {rel} {b}.',
+      hintCompare: '🤔 Look at which of the two is further right on the number line. With negatives, the one closer to zero is the greater.',
       rowAria: 'Row of numbers: {row}. The gap needs a number.',
       hintSmallest: 'Look at the whole part first, the digits before the decimal point. If they are equal, compare the tenths, then the hundredths.',
       hintSmallestNeg: 'They are all negative. The one furthest from zero is the smallest.',
@@ -54,14 +61,15 @@
     },
 
     concept: {
-      1: { title: 'The point separates', text: 'The decimal point separates the whole part from the decimal part. 2.5 is in the middle, between 2 and 3.' },
-      2: { title: 'Whole part first', text: 'Look first at what is before the point. 3.9 is less than 4.1, even though it has more tenths.' },
-      3: { title: 'If they tie, tenths', text: 'If the whole part is the same, look at the tenths. 3.4 is less than 3.7.' },
-      4: { title: 'If they tie, hundredths', text: 'If the tenths tie too, look at the hundredths. 2.46 is less than 2.49.' }
+      1: { title: 'The whole part and the decimal part', text: 'In 3.47, the whole part is 3: what comes before the point. The decimal part is 47: 4 tenths and 7 hundredths. Each decimal digit is worth less than the one before.' },
+      2: { title: 'The point separates', text: 'The decimal point separates the whole part from the decimal part. 2.5 is in the middle, between 2 and 3.' },
+      3: { title: 'Whole part first', text: 'Look first at what is before the point. 3.9 is less than 4.1, even though it has more tenths.' },
+      4: { title: 'If they tie, tenths', text: 'If the whole part is the same, look at the tenths. 3.4 is less than 3.7.' },
+      5: { title: 'If they tie, hundredths', text: 'If the tenths tie too, look at the hundredths. 2.46 is less than 2.49.' }
     },
 
     real: {
-      race: 'Race: 9.85 seconds beats 9.92 seconds.',
+      race: 'Race: 9.85 seconds takes less time than 9.92 seconds.',
       price: 'Prices: £1.25 is less than £1.5.',
       weight: 'Weights: 2.75 kg weighs less than 2.8 kg.',
       milk: 'Liquids: 0.5 litres is less than 0.75 litres.'

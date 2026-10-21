@@ -16,7 +16,8 @@
    Los nombres NO están aquí: son texto y viven en strings.<locale>.js.
    ============================================================ */
 var DATA = {
-  perRound: 6,
+  /* Una pregunta de cada tipo por ronda: son siete tipos en la prueba. */
+  perRound: 7,
 
   activities: {
     /* Una sola actividad reúne la idea práctica de la inclinación y los
@@ -28,6 +29,7 @@ var DATA = {
           tipo: 'mixed',
           questions: [
             { id: 'compare-ladders', tipo: 'compareLadders' },
+            { id: 'steeper-ramp', tipo: 'steeperRamp' },
             { id: 'ladder-height', tipo: 'ladderTaller' },
             { id: 'rise-and-distance', tipo: 'countReason' },
             { id: 'same-inclination', tipo: 'sameReasonJudge' },
@@ -79,5 +81,13 @@ var DATA = {
     { id: 'p34', up: 3, along: 4 },
     { id: 'p23', up: 2, along: 3 },
     { id: 'p12', up: 1, along: 2 }
+  ],
+
+  /* Las dos rampas de la explicación: la de la A sube poco por cada paso
+     que avanza; la de la B, mucho. La prueba las saca de `triangles`, así
+     que aquí solo está el ejemplo que se enseña antes de practicar. */
+  steeperExample: [
+    { id: 'suave', up: 1, along: 3 },
+    { id: 'empinada', up: 5, along: 4 }
   ]
 };

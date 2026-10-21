@@ -171,7 +171,7 @@ primero.
   dónde se dobla, cuál es la misma forma más pequeña— y el cálculo se queda
   donde ya está: el área contando cuadraditos y el perímetro sobre la
   cuadrícula son de `geometry/`, el volumen contando cubitos también, y la
-  semejanza con escalas y pendientes es de `similar/`. Los mismos números
+  semejanza con escalas y pendientes ya no tiene actividad (`similar/` se retiró); la pendiente de las rampas está en `trigonometry/`. Los mismos números
   no se piden dos veces en la suite.
 - Dos decisiones de la presentación del perímetro y de la simetría están
   forzadas por la pregunta, no por gusto. El perímetro solo se mide en

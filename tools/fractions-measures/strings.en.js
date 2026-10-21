@@ -128,6 +128,8 @@
         instruction: 'Before you play, look at how a decimal is written.',
         title: 'What a decimal number is',
         text: 'A decimal is another way of writing a part. It has a point: what comes before it are whole units, and what comes after are parts.',
+        whole: 'The whole part is what comes before the point: whole units. In 3.47 it is the 3.',
+        decimal: 'The decimal part is what comes after the point: parts of one unit. In 3.47 it is 4 tenths and 7 hundredths.',
         tenths: 'A pie has 10 equal parts. Each part is 0.1. Three parts are 0.3.',
         point: 'The point separates the whole units from the parts. The 0 is the whole units and the 3 is tenths.',
         half: '0.5 is half of the pie. 0.25 is a quarter.',
@@ -149,6 +151,8 @@
       },
       decimales: {
         title: 'Decimals are all around us.',
+        height: 'A person is 1.75 m tall: 1 whole metre and 0.75 m of the decimal part.',
+        coins: 'A jar holds 3.47 €: 3 whole euros and 47 cents, which is 0.47 €.',
         price: 'A loaf of bread costs 1.50 €. That is one euro and fifty cents.',
         milk: 'Half a litre of milk is 0.5 litres.',
         ribbon: 'A ribbon of 2.5 metres is two and a half metres.',

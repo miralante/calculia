@@ -1,6 +1,6 @@
 /* ============================================================
    Calculia — Numbers texts (EN)
-   Gallery of 7 slides (4 types + 3 comparisons). Minimum
+   Gallery of 10 slides (5 types + 2 comparisons). Minimum
    text: just the title and, on the type slides, a single
    line of "real life". The visual is the lesson.
    ============================================================ */
@@ -22,8 +22,14 @@
     slideNaturalesReal: '🧮 3 apples · 5 fingers · 10 years',
     slideEnterosTitle: 'Integers',
     slideEnterosReal: '🌡️ −5 °C · basement −1 · 3 floors',
+    slideFraccionesTitle: 'Fractions',
+    slideFraccionesReal: '🍕 1/2 pizza · 1/4 hour',
     slideDecimalesTitle: 'Decimals',
     slideDecimalesReal: '💰 $1.99 · 1.5 m · 3.14',
+    /* Labels inside the fractions pizza SVG. */
+    fraccionOneHalf: '1/2',
+    fraccionOneFourth: '1/4',
+
     /* Eyebrow shown above the list of real-life examples. */
     realEyebrow: 'In real life:',
 

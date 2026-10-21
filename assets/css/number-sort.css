@@ -1,7 +1,7 @@
 /* ==========================================================================
    Calculia — Ordering numbers: shared styles
-   Used by order-numbers, order-negatives, order-decimals and
-   number-challenge (assets/js/number-sort.js). Requires tokens.css,
+   Used by order-numbers, order-negatives and order-decimals
+   (assets/js/number-sort.js). Requires tokens.css,
    base.css and components.css.
    ========================================================================== */
 
@@ -105,22 +105,41 @@
   font-size: 1.3rem;
   font-weight: 800;
 }
-.ns-column {
+.ns-building {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 6px;
+  width: 160px;
+  padding: 8px 12px 0;
+  border: 3px solid var(--mod-razonamiento-suave);
+  border-bottom: 0;
+  border-radius: var(--radio) var(--radio) 0 0;
+  background: var(--color-superficie);
 }
-.ns-column .ns-chip {
+.ns-floor {
+  display: flex;
+  justify-content: center;
+  padding: 6px 0;
+  border-bottom: 2px solid var(--mod-razonamiento-suave);
+}
+.ns-floor.ns-underground {
+  background: var(--color-acierto-suave, #eef3ee);
+}
+.ns-building .ns-chip {
   min-width: 72px;
   min-height: 40px;
   font-size: 1.1rem;
 }
-.ns-column .ns-chip.ns-column-mark {
+.ns-building .ns-chip.ns-column-mark {
   border-color: var(--mod-razonamiento);
   background: var(--mod-razonamiento-suave);
   color: var(--mod-razonamiento);
 }
+.ns-ground {
+  height: 6px;
+  margin: 0 -12px;
+  background: var(--color-texto-suave);
+}
+
 .ns-line {
   width: 100%;
   max-width: 320px;
@@ -155,6 +174,12 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+}
+/* The sign of a comparison question (<, = or >), big enough to read at a glance. */
+.compare-sign {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1;
 }
 .options.options-row .option-btn {
   display: flex;

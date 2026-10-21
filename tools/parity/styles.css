@@ -65,10 +65,10 @@
 .parity-carousel-display:focus-visible { outline: 3px solid var(--color-foco); outline-offset: 2px; }
 .parity-carousel-balls .parity-ball { width: 44px; height: 44px; font-size: 18px; }
 .parity-carousel-balls .parity-ball-pair { gap: 8px; }
-/* The "0" of slide 0: an empty outlined ball in the pair colour. */
-.parity-carousel-balls .parity-zero {
-  box-sizing: border-box; background: #fff; color: #1565C0;
-  border: 3px dashed #1565C0;
+/* Slide 0: the text "0 = par" in the space of the balls. */
+.parity-carousel-balls .parity-zero-text {
+  font-size: var(--texto-grande); font-weight: 800; color: var(--mod-razonamiento);
+  align-self: center;
 }
 .parity-carousel-caption {
   margin: 0; min-height: 1.2em; text-align: center;
@@ -106,6 +106,18 @@
 
 /* nombre de la parte del test (dots, numbers, big numbers) */
 .parity-block { margin: 0; font-weight: 700; color: var(--mod-razonamiento); text-align: center; }
+
+/* recordatorio de la última cifra: dos fichas, par (azul) e impar (naranja) */
+.parity-last-card { border-color: var(--mod-razonamiento-suave); }
+.parity-last-title { margin: 0; font-weight: 700; color: var(--mod-razonamiento); }
+.parity-last-line { margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.parity-chip {
+  display: inline-block; padding: 4px 10px; border-radius: 999px;
+  font-weight: 700; letter-spacing: 1px;
+}
+.parity-chip-even { background: #1565C0; color: #fff; }
+.parity-chip-odd { background: #E65100; color: #111; }
+.parity-rule .parity-last-line { margin-top: var(--espacio); }
 
 /* pantalla final */
 .big-emoji { font-size: 96px; }

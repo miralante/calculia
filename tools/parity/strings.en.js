@@ -14,7 +14,15 @@
     title: '🟦 Even and odd',
     instruction: 'Look at the dots: one left alone or all paired up?',
     btnMenu: 'Back to the start',
-    ruleTitle: 'Remember the rule',
+    /* Reminder before the test, and the "open here" help on the
+       number questions that show no balls. */
+    ruleOpen: 'Open here to see the rule',
+    ruleLastDigit: 'If it ends in 0, 2, 4, 6 or 8: even. If it ends in 1, 3, 5, 7 or 9: odd.',
+    reminderTitle: 'Remember the rule',
+    reminderPairs: 'If its dots go two by two and none is left over, it is even. If one is left over, it is odd.',
+    reminderLastDigit: 'Look at the last digit:',
+    reminderExample: 'Example: 18 ends in 8, so it is even. 27 ends in 7, so it is odd.',
+    reminderNext: 'Start practising →',
 
     /* Root-menu key: the "Pares e impares" / "Even and odd"
        word used on the landing card and dev/. */
@@ -26,6 +34,7 @@
     introText: 'A number is even if its dots go two by two and none is left over. If one is left over, it is odd.',
     /* Captions for the 0 to 10 slides. {p} = even or odd. */
     seqZero: 'No balls: it is {p}.',
+    zeroLabel: '0 = even',
     seqEven: '{n} balls, all in pairs: it is {p}.',
     seqOne: 'One ball, left alone: it is {p}.',
     seqOdd: '{n} balls: one is left alone and the rest go in pairs: it is {p}.',
@@ -34,7 +43,7 @@
     /* ---------- Screen 2: real life ---------- */
     realTitle: 'In real life',
     realText: 'Look: even things go in pairs, and odd things leave one alone.',
-    realNext: 'Start practising →',
+    realNext: 'See the rule →',
     real: {
       0: {
         title: 'Shoes',

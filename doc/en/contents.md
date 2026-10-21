@@ -172,7 +172,7 @@ is rebalanced, this is the document to read first.
   which way it folds, which one is the same shape made smaller— and the
   calculation stays where it already was: area by counting little squares and
   perimeter on the grid belong to `geometry/`, volume by counting cubes as
-  well, and similarity with scales and slopes belongs to `similar/`. The
+  well, and similarity with scales has no activity any more (`similar/` was retired); the slope of ramps is in `trigonometry/`. The
   same numbers are never asked twice across the suite.
 - Two choices in how perimeter and symmetry are presented are forced by the
   question, not by taste. The perimeter is only measured on regular

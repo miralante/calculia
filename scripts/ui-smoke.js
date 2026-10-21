@@ -1693,10 +1693,10 @@ async function exerciseNumbers(page, baseUrl) {
   });
   await page.reload();
 
-  /* Números ya no es tarjeta de la portada pública: vive solo en la página
-     oculta dev/ (ver PUBLIC_SLUGS de scripts/check.js). */
-  assert.equal(await page.locator('a[href="tools/numbers/"]').count(), 0,
-    'La portada pública vuelve a mostrar Números');
+  /* Números es tarjeta de la portada pública, justo después de Tipos de
+     Números (ver PUBLIC_SLUGS de scripts/check.js). */
+  assert.equal(await page.locator('a[href="tools/numbers/"]').count(), 1,
+    'La portada pública no muestra Números');
   /* Positivos y negativos dejó de ser una herramienta propia y se
      integró en Números (commit "feat(numbers): integrate positive and
      negative practice"), así que ya no existe tools/posneg/: ese

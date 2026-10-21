@@ -108,12 +108,6 @@
         "works": 'Vocabulario geométrico con su significado (ángulo, borde, simétrico), y la idea de que el perímetro y el área se pueden contar, no hace falta ninguna fórmula.',
         "daily": 'Doblad un papel por la mitad y mirad si coincide. Al poner un mantel o una alfombra, contad juntos cuántas baldosas ocupa.'
       },
-      "similar": {
-        "name": 'Formas parecidas',
-        "does": 'Compara dos figuras y dice si son la misma forma a otro tamaño, contando los cuadraditos de ancho y de alto. Cuenta los cuadrados dibujados sobre los lados de un triángulo con una esquina recta. Y mira dos rampas para decir cuál sube más.',
-        "works": 'La idea de escala (la misma forma más grande), la relación entre los lados de un triángulo recto contada en cuadraditos, y la pendiente como «cuánto sube por lo que avanza».',
-        "daily": 'Mirad una foto ampliada y otra estirada: ¿cuál es la misma forma? Al subir una cuesta, comentad si esta sube más que aquella.'
-      },
       "fractions-measures": {
         "name": 'Fracciones',
         "does": 'Reconoce medios, cuartos y tercios, decide cuándo dos fracciones valen lo mismo, suma y resta partes del mismo tamaño y lee la parte escrita con coma (0,5).',

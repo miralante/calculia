@@ -8,7 +8,7 @@
 Una aplicación web gratuita y estática con 30 actividades para practicar
 cálculo y razonamiento lógico:
 
-- **Matemáticas**: Los Números, Formas, Geometría, Formas parecidas, Fracciones, Medidas, Escala, Restar y
+- **Matemáticas**: Los Números, Formas, Geometría, Fracciones, Medidas, Escala, Restar y
   Cálculo Mental, Dinero, Porcentajes, Las Tablas, Grupos exactos, Cuentas grandes,
   Cantidades, Números Romanos,
   Problemas, Temperatura del agua.
@@ -259,7 +259,6 @@ bloques en el orden correcto:
 | order-positives  | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-negatives  | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-decimals   | ✅ | ✅ | ✅ | ✅ | ✅ |
-| number-challenge | — | ✅ | ✅ | ✅ | ✅ |
 
 > El guion largo `—` en Puzzle significa "no aplicable": la
 > actividad es espacial y no tiene pregunta con respuesta correcta

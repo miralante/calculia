@@ -52,7 +52,6 @@ questions:
 | **Temperature** | Reading a thermometer. |
 | **Shapes** | Recognising shapes, counting sides and vertices, and introducing perimeter, area, volume, symmetry and similarity. |
 | **Geometry** | Angles, edges, area and symmetry. |
-| **Same shapes** | Scale, the three squares, slopes. |
 
 #### For intermediate users
 

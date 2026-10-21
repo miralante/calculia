@@ -108,12 +108,6 @@
         "works": 'Geometric vocabulary with its meaning (angle, edge, symmetrical), and the idea that perimeter and area can be counted, with no formula needed.',
         "daily": 'Fold a piece of paper in half and see whether it matches. When putting down a mat or a rug, count together how many tiles it covers.'
       },
-      "similar": {
-        "name": 'Same shapes',
-        "does": 'Compares two figures and says whether they are the same shape at another size, counting the little squares across and down. Counts the squares drawn on the sides of a triangle with a right corner. And looks at two ramps to say which one climbs more.',
-        "works": 'The idea of scale (the same shape, bigger), the relation between the sides of a right triangle counted in little squares, and slope as \"how much it climbs for how far it goes\".',
-        "daily": 'Look at an enlarged photo and a stretched one: which is the same shape? Going up a hill, talk about whether this one climbs more than that one.'
-      },
       "fractions-measures": {
         "name": 'Fractions',
         "does": 'Recognises halves, quarters and thirds, decides when two fractions are worth the same, adds and subtracts parts of the same size, and reads a part written with a point (0.5).',

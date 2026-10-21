@@ -54,7 +54,24 @@
         </div>
         <div class="stack" id="realCards"></div>
         <div class="row intro-buttons">
-          <button type="button" class="btn" id="parityRealNext" data-i18n="realNext">Empezar a practicar →</button>
+          <button type="button" class="btn" id="parityRealNext" data-i18n="realNext">Ver la regla →</button>
+        </div>
+      </section>
+
+      <!-- Pantalla 3: recordatorio de la regla, antes del test (como en Números Romanos). -->
+      <section id="screenParityReminder" class="stack hidden">
+        <div class="card reference-card stack">
+          <h2 class="reference-title" data-i18n="reminderTitle">Recuerda la regla</h2>
+          <p class="reference-text" data-i18n="reminderPairs">Si sus puntos van de dos en dos y no sobra ninguno, es par. Si sobra uno, es impar.</p>
+        </div>
+        <div class="card stack parity-last-card">
+          <p class="parity-last-title" data-i18n="reminderLastDigit">Mira la última cifra:</p>
+          <p class="parity-last-line"><span class="parity-chip parity-chip-even">0 · 2 · 4 · 6 · 8</span> → <strong data-i18n="evenLabel">Par</strong></p>
+          <p class="parity-last-line"><span class="parity-chip parity-chip-odd">1 · 3 · 5 · 7 · 9</span> → <strong data-i18n="oddLabel">Impar</strong></p>
+          <p class="reference-text" data-i18n="reminderExample">Ejemplo: 18 termina en 8, así que es par. 27 termina en 7, así que es impar.</p>
+        </div>
+        <div class="row intro-buttons">
+          <button type="button" class="btn" id="parityReminderNext" data-i18n="reminderNext">Empezar a practicar →</button>
         </div>
       </section>
 
@@ -67,8 +84,9 @@
         <p class="progress-text" id="parityProgressText"></p>
 
         <details class="parity-rule" id="parityRuleBox">
-          <summary data-i18n="ruleTitle">Recuerda la regla</summary>
+          <summary data-i18n="ruleOpen">Abre aquí para ver la regla</summary>
           <p id="parityRule"></p>
+          <p class="parity-last-line" data-i18n="ruleLastDigit">Si termina en 0, 2, 4, 6 u 8: par. Si termina en 1, 3, 5, 7 o 9: impar.</p>
         </details>
 
         <article class="card stack parity-card">

@@ -28,6 +28,8 @@
   var learnContextEl = $('#learnContext');
   var learnVisualEl = $('#learnVisual');
   var learnRuleEl = $('#learnRule');
+  var learnRampVisualEl = $('#learnRampVisual');
+  var learnRampRuleEl = $('#learnRampRule');
   var realVisualEl = $('#realVisual');
   var realCaptionEl = $('#realCaption');
 
@@ -194,6 +196,12 @@
       throw new Error('trigonometry: pair "' + p.id + '" cannot offer two different wrong answers');
     }
   });
+
+  /* The lesson's two ramps must lean differently, or "which climbs faster"
+     would have no single answer. */
+  if (sameReason(DATA.steeperExample[0], DATA.steeperExample[1])) {
+    throw new Error('trigonometry: the two example ramps lean the same way');
+  }
 
   /* ---- Utilities ---- */
 
@@ -395,6 +403,26 @@
     return App.i18n.t('gen.triAria')
       .replace(/\{up\}/g, t.up)
       .replace(/\{along\}/g, t.along);
+  }
+
+  /* Two ramps side by side, each with its letter and its numbers under it.
+     The numbers are written down so the answer is never judged by eye alone. */
+  function rampKeyText(t) {
+    return App.i18n.t('gen.steeperRampKey').replace('{up}', t.up).replace('{along}', t.along);
+  }
+
+  function rampPairHtml(named) {
+    return '<div class="reason-compare-stage">' + named.map(function (item) {
+      return '<div class="reason-example"><span class="reason-example-label">' + item.letter + '</span>' +
+        triangleSvg(item.triangle, { grid: true }) +
+        '<span class="reason-name">' + rampKeyText(item.triangle) + '</span></div>';
+    }).join('') + '</div>';
+  }
+
+  function rampPairAria(named) {
+    return App.i18n.t('gen.steeperRampAria')
+      .replace(/\{x\}/g, named[0].letter).replace(/\{a\}/g, named[0].triangle.up).replace(/\{b\}/g, named[0].triangle.along)
+      .replace(/\{y\}/g, named[1].letter).replace(/\{c\}/g, named[1].triangle.up).replace(/\{d\}/g, named[1].triangle.along);
   }
 
   var GENERATORS = {
@@ -616,6 +644,34 @@
       };
     },
 
+    /* Two ramps of different lean, drawn at the same scale. The one that
+       climbs more for every step it goes along is the one that climbs faster.
+       Compared by multiplying across, so no decimals decide it. */
+    steeperRamp: function (nv) {
+      var a = App.utils.drawRound(nv.id, DATA.triangles);
+      var b = App.utils.drawRound(nv.id + 'other', DATA.triangles.filter(function (t) {
+        return !sameReason(t, a);
+      }));
+      var named = App.utils.shuffle([a, b]).map(function (t, i) {
+        return { triangle: t, letter: i === 0 ? 'A' : 'B' };
+      });
+      var steeper = named[0].triangle.up * named[1].triangle.along > named[1].triangle.up * named[0].triangle.along
+        ? named[0] : named[1];
+      return {
+        prompt: App.i18n.t('gen.steeperRamp'),
+        hint: App.i18n.t('gen.socraticSteeperRamp'),
+        explanation: App.i18n.t('gen.steeperRampExplanation'),
+        visual: rampPairHtml(named),
+        visualAria: rampPairAria(named),
+        legend: App.i18n.t('gen.steeperRampHint'),
+        options: App.utils.shuffle(named.map(function (item) {
+          var text = App.i18n.t('gen.steeperRampOption').replace(/\{x\}/g, item.letter);
+          return { html: '<span class="kind-name">' + text + '</span>', aria: text, correct: item === steeper };
+        })),
+        inline: true
+      };
+    },
+
     /* The ladder against the wall. Which of the three is the slanted one?
        Answerable by looking: two of them stand straight up, one leans. */
     ladderSide: function (nv) {
@@ -696,7 +752,8 @@
     sameReasonJudge: GENERATORS.sameReasonJudge,
     whichSameReason: GENERATORS.whichSameReason,
     ladderSide: GENERATORS.ladderSide,
-    ladderTaller: GENERATORS.ladderTaller
+    ladderTaller: GENERATORS.ladderTaller,
+    steeperRamp: GENERATORS.steeperRamp
   };
 
   /* ============================================================
@@ -809,6 +866,13 @@
     learnVisualEl.setAttribute('role', 'img');
     learnVisualEl.setAttribute('aria-label', picture.aria);
     learnRuleEl.textContent = App.i18n.t('activity.' + activity.id + '.lessonRule');
+    var ramps = DATA.steeperExample.map(function (t, i) {
+      return { triangle: t, letter: i === 0 ? 'A' : 'B' };
+    });
+    learnRampVisualEl.innerHTML = rampPairHtml(ramps);
+    learnRampVisualEl.setAttribute('role', 'img');
+    learnRampVisualEl.setAttribute('aria-label', rampPairAria(ramps));
+    learnRampRuleEl.textContent = App.i18n.t('activity.' + activity.id + '.lessonRampRule');
     $('#btnStartLesson').textContent = App.i18n.t('btnStartLesson');
     $('#btnRealExamples').textContent = App.i18n.t('btnRealExamples');
     $('#btnStartLesson').classList.toggle('hidden', returnTo !== 'menu');

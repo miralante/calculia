@@ -1,8 +1,8 @@
 /* ============================================================
    Calculia — Ordering numbers: shared engine.
 
-   order-numbers (positives), order-negatives, order-decimals and
-   number-challenge share the question kinds and the three stages of
+   order-numbers (positives), order-negatives and order-decimals share
+   the question kinds and the three stages of
    the Formas flow:
      1. explanation: concept slides with ← → (the rule, with a picture),
      2. real life: everyday examples of the same comparison,
@@ -234,13 +234,46 @@
     throw new Error('number-sort: no missing-number question for pool "' + pool.kind + '"');
   }
 
-  var TYPES = ['smallest', 'largest', 'order', 'between', 'missing'];
+  /* Two numbers and the sign between them: <, > or =. One question in five
+     has two equal numbers, so "=" is a real answer and not a decoy. The
+     two numbers are drawn at the level's size, so the sign is always about
+     the numbers on screen, never about their order on the page. */
+  var SIGN_HTML = { less: '&lt;', eq: '=', greater: '&gt;' };
+  function makeCompare(pool) {
+    var pair = drawDistinct(pool, 2);
+    var a = pair[0];
+    var b = rint(1, 5) === 1 ? a : pair[1];
+    var rel = a === b ? 'eq' : (a < b ? 'less' : 'greater');
+    var words = { less: t('q.relLess'), eq: t('q.relEqual'), greater: t('q.relGreater') };
+    var values = { a: show(a, pool.kind), b: show(b, pool.kind), rel: words[rel] };
+    return {
+      type: 'compare',
+      prompt: t('q.promptCompare'),
+      visual: '<div class="ns-row"><span class="ns-chip">' + values.a + '</span>' +
+        '<span class="ns-sep" aria-hidden="true">?</span>' +
+        '<span class="ns-chip">' + values.b + '</span></div>',
+      visualAria: fill(t('q.compareAria'), values),
+      inline: true,
+      options: App.utils.shuffle(['less', 'eq', 'greater'].map(function (r) {
+        return {
+          html: '<span class="compare-sign">' + SIGN_HTML[r] + '</span>',
+          aria: words[r],
+          correct: r === rel
+        };
+      })),
+      hint: t('q.hintCompare'),
+      explanation: fill(t('q.explainCompare'), values)
+    };
+  }
+
+  var TYPES = ['smallest', 'largest', 'order', 'between', 'missing', 'compare'];
 
   /* One question of the given type from a pool. */
   function makeQuestion(pool, type) {
     if (type === 'smallest' || type === 'largest') return makeExtreme(pool, type);
     if (type === 'order') return makeOrder(pool);
     if (type === 'between') return makeBetween(pool);
+    if (type === 'compare') return makeCompare(pool);
     return makeMissing(pool);
   }
 
@@ -248,9 +281,15 @@
      caller shuffles the order, so the types are never grouped. */
   function makeRound(level, count) {
     var types = level.types || TYPES;
+    var pools = level.pools || [level.pool];
+    /* Each question draws from one of the level's sizes, spread evenly and in a
+       random order, so one round mixes small and large numbers. */
+    var sizes = [];
+    for (var k = 0; k < count; k += 1) sizes.push(k % pools.length);
+    sizes = App.utils.shuffle(sizes);
     var out = [];
     for (var i = 0; i < count; i += 1) {
-      out.push(makeQuestion(level.pool, types[i % types.length]));
+      out.push(makeQuestion(pools[sizes[i]], types[i % types.length]));
     }
     return out;
   }
@@ -351,10 +390,15 @@
 
   /* A vertical column of values (for example floors of a building), with one
      of them marked. Listed top to bottom, as the values are given. */
+  /* A building drawn as a column of floors, each with its number. `ground`
+     is the floor at street level: the ground line is drawn under it. Floors
+     below zero are shaded as underground, and `mark` highlights one floor. */
   function columnHtml(spec) {
-    return '<div class="ns-column">' + spec.values.map(function (v) {
+    return '<div class="ns-building">' + spec.values.map(function (v) {
       var mark = v === spec.mark ? ' ns-column-mark' : '';
-      return '<span class="ns-chip' + mark + '">' + fmtPlain(v, 0) + '</span>';
+      var under = v < 0 ? ' ns-underground' : '';
+      var floor = '<div class="ns-floor' + under + '"><span class="ns-chip' + mark + '">' + fmtPlain(v, 0) + '</span></div>';
+      return floor + (v === spec.ground ? '<div class="ns-ground" aria-hidden="true"></div>' : '');
     }).join('') + '</div>';
   }
 
@@ -390,6 +434,7 @@
     var testSheet = $('#testSheet');
     var btnCheck = $('#btnCheck');
     var btnNewRound = $('#btnNewRound');
+    var btnNext = $('#btnNext');
     var progressFill = $('#progressFill');
     var progressText = $('#progressText');
     var difficulty = $('#difficulty');
@@ -398,6 +443,7 @@
 
     var level = null;
     var sheets = [];
+    var current = 0;
     var conceptIndex = 0;
     var exampleIndex = 0;
 
@@ -422,93 +468,98 @@
     function startRound() {
       level = currentLevel();
       sheets = config.buildRound(level).map(function (q) {
-        return { question: q, selected: null, correct: null };
+        return { question: q, selected: null, correct: null, missed: false };
       });
+      current = 0;
       difficulty.textContent = t(level.name);
       transfer.classList.add('hidden');
-      btnCheck.classList.remove('hidden');
-      btnCheck.disabled = false;
-      btnNewRound.classList.add('hidden');
       showScreen(screenGame);
-      renderSheet();
+      renderQuestion();
     }
 
-    /* The whole round on one screen: one card per question. */
-    function renderSheet() {
+    /* One question on the screen at a time. Picking an option only marks it;
+       "Comprobar" checks it. A wrong answer shows the hint and stays open; a
+       right one shows the explanation and "Siguiente" moves on. The round
+       ends after the last question. */
+    function renderQuestion() {
+      var sheet = sheets[current];
       testSheet.innerHTML = '';
-      sheets.forEach(function (sheet, i) {
-        testSheet.appendChild(questionCard(sheet.question, i));
+      var card = questionCard(sheet.question, current);
+      testSheet.appendChild(card);
+      card.querySelectorAll('.option-btn').forEach(function (btn, j) {
+        btn.addEventListener('click', function () { selectOption(j); });
       });
-      var cards = testSheet.querySelectorAll('.test-sheet-card');
-      cards.forEach(function (card, i) {
-        card.querySelectorAll('.option-btn').forEach(function (btn, j) {
-          btn.addEventListener('click', function () { selectOption(i, j); });
-        });
-      });
+      btnCheck.classList.remove('hidden');
+      btnCheck.disabled = false;
+      btnNext.classList.add('hidden');
+      btnNewRound.classList.add('hidden');
       paintSheetProgress();
     }
 
-    function selectOption(sheetIdx, optionIdx) {
-      var sheet = sheets[sheetIdx];
+    function selectOption(optionIdx) {
+      var sheet = sheets[current];
       if (sheet.correct === true) return;
       sheet.selected = optionIdx;
-      var card = testSheet.querySelectorAll('.test-sheet-card')[sheetIdx];
+      var card = testSheet.querySelector('.test-sheet-card');
       card.querySelectorAll('.option-btn').forEach(function (b, j) {
         b.classList.toggle('selected', j === optionIdx);
         b.classList.remove('incorrect');
       });
-      paintSheetProgress();
     }
 
-    function checkAnswers() {
-      var firstUnanswered = -1;
-      for (var i = 0; i < sheets.length; i += 1) {
-        if (sheets[i].correct !== true && sheets[i].selected === null) { firstUnanswered = i; break; }
-      }
-      if (firstUnanswered !== -1) {
-        var target = testSheet.querySelectorAll('.test-sheet-card')[firstUnanswered];
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        target.classList.add('shake');
-        setTimeout(function () { target.classList.remove('shake'); }, 500);
+    function checkAnswer() {
+      var sheet = sheets[current];
+      var card = testSheet.querySelector('.test-sheet-card');
+      if (sheet.selected === null) {
+        /* Nothing picked yet: shake the card so it is noticed. */
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('shake');
+        setTimeout(function () { card.classList.remove('shake'); }, 500);
         return;
       }
-
-      /* Only the first check of a round scores; later checks just walk
-         through the questions still open. */
-      var firstCheck = sheets.every(function (sheet) { return sheet.correct === null; });
-      var rightFirstTry = 0;
-      var cards = testSheet.querySelectorAll('.test-sheet-card');
-      sheets.forEach(function (sheet, i) {
-        if (sheet.correct === true) return;
-        var ok = paintAnswer(cards[i], sheet.question, sheet.selected);
-        sheet.correct = ok;
-        if (ok && firstCheck) rightFirstTry += 1;
-      });
-
-      if (firstCheck) {
-        progress.stars += rightFirstTry;
-        progress.completedRounds = (progress.completedRounds || 0) + 1;
-        progress.roundsByLevel[level.id] = (progress.roundsByLevel[level.id] || 0) + 1;
+      var ok = paintAnswer(card, sheet.question, sheet.selected);
+      if (!ok) {
+        sheet.missed = true;
+        paintSheetProgress();
+        return;
+      }
+      sheet.correct = true;
+      /* A question right at the first try scores a star. */
+      if (!sheet.missed) {
+        progress.stars += 1;
         save();
         paintStars();
       }
-
-      var allRight = sheets.every(function (sheet) { return sheet.correct === true; });
-      btnCheck.classList.toggle('hidden', allRight);
-      btnNewRound.classList.remove('hidden');
-      transfer.classList.toggle('hidden', !allRight);
-      if (allRight) btnNewRound.focus();
+      btnCheck.classList.add('hidden');
+      if (current === sheets.length - 1) {
+        finishRound();
+      } else {
+        btnNext.classList.remove('hidden');
+        btnNext.focus();
+      }
       paintSheetProgress();
     }
 
-    /* Before the check: how many questions have an option picked. After it:
-       how many are right. The number is always "x / total". */
+    function nextQuestion() {
+      current += 1;
+      renderQuestion();
+    }
+
+    /* The round is complete: the level counts it, so the next round starts at
+       the next level, and the transfer sentence appears. */
+    function finishRound() {
+      progress.completedRounds = (progress.completedRounds || 0) + 1;
+      progress.roundsByLevel[level.id] = (progress.roundsByLevel[level.id] || 0) + 1;
+      save();
+      transfer.classList.remove('hidden');
+      btnNewRound.classList.remove('hidden');
+      btnNewRound.focus();
+    }
+
+    /* How many questions of the round are already right, out of the total. */
     function paintSheetProgress() {
       var total = sheets.length;
-      var checked = sheets.length > 0 && sheets[0].correct !== null;
-      var numerator = checked
-        ? sheets.filter(function (s) { return s.correct === true; }).length
-        : sheets.filter(function (s) { return s.selected !== null; }).length;
+      var numerator = sheets.filter(function (s) { return s.correct === true; }).length;
       progressFill.style.width = (total ? numerator / total * 100 : 0) + '%';
       progressText.textContent = numerator + ' / ' + total;
     }
@@ -550,7 +601,8 @@
       paintExample();
     });
     $('#realContinue').addEventListener('click', startRound);
-    btnCheck.addEventListener('click', checkAnswers);
+    btnCheck.addEventListener('click', checkAnswer);
+    btnNext.addEventListener('click', nextQuestion);
     btnNewRound.addEventListener('click', startRound);
 
     paintConcept();

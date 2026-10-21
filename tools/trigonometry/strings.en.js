@@ -71,7 +71,8 @@
       trigonometria: {
         name: 'Trigonometry',
         instruction: 'The ladder, wall and floor form a triangle. The ladder is the sloping side: the hypotenuse.',
-        lessonRule: 'The wall shows how high the ladder reaches; the floor shows how far it goes. The corner between the wall and floor is a right angle. Compare how high it reaches with how far it goes to see the steepness: with the same ladder, the higher it reaches, the steeper it is.'
+        lessonRule: 'The wall shows how high the ladder reaches; the floor shows how far it goes. The corner between the wall and floor is a right angle. Compare how high it reaches with how far it goes to see the steepness: with the same ladder, the higher it reaches, the steeper it is.',
+        lessonRampRule: 'Look at how much each ramp climbs for every step it goes along. The one that climbs more for each step climbs faster.'
       }
     },
     level: {
@@ -129,7 +130,14 @@
       socraticWhichSameReason: '🤔 Look for the triangle that rises and goes in the same proportion as the first.',
       socraticLadderSide: '🤔 Look for the only one of the three sides that leans.',
       socraticLadderCompare: '🤔 Compare how high each ladder reaches on the wall.',
-      socraticLadderTaller: '🤔 Look how far each ladder climbs up the wall.'
+      socraticLadderTaller: '🤔 Look how far each ladder climbs up the wall.',
+      steeperRamp: 'Which of the two ramps climbs faster?',
+      steeperRampHint: 'Look at how much each one climbs for every step it goes along.',
+      steeperRampAria: 'Two ramps. {x} climbs {a} and goes {b}. {y} climbs {c} and goes {d}.',
+      steeperRampKey: 'climbs {up}, goes {along}',
+      steeperRampOption: 'Ramp {x}',
+      steeperRampExplanation: 'For every step it goes along, it climbs more.',
+      socraticSteeperRamp: '🤔 Compare how much each ramp climbs for every step it goes along.'
     },
     transfer: 'This helps you know how far a ladder reaches, whether a ramp is too steep, and whether a roof needs supports.'
   }, 'en');

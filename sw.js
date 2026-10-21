@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v233';
+var VERSION = 'calculia-v243';
 
 var FILES = [
   './',
@@ -87,12 +87,6 @@ var FILES = [
   './tools/clock/strings.es.js',
   './tools/clock/strings.en.js',
   './tools/clock/styles.css',
-  './tools/similar/',
-  './tools/similar/app.js',
-  './tools/similar/data.js',
-  './tools/similar/strings.es.js',
-  './tools/similar/strings.en.js',
-  './tools/similar/styles.css',
   './tools/fractions-measures/',
   './tools/fractions-measures/app.js',
   './tools/fractions-measures/data.js',
@@ -243,12 +237,6 @@ var FILES = [
   './tools/order-decimals/strings.es.js',
   './tools/order-decimals/strings.en.js',
   './tools/order-decimals/styles.css',
-  './tools/number-challenge/',
-  './tools/number-challenge/app.js',
-  './tools/number-challenge/data.js',
-  './tools/number-challenge/strings.es.js',
-  './tools/number-challenge/strings.en.js',
-  './tools/number-challenge/styles.css',
   './tools/riddles/',
   './tools/riddles/app.js',
   './tools/riddles/data.js',

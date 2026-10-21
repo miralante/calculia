@@ -14,26 +14,31 @@ var DATA = {
   levels: [
     { id: 'halves', name: 'level.halves.name', detail: 'level.halves.detail',
       pool: { kind: 'halves', sign: 1 },
-      types: ['smallest', 'largest'] },
+      types: ['compare'] },
     { id: 'tenths', name: 'level.tenths.name', detail: 'level.tenths.detail',
       pool: { kind: 'tenths', sign: 1 },
-      types: ['smallest', 'largest', 'order'] },
+      pools: [{ kind: 'halves', sign: 1 }, { kind: 'tenths', sign: 1 }],
+      types: ['compare'] },
     { id: 'roundHundredths', name: 'level.roundHundredths.name', detail: 'level.roundHundredths.detail',
       pool: { kind: 'roundHundredths', sign: 1 },
-      types: ['smallest', 'largest', 'order', 'between'] },
+      pools: [{ kind: 'tenths', sign: 1 }, { kind: 'roundHundredths', sign: 1 }],
+      types: ['compare'] },
     { id: 'all', name: 'level.all.name', detail: 'level.all.detail',
       pool: { kind: 'hundredths', sign: 1 },
-      types: ['smallest', 'largest', 'order', 'between', 'missing'] }
+      pools: [{ kind: 'roundHundredths', sign: 1 }, { kind: 'hundredths', sign: 1 }],
+      types: ['compare'] }
   ],
 
   concepts: [
     { title: 'concept.1.title', text: 'concept.1.text',
-      visual: { kind: 'line', from: 2, to: 3, step: 0.5, dec: 1, marks: [2.5] } },
+      visual: { kind: 'chips', dec: 2, values: [3.47] } },
     { title: 'concept.2.title', text: 'concept.2.text',
-      visual: { kind: 'chips', dec: 1, values: [3.9, 4.1] } },
+      visual: { kind: 'line', from: 2, to: 3, step: 0.5, dec: 1, marks: [2.5] } },
     { title: 'concept.3.title', text: 'concept.3.text',
-      visual: { kind: 'chips', dec: 1, values: [3.4, 3.7] } },
+      visual: { kind: 'chips', dec: 1, values: [3.9, 4.1] } },
     { title: 'concept.4.title', text: 'concept.4.text',
+      visual: { kind: 'chips', dec: 1, values: [3.4, 3.7] } },
+    { title: 'concept.5.title', text: 'concept.5.text',
       visual: { kind: 'chips', dec: 2, values: [2.46, 2.49] } }
   ],
 

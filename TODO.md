@@ -200,8 +200,8 @@ producto servido al usuario.
 | Ecuaciones de primer grado | ✅ | `algebra` (`balanza`) |
 | Sistemas de ecuaciones sencillos | ✅ | 💡 `algebra` (`dosBalanzas`, nivel `s1`): dos balanzas a la vez, y la segunda es la que dice cuánto pesa cada cosa |
 | Proporcionalidad compuesta | ✅ | 💡 `percent` (`proporcion`, nivel `o3`): más gente en el mismo trabajo, menos rato — la proporcionalidad inversa, que es la idea que la compuesta añade a la directa |
-| Teorema de Pitágoras | ✅ | `similar` (`pitagoras`, nivel `t1`: los tres cuadrados, contados) |
-| Semejanza de figuras planas | ✅ | `similar` (`semejanza`, niveles `p1`-`p2`) |
+| Teorema de Pitágoras | ✅ | (retirada) `similar` (`pitagoras`, nivel `t1`: los tres cuadrados, contados) |
+| Semejanza de figuras planas | ✅ | (retirada) `similar` (`semejanza`, niveles `p1`-`p2`) |
 | Cuerpos geométricos | ✅ | `shapes` (`cuerpos`) y `shapes` (`desarrollos`), repetido |
 | Volumen de cuerpos geométricos | ✅ | `geometry` (`volumen`) |
 | Funciones: tablas, gráficas, primeras nociones | ✅ | `algebra` (`graficas`, niveles `g1`-`g2`) |
@@ -221,9 +221,9 @@ producto servido al usuario.
 | Funciones: concepto y gráficas | 🔶 | `algebra` (`graficas`) lee una gráfica real; no se presenta la función como objeto |
 | La función lineal | ✅ | `algebra` (`crecer`: la que sube siempre lo mismo es la recta) |
 | Funciones cuadráticas | 🔶 | `algebra` (`crecer`) distingue "cada vez más" de "siempre igual"; no se trabaja la parábola |
-| Proporcionalidad geométrica: escalas, Thales | ✅ | `similar` (`semejanza`) y `scale` (`plano`); la multiplicación de un cuadrado del plano queda en `percent` (`escala`) |
+| Proporcionalidad geométrica: escalas, Thales | ✅ | (retirada) `similar` (`semejanza`) y `scale` (`plano`); la multiplicación de un cuadrado del plano queda en `percent` (`escala`) |
 | Figuras planas: ángulos y áreas | ✅ | `geometry` (`angulos` y `area`), repetido |
-| Semejanza de figuras | ✅ | `similar` (`semejanza`) |
+| Semejanza de figuras | ✅ | (retirada) `similar` (`semejanza`) |
 | Movimientos en el plano (traslación, giro, simetría) | ✅ | `geometry` (`simetria`, nivel `m3`) |
 | Cuerpos geométricos: áreas y volúmenes | ✅ | `geometry` (`volumen`): el volumen contando cubos por capas (`v1`) y la superficie contando los cuadraditos de las seis caras abiertas (`v2`) |
 | Trigonometría básica | ✅ | `trigonometry` (`lados`, `razon`, `medir`): los tres lados del triángulo rectángulo nombrados por su faena, la razón (cuánto sube por cada cuánto avanza) contada en la cuadrícula, y la escalera apoyada en la pared. `similar` (`rampas`) sigue cubriendo la pendiente entre dos rampas, que es el escalón anterior |
@@ -243,7 +243,7 @@ producto servido al usuario.
 | Funciones exponenciales y logarítmicas | 🔶 | `algebra` (`crecer`) incluye series que doblan y triplican; no se nombran ni se invierten |
 | Funciones: dominio, continuidad, tasa de variación | 🔶 | `algebra` (`crecer`) muestra la tasa de variación como el salto entre dos valores; dominio y continuidad no |
 | Funciones elementales | 🔶 | `algebra` (`graficas` y `crecer`); no se clasifican por familias |
-| Semejanza de figuras y resolución de triángulos | 🔶 | `similar` (`semejanza` y `pitagoras`); resolver triángulos no se pide |
+| Semejanza de figuras y resolución de triángulos | 🔶 | (retirada) `similar` (`semejanza` y `pitagoras`); resolver triángulos no se pide |
 | Trigonometría: razones trigonométricas | ✅ | `trigonometry` (`razon`): la razón es el cateto que sube sobre el que avanza, reducida y comparable entre triángulos de distinto tamaño (`y1` la cuenta, `y2` dice si dos la comparten, `y3` elige cuál la comparte). Los tres lados se nombran en `lados` y se llevan a una escalera real en `medir`. Nunca se calcula un seno ni un coseno |
 | Geometría analítica: la recta | ✅ | `geometry` (`coordenadas`): el punto dicho con dos números (`k1`-`k2`) y la recta como los puntos que se alinean, con uno que se sale (`k3`). Sin ecuación de la recta: no hay dibujo que la sostenga |
 | Estadística bidimensional | ✅ | 💡 `charts` (`dosCosas`, nivel `y1`): dos cosas medidas a la vez en una nube de puntos — cuando una sube, ¿la otra sube o baja? |
@@ -287,7 +287,7 @@ filas es la que tenía cada hebra al empezar, para poder medir el avance:
 | Hebra sin cubrir | Filas | Estado |
 |---|---|---|
 | Datos y gráficos (pictogramas, barras, frecuencias, media, probabilidad) | 22 | ✅ hecha: `tools/charts/`, con dispersión, nube de puntos y probabilidad tras sacar sin devolver; quedan los gráficos combinados, 💡 de ESO |
-| Geometría: ángulos, perímetro, área, volumen, simetría | 26 | ✅ hecha: `tools/geometry/` más `tools/similar/` (semejanza, Pitágoras y pendientes); queda medir en grados con transportador |
+| Geometría: ángulos, perímetro, área, volumen, simetría | 26 | ✅ hecha: `tools/geometry/` más `tools/similar/` (semejanza, Pitágoras y pendientes; actividad retirada después); queda medir en grados con transportador |
 | Álgebra: letras, ecuaciones, funciones | 18 | ✅ hecha: `tools/algebra/` (balanza, letras, gráficas, dos balanzas, el cuadrado, cómo crece y las piezas); queda nombrar las familias de funciones, 💡 de ESO |
 | Múltiplos, divisores, primos, potencias y raíces | 11 | ✅ hecha: `tools/divisibility/`, con la notación corta y la raíz del cubo; quedan las raíces de índice cualquiera, que ya no se pueden contar |
 | Multiplicar y dividir a lo grande, jerarquía de operaciones | 7 | ✅ hecha: `tools/operations/` |
@@ -351,7 +351,7 @@ a través de un objeto que se puede tener en la mano).
 |---|---|---|---|
 | ~~**Porcentajes y Proporcionalidad**~~ | P5-6, ESO1-2 | 🧱 básico / 💡 resto | ✅ hecha — `tools/percent/`: el porcentaje sobre cien cuadraditos, la receta que crece, la proporcionalidad inversa y el límite de dinero. |
 | ~~**Potencias y Raíces**~~ | P5-ESO3 | 🧱 cuadrados simples / 💡 resto | ✅ hecha — `divisibility` (`cuadrados` y `grandes`): el cuadrado dibujado cuadrado, su raíz, la raíz del cubo por capas y el número grande escrito corto. |
-| ~~**Trigonometría**~~ | ESO2-4 | 💡 Concepto puro | ✅ hecha — `tools/trigonometry/`: los tres lados del triángulo rectángulo (`lados`), la razón contada en la cuadrícula y comparada entre triángulos de distinto tamaño (`razon`), y la escalera apoyada en la pared (`medir`). La pendiente entre rampas sigue en `tools/similar/`. Nunca calcular seno/coseno. |
+| ~~**Trigonometría**~~ | ESO2-4 | 💡 Concepto puro | ✅ hecha — `tools/trigonometry/`: los tres lados del triángulo rectángulo (`lados`), la razón contada en la cuadrícula y comparada entre triángulos de distinto tamaño (`razon`), y la escalera apoyada en la pared (`medir`). Las rampas (cuál sube más rápido) están ahora en la explicación y la prueba de `tools/trigonometry/`; `tools/similar/` se retiró. Nunca calcular seno/coseno. |
 | ~~**Álgebra y Ecuaciones**~~ | ESO1-4 | 💡 Concepto puro | ✅ hecha — `tools/algebra/`. Una balanza que debe quedar equilibrada: quitar/poner el mismo peso en los dos platos. Nunca manipulación simbólica de "x". |
 | ~~**Funciones**~~ | ESO1-4 | 💡 Concepto puro | ✅ hecha — `algebra` (`graficas`) lee una gráfica real hora a hora, y `algebra` (`crecer`) distingue crecer siempre igual de crecer cada vez más. Sin notación ni fórmulas. |
 | ~~**Geometría Analítica y Programación Lineal**~~ | ESO3-4 | 💡 Concepto puro | ✅ hecha — `geometry` (`coordenadas`): un punto se dice con dos números. Y `percent` (`limite`): con este dinero y este precio, cuántas caben y cuánto sobra, que es la restricción de la que va el tema. |
@@ -364,8 +364,8 @@ un comentario en cada `data.js` para que no se pierda al añadir actividades.
 
 | Dónde | Orden |
 |---|---|
-| Portada (`index.html`) | quantities → ordinals → roman-numerals → shapes → trigonometry → scale → math-tables (las siete públicas; quantities, ordinals, trigonometry, scale y math-tables siguen además en `dev/`, el resto vive solo en `dev/`) |
-| Catálogo oculto (`dev/index.html`) | numbers → geometry → divisibility → operations → quantities → mental-math → percent → money → math-tables → measures → scale → similar → fractions-measures → problems → temperature, y luego el bloque de razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
+| Portada (`index.html`) | los-numeros → numbers → order-numbers → quantities → ordinals → fractions-measures → parity → roman-numerals → shapes → trigonometry → scale → math-tables (las doce públicas; las once que también están en `dev/` siguen además en `dev/`, roman-numerals solo vive en la portada) |
+| Catálogo oculto (`dev/index.html`) | Las once que también están en la portada van en su mismo orden (los-numeros → numbers → order-numbers → quantities → ordinals → fractions-measures → parity → shapes → trigonometry → scale → math-tables), ocupando los huecos que ya tenían. El resto: order-positives → order-negatives → order-decimals → geometry → divisibility → operations → mental-math → percent → money → head-math → measures → problems → temperature, y luego el bloque de razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
 | Progreso (`config/index.html`) | mismo criterio y mismo bloque de razonamiento, pero con `shapes` delante de `numbers` |
 | `numbers` | ordinales (1º) → comparar (1º) → recta (2º) → unidades (2º-4º) → placevalue (2º-6º) → positivos-y-negativos (5º-6º) |
 | `measures` | longitud → peso → capacidad |

@@ -1,6 +1,6 @@
 /* ============================================================
    Calculia — Los Números textos (ES)
-   Galería de 7 slides (4 tipos + 3 comparaciones). Texto
+   Galería de 10 slides (5 tipos + 2 comparaciones). Texto
    mínimo: solo el título y, en los slides de tipo, una sola
    línea de "vida real". El visual es la lección.
    ============================================================ */
@@ -22,8 +22,14 @@
     slideNaturalesReal: '🧮 3 manzanas · 5 dedos · 10 años',
     slideEnterosTitle: 'Enteros',
     slideEnterosReal: '🌡️ −5 °C · sótano −1 · 3 plantas',
+    slideFraccionesTitle: 'Fracciones',
+    slideFraccionesReal: '🍕 1/2 pizza · 1/4 de hora',
     slideDecimalesTitle: 'Decimales',
     slideDecimalesReal: '💰 1,99 € · 1,5 m · 3,14',
+    /* Etiquetas dentro del SVG de la pizza de fracciones. */
+    fraccionOneHalf: '1/2',
+    fraccionOneFourth: '1/4',
+
     /* Eyebrow que aparece sobre la lista de ejemplos de vida real. */
     realEyebrow: 'En la vida real:',
 

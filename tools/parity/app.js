@@ -51,6 +51,7 @@
   var screens = {
     intro: $('#screenParityIntro'),
     real: $('#screenParityReal'),
+    reminder: $('#screenParityReminder'),
     game: $('#screenParity'),
     finish: $('#screenParityFinish')
   };
@@ -131,11 +132,11 @@
     display.innerHTML = '';
     display.classList.add('parity-carousel-balls');
     if (seqIdx === 0) {
-      /* No balls: one outlined "0" stands in for the empty set, so the
-         even reference is visible on the slide. */
+      /* No balls: the slide shows the words "0 = par" in the space
+         where the balls would be, so it is never empty. */
       var zero = document.createElement('span');
-      zero.className = 'parity-ball parity-zero';
-      zero.textContent = '0';
+      zero.className = 'parity-zero-text';
+      zero.textContent = t('zeroLabel');
       display.appendChild(zero);
     } else {
       paintDots(display, seqIdx);
@@ -234,18 +235,25 @@
   function trikeDrawing() {
     var markup =
       '<svg viewBox="0 0 240 180" class="parity-real-svg" focusable="false">' +
-      '<ellipse cx="120" cy="170" rx="96" ry="6" fill="#000" opacity="0.12"/>' +
-      '<path d="M120 92 L58 132 M120 92 L182 132 M120 92 L120 140" stroke="#C62828" stroke-width="7" stroke-linecap="round" fill="none"/>' +
-      '<line x1="58" y1="132" x2="182" y2="132" stroke="#455A64" stroke-width="6" stroke-linecap="round"/>' +
-      '<line x1="120" y1="92" x2="120" y2="40" stroke="#455A64" stroke-width="6" stroke-linecap="round"/>' +
-      '<line x1="98" y1="40" x2="142" y2="40" stroke="#455A64" stroke-width="6" stroke-linecap="round"/>' +
-      '<rect x="104" y="78" width="32" height="11" rx="5" fill="#4E342E"/>' +
-      '<path d="M109 78 L109 50 Q120 44 131 50 L131 78 Z" fill="#6D4C41"/>' +
-      '<rect x="91" y="34" width="10" height="12" rx="5" fill="#212121"/>' +
-      '<rect x="139" y="34" width="10" height="12" rx="5" fill="#212121"/>' +
-      wheelMarkup(58, 132, 26, DATA.pairColor) +
-      wheelMarkup(182, 132, 26, DATA.pairColor) +
-      wheelMarkup(120, 140, 24, DATA.leftoverColor) +
+      '<ellipse cx="120" cy="170" rx="100" ry="6" fill="#000" opacity="0.12"/>' +
+      /* Frame (red): seat stay, top tube, fork and the pedal tube. */
+      '<path d="M60 132 L116 80 L166 104 L176 136 M116 80 L104 120" stroke="#C62828" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' +
+      /* Seat post, saddle and backrest. */
+      '<line x1="116" y1="80" x2="116" y2="64" stroke="#455A64" stroke-width="5" stroke-linecap="round"/>' +
+      '<rect x="104" y="60" width="30" height="9" rx="4.5" fill="#4E342E"/>' +
+      '<rect x="100" y="42" width="8" height="22" rx="4" fill="#6D4C41"/>' +
+      /* Handlebar: stem from the fork and a bar with a grip. */
+      '<line x1="166" y1="104" x2="170" y2="60" stroke="#455A64" stroke-width="5" stroke-linecap="round"/>' +
+      '<line x1="162" y1="60" x2="190" y2="60" stroke="#455A64" stroke-width="5" stroke-linecap="round"/>' +
+      '<rect x="186" y="55" width="10" height="10" rx="4" fill="#212121"/>' +
+      /* Pedal crank at the seat tube. */
+      '<circle cx="104" cy="122" r="5" fill="#607D8B"/>' +
+      '<line x1="96" y1="122" x2="112" y2="122" stroke="#455A64" stroke-width="4" stroke-linecap="round"/>' +
+      /* Back wheels: the far one peeks out behind the near one, both in
+         the pair colour. Front wheel alone, in the leftover colour. */
+      wheelMarkup(82, 122, 28, DATA.pairColor) +
+      wheelMarkup(60, 132, 30, DATA.pairColor) +
+      wheelMarkup(176, 136, 26, DATA.leftoverColor) +
       '</svg>';
     return svgFrom(markup);
   }
@@ -366,6 +374,11 @@
     var pct = items.length === 0 ? 0 : (idx / items.length) * 100;
     $('#parityProgressFill').style.width = pct + '%';
     $('#parityProgressText').textContent = (idx + 1) + ' / ' + items.length;
+    /* The "open here" help appears only on questions that show a number
+       without balls; a balls question already shows its answer. */
+    var help = $('#parityRuleBox');
+    help.open = false;
+    if (item.block.kind === 'dots') hide(help); else show(help);
     $('#parityBlock').textContent = t('blocks.' + item.block.id + '.label');
     $('#parityPrompt').textContent = promptFor(item);
     /* The rule box follows the part the current question belongs to. */
@@ -433,7 +446,8 @@
 
   /* ----------- Wiring ----------- */
   $('#parityIntroNext').addEventListener('click', function () { goTo('real'); });
-  $('#parityRealNext').addEventListener('click', startRound);
+  $('#parityRealNext').addEventListener('click', function () { goTo('reminder'); });
+  $('#parityReminderNext').addEventListener('click', startRound);
   $('#parityNext').addEventListener('click', next);
 
   /* ----------- Boot ----------- */

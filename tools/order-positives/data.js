@@ -17,16 +17,19 @@ var DATA = {
   levels: [
     { id: 'simple', name: 'level.simple.name', detail: 'level.simple.detail',
       pool: { kind: 'single', sign: 1 },
-      types: ['smallest', 'largest'] },
+      types: ['compare'] },
     { id: 'round', name: 'level.round.name', detail: 'level.round.detail',
       pool: { kind: 'round', sign: 1 },
-      types: ['smallest', 'largest', 'order'] },
+      pools: [{ kind: 'single', sign: 1 }, { kind: 'round', sign: 1 }],
+      types: ['compare'] },
     { id: 'lessRound', name: 'level.lessRound.name', detail: 'level.lessRound.detail',
       pool: { kind: 'lessRound', sign: 1 },
-      types: ['smallest', 'largest', 'order', 'between'] },
+      pools: [{ kind: 'round', sign: 1 }, { kind: 'lessRound', sign: 1 }],
+      types: ['compare'] },
     { id: 'all', name: 'level.all.name', detail: 'level.all.detail',
       pool: { kind: 'any', sign: 1 },
-      types: ['smallest', 'largest', 'order', 'between', 'missing'] }
+      pools: [{ kind: 'lessRound', sign: 1 }, { kind: 'any', sign: 1 }],
+      types: ['compare'] }
   ],
 
   concepts: [

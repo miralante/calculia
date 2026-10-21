@@ -128,6 +128,8 @@
         instruction: 'Antes de jugar, mira cómo se escribe un decimal.',
         title: 'Qué es un número decimal',
         text: 'Un decimal es otra forma de escribir una parte. Lleva una coma: lo que va antes son unidades enteras y lo que va después son partes.',
+        whole: 'La parte entera es lo que va antes de la coma: son unidades enteras. En 3,47 es el 3.',
+        decimal: 'La parte decimal es lo que va después de la coma: son partes de una unidad. En 3,47 son 4 décimas y 7 centésimas.',
         tenths: 'Una tarta tiene 10 partes iguales. Cada parte es 0,1. Tres partes son 0,3.',
         point: 'La coma separa las unidades de las partes. El 0 son las unidades y el 3 son décimas.',
         half: '0,5 es la mitad de la tarta. 0,25 es un cuarto.',
@@ -149,6 +151,8 @@
       },
       decimales: {
         title: 'Los decimales están en la vida real.',
+        height: 'Una persona mide 1,75 m: 1 metro entero y 0,75 m de la parte decimal.',
+        coins: 'Un bote tiene 3,47 €: 3 euros enteros y 47 céntimos, que son 0,47 €.',
         price: 'Un pan cuesta 1,50 €. Es un euro y cincuenta céntimos.',
         milk: 'Medio litro de leche son 0,5 litros.',
         ribbon: 'Una cinta de 2,5 metros mide dos metros y medio.',

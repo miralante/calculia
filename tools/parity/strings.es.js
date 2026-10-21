@@ -23,7 +23,15 @@
     title: '🟦 Pares e impares',
     instruction: 'Mira los puntos: ¿sobra uno o van todos en parejas?',
     btnMenu: 'Volver al inicio',
-    ruleTitle: 'Recuerda la regla',
+    /* Recordatorio antes del test, y ayuda «abre aquí» en las preguntas
+       de números sin bolas. */
+    ruleOpen: 'Abre aquí para ver la regla',
+    ruleLastDigit: 'Si termina en 0, 2, 4, 6 u 8: par. Si termina en 1, 3, 5, 7 o 9: impar.',
+    reminderTitle: 'Recuerda la regla',
+    reminderPairs: 'Si sus puntos van de dos en dos y no sobra ninguno, es par. Si sobra uno, es impar.',
+    reminderLastDigit: 'Mira la última cifra:',
+    reminderExample: 'Ejemplo: 18 termina en 8, así que es par. 27 termina en 7, así que es impar.',
+    reminderNext: 'Empezar a practicar →',
 
     /* Tecla del menú raíz: la palabra "Pares e impares" que sale
        en la tarjeta de la portada y de dev/. */
@@ -35,6 +43,7 @@
     introText: 'Un número es par si sus puntos van de dos en dos y no sobra ninguno. Si sobra uno, es impar.',
     /* Pies de las diapositivas del 0 al 10. {p} = par o impar. */
     seqZero: 'Ninguna bola: es {p}.',
+    zeroLabel: '0 = par',
     seqEven: '{n} bolas, todas en parejas: es {p}.',
     seqOne: 'Una bola, y se queda sola: es {p}.',
     seqOdd: '{n} bolas: una se queda sola y las demás van en parejas: es {p}.',
@@ -43,7 +52,7 @@
     /* ---------- Pantalla 2: la vida real ---------- */
     realTitle: 'En la vida real',
     realText: 'Fíjate: lo par va en parejas y lo impar deja uno suelto.',
-    realNext: 'Empezar a practicar →',
+    realNext: 'Ver la regla →',
     real: {
       0: {
         title: 'Zapatos',
