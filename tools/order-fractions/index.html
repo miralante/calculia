@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ordenar fracciones | Calculia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
+  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v62e5b2c5">
+  <link rel="stylesheet" href="../../assets/css/number-sort.css?v=calculia-v5953f612">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../order-numbers/" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="title">🍰 Ordenar fracciones</h1>
+      <span class="stars" id="stars">⭐ 0</span>
+    </header>
+
+    <!-- Stage 1, explanation: the rule of the activity, one slide at a time. -->
+    <section id="screenIntro" class="stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="instructionIntro">Mira cómo se comparan los decimales.</p>
+      </div>
+      <article class="card stack gallery-card">
+        <div class="concept-visual" id="conceptVisual"></div>
+        <h2 class="concept-title" id="conceptTitle"></h2>
+        <p class="concept-text" id="conceptText"></p>
+        <p class="concept-count" id="conceptCount"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="conceptPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>
+          <button type="button" class="btn btn-secondary" id="conceptNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>
+        </div>
+      </article>
+      <button type="button" class="btn btn-secondary" id="introContinue" data-i18n="ui.introContinue">Ver ejemplos reales →</button>
+    </section>
+
+    <!-- Stage 2, real life: where these numbers are used. -->
+    <section id="screenReal" class="hidden stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="realTitle">Los decimales están en la vida real.</p>
+      </div>
+      <article class="card centered stack real-card">
+        <div class="real-object" id="realObject" aria-hidden="true"></div>
+        <p class="gallery-caption" id="realCaption"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="realPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>
+          <button type="button" class="btn btn-secondary" id="realNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>
+        </div>
+      </article>
+      <div class="row intro-buttons">
+        <button type="button" class="btn" id="realContinue" data-i18n="ui.realContinue">Empezar a practicar →</button>
+      </div>
+    </section>
+
+    <!-- The test: one question at a time, checked with "Comprobar" and
+         continued with "Siguiente". The level rises by itself as rounds finish. -->
+    <section id="screenGame" class="hidden stack">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+        <span class="progress-text" id="progressText">0 / 0</span>
+        <span class="difficulty" id="difficulty"></span>
+      </div>
+      <div class="stack test-sheet" id="testSheet" aria-live="polite"></div>
+      <p class="transfer hidden" id="transfer" data-i18n="transfer"></p>
+      <div class="row sheet-actions">
+        <button type="button" class="btn" id="btnCheck" data-i18n="ui.check">Comprobar</button>
+        <button type="button" class="btn hidden" id="btnNext" data-i18n="ui.next">Siguiente →</button>
+        <button type="button" class="btn hidden" id="btnNewRound" data-i18n="ui.newRound">Otra ronda →</button>
+      </div>
+    </section>
+
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
+  </div>
+
+  <script src="../../assets/js/utils.js?v=calculia-v37f362d0"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-v3d393c12"></script>
+  <script src="../../assets/js/storage.js?v=calculia-vd97e2550"></script>
+  <script src="../../assets/js/feedback.js?v=calculia-v73bb9e8a"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/number-sort.js?v=calculia-veea6593c"></script>
+  <script src="app.js"></script>
+  <script src="../../assets/js/sw-register.js?v=calculia-v4a242865"></script>
+</body>
+</html>

@@ -364,8 +364,8 @@ un comentario en cada `data.js` para que no se pierda al añadir actividades.
 
 | Dónde | Orden |
 |---|---|
-| Portada (`index.html`) | los-numeros → numbers → order-numbers → quantities → ordinals → fractions-measures → parity → roman-numerals → shapes → trigonometry → scale → math-tables (las doce públicas; las once que también están en `dev/` siguen además en `dev/`, roman-numerals solo vive en la portada) |
-| Catálogo oculto (`dev/index.html`) | Las once que también están en la portada van en su mismo orden (los-numeros → numbers → order-numbers → quantities → ordinals → fractions-measures → parity → shapes → trigonometry → scale → math-tables), ocupando los huecos que ya tenían. El resto: order-positives → order-negatives → order-decimals → geometry → divisibility → operations → mental-math → percent → money → head-math → measures → problems → temperature, y luego el bloque de razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
+| Portada (`index.html`) | Matemáticas: los-numeros → numbers → order-numbers → quantities → ordinals → fractions-measures → percent → parity → roman-numerals → shapes → trigonometry → scale → temperature. Aritmética: las cuatro tablas (`math-tables?op=add|multiply|subtract|divide`) |
+| Catálogo oculto (`dev/index.html`) | Matemáticas: las que también están en la portada en su mismo orden (los-numeros → numbers → order-numbers → quantities → ordinals → fractions-measures → percent → parity → shapes → trigonometry → scale → temperature), y luego order-positives → order-negatives → order-fractions → order-decimals → geometry → divisibility → operations → money → measures → problems. Aritmética: las cuatro tablas → mental-math → head-math. Razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
 | Progreso (`config/index.html`) | mismo criterio y mismo bloque de razonamiento, pero con `shapes` delante de `numbers` |
 | `numbers` | ordinales (1º) → comparar (1º) → recta (2º) → unidades (2º-4º) → placevalue (2º-6º) → positivos-y-negativos (5º-6º) |
 | `measures` | longitud → peso → capacidad |

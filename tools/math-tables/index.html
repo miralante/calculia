@@ -19,26 +19,30 @@
     </header>
 
     <main>
-      <!-- Choose operation -->
-      <section id="screenMenu" class="stack" aria-labelledby="menuTitle">
-        <h2 id="menuTitle" data-i18n="chooseOperation">Elige qué quieres practicar.</h2>
-        <div class="operation-grid" id="operationGrid"></div>
-      </section>
-
-      <!-- Choose table -->
+      <!-- Choose table. The operation comes from the landing card (?op=add,
+           multiply, subtract or divide), so there is no operation menu here. -->
       <section id="screenTables" class="stack hidden" aria-labelledby="tablesTitle">
         <h2 id="tablesTitle" data-i18n="chooseTable">Elige una tabla.</h2>
         <div class="table-grid" id="tableGrid"></div>
-        <button type="button" class="btn btn-secondary" id="tablesBack" data-i18n="core.backToMenu">Volver al menú</button>
+        <button type="button" class="btn btn-secondary" id="tablesBack" data-i18n="btnMenu">Volver al inicio</button>
       </section>
 
       <!-- Learn the table -->
       <section id="screenLearn" class="stack hidden" aria-labelledby="learnTitle">
         <h2 id="learnTitle"></h2>
-        <p id="learnInstruction" data-i18n="learnInstruction">Toca una row para verla con puntos.</p>
+        <p id="learnInstruction" data-i18n="learnInstruction">Toca una operación para ver cómo se cuenta con puntos.</p>
         <div class="learn-layout">
           <div class="fact-list" id="factList"></div>
-          <div class="card visual-card" id="learnVisual" role="img"></div>
+          <div class="stack learn-demo hidden" id="learnDemo">
+            <p class="demo-equation" id="demoEquation" aria-live="polite"></p>
+            <div class="card visual-card" id="learnVisual" role="img"></div>
+            <div class="carousel-controls">
+              <button type="button" class="btn btn-secondary" id="demoPrev" data-i18n-aria="demoPrev" aria-label="Anterior">←</button>
+              <span class="demo-counter" id="demoCounter"></span>
+              <button type="button" class="btn btn-secondary" id="demoNext" data-i18n-aria="demoNext" aria-label="Siguiente">→</button>
+            </div>
+            <button type="button" class="btn btn-secondary" id="demoBack" data-i18n="demoBack">← Volver a las operaciones</button>
+          </div>
         </div>
         <button type="button" class="btn" id="startPractice" data-i18n="practiceTable">Practicar esta tabla</button>
         <button type="button" class="btn btn-secondary" id="learnBack" data-i18n="backToTables">← Elegir otra tabla</button>

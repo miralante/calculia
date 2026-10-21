@@ -77,33 +77,38 @@
   /* ----------- Explanation stage: dots, slides and real examples ----------- */
 
   /* One ball: a circle with its number inside. */
-  function ball(number, leftover) {
+  /* One ball: a circle with its number inside, in the colour of its pair
+     (or the leftover colour when it stands alone). */
+  function ball(number, color, leftover) {
     var el = document.createElement('span');
     el.className = leftover ? 'parity-ball parity-leftover' : 'parity-ball parity-pair';
-    el.style.backgroundColor = leftover ? DATA.leftoverColor : DATA.pairColor;
+    el.style.backgroundColor = color;
     el.textContent = String(number);
     return el;
   }
 
   /* Paints n balls numbered 1..n. Each pair is a column: the ball
      with the lower number sits on top, the one above it below, so
-     "1 con 2" reads as one pair. The leftover ball (odd n) stands
-     alone in the second colour. The pairing shape IS the answer.
+     "1 con 2" reads as one pair. Both balls of a pair share its colour,
+     and each pair has a colour of its own, so the pairs can be told
+     apart. The leftover ball (odd n) stands alone in the leftover colour.
+     The pairing shape IS the answer.
      Sets an aria-label on the container that says it aloud. */
   function paintDots(cont, n) {
     cont.innerHTML = '';
     var pairs = Math.floor(n / 2);
     for (var i = 0; i < pairs; i += 1) {
+      var color = DATA.pairColors[i % DATA.pairColors.length];
       var pair = document.createElement('div');
       pair.className = 'parity-ball-pair';
-      pair.appendChild(ball(2 * i + 1, false));
-      pair.appendChild(ball(2 * i + 2, false));
+      pair.appendChild(ball(2 * i + 1, color, false));
+      pair.appendChild(ball(2 * i + 2, color, false));
       cont.appendChild(pair);
     }
     if (n % 2) {
       var single = document.createElement('div');
       single.className = 'parity-ball-pair';
-      single.appendChild(ball(n, true));
+      single.appendChild(ball(n, DATA.leftoverColor, true));
       cont.appendChild(single);
     }
     var label = pairs + ' ' + t('pairsWord');

@@ -36,6 +36,10 @@
      make one; `decimals` how many digits are written. A level picks one
      kind, so the same level always looks the same on screen. The order of
      the kinds is the graduation: from the simplest to any number. */
+  /* 120 is the least common multiple of the fraction denominators (2 to 12
+     that divide it), so a fraction in 120ths is always a whole number. */
+  var FRACTION_UNIT = 120;
+
   var KINDS = {
     /* Whole numbers */
     single: { scale: 1, decimals: 0, draw: function () { return rint(1, 9); } },
@@ -60,8 +64,30 @@
       var k;
       do { k = rint(1, 999); } while (k % 10 === 0);            /* any two digits */
       return k;
-    } }
+    } },
+    /* Proper fractions, stored in 120ths of a whole: 1/2 is 60, 1/4 is 30,
+       1/3 is 40. The denominators used divide 120, so every comparison is
+       exact. The fraction is written on screen in its simplest form. */
+    fracHalvesQuarters: { scale: FRACTION_UNIT, decimals: 0, format: fractionText,
+      draw: function () { return drawFraction([2, 4]); } },
+    fracThirdsSixths: { scale: FRACTION_UNIT, decimals: 0, format: fractionText,
+      draw: function () { return drawFraction([3, 6]); } },
+    fracEighthsTenths: { scale: FRACTION_UNIT, decimals: 0, format: fractionText,
+      draw: function () { return drawFraction([5, 8, 10]); } },
+    fracAny: { scale: FRACTION_UNIT, decimals: 0, format: fractionText,
+      draw: function () { return drawFraction([2, 3, 4, 5, 6, 8, 10, 12]); } }
   };
+
+  /* ---- Fractions ------------------------------------------------------ */
+  function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+  function drawFraction(denominators) {
+    var d = denominators[rint(0, denominators.length - 1)];
+    return rint(1, d - 1) * (FRACTION_UNIT / d);
+  }
+  function fractionText(units) {
+    var g = gcd(units, FRACTION_UNIT);
+    return (units / g) + '/' + (FRACTION_UNIT / g);
+  }
 
   /* ---- Formatting -----------------------------------------------------
      Project rule: below 10.000 there is no thousands separator; from
@@ -90,6 +116,7 @@
   /* Formats a stored value (units) of the given kind. */
   function show(units, kind) {
     var k = KINDS[kind];
+    if (k.format) return k.format(units);
     return fmtPlain(units / k.scale, k.decimals);
   }
 
@@ -383,7 +410,8 @@
 
   function chipsHtml(spec) {
     return '<div class="ns-row">' + spec.values.map(function (v, k) {
-      var chip = '<span class="ns-chip">' + fmtPlain(v, spec.dec) + '</span>';
+      var text = spec.labels ? spec.labels[k] : fmtPlain(v, spec.dec);
+      var chip = '<span class="ns-chip">' + text + '</span>';
       return k === 0 ? chip : '<span class="ns-sep" aria-hidden="true">&lt;</span>' + chip;
     }).join('') + '</div>';
   }

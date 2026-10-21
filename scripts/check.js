@@ -367,7 +367,7 @@ var devHtml = fs.readFileSync(path.join(ROOT, 'dev', 'index.html'), 'utf8');
    service worker cannot hand that redirected response to a navigation
    (net::ERR_FAILED). The alternation keeps an index.html link from
    silently passing this gate and re-breaking the site. */
-var reHref = /href="(?:\.\.\/)?tools\/([^/]+)\/(?:index\.html)?"/g;
+var reHref = /href="(?:\.\.\/)?tools\/([^/]+)\/(?:index\.html|\?op=[a-z]+)?"/g;
 function parseSlugsFromPage(html) {
   var result = [];
   var match;
@@ -385,11 +385,11 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['los-numeros', 'numbers', 'order-numbers', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'roman-numerals', 'shapes', 'trigonometry', 'scale', 'math-tables'];
+var PUBLIC_SLUGS = ['los-numeros', 'numbers', 'order-numbers', 'quantities', 'ordinals', 'fractions-measures', 'percent', 'parity', 'roman-numerals', 'shapes', 'trigonometry', 'scale', 'temperature', 'math-tables'];
 /* Public AND in dev/. Every name here must also be in PUBLIC_SLUGS,
    otherwise dev/ would carry an activity the landing hides, which is
    the inverse mistake and just as wrong. */
-var BOTH_SLUGS = ['los-numeros', 'numbers', 'order-numbers', 'quantities', 'ordinals', 'fractions-measures', 'parity', 'shapes', 'trigonometry', 'scale', 'math-tables'];
+var BOTH_SLUGS = ['los-numeros', 'numbers', 'order-numbers', 'quantities', 'ordinals', 'fractions-measures', 'percent', 'parity', 'shapes', 'trigonometry', 'scale', 'temperature', 'math-tables'];
 var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
 var expectedDevSlugs = new Set(slugs.filter(function (slug) {
   return PUBLIC_SLUGS.indexOf(slug) === -1 || BOTH_SLUGS.indexOf(slug) !== -1;

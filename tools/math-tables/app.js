@@ -82,14 +82,45 @@
 
   /* ---- Dots visuals ---- */
 
-  function dotRow(count, color, removed) {
+  /* One dot. `removed` crosses it out (it is not counted any more). When
+     `label` is given the dot carries that number: inside the dot, or under
+     it when `below` is set (subtraction). The quiz never passes a label. */
+  function dotCell(color, opts) {
+    var cell = document.createElement('span');
+    cell.className = 'dot-cell' + (opts.label !== undefined ? ' dot-cell-num' : '') +
+      (opts.below ? ' dot-cell-below' : '');
+    var dot = document.createElement('span');
+    dot.className = opts.removed ? 'dot dot-removed' : 'dot';
+    dot.style.backgroundColor = color;
+    cell.appendChild(dot);
+    if (opts.label !== undefined) {
+      var label = document.createElement('span');
+      label.className = 'dot-label';
+      label.textContent = String(opts.label);
+      cell.appendChild(label);
+    }
+    if (opts.removed) {
+      var cross = document.createElement('span');
+      cross.className = 'dot-cross';
+      cross.setAttribute('aria-hidden', 'true');
+      cross.textContent = '✕';
+      cell.appendChild(cross);
+    }
+    return cell;
+  }
+
+  /* A row of `count` dots. opts.from is the number the first dot carries
+     (the rest count on from it); leave it out and the dots carry no number. */
+  function dotRow(count, color, opts) {
+    var o = opts || {};
     var row = document.createElement('div');
     row.className = 'dot-row';
     for (var i = 0; i < count; i += 1) {
-      var dot = document.createElement('span');
-      dot.className = removed ? 'dot dot-removed' : 'dot';
-      dot.style.backgroundColor = color;
-      row.appendChild(dot);
+      row.appendChild(dotCell(color, {
+        removed: o.removed,
+        below: o.below,
+        label: o.from === undefined ? undefined : o.from + i
+      }));
     }
     return row;
   }
@@ -103,12 +134,13 @@
 
   /* Addition: first addend in color 0, second in color 1. With the total
      revealed, the combined row keeps both colors so the sum stays visible. */
-  function renderAddVisual(container, item, showTotal) {
+  function renderAddVisual(container, item, showTotal, numbered) {
     var operands = document.createElement('div');
     operands.className = 'visual-line';
-    operands.appendChild(dotRow(item.a, DATA.dotColors[0]));
+    /* Counted on across both addends: the second one goes on from the first. */
+    operands.appendChild(dotRow(item.a, DATA.dotColors[0], { from: numbered ? 1 : undefined }));
     operands.appendChild(sign('+'));
-    operands.appendChild(dotRow(item.b, DATA.dotColors[1]));
+    operands.appendChild(dotRow(item.b, DATA.dotColors[1], { from: numbered ? item.a + 1 : undefined }));
     container.appendChild(operands);
     if (!showTotal) return;
     var total = document.createElement('div');
@@ -124,11 +156,12 @@
 
   /* Multiplication: b groups of a dots, one color per group, so the
      repetition can be seen and counted group by group. */
-  function renderMultiplyVisual(container, item) {
+  function renderMultiplyVisual(container, item, numbered) {
     var groups = document.createElement('div');
     groups.className = 'group-stack';
     for (var i = 0; i < item.b; i += 1) {
-      groups.appendChild(dotRow(item.a, DATA.dotColors[i % DATA.dotColors.length]));
+      groups.appendChild(dotRow(item.a, DATA.dotColors[i % DATA.dotColors.length],
+        { from: numbered ? i * item.a + 1 : undefined }));
     }
     container.appendChild(groups);
   }
@@ -137,13 +170,16 @@
      are crossed out in a second color, so the remaining dots (color 0)
      can be counted by the user. The crossed-out dots use a 'dot-removed'
      span so the answer is "the dots that survived". */
-  function renderSubtractVisual(container, item) {
+  function renderSubtractVisual(container, item, numbered) {
     var line = document.createElement('div');
     line.className = 'visual-line';
     var row = document.createElement('div');
     row.className = 'dot-row';
-    row.appendChild(dotRow(item.a - item.b, DATA.dotColors[0]));
-    row.appendChild(dotRow(item.b, DATA.dotColors[1], true));
+    /* The numbers of this table sit under each dot, so the crossed-out
+       ones are counted on from the ones that stay. */
+    var below = !!numbered;
+    row.appendChild(dotRow(item.a - item.b, DATA.dotColors[0], { from: numbered ? 1 : undefined, below: below }));
+    row.appendChild(dotRow(item.b, DATA.dotColors[1], { removed: true, from: numbered ? item.a - item.b + 1 : undefined, below: below }));
     line.appendChild(row);
     container.appendChild(line);
   }
@@ -153,27 +189,31 @@
      any. The leftover row uses the next slot in dotColors, distinct
      from a "full row", so the answer is literally "the number of full
      rows of dots". */
-  function renderDivideVisual(container, item) {
+  function renderDivideVisual(container, item, numbered) {
     var groups = document.createElement('div');
     groups.className = 'group-stack';
     var quotient = Math.floor(item.a / item.b);
     var remainder = item.a % item.b;
     for (var i = 0; i < quotient; i += 1) {
-      groups.appendChild(dotRow(item.b, DATA.dotColors[i % DATA.dotColors.length]));
+      groups.appendChild(dotRow(item.b, DATA.dotColors[i % DATA.dotColors.length],
+        { from: numbered ? i * item.b + 1 : undefined }));
     }
     if (remainder > 0) {
-      groups.appendChild(dotRow(remainder, DATA.dotColors[quotient % DATA.dotColors.length], true));
+      groups.appendChild(dotRow(remainder, DATA.dotColors[quotient % DATA.dotColors.length],
+        { removed: true, from: numbered ? quotient * item.b + 1 : undefined }));
     }
     container.appendChild(groups);
   }
 
-  function renderVisual(container, item, showTotal) {
+  /* `numbered` is set only by the demonstration, never by the quiz: the
+     quiz asks the user to count, so the dots carry no numbers there. */
+  function renderVisual(container, item, showTotal, numbered) {
     container.innerHTML = '';
     container.setAttribute('aria-label', fill('visual' + keySuffix(), itemValues(item)));
-    if (mode === 'multiply') renderMultiplyVisual(container, item);
-    else if (mode === 'subtract') renderSubtractVisual(container, item);
-    else if (mode === 'divide') renderDivideVisual(container, item);
-    else renderAddVisual(container, item, showTotal);
+    if (mode === 'multiply') renderMultiplyVisual(container, item, numbered);
+    else if (mode === 'subtract') renderSubtractVisual(container, item, numbered);
+    else if (mode === 'divide') renderDivideVisual(container, item, numbered);
+    else renderAddVisual(container, item, showTotal, numbered);
   }
 
   function equationText(item, withResult) {
@@ -192,50 +232,69 @@
                       dividends that don't divide evenly (this is the
                       pedagogy the user asked for: real-world division
                       with remainder). */
+  /* The n-th operation of the current table (n from 1 to factsPerTable). */
+  function factAt(n) {
+    if (mode === 'add') return { a: table, b: n, sym: '+' };
+    if (mode === 'multiply') return { a: table, b: n, sym: '×' };
+    if (mode === 'subtract') return { a: table + n, b: table, sym: '−' };
+    return { a: n, b: table, sym: '÷' };
+  }
+
   function tablesRound() {
     var facts = [];
-    for (var n = 1; n <= DATA.factsPerTable; n += 1) {
-      var fact;
-      if (mode === 'add') fact = { a: table, b: n, sym: '+' };
-      else if (mode === 'multiply') fact = { a: table, b: n, sym: '×' };
-      else if (mode === 'subtract') fact = { a: table + n, b: table, sym: '−' };
-      else if (mode === 'divide') fact = { a: n, b: table, sym: '÷' };
-      facts.push(fact);
-    }
+    for (var n = 1; n <= DATA.factsPerTable; n += 1) facts.push(factAt(n));
     return App.utils.shuffle(facts);
   }
 
-  /* ---- Learn screen (all four operations) ---- */
+  /* ---- Learn screen (all four operations) ----
+     Two states. The list shows every operation of the table WITHOUT its
+     answer. Tapping one opens its demonstration: the dots are counted out
+     with a number on each, the answer is written under the equation, and
+     the arrows move to the previous or next operation of the table. */
+
+  var demoIndex = 0;
 
   function renderLearn() {
     var list = $('#factList');
     list.innerHTML = '';
     for (var n = 1; n <= DATA.factsPerTable; n += 1) {
-      (function (value) {
-        var item;
-        if (mode === 'add') item = { a: table, b: value, sym: '+' };
-        else if (mode === 'multiply') item = { a: table, b: value, sym: '×' };
-        else if (mode === 'subtract') item = { a: table + value, b: table, sym: '−' };
-        else if (mode === 'divide') item = { a: value, b: table, sym: '÷' };
+      (function (index) {
         var button = document.createElement('button');
         button.type = 'button';
         button.className = 'btn btn-secondary fact-row';
-        button.textContent = equationText(item, true);
-        button.addEventListener('click', function () {
-          list.querySelectorAll('.fact-row').forEach(function (row) { row.classList.remove('activa'); });
-          button.classList.add('activa');
-          renderVisual($('#learnVisual'), item, true);
-        });
+        button.textContent = equationText(factAt(index + 1), false) + ' = ?';
+        button.addEventListener('click', function () { showDemo(index); });
         list.appendChild(button);
-      })(n);
+      })(n - 1);
     }
-    /* Open on the first row with the result revealed so the picture is
-       right there, not just the line of text. */
-    var firstItem;
-    if (mode === 'subtract') firstItem = { a: table + 1, b: table, sym: '−' };
-    else if (mode === 'divide') firstItem = { a: 1, b: table, sym: '÷' };
-    else firstItem = { a: table, b: 1, sym: mode === 'add' ? '+' : '×' };
-    renderVisual($('#learnVisual'), firstItem, true);
+    showLearnList();
+  }
+
+  function showLearnList() {
+    show($('#factList'));
+    hide($('#learnDemo'));
+    show($('#startPractice'));
+    show($('#learnBack'));
+  }
+
+  function showDemo(index) {
+    demoIndex = index;
+    var item = factAt(index + 1);
+    $('#demoEquation').textContent = equationText(item, true);
+    renderVisual($('#learnVisual'), item, true, true);
+    $('#demoCounter').textContent = fill('demoCounter', { i: index + 1, n: DATA.factsPerTable });
+    $('#demoPrev').disabled = index === 0;
+    $('#demoNext').disabled = index === DATA.factsPerTable - 1;
+    hide($('#factList'));
+    show($('#learnDemo'));
+    hide($('#startPractice'));
+    hide($('#learnBack'));
+  }
+
+  function demoStep(delta) {
+    var next = demoIndex + delta;
+    if (next < 0 || next >= DATA.factsPerTable) return;
+    showDemo(next);
   }
 
   /* ---- Quiz screen ---- */
@@ -396,7 +455,7 @@
   /* ---- Navigation ---- */
 
   function showOnly(id) {
-    ['#screenMenu', '#screenTables', '#screenLearn', '#screenQuiz', '#screenFinish'].forEach(function (screen) {
+    ['#screenTables', '#screenLearn', '#screenQuiz', '#screenFinish'].forEach(function (screen) {
       if (screen === id) show($(screen));
       else hide($(screen));
     });
@@ -441,31 +500,32 @@
     showOnly('#screenTables');
   }
 
-  function renderModeMenu() {
-    var grid = $('#operationGrid');
-    grid.innerHTML = '';
-    DATA.modes.forEach(function (entry) {
-      var button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'btn operation-btn';
-      button.innerHTML = '<span class="operation-icon" aria-hidden="true">' + entry.icon + '</span><span>' +
-        App.i18n.t(entry.id + 'Name') + '</span><small>' + App.i18n.t(entry.id + 'Detail') + '</small>';
-      button.addEventListener('click', function () {
-        mode = entry.id;
-        openPicker();
-      });
-      grid.appendChild(button);
-    });
+  /* Each operation has its own card on the landing page: ?op=add, multiply,
+     subtract or divide. Without a valid one there is nothing to practise,
+     so the page goes back to the landing. */
+  function operationFromUrl() {
+    var op = new URLSearchParams(window.location.search).get('op');
+    for (var i = 0; i < DATA.modes.length; i += 1) {
+      if (DATA.modes[i].id === op) return op;
+    }
+    return null;
   }
 
   function init() {
     App.i18n.apply();
     $('#stars').textContent = '';
-    renderModeMenu();
-    $('#tablesBack').addEventListener('click', function () { showOnly('#screenMenu'); });
+    mode = operationFromUrl();
+    if (!mode) {
+      window.location.replace('../../');
+      return;
+    }
+    $('#tablesBack').addEventListener('click', function () { window.location.href = '../../'; });
     $('#learnBack').addEventListener('click', function () { showOnly('#screenTables'); });
     $('#quizBack').addEventListener('click', function () { showOnly('#screenTables'); });
     $('#startPractice').addEventListener('click', startPractice);
+    $('#demoPrev').addEventListener('click', function () { demoStep(-1); });
+    $('#demoNext').addEventListener('click', function () { demoStep(1); });
+    $('#demoBack').addEventListener('click', showLearnList);
     $('#nextFact').addEventListener('click', nextFact);
 
     /* Division input-row wiring. The input's "Enter" key counts as a
@@ -482,6 +542,7 @@
         }
       });
     }
+    openPicker();
   }
 
   document.addEventListener('DOMContentLoaded', init);

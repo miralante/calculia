@@ -16,22 +16,13 @@
 .table-btn { min-height: var(--boton-min); background: var(--mod-razonamiento); }
 
 /* Learn screen */
+/* One column: either the list of operations, or one demonstration. The
+   list is not a side panel any more, so it never needs its own scroll. */
 .learn-layout {
   display: grid;
-  grid-template-columns: minmax(160px, auto) 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--espacio);
   align-items: start;
-}
-/* Desktop: fact-list a la izquierda, visual a la derecha. El orden
-   depende de quién aparece primero en el DOM (fact-list), así que el
-   visual-card queda a la derecha sin necesidad de order. */
-.learn-layout .visual-card {
-  max-height: 50vh;
-  overflow-y: auto;
-}
-.learn-layout .fact-list {
-  max-height: 50vh;
-  overflow-y: auto;
 }
 .fact-list { display: flex; flex-direction: column; gap: 8px; }
 .fact-row { font-variant-numeric: tabular-nums; justify-content: flex-start; }
@@ -42,9 +33,23 @@
 .visual-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .group-stack { display: flex; flex-direction: column; gap: 8px; }
 .dot-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-.dot { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; }
-.dot-removed { opacity: 0.4; position: relative; }
-.dot-removed::after { content: '✕'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--color-texto); font-size: 15px; font-weight: 700; }
+/* A dot is a cell: the circle, and when it carries a number, the number
+   inside it (--d 30px) or under it (subtraction). */
+.dot-cell { --d: 22px; position: relative; display: inline-flex; flex-direction: column; align-items: center; width: var(--d); flex-shrink: 0; }
+.dot-cell-num { --d: 30px; }
+.dot { width: var(--d); height: var(--d); border-radius: 50%; flex-shrink: 0; }
+.dot-removed { opacity: 0.35; }
+/* The number of a dot: centred on it, or under it for subtraction. */
+.dot-label { position: absolute; top: 0; left: 0; width: var(--d); height: var(--d); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; text-shadow: 0 0 2px rgba(0, 0, 0, 0.45); font-variant-numeric: tabular-nums; pointer-events: none; }
+.dot-cell-below .dot-label { position: static; height: auto; width: auto; margin-top: 2px; font-size: 13px; color: var(--color-texto); text-shadow: none; }
+/* The cross over a crossed-out dot: dark, bold and outlined in the card
+   colour, so it stays visible on any of the dot colours. */
+.dot-cross { position: absolute; top: 0; left: 0; width: var(--d); height: var(--d); display: flex; align-items: center; justify-content: center; font-size: calc(var(--d) * 0.85); font-weight: 900; line-height: 1; color: var(--color-texto); text-shadow: 0 0 3px var(--color-superficie), 0 0 3px var(--color-superficie), 0 0 2px var(--color-superficie); pointer-events: none; }
+.dot-cell-below .dot-cross { height: var(--d); }
+.demo-equation { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); font-weight: 700; font-variant-numeric: tabular-nums; text-align: center; }
+.demo-counter { font-variant-numeric: tabular-nums; color: var(--color-texto-suave); min-width: 5em; text-align: center; }
+.learn-demo { align-items: stretch; }
+.learn-demo .visual-card { align-items: center; }
 .ten-frame { padding: 6px; border: 3px solid var(--mod-razonamiento); border-radius: var(--radio); background: var(--mod-razonamiento-suave); }
 .visual-sign { font-size: var(--texto-grande); font-weight: 700; color: var(--color-texto-suave); }
 
@@ -111,17 +116,9 @@
 
 /* ---- Responsive breakpoints ---- */
 @media (max-width: 640px) {
-  /* Learn: side-by-side en móvil vertical. La lista de hechos a la izquierda
-     (fija, con scroll interno si no cabe), la demostración de bolas a la
-     derecha (visible sin scroll). Cada columna ocupa ~50% del ancho. */
+  /* Learn: the list and the demonstration take the full width on a phone. */
   .learn-layout {
-    grid-template-columns: minmax(140px, 1fr) 1fr;
-    align-items: start;
-  }
-  .learn-layout .visual-card {
-    order: 0;
-    max-height: 60vh;
-    overflow-y: auto;
+    grid-template-columns: minmax(0, 1fr);
   }
   .learn-layout .fact-list {
     max-height: 60vh;

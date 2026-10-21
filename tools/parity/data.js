@@ -18,9 +18,12 @@
    ============================================================ */
 
 var DATA = {
-  /* Colours of the dots. The first colour paints every pair; the
-     leftover ball (if any) paints in the second colour, so even
-     numbers only ever show the first colour. */
+  /* Colours of the dots. Each pair takes the next colour of pairColors
+     (both of its balls share it), so the pairs can be told apart; the
+     leftover ball (if any) paints in leftoverColor, which is not in the
+     list. pairColor is the colour of the real-life drawings: one pair
+     per drawing. */
+  pairColors: ['#1565C0', '#2E7D32', '#6A1B9A', '#00838F', '#AD1457', '#5D4037'],
   pairColor: '#1565C0',
   leftoverColor: '#E65100',
 
