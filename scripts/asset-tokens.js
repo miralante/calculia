@@ -165,7 +165,15 @@ function isImmutable(relPath, patterns) {
 
 function tokenFor(root, relPath) {
   const abs = path.join(root, relPath);
-  const hash = crypto.createHash('sha256').update(fs.readFileSync(abs)).digest('hex');
+  /* Text files are hashed with LF line endings. A Windows checkout (autocrlf)
+     stores them with CRLF and GitHub CI checks them out with LF; the same file
+     must give the same token in both, so the line ending is not in the hash. */
+  const TEXT_FILE = /\.(css|js|html|svg|json|txt|md)$/i;
+  const raw = fs.readFileSync(abs);
+  const bytes = TEXT_FILE.test(relPath)
+    ? Buffer.from(raw.toString('utf8').split('\r\n').join('\n'), 'utf8')
+    : raw;
+  const hash = crypto.createHash('sha256').update(bytes).digest('hex');
   return hash.slice(0, 8);
 }
 
