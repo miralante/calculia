@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operaciones | Calculia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
+  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v62e5b2c5">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../../dev/" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="title">➕ Operaciones</h1>
+      <span class="stars" id="stars">⭐ 0</span>
+    </header>
+
+    <!-- Menu: the four operations. -->
+    <section id="screenMenu" class="stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="instruction">Elige una operación.</p>
+      </div>
+      <div class="op-grid" id="opGrid"></div>
+    </section>
+
+    <!-- 1. Explanation: slides with a drawing, one idea each. -->
+    <section id="screenIntro" class="hidden stack">
+      <h2 class="op-title" id="opTitle"></h2>
+      <article class="card stack gallery-card">
+        <div class="ops-visual" id="introVisual"></div>
+        <h3 class="concept-title" id="introTitle"></h3>
+        <p class="concept-text" id="introText"></p>
+        <p class="concept-count" id="introCount"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="introPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>
+          <button type="button" class="btn btn-secondary" id="introNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>
+        </div>
+      </article>
+      <button type="button" class="btn" id="introContinue" data-i18n="ui.seeReal">Ver ejemplos reales →</button>
+      <button type="button" class="btn btn-secondary" id="introBack" data-i18n="ui.otherOps">← Otras operaciones</button>
+    </section>
+
+    <!-- 2. Real life: one everyday example at a time. -->
+    <section id="screenReal" class="hidden stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="ui.realLabel">Ejemplos de la vida real</p>
+      </div>
+      <article class="card centered stack real-card">
+        <p class="real-text" id="realText"></p>
+        <p class="concept-count" id="realCount"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="realPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>
+          <button type="button" class="btn btn-secondary" id="realNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>
+        </div>
+      </article>
+      <button type="button" class="btn" id="realContinue" data-i18n="ui.startTest">Empezar a practicar →</button>
+    </section>
+
+    <!-- 3. Test: one question at a time. "Siguiente" appears after a right answer. -->
+    <section id="screenGame" class="hidden stack">
+      <button type="button" class="btn btn-secondary" id="testBack" data-i18n="ui.otherOps">← Otras operaciones</button>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+        <span class="progress-text" id="progressText">0 / 0</span>
+      </div>
+      <article class="card centered stack task-card">
+        <h2 class="prompt" id="testPrompt"></h2>
+        <div class="ops-visual" id="testVisual"></div>
+        <div class="options-row" id="testOptions"></div>
+        <p class="feedback" id="feedback" aria-live="polite"></p>
+      </article>
+      <button type="button" class="btn hidden" id="btnNext" data-i18n="ui.next">Siguiente →</button>
+    </section>
+
+    <!-- End of a round. -->
+    <section id="screenEnd" class="hidden stack centered" aria-live="polite">
+      <div class="emoji-large" aria-hidden="true">🎉</div>
+      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+      <p id="endSummary"></p>
+      <button type="button" class="btn" id="newRound" data-i18n="ui.newRound">Otra ronda →</button>
+      <button type="button" class="btn btn-secondary" id="otherOps" data-i18n="ui.otherOps">← Otras operaciones</button>
+    </section>
+
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
+  </div>
+
+  <script src="../../assets/js/utils.js?v=calculia-v37f362d0"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-v3d393c12"></script>
+  <script src="../../assets/js/storage.js?v=calculia-vd97e2550"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="../../assets/js/sw-register.js?v=calculia-v4a242865"></script>
+</body>
+</html>

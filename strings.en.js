@@ -35,6 +35,7 @@
     "operations": { "name": "Big sums", "detail": "Cutting, sharing and order." },
     "quantities": { "name": "Read and Write Numbers", "detail": "Read and write big numbers." },
     "ordinals": { "name": "Ordinal Numbers", "detail": "First, second, third…" },
+    "operationconcepts": { "name": "Operations", "detail": "What adding, subtracting, multiplying and dividing mean." },
     "order-numbers": { "name": "Order numbers", "detail": "Positive, negative and decimal numbers." },
     "order-positives": { "name": "Order positives", "detail": "Put the positive numbers from smallest to biggest." },
     "order-negatives": { "name": "Order negatives", "detail": "Put the negative numbers from smallest to biggest." },

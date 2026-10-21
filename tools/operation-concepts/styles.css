@@ -1,0 +1,86 @@
+/* ==========================================================================
+   Calculia — Operaciones: styles
+   The drawings are rows of small icons. Crossed-out items and empty
+   places must read at a glance, so they have their own marks.
+   ========================================================================== */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+.op-title { margin: 0; text-align: center; color: var(--mod-razonamiento); }
+
+/* Menu: four big cards in two columns (one on a narrow phone). */
+.op-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--espacio); }
+.op-btn {
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px;
+  text-align: center;
+  background: var(--mod-razonamiento);
+}
+.op-sym { font-size: 40px; font-weight: 800; line-height: 1; }
+.op-name { font-size: var(--texto-grande); font-weight: 700; }
+.op-btn small { font-size: var(--texto-pequeno); font-weight: 400; }
+@media (max-width: 400px) {
+  .op-grid { grid-template-columns: minmax(0, 1fr); }
+  .op-btn { min-height: 96px; }
+}
+
+/* Drawings */
+.ops-visual { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--espacio); min-height: 120px; }
+.ops-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
+.ops-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.ops-group-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.ops-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 42px;
+  font-size: 36px;
+  line-height: 1;
+}
+/* An empty place: a dashed outline, so it reads as «falta». */
+.ops-empty { border: 2px dashed var(--color-texto-suave); border-radius: var(--radio); background: transparent; }
+/* A crossed-out item (taken away): dimmed, with a heavy cross on top. */
+.ops-cross { opacity: 0.4; }
+.ops-cross::after {
+  content: '✕';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--color-texto);
+  text-shadow: 0 0 3px var(--color-superficie), 0 0 3px var(--color-superficie);
+}
+/* What is left over after the full groups (division with remainder). */
+.ops-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; border-radius: 50%; }
+.ops-left-row { padding-top: 4px; border-top: 2px dotted var(--color-texto-suave); }
+.ops-sign { font-size: var(--texto-grande); font-weight: 800; color: var(--color-texto-suave); }
+.ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+.ops-story { margin: 0; font-size: var(--texto-grande); text-align: center; line-height: 1.4; }
+
+/* Text blocks */
+.concept-title, .concept-count, .concept-text, .real-text { text-align: center; margin: 0; }
+.concept-text, .real-text { font-size: var(--texto-grande); line-height: 1.45; }
+.concept-count { color: var(--color-texto-suave); }
+.real-text { font-size: var(--texto-grande); }
+.real-card { min-height: 180px; justify-content: center; }
+
+/* Test answers */
+.option-btn { min-width: 96px; min-height: var(--boton-min); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
+.option-btn.correct { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
+.option-btn.incorrect { opacity: 0.5; text-decoration: line-through; }
+.option-btn:disabled { opacity: 0.6; }
+.option-btn .op-sym { font-size: var(--texto-grande); }
+.task-card { border-color: var(--mod-razonamiento-suave); }
+.prompt { margin: 0; text-align: center; font-size: var(--texto-grande); }
+.feedback { margin: 0; text-align: center; min-height: 1.4em; }
+.feedback.success { color: var(--color-texto); font-weight: 700; }
+.feedback.error { color: var(--color-texto-suave); }

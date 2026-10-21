@@ -35,6 +35,7 @@
     "operations": { "name": "Cuentas grandes", "detail": "Partir, repartir y el orden." },
     "quantities": { "name": "Leer y Escribir Números", "detail": "Lee y escribe números grandes." },
     "ordinals": { "name": "Números ordinales", "detail": "Primero, segundo, tercero…" },
+    "operationconcepts": { "name": "Operaciones", "detail": "Qué significa sumar, restar, multiplicar y dividir." },
     "order-numbers": { "name": "Ordenar números", "detail": "Positivos, negativos y decimales." },
     "order-positives": { "name": "Ordenar positivos", "detail": "Pon los números positivos de menor a mayor." },
     "order-negatives": { "name": "Ordenar negativos", "detail": "Pon los negativos de menor a mayor." },
