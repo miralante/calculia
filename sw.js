@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v266';
+var VERSION = 'calculia-v267';
 
 var FILES = [
   './',
@@ -38,6 +38,11 @@ var FILES = [
   './config/styles.css',
   './config/strings.es.js',
   './config/strings.en.js',
+  './about-app/',
+  './about-app/app.js',
+  './about-app/styles.css',
+  './about-app/strings.es.js',
+  './about-app/strings.en.js',
   './legal/',
   './legal/styles.css',
   './legal/strings.es.js',
@@ -57,6 +62,7 @@ var FILES = [
   './assets/js/storage.js',
   './assets/js/feedback.js',
   './assets/js/number-sort.js',
+  './assets/js/achievements.js',
   './assets/js/dinero.js',
   './assets/js/sw-register.js',
   /* External script that used to be inline on about/ and team/: the CSP is

@@ -5,7 +5,8 @@
      (none of Calculia's 11 activities store a name or other personal
      field). Progress in every activity is kept.
    - "Reset the whole app": deletes everything under
-     'calculia:*' (equivalent to opening the app for the first time).
+     'calculia:*', achievements included (equivalent to opening the
+     app for the first time).
    Two-step confirmation: one tap asks to confirm, the second deletes.
    ============================================================ */
 (function () {
@@ -82,6 +83,9 @@
     App.storage.toolIds().forEach(function (id) {
       App.storage.remove(id);
     });
+    /* Not activities, so toolIds() skips them (see storage.js). */
+    App.storage.remove('achievements');
+    App.storage.remove('streak');
     var f = $('#feedbackApp');
     f.textContent = App.i18n.t('feedbackResetAppDone');
     f.className = 'feedback acierto';

@@ -108,6 +108,8 @@
   Cache-Control: public, max-age=0, must-revalidate
 /config/index.html
   Cache-Control: public, max-age=0, must-revalidate
+/about-app/index.html
+  Cache-Control: public, max-age=0, must-revalidate
 /legal/index.html
   Cache-Control: public, max-age=0, must-revalidate
 /sw.js
@@ -136,6 +138,13 @@
 /config/app.js
   Cache-Control: no-cache, must-revalidate
 /config/strings.*
+  Cache-Control: public, max-age=31536000, immutable
+
+/about-app/styles.css
+  Cache-Control: public, max-age=300
+/about-app/app.js
+  Cache-Control: public, max-age=300
+/about-app/strings.*
   Cache-Control: public, max-age=31536000, immutable
 
 /legal/styles.css

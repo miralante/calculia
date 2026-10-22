@@ -89,6 +89,9 @@
    * @returns {string} the message used
    */
   function encourage(zone) {
+    /* Lets assets/js/achievements.js know the round had a mistake
+       (the "perfect round" badge). Nothing is stored here. */
+    try { document.dispatchEvent(new CustomEvent('calculia:mistake')); } catch (e) { /* ignore */ }
     var msg = pickRandom('feedback.encourage');
     if (zone) {
       zone.textContent = msg;
