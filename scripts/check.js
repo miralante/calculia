@@ -385,11 +385,11 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['los-numeros', 'numbers', 'order-numbers', 'temperature', 'quantities', 'ordinals', 'fractions-measures', 'percent', 'parity', 'roman-numerals', 'shapes', 'trigonometry', 'scale', 'math-tables'];
+var PUBLIC_SLUGS = ['los-numeros', 'numbers', 'order-numbers', 'temperature', 'quantities', 'ordinals', 'fractions-measures', 'percent', 'parity', 'roman-numerals', 'lines', 'shapes', 'trigonometry', 'scale', 'linear-functions', 'math-tables'];
 /* Public AND in dev/. Every name here must also be in PUBLIC_SLUGS,
    otherwise dev/ would carry an activity the landing hides, which is
    the inverse mistake and just as wrong. */
-var BOTH_SLUGS = ['los-numeros', 'numbers', 'order-numbers', 'temperature', 'quantities', 'ordinals', 'fractions-measures', 'percent', 'parity', 'shapes', 'trigonometry', 'scale', 'math-tables'];
+var BOTH_SLUGS = ['los-numeros', 'numbers', 'order-numbers', 'temperature', 'quantities', 'ordinals', 'fractions-measures', 'percent', 'parity', 'lines', 'shapes', 'trigonometry', 'scale', 'linear-functions', 'math-tables'];
 var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
 var expectedDevSlugs = new Set(slugs.filter(function (slug) {
   return PUBLIC_SLUGS.indexOf(slug) === -1 || BOTH_SLUGS.indexOf(slug) !== -1;

@@ -137,10 +137,11 @@
   function renderAddVisual(container, item, showTotal, numbered) {
     var operands = document.createElement('div');
     operands.className = 'visual-line';
-    /* Counted on across both addends: the second one goes on from the first. */
+    /* Each addend is counted from 1 on its own. The result counts on from 1
+       to the total: the first addend's dots, then the second's go on after. */
     operands.appendChild(dotRow(item.a, DATA.dotColors[0], { from: numbered ? 1 : undefined }));
     operands.appendChild(sign('+'));
-    operands.appendChild(dotRow(item.b, DATA.dotColors[1], { from: numbered ? item.a + 1 : undefined }));
+    operands.appendChild(dotRow(item.b, DATA.dotColors[1], { from: numbered ? 1 : undefined }));
     container.appendChild(operands);
     if (!showTotal) return;
     var total = document.createElement('div');
@@ -148,8 +149,8 @@
     total.appendChild(sign('='));
     var combined = document.createElement('div');
     combined.className = 'dot-row';
-    combined.appendChild(dotRow(item.a, DATA.dotColors[0]));
-    combined.appendChild(dotRow(item.b, DATA.dotColors[1]));
+    combined.appendChild(dotRow(item.a, DATA.dotColors[0], { from: numbered ? 1 : undefined }));
+    combined.appendChild(dotRow(item.b, DATA.dotColors[1], { from: numbered ? item.a + 1 : undefined }));
     total.appendChild(combined);
     container.appendChild(total);
   }

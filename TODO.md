@@ -116,7 +116,7 @@ producto servido al usuario.
 | El reloj y los intervalos de tiempo | ✅ | `clock` (modo `elapsed`: dos relojes y cuánto pasa entre ellos) |
 | Medidas y sus equivalencias | ✅ | `measures` pregunta conversiones en las tres magnitudes (1 m = 100 cm, 1 kg = 1.000 g, 1 l = 1.000 ml) |
 | Perímetro y área de figuras sencillas | ✅ | `geometry` (`perimetro` y `area`) |
-| Coordenadas sencillas en una cuadrícula | ✅ | `geometry` (`coordenadas`, niveles `k1`-`k2`) |
+| Coordenadas sencillas en una cuadrícula | ✅ | `linear-functions` (`casilla`, niveles `k1`-`k2`): un punto se dice con dos números |
 | Tablas y gráficos de barras: interpretación | ✅ | `charts` (`barras`: leer la altura contra la escala) |
 | La probabilidad de un suceso: más o menos probable | ✅ | `charts` (`probabilidad`, nivel `p2`) |
 | Problemas de varios pasos | ✅ | `problems` (`dosPasos`) |
@@ -161,7 +161,7 @@ producto servido al usuario.
 | Prismas y pirámides: elementos y desarrollo plano | ✅ | `shapes` (`desarrollos`, niveles `p1`-`p2`): las caras y los vértices de cada cuerpo, y qué sale al doblar un desarrollo dibujado abierto |
 | El volumen de cuerpos geométricos | ✅ | `geometry` (`volumen`, nivel `v1`: contar los cubos por capas) |
 | Simetría, traslación y giro de figuras | ✅ | `geometry` (`simetria`: `m1`-`m2` simetría, `m3` movida frente a girada) |
-| Coordenadas cartesianas sencillas | ✅ | `geometry` (`coordenadas`) |
+| Coordenadas cartesianas sencillas | ✅ | `linear-functions` (`casilla`) |
 | Estadística: tablas y gráficos | ✅ | `charts` |
 | La media, la moda y el rango | ✅ | `charts`: la media como reparto (`a1`), la moda (`t2`) y el rango (`x2`), contando los pasos de la marca más baja a la más alta |
 | Probabilidad: calcular la probabilidad de un suceso | ✅ | `charts` (`p4`): la probabilidad dicha como número, «2 de 6», contando las de esa clase y las que hay en total |
@@ -184,7 +184,7 @@ producto servido al usuario.
 | Rectas y ángulos | ✅ | `geometry` (`angulos`) los ángulos, y `geometry` (`rectas`, nivel `r1`) las paralelas, las perpendiculares y las que solo se cruzan |
 | Figuras planas: perímetro y área | ✅ | `geometry` (`perimetro` y `area`), repetido de Primaria |
 | Cuerpos geométricos: prismas, pirámides, redondos | ✅ | `shapes` (`cuerpos`) cubo, esfera y cilindro; `shapes` (`desarrollos`) prismas y pirámides |
-| Coordenadas cartesianas y gráficas sencillas | ✅ | `geometry` (`coordenadas`) y `algebra` (`graficas`) |
+| Coordenadas cartesianas y gráficas sencillas | ✅ | `linear-functions` (`casilla`) y `algebra` (`graficas`) |
 | Estadística: media y moda | ✅ | `charts` (`media` y `t2`) |
 | Probabilidad | ✅ | `charts` (`p1`-`p4`): seguro/puede ser/imposible, qué es más probable, sacar dos veces y la probabilidad como número |
 
@@ -219,7 +219,7 @@ producto servido al usuario.
 | Ecuaciones de segundo grado | ✅ | 💡 `algebra` (`cuadrado`, nivel `q1`): el lado de un cuadrado del que se conocen los cuadraditos |
 | Sistemas de ecuaciones | ✅ | 💡 `algebra` (`dosBalanzas`, nivel `s1`), repetido |
 | Funciones: concepto y gráficas | 🔶 | `algebra` (`graficas`) lee una gráfica real; no se presenta la función como objeto |
-| La función lineal | ✅ | `algebra` (`crecer`: la que sube siempre lo mismo es la recta) |
+| La función lineal | ✅ | `linear-functions` (`tabla`, `recta`, `pendiente`): la regla como máquina, la recta que sube siempre lo mismo y dónde empieza. `algebra` (`crecer`) la compara con las que no son rectas |
 | Funciones cuadráticas | 🔶 | `algebra` (`crecer`) distingue "cada vez más" de "siempre igual"; no se trabaja la parábola |
 | Proporcionalidad geométrica: escalas, Thales | ✅ | (retirada) `similar` (`semejanza`) y `scale` (`plano`); la multiplicación de un cuadrado del plano queda en `percent` (`escala`) |
 | Figuras planas: ángulos y áreas | ✅ | `geometry` (`angulos` y `area`), repetido |
@@ -245,7 +245,7 @@ producto servido al usuario.
 | Funciones elementales | 🔶 | `algebra` (`graficas` y `crecer`); no se clasifican por familias |
 | Semejanza de figuras y resolución de triángulos | 🔶 | (retirada) `similar` (`semejanza` y `pitagoras`); resolver triángulos no se pide |
 | Trigonometría: razones trigonométricas | ✅ | `trigonometry` (`razon`): la razón es el cateto que sube sobre el que avanza, reducida y comparable entre triángulos de distinto tamaño (`y1` la cuenta, `y2` dice si dos la comparten, `y3` elige cuál la comparte). Los tres lados se nombran en `lados` y se llevan a una escalera real en `medir`. Nunca se calcula un seno ni un coseno |
-| Geometría analítica: la recta | ✅ | `geometry` (`coordenadas`): el punto dicho con dos números (`k1`-`k2`) y la recta como los puntos que se alinean, con uno que se sale (`k3`). Sin ecuación de la recta: no hay dibujo que la sostenga |
+| Geometría analítica: la recta | ✅ | `linear-functions` (`casilla`, `recta`, `pendiente`): el punto dicho con dos números (`k1`-`k2`); la recta como los puntos que se alinean, con uno que se sale (`r1`); si pasa por el cero o empieza en otro número (`r2`); y cuánto sube y dónde empieza (`p1`-`p2`). La ecuación se ve escrita, nunca se resuelve |
 | Estadística bidimensional | ✅ | 💡 `charts` (`dosCosas`, nivel `y1`): dos cosas medidas a la vez en una nube de puntos — cuando una sube, ¿la otra sube o baja? |
 | Combinatoria | ✅ | `charts` (`combinaciones`, nivel `k1`), repetido |
 | Probabilidad condicionada | ✅ | 💡 `charts` (`despues`, nivel `w1`): se saca una bola y no se devuelve, así que la siguiente ya no es lo mismo |
@@ -292,7 +292,7 @@ filas es la que tenía cada hebra al empezar, para poder medir el avance:
 | Múltiplos, divisores, primos, potencias y raíces | 11 | ✅ hecha: `tools/divisibility/`, con la notación corta y la raíz del cubo; quedan las raíces de índice cualquiera, que ya no se pueden contar |
 | Multiplicar y dividir a lo grande, jerarquía de operaciones | 7 | ✅ hecha: `tools/operations/` |
 | Proporcionalidad, porcentajes, dinero real | 7 | ✅ hecha: `tools/percent/`, con proporcionalidad inversa y el límite de dinero |
-| Espacio y coordenadas | 8 | ⚠️ parcial: coordenadas en `geometry` (`coordenadas`); las nociones espaciales (dentro/fuera/...) estaban en `places`, que se eliminó |
+| Espacio y coordenadas | 8 | ⚠️ parcial: coordenadas en `linear-functions` (`casilla`); las nociones espaciales (dentro/fuera/...) estaban en `places`, que se eliminó |
 | Fracciones y decimales avanzados | 5 | ✅ hecha: `fractions-measures` (`f7`-`f9`, `d4`-`d5`) |
 | Problemas de varios pasos | 3 | ✅ hecha: `problems` (`dosPasos`) |
 | Tiempo: intervalos y equivalencias | 3 | ✅ hecha: unidades en `calendar`, equivalencias en `measures`, intervalos en `clock` |
@@ -354,7 +354,7 @@ a través de un objeto que se puede tener en la mano).
 | ~~**Trigonometría**~~ | ESO2-4 | 💡 Concepto puro | ✅ hecha — `tools/trigonometry/`: los tres lados del triángulo rectángulo (`lados`), la razón contada en la cuadrícula y comparada entre triángulos de distinto tamaño (`razon`), y la escalera apoyada en la pared (`medir`). Las rampas (cuál sube más rápido) están ahora en la explicación y la prueba de `tools/trigonometry/`; `tools/similar/` se retiró. Nunca calcular seno/coseno. |
 | ~~**Álgebra y Ecuaciones**~~ | ESO1-4 | 💡 Concepto puro | ✅ hecha — `tools/algebra/`. Una balanza que debe quedar equilibrada: quitar/poner el mismo peso en los dos platos. Nunca manipulación simbólica de "x". |
 | ~~**Funciones**~~ | ESO1-4 | 💡 Concepto puro | ✅ hecha — `algebra` (`graficas`) lee una gráfica real hora a hora, y `algebra` (`crecer`) distingue crecer siempre igual de crecer cada vez más. Sin notación ni fórmulas. |
-| ~~**Geometría Analítica y Programación Lineal**~~ | ESO3-4 | 💡 Concepto puro | ✅ hecha — `geometry` (`coordenadas`): un punto se dice con dos números. Y `percent` (`limite`): con este dinero y este precio, cuántas caben y cuánto sobra, que es la restricción de la que va el tema. |
+| ~~**Geometría Analítica y Programación Lineal**~~ | ESO3-4 | 💡 Concepto puro | ✅ hecha — `linear-functions` (`casilla`, `recta`, `pendiente`): un punto se dice con dos números, y la recta de la regla y = m · x + n se ve en su dibujo. Y `percent` (`limite`): con este dinero y este precio, cuántas caben y cuánto sobra, que es la restricción de la que va el tema. |
 
 ## 3. Orden de las actividades
 
@@ -364,8 +364,8 @@ un comentario en cada `data.js` para que no se pierda al añadir actividades.
 
 | Dónde | Orden |
 |---|---|
-| Portada (`index.html`) | Matemáticas: los-numeros → numbers → order-numbers → temperature → quantities → ordinals → fractions-measures → percent → parity → roman-numerals → shapes → trigonometry → scale. Aritmética: las cuatro tablas (`math-tables?op=add|multiply|subtract|divide`) |
-| Catálogo oculto (`dev/index.html`) | Matemáticas: Operaciones (`operation-concepts`, con + − × ÷) va antes de Ordenar números. Después, las que también están en la portada en su mismo orden (los-numeros → numbers → order-numbers → temperature → quantities → ordinals → fractions-measures → percent → parity → shapes → trigonometry → scale), y luego order-positives → order-negatives → order-fractions → order-decimals → geometry → divisibility → operations → money → measures → problems. Aritmética: las cuatro tablas → mental-math → head-math. Razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
+| Portada (`index.html`) | Matemáticas: los-numeros → numbers → order-numbers → temperature → quantities → ordinals → fractions-measures → percent → parity → roman-numerals → shapes → trigonometry → scale → linear-functions. Aritmética: las cuatro tablas (`math-tables?op=add|multiply|subtract|divide`) |
+| Catálogo oculto (`dev/index.html`) | Matemáticas: Operaciones (`operation-concepts`, con + − × ÷) va antes de Ordenar números. Después, las que también están en la portada en su mismo orden (los-numeros → numbers → order-numbers → temperature → quantities → ordinals → fractions-measures → percent → parity → shapes → trigonometry → scale → linear-functions), y luego order-positives → order-negatives → order-fractions → order-decimals → geometry → divisibility → operations → money → measures → problems. Aritmética: las cuatro tablas → mental-math → head-math. Razonamiento: riddles → patterns → wallet → algebra → charts → calendar → clock → stories → odd-one-out → puzzle |
 | Progreso (`config/index.html`) | mismo criterio y mismo bloque de razonamiento, pero con `shapes` delante de `numbers` |
 | `numbers` | ordinales (1º) → comparar (1º) → recta (2º) → unidades (2º-4º) → placevalue (2º-6º) → positivos-y-negativos (5º-6º) |
 | `measures` | longitud → peso → capacidad |

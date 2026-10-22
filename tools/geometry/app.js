@@ -46,15 +46,12 @@
   function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
-     The kind of an angle comes from its degrees, the perimeter and the
-     area from the sides, and whether a figure is symmetrical from folding
-     it. So the drawing and the right answer cannot drift apart: they are
-     computed from the same number. */
+     The kind of an angle comes from its degrees, and whether a figure is
+     symmetrical from folding it. So the drawing and the right answer cannot
+     drift apart: they are computed from the same number. */
   function angleKind(deg) {
     return deg === 90 ? 'right' : (deg < 90 ? 'acute' : 'obtuse');
   }
-  function perimeterOf(r) { return 2 * (r.w + r.h); }
-  function areaOf(r) { return r.w * r.h; }
 
   /* Folding along a vertical line: every row must read the same
      backwards. This is literally what the person is asked to imagine. */
@@ -114,25 +111,8 @@
   /* The real name is what the angle is called everywhere else, so it is
      what gets taught — with its plain-words gloss next to it, never
      instead of it. */
-  function range(from, to) {
-    var list = [];
-    for (var v = from; v <= to; v++) list.push(v);
-    return list;
-  }
-
   function kindName(kind) { return App.i18n.t('angle.' + kind + '.name'); }
   function kindGloss(kind) { return App.i18n.t('angle.' + kind + '.gloss'); }
-
-  /* Three numbers around the right one. Being out by one is the mistake
-     counting squares actually produces. */
-  function numberOptions(value) {
-    var values = [value, value - 1, value + 1].filter(function (v) { return v > 0; });
-    var extra = value + 2;
-    while (values.length < 3) { values.push(extra); extra += 1; }
-    return App.utils.shuffle(values.slice(0, 3)).map(function (v) {
-      return { html: String(v), correct: v === value };
-    });
-  }
 
   /* ---- The angle ----
      Every angle is drawn with the same faint square-corner guide, the way
@@ -161,8 +141,8 @@
   }
 
   /* ---- The grid figures ----
-     Everything is drawn square by square, so the perimeter can be walked
-     and the area counted without working anything out. */
+     Everything is drawn square by square, so a figure can be counted
+     without working anything out. */
   var CELL = 22;
 
   function gridSvg(cells, cols, rows, opts) {
@@ -184,20 +164,7 @@
     }
     var size = o.small ? { w: Math.round(w * 0.62), h: Math.round(h * 0.62) } : { w: w, h: h };
     return '<svg viewBox="-8 -8 ' + (w + 16) + ' ' + (h + 16) + '" width="' + size.w +
-      '" height="' + size.h + '" class="grid-svg" aria-hidden="true">' + body +
-      (o.outline
-        ? '<rect x="0" y="0" width="' + w + '" height="' + h + '" class="grid-border"/>'
-        : '') +
-      '</svg>';
-  }
-
-  function rectSvg(rect, outline) {
-    var cells = [];
-    for (var r = 0; r < rect.h; r++) {
-      cells.push([]);
-      for (var c = 0; c < rect.w; c++) cells[r].push(true);
-    }
-    return gridSvg(cells, rect.w, rect.h, { outline: outline });
+      '" height="' + size.h + '" class="grid-svg" aria-hidden="true">' + body + '</svg>';
   }
 
   function figureSvg(figure, opts) {
@@ -281,134 +248,6 @@
   function figureName(id) { return App.i18n.t('figure.' + id + '.name'); }
   function figureGloss(id) { return App.i18n.t('figure.' + id + '.gloss'); }
 
-  /* ---- The coordinate grid ----
-     The numbers are written along the edges, so a cell is read off the
-     drawing rather than worked out. */
-  function coordGrid(col, row) {
-    var cols = DATA.grid.cols;
-    var rows = DATA.grid.rows;
-    var w = cols * CELL;
-    var h = rows * CELL;
-    var body = '';
-    for (var r = 0; r < rows; r++) {
-      for (var c = 0; c < cols; c++) {
-        body += '<rect x="' + (c * CELL) + '" y="' + (r * CELL) + '" width="' + CELL +
-          '" height="' + CELL + '" class="coord-cell"/>';
-      }
-    }
-    /* Rows are numbered from the bottom up, the way a graph is read. */
-    var cy = (rows - row) * CELL + CELL / 2;
-    body += '<circle cx="' + ((col - 1) * CELL + CELL / 2) + '" cy="' + cy +
-      '" r="7" class="coord-dot"/>';
-    for (var i = 1; i <= cols; i++) {
-      body += '<text x="' + ((i - 1) * CELL + CELL / 2) + '" y="' + (h + 14) +
-        '" class="coord-label">' + i + '</text>';
-    }
-    for (var j = 1; j <= rows; j++) {
-      body += '<text x="-8" y="' + ((rows - j) * CELL + CELL / 2 + 5) +
-        '" class="coord-label">' + j + '</text>';
-    }
-    return '<svg viewBox="-20 -6 ' + (w + 28) + ' ' + (h + 26) + '" width="' + (w + 40) +
-      '" height="' + (h + 34) + '" class="coord-svg" aria-hidden="true">' + body + '</svg>';
-  }
-
-  /* Squares near this one, to offer as the wrong answers. The swapped pair
-     comes first because saying the two numbers the other way round is the
-     mistake this activity is about — but only when that really is another
-     square, which it is not on the diagonal. Every candidate is checked to
-     be on the grid and different, so a corner square never ends up offering
-     itself twice. */
-  function neighbourSquares(col, row, howMany) {
-    var candidates = [{ c: row, r: col },
-      { c: col + 1, r: row }, { c: col - 1, r: row },
-      { c: col, r: row + 1 }, { c: col, r: row - 1 }];
-    var seenPair = {};
-    seenPair[col + ',' + row] = true;
-    var out = [];
-    candidates.forEach(function (o) {
-      var key = o.c + ',' + o.r;
-      if (o.c < 1 || o.c > DATA.grid.cols || o.r < 1 || o.r > DATA.grid.rows) return;
-      if (seenPair[key] || out.length >= howMany) return;
-      seenPair[key] = true;
-      out.push(o);
-    });
-    return out;
-  }
-
-  function coordLabel(col, row) {
-    return App.i18n.t('gen.coordLabel').replace(/\{col\}/g, col).replace(/\{row\}/g, row);
-  }
-
-  /* ---- The circle ----
-     Measured the way it really is measured: the border laid out against
-     what the circle measures across, and the inside counted in whole
-     squares. Both are approximations, and the wording says so. */
-  var ACROSS_TIMES = 3;
-
-  function circleAcross(d) { return d * ACROSS_TIMES; }
-
-  /* Whole grid squares fully inside a circle of this diameter. Counted,
-     not from a formula, because counting is what the level asks for. */
-  function wholeSquaresIn(d) {
-    var r = d / 2;
-    var n = 0;
-    for (var y = 0; y < d; y++) {
-      for (var x = 0; x < d; x++) {
-        /* The far corner of the square decides: if it is inside, all of
-           the square is. */
-        var dx = Math.max(Math.abs(x - r), Math.abs(x + 1 - r));
-        var dy = Math.max(Math.abs(y - r), Math.abs(y + 1 - r));
-        if (Math.sqrt(dx * dx + dy * dy) <= r) n += 1;
-      }
-    }
-    return n;
-  }
-
-  function circleSvg(d, withGrid) {
-    var size = 132;
-    var cell = size / d;
-    var body = '';
-    if (withGrid) {
-      for (var y = 0; y < d; y++) {
-        for (var x = 0; x < d; x++) {
-          var r = d / 2;
-          var dx = Math.max(Math.abs(x - r), Math.abs(x + 1 - r));
-          var dy = Math.max(Math.abs(y - r), Math.abs(y + 1 - r));
-          var inside = Math.sqrt(dx * dx + dy * dy) <= r;
-          body += '<rect x="' + (x * cell).toFixed(1) + '" y="' + (y * cell).toFixed(1) +
-            '" width="' + cell.toFixed(1) + '" height="' + cell.toFixed(1) +
-            '" class="circle-cell' + (inside ? ' is-in' : '') + '"/>';
-        }
-      }
-    }
-    body += '<circle cx="' + (size / 2) + '" cy="' + (size / 2) + '" r="' + (size / 2 - 2) +
-      '" class="circle-outline"/>';
-    if (!withGrid) {
-      /* The line across, which is what the border is compared against. */
-      body += '<line x1="2" y1="' + (size / 2) + '" x2="' + (size - 2) + '" y2="' + (size / 2) +
-        '" class="across-line"/>';
-    }
-    return '<svg viewBox="-3 -3 ' + (size + 6) + ' ' + (size + 6) + '" width="180" height="180" ' +
-      'aria-hidden="true">' + body + '</svg>';
-  }
-
-  /* ---- The box ----
-     Drawn as its layers, one under the other, so the cubes inside can be
-     counted instead of multiplied. */
-  function boxLayers(box) {
-    var html = '<div class="layer-stack">';
-    for (var layer = 0; layer < box.d; layer++) {
-      html += '<span class="layer">';
-      for (var r = 0; r < box.h; r++) {
-        html += '<span class="layer-row">';
-        for (var c = 0; c < box.w; c++) html += '<span class="cube"></span>';
-        html += '</span>';
-      }
-      html += '</span>';
-    }
-    return html + '</div>';
-  }
-
   /* ---- Moving and turning ----
      A figure turned a quarter of the way round is the transpose of its
      rows, reversed. Computing it means the options cannot drift from what
@@ -436,11 +275,6 @@
   DATA.movedFigures.forEach(function (f) {
     if (sameRows(turned(f.rows), f.rows) || sameRows(mirrored(f.rows), f.rows)) {
       throw new Error('geometry: figure "' + f.id + '" looks the same turned or mirrored');
-    }
-  });
-  DATA.circles.forEach(function (d) {
-    if (wholeSquaresIn(d) < 1) {
-      throw new Error('geometry: a circle of ' + d + ' has no whole square inside it');
     }
   });
 
@@ -534,168 +368,6 @@
       body + '</svg>';
   }
 
-  /* ---- Two lines ----
-     Which pair it is comes out of the drawing: the slopes of the two lines
-     decide it, so the picture and the answer cannot disagree. */
-  function slopeOf(line) {
-    var dx = line[1][0] - line[0][0];
-    var dy = line[1][1] - line[0][1];
-    return dx === 0 ? null : dy / dx;
-  }
-
-  function pairKind(pair) {
-    var sa = slopeOf(pair.a);
-    var sb = slopeOf(pair.b);
-    var close = function (x, y) { return Math.abs(x - y) < 0.01; };
-    if (sa === null && sb === null) return 'parallel';
-    if (sa === null) return close(sb, 0) ? 'perpendicular' : 'crossing';
-    if (sb === null) return close(sa, 0) ? 'perpendicular' : 'crossing';
-    if (close(sa, sb)) return 'parallel';
-    return close(sa * sb, -1) ? 'perpendicular' : 'crossing';
-  }
-
-  DATA.linePairs.forEach(function (pair) {
-    if (pairKind(pair) !== pair.kind) {
-      throw new Error('geometry: lines "' + pair.id + '" are ' + pairKind(pair) +
-        ', not ' + pair.kind);
-    }
-  });
-  ['parallel', 'perpendicular', 'crossing'].forEach(function (k) {
-    if (!DATA.linePairs.some(function (p) { return p.kind === k; })) {
-      throw new Error('geometry: no pair of lines that is "' + k + '"');
-    }
-  });
-
-  function linesSvg(pair) {
-    var line = function (l, cls) {
-      return '<line x1="' + l[0][0] + '" y1="' + l[0][1] + '" x2="' + l[1][0] +
-        '" y2="' + l[1][1] + '" class="' + cls + '"/>';
-    };
-    /* The two lines differ by stroke pattern as well as colour, so they are
-       still two lines without any colour at all (WCAG 1.4.1). */
-    return '<svg viewBox="0 0 120 120" width="190" height="190" aria-hidden="true">' +
-      '<rect x="0" y="0" width="120" height="120" class="line-box"/>' +
-      line(pair.a, 'pair-line is-first') + line(pair.b, 'pair-line is-second') +
-      '</svg>';
-  }
-
-  /* ---- A triangle, drawn inside the rectangle it is half of ----
-     The rectangle is drawn in dashes behind it, so "half of it" is a thing
-     you see rather than a formula you are given. */
-  DATA.triangles.forEach(function (t) {
-    if ((t.w * t.h) % 2 !== 0) {
-      throw new Error('geometry: a triangle of ' + t.w + 'x' + t.h + ' has no whole area');
-    }
-  });
-
-  function triangleSvg(t) {
-    var w = t.w * CELL;
-    var h = t.h * CELL;
-    var body = '';
-    for (var r = 0; r < t.h; r++) {
-      for (var c = 0; c < t.w; c++) {
-        body += '<rect x="' + (c * CELL) + '" y="' + (r * CELL) + '" width="' + CELL +
-          '" height="' + CELL + '" class="coord-cell"/>';
-      }
-    }
-    body += '<rect x="0" y="0" width="' + w + '" height="' + h + '" class="half-box"/>';
-    body += '<polygon points="0,' + h + ' ' + w + ',' + h + ' 0,0" class="tri-fill"/>';
-    return '<svg viewBox="-2 -2 ' + (w + 4) + ' ' + (h + 4) + '" width="' + (w + 8) +
-      '" height="' + (h + 8) + '" aria-hidden="true">' + body + '</svg>';
-  }
-
-  /* ---- A box opened out ----
-     The six faces side by side, each one squared, so the outside of the box
-     is counted the same way its inside was. */
-  function faceHtml(cols, rows) {
-    var html = '<span class="face">';
-    for (var r = 0; r < rows; r++) {
-      html += '<span class="face-row">';
-      for (var c = 0; c < cols; c++) html += '<span class="face-cell"></span>';
-      html += '</span>';
-    }
-    return html + '</span>';
-  }
-
-  function netHtml(box) {
-    var html = '<div class="net">';
-    [[box.w, box.h], [box.w, box.h], [box.w, box.d], [box.w, box.d],
-      [box.d, box.h], [box.d, box.h]].forEach(function (f) {
-      html += faceHtml(f[0], f[1]);
-    });
-    return html + '</div>';
-  }
-
-  function surfaceOf(box) {
-    return 2 * (box.w * box.h + box.w * box.d + box.d * box.h);
-  }
-
-  /* ---- Points in a straight line ----
-     The points that line up are built from the rule, so they really do line
-     up; the odd one out is checked at start-up not to. */
-  function pointsFromRule(rule) {
-    var out = [];
-    for (var i = 0; i < rule.n; i++) {
-      out.push([rule.from[0] + rule.step[0] * i, rule.from[1] + rule.step[1] * i]);
-    }
-    return out;
-  }
-
-  function onSameLine(a, b, p) {
-    return (b[0] - a[0]) * (p[1] - a[1]) === (b[1] - a[1]) * (p[0] - a[0]);
-  }
-
-  DATA.lineRules.forEach(function (rule) {
-    var pts = pointsFromRule(rule).concat([rule.off]);
-    pts.forEach(function (p) {
-      if (p[0] < 1 || p[0] > DATA.grid.cols || p[1] < 1 || p[1] > DATA.grid.rows) {
-        throw new Error('geometry: point ' + p.join(',') + ' falls off the grid');
-      }
-    });
-    var line = pointsFromRule(rule);
-    if (onSameLine(line[0], line[1], rule.off)) {
-      throw new Error('geometry: the odd point ' + rule.off.join(',') + ' is on the line');
-    }
-    /* Two points are always in a line, so three are the fewest that can
-       show one; more than three would not fit the four answers. */
-    if (rule.n !== 3) {
-      throw new Error('geometry: a line rule has to lay down exactly three points');
-    }
-  });
-
-  function manyPointsSvg(points, labelled) {
-    var cols = DATA.grid.cols;
-    var rows = DATA.grid.rows;
-    var w = cols * CELL;
-    var h = rows * CELL;
-    var body = '';
-    for (var r = 0; r < rows; r++) {
-      for (var c = 0; c < cols; c++) {
-        body += '<rect x="' + (c * CELL) + '" y="' + (r * CELL) + '" width="' + CELL +
-          '" height="' + CELL + '" class="coord-cell"/>';
-      }
-    }
-    points.forEach(function (p, i) {
-      var x = (p[0] - 1) * CELL + CELL / 2;
-      var y = (rows - p[1]) * CELL + CELL / 2;
-      body += '<circle cx="' + x + '" cy="' + y + '" r="8" class="coord-dot"/>';
-      if (labelled) {
-        body += '<text x="' + x + '" y="' + (y + 4) + '" class="dot-letter">' +
-          labelled[i] + '</text>';
-      }
-    });
-    for (var i = 1; i <= cols; i++) {
-      body += '<text x="' + ((i - 1) * CELL + CELL / 2) + '" y="' + (h + 14) +
-        '" class="coord-label">' + i + '</text>';
-    }
-    for (var j = 1; j <= rows; j++) {
-      body += '<text x="-8" y="' + ((rows - j) * CELL + CELL / 2 + 5) +
-        '" class="coord-label">' + j + '</text>';
-    }
-    return '<svg viewBox="-20 -6 ' + (w + 28) + ' ' + (h + 26) + '" width="' + (w + 40) +
-      '" height="' + (h + 34) + '" class="coord-svg" aria-hidden="true">' + body + '</svg>';
-  }
-
   /* Three distinct numbers, the answer first, then the given confusions.
      `step` is how far apart the padding may be: a question read off a
      scale needs its wrong answers on the scale too. */
@@ -765,153 +437,6 @@
       };
     },
 
-    /* Two lines: never touching, crossing, or crossing square. */
-    linePair: function (nv) {
-      var pair = App.utils.drawRound(nv.id, DATA.linePairs);
-      var kind = pairKind(pair);
-      return {
-        prompt: App.i18n.t('gen.linePair'),
-        hint: App.i18n.t('gen.socraticLines'),
-        visual: '<div class="grid-stage">' + linesSvg(pair) + '</div>',
-        visualAria: App.i18n.t('gen.linesAria'),
-        legend: App.i18n.t('gen.linesHint'),
-        options: App.utils.shuffle(['parallel', 'perpendicular', 'crossing']
-          .map(function (k) {
-            return {
-              html: '<span class="answer-name">' + App.i18n.t('lines.' + k) + '</span>',
-              aria: App.i18n.t('lines.' + k),
-              correct: k === kind
-            };
-          })),
-        inline: true
-      };
-    },
-
-    /* The area of a triangle, seen as half of its rectangle. */
-    triangleArea: function (nv) {
-      var t = App.utils.drawRound(nv.id, DATA.triangles);
-      var whole = t.w * t.h;
-      var answer = whole / 2;
-      return {
-        prompt: App.i18n.t('gen.triangleArea'),
-        hint: App.i18n.t('gen.socraticTriangleArea'),
-        visual: '<div class="grid-stage">' + triangleSvg(t) + '</div>',
-        visualAria: App.i18n.t('gen.triangleAria')
-          .replace(/\{w\}/g, t.w).replace(/\{h\}/g, t.h),
-        legend: App.i18n.t('gen.triangleHint'),
-        /* Counting the whole rectangle, and adding the two sides instead of
-           multiplying them, are the two mistakes this produces. */
-        options: threeNumbers(answer, [whole, t.w + t.h])
-      };
-    },
-
-    /* The outside of a box, counted on its six faces opened out. */
-    surface: function (nv) {
-      var box = App.utils.drawRound(nv.id, DATA.boxes);
-      var answer = surfaceOf(box);
-      return {
-        prompt: App.i18n.t('gen.surface'),
-        hint: App.i18n.t('gen.socraticSurface'),
-        visual: netHtml(box),
-        visualAria: App.i18n.t('gen.netAria')
-          .replace(/\{w\}/g, box.w).replace(/\{h\}/g, box.h).replace(/\{d\}/g, box.d),
-        legend: App.i18n.t('gen.surfaceHint'),
-        /* Counting the cubes inside instead of the squares outside is the
-           confusion between the two levels, so it is on offer. */
-        options: threeNumbers(answer, [box.w * box.h * box.d, answer / 2])
-      };
-    },
-
-    /* Several points at once: three of them line up and one does not. That
-       line is the line of analytic geometry, without an equation in sight. */
-    offTheLine: function (nv) {
-      var rule = App.utils.drawRound(nv.id, DATA.lineRules);
-      var inLine = pointsFromRule(rule);
-      var letters = App.i18n.t('gen.dotLetters').split('');
-      /* Where the odd one sits among the others changes from question to
-         question, so the answer is never always the last dot. */
-      var slot = App.utils.drawRound(nv.id + 'slot', [0, 1, 2, 3]);
-      var points = inLine.slice();
-      points.splice(slot, 0, rule.off);
-      return {
-        prompt: App.i18n.t('gen.offTheLine'),
-        hint: App.i18n.t('gen.socraticOffLine'),
-        visual: '<div class="grid-stage">' + manyPointsSvg(points, letters) + '</div>',
-        visualAria: App.i18n.t('gen.pointsAria').replace(/\{n\}/g, points.length),
-        legend: App.i18n.t('gen.lineUpHint'),
-        options: App.utils.shuffle(points.map(function (p, i) {
-          return {
-            html: '<span class="answer-name">' + letters[i] + '</span>',
-            aria: letters[i],
-            correct: p === rule.off
-          };
-        })),
-        inline: true
-      };
-    },
-
-    /* How long is the border, roughly. It is a bit more than three times
-       what the circle measures across, and the question asks for the
-       "about", which is the honest version of that idea. */
-    circleEdge: function (nv) {
-      var d = App.utils.drawRound(nv.id, DATA.circles);
-      var about = circleAcross(d);
-      return {
-        prompt: App.i18n.t('gen.circleEdge').replace(/\{d\}/g, d),
-        hint: App.i18n.t('gen.socraticCircleEdge'),
-        visual: '<div class="grid-stage">' + circleSvg(d, false) + '</div>',
-        visualAria: App.i18n.t('gen.circleAria').replace(/\{d\}/g, d),
-        legend: App.i18n.t('gen.circleHint').replace(/\{d\}/g, d),
-        /* Doubling instead of tripling, and four times instead of three,
-           are the two mistakes this actually produces. */
-        options: App.utils.shuffle([about, d * 2, d * 4].map(function (v) {
-          return {
-            html: App.i18n.t('gen.about').replace(/\{n\}/g, v),
-            aria: App.i18n.t('gen.about').replace(/\{n\}/g, v),
-            correct: v === about
-          };
-        }))
-      };
-    },
-
-    /* How much fits inside, counted in whole squares. */
-    circleArea: function (nv) {
-      var d = App.utils.drawRound(nv.id, DATA.circles.filter(function (x) { return x <= 8; }));
-      var whole = wholeSquaresIn(d);
-      return {
-        prompt: App.i18n.t('gen.circleArea'),
-        hint: App.i18n.t('gen.socraticCircleArea'),
-        visual: '<div class="grid-stage">' + circleSvg(d, true) + '</div>',
-        visualAria: App.i18n.t('gen.circleGridAria').replace(/\{n\}/g, whole),
-        legend: App.i18n.t('gen.circleAreaHint'),
-        options: numberOptions(whole)
-      };
-    },
-
-    /* How many cubes fit in the box. The layers are drawn, so this is
-       counting, not a formula. */
-    volume: function (nv) {
-      var box = App.utils.drawRound(nv.id, DATA.boxes);
-      var cubes = box.w * box.h * box.d;
-      var perLayer = box.w * box.h;
-      return {
-        prompt: App.i18n.t('gen.volume'),
-        hint: App.i18n.t('gen.socraticVolume'),
-        visual: boxLayers(box),
-        visualAria: App.i18n.t('gen.boxAria')
-          .replace(/\{layers\}/g, box.d).replace(/\{per\}/g, perLayer),
-        legend: App.i18n.t('gen.volumeHint')
-          .replace(/\{per\}/g, perLayer).replace(/\{layers\}/g, box.d),
-        /* Counting only one layer, or adding the three measurements, are
-           the two mistakes a box actually produces. */
-        options: App.utils.shuffle([cubes, perLayer, box.w + box.h + box.d]
-          .filter(function (v, i, list) { return list.indexOf(v) === i; })
-          .slice(0, 3).map(function (v) {
-            return { html: String(v), correct: v === cubes };
-          }))
-      };
-    },
-
     /* Moved, or turned? A figure that has only been moved is still facing
        the same way; a turned one is not. */
     movedOrTurned: function (nv) {
@@ -961,34 +486,6 @@
           };
         })),
         inline: true
-      };
-    },
-
-    /* How long is the edge all the way round, in squares. */
-    perimeter: function (nv) {
-      var rect = App.utils.drawRound(nv.id, DATA.rects[nv.shape]);
-      return {
-        prompt: App.i18n.t('gen.perimeter'),
-        hint: App.i18n.t('gen.socraticPerimeter'),
-        visual: '<div class="grid-stage">' + rectSvg(rect, true) + '</div>',
-        visualAria: App.i18n.t('gen.rectAria')
-          .replace(/\{w\}/g, rect.w).replace(/\{h\}/g, rect.h),
-        legend: App.i18n.t('gen.perimeterHint'),
-        options: numberOptions(perimeterOf(rect))
-      };
-    },
-
-    /* How many squares fit inside. */
-    area: function (nv) {
-      var rect = App.utils.drawRound(nv.id, DATA.rects[nv.shape]);
-      return {
-        prompt: App.i18n.t('gen.area'),
-        hint: App.i18n.t('gen.socraticArea'),
-        visual: '<div class="grid-stage">' + rectSvg(rect, false) + '</div>',
-        visualAria: App.i18n.t('gen.rectAria')
-          .replace(/\{w\}/g, rect.w).replace(/\{h\}/g, rect.h),
-        legend: App.i18n.t('gen.areaHint'),
-        options: numberOptions(areaOf(rect))
       };
     },
 
@@ -1061,45 +558,6 @@
             correct: f.id === fig.id
           };
         })),
-        inline: true
-      };
-    },
-
-    /* Which square is the dot on. Two numbers, column first. */
-    readCoord: function (nv) {
-      var col = App.utils.drawRound(nv.id + 'c', range(1, DATA.grid.cols));
-      var row = App.utils.drawRound(nv.id + 'r', range(1, DATA.grid.rows));
-      var picked = neighbourSquares(col, row, 2);
-      return {
-        prompt: App.i18n.t('gen.whichSquare'),
-        hint: App.i18n.t('gen.socraticCoord'),
-        visual: '<div class="grid-stage">' + coordGrid(col, row) + '</div>',
-        visualAria: coordLabel(col, row),
-        legend: App.i18n.t('gen.coordHint'),
-        options: App.utils.shuffle(
-          [{ html: coordLabel(col, row), aria: coordLabel(col, row), correct: true }].concat(
-            picked.map(function (o) {
-              return { html: coordLabel(o.c, o.r), aria: coordLabel(o.c, o.r), correct: false };
-            })
-          )),
-        inline: true
-      };
-    },
-
-    /* The other way round: the square is named and the grid has to be
-       found. */
-    pickCoord: function (nv) {
-      var col = App.utils.drawRound(nv.id + 'c', range(1, DATA.grid.cols));
-      var row = App.utils.drawRound(nv.id + 'r', range(1, DATA.grid.rows));
-      var other = neighbourSquares(col, row, 1)[0];
-      return {
-        prompt: App.i18n.t('gen.findSquare').replace(/\{where\}/g, coordLabel(col, row)),
-        hint: App.i18n.t('gen.socraticPickCoord'),
-        legend: App.i18n.t('gen.coordHint'),
-        options: App.utils.shuffle([
-          { html: coordGrid(col, row), aria: coordLabel(col, row), correct: true },
-          { html: coordGrid(other.c, other.r), aria: coordLabel(other.c, other.r), correct: false }
-        ]),
         inline: true
       };
     },

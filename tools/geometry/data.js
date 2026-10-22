@@ -7,9 +7,6 @@
    - DATA.angles: cada ángulo por sus grados. Su NOMBRE no está aquí:
      app.js lo deduce de los grados (menos de 90, 90, más de 90), así
      que el dibujo y la respuesta no pueden decir cosas distintas.
-   - DATA.rects: rectángulos sobre cuadrícula, en cuadraditos. El
-     perímetro y el área tampoco están guardados: se calculan, por lo
-     mismo.
    - DATA.figures: figuras dibujadas cuadradito a cuadradito. '#' es
      un cuadradito pintado y '.' uno vacío. Si la figura es simétrica
      o no TAMPOCO está guardado: app.js lo comprueba doblando la
@@ -40,28 +37,6 @@ var DATA = {
       ]
     },
 
-    /* El perímetro como lo que es: cuánto mide el borde, contando los
-       cuadraditos que se recorren al darle la vuelta. */
-    perimetro: {
-      picto: '🔲',
-      levels: [
-        { id: 'p1', tipo: 'perimeter', shape: 'square' },
-        { id: 'p2', tipo: 'perimeter', shape: 'rect' }
-      ]
-    },
-
-    /* El área como lo que es: cuántos cuadraditos caben dentro. */
-    area: {
-      picto: '🟦',
-      levels: [
-        { id: 'a1', tipo: 'area', shape: 'square' },
-        { id: 'a2', tipo: 'area', shape: 'rect' },
-        /* a3 cambia solo la figura: un triángulo, dibujado dentro de su
-           rectángulo para que «la mitad» se vea. */
-        { id: 'a3', tipo: 'triangleArea' }
-      ]
-    },
-
     /* La simetría como doblar por la mitad y que coincida. */
     simetria: {
       picto: '🦋',
@@ -74,27 +49,6 @@ var DATA = {
       ]
     },
 
-    /* El círculo, medido como se mide de verdad: el borde comparado con
-       lo que mide de un lado a otro, y lo de dentro contando cuadrados. */
-    circulo: {
-      picto: '⭕',
-      levels: [
-        { id: 'w1', tipo: 'circleEdge' },
-        { id: 'w2', tipo: 'circleArea' }
-      ]
-    },
-
-    /* El volumen como lo que es: cuántos cubos caben dentro. */
-    volumen: {
-      picto: '🧊',
-      levels: [
-        { id: 'v1', tipo: 'volume' },
-        /* v2 pregunta por fuera en vez de por dentro: el cuerpo abierto
-           en sus seis caras, y se cuentan los cuadraditos de todas. */
-        { id: 'v2', tipo: 'surface' }
-      ]
-    },
-
     /* Clasificar por los lados iguales. Primero se cuentan las marcas, y
        solo después se le pone nombre: contar es más fácil que recordar. */
     clasificar: {
@@ -104,55 +58,8 @@ var DATA = {
         { id: 'q2', tipo: 'nameFigure', group: 'triangles' },
         { id: 'q3', tipo: 'nameFigure', group: 'quads' }
       ]
-    },
-
-    /* Una casilla se dice con dos números. La cuadrícula lleva los
-       números escritos, así que se lee, no se calcula. */
-    coordenadas: {
-      picto: '🗺️',
-      levels: [
-        { id: 'k1', tipo: 'readCoord' },
-        { id: 'k2', tipo: 'pickCoord' },
-        /* k3 pone varios puntos a la vez: si están en línea recta se ve,
-           y el que se sale también. Esa es la recta de la geometría
-           analítica, sin ecuación. */
-        { id: 'k3', tipo: 'offTheLine' }
-      ]
-    },
-
-    /* Dos rectas a la vez: o no se tocan nunca, o se cruzan, y si al
-       cruzarse hacen esquina de cuadrado son perpendiculares. */
-    rectas: {
-      picto: '➕',
-      levels: [
-        { id: 'r1', tipo: 'linePair' }
-      ]
     }
   },
-
-  /* Parejas de rectas, cada una por dos puntos en una caja de 120x120.
-     `kind` NO es la respuesta: app.js compara las pendientes del dibujo
-     y saca de ahí si son paralelas, perpendiculares o solo cruzadas, y
-     comprueba al arrancar que cada pareja es lo que dice ser. */
-  linePairs: [
-    { id: 'para1', kind: 'parallel', a: [[10, 30], [110, 30]], b: [[10, 80], [110, 80]] },
-    { id: 'para2', kind: 'parallel', a: [[20, 10], [20, 110]], b: [[80, 10], [80, 110]] },
-    { id: 'para3', kind: 'parallel', a: [[10, 20], [110, 80]], b: [[10, 50], [110, 110]] },
-    { id: 'perp1', kind: 'perpendicular', a: [[10, 60], [110, 60]], b: [[60, 10], [60, 110]] },
-    { id: 'perp2', kind: 'perpendicular', a: [[15, 15], [105, 105]], b: [[15, 105], [105, 15]] },
-    { id: 'perp3', kind: 'perpendicular', a: [[10, 90], [110, 40]], b: [[30, 10], [80, 110]] },
-    { id: 'cross1', kind: 'crossing', a: [[10, 100], [110, 20]], b: [[10, 40], [110, 90]] },
-    { id: 'cross2', kind: 'crossing', a: [[10, 20], [110, 100]], b: [[10, 70], [110, 40]] },
-    { id: 'cross3', kind: 'crossing', a: [[20, 10], [20, 110]], b: [[10, 100], [110, 30]] }
-  ],
-
-  /* Triángulos rectángulos por sus dos catetos, en cuadraditos. Los dos
-     pares: el área sale entera al partir el rectángulo por la mitad, que
-     es justo lo que el dibujo enseña. app.js lo comprueba. */
-  triangles: [
-    { w: 4, h: 2 }, { w: 2, h: 4 }, { w: 6, h: 2 }, { w: 4, h: 4 },
-    { w: 6, h: 4 }, { w: 2, h: 6 }, { w: 4, h: 6 }
-  ],
 
   /* Marcas de hora entre las que se mide el ángulo. Los grados no están
      guardados: la vuelta entera son 360 y hay 12 marcas, así que cada
@@ -192,39 +99,6 @@ var DATA = {
     ]
   },
 
-  /* Cuadrícula de coordenadas. Pequeña a propósito: las dos filas de
-     números tienen que caber y leerse a 320 px. */
-  grid: { cols: 5, rows: 5 },
-
-  /* Puntos en línea recta, dichos como una regla: se empieza en `from` y
-     se avanza `step` tantas veces como diga `n`. Los puntos NO están
-     guardados uno a uno: app.js los saca de la regla, así que están en
-     línea por construcción. `off` es el que se sale, y app.js comprueba
-     al arrancar que de verdad no cae en esa recta y que todos caben en la
-     cuadrícula. */
-  lineRules: [
-    { from: [1, 1], step: [1, 1], n: 3, off: [4, 2] },
-    { from: [1, 5], step: [1, -1], n: 3, off: [4, 4] },
-    { from: [1, 3], step: [2, 0], n: 3, off: [3, 5] },
-    { from: [2, 1], step: [0, 2], n: 3, off: [4, 4] },
-    { from: [1, 2], step: [2, 1], n: 3, off: [2, 5] },
-    { from: [5, 1], step: [-2, 1], n: 3, off: [3, 5] }
-  ],
-
-  /* Círculos por lo que miden de un lado a otro, en centímetros. El
-     borde mide algo más de 3 veces eso; la actividad pregunta por el
-     "más o menos", que es la introducción honesta a esa idea. Ni el
-     borde ni los cuadrados de dentro están guardados: app.js los
-     calcula. */
-  circles: [4, 5, 8, 10, 20],
-
-  /* Cajas por sus tres medidas, en cubos. Pequeñas para que las capas
-     se puedan dibujar y contar una a una. */
-  boxes: [
-    { w: 2, h: 2, d: 2 }, { w: 3, h: 2, d: 2 }, { w: 3, h: 3, d: 2 },
-    { w: 4, h: 2, d: 3 }, { w: 2, h: 3, d: 4 }, { w: 4, h: 3, d: 2 }
-  ],
-
   /* Figuras para distinguir mover de girar. Ninguna es simétrica al
      girarla: si lo fuera, movida y girada se verían igual y la pregunta
      no tendría respuesta única. app.js lo comprueba. */
@@ -249,17 +123,6 @@ var DATA = {
     { id: 'obtuse2', deg: 135 },
     { id: 'obtuse3', deg: 150 }
   ],
-
-  /* Lados en cuadraditos. Pequeños a propósito: se tienen que poder
-     contar de uno en uno sin perderse. */
-  rects: {
-    square: [
-      { w: 2, h: 2 }, { w: 3, h: 3 }, { w: 4, h: 4 }, { w: 5, h: 5 }
-    ],
-    rect: [
-      { w: 4, h: 2 }, { w: 5, h: 3 }, { w: 6, h: 2 }, { w: 3, h: 5 }, { w: 6, h: 4 }
-    ]
-  },
 
   figures: [
     /* Simétricas al doblar por una raya vertical. */

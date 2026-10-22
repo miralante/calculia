@@ -38,13 +38,6 @@
   stroke: var(--color-superficie);
   stroke-width: 2;
 }
-/* The edge is what is being counted, so it is drawn on top of the cells,
-   thick enough to follow with a finger. */
-.grid-border {
-  fill: none;
-  stroke: var(--color-texto);
-  stroke-width: 5;
-}
 /* The fold line: dashed, so it reads as "fold here" and not as an edge. */
 .fold-line {
   stroke: var(--color-texto);
@@ -72,66 +65,6 @@
   stroke: var(--color-texto);
   stroke-width: 3;
   stroke-linecap: round;
-}
-
-/* The coordinate grid: empty squares with the numbers written on the edges. */
-.coord-svg { overflow: visible; }
-.coord-cell {
-  fill: var(--color-superficie);
-  stroke: var(--color-borde);
-  stroke-width: 2;
-}
-.coord-dot { fill: var(--mod-secuencia, var(--color-texto)); }
-.coord-label {
-  fill: var(--color-texto);
-  font-size: 11px;
-  font-weight: 700;
-  text-anchor: middle;
-}
-
-/* The circle, and the grid that makes its inside countable. */
-.circle-outline {
-  fill: none;
-  stroke: var(--color-texto);
-  stroke-width: 4;
-}
-.across-line {
-  stroke: var(--mod-secuencia, var(--color-texto));
-  stroke-width: 4;
-  stroke-linecap: round;
-}
-.circle-cell {
-  fill: var(--color-superficie);
-  stroke: var(--color-borde);
-  stroke-width: 1;
-}
-.circle-cell.is-in { fill: var(--mod-razonamiento, var(--color-texto)); }
-
-/* A box drawn as its layers, so the cubes can be counted one by one. */
-.layer-stack {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0.7rem;
-  min-height: 150px;
-}
-.layer {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 4px;
-  border: 2px solid var(--color-borde);
-  border-radius: 6px;
-  background: var(--color-superficie);
-}
-.layer-row { display: flex; gap: 2px; }
-.cube {
-  display: block;
-  width: 16px;
-  height: 16px;
-  border: 1px solid var(--color-texto);
-  background: var(--mod-secuencia, var(--color-superficie));
 }
 
 /* ---- The protractor ----
@@ -174,75 +107,6 @@
   stroke-linecap: round;
 }
 
-/* ---- Two lines ----
-   One line is solid and the other dashed, so they are two lines even with
-   no colour at all (WCAG 1.4.1). */
-.line-box {
-  fill: var(--color-superficie);
-  stroke: var(--color-borde);
-  stroke-width: 2;
-}
-.pair-line {
-  stroke-width: 4;
-  stroke-linecap: round;
-}
-.pair-line.is-first { stroke: var(--mod-secuencia, var(--color-texto)); }
-.pair-line.is-second {
-  stroke: var(--mod-razonamiento, var(--color-texto));
-  stroke-dasharray: 9 5;
-}
-
-/* ---- A triangle inside the rectangle it is half of ---- */
-.half-box {
-  fill: none;
-  stroke: var(--color-texto);
-  stroke-width: 2;
-  stroke-dasharray: 6 4;
-}
-.tri-fill {
-  fill: var(--mod-secuencia, var(--color-texto));
-  fill-opacity: 0.55;
-  stroke: var(--color-texto);
-  stroke-width: 2.5;
-}
-
-/* ---- A box opened out into its six faces ---- */
-.net {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 150px;
-}
-.face {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding: 3px;
-  border: 2px solid var(--color-texto);
-  border-radius: 4px;
-  background: var(--color-superficie);
-}
-.face-row {
-  display: flex;
-  gap: 1px;
-}
-.face-cell {
-  display: block;
-  width: 14px;
-  height: 14px;
-  border: 1px solid var(--color-borde);
-  background: var(--mod-razonamiento, var(--color-superficie));
-}
-
-/* ---- Points that line up, and the one that does not ---- */
-.dot-letter {
-  fill: var(--color-superficie);
-  font-size: 10px;
-  font-weight: 700;
-  text-anchor: middle;
-}
 /* The answer name sits under its figure, not beside it. */
 .answer-name { display: block; }
 /* Answer options */

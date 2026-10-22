@@ -1,0 +1,271 @@
+/* Linear and affine functions — tool-specific styles. Shared styles live
+   in assets/css/. Colours come from the tokens, so the grid reads the same
+   in light and dark themes. */
+
+/* ---- The grid ----
+   Every line and point is drawn from the same numbers the answer is
+   compared against, so colour is never the only thing that carries the
+   idea: the line is thick, the points are dots, the axes are heavier. */
+.fn-svg {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+.grid-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+/* The grid is tall (eleven rows of numbers), so a phone caps it by height
+   and keeps its proportions, instead of letting its width fill the card and
+   pushing the answers below the fold. */
+.grid-stage .fn-svg {
+  width: auto;
+  height: min(300px, 52vh);
+  max-width: 100%;
+}
+/* The same cap for the drawing of a concept card. The machine is wide,
+   not tall, so it keeps its own size. */
+.concept-visual .fn-svg:not(.fn-machine) {
+  width: auto;
+  height: min(260px, 40vh);
+  max-width: 100%;
+}
+.visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+}
+.prompt {
+  margin: 0;
+  text-align: center;
+}
+.legend {
+  margin: 0.5rem 0 0;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-pequeno);
+  text-align: center;
+}
+
+.fn-grid {
+  stroke: var(--color-borde);
+  stroke-width: 1;
+}
+.fn-axis {
+  stroke: var(--color-texto);
+  stroke-width: 2;
+}
+.fn-num {
+  fill: var(--color-texto-suave);
+  font-size: 11px;
+  font-weight: 600;
+}
+.fn-num-x {
+  text-anchor: middle;
+}
+.fn-num-y {
+  text-anchor: end;
+}
+
+/* The line of the rule: the thickest thing on the grid, in the accent. */
+.fn-line {
+  stroke: var(--mod-razonamiento);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+/* The points the rule makes. Small dots, same colour as the line. */
+.fn-dot {
+  fill: var(--mod-razonamiento);
+}
+/* The point the question is about: bigger, and outlined in the
+   surface colour so it stands out on the line. */
+.fn-dot-here {
+  fill: var(--mod-secuencia);
+  stroke: var(--color-superficie);
+  stroke-width: 2;
+}
+.fn-letter {
+  fill: var(--color-texto);
+  font-size: 13px;
+  font-weight: 700;
+}
+.fn-guide {
+  stroke: var(--color-texto-suave);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+.fn-step-run {
+  stroke: var(--color-texto);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+.fn-step-rise {
+  stroke: var(--mod-secuencia);
+  stroke-width: 3;
+}
+.fn-step-label {
+  fill: var(--color-texto);
+  font-size: 12px;
+  font-weight: 700;
+}
+.fn-n {
+  fill: var(--mod-secuencia);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* ---- The table of the rule ---- */
+.fn-table {
+  border-collapse: collapse;
+  min-width: 9rem;
+  text-align: center;
+}
+.fn-table th,
+.fn-table td {
+  padding: 0.35rem 1.1rem;
+  border: 2px solid var(--color-texto);
+  font-size: 1.25rem;
+}
+.fn-table th {
+  background: var(--color-superficie);
+  color: var(--color-texto-suave);
+  font-size: 1rem;
+}
+
+/* ---- The rule as a machine ---- */
+.fn-machine {
+  max-width: 300px;
+}
+.fn-machine-io {
+  fill: var(--color-superficie);
+  stroke: var(--color-texto);
+  stroke-width: 2.5;
+}
+.fn-machine-num {
+  fill: var(--color-texto);
+  font-size: 22px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+.fn-machine-box {
+  fill: var(--mod-razonamiento-suave);
+  stroke: var(--mod-razonamiento);
+  stroke-width: 2.5;
+}
+.fn-machine-rule {
+  fill: var(--color-texto);
+  font-size: 18px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+.fn-arrow {
+  stroke: var(--color-texto);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.fn-machine-cap {
+  fill: var(--color-texto-suave);
+  font-size: 13px;
+  text-anchor: middle;
+}
+
+/* ---- Four answers: two by two when there is room for them ---- */
+.options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio);
+}
+@media (min-width: 480px) {
+  .options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* Two small grids side by side, as the answer to "which drawing". */
+.options .fn-svg {
+  max-width: 150px;
+}
+
+/* ---- Screens ---- */
+.center-row {
+  justify-content: center;
+  text-align: center;
+}
+.centered {
+  align-items: center;
+  text-align: center;
+}
+.tool-header h1 { font-size: 1.5rem; }
+
+.concept-card {
+  align-items: center;
+  border-color: var(--mod-razonamiento-suave);
+}
+.concept-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 150px;
+}
+.concept-title {
+  margin: 0;
+  color: var(--mod-razonamiento);
+  font-size: 1.3rem;
+}
+.concept-text {
+  max-width: 34rem;
+  margin: 0;
+  text-align: center;
+}
+
+.real-card {
+  align-items: center;
+  border-color: var(--mod-razonamiento-suave);
+}
+.real-object {
+  min-height: 1.2em;
+  font-size: 5rem;
+  line-height: 1.2;
+}
+.real-caption {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.real-note {
+  max-width: 30rem;
+  margin: 0;
+  color: var(--color-texto-suave);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--espacio);
+}
+.carousel-controls .btn {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.intro-buttons {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--espacio);
+}
+
+.emoji-large {
+  font-size: 3.5rem;
+  line-height: 1.1;
+}
+.transfer {
+  max-width: 34rem;
+  margin: 0 auto;
+  color: var(--color-texto-suave);
+  text-align: center;
+}

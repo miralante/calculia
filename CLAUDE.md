@@ -321,10 +321,11 @@ caras tiene este pirámide abierto?") were too hard for the target
 user — both ask the kid to mentally fold an open net, and the
 pyramid is the worst offender because its 4 triangles and 1 square
 are easy to miscount. Pulling them left a 41-question round that
-doesn't fit a one-at-a-time flow. The remaining questions are 41:
+doesn't fit a one-at-a-time flow. The remaining questions are 46:
 9 `shapeName` + 6 `sides` + 1 `corners` + 6 `perimeter` + 1 `area` +
-3 `solidVolume` + 3 `shapeSymmetry` + 3 `shapeSimilar` + 7
-`solidName` + 2 `solidParts` (cube and prism only). The
+2 `triangleKind` (by sides, by angles) + 3 `shapeAreaCalc` (square,
+rectangle, triangle) + 3 `solidVolume` + 3 `shapeSymmetry` + 3
+`shapeSimilar` + 7 `solidName` + 2 `solidParts` (cube and prism only). The
 `fromNet` generator and its strings (`gen.fromNet`, `gen.netHint`,
 `gen.netPiecesAria`) are kept in place in case a future activity
 wants the fold-the-net mechanic back. See the comment block at

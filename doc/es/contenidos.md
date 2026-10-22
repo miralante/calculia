@@ -54,7 +54,7 @@ primero.
 | Actividad | Slug (`tools/`) | Objetivo didáctico | Vocabulario clave |
 |---|---|---|---|
 | Números | `numbers/` | Leer, escribir y comparar números enteros, secuencias y valor posicional. Comprender positivos, negativos y cero con ejemplos cotidianos y práctica guiada. | número, contar, secuencia, posición, mayor, menor, igual, positivo, negativo, cero, termómetro, ascensor. |
-| Formas | `shapes/` | Reconocer formas planas y cuerpos geométricos, relacionarlos con objetos reales y practicar sus nombres, sus partes y los conceptos de perímetro, área, volumen, simetría y semejanza. | círculo, polígono, lado, vértice, perímetro, área, volumen, simetría, semejanza, cubo, prisma, pirámide, esfera, cilindro, cono. |
+| Formas | `shapes/` | Reconocer formas planas y cuerpos geométricos, relacionarlos con objetos reales y practicar sus nombres, sus partes, los tipos de triángulo, el área por fórmula y los conceptos de perímetro, área, volumen, simetría y semejanza. | círculo, polígono, lado, vértice, perímetro, área, volumen, simetría, semejanza, triángulo equilátero, isósceles, escaleno, cubo, prisma, pirámide, esfera, cilindro, cono. |
 | Fracciones y medidas | `fractions-measures/` | Reconocer, comparar y operar con fracciones y unidades de medida habituales. | fracción, mitad, tercio, metro, kilo, litro, comparar. |
 | Tablas de multiplicar | `math-tables/` | Tablas de multiplicar y dividir mediante repetición y retos cortos. | tabla, multiplicar, dividir, producto. |
 | Cálculo mental | `mental-math/` | Cálculo rápido con las cuatro operaciones, sin pasos intermedios escritos. | sumar, restar, multiplicar, dividir, rápido, cálculo. |
@@ -139,18 +139,26 @@ primero.
 
 - Reconocer círculo, triángulo, cuadrado, rectángulo, rombo, trapecio,
   pentágono, hexágono y octágono (`shapes/`).
+- Reconocer los tipos de triángulo: por sus lados (equilátero, isósceles,
+  escaleno) y por sus ángulos (rectángulo, acutángulo, obtusángulo)
+  (`shapes/`).
 - Distinguir las formas planas, que no tienen volumen, de los cuerpos:
   cubo, prismas, pirámide, esfera, cilindro y cono (`shapes/`).
 - Relacionar cada forma con objetos cotidianos y practicar sus nombres,
   lados, vértices, perímetro, área, volumen, simetría y semejanza (`shapes/`).
-- **Cuatro diapositivas de conceptos** antes de la galería. La primera
+- **Ocho diapositivas de conceptos** antes de la galería. La primera
   muestra qué es una forma plana y un cuerpo. La segunda explica el borde
   de la figura: lado y vértice —la palabra de cada día y la de geometría,
   las dos— en paralelo, y el perímetro debajo, que es la vuelta por todos
   los lados y por eso ocupa la fila entera. La tercera empareja el interior
   de las dos cosas: el área de la figura y el volumen del cuerpo. La cuarta
   compara dos figuras, la simetría (se dobla en dos mitades iguales) y la
-  semejanza (la misma forma a otro tamaño).
+  semejanza (la misma forma a otro tamaño). Las cuatro últimas explican el
+  área: primero se cuentan los cuadraditos de dentro de un cuadrado, un
+  rectángulo y un triángulo (que cubre la mitad del cuadrado); después, la
+  fórmula de cada una (lado × lado, base × altura, y la mitad para el
+  triángulo); y al final, los tipos de triángulo por sus lados y por sus
+  ángulos, cada uno con su dibujo.
 - Cada concepto se enseña con un dibujo propio, no con la palabra: el
   perímetro es el contorno a trazos, el área el interior rayado y recortado
   por la propia forma, el volumen la caja en trazos con el cuerpo dentro, y
@@ -163,16 +171,20 @@ primero.
   y su pie, y una nota aplica sobre ese objeto los conceptos que le
   corresponden: a una figura, sus lados, vértices, perímetro y área; a un
   cuerpo, su volumen. La nota no vuelve a definirlos, los cuenta.
-- Un solo test de 50 preguntas mezcla los nombres de todas las formas, lados
-  y vértices del triángulo al pentágono, perímetros, área, volumen, simetría,
-  semejanza, cuerpos y desarrollos.
-- **Aquí se presentan los conceptos, no se calculan.** `shapes/` pregunta por
-  ellos en su forma de reconocer —qué parte de la figura es su área, por
-  dónde se dobla, cuál es la misma forma más pequeña— y el cálculo se queda
-  donde ya está: el área contando cuadraditos y el perímetro sobre la
-  cuadrícula son de `geometry/`, el volumen contando cubitos también, y la
-  semejanza con escalas y pendientes ya no tiene actividad (`similar/` se retiró); la pendiente de las rampas está en `trigonometry/`. Los mismos números
-  no se piden dos veces en la suite.
+- Un solo test de 46 preguntas mezcla los nombres de todas las formas, lados
+  y vértices del triángulo al pentágono, perímetros, área, áreas por fórmula,
+  tipos de triángulo, volumen, simetría, semejanza, cuerpos y desarrollos.
+- **Los conceptos se presentan y se reconocen; el área por fórmula se
+  calcula.** `shapes/` pregunta por ellos en su forma de reconocer —qué parte
+  de la figura es su área, por dónde se dobla, cuál es la misma forma más
+  pequeña, qué tipo de triángulo es— y calcula una sola cosa: el área de
+  cuadrado, rectángulo y triángulo con su fórmula, con medidas en centímetros.
+  El área contando cuadraditos se explica en `shapes/`; el perímetro sobre la
+  cuadrícula y el volumen contando cubitos se retiraron de `geometry/` y no
+  tienen actividad, y la semejanza con escalas
+  y pendientes ya no tiene actividad (`similar/` se retiró); la pendiente de
+  las rampas está en `trigonometry/`. Los mismos números no se piden dos veces
+  en la suite.
 - Dos decisiones de la presentación del perímetro y de la simetría están
   forzadas por la pregunta, no por gusto. El perímetro solo se mide en
   figuras regulares, porque en un rectángulo o un trapecio el lado no es uno

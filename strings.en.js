@@ -22,10 +22,12 @@
 
     "numbers": { "name": "Numbers", "detail": "Read and compare. Learn about positive and negative numbers." },
     "losnumeros": { "name": "Number Types", "detail": "Natural numbers, integers, decimals and fractions." },
+    "lines": { "name": "Two lines", "detail": "Do they touch?" },
     "shapes": { "name": "Shapes", "detail": "The shapes you see every day." },
     "trigonometry": { "name": "Trigonometry", "detail": "The three sides of a triangle." },
     "scale": { "name": "Scale", "detail": "Read a ruler, a thermometer and a plan." },
-    "geometry": { "name": "Geometry", "detail": "Angles, edges and halves." },
+    "linearfunctions": { "name": "Linear and affine functions", "detail": "A rule that draws a straight line." },
+    "geometry": { "name": "Geometry", "detail": "Angles, grid squares and halves." },
     "fractionsmeasures": { "name": "Fractions", "detail": "Parts, halves and decimals." },
     "measures": { "name": "Measures", "detail": "Metres, kilos and litres." },
     "mentalmath": { "name": "Subtraction and Mental Math", "detail": "Subtract, big-number math and count in groups." },

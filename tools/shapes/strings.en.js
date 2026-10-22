@@ -31,6 +31,30 @@
     introSymmetryText: 'It is that the shape folds into two halves that match exactly.',
     introSimilarityTitle: 'Similarity',
     introSimilarityText: 'It is the same shape at another size: bigger or smaller.',
+    introAreaSquareTitle: 'Square',
+    introAreaSquareText: 'Its area is side × side.',
+    introAreaRectangleTitle: 'Rectangle',
+    introAreaRectangleText: 'Its area is base × height.',
+    introAreaTriangleTitle: 'Triangle',
+    introAreaTriangleText: 'Its area is (base × height) ÷ 2. It is half of a rectangle with the same base and height.',
+    introEquilateralTitle: 'Equilateral',
+    introEquilateralText: 'Its 3 sides are the same length.',
+    introIsoscelesTitle: 'Isosceles',
+    introIsoscelesText: 'It has 2 sides the same length.',
+    introScaleneTitle: 'Scalene',
+    introScaleneText: 'Its 3 sides are all different.',
+    introRightTitle: 'Right',
+    introRightText: 'It has one square corner, like the corner of a sheet of paper.',
+    introAcuteTitle: 'Acute',
+    introAcuteText: 'All 3 of its corners are narrower than the corner of a sheet of paper.',
+    introObtuseTitle: 'Obtuse',
+    introObtuseText: 'It has one corner wider than the corner of a sheet of paper.',
+    introCountSquareTitle: 'Square',
+    introCountSquareText: 'Count the little squares inside, row by row.',
+    introCountRectangleTitle: 'Rectangle',
+    introCountRectangleText: 'Count its little squares inside: how many are in each row, and how many rows there are.',
+    introCountTriangleTitle: 'Triangle',
+    introCountTriangleText: 'The squares cut by the diagonal are halves. Two halves make one whole square, so the triangle covers half of the square.',
     introSolidTitle: 'Solid',
     introSolidText: 'It is not flat. You can hold it, like a ball.',
     galleryPrevious: 'Previous',
@@ -89,6 +113,16 @@
       triangularPrism: 'triangular prism',
       pyramid: 'pyramid',
       cone: 'cone'
+    },
+    /* The names of the triangle kinds. They are said in full ("equilateral
+       triangle") because they are the answer to the question, not a title. */
+    triKind: {
+      equilateral: 'equilateral triangle',
+      isosceles: 'isosceles triangle',
+      scalene: 'scalene triangle',
+      right: 'right triangle',
+      acute: 'acute triangle',
+      obtuse: 'obtuse triangle'
     },
     gallery: {
       flat: {
@@ -178,6 +212,14 @@
       solidToNamePrompt: 'What shape is this object?',
       solidToObjectPrompt: 'Which of these objects is a {name}?',
       solidHint: 'Think about the shape of the object, not what it is for.',
+      triangleAria: 'A triangle.',
+      triangleSidesPrompt: 'What kind of triangle is it, by its sides?',
+      triangleAnglesPrompt: 'What kind of triangle is it, by its angles?',
+      areaCalcPrompt: 'What is the area of this {name}? Answer in cm².',
+      cmValue: '{n} cm',
+      sideLabel: 'side',
+      baseLabel: 'base',
+      heightLabel: 'height',
       /* The hint shown after a mistake. One per question type, and each one
          says what to do with the figure being looked at: the single
          sentence it replaced ("Try again. Look at the picture calmly") was
@@ -194,7 +236,10 @@
       socraticSimilar: '🤔 The similar figure has the same shape, it does not have to be the same size.',
       socraticFaces: '🤔 Count the pieces in the drawing one by one: each piece is one face of the solid.',
       socraticNet: '🤔 Fold each piece in your head: what solid comes out when it closes up?',
-      socraticSolid: '🤔 Look at the shape of the object, not what it is used for or its colour.'
+      socraticSolid: '🤔 Look at the shape of the object, not what it is used for or its colour.',
+      socraticTriangleSides: '🤔 Look at the marks on the sides: sides with the same mark are the same length. A side with no mark is different from the others.',
+      socraticTriangleAngles: '🤔 Look at the widest corner. If it is like the corner of a sheet of paper, it is right; if it is wider, it is obtuse; if all three are narrower, it is acute.',
+      socraticAreaCalc: '🤔 Multiply the two measures. If it is a triangle, divide the result by 2.'
     },
     transfer: 'This will help you understand signs and drawings, and describe what something is like when you need to explain it.'
   }, 'en');

@@ -31,6 +31,30 @@
     introSymmetryText: 'Es que la forma se dobla en dos mitades iguales.',
     introSimilarityTitle: 'Semejanza',
     introSimilarityText: 'Es la misma forma a otro tamaño: más grande o más pequeña.',
+    introAreaSquareTitle: 'Cuadrado',
+    introAreaSquareText: 'Su área es lado × lado.',
+    introAreaRectangleTitle: 'Rectángulo',
+    introAreaRectangleText: 'Su área es base × altura.',
+    introAreaTriangleTitle: 'Triángulo',
+    introAreaTriangleText: 'Su área es (base × altura) ÷ 2. Es la mitad de un rectángulo con la misma base y altura.',
+    introEquilateralTitle: 'Equilátero',
+    introEquilateralText: 'Sus 3 lados miden lo mismo.',
+    introIsoscelesTitle: 'Isósceles',
+    introIsoscelesText: 'Tiene 2 lados iguales.',
+    introScaleneTitle: 'Escaleno',
+    introScaleneText: 'Sus 3 lados son distintos.',
+    introRightTitle: 'Rectángulo',
+    introRightText: 'Tiene una esquina recta, como la de una hoja de papel.',
+    introAcuteTitle: 'Acutángulo',
+    introAcuteText: 'Sus 3 esquinas son más cerradas que la de una hoja de papel.',
+    introObtuseTitle: 'Obtusángulo',
+    introObtuseText: 'Tiene una esquina más abierta que la de una hoja de papel.',
+    introCountSquareTitle: 'Cuadrado',
+    introCountSquareText: 'Cuenta los cuadraditos de dentro, fila a fila.',
+    introCountRectangleTitle: 'Rectángulo',
+    introCountRectangleText: 'Cuenta sus cuadraditos de dentro: cuántos hay en cada fila y cuántas filas hay.',
+    introCountTriangleTitle: 'Triángulo',
+    introCountTriangleText: 'Los cuadraditos cortados por la diagonal son medios. Dos medios forman uno entero, así que el triángulo cubre la mitad del cuadrado.',
     introSolidTitle: 'Cuerpo',
     introSolidText: 'No es plana. Es como una pelota que puedes coger.',
     galleryPrevious: 'Anterior',
@@ -89,6 +113,16 @@
       triangularPrism: 'prisma triangular',
       pyramid: 'pirámide',
       cone: 'cono'
+    },
+    /* Los nombres de los tipos de triángulo. Van completos ("triángulo
+       equilátero") porque son la respuesta de la pregunta, no un título. */
+    triKind: {
+      equilateral: 'triángulo equilátero',
+      isosceles: 'triángulo isósceles',
+      scalene: 'triángulo escaleno',
+      right: 'triángulo rectángulo',
+      acute: 'triángulo acutángulo',
+      obtuse: 'triángulo obtusángulo'
     },
     gallery: {
       flat: {
@@ -178,6 +212,14 @@
       solidToNamePrompt: '¿Qué forma tiene este objeto?',
       solidToObjectPrompt: '¿Cuál de estos objetos es un {name}?',
       solidHint: 'Piensa en la forma del objeto, no en para qué sirve.',
+      triangleAria: 'Un triángulo.',
+      triangleSidesPrompt: '¿Qué tipo de triángulo es según sus lados?',
+      triangleAnglesPrompt: '¿Qué tipo de triángulo es según sus ángulos?',
+      areaCalcPrompt: '¿Cuánto mide el área de este {name}? Responde en cm².',
+      cmValue: '{n} cm',
+      sideLabel: 'lado',
+      baseLabel: 'base',
+      heightLabel: 'altura',
       /* La pista que sale al fallar. Una por tipo de pregunta, y todas
          dicen qué hacer con la figura que se está mirando: la frase
          única que había antes («Prueba otra vez. Mira el dibujo con
@@ -194,7 +236,10 @@
       socraticSimilar: '🤔 La figura semejante tiene la misma forma, no hace falta que sea del mismo tamaño.',
       socraticFaces: '🤔 Cuenta las piezas del dibujo una por una: cada pieza es una cara del cuerpo.',
       socraticNet: '🤔 Dobla cada pieza en la cabeza: ¿qué cuerpo sale cuando se cierra?',
-      socraticSolid: '🤔 Fíjate en la forma del objeto, no en para qué se usa ni en su color.'
+      socraticSolid: '🤔 Fíjate en la forma del objeto, no en para qué se usa ni en su color.',
+      socraticTriangleSides: '🤔 Mira las marcas de los lados: los que tienen la misma marca miden lo mismo. Si un lado no tiene marca, es distinto de los demás.',
+      socraticTriangleAngles: '🤔 Mira la esquina más abierta. Si es como la de una hoja de papel, es rectángulo; si es más abierta, es obtusángulo; si las tres son más cerradas, es acutángulo.',
+      socraticAreaCalc: '🤔 Multiplica las dos medidas. Si es un triángulo, divide el resultado entre 2.'
     },
     transfer: 'Esto te servirá para entender señales y dibujos, y para decir cómo es algo cuando lo tengas que explicar.'
   }, 'es');

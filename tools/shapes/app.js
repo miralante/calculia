@@ -559,7 +559,7 @@
      adding one entry and nothing else. The count is arithmetic, not data —
      it has to match the branches below or the carousel wraps into a
      gallery slide it should never show. */
-  var CONCEPT_SLIDES = 4;
+  var CONCEPT_SLIDES = 8;
 
   /* The fold line of the symmetry slide: from the top vertex of the
      triangle to the middle of its base, which are two of its own three
@@ -599,6 +599,151 @@
       'stroke="var(--color-texto)" stroke-width="4" stroke-linejoin="round"/>' +
       '<g clip-path="url(#shapesAreaClip)" class="area-hatch">' + hatch.join('') + '</g>' +
       '</svg>';
+  }
+
+  /* ---- Triangles and the area by formula ----
+     Each kind of triangle is three corners, fixed here once. The marks that
+     say which sides are equal, and the square that says which corner is a
+     right angle, are drawn from those same corners, so they cannot come
+     loose from the triangle they describe. */
+  var TRIANGLE_KINDS = {
+    sides: ['equilateral', 'isosceles', 'scalene'],
+    angles: ['right', 'acute', 'obtuse']
+  };
+
+  var TRIANGLE_CORNERS = {
+    equilateral: [[60, 14], [101.6, 86], [18.4, 86]],
+    isosceles: [[60, 8], [96, 98], [24, 98]],
+    scalene: [[12, 98], [110, 96], [34, 16]],
+    right: [[20, 98], [104, 98], [20, 22]],
+    acute: [[34, 14], [10, 98], [110, 96]],
+    obtuse: [[10, 96], [110, 96], [56, 60]]
+  };
+
+  /* Tick marks per side, in the order the corners are listed: side 0 runs
+     from corner 0 to corner 1, and so on. Sides with the same number of
+     ticks are the same length. */
+  var TRIANGLE_TICKS = {
+    equilateral: [1, 1, 1],
+    isosceles: [2, 0, 2],
+    scalene: [0, 0, 0]
+  };
+
+  var AREA_SHAPES = ['square', 'rectangle', 'triangle'];
+
+  /* One short stroke across the middle of a side, or several spread along it. */
+  function sideTicks(a, b, count) {
+    var length = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    var ux = (b[0] - a[0]) / length;
+    var uy = (b[1] - a[1]) / length;
+    var out = '';
+    for (var k = 0; k < count; k += 1) {
+      var along = (k - (count - 1) / 2) * 7;
+      var x = (a[0] + b[0]) / 2 + ux * along;
+      var y = (a[1] + b[1]) / 2 + uy * along;
+      out += '<line x1="' + (x - uy * 6).toFixed(1) + '" y1="' + (y + ux * 6).toFixed(1) +
+        '" x2="' + (x + uy * 6).toFixed(1) + '" y2="' + (y - ux * 6).toFixed(1) + '"/>';
+    }
+    return out;
+  }
+
+  function triangleKindSvg(kind) {
+    var corners = TRIANGLE_CORNERS[kind];
+    var ticks = TRIANGLE_TICKS[kind] || [0, 0, 0];
+    var marks = ticks.map(function (count, i) {
+      return sideTicks(corners[i], corners[(i + 1) % 3], count);
+    }).join('');
+    /* The right angle is the small square in its corner, as on paper. */
+    if (kind === 'right') marks += '<polyline points="20,88 30,88 30,98" fill="none"/>';
+    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
+      '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
+      '<polygon points="' + corners.map(function (c) { return c[0] + ',' + c[1]; }).join(' ') +
+      '" fill="' + SHAPE_FILL + '" stroke-width="4"/>' + marks + '</g></svg>';
+  }
+
+  /* The area counted: a figure over its grid of little squares. The squares
+     are lines drawn over the fill, so each one can be pointed at. The
+     triangle is the half of a square that the diagonal leaves. */
+  function countSvg(kind) {
+    var cell = 20;
+    var cols = kind === 'rectangle' ? 5 : 4;
+    var rows = kind === 'rectangle' ? 3 : 4;
+    var w = cols * cell;
+    var h = rows * cell;
+    var left = (120 - w) / 2;
+    var top = (120 - h) / 2;
+    var fill = kind === 'triangle'
+      ? '<polygon points="' + left + ',' + top + ' ' + left + ',' + (top + h) + ' ' +
+          (left + w) + ',' + (top + h) + '" fill="' + SHAPE_FILL + '" stroke-width="3"/>'
+      : '<rect x="' + left + '" y="' + top + '" width="' + w + '" height="' + h +
+          '" fill="' + SHAPE_FILL + '" stroke-width="3"/>';
+    var lines = '';
+    for (var c = 0; c <= cols; c++) {
+      lines += '<line x1="' + (left + c * cell) + '" y1="' + top + '" x2="' + (left + c * cell) +
+        '" y2="' + (top + h) + '"/>';
+    }
+    for (var r = 0; r <= rows; r++) {
+      lines += '<line x1="' + left + '" y1="' + (top + r * cell) + '" x2="' + (left + w) +
+        '" y2="' + (top + r * cell) + '"/>';
+    }
+    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
+      '<g stroke="var(--color-texto)" stroke-width="1" stroke-linejoin="round">' +
+      fill + lines + '</g></svg>';
+  }
+
+  /* An area drawn to scale: each measure is a fixed number of drawing units,
+     so the picture and the numbers written on it agree. `withNumbers` writes
+     the measures for a question; the formula slide leaves them out and only
+     names the parts, so its drawing does not give the answer away. */
+  var AREA_UNIT = 17;
+
+  /* `halo` outlines the text in the card colour, for a label that sits on
+     the dark fill of the triangle: the text stays readable in both themes. */
+  function turnedLabel(x, y, text, halo) {
+    return '<text x="' + x + '" y="' + y + '" transform="rotate(-90 ' + x + ' ' + y +
+      ')" text-anchor="middle" font-size="10" fill="var(--color-texto)" ' +
+      (halo ? 'paint-order="stroke" stroke="var(--color-superficie)" stroke-width="3"'
+        : 'stroke="none"') + '>' + text + '</text>';
+  }
+
+  function flatLabel(x, y, text) {
+    return '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-size="10" ' +
+      'fill="var(--color-texto)" stroke="none">' + text + '</text>';
+  }
+
+  function areaCalcSvg(shape, base, height, withNumbers) {
+    var w = base * AREA_UNIT;
+    var h = height * AREA_UNIT;
+    var left = (120 - w) / 2;
+    var bottom = 102;
+    var top = bottom - h;
+    var centre = left + w / 2;
+    var middle = (top + bottom) / 2;
+    var square = shape === 'square';
+    var measure = function (word, value) {
+      return App.i18n.t(word) +
+        (withNumbers ? ' ' + App.i18n.t('gen.cmValue').replace('{n}', value) : '');
+    };
+    /* The triangle's height is the dashed line from the top corner down to
+       the middle of the base; the rectangles have no line, their sides are
+       the height. */
+    var body = shape === 'triangle'
+      ? '<polygon points="' + left + ',' + bottom + ' ' + (left + w) + ',' + bottom + ' ' +
+          centre + ',' + top + '" fill="' + SHAPE_FILL + '" stroke-width="4"/>' +
+        '<line x1="' + centre + '" y1="' + top + '" x2="' + centre + '" y2="' + bottom +
+          '" class="intro-axis-mark"/>'
+      : '<rect x="' + left + '" y="' + top + '" width="' + w + '" height="' + h +
+          '" fill="' + SHAPE_FILL + '" stroke-width="4"/>';
+    /* The triangle's height is written beside its dashed line, inside the
+       fill, with a halo; outside the slope the text would not fit the
+       drawing. The rectangles name their side outside the figure. */
+    var heightLabel = shape === 'triangle'
+      ? turnedLabel(centre + 7, middle, measure('gen.heightLabel', height), true)
+      : turnedLabel(left - 7, middle, measure(square ? 'gen.sideLabel' : 'gen.heightLabel', height), false);
+    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
+      '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' + body + '</g>' +
+      flatLabel(centre, bottom + 14, measure(square ? 'gen.sideLabel' : 'gen.baseLabel', base)) +
+      heightLabel + '</svg>';
   }
 
   /* The volume: the space inside. A solid drawn inside a dashed outline of
@@ -703,14 +848,74 @@
     }
     /* Two figures compared: the same shape at another size, and the same
        shape folded onto itself. Both are about what a figure can do, not
-       about how many sides it has, so they close the concepts. */
+       about how many sides it has, so they close the first concepts. */
+    if (n === 3) {
+      return {
+        layout: 'parts',
+        cards: [
+          { id: 'symmetry', title: 'introSymmetryTitle', text: 'introSymmetryText',
+            html: triangleWith(triangleAxisMark()) },
+          { id: 'similarity', title: 'introSimilarityTitle', text: 'introSimilarityText',
+            html: similaritySvg() }
+        ]
+      };
+    }
+    /* The area as the little squares inside, counted. The triangle is wide
+       because it covers half of a square, the same idea as its formula. */
+    if (n === 4) {
+      return {
+        layout: 'parts',
+        cards: [
+          { id: 'count-square', title: 'introCountSquareTitle', text: 'introCountSquareText',
+            html: countSvg('square') },
+          { id: 'count-rectangle', title: 'introCountRectangleTitle', text: 'introCountRectangleText',
+            html: countSvg('rectangle') },
+          { id: 'count-triangle', wide: true, title: 'introCountTriangleTitle', text: 'introCountTriangleText',
+            html: countSvg('triangle') }
+        ]
+      };
+    }
+    /* The area by formula, one figure per shape, with the words of the
+       formula on each drawing. The triangle is wide because its formula is
+       the other two cut in half, so it goes underneath them. */
+    if (n === 5) {
+      return {
+        layout: 'parts',
+        cards: [
+          { id: 'area-square', title: 'introAreaSquareTitle', text: 'introAreaSquareText',
+            html: areaCalcSvg('square', 5, 5, false) },
+          { id: 'area-rectangle', title: 'introAreaRectangleTitle', text: 'introAreaRectangleText',
+            html: areaCalcSvg('rectangle', 5, 3, false) },
+          { id: 'area-triangle', wide: true, title: 'introAreaTriangleTitle', text: 'introAreaTriangleText',
+            html: areaCalcSvg('triangle', 6, 4, false) }
+        ]
+      };
+    }
+    /* The triangles by their sides, then by their angles. The scalene and
+       the obtuse triangles are the wide cards: they are the ones with no
+       pair to show, so they go underneath the other two. */
+    if (n === 6) {
+      return {
+        layout: 'parts',
+        cards: [
+          { id: 'equilateral', title: 'introEquilateralTitle', text: 'introEquilateralText',
+            html: triangleKindSvg('equilateral') },
+          { id: 'isosceles', title: 'introIsoscelesTitle', text: 'introIsoscelesText',
+            html: triangleKindSvg('isosceles') },
+          { id: 'scalene', wide: true, title: 'introScaleneTitle', text: 'introScaleneText',
+            html: triangleKindSvg('scalene') }
+        ]
+      };
+    }
     return {
       layout: 'parts',
       cards: [
-        { id: 'symmetry', title: 'introSymmetryTitle', text: 'introSymmetryText',
-          html: triangleWith(triangleAxisMark()) },
-        { id: 'similarity', title: 'introSimilarityTitle', text: 'introSimilarityText',
-          html: similaritySvg() }
+        { id: 'right', title: 'introRightTitle', text: 'introRightText',
+          html: triangleKindSvg('right') },
+        { id: 'acute', title: 'introAcuteTitle', text: 'introAcuteText',
+          html: triangleKindSvg('acute') },
+        { id: 'obtuse', wide: true, title: 'introObtuseTitle', text: 'introObtuseText',
+          html: triangleKindSvg('obtuse') }
       ]
     };
   }
@@ -879,6 +1084,14 @@
             throw new Error('shapes: the volume question "' + q.id +
               '" needs one big body and two different small ones');
           }
+        }
+        if (q.tipo === 'triangleKind' && !TRIANGLE_KINDS[q.basis]) {
+          throw new Error('shapes: the triangle question "' + q.id + '" asks by "' +
+            q.basis + '", which is neither sides nor angles');
+        }
+        if (q.tipo === 'shapeAreaCalc' && AREA_SHAPES.indexOf(q.shape) === -1) {
+          throw new Error('shapes: the area question "' + q.id + '" asks about "' +
+            q.shape + '", which has no area formula here');
         }
         if (q.tipo === 'shapeSimilar' && (q.against || []).length !== 2) {
           throw new Error('shapes: the similarity question "' + q.id +
@@ -1090,6 +1303,44 @@
           { html: App.i18n.t('gen.areaInside'), correct: true },
           { html: App.i18n.t('gen.areaCorners'), correct: false }
         ])
+      };
+    },
+
+    /* A triangle named by its sides or by its angles. The drawing is one kind
+       and the three kinds of its family are the answers, so every wrong
+       option is a real confusion, never a random word. */
+    triangleKind: function (nv) {
+      var kinds = TRIANGLE_KINDS[nv.basis];
+      var id = App.utils.drawRound(nv.id, kinds);
+      return {
+        prompt: App.i18n.t(nv.basis === 'angles' ? 'gen.triangleAnglesPrompt' : 'gen.triangleSidesPrompt'),
+        visual: '<div class="shape-stage">' + triangleKindSvg(id) + '</div>',
+        visualAria: App.i18n.t('gen.triangleAria'),
+        hint: App.i18n.t(nv.basis === 'angles' ? 'gen.socraticTriangleAngles' : 'gen.socraticTriangleSides'),
+        options: App.utils.shuffle(kinds.map(function (kind) {
+          return { html: App.i18n.t('triKind.' + kind), correct: kind === id };
+        }))
+      };
+    },
+
+    /* The area by formula. The two wrong answers are the two mistakes this
+       formula gets: the perimeter (all the sides added up), and the sum of
+       the two measures; for the triangle, the product without halving it. */
+    shapeAreaCalc: function (nv) {
+      var base = nv.shape === 'square' ? nv.side : nv.base;
+      var height = nv.shape === 'square' ? nv.side : nv.height;
+      var area = nv.shape === 'triangle' ? base * height / 2 : base * height;
+      var wrong = nv.shape === 'triangle'
+        ? [base * height, base + height]
+        : [2 * (base + height), base + height];
+      return {
+        prompt: App.i18n.t('gen.areaCalcPrompt').replace(/\{name\}/g, shapeName(nv.shape)),
+        visual: '<div class="shape-stage">' + areaCalcSvg(nv.shape, base, height, true) + '</div>',
+        visualAria: shapeName(nv.shape),
+        hint: App.i18n.t('gen.socraticAreaCalc'),
+        options: App.utils.shuffle([area].concat(wrong).map(function (v) {
+          return { html: String(v), correct: v === area };
+        }))
       };
     },
 

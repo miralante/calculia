@@ -70,7 +70,7 @@ If you get it right, a brief celebration appears. If not, you get an encouraging
 | Activity | What it does |
 |----------|--------------|
 | **Numbers** | Read, write and compare whole numbers, sequences and place value. |
-| **Geometry** | Tell a right angle from an acute or obtuse one, count the edge and the squares inside a figure, and fold a figure in half to see if it matches. |
+| **Geometry** | Tell a right angle from an acute or obtuse one, find squares on a grid, and fold a figure in half to see if it matches. |
 | **Math tables** | Practise multiplication and division facts through repetition and short challenges. |
 | **Big sums** | Turn a multiplication round, cut a hard one into two easy parts, share out in the two ways division is used, and decide what comes first when brackets are involved. |
 | **Exact groups** | Multiples and divisibility rules, prime numbers, when two repeating things meet, the biggest chunk common to two lengths, and squares with their roots. |

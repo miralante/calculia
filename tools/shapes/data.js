@@ -86,6 +86,19 @@ var DATA = {
                El área no se repite: es la misma pregunta con cualquier
                forma, así que una basta. */
             { id: 'area-inside', tipo: 'shapeArea' },
+            /* Los triángulos se preguntan por sus lados y por sus ángulos. La
+               figura es de un tipo y las tres respuestas son los tres de su
+               familia, así que las falsas son confusiones reales. */
+            { id: 'triangle-sides', tipo: 'triangleKind', basis: 'sides' },
+            { id: 'triangle-angles', tipo: 'triangleKind', basis: 'angles' },
+            /* El área por fórmula: lado por lado, base por altura, y el
+               triángulo con la mitad. Las respuestas falsas son lo que más se
+               confunde: el perímetro, la suma de las dos medidas y, en el
+               triángulo, olvidarse de dividir entre 2. Las medidas son
+               distintas en cada pregunta para que no se memoricen. */
+            { id: 'area-square-calc', tipo: 'shapeAreaCalc', shape: 'square', side: 5 },
+            { id: 'area-rectangle-calc', tipo: 'shapeAreaCalc', shape: 'rectangle', base: 5, height: 3 },
+            { id: 'area-triangle-calc', tipo: 'shapeAreaCalc', shape: 'triangle', base: 6, height: 4 },
             { id: 'volume-cube', tipo: 'solidVolume', solid: 'cube', against: ['sphere', 'cone'] },
             { id: 'volume-cylinder', tipo: 'solidVolume', solid: 'cylinder', against: ['cone', 'sphere'] },
             { id: 'volume-cone', tipo: 'solidVolume', solid: 'cone', against: ['cube', 'cylinder'] },

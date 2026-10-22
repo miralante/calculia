@@ -1,0 +1,38 @@
+/* Dos rectas — tool-specific styles. Shared styles live in assets/css/. */
+
+.tool-header h1 { font-size: 1.5rem; }
+
+/* ---- The drawing of the two lines ----
+   One line is solid and the other dashed, so they are two lines even with
+   no colour at all (WCAG 1.4.1). */
+.grid-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+}
+.line-box {
+  fill: var(--color-superficie);
+  stroke: var(--color-borde);
+  stroke-width: 2;
+}
+.pair-line {
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.pair-line.is-first { stroke: var(--mod-secuencia, var(--color-texto)); }
+.pair-line.is-second {
+  stroke: var(--mod-razonamiento, var(--color-texto));
+  stroke-dasharray: 9 5;
+}
+
+/* The answer name sits under its figure, not beside it. */
+.answer-name { display: block; }
+/* app.js toggles .options-row for questions marked inline: true.
+   Without this rule the class is inert and those answers stack in a
+   column. Same rule as money/measures/numbers. */
+.options.options-row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+.options.options-row .option-btn { width: auto; min-width: 180px; }
+
+.emoji-large { font-size: 96px; }
+.transfer { margin: 8px auto 24px; font-size: 1.1rem; color: var(--color-texto-suave, #555); max-width: 480px; }

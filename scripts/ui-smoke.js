@@ -1039,6 +1039,34 @@ async function exerciseShapes(page, baseUrl) {
   assert.equal(await sameCards.nth(1).locator('svg polygon').count(), 2,
     'La semejanza no enseña la misma forma en dos tamaños distintos');
   await page.locator('#galleryNext').click();
+  /* Primero el área como cuadraditos que se cuentan dentro de la figura. */
+  const countCards = page.locator('#galleryVisual .shape-part-item');
+  assert.deepEqual(await countCards.locator('h2').allInnerTexts(),
+    ['Cuadrado', 'Rectángulo', 'Triángulo'],
+  'La diapositiva de contar cuadraditos no presenta cuadrado, rectángulo y triángulo');
+  assert.match(await countCards.nth(2).innerText(), /mitad del cuadrado/,
+    'El triángulo no dice que cubre la mitad del cuadrado');
+  await page.locator('#galleryNext').click();
+  /* Las áreas por fórmula: cada figura lleva las palabras de su fórmula y el
+     triángulo, que es la mitad de un rectángulo, va debajo de las otras dos. */
+  const formulaCards = page.locator('#galleryVisual .shape-part-item');
+  assert.deepEqual(await formulaCards.locator('h2').allInnerTexts(),
+    ['Cuadrado', 'Rectángulo', 'Triángulo'],
+  'La diapositiva de áreas por fórmula no presenta cuadrado, rectángulo y triángulo');
+  assert.match(await formulaCards.nth(2).innerText(), /÷ 2/,
+    'El área del triángulo no dice que se divide entre 2');
+  await page.locator('#galleryNext').click();
+  /* Los triángulos, primero por sus lados y luego por sus ángulos. */
+  const sideCards = page.locator('#galleryVisual .shape-part-item');
+  assert.deepEqual(await sideCards.locator('h2').allInnerTexts(),
+    ['Equilátero', 'Isósceles', 'Escaleno'],
+  'La diapositiva de triángulos por lados no está completa');
+  await page.locator('#galleryNext').click();
+  const angleCards = page.locator('#galleryVisual .shape-part-item');
+  assert.deepEqual(await angleCards.locator('h2').allInnerTexts(),
+    ['Rectángulo', 'Acutángulo', 'Obtusángulo'],
+  'La diapositiva de triángulos por ángulos no está completa');
+  await page.locator('#galleryNext').click();
 
   const galleryNames = [];
   const galleryCount = await page.evaluate(() => window.DATA.gallery.length);
@@ -1490,14 +1518,16 @@ async function exerciseShapes(page, baseUrl) {
     return { id: level.id, length: level.questions.length, counts };
   });
   assert.equal(testSpec.id, 'test');
-  /* 41 preguntas: la hoja de la prueba única quitó "fromNet" y la
-     pirámide de "solidParts" (ver CLAUDE.md, sección Test sheet). */
-  assert.equal(testSpec.length, 41);
+  /* 46 preguntas: 41 de la hoja (ver CLAUDE.md, sección Test sheet) más los
+     dos tipos de triángulo y las tres áreas por fórmula. */
+  assert.equal(testSpec.length, 46);
   assert.deepEqual(testSpec.counts, {
     shapeName: 9,
     shapeCount: 7,
     shapePerimeter: 6,
     shapeArea: 1,
+    triangleKind: 2,
+    shapeAreaCalc: 3,
     solidVolume: 3,
     shapeSymmetry: 3,
     shapeSimilar: 3,
@@ -1544,18 +1574,22 @@ async function exerciseShapes(page, baseUrl) {
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
   await page.reload();
   await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
-  /* Se recorren las cuatro diapositivas de conceptos y se vuelve a la
+  /* Se recorren las ocho diapositivas de conceptos y se vuelve a la
      galería: la aclaración tiene que estar traducida en las dos, y el
      número de diapositivas sale de la misma constante que app.js usa para
      el carrusel. */
   const conceptTitles = [];
-  for (let slide = 0; slide < 4; slide += 1) {
+  for (let slide = 0; slide < 8; slide += 1) {
     conceptTitles.push(...await page.locator('#galleryVisual h2').allInnerTexts());
     await page.locator('#galleryNext').click();
   }
   assert.deepEqual(conceptTitles,
     ['Flat shape', 'Solid', 'Side', 'Vertex', 'Perimeter',
-      'Area', 'Volume', 'Symmetry', 'Similarity'],
+      'Area', 'Volume', 'Symmetry', 'Similarity',
+      'Square', 'Rectangle', 'Triangle',
+      'Square', 'Rectangle', 'Triangle',
+      'Equilateral', 'Isosceles', 'Scalene',
+      'Right', 'Acute', 'Obtuse'],
   'Las diapositivas de conceptos no están traducidas al inglés');
   /* Del círculo al cubo se avanza leyendo la galería, no contando a mano:
      insertar una forma en medio no puede dejar el recorrido en otra
@@ -1613,6 +1647,9 @@ async function exerciseShapes(page, baseUrl) {
     ['gen.solidToObjectPrompt', 'gen.socraticSolid'],
     ['gen.howManyFaces', 'gen.socraticFaces'],
     ['gen.fromNet', 'gen.socraticNet'],
+    ['gen.triangleSidesPrompt', 'gen.socraticTriangleSides'],
+    ['gen.triangleAnglesPrompt', 'gen.socraticTriangleAngles'],
+    ['gen.areaCalcPrompt', 'gen.socraticAreaCalc'],
   ];
   await page.locator('#introContinue').click();
   await page.locator('#realContinue').click();
