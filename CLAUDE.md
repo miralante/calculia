@@ -293,7 +293,8 @@ The rule, expressed as a decision:
   primary. Examples: `referenceNext` in `ordinals` / `mental-math` /
   `roman-numerals` (the reminder panel before the game), the
   `btnStart` family in `odd-one-out` / `patterns` / `stories`,
-  `learnStart` in `clock`, `startPractice` in `math-tables`.
+  `learnStart` in `clock`, the practice buttons in `math-tables`
+  (`#practiceModes`).
 
 The check is structural, not label-based: count `.carousel-controls`
 in the same `<section>` as the primary button. If the count is ≥ 1

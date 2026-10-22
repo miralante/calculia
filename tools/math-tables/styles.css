@@ -26,12 +26,24 @@
 }
 .fact-list { display: flex; flex-direction: column; gap: 8px; }
 .fact-row { font-variant-numeric: tabular-nums; justify-content: flex-start; }
+/* Practice modules: one row per channel (written or audio), each with its
+   two orders (in order, random). The buttons share the row and wrap. */
+.practice-modes { display: flex; flex-direction: column; gap: var(--espacio); }
+.practice-channel { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+.practice-channel-name { width: 100%; margin: 0; text-align: center; font-weight: 700; color: var(--mod-razonamiento); }
+.practice-channel .btn { flex: 1 1 140px; }
+#quizReplay { align-self: center; }
 .fact-row.activa { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
 
 /* Dots visual (shared by learn and quiz) */
 .visual-card { display: flex; flex-direction: column; gap: var(--espacio); align-items: flex-start; padding: var(--espacio); border: 3px solid var(--mod-razonamiento-suave); border-radius: var(--radio); background: var(--color-superficie); }
 .visual-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .group-stack { display: flex; flex-direction: column; gap: 8px; }
+/* Multiply frame: × in the corner, the first factor on top of the dots and
+   the second one on their left. Two columns: the labels, then the dots. */
+.mult-grid { display: grid; grid-template-columns: auto minmax(0, auto); gap: 6px 10px; align-items: center; justify-items: start; width: fit-content; max-width: 100%; }
+.mult-grid .visual-sign { justify-self: center; }
+.mult-factor { font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
 .dot-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 /* A dot is a cell: the circle, and when it carries a number, the number
    inside it (--d 30px) or under it (subtraction). */

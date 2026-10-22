@@ -28,6 +28,8 @@
   var round = [];     // items: { a, b, sym } with sym '+' or '×' or '−' or '÷'
   var index = 0;
   var attempts = 0;
+  var channel = 'written';   // 'written' | 'audio': how the question reaches the user
+  var order = 'random';      // 'sequential' | 'random': the order of the facts in a round
 
   if (typeof progress.stars !== 'number') progress.stars = 0;
 
@@ -79,6 +81,26 @@
   /* divide is "compute the quotient, the rest is feedback". Other
      three are "compute the result directly". */
   function usesInput() { return mode === 'divide'; }
+
+  /* ---- Audio module ----
+     The written module shows the equation and the dots. The audio module
+     shows neither: the question is only spoken, as in escribir números.
+     The equation is written again once the answer is right. */
+  function isAudio() { return channel === 'audio'; }
+
+  /* The operation word that is read aloud between the two numbers. */
+  function spokenOperation() {
+    if (mode === 'add') return App.i18n.t('spokenAdd');
+    if (mode === 'multiply') return App.i18n.t('spokenMultiply');
+    if (mode === 'subtract') return App.i18n.t('spokenSubtract');
+    return App.i18n.t('spokenDivide');
+  }
+
+  /* Reads the question aloud, e.g. "3 por 4". */
+  function speakItem(item) {
+    if (!App.tts) return;
+    App.tts.speak(item.a + ' ' + spokenOperation() + ' ' + item.b);
+  }
 
   /* ---- Dots visuals ---- */
 
@@ -155,16 +177,33 @@
     container.appendChild(total);
   }
 
+  /* A factor label: the number that sits on the top or on the left of the
+     dots, so the array reads as "a × b". */
+  function factor(value, className) {
+    var span = document.createElement('span');
+    span.className = 'mult-factor ' + className;
+    span.textContent = String(value);
+    return span;
+  }
+
   /* Multiplication: b groups of a dots, one color per group, so the
-     repetition can be seen and counted group by group. */
+     repetition can be seen and counted group by group. The factors frame
+     the dots: a on the top (dots per group), b on the left (number of
+     groups), and the × sign in the corner where they meet. */
   function renderMultiplyVisual(container, item, numbered) {
+    var grid = document.createElement('div');
+    grid.className = 'mult-grid';
+    grid.appendChild(sign('×'));
+    grid.appendChild(factor(item.a, 'mult-top'));
+    grid.appendChild(factor(item.b, 'mult-left'));
     var groups = document.createElement('div');
     groups.className = 'group-stack';
     for (var i = 0; i < item.b; i += 1) {
       groups.appendChild(dotRow(item.a, DATA.dotColors[i % DATA.dotColors.length],
         { from: numbered ? i * item.a + 1 : undefined }));
     }
-    container.appendChild(groups);
+    grid.appendChild(groups);
+    container.appendChild(grid);
   }
 
   /* Subtraction: the minuend's dots stay visible while the subtrahend's
@@ -241,10 +280,11 @@
     return { a: n, b: table, sym: '÷' };
   }
 
+  /* Sequential keeps the table in order (1, 2, … 10). Random shuffles it. */
   function tablesRound() {
     var facts = [];
     for (var n = 1; n <= DATA.factsPerTable; n += 1) facts.push(factAt(n));
-    return App.utils.shuffle(facts);
+    return order === 'sequential' ? facts : App.utils.shuffle(facts);
   }
 
   /* ---- Learn screen (all four operations) ----
@@ -274,7 +314,7 @@
   function showLearnList() {
     show($('#factList'));
     hide($('#learnDemo'));
-    show($('#startPractice'));
+    show($('#practiceModes'));
     show($('#learnBack'));
   }
 
@@ -288,7 +328,7 @@
     $('#demoNext').disabled = index === DATA.factsPerTable - 1;
     hide($('#factList'));
     show($('#learnDemo'));
-    hide($('#startPractice'));
+    hide($('#practiceModes'));
     hide($('#learnBack'));
   }
 
@@ -325,8 +365,17 @@
     $('#progressText').textContent = '';
     /* Equation prompt: always "a sym b = ?" so the same layout serves
        every operation regardless of which input the user uses. */
-    $('#quizPrompt').textContent = equationText(item, false) + ' = ?';
-    renderVisual($('#quizVisual'), item, false);
+    if (isAudio()) {
+      $('#quizPrompt').textContent = App.i18n.t('audioPrompt');
+      $('#quizVisual').classList.add('hidden');
+      $('#quizReplay').classList.remove('hidden');
+      speakItem(item);
+    } else {
+      $('#quizPrompt').textContent = equationText(item, false) + ' = ?';
+      $('#quizVisual').classList.remove('hidden');
+      $('#quizReplay').classList.add('hidden');
+      renderVisual($('#quizVisual'), item, false);
+    }
     $('#feedback').textContent = '';
     $('#explanation').textContent = '';
     hide($('#explanation'));
@@ -385,7 +434,7 @@
       attempts += 1;
       if (button) button.disabled = true;
       App.feedback.encourage(feedback);
-      feedback.textContent += ' ' + fill('hint' + keySuffix(), itemValues(item));
+      feedback.textContent += ' ' + fill(isAudio() ? 'hintAudio' : ('hint' + keySuffix()), itemValues(item));
       if (usesInput()) {
         App.feedback.lockUntilAck([$('#divideInput'), $('#checkDivide')], feedback);
       } else {
@@ -397,10 +446,18 @@
     saveProgress();
     $('#stars').textContent = '';
     App.feedback.success(feedback);
-    renderVisual($('#quizVisual'), item, true);
+    if (isAudio()) {
+      $('#quizPrompt').textContent = equationText(item, true);
+    } else {
+      renderVisual($('#quizVisual'), item, true);
+    }
     /* For division, the explanation text reflects the remainder; for
-       the other three the explain* key alone covers it. */
-    var explanation = fill('explain' + keySuffix(), itemValues(item));
+       the other three the explain* key alone covers it. The audio module
+       has no dots to point at, so it explains with the equation itself. */
+    var explanation = isAudio()
+      ? fill(itemRemainder(item) > 0 ? 'explainSpokenRest' : 'explainSpoken',
+          Object.assign({ op: spokenOperation() }, itemValues(item)))
+      : fill('explain' + keySuffix(), itemValues(item));
     $('#explanation').textContent = explanation;
     show($('#explanation'));
     if (usesInput()) {
@@ -456,6 +513,7 @@
   /* ---- Navigation ---- */
 
   function showOnly(id) {
+    if (App.tts) App.tts.stop();
     ['#screenTables', '#screenLearn', '#screenQuiz', '#screenFinish'].forEach(function (screen) {
       if (screen === id) show($(screen));
       else hide($(screen));
@@ -471,7 +529,11 @@
     if (btn) btn.disabled = false;
   }
 
-  function startPractice() {
+  /* The four practice modules of the learn screen (written or audio, in
+     order or random). The button carries both choices in data attributes. */
+  function startPractice(button) {
+    channel = button.getAttribute('data-channel');
+    order = button.getAttribute('data-order');
     round = tablesRound();
     index = 0;
     resetInputControls();
@@ -523,7 +585,10 @@
     $('#tablesBack').addEventListener('click', function () { window.location.href = '../../'; });
     $('#learnBack').addEventListener('click', function () { showOnly('#screenTables'); });
     $('#quizBack').addEventListener('click', function () { showOnly('#screenTables'); });
-    $('#startPractice').addEventListener('click', startPractice);
+    App.utils.$$('#practiceModes [data-channel]').forEach(function (button) {
+      button.addEventListener('click', function () { startPractice(button); });
+    });
+    $('#quizReplay').addEventListener('click', function () { speakItem(round[index]); });
     $('#demoPrev').addEventListener('click', function () { demoStep(-1); });
     $('#demoNext').addEventListener('click', function () { demoStep(1); });
     $('#demoBack').addEventListener('click', showLearnList);

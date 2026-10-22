@@ -44,7 +44,20 @@
             <button type="button" class="btn btn-secondary" id="demoBack" data-i18n="demoBack">← Volver a las operaciones</button>
           </div>
         </div>
-        <button type="button" class="btn" id="startPractice" data-i18n="practiceTable">Practicar esta tabla</button>
+        <!-- Four practice modules: written or audio, each in order or random.
+             The module is chosen by data-channel and data-order (app.js). -->
+        <div class="practice-modes" id="practiceModes">
+          <div class="practice-channel">
+            <p class="practice-channel-name" data-i18n="channelWritten">Escrita</p>
+            <button type="button" class="btn" data-channel="written" data-order="sequential" data-i18n="modeSequential">En orden</button>
+            <button type="button" class="btn" data-channel="written" data-order="random" data-i18n="modeRandom">Al azar</button>
+          </div>
+          <div class="practice-channel">
+            <p class="practice-channel-name" data-i18n="channelAudio">Con audio</p>
+            <button type="button" class="btn" data-channel="audio" data-order="sequential" data-i18n="modeSequential">En orden</button>
+            <button type="button" class="btn" data-channel="audio" data-order="random" data-i18n="modeRandom">Al azar</button>
+          </div>
+        </div>
         <button type="button" class="btn btn-secondary" id="learnBack" data-i18n="backToTables">← Elegir otra tabla</button>
       </section>
 
@@ -56,6 +69,7 @@
         </div>
         <article class="card task-card stack">
           <h2 class="equation" id="quizPrompt"></h2>
+          <button type="button" class="btn btn-secondary hidden" id="quizReplay" data-i18n="replayAudio">🔊 Escuchar otra vez</button>
           <div class="visual-card" id="quizVisual" role="img"></div>
           <!--
             Two answer shapes live here side by side:
@@ -109,6 +123,7 @@
   <script src="../../assets/js/i18n.js?v=calculia-va6035f9c"></script>
   <script src="../../assets/js/storage.js?v=calculia-v4dbd071c"></script>
   <script src="../../assets/js/feedback.js?v=calculia-veb83c6f7"></script>
+  <script src="../../assets/js/tts.js?v=calculia-va9046a0d"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
