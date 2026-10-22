@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dos rectas | Calculia</title>
+  <title>Rectas | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
   <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
@@ -14,15 +14,41 @@
   <div class="container">
     <header class="tool-header">
       <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
-      <h1 data-i18n="title">➕ Dos rectas</h1>
+      <h1 data-i18n="title">➕ Rectas</h1>
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-    <section id="screenMenu" class="stack">
+    <section id="screenIntro" class="stack">
       <div class="row center-row">
-        <p class="instruction" id="instruction" data-i18n="instructionMenu">Elige una actividad.</p>
+        <p class="instruction" data-i18n="instructionIntro">Mira las rectas.</p>
       </div>
-      <div id="activitiesMenu"></div>
+      <div class="card stack gallery-card">
+        <div class="gallery-visual" id="galleryVisual"></div>
+        <p class="gallery-caption" id="galleryCaption"></p>
+        <p class="gallery-note" id="galleryNote"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="galleryPrev" data-i18n-aria="galleryPrevious" aria-label="Anterior">←</button>
+          <button type="button" class="btn btn-secondary" id="galleryNext" data-i18n-aria="galleryNext" aria-label="Siguiente">→</button>
+        </div>
+      </div>
+      <button type="button" class="btn btn-secondary" id="introContinue" data-i18n="introContinue">Verlas en la vida real →</button>
+    </section>
+
+    <section id="screenReal" class="hidden stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="realTitle">Las rectas están a nuestro alrededor</p>
+      </div>
+      <div class="card centered stack real-card">
+        <div class="real-object" id="realObject" aria-hidden="true"></div>
+        <p class="gallery-caption" id="realCaption"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="realPrev" data-i18n-aria="galleryPrevious" aria-label="Anterior">←</button>
+          <button type="button" class="btn btn-secondary" id="realNext" data-i18n-aria="galleryNext" aria-label="Siguiente">→</button>
+        </div>
+      </div>
+      <div class="row intro-buttons">
+        <button type="button" class="btn" id="realContinue" data-i18n="realContinue">Empezar a practicar →</button>
+      </div>
     </section>
 
     <section id="screenGame" class="hidden stack">
@@ -32,22 +58,18 @@
         <span class="difficulty" id="difficulty"></span>
       </div>
 
-      <div class="card centered stack">
-        <p class="prompt" id="prompt"></p>
-        <div class="visual" id="visual"></div>
-        <p class="legend hidden" id="legend"></p>
-      </div>
+      <!-- Hoja de prueba: app.js pinta una tarjeta por pregunta con su
+           dibujo y sus opciones. La persona va eligiendo y al final
+           pulsa "Comprobar" para que se verifiquen todas a la vez. -->
+      <div class="stack test-sheet" id="testSheet" aria-live="polite"></div>
 
-      <div class="stack options" id="options"></div>
-
-      <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="row explanation hidden" id="explanationWrap">
-        <p id="explanation" aria-live="polite"></p>
+      <div class="row sheet-actions">
+        <button type="button" class="btn" id="btnCheck" data-i18n="check">Comprobar</button>
+        <button type="button" class="btn hidden" id="btnNewRound" data-i18n="newRound">Otra ronda →</button>
       </div>
-      <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
-    <section id="screenEnd" class="stack hidden centered">
+    <section id="screenEnd" class="hidden centered stack" aria-live="polite">
       <div class="emoji-large" aria-hidden="true">🎉</div>
       <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
       <p id="endSummary"></p>

@@ -19,12 +19,12 @@ grouped by the skill they work on, not by screen folder.
 | Activity | Description |
 |----------|-------------|
 | **Numbers** | Read, write and compare whole numbers, sequences and place value. Includes positive numbers, negative numbers and zero, with everyday examples and thermometer and elevator practice. |
-| **Two lines** | Decide, by looking at the picture, whether two lines are parallel, perpendicular, or only cross. |
-| **Shapes** | Compare a flat shape and a solid through pictures, recognise shapes in real objects, and introduce side, vertex, perimeter, area, volume, symmetry and similarity on eight slides before asking about them in the test. |
+| **Lines** | Pictures of two lines: decide whether they are parallel, intersecting or perpendicular. Four concept slides and real-life examples come before the questions. |
+| **Shapes** | Compare a flat shape and a solid through pictures, recognise shapes in real objects, and introduce side, vertex, perimeter, area, volume, symmetry and similarity on eight slides before asking about them in the test. It includes the sub-activity **Fold in half**. |
 | **Trigonometry** | Name the three sides of a right triangle after the job they do, count how many squares it rises for every square it goes along (the ratio), see that two equally steep triangles share it even when one is twice as big, and carry it over to a ladder against a wall. It never computes a sine or a cosine: everything is counted and looked at. |
 | **Fractions** | Recognise, compare and operate with simple fractions and decimals. |
 | **Measures** | Choose the right unit (cm, m, g, kg, ml, l) and estimate length, weight and capacity. |
-| **Geometry** | Tell a right angle from an acute or obtuse one, find squares on a grid, and fold a figure in half to see if it matches. |
+| **Geometry** | Tell a right angle from an acute or obtuse one, find squares on a grid, and count equal sides. |
 | **Math tables** | Practise multiplication and division facts through repetition and short challenges. |
 | **Big sums** | Turn a multiplication round, cut a hard one into two easy parts, share out in the two ways division is used, and decide what comes first when brackets are involved. |
 | **Exact groups** | Multiples and divisibility rules, prime numbers, when two repeating things meet, the biggest chunk common to two lengths, and squares with their roots. |

@@ -1,4 +1,5 @@
-/* Dos rectas — tool-specific styles. Shared styles live in assets/css/. */
+/* Rectas paralelas, secantes y perpendiculares — tool-specific styles.
+   Shared styles live in assets/css/. */
 
 .tool-header h1 { font-size: 1.5rem; }
 
@@ -25,6 +26,14 @@
   stroke: var(--mod-razonamiento, var(--color-texto));
   stroke-dasharray: 9 5;
 }
+/* The point where two lines meet, and the square corner of a
+   perpendicular. Both are drawn, so the eye can find them without colour. */
+.meet-dot { fill: var(--color-texto); }
+.corner-mark {
+  fill: none;
+  stroke: var(--color-texto);
+  stroke-width: 2.5;
+}
 
 /* The answer name sits under its figure, not beside it. */
 .answer-name { display: block; }
@@ -36,3 +45,95 @@
 
 .emoji-large { font-size: 96px; }
 .transfer { margin: 8px auto 24px; font-size: 1.1rem; color: var(--color-texto-suave, #555); max-width: 480px; }
+
+/* ---- Concept and real-life carousels ----
+   Same chrome as the Formas gallery: a card, a caption, a short note, and
+   arrows that sit under the picture. */
+.gallery-card,
+.real-card {
+  align-items: center;
+  border-color: var(--mod-razonamiento-suave);
+}
+.carousel-controls .btn {
+  min-width: 44px;
+  min-height: 44px;
+}
+.gallery-visual { width: 100%; }
+.gallery-caption {
+  min-height: 2em;
+  max-width: 560px;
+  margin: 0;
+  text-align: center;
+}
+.gallery-card .gallery-caption {
+  color: var(--mod-razonamiento);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+.gallery-note {
+  min-height: 3em;
+  max-width: 560px;
+  margin: 0;
+  text-align: center;
+  color: var(--color-texto-suave);
+}
+.real-object {
+  min-height: 1.2em;
+  font-size: 5rem;
+  line-height: 1.2;
+}
+.intro-buttons { justify-content: center; gap: var(--espacio); }
+
+
+/* ---- Test sheet ----
+   One card per question, all visible at once. Chosen options are marked
+   before "Comprobar"; right and wrong ones after it. */
+.test-sheet { gap: var(--espacio); }
+.test-sheet-card { border-color: var(--mod-razonamiento-suave); }
+.test-sheet-card .prompt {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-texto);
+}
+.test-sheet-card .visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 96px;
+}
+.test-sheet-card .option-btn.selected {
+  background: var(--mod-coordinacion);
+  color: var(--texto-sobre-acento, #FFFFFF);
+  border-color: var(--mod-coordinacion);
+}
+.test-sheet-card .option-btn.correct {
+  background: var(--color-acierto);
+  color: var(--texto-sobre-acento, #FFFFFF);
+  border-color: var(--color-acierto);
+}
+.test-sheet-card .option-btn.incorrect {
+  background: var(--color-error, #B0413E);
+  color: var(--texto-sobre-acento, #FFFFFF);
+  border-color: var(--color-error, #B0413E);
+}
+.test-sheet-card .feedback {
+  margin: 0;
+  font-weight: 700;
+}
+.test-sheet-card .feedback.success { color: var(--color-acierto); }
+.test-sheet-card .feedback.error { color: var(--color-error, #B0413E); }
+@keyframes test-sheet-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.test-sheet-card.shake { animation: test-sheet-shake 0.4s ease; }
+.sheet-actions {
+  justify-content: center;
+  gap: var(--espacio);
+}
+
+@media (max-width: 600px) {
+  .options.options-row .option-btn { min-width: 0; width: 100%; }
+}

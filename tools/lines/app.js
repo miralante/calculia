@@ -1,7 +1,8 @@
 /* ============================================================
-   Calculia — Dos rectas
+   Calculia — Rectas
    Data in data.js. Shared modules in assets/js/.
-   Questions are generated on the fly, one per round position.
+   Screens: concepts → real examples → test sheet. The test sheet shows
+   every question of the round at once, as in Formas.
    ============================================================ */
 (function () {
   'use strict';
@@ -9,17 +10,18 @@
   var TOOL_ID = 'lines';
   var $ = App.utils.$;
 
-  var screenMenu = $('#screenMenu');
+  var screenIntro = $('#screenIntro');
+  var screenReal = $('#screenReal');
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
-  var promptEl = $('#prompt');
-  var visualEl = $('#visual');
-  var legendEl = $('#legend');
-  var optionsEl = $('#options');
-  var feedbackEl = $('#feedback');
-  var explanationWrap = $('#explanationWrap');
-  var explanationEl = $('#explanation');
-  var btnNext = $('#btnNext');
+  var galleryVisual = $('#galleryVisual');
+  var galleryCaption = $('#galleryCaption');
+  var galleryNote = $('#galleryNote');
+  var realObject = $('#realObject');
+  var realCaption = $('#realCaption');
+  var testSheetEl = $('#testSheet');
+  var btnCheck = $('#btnCheck');
+  var btnNewRound = $('#btnNewRound');
   var progressFill = $('#progressFill');
   var progressText = $('#progressText');
   var starsEl = $('#stars');
@@ -27,19 +29,16 @@
   /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
-  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
-  /* Round state */
-  var activity = null;
-  var level = null;
-  var index = 0;
+  /* Round state. Each roundSheets entry is one question of the round with
+     the option the person picked (selected, null until chosen) and whether
+     "Comprobar" accepted it (correct, null until it is checked). */
   var roundCorrect = 0;
-  var answered = false;
-  var attempts = 0;
-  var question = null;
-  var inReinforce = false;
-  var reinforceList = [];
-  var reinforceIndex = 0;
+  var roundSheets = [];
+  var galleryIndex = 0;
+  var realIndex = 0;
+
+  var KINDS = ['parallel', 'crossing', 'perpendicular'];
 
   function save() { App.storage.set(TOOL_ID, progress); }
   function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
@@ -65,279 +64,284 @@
   }
 
   /* Checked at start-up, so a pair that says the wrong kind fails loudly
-     instead of teaching a lie. */
+     instead of teaching a lie, and the test has all three kinds to ask. */
   DATA.linePairs.forEach(function (pair) {
     if (pairKind(pair) !== pair.kind) {
       throw new Error('lines: "' + pair.id + '" is ' + pairKind(pair) +
         ', not ' + pair.kind);
     }
   });
-  ['parallel', 'perpendicular', 'crossing'].forEach(function (k) {
+  KINDS.forEach(function (k) {
     if (!DATA.linePairs.some(function (p) { return p.kind === k; })) {
       throw new Error('lines: no pair of lines that is "' + k + '"');
     }
   });
 
+  /* ---- Drawings ----
+     Both lines are drawn the same way everywhere: one solid and one dashed,
+     so they are still two lines without any colour at all (WCAG 1.4.1). */
+  function lineTag(l, cls) {
+    return '<line x1="' + l[0][0] + '" y1="' + l[0][1] + '" x2="' + l[1][0] +
+      '" y2="' + l[1][1] + '" class="' + cls + '"/>';
+  }
+
   function linesSvg(pair) {
-    var line = function (l, cls) {
-      return '<line x1="' + l[0][0] + '" y1="' + l[0][1] + '" x2="' + l[1][0] +
-        '" y2="' + l[1][1] + '" class="' + cls + '"/>';
-    };
-    /* The two lines differ by stroke pattern as well as colour, so they are
-       still two lines without any colour at all (WCAG 1.4.1). */
     return '<svg viewBox="0 0 120 120" width="190" height="190" aria-hidden="true">' +
       '<rect x="0" y="0" width="120" height="120" class="line-box"/>' +
-      line(pair.a, 'pair-line is-first') + line(pair.b, 'pair-line is-second') +
+      lineTag(pair.a, 'pair-line is-first') + lineTag(pair.b, 'pair-line is-second') +
       '</svg>';
   }
 
-  var GENERATORS = {
-    /* Two lines: never touching, crossing, or crossing square. */
-    linePair: function (nv) {
-      var pair = App.utils.drawRound(nv.id, DATA.linePairs);
-      var kind = pairKind(pair);
-      return {
-        prompt: App.i18n.t('gen.linePair'),
-        hint: App.i18n.t('gen.socraticLines'),
-        visual: '<div class="grid-stage">' + linesSvg(pair) + '</div>',
-        visualAria: App.i18n.t('gen.linesAria'),
-        legend: App.i18n.t('gen.linesHint'),
-        options: App.utils.shuffle(['parallel', 'perpendicular', 'crossing']
-          .map(function (k) {
-            return {
-              html: '<span class="answer-name">' + App.i18n.t('lines.' + k) + '</span>',
-              aria: App.i18n.t('lines.' + k),
-              correct: k === kind
-            };
-          })),
-        inline: true
-      };
-    }
+  /* The concept slides. The line runs past the edge of the box on purpose:
+     a line does not end. */
+  var CONCEPT_LINES = {
+    line: [[[-20, 60], [140, 60]]],
+    parallel: [[[0, 35], [120, 35]], [[0, 85], [120, 85]]],
+    crossing: [[[0, 100], [120, 20]], [[0, 30], [120, 90]]],
+    perpendicular: [[[0, 60], [120, 60]], [[60, 0], [60, 120]]]
   };
 
+  function conceptSvg(id) {
+    var lines = CONCEPT_LINES[id];
+    var body = lineTag(lines[0], 'pair-line is-first');
+    if (lines.length > 1) body += lineTag(lines[1], 'pair-line is-second');
+    /* A dot marks where two lines meet, and a small square marks a square
+       corner, so the two kinds of crossing are told apart by drawing. */
+    if (id === 'crossing') body += '<circle cx="60" cy="60" r="4" class="meet-dot"/>';
+    if (id === 'perpendicular') body += '<path d="M60 50 L70 50 L70 60" class="corner-mark"/>';
+    return '<svg viewBox="0 0 120 120" width="190" height="190" aria-hidden="true">' +
+      '<rect x="0" y="0" width="120" height="120" class="line-box"/>' + body + '</svg>';
+  }
+
+  /* ---- Questions ----
+     Each question shows one pair and asks which of the three kinds it is. */
+  function questionFor(pair) {
+    var kind = pairKind(pair);
+    return {
+      prompt: App.i18n.t('gen.kindPrompt'),
+      hint: App.i18n.t('gen.socraticKind'),
+      visual: '<div class="grid-stage">' + linesSvg(pair) + '</div>',
+      visualAria: App.i18n.t('gen.linesAria'),
+      options: App.utils.shuffle(KINDS.map(function (k) {
+        return {
+          html: '<span class="answer-name">' + App.i18n.t('kind.' + k) + '</span>',
+          aria: App.i18n.t('kind.' + k),
+          correct: k === kind
+        };
+      })),
+      inline: true
+    };
+  }
+
+  /* ---- Screens ---- */
+
   function show(screen) {
-    [screenMenu, screenGame, screenEnd].forEach(function (p) {
+    [screenIntro, screenReal, screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
 
-  /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
-  function paintMenu() {
-    var cont = $('#activitiesMenu');
-    cont.innerHTML = '';
-    var grid = document.createElement('div');
-    grid.className = 'menu-grid';
-    Object.keys(DATA.activities).forEach(function (id) {
-      var act = DATA.activities[id];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-actividad';
-      btn.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
-        '<span>' + App.i18n.t('activity.' + id + '.name') + '</span>' +
-        '<span class="detail-card">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
-      btn.addEventListener('click', function () { openActivity(id); });
-      grid.appendChild(btn);
-    });
-    cont.appendChild(grid);
+  /* ---- Concept carousel ---- */
+
+  function paintGallery() {
+    var item = DATA.concepts[galleryIndex];
+    galleryVisual.innerHTML = '<div class="grid-stage">' + conceptSvg(item.id) + '</div>';
+    galleryCaption.textContent = App.i18n.t('concept.' + item.id + '.title');
+    galleryNote.textContent = App.i18n.t('concept.' + item.id + '.text');
   }
 
-  /* The level rises one step per completed round, capped at the last
-     one, so a person who comes back continues where they were. */
-  function levelFromProgress() {
-    var levels = activity.levels;
-    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
+  /* ---- Real-life carousel ---- */
+
+  function paintRealExample() {
+    var item = DATA.real[realIndex];
+    realObject.textContent = item.object;
+    realCaption.textContent = App.i18n.t('real.' + item.id);
   }
 
-  function openActivity(id) {
-    activity = DATA.activities[id];
-    activity.id = id;
-    startRound(levelFromProgress());
-  }
+  /* ---- Test sheet ----
+     The whole round is on one screen. Every question is generated when the
+     round starts, and the options inside each one are shuffled too. "Comprobar"
+     checks them all at once; "Otra ronda" deals a new round. */
 
-  /* ---- Game ---- */
-
-  function startRound(nv) {
-    level = nv;
-    index = 0;
-    roundCorrect = 0;
+  function startRound() {
     App.utils.drawRoundReset();
-    reinforceList = [];
-    reinforceIndex = 0;
-    inReinforce = false;
-    App.reinforce.banner.hide();
-    App.reinforce.start(function (fallos) { startReinforce(fallos); });
-    show(screenGame);
-    render();
-  }
-
-  function startReinforce(fallos) {
-    reinforceList = fallos.map(function (f) { return f.payload; });
-    reinforceIndex = 0;
-    inReinforce = true;
-    attempts = 0;
-    App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
-      App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
-    );
-    showReinforceQuestion(reinforceList[0]);
-  }
-
-  /* Paints one question. `fixed` replays a question from the reinforce
-     queue; without it a new one is generated for the current level. */
-  function paintQuestion(fixed) {
-    question = fixed || GENERATORS[level.tipo](level, index);
-    answered = false;
-    attempts = 0;
-
-    promptEl.textContent = question.prompt;
-    visualEl.innerHTML = question.visual || '';
-    visualEl.classList.toggle('hidden', !question.visual);
-    if (question.visualAria) {
-      visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', question.visualAria);
-    } else {
-      visualEl.removeAttribute('role');
-      visualEl.removeAttribute('aria-label');
+    var questions = [];
+    for (var i = 0; i < DATA.perRound; i += 1) {
+      questions.push(questionFor(App.utils.drawRound('lines', DATA.linePairs)));
     }
-    legendEl.textContent = question.legend || '';
-    legendEl.classList.toggle('hidden', !question.legend);
+    roundSheets = App.utils.shuffle(questions).map(function (q) {
+      return { question: q, selected: null, correct: null };
+    });
+    roundCorrect = 0;
+    show(screenGame);
+    renderSheet();
+  }
 
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('hidden');
-    explanationEl.textContent = '';
-    btnNext.classList.add('hidden');
+  /* Paints the whole round at once. The user can change a selection on any
+     question until "Comprobar" is pressed. Right answers lock; a missed
+     question shows its hint (never the answer) and stays open. */
+  function renderSheet() {
+    testSheetEl.innerHTML = '';
+    roundSheets.forEach(function (sheet, i) {
+      var card = document.createElement('article');
+      card.className = 'card stack test-sheet-card';
 
-    optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('options-row', !!question.inline);
-    question.options.forEach(function (op) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'option-btn';
-      btn.innerHTML = op.html;
-      if (op.aria) btn.setAttribute('aria-label', op.aria);
-      btn.addEventListener('click', function () { answer(op, btn); });
-      optionsEl.appendChild(btn);
+      var promptEl = document.createElement('p');
+      promptEl.className = 'prompt';
+      promptEl.textContent = sheet.question.prompt;
+      card.appendChild(promptEl);
+
+      var visualEl = document.createElement('div');
+      visualEl.className = 'visual';
+      visualEl.innerHTML = sheet.question.visual;
+      visualEl.setAttribute('role', 'img');
+      visualEl.setAttribute('aria-label', sheet.question.visualAria);
+      card.appendChild(visualEl);
+
+      var optionsEl = document.createElement('div');
+      optionsEl.className = 'stack options';
+      if (sheet.question.inline) optionsEl.classList.add('options-row');
+      sheet.question.options.forEach(function (op, j) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-btn';
+        btn.innerHTML = op.html;
+        if (op.aria) btn.setAttribute('aria-label', op.aria);
+        btn.addEventListener('click', function () { selectOption(i, j); });
+        optionsEl.appendChild(btn);
+      });
+      card.appendChild(optionsEl);
+
+      var feedbackEl = document.createElement('p');
+      feedbackEl.className = 'feedback hidden';
+      feedbackEl.setAttribute('aria-live', 'polite');
+      card.appendChild(feedbackEl);
+
+      testSheetEl.appendChild(card);
     });
 
-    progressFill.style.width = (inReinforce
-      ? ((reinforceIndex + 1) / reinforceList.length)
-      : (index / DATA.perRound)) * 100 + '%';
-    progressText.textContent = '';
-    paintStars();
+    btnCheck.classList.remove('hidden');
+    btnCheck.disabled = false;
+    btnNewRound.classList.add('hidden');
+    paintSheetProgress();
   }
 
-  function showReinforceQuestion(p) { paintQuestion(p); }
-
-  function render() { paintQuestion(null); }
-
-  /* Visible text of an option (its html may wrap spans). */
-  function plainText(html) {
-    var div = document.createElement('div');
-    div.innerHTML = html;
-    return div.textContent;
+  function selectOption(sheetIdx, optionIdx) {
+    var sheet = roundSheets[sheetIdx];
+    if (sheet.correct === true) return; /* already right: locked */
+    sheet.selected = optionIdx;
+    var card = testSheetEl.querySelectorAll('.test-sheet-card')[sheetIdx];
+    card.querySelectorAll('.option-btn').forEach(function (b, j) {
+      b.classList.toggle('selected', j === optionIdx);
+      b.classList.remove('incorrect');
+    });
+    paintSheetProgress();
   }
 
-  function showExplanation(isCorrect) {
-    if (isCorrect && inReinforce) {
-      explanationEl.textContent = '';
-      explanationWrap.classList.add('hidden');
+  function checkAnswers() {
+    var firstUnanswered = -1;
+    for (var i = 0; i < roundSheets.length; i += 1) {
+      if (roundSheets[i].correct !== true && roundSheets[i].selected === null) {
+        firstUnanswered = i;
+        break;
+      }
+    }
+    if (firstUnanswered !== -1) {
+      /* Not checked half-way: scroll to the first unanswered card and shake
+         it so it is noticed. The round does not count yet. */
+      var target = testSheetEl.querySelectorAll('.test-sheet-card')[firstUnanswered];
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.add('shake');
+      setTimeout(function () { target.classList.remove('shake'); }, 500);
       return;
     }
-    var correct = question.options.filter(function (o) { return o.correct; })[0];
-    /* A picture option has no words of its own, so the explanation falls
-       back to its aria text rather than saying nothing. */
-    var said = plainText(correct.html).replace(/\s+/g, ' ').trim();
-    explanationEl.textContent =
-      (isCorrect ? App.i18n.t('correctExplanation') : App.i18n.t('incorrectExplanationA')) +
-      (said || correct.aria || '') + '.';
-    explanationWrap.classList.remove('hidden');
-  }
 
-  /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question, and the generic
-     line is only the fallback, for a question that forgot to bring its own. */
-  function showHint() {
-    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
-    explanationWrap.classList.remove('hidden');
-  }
+    /* Only the first check of the round scores. Later checks walk through
+       the questions still wrong and add no stars. */
+    var firstCheck = roundSheets.every(function (sheet) { return sheet.correct === null; });
+    var rightFirstTry = 0;
+    var cards = testSheetEl.querySelectorAll('.test-sheet-card');
+    roundSheets.forEach(function (sheet, i) {
+      if (sheet.correct === true) return; /* already right: stays locked */
+      var card = cards[i];
+      var options = card.querySelectorAll('.option-btn');
+      var selected = sheet.question.options[sheet.selected];
+      sheet.correct = selected.correct;
+      if (selected.correct && firstCheck) rightFirstTry += 1;
 
-  function answer(op, btn) {
-    if (answered) return;
-    if (op.correct) {
-      showExplanation(true);
-      answered = true;
-      btn.classList.add('correct');
-      App.feedback.success(feedbackEl);
-      progress.stars += 1;
-      roundCorrect += 1;
+      options.forEach(function (b) { b.classList.remove('selected'); });
+      var feedbackEl = card.querySelector('.feedback');
+      feedbackEl.classList.remove('hidden', 'success', 'error', 'encourage');
+      if (selected.correct) {
+        options.forEach(function (b) { b.disabled = true; });
+        options[sheet.selected].classList.add('correct');
+        feedbackEl.textContent = '✅';
+        feedbackEl.classList.add('success');
+      } else {
+        /* Wrong: the hint shows, the answer does not. The card stays open. */
+        options[sheet.selected].classList.add('incorrect');
+        App.feedback.encourage(feedbackEl);
+        feedbackEl.textContent = ' ' + (sheet.question.hint || App.i18n.t('hint'));
+        feedbackEl.classList.add('error');
+      }
+    });
+
+    if (firstCheck) {
+      roundCorrect = rightFirstTry;
+      progress.stars += roundCorrect;
       save();
       paintStars();
-      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
-      btnNext.classList.remove('hidden');
-      btnNext.focus();
-    } else {
-      attempts += 1;
-      App.reinforce.add(level.id + ':' + index, question);
-      var respuestaTrasPista = attempts > 1;
-      showHint();
-      /* Reveal the explanation only after the hint is acknowledged. */
-      btn.classList.add('encourage');
-      btn.disabled = true;
-      App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(false); });
     }
+
+    var allRight = roundSheets.every(function (sheet) { return sheet.correct === true; });
+    btnCheck.classList.toggle('hidden', allRight);
+    btnNewRound.classList.remove('hidden');
+    if (allRight) btnNewRound.focus();
+    paintSheetProgress();
   }
 
-  function next() {
-    if (inReinforce) {
-      reinforceIndex += 1;
-      if (reinforceIndex >= reinforceList.length) {
-        inReinforce = false;
-        App.reinforce.clear();
-        App.reinforce.banner.hide();
-        endRound();
-      } else {
-        showReinforceQuestion(reinforceList[reinforceIndex]);
-      }
-      return;
-    }
-    index += 1;
-    if (index >= DATA.perRound) {
-      /* consume() returns [] when nothing was failed; otherwise it fires
-         the callback that mounts the mini-round, which ends the round
-         itself, so endRound must not also run here. */
-      if (App.reinforce.consume().length === 0) endRound();
-    } else {
-      render();
-    }
-  }
-
-  function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    save();
-    show(screenEnd);
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
-        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
-        .replace('{stars}', progress.stars);
-    }
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
+  /* Before "Comprobar" the bar counts the questions with an option picked;
+     after it, the ones already right. The figure is always "x / total". */
+  function paintSheetProgress() {
+    var total = roundSheets.length;
+    var checked = roundSheets[0].correct !== null;
+    var numerator = checked
+      ? roundSheets.filter(function (s) { return s.correct === true; }).length
+      : roundSheets.filter(function (s) { return s.selected !== null; }).length;
+    progressFill.style.width = (numerator / total * 100) + '%';
+    progressText.textContent = numerator + ' / ' + total;
   }
 
   /* ---- Events ---- */
 
-  $('#btnNext').addEventListener('click', next);
+  $('#galleryPrev').addEventListener('click', function () {
+    galleryIndex = (galleryIndex + DATA.concepts.length - 1) % DATA.concepts.length;
+    paintGallery();
+  });
+  $('#galleryNext').addEventListener('click', function () {
+    galleryIndex = (galleryIndex + 1) % DATA.concepts.length;
+    paintGallery();
+  });
+  $('#realPrev').addEventListener('click', function () {
+    realIndex = (realIndex + DATA.real.length - 1) % DATA.real.length;
+    paintRealExample();
+  });
+  $('#realNext').addEventListener('click', function () {
+    realIndex = (realIndex + 1) % DATA.real.length;
+    paintRealExample();
+  });
+  $('#introContinue').addEventListener('click', function () { show(screenReal); });
+  $('#realContinue').addEventListener('click', startRound);
+  $('#btnCheck').addEventListener('click', checkAnswers);
+  $('#btnNewRound').addEventListener('click', startRound);
 
-  paintMenu();
-  paintStars();
-  /* End screen: the only button is "Volver al inicio", which goes back
-     to the Calculia landing. The end screen is a closing card, not a
-     second menu: picking another activity is a tap away on the home
-     page, so it does not need its own button here. */
+  /* End screen: the only button is "Volver al inicio", which goes back to
+     the Calculia landing. The test sheet never reaches it; the guard keeps
+     the wire the same as the other activities. */
   var endBackToStart = $('#endBackToStart');
   if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
+
+  paintGallery();
+  paintRealExample();
+  paintStars();
 })();

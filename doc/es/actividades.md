@@ -21,12 +21,12 @@ de pantalla.
 | Actividad | Descripción |
 |-----------|-------------|
 | **Números** | Leer, escribir y comparar números enteros, secuencias y valor posicional. Incluye positivos, negativos y cero con ejemplos de la vida diaria y práctica con termómetro y ascensor. |
-| **Dos rectas** | Decidir, mirando el dibujo, si dos rectas son paralelas, perpendiculares o solo se cruzan. |
-| **Formas** | Comparar con dibujos cómo es una forma plana y un cuerpo, reconocer formas en objetos reales, y presentar en ocho diapositivas los conceptos de lado, vértice, perímetro, área, volumen, simetría y semejanza antes de preguntarlos en el test. |
+| **Rectas** | Seis preguntas de dos rectas: decidir, mirando el dibujo, si son paralelas, secantes o perpendiculares. Antes, cuatro diapositivas con los conceptos y ejemplos de la vida real. |
+| **Formas** | Comparar con dibujos cómo es una forma plana y un cuerpo, reconocer formas en objetos reales, y presentar en ocho diapositivas los conceptos de lado, vértice, perímetro, área, volumen, simetría y semejanza antes de preguntarlos en el test. Incluye la subactividad **Doblar por la mitad**. |
 | **Trigonometría** | Nombrar los tres lados de un triángulo rectángulo por la faena que hacen, contar cuántos cuadraditos sube por cada uno que avanza (la razón), ver que dos triángulos igual de inclinados la comparten aunque uno sea el doble de grande, y llevarlo a una escalera apoyada en la pared. Nunca calcula un seno ni un coseno: todo se cuenta y se mira. |
 | **Fracciones** | Reconocer, comparar y operar con fracciones sencillas y decimales. |
 | **Medidas** | Elegir la unidad adecuada (cm, m, g, kg, ml, l) y estimar longitud, peso y capacidad. |
-| **Geometría** | Distinguir un ángulo recto de uno agudo u obtuso, ubicar casillas en una cuadrícula, y doblarla por la mitad para ver si coincide. |
+| **Geometría** | Distinguir un ángulo recto de uno agudo u obtuso, ubicar casillas en una cuadrícula y contar lados iguales. |
 | **Tablas de multiplicar** | Practicar las tablas de multiplicar y dividir mediante repetición y retos cortos. |
 | **Cuentas grandes** | Dar la vuelta a una multiplicación, partir una difícil en dos fáciles, repartir de las dos maneras en que se divide, y decidir qué va primero cuando hay paréntesis. |
 | **Grupos exactos** | Múltiplos y reglas de divisibilidad, números primos, cuándo coinciden dos cosas que se repiten, el trozo más grande común a dos medidas, y los cuadrados con su raíz. |
