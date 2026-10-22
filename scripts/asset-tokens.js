@@ -1,11 +1,5 @@
 'use strict';
-/* Asset-version token tool, calculia copy.
- *
- * Same rule as the suite tool (one copy per repo): the token is a hash of the
- * file's own bytes, and the immutable paths come from this project's _headers.
- * This copy lives in the calculia repo so CI can run it on its own.
- *
- * Shared tool for the Miralante suite.
+/* Shared asset-version token tool for the Miralante suite.
  *
  * WHY
  * ---
@@ -35,8 +29,8 @@
  * would silently miss a project's real rule.
  *
  * USAGE (from a project root)
- *   node scripts/asset-tokens.js calculia            write tokens
- *   node scripts/asset-tokens.js --check calculia    verify only, exit 1 on drift
+ *   node <path-to>/asset-tokens.js            write tokens
+ *   node <path-to>/asset-tokens.js --check    verify only, exit 1 on drift
  */
 
 const fs = require('fs');
@@ -96,7 +90,6 @@ const CONFIG = {
   },
 };
 
-/* In this repo the project root is the repo itself. */
 const SUITE_ROOT = path.resolve(__dirname, '..');
 
 /* ---- Read the project's own _headers: which paths are immutable? ----
@@ -165,15 +158,7 @@ function isImmutable(relPath, patterns) {
 
 function tokenFor(root, relPath) {
   const abs = path.join(root, relPath);
-  /* Text files are hashed with LF line endings. A Windows checkout (autocrlf)
-     stores them with CRLF and GitHub CI checks them out with LF; the same file
-     must give the same token in both, so the line ending is not in the hash. */
-  const TEXT_FILE = /\.(css|js|html|svg|json|txt|md)$/i;
-  const raw = fs.readFileSync(abs);
-  const bytes = TEXT_FILE.test(relPath)
-    ? Buffer.from(raw.toString('utf8').split('\r\n').join('\n'), 'utf8')
-    : raw;
-  const hash = crypto.createHash('sha256').update(bytes).digest('hex');
+  const hash = crypto.createHash('sha256').update(fs.readFileSync(abs)).digest('hex');
   return hash.slice(0, 8);
 }
 
@@ -279,7 +264,7 @@ function main() {
   let total = 0, files = 0;
 
   for (const name of names) {
-    const projectRoot = name === 'calculia' ? SUITE_ROOT : path.join(SUITE_ROOT, name);
+    const projectRoot = path.join(SUITE_ROOT, name);
     if (!fs.existsSync(projectRoot)) continue;
     root = projectRoot;
     const cfg = CONFIG[name];

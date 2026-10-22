@@ -27,29 +27,8 @@
 .ord-c4 { color: var(--mod-memoria); }
 .ord-c5 { color: var(--mod-lenguaje); }
 
-/* ============================================================
-   Rejilla de pasos
-   ============================================================
-   Estas clases están también en el CSS de Cantidades, pero cada
-   actividad carga sólo su propio styles.css: definirlas aquí no es
-   duplicar, es lo único que hace que esta pantalla salga con
-   aspecto. (Que check.js no lo detecte es otro asunto: busca el
-   nombre de la clase en el CSS de todo el proyecto, así que da por
-   buena una clase que en esta página no está definida.) */
-.practice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--espacio); }
-.btn-practice {
-  min-height: 150px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  background: var(--mod-razonamiento);
-  text-align: center;
-}
-.practice-icon { font-size: 42px; line-height: 1; }
-.practice-name { font-weight: 700; }
-.practice-detail { font-size: var(--texto-pequeno); font-weight: 400; opacity: 0.9; }
+/* Rejilla de pasos: usa .menu-grid / .btn-actividad (components.css),
+   igual que el resto de tarjetas. Solo queda el detalle de estrellas. */
 .practice-stars { font-size: var(--texto-pequeno); letter-spacing: 2px; }
 .practice-done {
   font-size: var(--texto-pequeno);
@@ -751,7 +730,6 @@
    Responsive — 320 / 375 / 768 / desktop
    ============================================================ */
 @media (max-width: 480px) {
-  .practice-grid { grid-template-columns: 1fr; }
   .carousel-figure, .carousel-medal { font-size: 32px; }
   .carousel-figure-row { gap: 6px; }
   .famoso-figure { font-size: 32px; }

@@ -992,12 +992,12 @@
     GROUPS_DATA.levels.forEach(function (level) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-practice';
+      btn.className = 'btn-actividad';
       var done = groupsLevelDone(level);
       btn.innerHTML =
-        '<div class="practice-icon" aria-hidden="true">' + (level.icon || groupsLevelIcon(level)) + '</div>' +
-        '<div class="practice-name">' + groupsT('level.' + level.id + 'Name') + '</div>' +
-        '<div class="practice-detail">' + groupsT('level.' + level.id + 'Detail') + '</div>' +
+        '<span class="picto" aria-hidden="true">' + (level.icon || groupsLevelIcon(level)) + '</span>' +
+        '<span>' + groupsT('level.' + level.id + 'Name') + '</span>' +
+        '<span class="detail-card">' + groupsT('level.' + level.id + 'Detail') + '</span>' +
         '<div class="practice-stars" aria-label="' + groupsT('starsCount').replace('{n}', groupsLevelStars(level)) + '">' +
         '⭐'.repeat(groupsLevelStars(level)) + '</div>' +
         (done ? '<div class="practice-done">' + groupsT('levelDone') + '</div>' : '');

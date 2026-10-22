@@ -705,7 +705,7 @@
   }
 
   /* ---- Events ---- */
-  App.utils.$$('.activity-card').forEach(function (btn) {
+  App.utils.$$('#screenMenu .btn-actividad').forEach(function (btn) {
     btn.addEventListener('click', function () { openActivity(btn.getAttribute('data-activity')); });
   });
   var elBtnBackToMenuLevels = $('#btnBackToMenuLevels');

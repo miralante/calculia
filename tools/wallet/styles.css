@@ -20,19 +20,6 @@
 
 .progress-bar { margin-top: var(--espacio); }
 
-/* Menu cards (same pattern as The Shop) */
-.activity-card {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 8px; min-height: 160px; padding: var(--espacio-grande);
-  background: var(--color-superficie); border: 3px solid var(--color-borde);
-  border-radius: var(--radio); box-shadow: var(--sombra);
-  font-family: inherit; color: var(--color-texto); cursor: pointer;
-}
-.activity-card:hover { border-color: var(--mod-razonamiento); }
-.activity-card .picto { font-size: 48px; }
-.activity-card .name { font-weight: 800; font-size: var(--texto-base); }
-.activity-card .detail { font-size: var(--texto-pequeno); color: var(--color-texto-suave); text-align: center; }
-
 /* Visual money (.money, .m5c….b50e, .money-table) is shared:
    lives in assets/css/components.css + assets/js/dinero.js. Here we
    only override tool-specific tweaks. */

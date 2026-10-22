@@ -337,8 +337,8 @@
     DATA.stepLevels.forEach(function (value) {
       var button = document.createElement('button');
       button.type = 'button';
-      button.className = 'btn operation-btn';
-      button.innerHTML = '<span class="operation-icon" aria-hidden="true">🔢</span><span>' +
+      button.className = 'btn-actividad';
+      button.innerHTML = '<span class="picto" aria-hidden="true">🔢</span><span>' +
         App.i18n.t('stepLevel').replace('{n}', value) + '</span>';
       button.addEventListener('click', function () {
         step = value;
@@ -355,9 +355,9 @@
     DATA.modes.forEach(function (entry) {
       var button = document.createElement('button');
       button.type = 'button';
-      button.className = 'btn operation-btn';
-      button.innerHTML = '<span class="operation-icon" aria-hidden="true">' + entry.icon + '</span><span>' +
-        App.i18n.t(entry.id + 'Name') + '</span><small>' + App.i18n.t(entry.id + 'Detail') + '</small>';
+      button.className = 'btn-actividad';
+      button.innerHTML = '<span class="picto" aria-hidden="true">' + entry.icon + '</span><span>' +
+        App.i18n.t(entry.id + 'Name') + '</span><span class="detail-card">' + App.i18n.t(entry.id + 'Detail') + '</span>';
       button.addEventListener('click', function () {
         mode = entry.id;
         if (entry.id === 'steps') openStepPicker();

@@ -534,12 +534,12 @@
     DATA.levels.forEach(function (level) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-practice';
+      btn.className = 'btn-actividad';
       var done = levelDone(level);
       btn.innerHTML =
-        '<div class="practice-icon" aria-hidden="true">' + level.icon + '</div>' +
-        '<div class="practice-name">' + t('level.' + level.id + 'Name') + '</div>' +
-        '<div class="practice-detail">' + t('level.' + level.id + 'Detail') + '</div>' +
+        '<span class="picto" aria-hidden="true">' + level.icon + '</span>' +
+        '<span>' + t('level.' + level.id + 'Name') + '</span>' +
+        '<span class="detail-card">' + t('level.' + level.id + 'Detail') + '</span>' +
         '<div class="practice-stars" aria-label="' + t('starsCount').replace('{n}', levelStars(level)) + '">' +
         '⭐'.repeat(levelStars(level)) + '</div>' +
         (done ? '<div class="practice-done">' + t('levelDone') + '</div>' : '');

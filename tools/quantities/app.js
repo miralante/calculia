@@ -830,11 +830,11 @@
     DATA.practices.forEach(function (p) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-practice';
+      btn.className = 'btn-actividad';
       btn.innerHTML =
-        '<div class="practice-icon" aria-hidden="true">' + p.icon + '</div>' +
-        '<div class="practice-name">' + t(p.id + 'Name') + '</div>' +
-        '<div class="practice-detail">' + t(p.id + 'Detail') + '</div>';
+        '<span class="picto" aria-hidden="true">' + p.icon + '</span>' +
+        '<span>' + t(p.id + 'Name') + '</span>' +
+        '<span class="detail-card">' + t(p.id + 'Detail') + '</span>';
       btn.addEventListener('click', function () { startPractice(p.id); });
       cont.appendChild(btn);
     });

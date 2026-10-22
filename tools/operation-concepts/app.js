@@ -132,10 +132,10 @@
     DATA.ops.forEach(function (entry) {
       var button = document.createElement('button');
       button.type = 'button';
-      button.className = 'btn op-btn';
-      button.innerHTML = '<span class="op-sym" aria-hidden="true">' + entry.symbol + '</span>' +
-        '<span class="op-name">' + t('ops.' + entry.id + '.name') + '</span>' +
-        '<small>' + t('ops.' + entry.id + '.detail') + '</small>';
+      button.className = 'btn-actividad';
+      button.innerHTML = '<span class="picto" aria-hidden="true">' + entry.symbol + '</span>' +
+        '<span>' + t('ops.' + entry.id + '.name') + '</span>' +
+        '<span class="detail-card">' + t('ops.' + entry.id + '.detail') + '</span>';
       button.addEventListener('click', function () { openOp(entry); });
       grid.appendChild(button);
     });
