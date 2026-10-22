@@ -21,7 +21,7 @@
     "arithmetic-divide": { "name": "Division tables", "detail": "Share the dots into equal groups and say how many groups fit." },
 
     "numbers": { "name": "Numbers", "detail": "Read and compare. Learn about positive and negative numbers." },
-    "losnumeros": { "name": "Number Types", "detail": "Natural, integers and decimals." },
+    "losnumeros": { "name": "Number Types", "detail": "Natural numbers, integers, decimals and fractions." },
     "shapes": { "name": "Shapes", "detail": "The shapes you see every day." },
     "trigonometry": { "name": "Trigonometry", "detail": "The three sides of a triangle." },
     "scale": { "name": "Scale", "detail": "Read a ruler, a thermometer and a plan." },
