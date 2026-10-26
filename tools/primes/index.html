@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primos y compuestos | Calculia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
+  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v762b27b7">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="title">🔍 Primos y compuestos</h1>
+      <span class="stars" id="stars">⭐ 0</span>
+    </header>
+
+    <section id="screenIntro" class="stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="instructionIntro">Mira los números.</p>
+      </div>
+      <div class="card stack gallery-card">
+        <div class="gallery-visual" id="galleryVisual"></div>
+        <p class="gallery-caption" id="galleryCaption"></p>
+        <p class="gallery-note" id="galleryNote"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="galleryPrev" data-i18n-aria="galleryPrevious" aria-label="Anterior">←</button>
+          <button type="button" class="btn btn-secondary" id="galleryNext" data-i18n-aria="galleryNext" aria-label="Siguiente">→</button>
+        </div>
+      </div>
+      <button type="button" class="btn btn-secondary" id="introContinue" data-i18n="introContinue">Verlos en la vida real →</button>
+    </section>
+
+    <section id="screenReal" class="hidden stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="realTitle">Los primos y los compuestos están en la vida diaria</p>
+      </div>
+      <div class="card centered stack real-card">
+        <div class="real-object" id="realObject" aria-hidden="true"></div>
+        <p class="gallery-caption" id="realCaption"></p>
+        <div class="carousel-controls">
+          <button type="button" class="btn btn-secondary" id="realPrev" data-i18n-aria="galleryPrevious" aria-label="Anterior">←</button>
+          <button type="button" class="btn btn-secondary" id="realNext" data-i18n-aria="galleryNext" aria-label="Siguiente">→</button>
+        </div>
+      </div>
+      <div class="row intro-buttons">
+        <button type="button" class="btn" id="realContinue" data-i18n="realContinue">Empezar a practicar →</button>
+      </div>
+    </section>
+
+    <section id="screenGame" class="hidden stack">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+        <span class="progress-text" id="progressText">0 / 6</span>
+        <span class="difficulty" id="difficulty"></span>
+      </div>
+
+      <!-- Hoja de prueba: app.js pinta una tarjeta por pregunta con su
+           número o sus opciones. La persona va eligiendo y al final
+           pulsa "Comprobar" para que se verifiquen todas a la vez. -->
+      <div class="stack test-sheet" id="testSheet" aria-live="polite"></div>
+
+      <div class="row sheet-actions">
+        <button type="button" class="btn" id="btnCheck" data-i18n="check">Comprobar</button>
+        <button type="button" class="btn hidden" id="btnNewRound" data-i18n="newRound">Otra ronda →</button>
+      </div>
+    </section>
+
+    <section id="screenEnd" class="hidden centered stack" aria-live="polite">
+      <div class="emoji-large" aria-hidden="true">🎉</div>
+      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
+      <p id="endSummary"></p>
+      <p id="transfer" class="transfer" data-i18n="transfer"></p>
+      <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>
+    </section>
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
+  </div>
+
+  <script src="../../assets/js/utils.js?v=calculia-v316dc766"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-vdc480eb5"></script>
+  <script src="../../assets/js/storage.js?v=calculia-v31e9f33b"></script>
+  <script src="../../assets/js/feedback.js?v=calculia-v08363821"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="../../assets/js/sw-register.js?v=calculia-v4a242865"></script>
+</body>
+</html>

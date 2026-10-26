@@ -44,6 +44,7 @@
     "order-fractions": { "name": "Ordenar fracciones", "detail": "Pon las fracciones de menor a mayor." },
     "order-decimals": { "name": "Ordenar decimales", "detail": "Pon los decimales de menor a mayor." },
     "parity": { "name": "Pares e impares", "detail": "Mira los puntos: ¿sobra uno o van todos en parejas?" },
+    "primes": { "name": "Primos y compuestos", "detail": "¿Se divide solo entre 1 y entre él mismo?" },
     "mathtables": { "name": "Las Tablas", "detail": "Suma y multiplica con colores." },
     "headmath": { "name": "Cálculo de cabeza", "detail": "Contar, llegar a 10 y dividir entre 10 con puntos de colores." },
     "headmath": { "name": "Cálculo de cabeza", "detail": "Suma, resta y reparte con ayuda visual." },

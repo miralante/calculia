@@ -44,6 +44,7 @@
     "order-fractions": { "name": "Order fractions", "detail": "Put the fractions from smallest to biggest." },
     "order-decimals": { "name": "Order decimals", "detail": "Put the decimals from smallest to biggest." },
     "parity": { "name": "Even and odd", "detail": "Look at the dots: one left alone or all paired up?" },
+    "primes": { "name": "Primes and composites", "detail": "Is it only divided by 1 and by itself?" },
     "mathtables": { "name": "Math Tables", "detail": "Add and multiply with colors." },
     "headmath": { "name": "Head Math", "detail": "Count, make 10 first and split into 10s with colored dots." },
     "headmath": { "name": "Mental Math", "detail": "Add, subtract and share with visual help." },
