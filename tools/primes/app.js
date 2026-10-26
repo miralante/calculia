@@ -144,7 +144,6 @@
       prompt: App.i18n.t('gen.classifyPrompt'),
       hint: App.i18n.t('gen.hintClassify'),
       visual: '<div class="number-stage">' + n + '</div>',
-      visualAria: App.i18n.t('gen.numberAria'),
       options: App.utils.shuffle(['prime', 'composite', 'neither'].map(function (k) {
         return {
           html: '<span class="answer-name">' + App.i18n.t('answer.' + k) + '</span>',
@@ -191,7 +190,6 @@
       prompt: App.i18n.t('gen.factorsPrompt'),
       hint: App.i18n.t('gen.hintFactors'),
       visual: '<div class="number-stage">' + n + '</div>',
-      visualAria: App.i18n.t('gen.numberAria'),
       options: App.utils.shuffle(texts.map(function (text, i) {
         return {
           html: '<span class="answer-name">' + text + '</span>',
@@ -275,8 +273,12 @@
         var visualEl = document.createElement('div');
         visualEl.className = 'visual';
         visualEl.innerHTML = sheet.question.visual;
-        visualEl.setAttribute('role', 'img');
-        visualEl.setAttribute('aria-label', sheet.question.visualAria);
+        /* Only a picture without text gets a label. A number is already
+           text, so the screen reader must read it as it is. */
+        if (sheet.question.visualAria) {
+          visualEl.setAttribute('role', 'img');
+          visualEl.setAttribute('aria-label', sheet.question.visualAria);
+        }
         card.appendChild(visualEl);
       }
 

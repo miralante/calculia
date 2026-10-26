@@ -54,7 +54,6 @@
       classifyPrompt: 'Is this number prime, composite or neither?',
       pickPrompt: 'Which of these numbers is prime?',
       factorsPrompt: 'What is the prime factorisation of this number?',
-      numberAria: 'A number.',
       hintClassify: '🤔 Can it be divided by another number, besides 1 and itself? Try 2, 3 and 5.',
       hintPick: '🤔 A prime number is only divided by 1 and by itself. Try them one by one.',
       hintFactors: '🤔 Check that each number you multiply is prime. Multiply them to check they give the number.'

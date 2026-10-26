@@ -12,7 +12,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '📈 Funciones lineales y afines',
+    title: '📈 Funciones',
     instructionIntro: 'Mira cómo una regla convierte un número en otro.',
 
     /* ---- Las cuatro ideas, antes de preguntar ---- */

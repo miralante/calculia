@@ -11,7 +11,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '📈 Linear and affine functions',
+    title: '📈 Functions',
     instructionIntro: 'See how a rule turns one number into another.',
 
     /* ---- The four ideas, before any question ---- */

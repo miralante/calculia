@@ -54,7 +54,6 @@
       classifyPrompt: '¿Este número es primo, compuesto o ninguno de los dos?',
       pickPrompt: '¿Cuál de estos números es primo?',
       factorsPrompt: '¿Cuál es la descomposición en primos de este número?',
-      numberAria: 'Un número.',
       hintClassify: '🤔 ¿Se puede dividir entre otro número, además de 1 y de sí mismo? Prueba con 2, 3 y 5.',
       hintPick: '🤔 Un número primo solo se divide entre 1 y entre sí mismo. Pruébalos uno a uno.',
       hintFactors: '🤔 Mira si cada número que multiplicas es primo. Multiplícalos para comprobar que dan el número.'

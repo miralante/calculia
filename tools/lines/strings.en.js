@@ -10,7 +10,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '➕ Lines',
+    title: '🛤️ Lines',
     instructionIntro: 'Look at the lines.',
     introContinue: 'See them in real life →',
     galleryPrevious: 'Previous',

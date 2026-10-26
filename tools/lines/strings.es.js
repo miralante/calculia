@@ -10,7 +10,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '➕ Rectas',
+    title: '🛤️ Rectas',
     instructionIntro: 'Mira las rectas.',
     introContinue: 'Verlas en la vida real →',
     galleryPrevious: 'Anterior',

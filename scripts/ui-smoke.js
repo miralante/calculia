@@ -1737,9 +1737,9 @@ async function exerciseNumbers(page, baseUrl) {
   });
   await page.reload();
 
-  /* Números es tarjeta de la portada pública, justo después de Tipos de
-     Números (ver PUBLIC_SLUGS de scripts/check.js). */
-  assert.equal(await page.locator('a[href="tools/numbers/"]').count(), 1,
+  /* Números es tarjeta de la portada pública: enlaza al grupo, que lista
+     Tipos de números y Los números (ver PUBLIC_SLUGS de scripts/check.js). */
+  assert.equal(await page.locator('a[href="tools/numbers-group/"]').count(), 1,
     'La portada pública no muestra Números');
   /* Positivos y negativos dejó de ser una herramienta propia y se
      integró en Números (commit "feat(numbers): integrate positive and
@@ -1755,10 +1755,10 @@ async function exerciseNumbers(page, baseUrl) {
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
 
-  const catalogCard = page.locator('a[href="../tools/numbers/"]');
+  const catalogCard = page.locator('a[href="../tools/numbers-group/"]');
   assert.ok(await catalogCard.isVisible().catch(() => false),
     'Números no aparece en el catálogo de dev/');
-  assert.ok((await catalogCard.innerText()).includes('Los Números'),
+  assert.ok((await catalogCard.innerText()).includes('Números'),
     'La tarjeta de Números del catálogo no aparece en español');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
   await page.reload();
@@ -1767,6 +1767,8 @@ async function exerciseNumbers(page, baseUrl) {
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
   await catalogCard.click();
+  await page.waitForURL('**/tools/numbers-group/', { timeout: NAV_TIMEOUT });
+  await page.locator('#activitiesMenu a.btn-actividad[href="../numbers/"]').click();
   await page.waitForURL('**/tools/numbers/', { timeout: NAV_TIMEOUT });
   await page.waitForSelector('#screenMenu:not(.hidden)', { timeout: NAV_TIMEOUT });
   actions += 1;
