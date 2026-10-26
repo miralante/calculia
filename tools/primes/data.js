@@ -17,10 +17,13 @@
 var DATA = {
   perRound: 6,
 
-  /* Las cuatro diapositivas de conceptos, en orden. */
+  /* Las diapositivas de conceptos, en orden. Las que llevan `numbers`
+     dibujan esos números en cuadrícula; los primos llevan anillo. */
   concepts: [
     { id: 'prime' },
+    { id: 'upto10', numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
     { id: 'composite' },
+    { id: 'notPrime', numbers: [4, 6, 8, 9, 10] },
     { id: 'one' },
     { id: 'factors' }
   ],

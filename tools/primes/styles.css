@@ -79,7 +79,8 @@
   margin: 0;
   text-align: center;
 }
-.gallery-card .gallery-caption {
+.gallery-card .gallery-caption,
+.real-card .gallery-caption {
   color: var(--mod-razonamiento);
   font-size: 1.35rem;
   font-weight: 800;
@@ -93,7 +94,7 @@
 }
 .real-object {
   min-height: 1.2em;
-  font-size: 5rem;
+  font-size: 2.5rem;
   line-height: 1.2;
 }
 .intro-buttons { justify-content: center; gap: var(--espacio); }

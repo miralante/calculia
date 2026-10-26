@@ -18,11 +18,19 @@
     concept: {
       prime: {
         title: 'Prime number',
-        text: 'It can only be divided by 1 and by itself, with nothing left over. For example, 7.'
+        text: 'A prime number can only be divided by 1 and by itself, with nothing left over. For example, 7 can only be made into one row of 7 dots.'
+      },
+      upto10: {
+        title: 'Primes up to 10',
+        text: 'There are four: 2, 3, 5 and 7. The number 1 is not prime. The numbers 4, 6, 8, 9 and 10 can be divided by other numbers.'
       },
       composite: {
         title: 'Composite number',
-        text: 'It can be divided by other numbers, with nothing left over. For example, 6: it is 2 rows of 3 dots.'
+        text: 'A composite number can be divided by other numbers, with nothing left over. For example, 6 can be made into 2 rows of 3 dots.'
+      },
+      notPrime: {
+        title: 'Examples that are not prime',
+        text: '4 = 2 × 2. 6 = 2 × 3. 8 = 2 × 2 × 2. 9 = 3 × 3. 10 = 2 × 5. Each one can be written as a multiplication.'
       },
       one: {
         title: 'The number 1',

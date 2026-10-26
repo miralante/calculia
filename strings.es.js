@@ -20,7 +20,7 @@
     "arithmetic-subtract": { "name": "Tablas de restar", "detail": "Quita puntos: empieza con muchos y tacha los que se van." },
     "arithmetic-divide": { "name": "Tablas de dividir", "detail": "Reparte los puntos en grupos iguales y di cuántos grupos te caben." },
 
-    "numbers-group": { "name": "Números", "detail": "Tipos de números, lectura y comparación." },
+    "numbers-group": { "name": "Los números", "detail": "Tipos de números, lectura y comparación." },
     "numbers": { "name": "Los Números", "detail": "Lee y compara. Aprende los positivos y negativos." },
     "losnumeros": { "name": "Tipos de Números", "detail": "Naturales, enteros, decimales y fracciones." },
     "lines": { "name": "Rectas", "detail": "¿Se cruzan? ¿Hacen esquina?" },

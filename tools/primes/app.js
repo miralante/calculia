@@ -130,9 +130,23 @@
     one: [[60, 60, 8]]
   };
 
-  function conceptSvg(id) {
-    if (id === 'factors') return treeSvg();
-    return dotsSvg(CONCEPT_DOTS[id]);
+  /* Numbers in cells, five to a row. A prime gets a ring, so it is told
+     apart without colour, as in the tree. */
+  function numbersSvg(nums) {
+    var cells = nums.map(function (n, i) {
+      var x = 12 + (i % 5) * 24;
+      var y = 16 + Math.floor(i / 5) * 28;
+      return '<circle cx="' + x + '" cy="' + y + '" r="10" class="tree-node' +
+        (isPrime(n) ? ' is-prime' : '') + '"/>' +
+        '<text x="' + x + '" y="' + (y + 4) + '" class="tree-num">' + n + '</text>';
+    }).join('');
+    return '<svg viewBox="0 0 120 60" width="190" height="95" aria-hidden="true">' + cells + '</svg>';
+  }
+
+  function conceptSvg(item) {
+    if (item.numbers) return numbersSvg(item.numbers);
+    if (item.id === 'factors') return treeSvg();
+    return dotsSvg(CONCEPT_DOTS[item.id]);
   }
 
   /* ---- Questions ----
@@ -213,7 +227,7 @@
 
   function paintGallery() {
     var item = DATA.concepts[galleryIndex];
-    galleryVisual.innerHTML = '<div class="grid-stage">' + conceptSvg(item.id) + '</div>';
+    galleryVisual.innerHTML = '<div class="grid-stage">' + conceptSvg(item) + '</div>';
     galleryCaption.textContent = App.i18n.t('concept.' + item.id + '.title');
     galleryNote.textContent = App.i18n.t('concept.' + item.id + '.text');
   }

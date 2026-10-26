@@ -18,11 +18,19 @@
     concept: {
       prime: {
         title: 'Número primo',
-        text: 'Solo se puede dividir entre 1 y entre sí mismo, sin que sobre nada. Por ejemplo, el 7.'
+        text: 'Un número primo solo se puede dividir entre 1 y entre sí mismo, sin que sobre nada. Por ejemplo, el 7 solo se puede poner en una fila de 7 puntos.'
+      },
+      upto10: {
+        title: 'Los primos hasta el 10',
+        text: 'Son cuatro: el 2, el 3, el 5 y el 7. El 1 no es primo. El 4, el 6, el 8, el 9 y el 10 sí se pueden dividir entre otros números.'
       },
       composite: {
         title: 'Número compuesto',
-        text: 'Se puede dividir entre otros números, sin que sobre nada. Por ejemplo, el 6: son 2 filas de 3 puntos.'
+        text: 'Un número compuesto se puede dividir entre otros números, sin que sobre nada. Por ejemplo, el 6 se puede poner en 2 filas de 3 puntos.'
+      },
+      notPrime: {
+        title: 'Ejemplos que no son primos',
+        text: 'El 4 = 2 × 2. El 6 = 2 × 3. El 8 = 2 × 2 × 2. El 9 = 3 × 3. El 10 = 2 × 5. Todos se pueden escribir como multiplicación.'
       },
       one: {
         title: 'El 1',

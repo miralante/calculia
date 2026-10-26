@@ -1758,12 +1758,12 @@ async function exerciseNumbers(page, baseUrl) {
   const catalogCard = page.locator('a[href="../tools/numbers-group/"]');
   assert.ok(await catalogCard.isVisible().catch(() => false),
     'Números no aparece en el catálogo de dev/');
-  assert.ok((await catalogCard.innerText()).includes('Números'),
-    'La tarjeta de Números del catálogo no aparece en español');
+  assert.ok((await catalogCard.innerText()).includes('Los números'),
+    'La tarjeta de Los números del catálogo no aparece en español');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
   await page.reload();
-  assert.ok((await catalogCard.innerText()).includes('Numbers'),
-    'La tarjeta de Numbers del catálogo no aparece en inglés');
+  assert.ok((await catalogCard.innerText()).includes('The numbers'),
+    'La tarjeta de The numbers del catálogo no aparece en inglés');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
   await catalogCard.click();
