@@ -87,7 +87,7 @@ producto servido al usuario.
 | La división: reparto en partes iguales | ✅ | `math-tables` (modo `divide`) |
 | Fracciones sencillas: mitad, tercio, cuarto | ✅ | `fractions-measures` |
 | Ángulos: recto, agudo y obtuso | ✅ | `geometry` (`angulos`, niveles `n1`-`n3`) |
-| Simetría en figuras planas | ✅ | `geometry` (`simetria`, niveles `m1`-`m2`) |
+| Simetría en figuras planas | ✅ | `shapes` (subactividad `mitad`, "Doblar por la mitad": doblar y ver si coincide) |
 | El reloj: horas y minutos | ✅ | `clock` |
 | Unidades de tiempo: año, mes, semana, día | ✅ | `calendar` (`unidades`, niveles `u1`-`u2`) |
 | Medidas de longitud, peso y capacidad | ✅ | `fractions-measures` |
@@ -160,7 +160,7 @@ producto servido al usuario.
 | Escalas y planos | ✅ | `scale` (`leer`, `paso`, `instrumento`, `plano`): leer una regla, el valor de un paso, la misma lectura en otros instrumentos y la escala de un plano en ambos sentidos; `percent` (`escala`, nivel `e1`: cuánto vale un cuadrado del plano) |
 | Prismas y pirámides: elementos y desarrollo plano | ✅ | `shapes` (`desarrollos`, niveles `p1`-`p2`): las caras y los vértices de cada cuerpo, y qué sale al doblar un desarrollo dibujado abierto |
 | El volumen de cuerpos geométricos | ✅ | `geometry` (`volumen`, nivel `v1`: contar los cubos por capas) |
-| Simetría, traslación y giro de figuras | ✅ | `geometry` (`simetria`: `m1`-`m2` simetría, `m3` movida frente a girada) |
+| Simetría, traslación y giro de figuras | ✅ | `shapes` (`mitad`: simetría al doblar, y movida frente a girada) |
 | Coordenadas cartesianas sencillas | ✅ | `linear-functions` (`casilla`) |
 | Estadística: tablas y gráficos | ✅ | `charts` |
 | La media, la moda y el rango | ✅ | `charts`: la media como reparto (`a1`), la moda (`t2`) y el rango (`x2`), contando los pasos de la marca más baja a la más alta |
@@ -224,7 +224,7 @@ producto servido al usuario.
 | Proporcionalidad geométrica: escalas, Thales | ✅ | (retirada) `similar` (`semejanza`) y `scale` (`plano`); la multiplicación de un cuadrado del plano queda en `percent` (`escala`) |
 | Figuras planas: ángulos y áreas | ✅ | `geometry` (`angulos` y `area`), repetido |
 | Semejanza de figuras | ✅ | (retirada) `similar` (`semejanza`) |
-| Movimientos en el plano (traslación, giro, simetría) | ✅ | `geometry` (`simetria`, nivel `m3`) |
+| Movimientos en el plano (traslación, giro, simetría) | ✅ | `shapes` (`mitad`, preguntas de movida o girada) |
 | Cuerpos geométricos: áreas y volúmenes | ✅ | `geometry` (`volumen`): el volumen contando cubos por capas (`v1`) y la superficie contando los cuadraditos de las seis caras abiertas (`v2`) |
 | Trigonometría básica | ✅ | `trigonometry` (`lados`, `razon`, `medir`): los tres lados del triángulo rectángulo nombrados por su faena, la razón (cuánto sube por cada cuánto avanza) contada en la cuadrícula, y la escalera apoyada en la pared. `similar` (`rampas`) sigue cubriendo la pendiente entre dos rampas, que es el escalón anterior |
 | Estadística: medidas de dispersión | ✅ | `charts` (`reparto`, nivel `x1`: juntos o repartidos, sin fórmula) |

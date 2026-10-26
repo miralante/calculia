@@ -53,35 +53,7 @@
     return deg === 90 ? 'right' : (deg < 90 ? 'acute' : 'obtuse');
   }
 
-  /* Folding along a vertical line: every row must read the same
-     backwards. This is literally what the person is asked to imagine. */
-  function isSymmetric(figure) {
-    return figure.rows.every(function (row) {
-      return row === row.split('').reverse().join('');
-    });
-  }
-
   /* ---- Data invariants, loud at start-up rather than wrong on screen ---- */
-  DATA.figures.forEach(function (f) {
-    var width = f.rows[0].length;
-    f.rows.forEach(function (row) {
-      if (row.length !== width) {
-        throw new Error('geometry: figure "' + f.id + '" has rows of different width');
-      }
-      if (/[^#.]/.test(row)) {
-        throw new Error('geometry: figure "' + f.id + '" has a cell that is not # or .');
-      }
-    });
-    /* The fold line is drawn down the middle of the grid, so an empty
-       first or last column would put it off-centre from the figure the
-       person actually sees — and folding along the wrong line teaches
-       the wrong thing. */
-    var usesEdges = f.rows.some(function (row) { return row[0] === '#'; }) &&
-      f.rows.some(function (row) { return row[width - 1] === '#'; });
-    if (!usesEdges) {
-      throw new Error('geometry: figure "' + f.id + '" leaves an outer column empty');
-    }
-  });
   ['right', 'acute', 'obtuse'].forEach(function (kind) {
     if (!DATA.angles.some(function (a) { return angleKind(a.deg) === kind; })) {
       throw new Error('geometry: no angle of kind "' + kind + '"');
@@ -96,12 +68,6 @@
       }
     });
   });
-  [true, false].forEach(function (want) {
-    if (!DATA.figures.some(function (f) { return isSymmetric(f) === want; })) {
-      throw new Error('geometry: no figure that is ' + (want ? '' : 'not ') + 'symmetric');
-    }
-  });
-
   /* ---- Utilities ---- */
 
   /* The round takes elements from the pool without repeating: the
@@ -138,42 +104,6 @@
       '" class="angle-ray"/>' +
       '<circle cx="' + VX + '" cy="' + VY + '" r="5" class="angle-vertex"/>' +
       '</svg>';
-  }
-
-  /* ---- The grid figures ----
-     Everything is drawn square by square, so a figure can be counted
-     without working anything out. */
-  var CELL = 22;
-
-  function gridSvg(cells, cols, rows, opts) {
-    var o = opts || {};
-    var w = cols * CELL;
-    var h = rows * CELL;
-    var body = '';
-    for (var r = 0; r < rows; r++) {
-      for (var c = 0; c < cols; c++) {
-        if (cells[r][c]) {
-          body += '<rect x="' + (c * CELL) + '" y="' + (r * CELL) + '" width="' + CELL +
-            '" height="' + CELL + '" class="grid-cell"/>';
-        }
-      }
-    }
-    if (o.axis) {
-      body += '<line x1="' + (w / 2) + '" y1="-6" x2="' + (w / 2) + '" y2="' + (h + 6) +
-        '" class="fold-line"/>';
-    }
-    var size = o.small ? { w: Math.round(w * 0.62), h: Math.round(h * 0.62) } : { w: w, h: h };
-    return '<svg viewBox="-8 -8 ' + (w + 16) + ' ' + (h + 16) + '" width="' + size.w +
-      '" height="' + size.h + '" class="grid-svg" aria-hidden="true">' + body + '</svg>';
-  }
-
-  function figureSvg(figure, opts) {
-    var cells = figure.rows.map(function (row) {
-      return row.split('').map(function (ch) { return ch === '#'; });
-    });
-    var o = opts || {};
-    o.axis = true;
-    return gridSvg(cells, figure.rows[0].length, figure.rows.length, o);
   }
 
   /* ---- Figures given by their corners ----
@@ -247,54 +177,6 @@
 
   function figureName(id) { return App.i18n.t('figure.' + id + '.name'); }
   function figureGloss(id) { return App.i18n.t('figure.' + id + '.gloss'); }
-
-  /* ---- Moving and turning ----
-     A figure turned a quarter of the way round is the transpose of its
-     rows, reversed. Computing it means the options cannot drift from what
-     the question claims. */
-  function turned(rows) {
-    var h = rows.length;
-    var w = rows[0].length;
-    var out = [];
-    for (var x = 0; x < w; x++) {
-      var line = '';
-      for (var y = h - 1; y >= 0; y--) line += rows[y][x];
-      out.push(line);
-    }
-    return out;
-  }
-
-  function mirrored(rows) {
-    return rows.map(function (row) { return row.split('').reverse().join(''); });
-  }
-
-  function sameRows(a, b) { return a.join('|') === b.join('|'); }
-
-  /* A figure whose turn looks like itself would make "moved" and "turned"
-     the same picture, and then the question would have two right answers. */
-  DATA.movedFigures.forEach(function (f) {
-    if (sameRows(turned(f.rows), f.rows) || sameRows(mirrored(f.rows), f.rows)) {
-      throw new Error('geometry: figure "' + f.id + '" looks the same turned or mirrored');
-    }
-  });
-
-  /* The same figure drawn in a padded grid, so a moved copy really sits
-     somewhere else on the page. */
-  function paddedFigure(rows, shiftX, shiftY, small) {
-    var w = rows[0].length + 1;
-    var h = rows.length + 1;
-    var cells = [];
-    for (var r = 0; r < h; r++) {
-      cells.push([]);
-      for (var c = 0; c < w; c++) cells[r].push(false);
-    }
-    rows.forEach(function (row, r) {
-      row.split('').forEach(function (ch, c) {
-        if (ch === '#') cells[r + shiftY][c + shiftX] = true;
-      });
-    });
-    return gridSvg(cells, w, h, { small: small });
-  }
 
   /* ---- Degrees ----
      A protractor with a tick every ten degrees and a number every thirty:
@@ -437,29 +319,6 @@
       };
     },
 
-    /* Moved, or turned? A figure that has only been moved is still facing
-       the same way; a turned one is not. */
-    movedOrTurned: function (nv) {
-      var fig = App.utils.drawRound(nv.id, DATA.movedFigures);
-      var moved = paddedFigure(fig.rows, 1, 1, true);
-      var spun = paddedFigure(turned(fig.rows), 0, 1, true);
-      var flipped = paddedFigure(mirrored(fig.rows), 1, 0, true);
-      return {
-        prompt: App.i18n.t('gen.whichMoved'),
-        hint: App.i18n.t('gen.socraticMoved'),
-        visual: '<div class="grid-stage">' + paddedFigure(fig.rows, 0, 0, false) + '</div>',
-        visualAria: App.i18n.t('gen.movedAria'),
-        legend: App.i18n.t('gen.movedHint'),
-        options: App.utils.shuffle([
-          { html: moved, aria: App.i18n.t('gen.ariaMoved'), correct: true },
-          { html: spun, aria: App.i18n.t('gen.ariaTurned'), correct: false },
-          { html: flipped, aria: App.i18n.t('gen.ariaFlipped'), correct: false }
-        ]),
-        inline: true
-      };
-    },
-
-
     /* What kind of angle is it. The guide corner stands in for the sheet
        of paper you would hold against it. */
     angleKind: function (nv) {
@@ -483,27 +342,6 @@
               '<span class="kind-gloss">' + kindGloss(k) + '</span>',
             aria: kindName(k) + ', ' + kindGloss(k),
             correct: k === kind
-          };
-        })),
-        inline: true
-      };
-    },
-
-    /* Does it match when you fold it along the line? */
-    symmetry: function (nv) {
-      var figure = App.utils.drawRound(nv.id, DATA.figures);
-      var yes = isSymmetric(figure);
-      return {
-        prompt: App.i18n.t('gen.isSymmetric'),
-        hint: App.i18n.t('gen.socraticSymmetry'),
-        visual: '<div class="grid-stage">' + figureSvg(figure, {}) + '</div>',
-        visualAria: App.i18n.t(yes ? 'gen.ariaSymmetric' : 'gen.ariaNotSymmetric'),
-        legend: App.i18n.t('gen.symmetryHint'),
-        options: App.utils.shuffle([true, false].map(function (v) {
-          return {
-            html: '<span class="kind-name">' + App.i18n.t(v ? 'answer.yes' : 'answer.no') + '</span>',
-            aria: App.i18n.t(v ? 'answer.yes' : 'answer.no'),
-            correct: v === yes
           };
         })),
         inline: true
@@ -558,26 +396,6 @@
             correct: f.id === fig.id
           };
         })),
-        inline: true
-      };
-    },
-
-    /* The other way round: which of the two folds and matches. */
-    symmetryPick: function (nv) {
-      var good = App.utils.drawRound(nv.id + 'yes', DATA.figures.filter(isSymmetric));
-      var bad = App.utils.drawRound(nv.id + 'no', DATA.figures.filter(function (f) {
-        return !isSymmetric(f);
-      }));
-      return {
-        prompt: App.i18n.t('gen.pickSymmetric'),
-        hint: App.i18n.t('gen.socraticSymmetryPick'),
-        legend: App.i18n.t('gen.symmetryHint'),
-        options: App.utils.shuffle([
-          { html: figureSvg(good, { small: true }),
-            aria: App.i18n.t('gen.ariaSymmetric'), correct: true },
-          { html: figureSvg(bad, { small: true }),
-            aria: App.i18n.t('gen.ariaNotSymmetric'), correct: false }
-        ]),
         inline: true
       };
     }

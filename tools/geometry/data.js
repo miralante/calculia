@@ -7,10 +7,6 @@
    - DATA.angles: cada ángulo por sus grados. Su NOMBRE no está aquí:
      app.js lo deduce de los grados (menos de 90, 90, más de 90), así
      que el dibujo y la respuesta no pueden decir cosas distintas.
-   - DATA.figures: figuras dibujadas cuadradito a cuadradito. '#' es
-     un cuadradito pintado y '.' uno vacío. Si la figura es simétrica
-     o no TAMPOCO está guardado: app.js lo comprueba doblando la
-     figura, que es exactamente lo que se le pide a quien juega.
    Los nombres NO están aquí: son texto y viven en strings.<locale>.js.
    ============================================================ */
 var DATA = {
@@ -34,18 +30,6 @@ var DATA = {
            en los dos sitios donde de verdad aparece. */
         { id: 'n4', tipo: 'measureAngle' },
         { id: 'n5', tipo: 'clockAngle' }
-      ]
-    },
-
-    /* La simetría como doblar por la mitad y que coincida. */
-    simetria: {
-      picto: '🦋',
-      levels: [
-        { id: 'm1', tipo: 'symmetry' },
-        { id: 'm2', tipo: 'symmetryPick' },
-        /* Y por último distinguir mover de girar: la misma figura movida
-           sigue mirando igual, y girada no. */
-        { id: 'm3', tipo: 'movedOrTurned' }
       ]
     },
 
@@ -99,16 +83,6 @@ var DATA = {
     ]
   },
 
-  /* Figuras para distinguir mover de girar. Ninguna es simétrica al
-     girarla: si lo fuera, movida y girada se verían igual y la pregunta
-     no tendría respuesta única. app.js lo comprueba. */
-  movedFigures: [
-    { id: 'step3', rows: ['#..', '##.', '###'] },
-    { id: 'hook3', rows: ['##.', '#..', '#.#'] },
-    { id: 'flag3', rows: ['###', '#..', '#..'] },
-    { id: 'zig3', rows: ['##.', '.##', '..#'] }
-  ],
-
   /* Sin 90 aquí no habría ángulo recto que reconocer, y sin ángulos
      claramente lejos de 90 la diferencia no se vería.
      Ningún ángulo repite grados: dos entradas con los mismos grados se
@@ -122,22 +96,5 @@ var DATA = {
     { id: 'obtuse1', deg: 120 },
     { id: 'obtuse2', deg: 135 },
     { id: 'obtuse3', deg: 150 }
-  ],
-
-  figures: [
-    /* Simétricas al doblar por una raya vertical. */
-    { id: 'cross', rows: ['.##.', '####', '####', '.##.'] },
-    { id: 'tree', rows: ['..##..', '.####.', '######', '..##..'] },
-    { id: 'cup', rows: ['#....#', '#....#', '######', '.####.'] },
-    { id: 'arrow', rows: ['..##..', '.####.', '##..##', '..##..'] },
-    { id: 'house', rows: ['..##..', '.####.', '######', '#.##.#'] },
-    /* No simétricas: al doblarlas, un lado sobra.
-       Ninguna deja vacía la primera ni la última columna: si las dejara,
-       la raya de doblar caería fuera del centro de lo que se ve. */
-    { id: 'flag', rows: ['####', '####', '##..', '##..'] },
-    { id: 'step', rows: ['#...', '##..', '###.', '####'] },
-    { id: 'hook', rows: ['####', '#...', '#...', '###.'] },
-    { id: 'wave', rows: ['##..##', '.####.', '##....', '####..'] },
-    { id: 'lean', rows: ['####', '###.', '#...', '#...'] }
   ]
 };

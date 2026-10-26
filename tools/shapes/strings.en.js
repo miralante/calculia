@@ -165,10 +165,12 @@
       }
     },
     activity: {
-      formas: { name: 'Shapes', detail: 'One test with all shapes and solids.' }
+      formas: { name: 'Shapes', detail: 'One test with all shapes and solids.' },
+      mitad: { name: 'Fold in half', detail: 'Does it match or not, and is a figure moved or turned?' }
     },
     level: {
-      test: 'Complete test'
+      test: 'Complete test',
+      mitad: 'Fold in half'
     },
     net: {
       cube: { name: 'cube', gloss: '6 squares' },
@@ -239,7 +241,23 @@
       socraticSolid: '🤔 Look at the shape of the object, not what it is used for or its colour.',
       socraticTriangleSides: '🤔 Look at the marks on the sides: sides with the same mark are the same length. A side with no mark is different from the others.',
       socraticTriangleAngles: '🤔 Look at the widest corner. If it is like the corner of a sheet of paper, it is right; if it is wider, it is obtuse; if all three are narrower, it is acute.',
-      socraticAreaCalc: '🤔 Multiply the two measures. If it is a triangle, divide the result by 2.'
+      socraticAreaCalc: '🤔 Multiply the two measures. If it is a triangle, divide the result by 2.',
+      foldPrompt: 'If you fold along the line, do the two sides match?',
+      foldPickPrompt: 'Which of the two matches when folded along the line?',
+      foldHint: 'Look at one side of the line, then at the other.',
+      foldAria: 'A figure drawn on a grid, with its fold line.',
+      foldOption: 'One of the two figures.',
+      foldYes: 'Yes',
+      foldNo: 'No',
+      socraticFold: '🤔 Fold the drawing along the line and see if anything sticks out.',
+      socraticFoldPick: '🤔 Imagine folding each drawing along its line and compare them.',
+      whichMoved: 'Which is the same figure, only moved somewhere else?',
+      movedHint: 'Moved, it still faces the same way. Turned, it faces another way.',
+      movedAria: 'A figure drawn on a grid.',
+      ariaMoved: 'The same figure moved somewhere else.',
+      ariaTurned: 'The figure turned.',
+      ariaFlipped: 'The figure the wrong way round, as in a mirror.',
+      socraticMoved: '🤔 Look for the drawing that faces the same way as the first one.'
     },
     transfer: 'This will help you understand signs and drawings, and describe what something is like when you need to explain it.'
   }, 'en');

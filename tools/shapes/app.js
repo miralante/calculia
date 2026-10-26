@@ -1163,6 +1163,128 @@
     return '<span class="thumb' + (big ? ' thumb-big' : '') + '">' + solidSvg(id) + '</span>';
   }
 
+  /* ---- Folding in half ----
+     A figure drawn square by square, with the fold line down its middle when
+     the question asks about it. Whether a figure folds exactly in half is
+     worked out from its rows (every row reads the same backwards), never
+     stored, so the drawing and the answer cannot drift apart. */
+  function foldCells(rows) {
+    return rows.map(function (row) {
+      return row.split('').map(function (ch) { return ch === '#'; });
+    });
+  }
+
+  function isSymmetricRows(rows) {
+    return rows.every(function (row) {
+      return row === row.split('').reverse().join('');
+    });
+  }
+
+  /* A figure turned a quarter of the way round is the transpose of its rows,
+     reversed, so the options cannot drift from what the question claims. */
+  function turnedRows(rows) {
+    var h = rows.length;
+    var w = rows[0].length;
+    var out = [];
+    for (var x = 0; x < w; x++) {
+      var line = '';
+      for (var y = h - 1; y >= 0; y--) line += rows[y][x];
+      out.push(line);
+    }
+    return out;
+  }
+
+  function mirroredRows(rows) {
+    return rows.map(function (row) { return row.split('').reverse().join(''); });
+  }
+
+  function sameRows(a, b) { return a.join('|') === b.join('|'); }
+
+  /* The same figure in a grid with one free row and column, so a moved copy
+     really sits somewhere else on the card. */
+  function paddedCells(rows, shiftX, shiftY) {
+    var w = rows[0].length + 1;
+    var h = rows.length + 1;
+    var cells = [];
+    for (var r = 0; r < h; r++) {
+      cells.push([]);
+      for (var c = 0; c < w; c++) cells[r].push(false);
+    }
+    rows.forEach(function (row, r) {
+      row.split('').forEach(function (ch, c) {
+        if (ch === '#') cells[r + shiftY][c + shiftX] = true;
+      });
+    });
+    return cells;
+  }
+
+  /* The cells drawn inside a 120-unit square, the cell size chosen so the
+     whole grid fits. `axis` puts the fold line down the middle; `size` is the
+     width and height of the drawing on screen. */
+  function gridFigureSvg(cells, axis, size) {
+    var rows = cells.length;
+    var cols = cells[0].length;
+    var cell = Math.floor(100 / Math.max(rows, cols));
+    var x0 = (120 - cols * cell) / 2;
+    var y0 = (120 - rows * cell) / 2;
+    var body = '';
+    cells.forEach(function (row, r) {
+      row.forEach(function (on, c) {
+        if (on) {
+          body += '<rect x="' + (x0 + c * cell) + '" y="' + (y0 + r * cell) +
+            '" width="' + cell + '" height="' + cell + '"/>';
+        }
+      });
+    });
+    if (axis) {
+      var mid = x0 + cols * cell / 2;
+      var top = y0 - 6;
+      var bottom = y0 + rows * cell + 6;
+      /* A light band under the dashes. The dark dashes alone disappear on the
+         dark fill of the figure; the band is the card colour, so outside the
+         figure it does not show at all. */
+      body += '<line x1="' + mid + '" y1="' + top + '" x2="' + mid + '" y2="' + bottom +
+        '" class="fold-halo"/>' +
+        '<line x1="' + mid + '" y1="' + top + '" x2="' + mid + '" y2="' + bottom +
+        '" class="fold-line"/>';
+    }
+    return '<svg viewBox="0 0 120 120" width="' + size + '" height="' + size +
+      '" aria-hidden="true"><g fill="' + SHAPE_FILL + '" stroke="var(--color-texto)" ' +
+      'stroke-width="2" stroke-linejoin="round">' + body + '</g></svg>';
+  }
+
+  /* Checked at start-up: the fold question needs a figure of each kind, the
+     figures must be drawn square, and a moved figure must not look the same
+     turned or mirrored, or "moved" and "turned" would have two answers. */
+  [true, false].forEach(function (want) {
+    if (!DATA.folds.some(function (f) { return isSymmetricRows(f.rows) === want; })) {
+      throw new Error('shapes: no fold figure that is ' + (want ? '' : 'not ') + 'symmetric');
+    }
+  });
+  DATA.folds.forEach(function (f) {
+    var width = f.rows[0].length;
+    f.rows.forEach(function (row) {
+      if (row.length !== width) {
+        throw new Error('shapes: fold figure "' + f.id + '" has rows of different width');
+      }
+      if (/[^#.]/.test(row)) {
+        throw new Error('shapes: fold figure "' + f.id + '" has a cell that is not # or .');
+      }
+    });
+    /* The fold line is drawn down the middle, so an empty outer column would
+       put it off-centre from the figure the person sees. */
+    var usesEdges = f.rows.some(function (row) { return row[0] === '#'; }) &&
+      f.rows.some(function (row) { return row[width - 1] === '#'; });
+    if (!usesEdges) {
+      throw new Error('shapes: fold figure "' + f.id + '" leaves an outer column empty');
+    }
+  });
+  DATA.movedFigures.forEach(function (f) {
+    if (sameRows(turnedRows(f.rows), f.rows) || sameRows(mirroredRows(f.rows), f.rows)) {
+      throw new Error('shapes: moved figure "' + f.id + '" looks the same turned or mirrored');
+    }
+  });
+
   /* Three axes for a figure that has exactly one: straight up, straight
      across, and at an angle. Every shape this question is asked of has one
      vertical fold line and neither of the other two, so exactly one option
@@ -1482,6 +1604,74 @@
               return { html: nameOf(s), correct: false };
             })
           ))
+      };
+    },
+
+    /* Does it match when you fold it along the line? The drawing is the only
+       evidence: the fold line is on it, and the answer comes from its rows. */
+    foldYesNo: function (nv) {
+      var fig = App.utils.drawRound(nv.id, DATA.folds);
+      var yes = isSymmetricRows(fig.rows);
+      return {
+        prompt: App.i18n.t('gen.foldPrompt'),
+        hint: App.i18n.t('gen.socraticFold'),
+        visual: '<div class="shape-stage">' + gridFigureSvg(foldCells(fig.rows), true, 160) + '</div>',
+        /* The aria text does not say yes or no: that would give the answer away. */
+        visualAria: App.i18n.t('gen.foldAria'),
+        legend: App.i18n.t('gen.foldHint'),
+        options: App.utils.shuffle([true, false].map(function (v) {
+          return {
+            html: '<span class="fold-answer">' + App.i18n.t(v ? 'gen.foldYes' : 'gen.foldNo') + '</span>',
+            aria: App.i18n.t(v ? 'gen.foldYes' : 'gen.foldNo'),
+            correct: v === yes
+          };
+        })),
+        inline: true
+      };
+    },
+
+    /* Which of the two folds exactly in half. Both are drawn the same size, so
+       only the shape tells them apart. */
+    foldPick: function (nv) {
+      var good = App.utils.drawRound(nv.id + 'yes', DATA.folds.filter(function (f) {
+        return isSymmetricRows(f.rows);
+      }));
+      var bad = App.utils.drawRound(nv.id + 'no', DATA.folds.filter(function (f) {
+        return !isSymmetricRows(f.rows);
+      }));
+      return {
+        prompt: App.i18n.t('gen.foldPickPrompt'),
+        hint: App.i18n.t('gen.socraticFoldPick'),
+        legend: App.i18n.t('gen.foldHint'),
+        options: App.utils.shuffle([
+          { html: gridFigureSvg(foldCells(good.rows), true, 110),
+            aria: App.i18n.t('gen.foldOption'), correct: true },
+          { html: gridFigureSvg(foldCells(bad.rows), true, 110),
+            aria: App.i18n.t('gen.foldOption'), correct: false }
+        ]),
+        inline: true
+      };
+    },
+
+    /* Moved, or turned? A figure that has only been moved still faces the same
+       way; a turned one does not. The three choices come from the same rows. */
+    movedOrTurned: function (nv) {
+      var fig = App.utils.drawRound(nv.id, DATA.movedFigures);
+      return {
+        prompt: App.i18n.t('gen.whichMoved'),
+        hint: App.i18n.t('gen.socraticMoved'),
+        visual: '<div class="shape-stage">' + gridFigureSvg(paddedCells(fig.rows, 0, 0), false, 160) + '</div>',
+        visualAria: App.i18n.t('gen.movedAria'),
+        legend: App.i18n.t('gen.movedHint'),
+        options: App.utils.shuffle([
+          { html: gridFigureSvg(paddedCells(fig.rows, 1, 1), false, 110),
+            aria: App.i18n.t('gen.ariaMoved'), correct: true },
+          { html: gridFigureSvg(paddedCells(turnedRows(fig.rows), 0, 1), false, 110),
+            aria: App.i18n.t('gen.ariaTurned'), correct: false },
+          { html: gridFigureSvg(paddedCells(mirroredRows(fig.rows), 1, 0), false, 110),
+            aria: App.i18n.t('gen.ariaFlipped'), correct: false }
+        ]),
+        inline: true
       };
     }
   };

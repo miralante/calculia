@@ -34,25 +34,17 @@
       acute: { name: 'acute', gloss: 'more closed' },
       obtuse: { name: 'obtuse', gloss: 'more open' }
     },
-    answer: {
-      yes: 'Yes',
-      no: 'No'
-    },
     activity: {
       clasificar: { name: 'Equal sides', detail: 'Count them and name it.', instruction: 'Sides that are equal carry the same mark. Count the matching marks and you will know how many sides are the same length. Then you will name the figure.' },
       angulos: { name: 'Angles', detail: 'Right, acute or obtuse.', instruction: 'An angle is how open a corner is. A right angle is like the corner of a sheet of paper: in the picture it is marked with a grey line. If the line reaches exactly the grey line, the angle is right. If it stops before, it is acute: more closed. If it goes past, it is obtuse: more open.' },
-      simetria: { name: 'Fold in half', detail: 'Does it match or not.', instruction: 'Imagine folding the picture along the middle line. If the two sides match exactly, the figure is symmetrical. If something is left over on one side, it is not.' }
     },
     level: {
-      m3: 'Moved or turned?',
       q1: 'How many equal sides?',
       q2: 'The name of the triangle',
       q3: 'The name of the 4-sided figure',
       n1: 'Right or acute',
       n2: 'Right or obtuse',
       n3: 'All three together',
-      m1: 'Does it match?',
-      m2: 'Find the one that matches',
       n4: 'How many degrees?',
       n5: 'The degrees on a clock'
     },
@@ -72,23 +64,12 @@
       clockAngle: 'The two hands are on the {a} and on the {b}. What angle do they make?',
       clockHint: 'A whole turn is {turn} degrees and there are {marks} marks, so from one mark to the next is {each} degrees. Count the marks the short way round.',
       clockAria: 'A clock with its hands on the {a} and on the {b}.',
-      whichMoved: 'Which is the same figure, only moved somewhere else?',
-      movedHint: 'Moved, it still faces the same way. Turned, it faces another way.',
-      movedAria: 'A figure drawn on a grid.',
-      ariaMoved: 'The same figure moved somewhere else.',
-      ariaTurned: 'The figure turned round.',
-      ariaFlipped: 'The figure the other way round, as in a mirror.',
       howManyEqual: 'How many sides are the same length?',
       equalHint: 'Sides with the same mark are the same length.',
       equalAria: 'A figure with {n} equal sides marked.',
       whichFigure: 'What is this figure called?',
       whichAngle: 'What is this angle like?',
       angleHint: 'The grey line marks where a right angle is.',
-      isSymmetric: 'If you fold along the line, do the two sides match?',
-      pickSymmetric: 'Which of the two matches when you fold it along the line?',
-      symmetryHint: 'Look at one side of the line, then at the other.',
-      ariaSymmetric: 'A figure that matches when folded.',
-      ariaNotSymmetric: 'A figure that does not match when folded.',
       /* The hint that comes out when an answer is wrong. One per kind of
          question, and each one says what to look at or do with what is on
          screen: the single sentence it replaced ("Try again...") was the
@@ -97,13 +78,10 @@
          Socratic hint from a spoiler. */
       socraticProtractor: '🤔 Look at which number on the protractor the moving arm reaches.',
       socraticClock: '🤔 Count the marks along the short way round the clock, one by one.',
-      socraticMoved: '🤔 Look for the drawing that faces the same way as the first one.',
       socraticAngleKind: '🤔 Compare the angle with the grey line marking the right corner.',
-      socraticSymmetry: '🤔 Fold the drawing along the line and see if anything sticks out.',
       socraticEqualSides: '🤔 Look at the matching marks and count the sides that carry them.',
-      socraticFigureName: '🤔 Count the equal sides of the figure first, then choose its name.',
-      socraticSymmetryPick: '🤔 Imagine folding each drawing along its line and compare them.'
+      socraticFigureName: '🤔 Count the equal sides of the figure first, then choose its name.'
     },
-    transfer: 'This will help you work out how much tape you need to go round something, how many tiles fit on a floor, or where to fold a piece of paper so both halves are the same.'
+    transfer: 'This will help you see the corners of a door and find a square on a map.'
   }, 'en');
 })();

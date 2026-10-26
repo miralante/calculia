@@ -1504,11 +1504,13 @@ async function exerciseShapes(page, baseUrl) {
     await page.locator('#btnNext').click();
   }
 
+  /* Formas tiene dos opciones: su prueba completa y la subactividad de doblar
+     por la mitad. La prueba es la primera. */
   const menuButtons = page.locator('#activitiesMenu .btn-actividad');
-  assert.equal(await menuButtons.count(), 1,
-    'El test de Formas está separado en más de una opción');
-  assert.match(await menuButtons.innerText(), /Formas|Shapes/,
-    'La opción única no está identificada como Formas');
+  assert.equal(await menuButtons.count(), 2,
+    'Formas debe ofrecer su prueba y la subactividad de doblar por la mitad');
+  assert.match(await menuButtons.first().innerText(), /Formas|Shapes/,
+    'La primera opción no está identificada como Formas');
   const testSpec = await page.evaluate(() => {
     const level = window.DATA.activities.formas.levels[0];
     const counts = level.questions.reduce((result, question) => {
@@ -1535,7 +1537,7 @@ async function exerciseShapes(page, baseUrl) {
     solidParts: 2,
   }, 'La prueba única no incluye todos los tipos de contenido');
   /* Con un solo test el recorrido ya venía dentro desde "Hacer el test". */
-  if (testCount > 1) await menuButtons.click();
+  if (testCount > 1) await menuButtons.first().click();
   /* La prueba única es una hoja: todas las preguntas a la vez, cada una
      en su tarjeta. Se contesta cada tarjeta (la primera opción), se
      verifica todo con "Comprobar" y no hay pantalla de fin entre rondas
@@ -1653,6 +1655,11 @@ async function exerciseShapes(page, baseUrl) {
   ];
   await page.locator('#introContinue').click();
   await page.locator('#realContinue').click();
+  /* Formas tiene dos opciones (prueba y "Doblar por la mitad"): la primera es
+     la prueba completa, que es la que tienen que comprobar las pistas. */
+  if (await page.locator('#screenMenu').isVisible()) {
+    await page.locator('#activitiesMenu .btn-actividad').first().click();
+  }
   assert.ok(await page.locator('#screenGame').isVisible(),
     'La pista socrática no se puede comprobar: el test no arranca desde "Hacer el test"');
   /* La hoja de la prueba no trae una pregunta cada vez: se contesta todo

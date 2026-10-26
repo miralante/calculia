@@ -162,6 +162,20 @@
   stroke-dasharray: 8 6;
 }
 
+/* ---- Folding in half ----
+   The fold line is dashed, so it reads as "fold here" and not as an edge. It
+   runs past the figure on both ends, so it is visible on the card too. */
+.fold-halo {
+  stroke: var(--color-superficie);
+  stroke-width: 6;
+}
+.fold-line {
+  stroke: var(--color-texto);
+  stroke-width: 2.5;
+  stroke-dasharray: 6 4;
+}
+.fold-answer { display: block; }
+
 /* Lado y vértice van en paralelo arriba y el perímetro ocupa la fila
    entera debajo, porque no es un cuarto concepto suelto al lado: es lo que
    los dos anteriores sirven para medir. Sin esto la tercera tarjeta cae

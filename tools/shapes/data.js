@@ -143,6 +143,29 @@ var DATA = {
           ]
         }
       ]
+    },
+
+    /* Doblar por la mitad: una subactividad de Formas. Cada pregunta es una
+       figura dibujada cuadradito a cuadradito; si coincide al doblarla se
+       decide mirando el dibujo, nunca se guarda aquí. Va en una sola hoja,
+       como la prueba de Formas. */
+    mitad: {
+      picto: '🦋',
+      levels: [
+        {
+          id: 'mitad',
+          tipo: 'mixed',
+          questions: [
+            { id: 'fold-1', tipo: 'foldYesNo' },
+            { id: 'fold-2', tipo: 'foldYesNo' },
+            { id: 'fold-3', tipo: 'foldYesNo' },
+            { id: 'pick-1', tipo: 'foldPick' },
+            { id: 'pick-2', tipo: 'foldPick' },
+            { id: 'moved-1', tipo: 'movedOrTurned' },
+            { id: 'moved-2', tipo: 'movedOrTurned' }
+          ]
+        }
+      ]
     }
   },
 
@@ -187,5 +210,30 @@ var DATA = {
     { id: 'cube', solid: 'cube', faces: 6, rows: ['.S..', 'SSSS', '.S..'] },
     { id: 'prism', solid: 'triangularPrism', faces: 5, rows: ['.T.', 'RRR', '.T.'] },
     { id: 'pyramid', solid: 'pyramid', faces: 5, rows: ['.T.', 'TST', '.T.'] }
+  ],
+
+  /* Figuras para doblar por la mitad, cuadradito a cuadradito: '#' pintado
+     y '.' vacío. Si coinciden al doblarlas NO está guardado: app.js lo
+     comprueba mirando las filas, que es lo que se le pide a quien juega. */
+  folds: [
+    { id: 'cross', rows: ['.##.', '####', '####', '.##.'] },
+    { id: 'tree', rows: ['..##..', '.####.', '######', '..##..'] },
+    { id: 'cup', rows: ['#....#', '#....#', '######', '.####.'] },
+    { id: 'arrow', rows: ['..##..', '.####.', '##..##', '..##..'] },
+    { id: 'house', rows: ['..##..', '.####.', '######', '#.##.#'] },
+    { id: 'flag', rows: ['####', '####', '##..', '##..'] },
+    { id: 'step', rows: ['#...', '##..', '###.', '####'] },
+    { id: 'hook', rows: ['####', '#...', '#...', '###.'] },
+    { id: 'wave', rows: ['##..##', '.####.', '##....', '####..'] },
+    { id: 'lean', rows: ['####', '###.', '#...', '#...'] }
+  ],
+
+  /* Figuras para distinguir mover de girar. Ninguna es igual girada o al
+     revés, o la pregunta tendría dos respuestas. app.js lo comprueba. */
+  movedFigures: [
+    { id: 'step3', rows: ['#..', '##.', '###'] },
+    { id: 'hook3', rows: ['##.', '#..', '#.#'] },
+    { id: 'flag3', rows: ['###', '#..', '#..'] },
+    { id: 'zig3', rows: ['##.', '.##', '..#'] }
   ]
 };

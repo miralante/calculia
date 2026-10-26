@@ -32,18 +32,6 @@
   justify-content: center;
   min-height: 170px;
 }
-.grid-svg { overflow: visible; }
-.grid-cell {
-  fill: var(--mod-razonamiento, var(--color-texto));
-  stroke: var(--color-superficie);
-  stroke-width: 2;
-}
-/* The fold line: dashed, so it reads as "fold here" and not as an edge. */
-.fold-line {
-  stroke: var(--color-texto);
-  stroke-width: 3;
-  stroke-dasharray: 7 5;
-}
 
 /* ---- Options ---- */
 .kind-name {

@@ -51,7 +51,7 @@ questions:
 
 | **Temperature** | Reading a thermometer. |
 | **Shapes** | Recognising shapes, counting sides and vertices, and introducing perimeter, area, volume, symmetry and similarity. |
-| **Geometry** | Angles, grid squares and symmetry. |
+| **Geometry** | Angles, grid squares and equal sides. |
 
 #### For intermediate users
 

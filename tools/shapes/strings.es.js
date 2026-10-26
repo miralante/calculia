@@ -165,10 +165,12 @@
       }
     },
     activity: {
-      formas: { name: 'Formas', detail: 'Una prueba con todas las formas y cuerpos.' }
+      formas: { name: 'Formas', detail: 'Una prueba con todas las formas y cuerpos.' },
+      mitad: { name: 'Doblar por la mitad', detail: 'Si coincide o no, y si una figura está movida o girada.' }
     },
     level: {
-      test: 'Prueba completa'
+      test: 'Prueba completa',
+      mitad: 'Doblar por la mitad'
     },
     net: {
       cube: { name: 'cubo', gloss: '6 cuadrados' },
@@ -239,7 +241,23 @@
       socraticSolid: '🤔 Fíjate en la forma del objeto, no en para qué se usa ni en su color.',
       socraticTriangleSides: '🤔 Mira las marcas de los lados: los que tienen la misma marca miden lo mismo. Si un lado no tiene marca, es distinto de los demás.',
       socraticTriangleAngles: '🤔 Mira la esquina más abierta. Si es como la de una hoja de papel, es rectángulo; si es más abierta, es obtusángulo; si las tres son más cerradas, es acutángulo.',
-      socraticAreaCalc: '🤔 Multiplica las dos medidas. Si es un triángulo, divide el resultado entre 2.'
+      socraticAreaCalc: '🤔 Multiplica las dos medidas. Si es un triángulo, divide el resultado entre 2.',
+      foldPrompt: 'Si doblas por la raya, ¿coinciden los dos lados?',
+      foldPickPrompt: '¿Cuál de las dos coincide al doblarla por la raya?',
+      foldHint: 'Mira un lado de la raya y luego el otro.',
+      foldAria: 'Una figura dibujada en una cuadrícula, con su raya de doblar.',
+      foldOption: 'Una de las dos figuras.',
+      foldYes: 'Sí',
+      foldNo: 'No',
+      socraticFold: '🤔 Dobla el dibujo por la raya y mira si sobra algo en un lado.',
+      socraticFoldPick: '🤔 Imagina que doblas cada dibujo por su raya y compáralos.',
+      whichMoved: '¿Cuál es la misma figura, solo movida de sitio?',
+      movedHint: 'Movida sigue mirando igual. Girada mira hacia otro lado.',
+      movedAria: 'Una figura dibujada en una cuadrícula.',
+      ariaMoved: 'La misma figura movida de sitio.',
+      ariaTurned: 'La figura girada.',
+      ariaFlipped: 'La figura del revés, como en un espejo.',
+      socraticMoved: '🤔 Busca el dibujo que mira hacia el mismo lado que el primero.'
     },
     transfer: 'Esto te servirá para entender señales y dibujos, y para decir cómo es algo cuando lo tengas que explicar.'
   }, 'es');
