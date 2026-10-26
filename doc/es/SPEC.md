@@ -9,7 +9,7 @@ Una aplicación web gratuita y estática con 30 actividades para practicar
 cálculo y razonamiento lógico:
 
 - **Matemáticas**: Los Números, Formas, Geometría, Fracciones, Medidas, Escala, Restar y
-  Cálculo Mental, Dinero, Porcentajes, Las Tablas, Grupos exactos, Cuentas grandes,
+  Cálculo Mental, Dinero, Porcentajes, Las Tablas, Grupos exactos, Cuentas rápidas,
   Cantidades, Números Romanos,
   Problemas, Temperatura del agua.
 - **Razonamiento y lógica**: Adivinanzas, Patrones, El Monedero, La balanza, Datos

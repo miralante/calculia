@@ -58,7 +58,7 @@ questions:
 | Activity | Skill worked |
 |----------|--------------|
 | **Math tables** | Multiplication facts. |
-| **Big sums** | Cutting a sum into easy parts, sharing out. |
+| **Quick sums** | Cutting a sum into easy parts, sharing out. |
 | **Exact groups** | Multiples, primes, squares. |
 | **Fractions** | Fractions and decimals. |
 | **Measures** | Units of measure, estimating. |

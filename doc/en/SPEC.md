@@ -9,7 +9,7 @@ A free, static web app with 30 activities for practicing math and
 logical reasoning:
 
 - **Math**: Numbers, Shapes, Geometry, Fractions, Measures, Scale, Subtraction and
-  Mental Math, Money, Percentages, Math Tables, Exact groups, Big sums, Quantities, Roman Numerals,
+  Mental Math, Money, Percentages, Math Tables, Exact groups, Quick sums, Quantities, Roman Numerals,
   Problems, Water Temperature.
 - **Reasoning and logic**: Riddles, Patterns, The Wallet, The balance, Data and
   charts, The Calendar,

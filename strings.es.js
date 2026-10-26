@@ -34,7 +34,7 @@
     "percent": { "name": "Porcentajes", "detail": "Rebajas, recetas y planos." },
     "money": { "name": "Dinero", "detail": "Cuenta, paga y calcula el cambio." },
     "divisibility": { "name": "Grupos exactos", "detail": "Múltiplos, primos y cuadrados." },
-    "operations": { "name": "Cuentas grandes", "detail": "Partir, repartir y el orden." },
+    "operations": { "name": "Cuentas rápidas", "detail": "Partir, repartir y el orden." },
     "quantities": { "name": "Leer y Escribir Números", "detail": "Lee y escribe números grandes." },
     "ordinals": { "name": "Números ordinales", "detail": "Primero, segundo, tercero…" },
     "operationconcepts": { "name": "Operaciones", "detail": "Qué significa sumar, restar, multiplicar y dividir." },

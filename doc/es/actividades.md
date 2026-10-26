@@ -28,7 +28,7 @@ de pantalla.
 | **Medidas** | Elegir la unidad adecuada (cm, m, g, kg, ml, l) y estimar longitud, peso y capacidad. |
 | **Geometría** | Distinguir un ángulo recto de uno agudo u obtuso, ubicar casillas en una cuadrícula y contar lados iguales. |
 | **Tablas de multiplicar** | Practicar las tablas de multiplicar y dividir mediante repetición y retos cortos. |
-| **Cuentas grandes** | Dar la vuelta a una multiplicación, partir una difícil en dos fáciles, repartir de las dos maneras en que se divide, y decidir qué va primero cuando hay paréntesis. |
+| **Cuentas rápidas** | Dar la vuelta a una multiplicación, partir una difícil en dos fáciles, repartir de las dos maneras en que se divide, y decidir qué va primero cuando hay paréntesis. |
 | **Grupos exactos** | Múltiplos y reglas de divisibilidad, números primos, cuándo coinciden dos cosas que se repiten, el trozo más grande común a dos medidas, y los cuadrados con su raíz. |
 | **Cálculo mental** | Ejercicios rápidos con las cuatro operaciones, sin escribir pasos intermedios. |
 | **Porcentajes** | Leer un porcentaje en una cuadrícula de cien, calcular un descuento o un aumento en euros, hacer crecer una receta manteniendo la proporción, ver que más gente en el mismo trabajo es menos rato, leer los metros de verdad en un plano, y saber para cuántas cosas llega el dinero que se lleva. |

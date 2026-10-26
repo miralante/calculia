@@ -10,7 +10,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '➗ Big sums',
+    title: '➗ Quick sums',
     instructionMenu: 'Choose an activity.',
     contexto: 'A big sum is not a hard sum: it is a small sum done twice.',
     explicacion: '✅ There is no new sum to learn here. Only how to cut one into parts you already know.',

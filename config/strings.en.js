@@ -30,7 +30,7 @@
     activity: {
       'los-numeros': 'Number Types', 'lines': 'Lines', 'shapes': 'Shapes','trigonometry': 'Trigonometry', 'geometry': 'Geometry', 'numbers': 'Numbers', 'fractions-measures': 'Fractions', 'measures': 'Measures', 'scale': 'Scale', 'linear-functions': 'Linear and affine functions',
       'mental-math': 'Subtraction and Mental Math', 'percent': 'Percentages', 'money': 'Money',
-      'divisibility': 'Exact groups', 'operations': 'Big sums', 'quantities': 'Read and Write Numbers', 'operation-concepts': 'Operations', 'order-numbers': 'Order numbers', 'order-positives': 'Order positives', 'order-negatives': 'Order negatives', 'order-fractions': 'Order fractions', 'order-decimals': 'Order decimals', 'ordinals': 'Ordinal Numbers', 'parity': 'Even and odd', 'math-tables': 'Math Tables', 'head-math': 'Head Math',
+      'divisibility': 'Exact groups', 'operations': 'Quick sums', 'quantities': 'Read and Write Numbers', 'operation-concepts': 'Operations', 'order-numbers': 'Order numbers', 'order-positives': 'Order positives', 'order-negatives': 'Order negatives', 'order-fractions': 'Order fractions', 'order-decimals': 'Order decimals', 'ordinals': 'Ordinal Numbers', 'parity': 'Even and odd', 'math-tables': 'Math Tables', 'head-math': 'Head Math',
       'roman-numerals': 'Roman Numerals', 'riddles': 'Riddles', 'patterns': 'Patterns',
       'problems': 'Problems', 'temperature': 'Water Temperature',
       'wallet': 'The Wallet', 'algebra': 'The balance', 'charts': 'Data and charts', 'calendar': 'The Calendar', 'clock': 'The Clock', 'stories': 'Stories',

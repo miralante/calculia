@@ -34,7 +34,7 @@
     "percent": { "name": "Percentages", "detail": "Sales, recipes and plans." },
     "money": { "name": "Money", "detail": "Count, pay and work out change." },
     "divisibility": { "name": "Exact groups", "detail": "Multiples, primes and squares." },
-    "operations": { "name": "Big sums", "detail": "Cutting, sharing and order." },
+    "operations": { "name": "Quick sums", "detail": "Cutting, sharing and order." },
     "quantities": { "name": "Read and Write Numbers", "detail": "Read and write big numbers." },
     "ordinals": { "name": "Ordinal Numbers", "detail": "First, second, third…" },
     "operationconcepts": { "name": "Operations", "detail": "What adding, subtracting, multiplying and dividing mean." },

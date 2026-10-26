@@ -85,7 +85,7 @@
         "daily": 'Al repartir cartas o caramelos, mirad si sale exacto o sobra. Si dos autobuses pasan cada 10 y cada 15 minutos, calculad juntos cuándo vuelven a coincidir.'
       },
       "operations": {
-        "name": 'Cuentas grandes',
+        "name": 'Cuentas rápidas',
         "does": 'Ve que 3 por 4 y 4 por 3 son los mismos puntos girados. Parte una multiplicación difícil en dos fáciles (6 por 7 son 6 por 5 y 6 por 2) y así multiplica también por números de dos cifras. Reparte en montones y cuenta cuántos salen. Y decide qué se hace primero cuando hay paréntesis.',
         "works": 'La idea de que una cuenta grande se resuelve partiendo, no memorizando; las dos maneras de dividir que se usan al hablar; y para qué sirven los paréntesis.',
         "daily": 'Al repartir algo entre varios, dejadle decir cuántos le tocan a cada uno. En la compra, partid un precio: "12 euros cada uno son 10 y 2 más, por tres personas".'

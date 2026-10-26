@@ -30,7 +30,7 @@
     activity: {
       'los-numeros': 'Tipos de Números', 'lines': 'Rectas', 'shapes': 'Formas','trigonometry': 'Trigonometría', 'geometry': 'Geometría', 'numbers': 'Los Números', 'fractions-measures': 'Fracciones', 'measures': 'Medidas', 'scale': 'Escala', 'linear-functions': 'Funciones lineales y afines',
       'mental-math': 'Restar y Cálculo Mental', 'percent': 'Porcentajes', 'money': 'Dinero',
-      'divisibility': 'Grupos exactos', 'operations': 'Cuentas grandes', 'quantities': 'Leer y Escribir Números', 'operation-concepts': 'Operaciones', 'order-numbers': 'Ordenar números', 'order-positives': 'Ordenar positivos', 'order-negatives': 'Ordenar negativos', 'order-fractions': 'Ordenar fracciones', 'order-decimals': 'Ordenar decimales', 'ordinals': 'Números ordinales', 'parity': 'Pares e impares', 'math-tables': 'Las Tablas', 'head-math': 'Cálculo de cabeza',
+      'divisibility': 'Grupos exactos', 'operations': 'Cuentas rápidas', 'quantities': 'Leer y Escribir Números', 'operation-concepts': 'Operaciones', 'order-numbers': 'Ordenar números', 'order-positives': 'Ordenar positivos', 'order-negatives': 'Ordenar negativos', 'order-fractions': 'Ordenar fracciones', 'order-decimals': 'Ordenar decimales', 'ordinals': 'Números ordinales', 'parity': 'Pares e impares', 'math-tables': 'Las Tablas', 'head-math': 'Cálculo de cabeza',
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',
       'problems': 'Problemas', 'temperature': 'Temperatura del agua',
       'wallet': 'El Monedero', 'algebra': 'La balanza', 'charts': 'Datos y gráficos', 'calendar': 'El Calendario', 'clock': 'El Reloj', 'stories': 'Historias',

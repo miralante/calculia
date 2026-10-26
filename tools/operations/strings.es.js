@@ -10,7 +10,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '➗ Cuentas grandes',
+    title: '➗ Cuentas rápidas',
     instructionMenu: 'Elige una actividad.',
     contexto: 'Una cuenta grande no es una cuenta difícil: es una cuenta pequeña hecha dos veces.',
     explicacion: '✅ Aquí no hay que aprenderse ninguna cuenta nueva. Solo partirla en trozos que ya sabes.',

@@ -26,7 +26,7 @@ grouped by the skill they work on, not by screen folder.
 | **Measures** | Choose the right unit (cm, m, g, kg, ml, l) and estimate length, weight and capacity. |
 | **Geometry** | Tell a right angle from an acute or obtuse one, find squares on a grid, and count equal sides. |
 | **Math tables** | Practise multiplication and division facts through repetition and short challenges. |
-| **Big sums** | Turn a multiplication round, cut a hard one into two easy parts, share out in the two ways division is used, and decide what comes first when brackets are involved. |
+| **Quick sums** | Turn a multiplication round, cut a hard one into two easy parts, share out in the two ways division is used, and decide what comes first when brackets are involved. |
 | **Exact groups** | Multiples and divisibility rules, prime numbers, when two repeating things meet, the biggest chunk common to two lengths, and squares with their roots. |
 | **Mental math** | Quick calculation exercises with the four operations, without writing intermediate steps. |
 | **Percentages** | Read a percentage off a hundred squares, work out a discount or a rise in euros, grow a recipe keeping its proportion, see that more people on the same job means less time, read real metres off a plan, and know how many things the money you carry reaches for. |

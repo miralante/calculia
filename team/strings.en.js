@@ -85,7 +85,7 @@
         "daily": 'When dealing out cards or sweets, see whether it comes out exactly or something is left. If two buses come every 10 and every 15 minutes, work out together when they next come together.'
       },
       "operations": {
-        "name": 'Big sums',
+        "name": 'Quick sums',
         "does": 'Sees that 3 times 4 and 4 times 3 are the same dots turned round. Cuts a hard multiplication into two easy ones (6 times 7 is 6 times 5 and 6 times 2) and so multiplies by two-digit numbers too. Shares into piles and counts how many come out. And decides what is done first when there are brackets.',
         "works": 'The idea that a big sum is solved by cutting it up, not by memorising; the two ways of dividing that people actually use when speaking; and what brackets are for.',
         "daily": 'When sharing something between several people, let them say how many each one gets. When shopping, cut a price up: \"12 euros each is 10 and 2 more, for three people\".'
