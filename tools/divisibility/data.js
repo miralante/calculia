@@ -38,6 +38,16 @@ var DATA = {
       ]
     },
 
+    /* La división entera: cuántos grupos completos salen y cuánto sobra.
+       En filas se ve solo: las filas completas son los grupos y la última,
+       si sale corta, es lo que sobra. */
+    division: {
+      picto: '➗',
+      levels: [
+        { id: 'e1', tipo: 'intDivision' }
+      ]
+    },
+
     /* Primo: el que no se puede repartir de ninguna manera. Se prueba
        con 2, 3 y 5, que es suficiente para todos los números de aquí
        (el siguiente que habría que probar es el 7, y 7 × 7 = 49 se sale
@@ -98,6 +108,15 @@ var DATA = {
       ]
     }
   },
+
+  /* Pares para la división entera: `n` puntos repartidos en grupos de
+     `d`. Hasta 25 para que se puedan contar; el resto de la división
+     siempre es distinto de cero, así la respuesta se ve en la última fila. */
+  divisionPairs: [
+    { n: 7, d: 2 }, { n: 11, d: 2 }, { n: 13, d: 3 }, { n: 23, d: 3 },
+    { n: 20, d: 3 }, { n: 14, d: 5 }, { n: 17, d: 5 }, { n: 16, d: 5 },
+    { n: 22, d: 4 }, { n: 25, d: 4 }, { n: 18, d: 4 }, { n: 19, d: 6 }
+  ],
 
   /* Los números que se pueden poner en filas y contar. */
   numbers: [6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 24, 25],

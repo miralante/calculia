@@ -39,6 +39,7 @@
       by3: 'Entre 3 se puede si al sumar sus cifras sale un número de la tabla del 3.'
     },
     activity: {
+      division: { name: 'División entera', detail: 'Cuántos grupos salen y cuánto sobra.', instruction: 'Reparte los puntos en grupos iguales. Cada fila completa es un grupo. Lo que queda en la última fila, si sale corta, es lo que sobra.' },
       grandes: { name: 'Números grandes', detail: 'Escritos corto.', instruction: 'Un millón es un 1 con seis ceros. Para no escribir tantos ceros se escribe 10 con un número pequeño arriba, que dice cuántos ceros lleva. Cuéntalos y ya lo tienes.' },
       noExactos: { name: 'No sale exacto', detail: 'Números que no encajan.', instruction: 'El lado de un cuadrado mide un número exacto de cuadraditos. Pero su diagonal, la raya de esquina a esquina, no cae nunca en una raya: no hay ningún número exacto que la mida. Hay números así.' },
       multiplos: { name: 'Múltiplos', detail: '¿Sale exacto?', instruction: 'Un número es múltiplo de otro si se puede repartir en filas completas, sin que sobre ninguno. Pon los puntos en filas y mira la última: si está completa, es múltiplo.' },
@@ -90,6 +91,11 @@
       whichMultiple: '¿Cuál de estos números es múltiplo de {base}?',
       multipleHint: 'Si la última fila queda completa, sale exacto.',
       rowsAria: '{n} puntos puestos en filas de {base}.',
+      intDivision: '¿Cuántos grupos completos salen al repartir {n} puntos en grupos de {d}, y cuántos sobran?',
+      intDivisionAria: '{n} puntos puestos en grupos de {d}.',
+      intDivisionLegend: 'Cada fila completa es un grupo. Lo que queda en la última fila es lo que sobra.',
+      quotRem: '{q} grupos y sobran {r}',
+      socraticIntDivision: '🤔 Cuenta las filas completas: eso son los grupos. Mira cuántos puntos quedan en la última fila: eso sobra.',
       divides: '¿Se puede dividir {n} entre {d} sin que sobre nada?',
       isPrime: '¿Es {n} un número primo?',
       inRowsOf: 'En filas de {t}:',

@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v274';
+var VERSION = 'calculia-v277';
 
 var FILES = [
   './',
@@ -189,6 +189,24 @@ var FILES = [
   './tools/numbers-group/strings.es.js',
   './tools/numbers-group/strings.en.js',
   './tools/numbers-group/styles.css',
+  './tools/common-group/',
+  './tools/common-group/app.js',
+  './tools/common-group/data.js',
+  './tools/common-group/strings.es.js',
+  './tools/common-group/strings.en.js',
+  './tools/common-group/styles.css',
+  './tools/common-divisor/',
+  './tools/common-divisor/app.js',
+  './tools/common-divisor/data.js',
+  './tools/common-divisor/strings.es.js',
+  './tools/common-divisor/strings.en.js',
+  './tools/common-divisor/styles.css',
+  './tools/common-multiple/',
+  './tools/common-multiple/app.js',
+  './tools/common-multiple/data.js',
+  './tools/common-multiple/strings.es.js',
+  './tools/common-multiple/strings.en.js',
+  './tools/common-multiple/styles.css',
   './tools/los-numeros/',
   './tools/los-numeros/app.js',
   './tools/los-numeros/data.js',

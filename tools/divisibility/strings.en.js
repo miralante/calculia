@@ -39,6 +39,7 @@
       by3: 'By 3 it works if adding up its digits gives a number from the 3 times table.'
     },
     activity: {
+      division: { name: 'Whole division', detail: 'How many groups, and what is left over.', instruction: 'Share the dots into equal groups. Each full row is a group. What is left on the last row, if it is short, is what is left over.' },
       grandes: { name: 'Big numbers', detail: 'Written short.', instruction: 'A million is a 1 with six zeros. So as not to write all those zeros, you write 10 with a small number above it saying how many zeros it carries. Count them and you have it.' },
       noExactos: { name: 'It does not come out exact', detail: 'Numbers that do not fit.', instruction: 'The side of a square is a whole number of little squares. But its diagonal, the line from corner to corner, never lands on a line: there is no exact number that measures it. Some numbers are like that.' },
       multiplos: { name: 'Multiples', detail: 'Does it come out even?', instruction: 'A number is a multiple of another if it can be shared into full rows with none left over. Put the dots in rows and look at the last one: if it is full, it is a multiple.' },
@@ -90,6 +91,11 @@
       whichMultiple: 'Which of these numbers is a multiple of {base}?',
       multipleHint: 'If the last row comes out full, it works exactly.',
       rowsAria: '{n} dots put in rows of {base}.',
+      intDivision: 'How many full groups come out when you share {n} dots into groups of {d}, and how many are left over?',
+      intDivisionAria: '{n} dots put in groups of {d}.',
+      intDivisionLegend: 'Each full row is a group. What is left on the last row is what is left over.',
+      quotRem: '{q} groups and {r} left over',
+      socraticIntDivision: '🤔 Count the full rows: those are the groups. Look at how many dots are on the last row: that is what is left over.',
       divides: 'Can {n} be divided by {d} with nothing left over?',
       isPrime: 'Is {n} a prime number?',
       inRowsOf: 'In rows of {t}:',

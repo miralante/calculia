@@ -459,6 +459,40 @@
       };
     },
 
+    /* Integer division: the full rows are the groups, and the short last
+       row, if there is one, is what is left over. The wrong answers are
+       the mistakes people make: swapping the two numbers, counting one
+       group too many, or leaving a remainder bigger than the group. */
+    intDivision: function (nv) {
+      var pair = App.utils.drawRound(nv.id, DATA.divisionPairs);
+      var n = pair.n;
+      var d = pair.d;
+      var q = Math.floor(n / d);
+      var r = n % d;
+      var seen = {};
+      seen[q + ' ' + r] = true;
+      var wrong = [[r, q], [q + 1, 0], [q, r + d], [q - 1, r + d]].filter(function (c) {
+        var key = c[0] + ' ' + c[1];
+        if (c[0] < 0 || c[1] < 0 || seen[key]) return false;
+        seen[key] = true;
+        return true;
+      }).slice(0, 3);
+      return {
+        prompt: App.i18n.t('gen.intDivision').replace(/\{n\}/g, n).replace(/\{d\}/g, d),
+        visual: '<div class="calc-stage">' + rowsOf(n, d, 1) + '</div>',
+        visualAria: App.i18n.t('gen.intDivisionAria').replace(/\{n\}/g, n).replace(/\{d\}/g, d),
+        legend: App.i18n.t('gen.intDivisionLegend'),
+        hint: App.i18n.t('gen.socraticIntDivision').replace(/\{n\}/g, n).replace(/\{d\}/g, d),
+        options: App.utils.shuffle([[q, r]].concat(wrong).map(function (c) {
+          return {
+            html: '<span class="answer-name">' + App.i18n.t('gen.quotRem')
+              .replace('{q}', c[0]).replace('{r}', c[1]) + '</span>',
+            correct: c[0] === q && c[1] === r
+          };
+        }))
+      };
+    },
+
     /* Prime or not, decided by trying to build the rows. Every attempt is
        on screen, so the answer is "none of them came out even". */
     isPrime: function (nv) {
