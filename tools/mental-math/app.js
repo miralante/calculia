@@ -684,8 +684,9 @@
      question —what to do with what is on screen— and not the same
      sentence for every question. The generic line is only the
      fallback, for a question that forgot to bring its own. */
-  function showHint() {
-    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
+  function showHint(op) {
+    explanationEl.textContent = App.feedback.hintText(
+      (question && question.hint) || App.i18n.t('hint'), op ? plainText(op.html) : '');
     explanationWrap.classList.remove('hidden');
   }
 
@@ -711,7 +712,7 @@
          the same item is failed again within the reinforce. */
       App.reinforce.add(level.id + ':' + idx, question);
       var respuestaTrasPista = attempts > 1;
-      showHint();
+      showHint(op);
       /* Reveal the explanation only after the hint is acknowledged. */
       btn.classList.add('encourage');
       btn.disabled = true;
@@ -1411,7 +1412,8 @@
     } else {
       gAttempts += 1;
       if (gAttempts === 1) {
-        $('#groupsExplanation').textContent = groupsT('groupsHintPrefix') + groupsPickHint(roundData.entry);
+        $('#groupsExplanation').textContent = groupsT('groupsHintPrefix') +
+          App.feedback.hintText(groupsPickHint(roundData.entry), btn.textContent);
       } else {
         $('#groupsExplanation').textContent = groupsT('groupsWrongPrefix') + roundData.correctValue;
       }

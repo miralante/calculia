@@ -21,12 +21,12 @@
     btnMenu: 'Back to start',
     endSummary: 'You sorted {n} stories. You now have {stars} stars.',
     otherLevel: 'Choose another activity',
-    pista: '🤔 Look at the panels. Which one is the beginning of the story?',
+    pista: '🤔 «{elegida}» is not the panel that comes first. Look at the panels: what is the beginning of the story?',
     /* ---- The Socratic hint ----
        `pista` stays as showHint()'s fallback: it was the same sentence
        for every story. This one says what to do with the panels of
        THIS story and never says which one comes first. */
-    pistaOrden: '🤔 Think which panel could come first, and what happens after it.',
+    pistaOrden: '🤔 «{elegida}» cannot be the beginning: think which panel could come first, and what happens after it.',
     refuerzoTitulo: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} stories you missed until you get them all right.",
     explicacionCorrecta: '✅ Correct!',

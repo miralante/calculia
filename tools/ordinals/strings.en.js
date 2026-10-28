@@ -241,10 +241,10 @@
 
     /* Socratic hints: they say where to look, never what the answer
        was. */
-    hintPosition: 'Count from the flag. The first one is right next to it.',
-    hintMember: 'Count from the flag up to that place.',
-    hintOrdinalToDigit: 'Look at the number written next to the word.',
-    hintDigitToOrdinal: 'Think which place that number takes in the queue.',
+    hintPosition: '«{elegida}» is not the place: count from the flag. The first one is right next to it.',
+    hintMember: '«{elegida}» is not that place: count from the flag up to that place.',
+    hintOrdinalToDigit: '«{elegida}» is not the number: look at the number written next to the word.',
+    hintDigitToOrdinal: '«{elegida}» is not the word for that place: think which place that number takes in the queue.',
 
     finalSummary: 'You got {n} of {total} right. Now you have {stars} stars.',
     transfer: 'Ordinals are used for podiums, rankings, queues, floors, turns, dates and lists. Knowing which place each one takes helps in daily life.'

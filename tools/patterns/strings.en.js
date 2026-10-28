@@ -18,7 +18,7 @@
     chooseOtherLevel: 'Choose another activity',
     explicacionCorrecta: '✅ Correct! Next in the series comes: ',
     explicacionIncorrectaA: "❌ That doesn't follow the pattern. What comes next is: ",
-    pista: '🤔 Try again. Look calmly at the series.',
+    pista: '🤔 «{elegida}» is not the answer. Look at the sequence calmly.',
 
     /* ---- One Socratic hint per kind of series ----
        `pista` stays as showHint()'s fallback. Each level builds its
@@ -26,10 +26,10 @@
        that row of pictures: the two that take turns, the group that
        repeats, the numbers counting up, the letter that goes with
        each symbol. None of them says what comes next. */
-    pistaParejas: '🤔 Look at which two pictures keep taking turns.',
-    pistaGrupos: '🤔 Look at what repeats: the group of pictures or the size of the circle.',
-    pistaNumeros: '🤔 Look at how much the number goes up or down each time.',
-    pistaCodigo: '🤔 Look at which letter always goes with each symbol.',
+    pistaParejas: '🤔 «{elegida}» does not follow the turns: look at which two pictures keep taking turns.',
+    pistaGrupos: '🤔 «{elegida}» does not follow what repeats: look at what repeats, the group of pictures or the size of the circle.',
+    pistaNumeros: '🤔 «{elegida}» does not follow the count: look at how much the number goes up or down each time.',
+    pistaCodigo: '🤔 «{elegida}» is not the letter that goes with the symbol: look at which letter always goes with each symbol.',
     refuerzoTitulo: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",

@@ -24,8 +24,8 @@
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ Mira: la respuesta correcta es ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    pista: '🤔 Prueba otra vez. Piensa con calma.',
-    hint: '🤔 Prueba otra vez. Piensa con calma.',
+    pista: '🤔 «{elegida}» no es la respuesta. Piensa con calma.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     refuerzoTitulo: 'Refuerzo',
     reinforceTitle: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
@@ -106,10 +106,10 @@
          dice qué mirar en la escalera o en el dibujo de delante: la frase
          única de antes («Prueba otra vez. Piensa con calma») era igual para
          todas. No dan la respuesta, dan la estrategia. */
-      socraticSteps: '🤔 Cuenta los huecos que quedan entre los dos escalones señalados.',
-      socraticFactor: '🤔 Mira los dos escalones señalados y cuenta cuántas veces bajas.',
-      socraticConvert: '🤔 Fíjate en el tamaño de cada escalón: cada uno vale diez veces el siguiente.',
-      socraticMeasures: '🤔 Mira el dibujo y la pregunta, y fíjate en la unidad que te piden.'
+      socraticSteps: '🤔 «{elegida}» no es el número de huecos: cuenta los huecos que quedan entre los dos escalones señalados.',
+      socraticFactor: '🤔 «{elegida}» no es cuántas veces bajas: mira los dos escalones señalados y cuenta cuántas veces bajas.',
+      socraticConvert: '🤔 «{elegida}» no respeta el tamaño de los escalones: cada uno vale diez veces el siguiente.',
+      socraticMeasures: '🤔 «{elegida}» no es la unidad que piden: mira el dibujo y la pregunta, y fíjate en la unidad que te piden.'
     },
     transfer: 'Esto te servirá para comprar por peso, entender una receta, saber si algo cabe donde quieres ponerlo y pasar de una unidad a otra sin perderte.'
   }, 'es');

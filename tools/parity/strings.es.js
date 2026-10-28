@@ -79,17 +79,17 @@
       dots: {
         label: 'Parte 1: puntos',
         rule: 'Los puntos van de dos en dos. Si no sobra ninguno, es par. Si sobra uno, es impar.',
-        hint: 'Empareja los puntos de dos en dos. Si sobra uno, es impar.'
+        hint: '«{elegida}» no es la respuesta: empareja los puntos de dos en dos. Si sobra uno, es impar.'
       },
       numbers: {
         label: 'Parte 2: números del 0 al 99',
         rule: 'Un número es par si se puede repartir en parejas sin que sobre nada. Si sobra uno, es impar.',
-        hint: 'Imagina los puntos de dos en dos. ¿Sobra uno?'
+        hint: '«{elegida}» no es la respuesta: imagina los puntos de dos en dos. ¿Sobra uno?'
       },
       big: {
         label: 'Parte 3: números grandes',
         rule: 'Mira la última cifra: 0, 2, 4, 6 u 8 → par. 1, 3, 5, 7 o 9 → impar.',
-        hint: 'Mira solo la última cifra.'
+        hint: '«{elegida}» no es la respuesta: mira solo la última cifra.'
       }
     },
 

@@ -24,7 +24,7 @@
     btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    hint: '🤔 Prueba otra vez. Lee el problema despacio y mira el dibujo.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
@@ -57,10 +57,10 @@
          («Prueba otra vez…») era la misma para todas, así que no decía
          nada. Estas dicen qué mirar en el dibujo de esta pregunta y
          nunca dan la respuesta. */
-      socraticChooseOp: '🤔 Mira el dibujo: ¿se juntan los dos grupos o se va alguna ficha?',
-      socraticSolveAdd: '🤔 Junta los dos grupos de fichas y cuéntalos todos, uno a uno.',
-      socraticSolveSub: '🤔 Cuenta solo las fichas que no están tachadas: esas son las que quedan.',
-      socraticTwoStep: '🤔 Cuenta lo que queda al final, después de los dos cambios del enunciado.'
+      socraticChooseOp: '🤔 «{elegida}» no es la operación que toca: mira el dibujo, ¿se juntan los dos grupos o se va alguna ficha?',
+      socraticSolveAdd: '🤔 «{elegida}» no es el total: junta los dos grupos de fichas y cuéntalos todos, uno a uno.',
+      socraticSolveSub: '🤔 «{elegida}» cuenta fichas que ya no están: cuenta solo las que no están tachadas, esas son las que quedan.',
+      socraticTwoStep: '🤔 «{elegida}» no es lo que queda al final: cuenta después de los dos cambios del enunciado.'
     },
     problem: {
       garden: 'En el jardín hay {a} flores. Plantas {b} flores más. Luego plantas {c} flores más.',

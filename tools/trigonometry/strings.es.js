@@ -54,7 +54,7 @@
     btnHarder: '¿Quieres probar «{name}»?',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    hint: '🤔 Prueba otra vez. Mira el dibujo con calma.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
@@ -127,21 +127,21 @@
          todas las preguntas, así que no decía nada. Estas no dan la
          respuesta —dan la estrategia—, que es lo que distingue una
          pista socrática de un spoiler. */
-      socraticHypotenuse: '🤔 Compara los tres lados y busca el más largo.',
-      socraticSideByAngle: '🤔 Mira si el lado que buscas está enfrente del ángulo o junto a él.',
-      socraticReason: '🤔 Cuenta primero los cuadritos de un lado y luego los del otro.',
-      socraticSameReason: '🤔 Compara los dos triángulos y mira si los números se repiten igual.',
-      socraticWhichSameReason: '🤔 Busca el triángulo que sube y avanza en la misma proporción que el primero.',
-      socraticLadderSide: '🤔 Mira cuál de los tres lados es el único que está inclinado.',
-      socraticLadderCompare: '🤔 Compara cuánto sube cada escalera por la pared.',
-      socraticLadderTaller: '🤔 Mira hasta dónde sube cada escalera en la pared.',
+      socraticHypotenuse: '🤔 «{elegida}» no es la hipotenusa: compara los tres lados y busca el más largo.',
+      socraticSideByAngle: '🤔 «{elegida}» no es el lado que buscas: mira si el lado que buscas está enfrente del ángulo o junto a él.',
+      socraticReason: '🤔 «{elegida}» no es la razón entre los lados: cuenta primero los cuadritos de un lado y luego los del otro.',
+      socraticSameReason: '🤔 «{elegida}» no es el triángulo con la misma razón: compara los dos triángulos y mira si los números se repiten igual.',
+      socraticWhichSameReason: '🤔 «{elegida}» no sube y avanza en la misma proporción: busca el triángulo que sube y avanza igual que el primero.',
+      socraticLadderSide: '🤔 «{elegida}» no es el lado inclinado: mira cuál de los tres lados es el único que está inclinado.',
+      socraticLadderCompare: '🤔 «{elegida}» no compara bien las escaleras: compara cuánto sube cada escalera por la pared.',
+      socraticLadderTaller: '🤔 «{elegida}» no es hasta dónde llega la escalera: mira hasta dónde sube cada escalera en la pared.',
       steeperRamp: '¿Cuál de las dos rampas sube más rápido?',
       steeperRampHint: 'Mira cuánto sube cada una por cada paso que avanza.',
       steeperRampAria: 'Dos rampas. La {x} sube {a} y avanza {b}. La {y} sube {c} y avanza {d}.',
       steeperRampKey: 'sube {up}, avanza {along}',
       steeperRampOption: 'La rampa {x}',
       steeperRampExplanation: 'Por cada paso que avanza, sube más.',
-      socraticSteeperRamp: '🤔 Compara cuánto sube cada rampa por cada paso que avanza.'
+      socraticSteeperRamp: '🤔 «{elegida}» no es la rampa más empinada: compara cuánto sube cada rampa por cada paso que avanza.'
     },
     transfer: 'Esto te sirve para saber hasta dónde llega una escalera, si una rampa es muy empinada y si un tejado necesita puntales.'
   }, 'es');

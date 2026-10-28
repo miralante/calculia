@@ -21,8 +21,8 @@
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ Mira: la respuesta correcta es ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    pista: '🤔 Prueba otra vez. Piensa con calma.',
-    hint: '🤔 Prueba otra vez. Piensa con calma.',
+    pista: '🤔 «{elegida}» no es la respuesta. Piensa con calma.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     refuerzoTitulo: 'Refuerzo',
     reinforceTitle: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
@@ -100,17 +100,17 @@
          todas las preguntas, así que no decía nada. Estas no dan la
          respuesta —dan la estrategia—, que es lo que distingue una
          pista socrática de un spoiler. */
-      socraticMixFrac: '🤔 Mira los dos círculos y quédate con los trozos del mismo tamaño.',
-      socraticFracOf: '🤔 Mira el grupo marcado y cuenta solo los dibujos que tiene.',
-      socraticMixedOp: '🤔 Los dos números están en diez partes: mira las tartas.',
-      socraticFracVsDecimal: '🤔 Cuenta los trozos pintados de cada tarta, no los números.',
-      socraticDecimalOp: '🤔 Cuenta las partes de cada tarta y mira cuánto suman.',
-      socraticFracciones: '🤔 Cuenta cuántas partes están pintadas y cuántas partes tiene la tarta en total. Arriba va lo pintado; abajo, el total.',
-      socraticComparaFrac: '🤔 Compara las dos tartas y fíjate en cuál tiene más pintada.',
-      socraticEquivalentes: '🤔 Compara cuánto se pinta en las dos figuras, parte por parte.',
-      socraticSumaFrac: '🤔 Las dos tartas están cortadas en el mismo número de trozos.',
-      socraticDecimalToPicture: '🤔 Busca la tarta que tenga pintada esa misma cantidad.',
-      socraticDecimalToNumber: '🤔 Mira cuánta parte de la tarta está pintada y ponle su número.'
+      socraticMixFrac: '🤔 «{elegida}» no suma trozos del mismo tamaño: mira los dos círculos y quédate solo con los trozos iguales.',
+      socraticFracOf: '🤔 «{elegida}» no cuenta el grupo marcado: mira el grupo y cuenta solo los dibujos que tiene dentro.',
+      socraticMixedOp: '🤔 «{elegida}» no hace bien la cuenta: los dos números están en décimas, mira las tartas.',
+      socraticFracVsDecimal: '🤔 «{elegida}» no es lo que pinta la tarta: cuenta los trozos pintados de cada tarta, no los números.',
+      socraticDecimalOp: '🤔 «{elegida}» no suma bien las partes: cuenta las partes de cada tarta y mira cuánto suman.',
+      socraticFracciones: '🤔 «{elegida}» no es la fracción de la tarta: cuenta lo pintado y el total de partes. Arriba va lo pintado; abajo, el total.',
+      socraticComparaFrac: '🤔 «{elegida}» no es la tarta con más pintado: compara las dos tartas y fíjate en cuál tiene más pintada.',
+      socraticEquivalentes: '🤔 «{elegida}» no es equivalente: compara cuánto se pinta en las dos figuras, parte por parte.',
+      socraticSumaFrac: '🤔 «{elegida}» no suma bien los trozos: las dos tartas están cortadas en el mismo número de trozos.',
+      socraticDecimalToPicture: '🤔 «{elegida}» no tiene esa cantidad pintada: busca la tarta que tenga pintada esa misma cantidad.',
+      socraticDecimalToNumber: '🤔 «{elegida}» no es la parte pintada: mira cuánta parte de la tarta está pintada y ponle su número.'
     },
     intro: {
       fracciones: {

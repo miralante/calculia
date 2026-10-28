@@ -117,8 +117,13 @@ distintas, y entre todas usan casi cada rincón de la API:
   `data.js` es neutral en idioma y recibe el texto fusionado desde
   `strings.<locale>.js`.
 - `App.feedback.lockUntilAck()`: usado por actividades tipo quiz para
-  bloquear las opciones restantes tras un fallo (una pausa de lectura,
+  bloquear las opciones restantes tras un fallo y ocultarlas mientras se
+  muestra la pista; "Entendido" las vuelve a mostrar (una pausa de lectura,
   nunca un bloqueo de progreso).
+- `App.feedback.hintText(plantilla, elegida)`: rellena el marcador
+  `«{elegida}»` de una pista socrática con la respuesta que se acaba de
+  probar, para que la pista diga por qué no encaja. Sin texto, usa
+  «esta opción».
 - En la repetición de refuerzo, al acertar se mantiene el mensaje positivo,
   pero se oculta la explicación con la respuesta para reducir la carga visual.
 - `App.storage.estrellasTotales()` / `.listaToolIds()`: usado por

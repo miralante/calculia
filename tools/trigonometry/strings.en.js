@@ -54,7 +54,7 @@
     btnHarder: 'Do you want to try «{name}»?',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    hint: '🤔 Try again. Look at the drawing calmly.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Practice again',
     reinforceIntro: 'We are going to repeat the {n} questions you got wrong until you get them all right.',
     reinforceDone: 'Practice finished! You have them all now.',
@@ -123,21 +123,21 @@
          same for every question, so it said nothing. These never give the
          answer away — they give the strategy, which is what separates a
          Socratic hint from a spoiler. */
-      socraticHypotenuse: '🤔 Compare the three sides and look for the longest one.',
-      socraticSideByAngle: '🤔 Check whether the side you want sits across from the angle or next to it.',
-      socraticReason: '🤔 Count the squares on one side first, then the squares on the other.',
-      socraticSameReason: '🤔 Compare the two triangles and see if the numbers repeat the same way.',
-      socraticWhichSameReason: '🤔 Look for the triangle that rises and goes in the same proportion as the first.',
-      socraticLadderSide: '🤔 Look for the only one of the three sides that leans.',
-      socraticLadderCompare: '🤔 Compare how high each ladder reaches on the wall.',
-      socraticLadderTaller: '🤔 Look how far each ladder climbs up the wall.',
+      socraticHypotenuse: '🤔 «{elegida}» is not the hypotenuse: compare the three sides and look for the longest one.',
+      socraticSideByAngle: '🤔 «{elegida}» is not the side you want: check whether the side you want sits across from the angle or next to it.',
+      socraticReason: '🤔 «{elegida}» is not the ratio between the sides: count the squares on one side first, then the squares on the other.',
+      socraticSameReason: '🤔 «{elegida}» is not the triangle with the same ratio: compare the two triangles and see whether the numbers repeat the same way.',
+      socraticWhichSameReason: '🤔 «{elegida}» does not rise and move in the same proportion: look for the triangle that rises and goes in the same proportion as the first.',
+      socraticLadderSide: '🤔 «{elegida}» is not the sloping side: look at which of the three sides is the only one that leans.',
+      socraticLadderCompare: '🤔 «{elegida}» does not compare the ladders correctly: compare how high each ladder reaches up the wall.',
+      socraticLadderTaller: '🤔 «{elegida}» is not how far the ladder reaches: look how far each ladder climbs up the wall.',
       steeperRamp: 'Which of the two ramps climbs faster?',
       steeperRampHint: 'Look at how much each one climbs for every step it goes along.',
       steeperRampAria: 'Two ramps. {x} climbs {a} and goes {b}. {y} climbs {c} and goes {d}.',
       steeperRampKey: 'climbs {up}, goes {along}',
       steeperRampOption: 'Ramp {x}',
       steeperRampExplanation: 'For every step it goes along, it climbs more.',
-      socraticSteeperRamp: '🤔 Compare how much each ramp climbs for every step it goes along.'
+      socraticSteeperRamp: '🤔 «{elegida}» is not the steeper ramp: compare how much each ramp climbs for every step it goes along.'
     },
     transfer: 'This helps you know how far a ladder reaches, whether a ramp is too steep, and whether a roof needs supports.'
   }, 'en');

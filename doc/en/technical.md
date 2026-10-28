@@ -111,8 +111,13 @@ nearly every corner of the API:
   `data.js` is locale-neutral and gets its text merged in from
   `strings.<locale>.js`.
 - `App.feedback.lockUntilAck()`: used by quiz-style activities to lock
-  remaining options after a wrong answer (a reading pause, never a
-  progress block).
+  remaining options after a wrong answer and hide them while the hint is
+  shown; "Entendido" brings them back (a reading pause, never a progress
+  block).
+- `App.feedback.hintText(template, chosen)`: fills the `«{elegida}»`
+  placeholder of a socratic hint with the answer just tried, so the hint
+  says why that one does not fit. Without a text label, "this option" is
+  used.
 - During a reinforcement repeat, a correct answer keeps the positive feedback
   but hides the answer explanation to reduce visual load.
 - `App.storage.estrellasTotales()` / `.listaToolIds()`: used by

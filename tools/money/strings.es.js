@@ -25,8 +25,8 @@
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ Mira: la respuesta correcta es ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    pista: '🤔 Prueba otra vez. Piensa con calma.',
-    hint: '🤔 Prueba otra vez. Piensa con calma.',
+    pista: '🤔 «{elegida}» no es la respuesta. Piensa con calma.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     refuerzoTitulo: 'Refuerzo',
     reinforceTitle: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
@@ -75,11 +75,11 @@
          dice qué mirar en el dinero que hay en pantalla: la frase única de
          antes («Prueba otra vez. Piensa con calma») era la misma para
          todas. No dan la respuesta, dan la estrategia. */
-      socraticPrice: '🤔 Mira el precio escrito y léelo con euros y céntimos.',
-      socraticComparePrices: '🤔 Mira los dos precios y compáralos: el dibujo es igual para los dos.',
-      socraticOneEnough: '🤔 Mira cuánto dinero tienes y cuánto cuesta, y compara los dos números.',
-      socraticTwoEnough: '🤔 Mira los dos precios juntos y compáralos con el dinero que tienes.',
-      socraticChange: '🤔 Mira qué billete pagas y cuánto cuesta: piensa en la diferencia.'
+      socraticPrice: '🤔 «{elegida}» no es el precio escrito: mira el precio escrito y léelo con euros y céntimos.',
+      socraticComparePrices: '🤔 «{elegida}» no compara los dos precios: mira los dos precios y compáralos, porque el dibujo es igual para los dos.',
+      socraticOneEnough: '🤔 «{elegida}» no compara bien el dinero: mira cuánto dinero tienes y cuánto cuesta, y compara los dos números.',
+      socraticTwoEnough: '🤔 «{elegida}» no suma bien los dos precios: mira los dos precios juntos y compáralos con el dinero que tienes.',
+      socraticChange: '🤔 «{elegida}» no es el cambio: mira qué billete pagas y cuánto cuesta, y piensa en la diferencia.'
     },
     transfer: 'Esto te servirá para manejarte con el dinero del día a día: saber si te llega, contar el cambio o leer un precio.'
   }, 'es');

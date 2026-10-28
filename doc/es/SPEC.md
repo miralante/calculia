@@ -255,7 +255,7 @@ bloques en el orden correcto:
 | temperature      | ✅ | ✅ | ✅ | ✅ | ✅ |
 | wallet           | ✅ | ✅ | ✅ | ✅ | ✅ |
 | puzzle           | — | — | ✅ | ✅ | ✅ |
-| quantities       | ✅ | ✅ | ✅ | ✅ | ✅ |
+| quantities       | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-positives  | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-negatives  | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-decimals   | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -403,9 +403,10 @@ siendo dinámico y accesible para tecnologías de asistencia.
 11. Preguntas tipo quiz: máximo 3 opciones, siempre con explicación.
 12. Ritmo socrático ante errores: pista antes que la respuesta, ánimo
     nunca castigo (`App.feedback.encourage()` /
-    `App.feedback.lockUntilAck()`), reintentos ilimitados. Excepción:
-    números escritos a mano (§3.8) muestran la solución en lugar de
-    una pista.
+    `App.feedback.lockUntilAck()`), reintentos ilimitados. Mientras se
+    muestra la pista se ocultan las respuestas; "Entendido" las vuelve a
+    mostrar y oculta la pista. Excepción: números escritos a mano (§3.8)
+    muestran la solución en lugar de una pista.
 13. Progresión gradual: cada nivel cambia solo una variable cada vez.
 
 ### 6.1 Baseline WCAG AAA (común a toda la suite)

@@ -888,8 +888,12 @@
      question —which is what to do with the figure in front of you— and
      not the same sentence for every question. The generic line is only
      the fallback, for a question that forgot to bring its own. */
-  function showHint() {
-    explanationEl.textContent = (question && question.hint) || App.i18n.t('hint');
+  function showHint(op) {
+    /* The hint names the answer just tried («{elegida}») and says why it
+       does not fit and where to look, never the right answer. */
+    explanationEl.textContent = App.feedback.hintText(
+      (question && question.hint) || App.i18n.t('hint'),
+      op ? plainText(op.html) : '');
     explanationWrap.classList.remove('hidden');
   }
 
@@ -911,7 +915,7 @@
       attempts += 1;
       if (attempts === 1) App.reinforce.add(level.id + ':' + index, question);
       var respuestaTrasPista = attempts > 1;
-      showHint();
+      showHint(op);
       /* Reveal the explanation only after the hint is acknowledged. */
       btn.classList.add('encourage');
       btn.disabled = true;

@@ -22,7 +22,7 @@
     btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    hint: '🤔 Try again. Look at the calendar calmly.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",
@@ -114,14 +114,14 @@
          same for every question, so it said nothing. These never give the
          answer away — they give the strategy, which is what separates a
          Socratic hint from a spoiler. */
-      socraticDaySeq: '🤔 Find the marked day on the strip and count from there.',
-      socraticDayGap: '🤔 Look at the days on the strip and find the one missing between them.',
-      socraticMonthSeq: '🤔 Find the marked month on the strip of twelve.',
-      socraticMonthGap: '🤔 Look at the months on the strip and find the gap between them.',
-      socraticSeason: '🤔 Look at the month on the card and the weather it usually brings.',
-      socraticHowManyIn: '🤔 Count the pictures on the strip, one by one.',
-      socraticLongerUnit: '🤔 Look at which of the two measures fits inside the other.',
-      socraticSeasonMonth: '🤔 Look at the season in the drawing and which months belong to it.'
+      socraticDaySeq: '🤔 «{elegida}» does not come from counting from the marked day: look at the day on the strip and count from there.',
+      socraticDayGap: '🤔 «{elegida}» is not the missing day: look at the days on the strip and find the gap between them.',
+      socraticMonthSeq: '🤔 «{elegida}» is not the month that comes next: find the marked month on the strip of twelve and count from it.',
+      socraticMonthGap: '🤔 «{elegida}» is not the missing month: look at the months on the strip and find the gap between them.',
+      socraticSeason: '🤔 «{elegida}» is not the season of that card: look at the month on the card and the weather it usually brings.',
+      socraticHowManyIn: '🤔 «{elegida}» is not the count on the strip: count the pictures one by one.',
+      socraticLongerUnit: '🤔 «{elegida}» is not the right measure: look at which of the two measures fits inside the other.',
+      socraticSeasonMonth: '🤔 «{elegida}» does not fall in that season: look at the season in the drawing and which months belong to it.'
     },
     transfer: 'This will help you know what day it is, write an appointment in the calendar and count how long is left until something you are waiting for.'
   }, 'en');

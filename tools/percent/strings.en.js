@@ -23,7 +23,7 @@
     btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    hint: '🤔 Try again. Count calmly what is coloured in.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",
@@ -111,16 +111,16 @@
          coins in front of you: the single old sentence ("Try again.
          Count calmly what is coloured in.") was the same for all of them.
          They give the strategy, never the answer. */
-      socraticReadPercent: '🤔 Count the rows and columns that are coloured in the grid.',
-      socraticPickPercent: '🤔 Compare the three grids: count the coloured squares in each one.',
-      socraticMoneyPart: '🤔 Look at which coins are marked: only those are the part the percentage takes.',
-      socraticMoneyLess: '🤔 Look at the marked coins and take them off the price you can see.',
-      socraticMoneyMore: '🤔 Look at the marked coins and add them to the money you already have.',
-      socraticRatio: '🤔 Look at the servings drawn: compare the first one with the ones beside it.',
-      socraticInverse: '🤔 Look at the rows of work: count how many there are and how long each one lasts.',
-      socraticFit: '🤔 Look at the price of one under the money: count how many times it fits.',
-      socraticLeft: '🤔 Look at the price of one and the money you have: what is left is the rest.',
-      socraticScale: '🤔 Look at the plan: count the squares and read what each one is worth.'
+      socraticReadPercent: '🤔 «{elegida}» is not the percentage of the grid: count the rows and columns that are coloured in.',
+      socraticPickPercent: '🤔 «{elegida}» is not the grid you need: compare the three and count the coloured squares in each one.',
+      socraticMoneyPart: '🤔 «{elegida}» is not the part the percentage takes: look at which coins are marked, only those are the part.',
+      socraticMoneyLess: '🤔 «{elegida}» is not the discounted price: look at the marked coins and take them off the price you can see.',
+      socraticMoneyMore: '🤔 «{elegida}» is not the price after the rise: look at the marked coins and add them to the price you already have.',
+      socraticRatio: '🤔 «{elegida}» does not match the servings: look at the servings drawn and compare the first one with the ones beside it.',
+      socraticInverse: '🤔 «{elegida}» is not the time asked for: count how many rows of work there are and how long each one lasts.',
+      socraticFit: '🤔 «{elegida}» is not how many fit: look at the price of one under the money and count how many times it fits.',
+      socraticLeft: '🤔 «{elegida}» is not what is left over: look at the price of one and the money you have; what is left is the rest.',
+      socraticScale: '🤔 «{elegida}» is not the real measure: look at the plan, count the squares and read what each one is worth.'
     },
     transfer: 'This will help you understand the sales in a shop, know how much you are really getting off, read a plan or a map, and know how many things the money you are carrying reaches for.'
   }, 'en');

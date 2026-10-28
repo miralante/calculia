@@ -16,7 +16,7 @@
     explicacionCorrecta: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ ',
     explicacionIncorrectaB: ' is not right. The correct answer is: ',
-    pista: '🤔 Try again. Read the clue again: ',
+    pista: '🤔 «{elegida}» does not fit the riddle. Read the clue again: ',
     refuerzoTitulo: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",

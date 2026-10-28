@@ -26,8 +26,8 @@
     correctExplanation: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ Look: the correct answer is ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    pista: '🤔 Try again. Think calmly.',
-    hint: '🤔 Try again. Think calmly.',
+    pista: '🤔 «{elegida}» is not the answer. Think calmly.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     refuerzoTitulo: 'Reinforcement',
     reinforceTitle: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
@@ -76,11 +76,11 @@
          type, and each one says what to look at in the money on screen:
          the single old sentence ("Try again. Think calmly.") was the same
          for all of them. They give the strategy, never the answer. */
-      socraticPrice: '🤔 Look at the written price and read it out in euros and cents.',
-      socraticComparePrices: '🤔 Look at the two prices and compare them: both are drawn the same.',
-      socraticOneEnough: '🤔 Look at how much money you have and what it costs, and compare.',
-      socraticTwoEnough: '🤔 Look at both prices together and compare them with your money.',
-      socraticChange: '🤔 Look at which note you hand over and what it costs: think about the difference.'
+      socraticPrice: '🤔 «{elegida}» is not the written price: look at the written price and read it out in euros and cents.',
+      socraticComparePrices: '🤔 «{elegida}» does not compare the two prices: look at the two prices and compare them, because both are drawn the same.',
+      socraticOneEnough: '🤔 «{elegida}» does not compare the money correctly: look at how much money you have and what it costs, and compare the two numbers.',
+      socraticTwoEnough: '🤔 «{elegida}» does not add the two prices correctly: look at both prices together and compare them with your money.',
+      socraticChange: '🤔 «{elegida}» is not the change: look at which note you hand over and what it costs, and think about the difference.'
     },
     transfer: 'This will help you handle money in daily life: knowing if you have enough, counting change or reading a price.'
   }, 'en');

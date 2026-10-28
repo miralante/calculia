@@ -26,8 +26,8 @@
     correctExplanation: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ Look: the correct answer is ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    pista: '🤔 Try again. Think calmly.',
-    hint: '🤔 Try again. Think calmly.',
+    pista: '🤔 «{elegida}» is not the answer. Think calmly.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     refuerzoTitulo: 'Reinforcement',
     reinforceTitle: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
@@ -254,12 +254,12 @@
          number in front of you: the single old sentence ("Try again.
          Think calmly.") was the same for all of them. They give the
          strategy, never the answer. */
-      socraticCompare: '🤔 Look at the digits of both numbers and compare the biggest places first.',
-      socraticBlocks: '🤔 Count the blocks in each group, then put the totals together.',
+      socraticCompare: '🤔 «{elegida}» is not the sign. Compare the biggest places of both numbers first: they decide which way the sign opens.',
+      socraticBlocks: '🤔 «{elegida}» does not match the blocks. Count the blocks in each group, then put the totals together.',
       socraticSayNumber: '🤔 Look at the number drawn and read it in parts, from left to right.',
-      socraticTradeUp: '🤔 Look at the blocks and group them in tens: count the groups.',
-      socraticTradeDown: '🤔 Look at each big block and count how many small ones fit inside.',
-      socraticLadder: '🤔 Look at the number: it is a one followed by zeros, count how many.',
+      socraticTradeUp: '🤔 «{elegida}» is not the number of groups. Look at the blocks and group them in tens: count the groups.',
+      socraticTradeDown: '🤔 «{elegida}» is not how many small blocks fit. Look at each big block and count how many small ones fit inside.',
+      socraticLadder: '🤔 «{elegida}» does not have the right number of zeros. Look at the number: it is a one followed by zeros, count how many.',
       /* Interactive "escribir números" — typed-input practice with
          audio. "Generar" plays the number aloud, "Reproducir"
          replays it, "Comprobar" validates, "Ver resultado" reveals. */

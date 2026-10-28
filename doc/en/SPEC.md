@@ -253,7 +253,7 @@ blocks in the right order:
 | temperature        | ✅ | ✅ | ✅ | ✅ | ✅ |
 | wallet             | ✅ | ✅ | ✅ | ✅ | ✅ |
 | puzzle             | — | — | ✅ | ✅ | ✅ |
-| quantities         | ✅ | ✅ | ✅ | ✅ | ✅ |
+| quantities         | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-positives    | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-negatives    | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-decimals     | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -394,8 +394,10 @@ remains dynamic and accessible to assistive technologies.
 11. Quiz-type questions: maximum 3 options, always with an explanation.
 12. Socratic pacing on mistakes: a hint before the answer, encouragement
     never punishment (`App.feedback.encourage()` /
-    `App.feedback.lockUntilAck()`), unlimited retries. Exception: numbers
-    typed by hand (§3.8) show the solution instead of a hint.
+    `App.feedback.lockUntilAck()`), unlimited retries. While the hint is
+    shown the answers are hidden; "Entendido" shows them again and hides
+    the hint. Exception: numbers typed by hand (§3.8) show the solution
+    instead of a hint.
 13. Gradual progression: each level changes only one variable at a time.
 
 ### 6.1 WCAG AAA baseline (suite-wide)

@@ -24,8 +24,8 @@
     correctExplanation: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ Look: the correct answer is ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    pista: '🤔 Try again. Think calmly.',
-    hint: '🤔 Try again. Think calmly.',
+    pista: '🤔 «{elegida}» is not the answer. Think calmly.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     refuerzoTitulo: 'Reinforcement',
     reinforceTitle: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
@@ -107,10 +107,10 @@
          picture in front of you: the single old sentence ("Try again.
          Think calmly.") was the same for all of them. They give the
          strategy, never the answer. */
-      socraticSteps: '🤔 Count the gaps between the two rungs that are marked.',
-      socraticFactor: '🤔 Look at the two marked rungs and count how many times you go down.',
-      socraticConvert: '🤔 Watch how big each rung is: every one is worth ten times the next.',
-      socraticMeasures: '🤔 Look at the picture and the question, and check which unit they want.'
+      socraticSteps: '🤔 «{elegida}» is not the number of gaps: count the gaps between the two marked rungs.',
+      socraticFactor: '🤔 «{elegida}» is not how many times you go down: look at the two marked rungs and count how many times you go down.',
+      socraticConvert: '🤔 «{elegida}» does not respect the size of the rungs: each one is worth ten times the next.',
+      socraticMeasures: '🤔 «{elegida}» is not the unit they ask for: look at the picture and the question, and check which unit they want.'
     },
     transfer: 'This will help you buy things by weight, follow a recipe, work out whether something fits where you want it, and change from one unit to another without getting lost.'
   }, 'en');

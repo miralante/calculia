@@ -280,7 +280,8 @@
       attempts += 1;
       button.disabled = true;
       App.feedback.encourage(feedback);
-      feedback.textContent += ' ' + fill('hint' + keySuffix(item), itemValues(item));
+      feedback.textContent += ' ' + App.feedback.hintText(
+        fill('hint' + keySuffix(item), itemValues(item)), button ? button.textContent : '');
       App.feedback.lockUntilAck($('#options').querySelectorAll('button'), feedback);
       return;
     }

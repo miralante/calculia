@@ -23,7 +23,7 @@
     btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    hint: '🤔 Try again. Look at the picture calmly.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",
@@ -126,21 +126,21 @@
          ("Try again. Look at the picture calmly") was the same for all of
          them, so it said nothing. These say what to look at in this
          question's picture and never give the answer away. */
-      socraticReadTiles: '🤔 Look at the pile: count the big pieces, the strips and the little ones separately.',
-      socraticSquareSide: '🤔 Walk along one whole side of the square, corner to corner, counting the pieces you pass.',
-      socraticOtherSide: '🤔 Look at the side without the x on it: count the pieces along that edge.',
-      socraticSystem: '🤔 Try each pair on both balances: it has to work on both.',
-      socraticTilted: '🤔 Look at which way the balance tips down: that is the heavier side.',
-      socraticSquareEquation: '🤔 Count the sides of the square: that is how long x is.',
-      socraticHowItGrows: '🤔 Look at the jumps between the bars: are they all the same?',
-      socraticPickStraight: '🤔 Compare the three graphs: find the one that rises by the same jump every time.',
-      socraticOnePlusWeights: '🤔 Look at what is on each side of the balance and take away the weights you can see.',
-      socraticManyBags: '🤔 Count the bags in the picture and share the weight between all of them.',
-      socraticBothSides: '🤔 Take the same weight off both sides: the bag is left on its own.',
-      socraticSubstitute: '🤔 Look at the value of x and multiply it by the times in the expression.',
-      socraticWriteIt: '🤔 Count the bags in the picture: that is the number that goes with x.',
-      socraticUpOrDown: '🤔 Look at the height of the two marked bars and compare them.',
-      socraticHighestPoint: '🤔 Find the tallest bar on the graph and see what time it is.'
+      socraticReadTiles: '🤔 «{elegida}» does not match the pile: count the big pieces, the strips and the little ones separately, then add them up.',
+      socraticSquareSide: '🤔 «{elegida}» is not the whole side: walk one full side from corner to corner and count the pieces you pass.',
+      socraticOtherSide: '🤔 «{elegida}» does not come from that edge: look at the side without the x and count the pieces along that edge.',
+      socraticSystem: '🤔 «{elegida}» does not work on both balances: try each pair on both, it has to work on each one.',
+      socraticTilted: '🤔 «{elegida}» is not the heavier side: look at which way the balance tips down.',
+      socraticSquareEquation: '🤔 «{elegida}» is not how long x is: count how many sides the square has.',
+      socraticHowItGrows: '🤔 «{elegida}» does not follow the pattern of jumps: check whether the jumps between the bars are all the same.',
+      socraticPickStraight: '🤔 «{elegida}» is not the graph that rises by the same jump: compare the three and find the one with a constant jump.',
+      socraticOnePlusWeights: '🤔 «{elegida}» does not fit: take from both sides the weights you can see and look at what is left.',
+      socraticManyBags: '🤔 «{elegida}» does not share the weight properly: count the bags in the picture and share the weight between all of them.',
+      socraticBothSides: '🤔 «{elegida}» leaves extra things: take the same weight off both sides and the bag is left on its own.',
+      socraticSubstitute: '🤔 «{elegida}» is not the result: look at the value of x and multiply it by the number of times it appears in the expression.',
+      socraticWriteIt: '🤔 «{elegida}» is not the number that goes with x: count the bags in the picture.',
+      socraticUpOrDown: '🤔 «{elegida}» does not compare the heights correctly: look at the two marked bars and decide which one is taller.',
+      socraticHighestPoint: '🤔 «{elegida}» is not the time of the tallest bar: find the tallest bar on the graph and see what time it is.'
     },
     transfer: 'This will help you understand a graph in the newspaper or on your phone, and realise that a letter in a sum is just a number nobody has told you yet, and see that those sums with letters are pieces that can be built up and taken apart.'
   }, 'en');

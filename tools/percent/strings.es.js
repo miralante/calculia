@@ -23,7 +23,7 @@
     btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    hint: '🤔 Prueba otra vez. Cuenta con calma lo que está pintado.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
@@ -111,16 +111,16 @@
          única de antes («Prueba otra vez. Cuenta con calma lo que está
          pintado») era la misma para todas. No dan la respuesta, dan la
          estrategia. */
-      socraticReadPercent: '🤔 Cuenta las filas y las columnas pintadas de la cuadrícula.',
-      socraticPickPercent: '🤔 Compara las tres cuadrículas: cuenta los pintados de cada una.',
-      socraticMoneyPart: '🤔 Mira qué monedas están marcadas: solo ésas son la parte del porcentaje.',
-      socraticMoneyLess: '🤔 Mira las monedas marcadas y quitáselas al precio que ves.',
-      socraticMoneyMore: '🤔 Mira las monedas marcadas y añádeselas al precio que ya tienes.',
-      socraticRatio: '🤔 Mira las raciones dibujadas: compara la primera con las de al lado.',
-      socraticInverse: '🤔 Mira las filas de trabajo: cuenta cuántas filas hay y cuánto dura cada una.',
-      socraticFit: '🤔 Mira el precio de una bajo el dinero: cuenta cuántas veces cabe.',
-      socraticLeft: '🤔 Mira el precio de una y el dinero que tienes: lo que sobra es el resto.',
-      socraticScale: '🤔 Mira el plano: cuenta los cuadrados y lee lo que vale cada uno.'
+      socraticReadPercent: '🤔 «{elegida}» no es el porcentaje de la cuadrícula: cuenta las filas y las columnas pintadas.',
+      socraticPickPercent: '🤔 «{elegida}» no es la cuadrícula que buscas: compara las tres y cuenta los pintados de cada una.',
+      socraticMoneyPart: '🤔 «{elegida}» no es la parte del porcentaje: mira qué monedas están marcadas, solo ésas son la parte.',
+      socraticMoneyLess: '🤔 «{elegida}» no es el precio con descuento: mira las monedas marcadas y quítaselas al precio que ves.',
+      socraticMoneyMore: '🤔 «{elegida}» no es el precio con subida: mira las monedas marcadas y añádelas al precio que ya tienes.',
+      socraticRatio: '🤔 «{elegida}» no cuadra con las raciones: mira las raciones dibujadas y compara la primera con las de al lado.',
+      socraticInverse: '🤔 «{elegida}» no es el tiempo que pide: cuenta cuántas filas de trabajo hay y cuánto dura cada una.',
+      socraticFit: '🤔 «{elegida}» no es cuántas cabe: mira el precio de una bajo el dinero y cuenta cuántas veces cabe.',
+      socraticLeft: '🤔 «{elegida}» no es lo que sobra: mira el precio de una y el dinero que tienes; lo que sobra es el resto.',
+      socraticScale: '🤔 «{elegida}» no es la medida real: mira el plano, cuenta los cuadrados y lee lo que vale cada uno.'
     },
     transfer: 'Esto te servirá para entender las rebajas de una tienda, saber cuánto te descuentan de verdad, leer un plano o un mapa y saber para cuántas cosas te llega el dinero que llevas.'
   }, 'es');

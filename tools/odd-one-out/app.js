@@ -162,8 +162,10 @@
      with the three drawings in front of you— and not the same
      sentence for every question. The generic line is only the
      fallback, for a question that forgot to bring its own. */
-  function showHint() {
-    explanationEl.textContent = pistaActual || App.i18n.t('pista');
+  function showHint(btn) {
+    explanationEl.textContent = App.feedback.hintText(
+      pistaActual || App.i18n.t('pista'),
+      btn ? (btn.getAttribute('aria-label') || btn.textContent) : '');
     explanationWrap.classList.remove('hidden');
   }
 
@@ -185,7 +187,7 @@
       attempts += 1;
       if (attempts === 1) App.reinforce.add(level.id + ':' + index, group);
       var respuestaTrasPista = attempts > 1;
-      showHint();
+      showHint(btn);
       /* Reveal the explanation only after the hint is acknowledged. */
       btn.classList.add('encourage');
       btn.disabled = true;

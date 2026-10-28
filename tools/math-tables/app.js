@@ -434,7 +434,9 @@
       attempts += 1;
       if (button) button.disabled = true;
       App.feedback.encourage(feedback);
-      feedback.textContent += ' ' + fill(isAudio() ? 'hintAudio' : ('hint' + keySuffix()), itemValues(item));
+      feedback.textContent += ' ' + App.feedback.hintText(
+        fill(isAudio() ? 'hintAudio' : ('hint' + keySuffix()), itemValues(item)),
+        button ? button.textContent : String(value));
       if (usesInput()) {
         App.feedback.lockUntilAck([$('#divideInput'), $('#checkDivide')], feedback);
       } else {

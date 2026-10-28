@@ -22,13 +22,13 @@
     rondaCompletadaTitulo: '¡Ronda completada!',
     explicacionCorrecta: '✅ ¡Correcto! Ese es el que no encaja con los demás.',
     explicacionIncorrectaA: '❌ Ese sí encaja con los demás. El que no encaja es: ',
-    pista: '🤔 Prueba otra vez. Mira los tres dibujos con calma.',
+    pista: '🤔 «{elegida}» no es la respuesta. Mira los tres dibujos con calma.',
     /* ---- Pista socrática ----
        `pista` se queda como respaldo de showHint(): era la misma para
        todas las preguntas y no decía nada. Esta dice qué hacer con los
        tres dibujos de esta pregunta y nunca dice cuál es el
        intruso. */
-    pistaIntruso: '🤔 Mira si dos de los tres van juntos y cuál se queda fuera.',
+    pistaIntruso: '🤔 «{elegida}» no es el intruso: mira si dos de los tres van juntos y cuál se queda fuera.',
     refuerzoTitulo: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',

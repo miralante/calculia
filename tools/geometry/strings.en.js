@@ -23,7 +23,7 @@
     btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    hint: '🤔 Try again. Look at the picture calmly.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",
@@ -76,11 +76,11 @@
          same for every question, so it said nothing. These never give the
          answer away - they give the strategy, which is what separates a
          Socratic hint from a spoiler. */
-      socraticProtractor: '🤔 Look at which number on the protractor the moving arm reaches.',
-      socraticClock: '🤔 Count the marks along the short way round the clock, one by one.',
-      socraticAngleKind: '🤔 Compare the angle with the grey line marking the right corner.',
-      socraticEqualSides: '🤔 Look at the matching marks and count the sides that carry them.',
-      socraticFigureName: '🤔 Count the equal sides of the figure first, then choose its name.'
+      socraticProtractor: '🤔 «{elegida}» is not the measure of the arm: look at which number on the protractor the moving arm reaches.',
+      socraticClock: '🤔 «{elegida}» is not the short way round: count the marks along the short way round the clock, one by one.',
+      socraticAngleKind: '🤔 «{elegida}» is not the kind of angle: compare the angle with the grey line marking the right corner.',
+      socraticEqualSides: '🤔 «{elegida}» does not count the equal sides correctly: look at the matching marks and count the sides that carry them.',
+      socraticFigureName: '🤔 «{elegida}» is not the name of the figure: count the equal sides first, then choose the name.'
     },
     transfer: 'This will help you see the corners of a door and find a square on a map.'
   }, 'en');

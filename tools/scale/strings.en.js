@@ -85,7 +85,7 @@
     btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    hint: '🤔 Try again. Look at the drawing calmly.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Extra practice',
     reinforceIntro: 'Let us repeat the {n} questions you got wrong until you get them all right.',
     reinforceDone: 'Extra practice finished. You have them all.',
@@ -129,11 +129,11 @@
          five questions. These say what to look at in THIS instrument or
          plan, and never give the measure: they give the way of getting
          to it. */
-      socraticRead: '🤔 Look at the highest mark the pencil or the level points to and count the ticks.',
-      socraticStep: '🤔 Share the space between the two numbers among all the ticks.',
-      socraticSteps: '🤔 Count the ticks the pencil passes, one by one, from where it starts.',
-      socraticPlanToReal: '🤔 Look at the scale above and count the centimetres of the road.',
-      socraticRealToPlan: '🤔 Think how many one-centimetre pieces fit in that distance.'
+      socraticRead: '🤔 «{elegida}» is not the reading: look at the highest mark the pencil or the level points to and count the ticks.',
+      socraticStep: '🤔 «{elegida}» does not share the space properly: share the space between the two numbers among all the ticks.',
+      socraticSteps: '🤔 «{elegida}» is not the number of steps: count the ticks the pencil passes, one by one, from where it starts.',
+      socraticPlanToReal: '🤔 «{elegida}» is not the real distance: look at the scale above and count the centimetres of the road.',
+      socraticRealToPlan: '🤔 «{elegida}» is not what it measures on the plan: think how many one-centimetre pieces fit in that distance.'
     },
 
     transfer: 'It will help you read a recipe, a metro plan or the water meter without fear.'

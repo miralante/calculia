@@ -198,13 +198,13 @@
 
     /* Pistas Socráticas por letra, para que la pista guíe
        la mecánica y no se limite a repetir el número. */
-    "pistaI":  "¿Cuántas I ves? ¿Cuánto vale cada I?",
-    "pistaV":  "¿Hay una V? ¿Cuánto vale?",
-    "pistaX":  "¿Hay una X? ¿Cuánto vale?",
-    "pistaIV": "Una I va DELANTE de una V. ¿Suma o resta?",
-    "pistaIX": "Una I va DELANTE de una X. ¿Suma o resta?",
-    "pistaXI": "Hay una X y una I detrás. ¿Cuánto suman 10 + 1?",
-    "pistaGeneral": "Cuenta letra a letra: ¿cuáles suman y cuáles restan?",
+    "pistaI":  "«{elegida}» no es la cantidad: ¿cuántas I ves? ¿Cuánto vale cada I?",
+    "pistaV":  "«{elegida}» no cuadra: ¿hay una V? ¿Cuánto vale?",
+    "pistaX":  "«{elegida}» no cuadra: ¿hay una X? ¿Cuánto vale?",
+    "pistaIV": "«{elegida}» no es la lectura: una I va DELANTE de una V. ¿Suma o resta?",
+    "pistaIX": "«{elegida}» no es la lectura: una I va DELANTE de una X. ¿Suma o resta?",
+    "pistaXI": "«{elegida}» no suma bien: hay una X y una I detrás. ¿Cuánto suman 10 + 1?",
+    "pistaGeneral": "«{elegida}» no es la lectura: cuenta letra a letra. ¿Cuáles suman y cuáles restan?",
 
     /* Ordinales para siglos y monarcas (audio). El audio del enunciado
        usa estas palabras en lugar de leer las letras (que sonaría

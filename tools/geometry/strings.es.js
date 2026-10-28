@@ -23,7 +23,7 @@
     btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    hint: '🤔 Prueba otra vez. Mira el dibujo con calma.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
@@ -76,11 +76,11 @@
          todas las preguntas, así que no decía nada. Estas no dan la
          respuesta —dan la estrategia—, que es lo que distingue una
          pista socrática de un spoiler. */
-      socraticProtractor: '🤔 Mira en qué número del transportador cae el brazo que se mueve.',
-      socraticClock: '🤔 Cuenta las marcas del reloj por el camino corto, de una en una.',
-      socraticAngleKind: '🤔 Compara el ángulo con la raya gris que marca la esquina recta.',
-      socraticEqualSides: '🤔 Mira las marcas iguales del dibujo y cuenta los lados que las llevan.',
-      socraticFigureName: '🤔 Cuenta primero los lados iguales de la figura antes de elegir el nombre.'
+      socraticProtractor: '🤔 «{elegida}» no es la medida del brazo: mira en qué número del transportador cae el brazo que se mueve.',
+      socraticClock: '🤔 «{elegida}» no es el camino corto: cuenta las marcas del reloj por el camino corto, de una en una.',
+      socraticAngleKind: '🤔 «{elegida}» no es el tipo de ángulo: compara el ángulo con la raya gris que marca la esquina recta.',
+      socraticEqualSides: '🤔 «{elegida}» no cuenta bien los lados iguales: mira las marcas iguales del dibujo y cuenta los lados que las llevan.',
+      socraticFigureName: '🤔 «{elegida}» no es el nombre de la figura: cuenta primero los lados iguales antes de elegir el nombre.'
     },
     transfer: 'Esto te servirá para entender las esquinas de una puerta y para encontrar una casilla en un mapa.'
   }, 'es');

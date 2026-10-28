@@ -876,7 +876,7 @@
     } else {
       attempts += 1;
       $('#explanation').textContent = (attempts === 1
-        ? t('hintPrefix') + pickHint(roundData.entry)
+        ? t('hintPrefix') + App.feedback.hintText(pickHint(roundData.entry), btn.textContent)
         : t('wrongPrefix') + stripTags(roundData.correctValue));
       $('#explanationWrap').classList.remove('hidden');
       btn.classList.add('encourage');

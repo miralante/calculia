@@ -158,8 +158,8 @@
      the person is pointed back to the hint already on screen. Only
      on the second mistake is the correct answer explained
      (showExplanation). */
-  function showHint(item) {
-    explanationEl.textContent = App.i18n.t('pista') + '"' + item.text + '"';
+  function showHint(item, optionText) {
+    explanationEl.textContent = App.feedback.hintText(App.i18n.t('pista'), optionText) + '"' + item.text + '"';
     explanationWrap.classList.remove('hidden');
   }
 
@@ -187,7 +187,7 @@
          stable key (the item is passed whole to answer). */
       if (attempts === 1) App.reinforce.add(item.text, item);
       var respuestaTrasPista = attempts > 1;
-      showHint(item);
+      showHint(item, optionText);
       /* Reveal the explanation only after the hint is acknowledged. */
       btn.classList.add('encourage');
       btn.disabled = true;

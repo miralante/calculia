@@ -24,7 +24,7 @@
     btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    hint: '🤔 Prueba otra vez. Mira el dibujo con calma.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
@@ -127,21 +127,21 @@
          («Prueba otra vez. Mira el dibujo con calma») era la misma para
          todas, así que no decía nada. Estas dicen qué mirar en el dibujo
          de esta pregunta y nunca dan la respuesta. */
-      socraticReadTiles: '🤔 Mira el montón: cuenta por separado las piezas grandes, las tiras y las pequeñas.',
-      socraticSquareSide: '🤔 Recorre un lado entero del cuadrado, de esquina a esquina, y cuenta las piezas que te passes.',
-      socraticOtherSide: '🤔 Mira el lado que no lleva la x: cuenta cuántas piezas hay en ese borde.',
-      socraticSystem: '🤔 Prueba cada pareja en las dos balanzas: tiene que cumplir las dos.',
-      socraticTilted: '🤔 Mira hacia qué lado baja la balanza: ese es el que pesa más.',
-      socraticSquareEquation: '🤔 Cuenta los lados del cuadrado: eso mide la x.',
-      socraticHowItGrows: '🤔 Mira los saltos que hay entre las barras: ¿son todos iguales?',
-      socraticPickStraight: '🤔 Compara las tres gráficas: busca la que sube con el mismo salto siempre.',
-      socraticOnePlusWeights: '🤔 Mira lo que hay en cada lado de la balanza y quita las pesas que se vean.',
-      socraticManyBags: '🤔 Cuenta las bolsas del dibujo y reparte el peso entre todas.',
-      socraticBothSides: '🤔 Quita el mismo peso de los dos lados: la bolsa queda sola.',
-      socraticSubstitute: '🤔 Mira el valor de la x y multiplica por las veces que aparece en la expresión.',
-      socraticWriteIt: '🤔 Cuenta las bolsas del dibujo: ese es el número que va con la x.',
-      socraticUpOrDown: '🤔 Mira la altura de las dos barras señaladas y compáralas.',
-      socraticHighestPoint: '🤔 Busca la barra más alta de la gráfica y mira a qué hora está.'
+      socraticReadTiles: '🤔 «{elegida}» no cuadra con el montón: cuenta por separado las piezas grandes, las tiras y las pequeñas, y junta el total.',
+      socraticSquareSide: '🤔 «{elegida}» no es el lado completo: recorre un lado entero de esquina a esquina y cuenta las piezas que pasas.',
+      socraticOtherSide: '🤔 «{elegida}» no sale de ese borde: mira el lado que no lleva la x y cuenta las piezas de ese borde.',
+      socraticSystem: '🤔 «{elegida}» no cumple las dos balanzas: prueba cada pareja en las dos, tiene que funcionar en ambas.',
+      socraticTilted: '🤔 «{elegida}» no es el lado que pesa más: mira hacia qué lado baja la balanza.',
+      socraticSquareEquation: '🤔 «{elegida}» no es lo que mide la x: cuenta cuántos lados tiene el cuadrado.',
+      socraticHowItGrows: '🤔 «{elegida}» no sigue el patrón de los saltos: mira si los saltos entre las barras son todos iguales.',
+      socraticPickStraight: '🤔 «{elegida}» no es la gráfica que sube siempre igual: compara las tres y busca la de salto constante.',
+      socraticOnePlusWeights: '🤔 «{elegida}» no queda bien: quita de los dos lados las pesas que se vean y mira lo que queda.',
+      socraticManyBags: '🤔 «{elegida}» no reparte bien el peso: cuenta las bolsas del dibujo y reparte el peso entre todas.',
+      socraticBothSides: '🤔 «{elegida}» deja cosas de más: quita el mismo peso de los dos lados y la bolsa queda sola.',
+      socraticSubstitute: '🤔 «{elegida}» no es el resultado: mira el valor de la x y multiplica por las veces que aparece en la expresión.',
+      socraticWriteIt: '🤔 «{elegida}» no es el número que va con la x: cuenta las bolsas del dibujo.',
+      socraticUpOrDown: '🤔 «{elegida}» no compara bien las alturas: mira las dos barras señaladas y decide cuál es más alta.',
+      socraticHighestPoint: '🤔 «{elegida}» no es la hora de la barra más alta: busca la barra más alta de la gráfica y mira a qué hora está.'
     },
     transfer: 'Esto te servirá para entender una gráfica del periódico o del móvil, para darte cuenta de que una letra en una cuenta es solo un número que aún no te han dicho, y para ver que esas cuentas con letras son trozos que se pueden montar y separar.'
   }, 'es');

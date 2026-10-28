@@ -24,7 +24,7 @@
     btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    hint: '🤔 Try again. Read the problem slowly and look at the picture.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceDone: "Reinforcement done! You've got them all.",
@@ -57,10 +57,10 @@
          ("Try again…") was the same for all of them, so it said nothing.
          These say what to look at in this question's picture and never
          give the answer away. */
-      socraticChooseOp: '🤔 Look at the picture: do the two groups join up, or does a picture go away?',
-      socraticSolveAdd: '🤔 Put the two groups of pictures together and count them all, one by one.',
-      socraticSolveSub: '🤔 Count only the pictures that are not crossed out: those are the ones left.',
-      socraticTwoStep: '🤔 Count what is left at the end, after the two changes in the question.'
+      socraticChooseOp: '🤔 «{elegida}» is not the operation that fits: look at the picture, do the two groups join up or does a piece go away?',
+      socraticSolveAdd: '🤔 «{elegida}» is not the total: put the two groups of pieces together and count them all, one by one.',
+      socraticSolveSub: '🤔 «{elegida}» counts pieces that are no longer there: count only the ones that are not crossed out, those are the ones left.',
+      socraticTwoStep: '🤔 «{elegida}» is not what is left at the end: count after the two changes in the question.'
     },
     problem: {
       garden: 'There are {a} flowers in the garden. You plant {b} more flowers. Then you plant {c} more.',

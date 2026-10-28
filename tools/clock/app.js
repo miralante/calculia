@@ -609,13 +609,15 @@
   /* Socratic method: on the first mistake the answer is not given —
      the person is encouraged to look again. Only on the second
      mistake is the correct time explained (showExplanation). */
-  function showHint(p) {
+  function showHint(p, btn) {
     var key;
     if (p.type === 'read') key = 'readHint';
     else if (p.type === 'situations') key = 'associateHint';
     else if (p.type === 'set') key = 'setHint';
     else key = 'convertHint';
-    explanationEl.textContent = App.i18n.t(key);
+    /* Only a picked option names «{elegida}»; a clock set by hand has no label. */
+    var picked = btn && btn.classList.contains('option-btn') ? btn.textContent : '';
+    explanationEl.textContent = App.feedback.hintText(App.i18n.t(key), picked);
     explanationWrap.classList.remove('hidden');
   }
 
@@ -638,7 +640,7 @@
       attempts += 1;
       if (attempts === 1) App.reinforce.add(level.id + ':' + roundIndex, p);
       var respuestaTrasPista = attempts > 1;
-      showHint(p);
+      showHint(p, btn);
       /* Reveal the explanation only after the hint is acknowledged. */
       btn.classList.add('encourage');
       btn.disabled = true;

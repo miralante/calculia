@@ -244,10 +244,10 @@
 
     /* Pistas socráticas: dicen dónde mirar, nunca cuál era la
        respuesta. */
-    hintPosition: 'Cuenta desde la bandera. El primero va justo al lado de ella.',
-    hintMember: 'Cuenta desde la bandera hasta ese puesto.',
-    hintOrdinalToDigit: 'Mira qué número va escrito junto a la palabra.',
-    hintDigitToOrdinal: 'Piensa qué puesto ocupa ese número en la fila.',
+    hintPosition: '«{elegida}» no es el puesto: cuenta desde la bandera. El primero va justo al lado de ella.',
+    hintMember: '«{elegida}» no es ese puesto: cuenta desde la bandera hasta ese puesto.',
+    hintOrdinalToDigit: '«{elegida}» no es el número: mira qué número va escrito junto a la palabra.',
+    hintDigitToOrdinal: '«{elegida}» no es la palabra de ese puesto: piensa qué puesto ocupa ese número en la fila.',
 
     finalSummary: 'Has acertado {n} de {total}. Ahora tienes {stars} estrellas.',
     transfer: 'Los ordinales se usan en los podios, en las clasificaciones, en las colas, en los pisos, en las fechas y en las listas. Saber el puesto de cada uno ayuda en el día a día.'

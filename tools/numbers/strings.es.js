@@ -25,8 +25,8 @@
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ Mira: la respuesta correcta es ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    pista: '🤔 Prueba otra vez. Piensa con calma.',
-    hint: '🤔 Prueba otra vez. Piensa con calma.',
+    pista: '🤔 «{elegida}» no es la respuesta. Piensa con calma.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     refuerzoTitulo: 'Refuerzo',
     reinforceTitle: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
@@ -251,12 +251,12 @@
          dice qué mirar en el dibujo o en el número de delante: la frase
          única de antes («Prueba otra vez. Piensa con calma») era la misma
          para todas. No dan la respuesta, dan la estrategia. */
-      socraticCompare: '🤔 Mira las cifras de los dos números y compara primero las de más sitio.',
-      socraticBlocks: '🤔 Cuenta los bloques de cada grupo y después junta los resultados.',
+      socraticCompare: '🤔 «{elegida}» no es el signo. Compara primero las cifras de más valor de los dos números: ellas dicen hacia dónde abre el signo.',
+      socraticBlocks: '🤔 «{elegida}» no cuadra con los bloques. Cuenta los bloques de cada grupo y después junta los resultados.',
       socraticSayNumber: '🤔 Mira el número pintado y léelo por partes, de izquierda a derecha.',
-      socraticTradeUp: '🤔 Mira los bloques y agrúpalos de diez en diez: cuenta los grupos.',
-      socraticTradeDown: '🤔 Mira cada bloque grande y cuenta cuántos pequeños entran dentro.',
-      socraticLadder: '🤔 Mira el número: es un uno seguido de ceros, cuenta cuántos hay.',
+      socraticTradeUp: '🤔 «{elegida}» no es el número de grupos. Mira los bloques y agrúpalos de diez en diez: cuenta los grupos.',
+      socraticTradeDown: '🤔 «{elegida}» no es cuántos bloques pequeños entran. Mira cada bloque grande y cuenta cuántos pequeños caben dentro.',
+      socraticLadder: '🤔 «{elegida}» no tiene los ceros que toca. Mira el número: es un uno seguido de ceros, cuenta cuántos hay.',
       /* Práctica interactiva de "escribir números" — el número se
          genera y se reproduce en audio. "Generar" lo dice en voz
          alta, "Reproducir" lo repite, "Comprobar" valida, "Ver

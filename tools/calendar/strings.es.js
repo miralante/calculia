@@ -22,7 +22,7 @@
     btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    hint: '🤔 Prueba otra vez. Mira el calendario con calma.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
@@ -114,14 +114,14 @@
          todas las preguntas, así que no decía nada. Estas no dan la
          respuesta —dan la estrategia—, que es lo que distingue una
          pista socrática de un spoiler. */
-      socraticDaySeq: '🤔 Mira el día señalado en la tira y cuenta a partir de ahí.',
-      socraticDayGap: '🤔 Mira qué días están en la tira y busca el que falta entre ellos.',
-      socraticMonthSeq: '🤔 Sitúate en el mes señalado en la tira de los doce.',
-      socraticMonthGap: '🤔 Mira los meses de la tira y busca el hueco que queda entre ellos.',
-      socraticSeason: '🤔 Mira el mes de la tarjeta y el tiempo que suele hacer.',
-      socraticHowManyIn: '🤔 Cuenta los dibujos de la tira, uno a uno.',
-      socraticLongerUnit: '🤔 Mira cuál de las dos medidas cabe dentro de la otra.',
-      socraticSeasonMonth: '🤔 Mira la estación del dibujo y qué meses caen en ella.'
+      socraticDaySeq: '🤔 «{elegida}» no sale de contar desde el día señalado: mira el día de la tira y cuenta a partir de ahí.',
+      socraticDayGap: '🤔 «{elegida}» no es el día que falta: mira qué días están en la tira y busca el hueco entre ellos.',
+      socraticMonthSeq: '🤔 «{elegida}» no es el mes que toca: sitúate en el mes señalado en la tira de los doce y cuenta desde él.',
+      socraticMonthGap: '🤔 «{elegida}» no es el mes que falta: mira los meses de la tira y busca el hueco que queda entre ellos.',
+      socraticSeason: '🤔 «{elegida}» no es la estación de esa tarjeta: mira el mes de la tarjeta y el tiempo que suele hacer.',
+      socraticHowManyIn: '🤔 «{elegida}» no es la cuenta de la tira: cuenta los dibujos uno a uno.',
+      socraticLongerUnit: '🤔 «{elegida}» no es la medida correcta: mira cuál de las dos medidas cabe dentro de la otra.',
+      socraticSeasonMonth: '🤔 «{elegida}» no cae en esa estación: mira la estación del dibujo y qué meses caen en ella.'
     },
     transfer: 'Esto te servirá para saber qué día es hoy, apuntar una cita en el calendario y contar cuánto falta para algo que esperas.'
   }, 'es');

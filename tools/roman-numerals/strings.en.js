@@ -190,13 +190,13 @@
 
     /* Socratic hints by letter, so the hint guides the mechanics
        instead of just repeating the number. */
-    "pistaI":  "How many I's do you see? How much is each I worth?",
-    "pistaV":  "Is there a V? How much is it worth?",
-    "pistaX":  "Is there an X? How much is it worth?",
-    "pistaIV": "An I sits BEFORE a V. Does it add or subtract?",
-    "pistaIX": "An I sits BEFORE an X. Does it add or subtract?",
-    "pistaXI": "An X with an I after it. How much is 10 + 1?",
-    "pistaGeneral": "Count letter by letter: which add and which subtract?",
+    "pistaI":  "«{elegida}» is not the amount: how many I letters do you see? How much is each I worth?",
+    "pistaV":  "«{elegida}» does not match: is there a V? How much is it worth?",
+    "pistaX":  "«{elegida}» does not match: is there an X? How much is it worth?",
+    "pistaIV": "«{elegida}» is not the reading: an I sits BEFORE a V. Does it add or subtract?",
+    "pistaIX": "«{elegida}» is not the reading: an I sits BEFORE an X. Does it add or subtract?",
+    "pistaXI": "«{elegida}» does not add up: an X with an I after it. How much is 10 + 1?",
+    "pistaGeneral": "«{elegida}» is not the reading: count letter by letter. Which add and which subtract?",
 
     /* Ordinals for centuries and monarchs (audio). The TTS of the
        question uses these words instead of reading the letters

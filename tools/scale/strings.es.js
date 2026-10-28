@@ -85,7 +85,7 @@
     btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    hint: '🤔 Prueba otra vez. Mira el dibujo con calma.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
@@ -129,11 +129,11 @@
          preguntas. Estas dicen qué mirar en el instrumento o en el
          plano de esta pregunta, y nunca dan la medida: dan el modo de
          llegar a ella. */
-      socraticRead: '🤔 Mira la marca más alta que señala el lápiz o el nivel y cuenta las rayitas.',
-      socraticStep: '🤔 Reparte el espacio entre los dos números entre todas las rayitas.',
-      socraticSteps: '🤔 Cuenta las rayitas que pasa el lápiz, una a una, desde donde empieza.',
-      socraticPlanToReal: '🤔 Mira la escala de arriba y cuenta los centímetros del camino.',
-      socraticRealToPlan: '🤔 Piensa cuántos trozos de un centímetro caben en esa distancia.'
+      socraticRead: '🤔 «{elegida}» no es la lectura: mira la marca más alta que señala el lápiz o el nivel y cuenta las rayitas.',
+      socraticStep: '🤔 «{elegida}» no reparte bien el espacio: reparte el espacio entre los dos números entre todas las rayitas.',
+      socraticSteps: '🤔 «{elegida}» no es el número de pasos: cuenta las rayitas que pasa el lápiz, una a una, desde donde empieza.',
+      socraticPlanToReal: '🤔 «{elegida}» no es la distancia real: mira la escala de arriba y cuenta los centímetros del camino.',
+      socraticRealToPlan: '🤔 «{elegida}» no es lo que mide en el plano: piensa cuántos trozos de un centímetro caben en esa distancia.'
     },
 
     transfer: 'Te servirá para leer una receta, un plano del metro o el contador del agua sin miedo.'

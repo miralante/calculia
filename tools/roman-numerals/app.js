@@ -1355,7 +1355,7 @@
            "Got it" button is unlocked), but it does teach the
            mechanic — which is exactly what the user asks for when
            they ask for failure help. */
-        explanationEl.textContent = t('hintHint') + pickHint(round.hintRoman);
+        explanationEl.textContent = t('hintHint') + App.feedback.hintText(pickHint(round.hintRoman), btn.textContent);
         var romanHint = round.decoRoman || (typeof round.correctValue === 'string' ? round.correctValue : '');
         if (romanHint) paintQuizDecomposition(romanHint, true);
         explanationWrap.classList.remove('hidden');

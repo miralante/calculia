@@ -22,7 +22,7 @@
     btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    hint: '🤔 Prueba otra vez. Mira el dibujo y cuenta con calma.',
+    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
@@ -69,14 +69,14 @@
          («Prueba otra vez. Mira el dibujo y cuenta con calma») era la
          misma para todas, así que no decía nada. Estas dan la estrategia
          —qué mirar en el dibujo de esta pregunta— y nunca la respuesta. */
-      socraticWalk: '🤔 Empieza en la chincheta, no en el cero, y cuenta los pasos.',
-      socraticCommute: '🤔 Cuenta los puntos del rectángulo que está en blanco: son los mismos.',
-      socraticSplit: '🤔 Los dos trozos ya están calculados: mira sus números y júntalos.',
-      socraticSplitTens: '🤔 Mira cómo se ha partido el número: unas decenas y unas unidades.',
-      socraticShare: '🤔 Fíjate en un solo montón y cuenta los puntos que tiene.',
-      socraticGroups: '🤔 Lo que se pregunta es cuántos montones hay: cuéntalos, no cuentes puntos.',
-      socraticWhatFirst: '🤔 Mira primero si hay paréntesis: si los hay, mandan ellos.',
-      socraticOrderResult: '🤔 Haz primero lo de dentro del paréntesis o la multiplicación; luego suma.'
+      socraticWalk: '🤔 «{elegida}» no sale de contar bien los pasos: empieza en la chincheta, no en el cero, y cuenta los pasos.',
+      socraticCommute: '🤔 «{elegida}» no es el mismo total: cuenta los puntos del rectángulo que está en blanco, son los mismos.',
+      socraticSplit: '🤔 «{elegida}» no junta bien los dos trozos: ya están calculados, mira sus números y júntalos.',
+      socraticSplitTens: '🤔 «{elegida}» no respeta cómo se ha partido el número: mira las decenas y las unidades en que se ha partido.',
+      socraticShare: '🤔 «{elegida}» no es lo que hay en cada montón: fíjate en un solo montón y cuenta los puntos que tiene.',
+      socraticGroups: '🤔 «{elegida}» cuenta puntos y no montones: lo que se pregunta es cuántos montones hay, cuéntalos a ellos.',
+      socraticWhatFirst: '🤔 «{elegida}» no empieza por donde toca: mira primero si hay paréntesis, y si los hay, mandan ellos.',
+      socraticOrderResult: '🤔 «{elegida}» hace las cuentas en otro orden: haz primero lo de dentro del paréntesis o la multiplicación, y luego suma.'
     },
     transfer: 'Esto te servirá para hacer cuentas grandes de cabeza partiéndolas en trozos, y para repartir cosas entre varias personas sin que sobre ni falte.'
   }, 'es');

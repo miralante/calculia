@@ -146,16 +146,22 @@
 
   /**
    * Locks every not-yet-tried option button after a wrong answer (rule 12:
-   * a reading pause, never a punishment). Buttons already disabled from an
-   * earlier wrong try in this round are left as-is. Shows/reuses an
-   * "Entendido" button inside `zone`, focuses it; clicking it re-enables
-   * the buttons this call locked. Retries stay unlimited.
+   * a reading pause, never a punishment). While the hint is shown the
+   * options are hidden, so the person reads the pista before choosing
+   * again. Buttons already disabled from an earlier wrong try in this round
+   * stay disabled. Shows/reuses an "Entendido" button inside `zone`, focuses
+   * it; clicking it shows the options again (the ones this call hid) and
+   * re-enables the buttons this call locked, then hides the pista.
+   * Retries stay unlimited.
    * @param {Element[]|NodeList} buttons - option buttons of the current round
    * @param {Element} zone - wrap holding the pista/explanation (or consejo) text
    * @param {function} [onConfirm] - called after the person taps Entendido
    */
   function lockUntilAck(buttons, zone, onConfirm) {
-    var pending = Array.prototype.filter.call(buttons || [], function (b) { return !b.disabled; });
+    var options = Array.prototype.filter.call(buttons || [], function (b) {
+      return !b.classList.contains('btn-understood');
+    });
+    var pending = options.filter(function (b) { return !b.disabled; });
     pending.forEach(function (b) {
       b.disabled = true;
       b.classList.add('locked');
@@ -168,9 +174,14 @@
       button.className = 'btn btn-understood';
       zone.appendChild(button);
     }
+    /* Hide only the options that were visible, so a button the activity
+       hid on purpose stays hidden after "Entendido". */
+    var hidden = options.filter(function (b) { return !b.classList.contains('hidden'); });
+    hidden.forEach(function (b) { b.classList.add('hidden'); });
     button.textContent = understoodText();
     button.classList.remove('hidden');
     button.onclick = function () {
+      hidden.forEach(function (b) { b.classList.remove('hidden'); });
       pending.forEach(function (b) {
         b.disabled = false;
         b.classList.remove('locked');
@@ -179,6 +190,25 @@
       if (onConfirm) onConfirm();
     };
     button.focus();
+  }
+
+  /**
+   * Socratic hint text after a wrong answer. A template may hold
+   * «{elegida}»: it is replaced by the answer the person just tried, so the
+   * hint can say why that one does not fit. Without a text label (a picture
+   * option) the phrase "esta opción" / "this option" is used instead.
+   * @param {string} template - hint text, from the question or the locale
+   * @param {string} [chosen] - plain text of the answer just tried
+   * @returns {string} the hint to show
+   */
+  function hintText(template, chosen) {
+    var text = template || '';
+    if (text.indexOf('{elegida}') === -1) return text;
+    var label = (chosen || '').trim();
+    var fallback = window.App.i18n ? App.i18n.t('core.thisOption') : 'this option';
+    return text
+      .replace('«{elegida}»', label ? '«' + label + '»' : fallback)
+      .replace('{elegida}', label || fallback);
   }
 
   /* Failure reinforcement at the end of the round. Shared pattern
@@ -286,6 +316,7 @@
     success: success,
     encourage: encourage,
     celebrate: celebrate,
-    lockUntilAck: lockUntilAck
+    lockUntilAck: lockUntilAck,
+    hintText: hintText
   };
 })();

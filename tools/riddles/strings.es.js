@@ -16,7 +16,7 @@
     explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ ',
     explicacionIncorrectaB: ' no es correcto. La respuesta correcta es: ',
-    pista: '🤔 Prueba otra vez. Vuelve a leer la pista: ',
+    pista: '🤔 «{elegida}» no encaja con la adivinanza. Vuelve a leer la pista: ',
     refuerzoTitulo: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',

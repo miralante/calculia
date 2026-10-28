@@ -70,17 +70,17 @@
       dots: {
         label: 'Part 1: dots',
         rule: 'The dots go two by two. If none is left over, it is even. If one is left over, it is odd.',
-        hint: 'Pair the dots two by two. If one is left alone, it is odd.'
+        hint: '«{elegida}» is not the answer: pair the dots two by two. If one is left alone, it is odd.'
       },
       numbers: {
         label: 'Part 2: numbers from 0 to 99',
         rule: 'A number is even if it can be split into pairs with none left over. If one is left over, it is odd.',
-        hint: 'Picture the dots two by two. Is one left over?'
+        hint: '«{elegida}» is not the answer: picture the dots two by two. Is one left over?'
       },
       big: {
         label: 'Part 3: big numbers',
         rule: 'Look at the last digit: 0, 2, 4, 6 or 8 → even. 1, 3, 5, 7 or 9 → odd.',
-        hint: 'Look only at the last digit.'
+        hint: '«{elegida}» is not the answer: look only at the last digit.'
       }
     },
 

@@ -21,8 +21,8 @@
     correctExplanation: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ Look: the correct answer is ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    pista: '🤔 Try again. Think calmly.',
-    hint: '🤔 Try again. Think calmly.',
+    pista: '🤔 «{elegida}» is not the answer. Think calmly.',
+    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     refuerzoTitulo: 'Reinforcement',
     reinforceTitle: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
@@ -100,17 +100,17 @@
          same for every question, so it said nothing. These never give the
          answer away — they give the strategy, which is what separates a
          Socratic hint from a spoiler. */
-      socraticMixFrac: '🤔 Look at the two circles and keep only the slices of the same size.',
-      socraticFracOf: '🤔 Look at the marked group and count only the pictures inside it.',
-      socraticMixedOp: '🤔 Both numbers are in tenths: look at the pies.',
-      socraticFracVsDecimal: '🤔 Count the painted slices in each pie, not the numbers.',
-      socraticDecimalOp: '🤔 Count the slices in each pie and see how much they make.',
-      socraticFracciones: '🤔 Count how many parts are painted and how many parts the pie has in total. The top number is the painted part; the bottom one is the total.',
-      socraticComparaFrac: '🤔 Compare the two pies and see which one has more painted.',
-      socraticEquivalentes: '🤔 Compare how much is painted in the two figures, part by part.',
-      socraticSumaFrac: '🤔 Both pies are cut into the same number of slices.',
-      socraticDecimalToPicture: '🤔 Look for the pie with exactly that amount painted.',
-      socraticDecimalToNumber: '🤔 Look at how much of the pie is painted and give it its number.'
+      socraticMixFrac: '🤔 «{elegida}» does not add up pieces of the same size: look at the two circles and keep only the slices that are the same size.',
+      socraticFracOf: '🤔 «{elegida}» does not count the marked group: look at the group and count only the pictures inside it.',
+      socraticMixedOp: '🤔 «{elegida}» does not do the sum correctly: both numbers are in tenths, look at the pies.',
+      socraticFracVsDecimal: '🤔 «{elegida}» is not what the pie shows: count the painted slices in each pie, not the numbers.',
+      socraticDecimalOp: '🤔 «{elegida}» does not add the parts correctly: count the slices in each pie and see how much they make.',
+      socraticFracciones: '🤔 «{elegida}» is not the fraction of the pie: count the painted parts and the total parts. The top number is the painted part; the bottom one is the total.',
+      socraticComparaFrac: '🤔 «{elegida}» is not the pie with more painted: compare the two pies and see which one has more painted.',
+      socraticEquivalentes: '🤔 «{elegida}» is not equivalent: compare how much is painted in the two figures, part by part.',
+      socraticSumaFrac: '🤔 «{elegida}» does not add the slices correctly: both pies are cut into the same number of slices.',
+      socraticDecimalToPicture: '🤔 «{elegida}» does not have that amount painted: look for the pie with exactly that amount painted.',
+      socraticDecimalToNumber: '🤔 «{elegida}» is not the painted part: look at how much of the pie is painted and give it its number.'
     },
     intro: {
       fracciones: {

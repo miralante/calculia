@@ -222,7 +222,7 @@
     App.feedback.encourage(quizFeedbackEl);
     if (attemptsQ === 1) {
       /* First failure: Socratic hint, without giving the answer (rule 12). */
-      showQuizText(currentConfig().hint(caseQ));
+      showQuizText(App.feedback.hintText(currentConfig().hint(caseQ), btn.textContent));
       App.feedback.lockUntilAck(optionButtons.map(function (p) { return p.btn; }), quizExplanationWrap);
     } else {
       /* Second failure: the correct answer is marked and explained

@@ -416,7 +416,8 @@
     if (!correct) {
       button.disabled = true;
       App.feedback.encourage($('#parityFeedback'));
-      $('#parityFeedback').textContent += ' ' + t('blocks.' + item.block.id + '.hint');
+      $('#parityFeedback').textContent += ' ' + App.feedback.hintText(
+        t('blocks.' + item.block.id + '.hint'), button.textContent);
       App.feedback.lockUntilAck($('#parityOptions').querySelectorAll('button'), $('#parityFeedback'));
       return;
     }
