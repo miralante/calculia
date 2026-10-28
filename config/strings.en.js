@@ -34,6 +34,7 @@
       'roman-numerals': 'Roman Numerals', 'riddles': 'Riddles', 'patterns': 'Patterns',
       'problems': 'Problems', 'temperature': 'Water Temperature',
       'wallet': 'The Wallet', 'algebra': 'The balance', 'charts': 'Data and charts', 'calendar': 'The Calendar', 'clock': 'The Clock', 'stories': 'Stories',
+      'time-group': 'Time and clock', 'time-units': 'Units of time', 'time-convert': 'Change the unit', 'time-durations': 'How long does it take?', 'time-compare': 'Which lasts longer?',
       'odd-one-out': "What doesn't belong?", 'puzzle': 'Puzzle'
     },
 

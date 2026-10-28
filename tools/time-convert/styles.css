@@ -1,0 +1,11 @@
+/* ============================================================
+   Calculia — Cambia de unidad: estilos propios.
+   The shared pieces (cards, options, test sheet) come from
+   assets/css. Only the number inside each option is styled here.
+   ============================================================ */
+
+.answer-num {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

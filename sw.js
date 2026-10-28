@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v279';
+var VERSION = 'calculia-v280';
 
 var FILES = [
   './',
@@ -195,6 +195,36 @@ var FILES = [
   './tools/common-group/strings.es.js',
   './tools/common-group/strings.en.js',
   './tools/common-group/styles.css',
+  './tools/time-group/',
+  './tools/time-group/app.js',
+  './tools/time-group/data.js',
+  './tools/time-group/strings.es.js',
+  './tools/time-group/strings.en.js',
+  './tools/time-group/styles.css',
+  './tools/time-units/',
+  './tools/time-units/app.js',
+  './tools/time-units/data.js',
+  './tools/time-units/strings.es.js',
+  './tools/time-units/strings.en.js',
+  './tools/time-units/styles.css',
+  './tools/time-convert/',
+  './tools/time-convert/app.js',
+  './tools/time-convert/data.js',
+  './tools/time-convert/strings.es.js',
+  './tools/time-convert/strings.en.js',
+  './tools/time-convert/styles.css',
+  './tools/time-durations/',
+  './tools/time-durations/app.js',
+  './tools/time-durations/data.js',
+  './tools/time-durations/strings.es.js',
+  './tools/time-durations/strings.en.js',
+  './tools/time-durations/styles.css',
+  './tools/time-compare/',
+  './tools/time-compare/app.js',
+  './tools/time-compare/data.js',
+  './tools/time-compare/strings.es.js',
+  './tools/time-compare/strings.en.js',
+  './tools/time-compare/styles.css',
   './tools/common-divisor/',
   './tools/common-divisor/app.js',
   './tools/common-divisor/data.js',
