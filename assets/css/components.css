@@ -291,6 +291,7 @@ button.locked {
   border: 3px solid var(--color-borde); border-radius: var(--radio);
   background: var(--color-superficie); color: var(--color-texto);
   font-size: var(--texto-base); font-weight: 700; text-align: center;
+  text-decoration: none;
 }
 .btn-actividad:hover { border-color: var(--mod-razonamiento); }
 .btn-actividad .picto { font-size: 48px; }
