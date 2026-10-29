@@ -27,7 +27,8 @@
       introTitle: 'Así funciona',
       realLabel: 'Ejemplos de la vida real',
       visualAria: 'Dibujo con puntos o figuras que cuentan la operación.',
-      groupsOf: '{g} grupos de {e}'
+      groupsOf: '{g} grupos de {e}',
+      remainder: 'resto {r}'
     },
 
     /* Operaciones: nombre, idea en una frase, explicación en slides,
@@ -75,13 +76,13 @@
       div: {
         name: 'Dividir', symbolName: 'Dividir', detail: 'Repartir en partes iguales, o contar cuántos grupos caben.',
         intro: {
-          1: { title: 'Dividir es repartir en partes iguales', text: '12 calcetines entre 3 amigos: a cada uno le tocan 4.' },
-          2: { title: 'Dividir también es contar cuántos grupos caben', text: '12 calcetines en paquetes de 4: salen 3 paquetes.' },
-          3: { title: 'Puede sobrar', text: '13 calcetines en paquetes de 4: salen 3 paquetes llenos y sobra 1. Es la división con resto.' },
-          4: { title: 'Dividir y multiplicar van juntas', text: '12 ÷ 4 = 3, porque 3 × 4 = 12.' }
+          1: { title: 'Dividir es repartir en partes iguales', text: '12 trozos de pizza entre 3 amigos: a cada uno le tocan 4.' },
+          2: { title: 'Dividir también es contar cuántos grupos caben', text: '12 bolas en paquetes de 4: salen 3 paquetes.' },
+          3: { title: 'Puede sobrar', text: '13 bolas en paquetes de 4: salen 3 paquetes llenos y sobra 1. Es la división con resto.' },
+          4: { title: 'Dividir es lo contrario de multiplicar', text: 'Multiplicas: 3 × 4 = 12. Divides: 12 ÷ 4 = 3. Si sabes una, sabes la otra.' }
         },
         real: {
-          1: '🧦 Repartes 12 calcetines entre 4 amigos: a cada amigo le tocan 3.',
+          1: '🪙 Repartes 12 euros entre 4 amigos: a cada amigo le tocan 3 euros.',
           2: '📦 Tienes 15 libros y pones 5 en cada estante: necesitas 3 estantes.',
           3: '🍪 Tienes 7 galletas y las metes en cajas de 3: llenas 2 cajas y sobra 1.'
         }
@@ -98,7 +99,7 @@
       sub2: 'Necesitas 10 sillas y hay 6.',
       mul1: 'Hay 4 cajas y en cada caja hay 6 lápices.',
       mul2: 'Tienes 5 bolsas con 2 canicas en cada una.',
-      div1: 'Tienes 12 calcetines y los repartes entre 3 amigos, todos igual.',
+      div1: 'Tienes 12 trozos de pizza y los repartes entre 3 amigos, todos igual.',
       div2: 'Tienes 15 pegatinas y las pones en hojas de 5.'
     },
 
@@ -146,12 +147,12 @@
         explain: '{g} × {e} es lo mismo que sumar {e} cada vez, {g} veces.'
       },
       share: {
-        prompt: '¿Cuántos calcetines le tocan a cada uno?',
-        hint: '🤔 Reparte los dibujos de uno en uno, entre los amigos.',
+        prompt: 'Tienes {T} trozos de pizza y los repartes entre {g} amigos, todos igual. ¿Cuántos le tocan a cada uno?',
+        hint: '🤔 Reparte los trozos de uno en uno, en cada grupo de amigos.',
         explain: 'Cada uno recibe {each}, porque {T} ÷ {g} = {each}.'
       },
       rest: {
-        prompt: '¿Cuántos paquetes llenos salen?',
+        prompt: 'Tienes {T} bolas y las metes en paquetes de {e}. ¿Cuántos paquetes llenos salen?',
         hint: '🤔 Cuenta los paquetes que van completos. Lo que no llena un paquete, sobra.',
         explain: 'Salen {q} paquetes llenos y sobran {r}.'
       },

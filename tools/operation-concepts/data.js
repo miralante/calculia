@@ -42,8 +42,8 @@ var DATA = {
     { id: 'mul', symbol: '×', icon: '✖️',
       intro: [
         { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', caption: true } },
-        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', sum: true } },
-        { visual: { kind: 'groups', groups: 4, each: 3, icon: '🔋', sum: true } },
+        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', sum: true, product: true } },
+        { visual: { kind: 'groups', groups: 4, each: 3, icon: '🔋', sum: true, product: true } },
         { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', caption: true } }
       ],
       real: [
@@ -53,15 +53,15 @@ var DATA = {
       ] },
     { id: 'div', symbol: '÷', icon: '➗',
       intro: [
-        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🧦', caption: true } },
-        { visual: { kind: 'pack', total: 12, size: 4, icon: '🧦', caption: true } },
-        { visual: { kind: 'rest', total: 13, size: 4, icon: '🧦' } },
-        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🧦' } }
+        { visual: { kind: 'divide', total: 12, groups: 3, slice: true, caption: true } },
+        { visual: { kind: 'divide', total: 12, size: 4, icon: '🔴', caption: true } },
+        { visual: { kind: 'divide', total: 13, size: 4, icon: '🔴', caption: true } },
+        { visual: { kind: 'divide', total: 12, size: 4, icon: '🔴', caption: true, product: true } }
       ],
       real: [
-        { visual: { kind: 'groups', groups: 4, each: 3, icon: '🧦', caption: true } },
-        { visual: { kind: 'pack', total: 15, size: 5, icon: '📚', caption: true } },
-        { visual: { kind: 'rest', total: 7, size: 3, icon: '🍪' } }
+        { visual: { kind: 'divide', total: 12, groups: 4, coin: true, caption: true } },
+        { visual: { kind: 'divide', total: 15, size: 5, icon: '📚', caption: true } },
+        { visual: { kind: 'divide', total: 7, size: 3, icon: '🍪', caption: true } }
       ] }
   ],
 

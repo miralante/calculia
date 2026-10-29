@@ -26,7 +26,8 @@
       introTitle: 'This is how it works',
       realLabel: 'Real-life examples',
       visualAria: 'A drawing with dots or shapes that shows the operation.',
-      groupsOf: '{g} groups of {e}'
+      groupsOf: '{g} groups of {e}',
+      remainder: 'remainder {r}'
     },
 
     ops: {
@@ -72,13 +73,13 @@
       div: {
         name: 'Divide', symbolName: 'Divide', detail: 'Share into equal parts, or count how many groups fit.',
         intro: {
-          1: { title: 'Dividing is sharing into equal parts', text: '12 socks for 3 friends: each friend gets 4.' },
-          2: { title: 'Dividing also counts how many groups fit', text: '12 socks in packs of 4: 3 packs.' },
-          3: { title: 'Some can be left over', text: '13 socks in packs of 4: 3 full packs and 1 is left over. This is division with a remainder.' },
-          4: { title: 'Dividing and multiplying go together', text: '12 ÷ 4 = 3, because 3 × 4 = 12.' }
+          1: { title: 'Dividing is sharing into equal parts', text: '12 pizza slices for 3 friends: each friend gets 4.' },
+          2: { title: 'Dividing also counts how many groups fit', text: '12 balls in packs of 4: 3 packs.' },
+          3: { title: 'Some can be left over', text: '13 balls in packs of 4: 3 full packs and 1 is left over. This is division with a remainder.' },
+          4: { title: 'Dividing is the opposite of multiplying', text: 'Multiply: 3 × 4 = 12. Divide: 12 ÷ 4 = 3. If you know one, you know the other.' }
         },
         real: {
-          1: '🧦 You share 12 socks among 4 friends: each friend gets 3.',
+          1: '🪙 You share 12 dollars among 4 friends: each friend gets 3 dollars.',
           2: '📦 You have 15 books and put 5 on each shelf: you need 3 shelves.',
           3: '🍪 You have 7 biscuits and put them in boxes of 3: 2 boxes are full and 1 is left over.'
         }
@@ -94,7 +95,7 @@
       sub2: 'You need 10 chairs and there are 6.',
       mul1: 'There are 4 boxes and each box has 6 pencils.',
       mul2: 'You have 5 bags with 2 marbles in each one.',
-      div1: 'You have 12 socks and share them among 3 friends, all the same.',
+      div1: 'You have 12 pizza slices and share them among 3 friends, all the same.',
       div2: 'You have 15 stickers and put them on sheets of 5.'
     },
 
@@ -140,12 +141,12 @@
         explain: '{g} × {e} is the same as adding {e} each time, {g} times.'
       },
       share: {
-        prompt: 'How many socks does each friend get?',
-        hint: '🤔 Share the drawings one by one among the friends.',
+        prompt: 'You have {T} pizza slices and share them among {g} friends, all the same. How many does each friend get?',
+        hint: '🤔 Share the slices one by one into each group of friends.',
         explain: 'Each friend gets {each}, because {T} ÷ {g} = {each}.'
       },
       rest: {
-        prompt: 'How many full packs are there?',
+        prompt: 'You have {T} balls and put them in packs of {e}. How many full packs are there?',
         hint: '🤔 Count the packs that are full. What does not fill a pack is left over.',
         explain: '{q} packs are full and {r} are left over.'
       },

@@ -14,6 +14,11 @@
 .ops-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
 .ops-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .ops-group-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+/* An empty group to be filled in: a dashed frame with room for the items. */
+.ops-empty-box { min-width: 150px; min-height: 52px; border-style: dashed; }
+
+/* A total, a down arrow and the groups it is divided into, one above the other at any width. */
+.ops-divide { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 /* One group that repeats: a frame around its items, so the group reads as one unit. */
 .ops-group-box { display: flex; justify-content: center; padding: 6px 12px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
 .ops-item {
@@ -55,6 +60,15 @@
 .concept-count { color: var(--color-texto-suave); }
 .real-text { font-size: var(--texto-grande); }
 .real-card { min-height: 180px; justify-content: center; }
+
+/* One slice of a pizza: a yellow triangle with a crust-coloured point at the top. */
+.ops-slice {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  background: radial-gradient(circle at 50% 30%, #d9452b 0 4px, transparent 5px), #f4c04a;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
 
 /* A coin for money drawings: the currency sign of the locale (€ or $) on a round gold coin. */
 .ops-coin {

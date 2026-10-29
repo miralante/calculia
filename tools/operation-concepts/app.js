@@ -30,6 +30,7 @@
   var answered = false;
   var firstTry = true;
   var pickQueue = [];      // the «¿qué operación usarías?» stories of this round, not yet asked
+  var SLICE = '<span class="ops-slice" aria-hidden="true"></span>';   // one slice of a pizza
 
   function save() { App.storage.set(TOOL_ID, progress); }
   function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
@@ -111,11 +112,36 @@
   }
   /* Like packHtml, but the leftover row is drawn apart so it reads as «sobra». */
   function restHtml(total, size, icon) { return packHtml(total, size, icon); }
+  /* The total, and below it the empty groups it has to be shared into: the user fills them in. */
+  function shareHtml(total, groups) {
+    var html = '<div class="ops-divide">' + row(total, SLICE) + sign('↓') + '<div class="ops-group-stack">';
+    for (var g = 0; g < groups; g += 1) html += '<div class="ops-group-box ops-empty-box"></div>';
+    return html + '</div></div>';
+  }
+  /* The total first, and next to it how it is divided: `groups` equal groups (sharing), or groups of `size`
+     (packing). A leftover, if any, sits apart. `caption` writes the division underneath. */
+  function divideHtml(total, groups, size, icon, caption, product) {
+    var each = groups ? total / groups : size;
+    var full = groups || Math.floor(total / size);
+    var rem = groups ? 0 : total % size;
+    var html = '<div class="ops-divide">' + row(total, icon) + sign('↓') + '<div class="ops-group-stack">';
+    for (var g = 0; g < full; g += 1) html += '<div class="ops-group-box">' + row(each, icon) + '</div>';
+    if (rem) html += '<div class="ops-row ops-left-row">' + items(rem, icon, {}).replace(/ops-item/g, 'ops-item ops-left') + '</div>';
+    html += '</div></div>';
+    if (caption) {
+      var text = total + ' ÷ ' + (groups || size) + ' = ' + (groups ? each : full);
+      if (rem) text += ', ' + fill(t('ui.remainder'), { r: rem });
+      /* `product` writes the opposite multiplication on the line below: 3 × 4 = 12. */
+      if (product && !rem) text += '<br>' + (groups || full) + ' × ' + each + ' = ' + total;
+      html += '<p class="ops-expr">' + text + '</p>';
+    }
+    return html;
+  }
 
   /* A drawing from its visual spec: intro slides and real-life examples. */
   function drawingHtml(spec) {
     /* A money drawing (`coin`) is drawn with the currency sign of the locale, not an emoji. */
-    var icon = spec.coin ? '<span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span>' : spec.icon;
+    var icon = spec.coin ? '<span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span>' : (spec.slice ? SLICE : spec.icon);
     if (spec.kind === 'join') return joinHtml(spec.a, spec.b, icon, true, spec.iconB);
     if (spec.kind === 'take') return takeHtml(spec.n, spec.take, icon, spec.result);
     if (spec.kind === 'gap') return gapHtml(spec.need, spec.have, icon);
@@ -132,6 +158,7 @@
       }
       return groupsHtml(spec.groups, spec.each, spec.icon, text);
     }
+    if (spec.kind === 'divide') return divideHtml(spec.total, spec.groups, spec.size, icon, spec.caption, spec.product);
     if (spec.kind === 'pack') {
       var caption = spec.caption ? fill(t('ui.groupsOf'), { g: spec.total / spec.size, e: spec.size }) : null;
       return packHtml(spec.total, spec.size, spec.icon, caption);
@@ -277,7 +304,7 @@
     if (type === 'share') {
       var people = rint(2, 4), each = rint(2, 5), total = people * each;
       return {
-        prompt: q, visual: flatHtml(total, '🧦'), hint: hint,
+        prompt: fill(q, { T: total, g: people }), visual: shareHtml(total, people), hint: hint,
         options: numericOptions(each, [each + 1, each - 1, people]),
         explanation: fill(t('q.share.explain'), { each: each, T: total, g: people })
       };
@@ -285,7 +312,7 @@
     if (type === 'rest') {
       var size = rint(3, 5), full = rint(2, 4), left = rint(1, size - 1);
       return {
-        prompt: q, visual: restHtml(full * size + left, size, '🧦'), hint: hint,
+        prompt: fill(q, { T: full * size + left, e: size }), visual: restHtml(full * size + left, size, '🔴'), hint: hint,
         options: numericOptions(full, [full + 1, full - 1, left]),
         explanation: fill(t('q.rest.explain'), { q: full, r: left })
       };
@@ -314,7 +341,7 @@
     var gl = rint(2, 4), el = rint(2, 5), Tl = gl * el;
     var division = Tl + ' ÷ ' + el + ' = ' + gl;
     return {
-      prompt: fill(q, { T: Tl, e: el }), visual: groupsHtml(gl, el, '🧦'), hint: fill(hint, { e: el }),
+      prompt: fill(q, { T: Tl, e: el }), visual: groupsHtml(gl, el, '🔴'), hint: fill(hint, { e: el }),
       options: textOptions(division, [
         Tl + ' ÷ ' + el + ' = ' + (gl + 1),
         Tl + ' ÷ ' + gl + ' = ' + (el + 1),
