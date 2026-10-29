@@ -28,7 +28,7 @@
     module2: '🧩 Razonamiento y lógica',
 
     activity: {
-      'los-numeros': 'Tipos de Números', 'numbers-group': 'Números','lines': 'Rectas', 'shapes': 'Formas','trigonometry': 'Trigonometría', 'geometry': 'Geometría', 'numbers': 'Los Números', 'fractions-measures': 'Fracciones', 'measures': 'Medidas', 'scale': 'Escala', 'linear-functions': 'Funciones',
+      'los-numeros': 'Tipos de Números', 'lines': 'Rectas', 'shapes': 'Formas','trigonometry': 'Trigonometría', 'geometry': 'Geometría', 'numbers': 'Los Números', 'fractions-measures': 'Fracciones', 'measures': 'Medidas', 'scale': 'Escala', 'linear-functions': 'Funciones',
       'mental-math': 'Restar y Cálculo Mental', 'percent': 'Porcentajes', 'money': 'Dinero',
       'divisibility': 'Grupos exactos', 'operations': 'Cuentas rápidas', 'quantities': 'Leer y Escribir Números', 'operation-concepts': 'Operaciones', 'order-numbers': 'Ordenar números', 'order-positives': 'Ordenar positivos', 'order-negatives': 'Ordenar negativos', 'order-fractions': 'Ordenar fracciones', 'order-decimals': 'Ordenar decimales', 'ordinals': 'Números ordinales', 'parity': 'Pares e impares', 'primes': 'Primos y compuestos', 'common-group': 'Divisores y múltiplos', 'common-divisor': 'Máximo común divisor', 'common-multiple': 'Mínimo común múltiplo', 'math-tables': 'Las Tablas', 'head-math': 'Cálculo de cabeza',
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',

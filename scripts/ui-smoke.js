@@ -1737,10 +1737,12 @@ async function exerciseNumbers(page, baseUrl) {
   });
   await page.reload();
 
-  /* Números es tarjeta de la portada pública: enlaza al grupo, que lista
-     Tipos de números y Los números (ver PUBLIC_SLUGS de scripts/check.js). */
-  assert.equal(await page.locator('a[href="tools/numbers-group/"]').count(), 1,
-    'La portada pública no muestra Números');
+  /* Tipos de números y Los números son tarjetas de primer nivel de la
+     portada pública, sin grupo intermedio (ver PUBLIC_SLUGS de scripts/check.js). */
+  assert.equal(await page.locator('a[href="tools/los-numeros/"]').count(), 1,
+    'La portada pública no muestra Tipos de números');
+  assert.equal(await page.locator('a[href="tools/numbers/"]').count(), 1,
+    'La portada pública no muestra Los números');
   /* Positivos y negativos dejó de ser una herramienta propia y se
      integró en Números (commit "feat(numbers): integrate positive and
      negative practice"), así que ya no existe tools/posneg/: ese
@@ -1755,20 +1757,18 @@ async function exerciseNumbers(page, baseUrl) {
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
 
-  const catalogCard = page.locator('a[href="../tools/numbers-group/"]');
+  const catalogCard = page.locator('a[href="../tools/numbers/"]');
   assert.ok(await catalogCard.isVisible().catch(() => false),
-    'Números no aparece en el catálogo de dev/');
-  assert.ok((await catalogCard.innerText()).includes('Los números'),
-    'La tarjeta de Los números del catálogo no aparece en español');
+    'Los números no aparece en el catálogo de dev/');
+  assert.ok((await catalogCard.innerText()).includes('Los Números'),
+    'La tarjeta de Los Números del catálogo no aparece en español');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
   await page.reload();
-  assert.ok((await catalogCard.innerText()).includes('The numbers'),
-    'La tarjeta de The numbers del catálogo no aparece en inglés');
+  assert.ok((await catalogCard.innerText()).includes('Numbers'),
+    'La tarjeta de Numbers del catálogo no aparece en inglés');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
   await catalogCard.click();
-  await page.waitForURL('**/tools/numbers-group/', { timeout: NAV_TIMEOUT });
-  await page.locator('#activitiesMenu a.btn-actividad[href="../numbers/"]').click();
   await page.waitForURL('**/tools/numbers/', { timeout: NAV_TIMEOUT });
   await page.waitForSelector('#screenMenu:not(.hidden)', { timeout: NAV_TIMEOUT });
   actions += 1;

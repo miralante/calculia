@@ -28,7 +28,7 @@
     module2: '🧩 Reasoning and logic',
 
     activity: {
-      'los-numeros': 'Number Types', 'numbers-group': 'Numbers','lines': 'Lines', 'shapes': 'Shapes','trigonometry': 'Trigonometry', 'geometry': 'Geometry', 'numbers': 'Numbers', 'fractions-measures': 'Fractions', 'measures': 'Measures', 'scale': 'Scale', 'linear-functions': 'Functions',
+      'los-numeros': 'Number Types', 'lines': 'Lines', 'shapes': 'Shapes','trigonometry': 'Trigonometry', 'geometry': 'Geometry', 'numbers': 'Numbers', 'fractions-measures': 'Fractions', 'measures': 'Measures', 'scale': 'Scale', 'linear-functions': 'Functions',
       'mental-math': 'Subtraction and Mental Math', 'percent': 'Percentages', 'money': 'Money',
       'divisibility': 'Exact groups', 'operations': 'Quick sums', 'quantities': 'Read and Write Numbers', 'operation-concepts': 'Operations', 'order-numbers': 'Order numbers', 'order-positives': 'Order positives', 'order-negatives': 'Order negatives', 'order-fractions': 'Order fractions', 'order-decimals': 'Order decimals', 'ordinals': 'Ordinal Numbers', 'parity': 'Even and odd', 'primes': 'Primes and composites', 'common-group': 'Divisors and multiples', 'common-divisor': 'Greatest common divisor', 'common-multiple': 'Least common multiple', 'math-tables': 'Math Tables', 'head-math': 'Head Math',
       'roman-numerals': 'Roman Numerals', 'riddles': 'Riddles', 'patterns': 'Patterns',
