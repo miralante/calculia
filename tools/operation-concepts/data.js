@@ -20,31 +20,48 @@ var DATA = {
   ops: [
     { id: 'add', symbol: '+', icon: '➕',
       intro: [
-        { visual: { kind: 'join', a: 3, b: 2, icon: '🍎' } },
-        { visual: { kind: 'join', a: 2, b: 3, icon: '🍎' } }
+        { visual: { kind: 'join', a: 3, b: 2, icon: '🍎', iconB: '🍏' } },
+        { visual: { kind: 'join', a: 3, b: 2, icon: '🍎', iconB: '🍏' } },
+        { visual: { kind: 'join', a: 2, b: 3, icon: '🍏', iconB: '🍎' } }
       ],
-      real: 3 },
+      real: [
+        { visual: { kind: 'join', a: 5, b: 3, icon: '🍪' } },
+        { visual: { kind: 'join', a: 4, b: 3, icon: '🧑' } },
+        { visual: { kind: 'join', a: 2, b: 5, icon: '💶' } }
+      ] },
     { id: 'sub', symbol: '−', icon: '➖',
       intro: [
         { visual: { kind: 'take', n: 5, take: 2, icon: '🍪' } },
-        { visual: { kind: 'gap', have: 3, need: 5, icon: '⭐' } }
+        { visual: { kind: 'gap', have: 3, need: 5, icon: '💶' } }
       ],
-      real: 3 },
+      real: [
+        { visual: { kind: 'take', n: 6, take: 2, icon: '🧃', result: true } },
+        { visual: { kind: 'take', n: 10, take: 3, icon: '🚲', result: true } },
+        { visual: { kind: 'gap', need: 8, have: 5, icon: '🎁' } }
+      ] },
     { id: 'mul', symbol: '×', icon: '✖️',
       intro: [
-        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🍬' } },
-        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🍬', sum: true } },
-        { visual: { kind: 'groups', groups: 4, each: 3, icon: '🍬' } }
+        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', caption: true } },
+        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', sum: true } },
+        { visual: { kind: 'groups', groups: 4, each: 3, icon: '🔋', caption: true } }
       ],
-      real: 3 },
+      real: [
+        { visual: { kind: 'groups', groups: 2, each: 6, icon: '🥚', sum: true } },
+        { visual: { kind: 'groups', groups: 4, each: 5, icon: '🪑', sum: true } },
+        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🍕', sum: true } }
+      ] },
     { id: 'div', symbol: '÷', icon: '➗',
       intro: [
-        { visual: { kind: 'share', total: 12, people: 3, icon: '🍬' } },
-        { visual: { kind: 'pack', total: 12, size: 4, icon: '🍬' } },
-        { visual: { kind: 'rest', total: 13, size: 4, icon: '🍬' } },
-        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🍬' } }
+        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🧦', caption: true } },
+        { visual: { kind: 'pack', total: 12, size: 4, icon: '🧦', caption: true } },
+        { visual: { kind: 'rest', total: 13, size: 4, icon: '🧦' } },
+        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🧦' } }
       ],
-      real: 3 }
+      real: [
+        { visual: { kind: 'groups', groups: 4, each: 3, icon: '🧦', caption: true } },
+        { visual: { kind: 'pack', total: 15, size: 5, icon: '📚', caption: true } },
+        { visual: { kind: 'rest', total: 11, size: 3, icon: '🍪' } }
+      ] }
   ],
 
   /* Pregunta «¿qué operación usarías?». `op` es la respuesta. */
@@ -58,7 +75,7 @@ var DATA = {
   /* Tipos de pregunta de la prueba de cada operación. Cada ronda toma
      `perRound` preguntas, mezclando estos tipos. */
   questions: {
-    add: ['pick', 'join', 'join'],
+    add: ['pick', 'join', 'more'],
     sub: ['pick', 'take', 'gap'],
     mul: ['pick', 'times', 'repeat'],
     div: ['pick', 'share', 'rest', 'relation']

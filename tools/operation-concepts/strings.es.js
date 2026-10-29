@@ -25,7 +25,8 @@
       realTitle: 'Se usa en la vida real:',
       introTitle: 'Así funciona',
       realLabel: 'Ejemplos de la vida real',
-      visualAria: 'Dibujo con puntos o figuras que cuentan la operación.'
+      visualAria: 'Dibujo con puntos o figuras que cuentan la operación.',
+      groupsOf: '{g} grupos de {e}'
     },
 
     /* Operaciones: nombre, idea en una frase, explicación en slides,
@@ -34,11 +35,12 @@
       add: {
         name: 'Sumar', symbolName: 'Sumar', detail: 'Juntar cosas y contar el total.',
         intro: {
-          1: { title: 'Sumar es juntar', text: 'Tienes 3 manzanas y te dan 2 más. Ahora tienes 5 en total.' },
-          2: { title: 'Puedes juntar en cualquier orden', text: '3 + 2 y 2 + 3 dan lo mismo: 5.' }
+          1: { title: 'Sumar es juntar', text: 'Juntas 3 manzanas rojas y 2 verdes. Ahora tienes 5 en total.' },
+          2: { title: 'Sumar también es añadir', text: 'Tienes 3 manzanas rojas y te añaden 2 verdes. Las verdes se añaden a las rojas: son 5.' },
+          3: { title: 'Puedes juntar en cualquier orden', text: '3 + 2 y 2 + 3 dan lo mismo: 5.' }
         },
         real: {
-          1: '🍪 Tienes 5 galletas y te dan 3 más: ahora tienes 8.',
+          1: '🍪 Tienes 5 galletas y te compras 3 más: ahora tienes 8.',
           2: '🚌 Suben 4 personas en una parada y 3 en la siguiente: van 7.',
           3: '💶 Tienes 2 euros en una mano y 5 en la otra: tienes 7 euros.'
         }
@@ -47,7 +49,7 @@
         name: 'Restar', symbolName: 'Restar', detail: 'Quitar cosas, o ver cuánto falta.',
         intro: {
           1: { title: 'Restar es quitar', text: 'Tenías 5 galletas y te comes 2. Te quedan 3.' },
-          2: { title: 'Restar también es ver cuánto falta', text: 'Tienes 3 estrellas y necesitas 5. Faltan 2.' }
+          2: { title: 'Restar también es ver cuánto falta', text: 'Necesitas 5 euros y tienes 3. Te faltan 2 euros.' }
         },
         real: {
           1: '🧃 Tenías 6 zumos y te bebes 2: te quedan 4.',
@@ -58,7 +60,7 @@
       mul: {
         name: 'Multiplicar', symbolName: 'Multiplicar', detail: 'Repetir el mismo grupo muchas veces.',
         intro: {
-          1: { title: 'Multiplicar es repetir un grupo', text: 'Hay 3 bolsas y en cada bolsa hay 4 caramelos. Son 4 + 4 + 4 = 12.' },
+          1: { title: 'Multiplicar es repetir un grupo', text: 'Hay 3 paquetes y en cada paquete hay 4 pilas. Son 4 + 4 + 4 = 12.' },
           2: { title: 'Es sumar lo mismo varias veces', text: '3 × 4 se lee «3 veces 4»: el 4 se repite 3 veces.' },
           3: { title: 'El orden no cambia el total', text: '4 grupos de 3 también son 12. 3 × 4 = 4 × 3.' }
         },
@@ -71,13 +73,13 @@
       div: {
         name: 'Dividir', symbolName: 'Dividir', detail: 'Repartir en partes iguales, o contar cuántos grupos caben.',
         intro: {
-          1: { title: 'Dividir es repartir en partes iguales', text: '12 caramelos entre 3 amigos: a cada uno le tocan 4.' },
-          2: { title: 'Dividir también es contar cuántos grupos caben', text: '12 caramelos en bolsas de 4: salen 3 bolsas.' },
-          3: { title: 'Puede sobrar', text: '13 caramelos en bolsas de 4: salen 3 bolsas llenas y sobra 1. Es la división con resto.' },
+          1: { title: 'Dividir es repartir en partes iguales', text: '12 calcetines entre 3 amigos: a cada uno le tocan 4.' },
+          2: { title: 'Dividir también es contar cuántos grupos caben', text: '12 calcetines en paquetes de 4: salen 3 paquetes.' },
+          3: { title: 'Puede sobrar', text: '13 calcetines en paquetes de 4: salen 3 paquetes llenos y sobra 1. Es la división con resto.' },
           4: { title: 'Dividir y multiplicar van juntas', text: '12 ÷ 4 = 3, porque 3 × 4 = 12.' }
         },
         real: {
-          1: '🍬 Repartes 12 caramelos entre 4 amigos: a cada amigo le tocan 3.',
+          1: '🧦 Repartes 12 calcetines entre 4 amigos: a cada amigo le tocan 3.',
           2: '📦 Tienes 15 libros y pones 5 en cada estante: necesitas 3 estantes.',
           3: '🍪 Tienes 11 galletas y las metes en cajas de 3: llenas 3 cajas y sobran 2.'
         }
@@ -94,7 +96,7 @@
       sub2: 'Necesitas 10 sillas y hay 6. ¿Cuántas faltan?',
       mul1: 'Hay 4 cajas y en cada caja hay 6 lápices. ¿Cuántos lápices hay?',
       mul2: 'Tienes 5 bolsas con 2 canicas en cada una. ¿Cuántas canicas tienes?',
-      div1: 'Tienes 12 caramelos y los repartes entre 3 amigos, todos igual. ¿Qué operación es?',
+      div1: 'Tienes 12 calcetines y los repartes entre 3 amigos, todos igual. ¿Qué operación es?',
       div2: 'Tienes 15 pegatinas y las pones en hojas de 5. ¿Cuántas hojas necesitas?'
     },
 
@@ -105,6 +107,11 @@
         prompt: '¿Cuántos hay en total?',
         hint: '🤔 Cuenta todos los dibujos, uno a uno, sin contar dos veces.',
         explain: 'Juntamos {a} y {b}: son {T} en total.'
+      },
+      more: {
+        prompt: 'Tienes {a} manzanas rojas y te añaden {b} verdes. ¿Cuántas hay ahora?',
+        hint: '🤔 Empieza por las rojas que ya tenías y cuenta las verdes que se añaden.',
+        explain: 'Añadimos {b} verdes a las {a} rojas: son {T} en total.'
       },
       take: {
         prompt: '¿Cuántos quedan?',
@@ -127,14 +134,14 @@
         explain: '{g} × {e} es lo mismo que sumar {e} cada vez, {g} veces.'
       },
       share: {
-        prompt: '¿Cuántos caramelos le tocan a cada uno?',
+        prompt: '¿Cuántos calcetines le tocan a cada uno?',
         hint: '🤔 Reparte los dibujos de uno en uno, entre los amigos.',
         explain: 'Cada uno recibe {each}, porque {T} ÷ {g} = {each}.'
       },
       rest: {
-        prompt: '¿Cuántas bolsas llenas salen?',
-        hint: '🤔 Cuenta las bolsas que van completas. Lo que no llena una bolsa, sobra.',
-        explain: 'Salen {q} bolsas llenas y sobran {r}.'
+        prompt: '¿Cuántos paquetes llenos salen?',
+        hint: '🤔 Cuenta los paquetes que van completos. Lo que no llena un paquete, sobra.',
+        explain: 'Salen {q} paquetes llenos y sobran {r}.'
       },
       relation: {
         prompt: 'Repartes {T} en grupos de {e}. ¿Qué división sale?',

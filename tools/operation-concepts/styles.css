@@ -14,6 +14,8 @@
 .ops-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
 .ops-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .ops-group-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+/* One group that repeats: a frame around its items, so the group reads as one unit. */
+.ops-group-box { display: flex; justify-content: center; padding: 6px 12px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
 .ops-item {
   position: relative;
   display: inline-flex;
