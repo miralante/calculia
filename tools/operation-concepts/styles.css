@@ -56,6 +56,26 @@
 .real-text { font-size: var(--texto-grande); }
 .real-card { min-height: 180px; justify-content: center; }
 
+/* A coin for money drawings: the currency sign of the locale (€ or $) on a round gold coin. */
+.ops-coin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #b8860b;
+  background: radial-gradient(circle at 35% 35%, #ffe38a, #d4a017);
+  color: #5c4300;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Slide arrows: centred under the drawing (number-sort.css, which styles them elsewhere, is not loaded here). */
+.carousel-controls { display: flex; justify-content: center; gap: var(--espacio); }
+.carousel-controls .btn { min-width: 44px; min-height: 44px; }
+
 /* Test answers */
 .option-btn { min-width: 96px; min-height: var(--boton-min); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
 .option-btn.correct { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }

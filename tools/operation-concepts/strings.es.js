@@ -13,6 +13,7 @@
     pickTitle: 'Elige una operación.',
 
     ui: {
+      coin: '€',
       prev: 'Anterior',
       next: 'Siguiente',
       count: '{i} de {n}',
@@ -37,12 +38,12 @@
         intro: {
           1: { title: 'Sumar es juntar', text: 'Juntas 3 manzanas rojas y 2 verdes. Ahora tienes 5 en total.' },
           2: { title: 'Sumar también es añadir', text: 'Tienes 3 manzanas rojas y te añaden 2 verdes. Las verdes se añaden a las rojas: son 5.' },
-          3: { title: 'Puedes juntar en cualquier orden', text: '3 + 2 y 2 + 3 dan lo mismo: 5.' }
+          3: { title: 'Puedes juntar en cualquier orden', text: '3 + 2 = 2 + 3 = 5' }
         },
         real: {
-          1: '🍪 Tienes 5 galletas y te compras 3 más: ahora tienes 8.',
-          2: '🚌 Suben 4 personas en una parada y 3 en la siguiente: van 7.',
-          3: '💶 Tienes 2 euros en una mano y 5 en la otra: tienes 7 euros.'
+          1: '🍪 Tienes 3 galletas y te compras 2 más: ahora tienes 5.',
+          2: '🚌 Suben 2 personas en una parada y 2 en la siguiente: van 4.',
+          3: '🪙 Tienes 2 euros en una mano y 5 en la otra: tienes 7 euros.'
         }
       },
       sub: {
@@ -53,8 +54,8 @@
         },
         real: {
           1: '🧃 Tenías 6 zumos y te bebes 2: te quedan 4.',
-          2: '🚲 Hay 10 bicis y se llevan 3: quedan 7.',
-          3: '🎁 Necesitas 8 pegatinas y tienes 5: te faltan 3.'
+          2: '🚲 Hay 6 bicis y se llevan 2: quedan 4.',
+          3: '🎈 Necesitas 8 globos para la fiesta y tienes 5: te faltan 3.'
         }
       },
       mul: {
@@ -62,7 +63,8 @@
         intro: {
           1: { title: 'Multiplicar es repetir un grupo', text: 'Hay 3 paquetes y en cada paquete hay 4 pilas. Son 4 + 4 + 4 = 12.' },
           2: { title: 'Es sumar lo mismo varias veces', text: '3 × 4 se lee «3 veces 4»: el 4 se repite 3 veces.' },
-          3: { title: 'El orden no cambia el total', text: '4 grupos de 3 también son 12. 3 × 4 = 4 × 3.' }
+          3: { title: 'Cambiar el orden de los grupos', text: '4 grupos de 3 también son 12: 3 + 3 + 3 + 3 = 12.' },
+          4: { title: 'El orden no cambia el total', text: '3 × 4 = 4 × 3. El total es 12 en los dos casos.' }
         },
         real: {
           1: '🥚 Una caja tiene 6 huevos. Si hay 2 cajas, son 12 huevos.',
@@ -81,7 +83,7 @@
         real: {
           1: '🧦 Repartes 12 calcetines entre 4 amigos: a cada amigo le tocan 3.',
           2: '📦 Tienes 15 libros y pones 5 en cada estante: necesitas 3 estantes.',
-          3: '🍪 Tienes 11 galletas y las metes en cajas de 3: llenas 3 cajas y sobran 2.'
+          3: '🍪 Tienes 7 galletas y las metes en cajas de 3: llenas 2 cajas y sobra 1.'
         }
       }
     },
@@ -90,14 +92,14 @@
     picks: {
       prompt: '¿Qué operación usarías?',
       hint: '🤔 Piensa qué pasa en la historia: ¿se juntan, se quitan, se repiten o se reparten?',
-      add1: 'En el autobús hay 12 personas y suben 3 más. ¿Cuántas hay ahora?',
-      add2: 'Tienes 2 euros y te dan 5. ¿Cuánto tienes?',
-      sub1: 'Tenías 9 caramelos y te comes 4. ¿Cuántos te quedan?',
-      sub2: 'Necesitas 10 sillas y hay 6. ¿Cuántas faltan?',
-      mul1: 'Hay 4 cajas y en cada caja hay 6 lápices. ¿Cuántos lápices hay?',
-      mul2: 'Tienes 5 bolsas con 2 canicas en cada una. ¿Cuántas canicas tienes?',
-      div1: 'Tienes 12 calcetines y los repartes entre 3 amigos, todos igual. ¿Qué operación es?',
-      div2: 'Tienes 15 pegatinas y las pones en hojas de 5. ¿Cuántas hojas necesitas?'
+      add1: 'En el autobús hay 12 personas y suben 3 más.',
+      add2: 'Tienes 2 euros y te dan 5.',
+      sub1: 'Tenías 9 caramelos y te comes 4.',
+      sub2: 'Necesitas 10 sillas y hay 6.',
+      mul1: 'Hay 4 cajas y en cada caja hay 6 lápices.',
+      mul2: 'Tienes 5 bolsas con 2 canicas en cada una.',
+      div1: 'Tienes 12 calcetines y los repartes entre 3 amigos, todos igual.',
+      div2: 'Tienes 15 pegatinas y las pones en hojas de 5.'
     },
 
     /* Preguntas de la prueba: enunciado, pista (sin dar la respuesta) y
@@ -112,6 +114,16 @@
         prompt: 'Tienes {a} manzanas rojas y te añaden {b} verdes. ¿Cuántas hay ahora?',
         hint: '🤔 Empieza por las rojas que ya tenías y cuenta las verdes que se añaden.',
         explain: 'Añadimos {b} verdes a las {a} rojas: son {T} en total.'
+      },
+      swap: {
+        prompt: '¿Qué suma da lo mismo que {a} + {b}?',
+        hint: '🤔 Cambia el orden de los números: ¿cambia el total?',
+        explain: '{a} + {b} es lo mismo que {b} + {a}: el total es {T}.'
+      },
+      swapTimes: {
+        prompt: '¿Qué multiplicación da lo mismo que {g} × {e}?',
+        hint: '🤔 Gira los grupos: ¿cambia el total?',
+        explain: '{g} × {e} es lo mismo que {e} × {g}: el orden no cambia el total.'
       },
       take: {
         prompt: '¿Cuántos quedan?',

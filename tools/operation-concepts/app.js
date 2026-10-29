@@ -114,15 +114,19 @@
 
   /* A drawing from its visual spec: intro slides and real-life examples. */
   function drawingHtml(spec) {
-    if (spec.kind === 'join') return joinHtml(spec.a, spec.b, spec.icon, true, spec.iconB);
-    if (spec.kind === 'take') return takeHtml(spec.n, spec.take, spec.icon, spec.result);
-    if (spec.kind === 'gap') return gapHtml(spec.need, spec.have, spec.icon);
+    /* A money drawing (`coin`) is drawn with the currency sign of the locale, not an emoji. */
+    var icon = spec.coin ? '<span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span>' : spec.icon;
+    if (spec.kind === 'join') return joinHtml(spec.a, spec.b, icon, true, spec.iconB);
+    if (spec.kind === 'take') return takeHtml(spec.n, spec.take, icon, spec.result);
+    if (spec.kind === 'gap') return gapHtml(spec.need, spec.have, icon);
     if (spec.kind === 'groups') {
       var text = null;
       if (spec.sum) {
         var parts = [];
         for (var g = 0; g < spec.groups; g += 1) parts.push(String(spec.each));
         text = parts.join(' + ') + ' = ' + (spec.groups * spec.each);
+        /* `product` puts the multiplication on the line below the sum. */
+        if (spec.product) text += '<br>' + spec.groups + ' × ' + spec.each + ' = ' + (spec.groups * spec.each);
       } else if (spec.caption) {
         text = fill(t('ui.groupsOf'), { g: spec.groups, e: spec.each });
       }
@@ -284,6 +288,26 @@
         prompt: q, visual: restHtml(full * size + left, size, '🧦'), hint: hint,
         options: numericOptions(full, [full + 1, full - 1, left]),
         explanation: fill(t('q.rest.explain'), { q: full, r: left })
+      };
+    }
+    /* swap: changing the order of the two addends keeps the total (commutative). */
+    if (type === 'swap') {
+      var sa = rint(2, 5), sb = rint(1, 5);
+      while (sb === sa) sb = rint(1, 5);
+      return {
+        prompt: fill(q, { a: sa, b: sb }), visual: joinHtml(sa, sb, '🍎', false, '🍏'), hint: hint,
+        options: textOptions(sb + ' + ' + sa, [sa + ' + ' + (sb + 1), (sa + 1) + ' + ' + (sb + 1), sa + ' + ' + sa]),
+        explanation: fill(t('q.swap.explain'), { a: sa, b: sb, T: sa + sb })
+      };
+    }
+    /* swapTimes: turning the groups around keeps the total (commutative). */
+    if (type === 'swapTimes') {
+      var sg = rint(2, 4), se = rint(2, 5);
+      while (se === sg) se = rint(2, 5);
+      return {
+        prompt: fill(q, { g: sg, e: se }), visual: groupsHtml(sg, se, '🔋'), hint: hint,
+        options: textOptions(se + ' × ' + sg, [sg + ' × ' + (se + 1), sg + ' + ' + se, (sg + 1) + ' × ' + se]),
+        explanation: fill(t('q.swapTimes.explain'), { g: sg, e: se, T: sg * se })
       };
     }
     /* relation */
