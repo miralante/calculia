@@ -62,7 +62,7 @@ var DATA = {
       ],
       real: [
         { visual: { kind: 'divide', total: 8, groups: 4, coin: true, caption: true, alt: true } },
-        { visual: { kind: 'divide', total: 6, size: 2, icon: '📚', caption: true, alt: true } },
+        { visual: { kind: 'divide', total: 6, size: 2, icon: '📖', caption: true, alt: true } },
         { visual: { kind: 'divide', total: 7, size: 3, icon: '🍪', caption: true, alt: true } }
       ] }
   ],
