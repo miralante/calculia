@@ -8,7 +8,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '➕ Operaciones',
+    title: '➕➖✖️➗ Operaciones',
     instruction: 'Elige una operación. Aquí se entiende qué significa cada una, sin hacer cuentas largas.',
     pickTitle: 'Elige una operación.',
 
@@ -62,7 +62,7 @@
       mul: {
         name: 'Multiplicar', symbolName: 'Multiplicar', detail: 'Repetir el mismo grupo muchas veces.',
         intro: {
-          1: { title: 'Multiplicar es repetir un grupo', text: 'Hay 3 paquetes y en cada paquete hay 4 pilas. Son 4 + 4 + 4 = 12.' },
+          1: { title: 'Multiplicar es repetir un grupo', text: 'Hay 3 paquetes y en cada paquete hay 4 pilas. Son 4 + 4 + 4 = 12. Multiplicando, 3 × 4 = 12.' },
           2: { title: 'Es sumar lo mismo varias veces', text: '3 × 4 se lee «3 veces 4»: el 4 se repite 3 veces.' },
           3: { title: 'Cambiar el orden de los grupos', text: '4 grupos de 3 también son 12: 3 + 3 + 3 + 3 = 12.' },
           4: { title: 'El orden no cambia el total', text: '3 × 4 = 4 × 3. El total es 12 en los dos casos.' }
@@ -92,22 +92,22 @@
     /* Preguntas de «¿qué operación usarías?». Cada una describe una situación. */
     picks: {
       prompt: '¿Qué operación usarías?',
-      hint: '🤔 Piensa qué pasa en la historia: ¿se juntan, se quitan, se repiten o se reparten?',
+      hint: '🤔 Piensa qué pasa: ¿se juntan, se quitan, se repiten o se reparten?',
       add1: 'En el autobús hay 12 personas y suben 3 más.',
       add2: 'Tienes 2 euros y te dan 5.',
       sub1: 'Tenías 9 caramelos y te comes 4.',
-      sub2: 'Necesitas 10 sillas y hay 6.',
+      sub2: 'Necesitas 10 sillas y hay 6: ¿cuántas faltan?',
       mul1: 'Hay 4 cajas y en cada caja hay 6 lápices.',
       mul2: 'Tienes 5 bolsas con 2 canicas en cada una.',
       div1: 'Tienes 12 trozos de pizza y los repartes entre 3 amigos, todos igual.',
-      div2: 'Tienes 15 pegatinas y las pones en hojas de 5.'
+      div2: 'Tienes 15 pegatinas y pones 5 en cada hoja. ¿Cuántas hojas necesitas?'
     },
 
     /* Preguntas de la prueba: enunciado, pista (sin dar la respuesta) y
        explicación al acertar. {n}, {g}, {e}, {T}… se rellenan en app.js. */
     q: {
       join: {
-        prompt: '¿Cuántos hay en total?',
+        prompt: 'Juntas los dos grupos. ¿Cuántos hay en total?',
         hint: '🤔 Cuenta todos los dibujos, uno a uno, sin contar dos veces.',
         explain: 'Juntamos {a} y {b}: son {T} en total.'
       },
@@ -127,17 +127,17 @@
         explain: '{g} × {e} es lo mismo que {e} × {g}: el orden no cambia el total.'
       },
       take: {
-        prompt: '¿Cuántos quedan?',
+        prompt: 'Tenías {n} galletas y te comes {t}. ¿Cuántas te quedan?',
         hint: '🤔 Tacha lo que se va y cuenta lo que queda sin tachar.',
         explain: 'Quitamos {t} de {n}: quedan {r}.'
       },
       gap: {
-        prompt: '¿Cuántos faltan?',
+        prompt: 'Necesitas {n} estrellas y tienes {h}. ¿Cuántas te faltan?',
         hint: '🤔 Cuenta cuántos huecos quedan vacíos.',
         explain: 'Faltan {m}, porque {n} − {h} = {m}.'
       },
       times: {
-        prompt: '¿Cuántos hay en total?',
+        prompt: 'Hay {g} grupos con {e} en cada uno. ¿Cuántos hay en total?',
         hint: '🤔 Cuenta cuántos grupos hay y cuántos hay en cada grupo.',
         explain: '{g} grupos de {e} son {T}.'
       },

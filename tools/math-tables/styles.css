@@ -59,7 +59,6 @@
 .dot-cross { position: absolute; top: 0; left: 0; width: var(--d); height: var(--d); display: flex; align-items: center; justify-content: center; font-size: calc(var(--d) * 0.85); font-weight: 900; line-height: 1; color: var(--color-texto); text-shadow: 0 0 3px var(--color-superficie), 0 0 3px var(--color-superficie), 0 0 2px var(--color-superficie); pointer-events: none; }
 .dot-cell-below .dot-cross { height: var(--d); }
 .demo-equation { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); font-weight: 700; font-variant-numeric: tabular-nums; text-align: center; }
-.demo-counter { font-variant-numeric: tabular-nums; color: var(--color-texto-suave); min-width: 5em; text-align: center; }
 .learn-demo { align-items: stretch; }
 .learn-demo .visual-card { align-items: center; }
 .ten-frame { padding: 6px; border: 3px solid var(--mod-razonamiento); border-radius: var(--radio); background: var(--mod-razonamiento-suave); }

@@ -12,6 +12,7 @@
     titleH1: '🔢 Number Types',
 
     galleryIntro: 'Look and flip the cards.',
+    slideCount: '{i} of {n}',
 
     /* ---- Type slides: title + real life ----
        Each number type is taught in two consecutive cards:

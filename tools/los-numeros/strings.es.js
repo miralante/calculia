@@ -12,6 +12,7 @@
     titleH1: '🔢 Tipos de Números',
 
     galleryIntro: 'Mira y pasa las tarjetas.',
+    slideCount: '{i} de {n}',
 
     /* ---- Slides de tipo: título + vida real ----
        Cada tipo de número se enseña en dos cards consecutivas:

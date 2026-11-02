@@ -598,9 +598,13 @@
       $('#conceptTitle').textContent = t(slide.title);
       $('#conceptText').textContent = t(slide.text);
       $('#conceptVisual').innerHTML = visualHtml(slide.visual);
-      $('#conceptCount').textContent = fill(t('ui.conceptCount'), {
+      var conceptBar = $('#conceptProgress');
+      conceptBar.setAttribute('aria-label', fill(t('ui.conceptCount'), {
         i: String(conceptIndex + 1), n: String(concepts.length)
-      });
+      }));
+      conceptBar.setAttribute('aria-valuemax', String(concepts.length));
+      conceptBar.setAttribute('aria-valuenow', String(conceptIndex + 1));
+      $('#conceptProgressFill').style.width = ((conceptIndex + 1) / concepts.length * 100) + '%';
       $('#conceptPrev').disabled = conceptIndex === 0;
       $('#conceptNext').disabled = conceptIndex === concepts.length - 1;
     }

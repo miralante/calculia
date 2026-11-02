@@ -323,7 +323,11 @@
     var item = factAt(index + 1);
     $('#demoEquation').textContent = equationText(item, true);
     renderVisual($('#learnVisual'), item, true, true);
-    $('#demoCounter').textContent = fill('demoCounter', { i: index + 1, n: DATA.factsPerTable });
+    var demoBar = $('#demoProgress');
+    demoBar.setAttribute('aria-label', fill('demoCounter', { i: index + 1, n: DATA.factsPerTable }));
+    demoBar.setAttribute('aria-valuemax', String(DATA.factsPerTable));
+    demoBar.setAttribute('aria-valuenow', String(index + 1));
+    $('#demoProgressFill').style.width = ((index + 1) / DATA.factsPerTable * 100) + '%';
     $('#demoPrev').disabled = index === 0;
     $('#demoNext').disabled = index === DATA.factsPerTable - 1;
     hide($('#factList'));

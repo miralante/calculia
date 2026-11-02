@@ -100,12 +100,6 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
-.slide-counter {
-  font-size: var(--texto-base);
-  color: var(--color-texto-suave);
-  min-width: 4ch;
-  text-align: center;
-}
 
 /* ---- Cierre ---- */
 #screenEnd .transfer {

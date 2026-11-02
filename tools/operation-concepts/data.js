@@ -46,7 +46,7 @@ var DATA = {
         { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', caption: true } },
         { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', sum: true, product: true } },
         { visual: { kind: 'groups', groups: 4, each: 3, icon: '🔋', sum: true, product: true } },
-        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', caption: true } }
+        { visual: { kind: 'swapgroups', a: 3, b: 4, icon: '🔋' } }
       ],
       real: [
         { visual: { kind: 'groups', groups: 2, each: 6, icon: '🥚', sum: true, product: true, alt: true } },

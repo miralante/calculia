@@ -32,7 +32,8 @@
   var slideEyebrow = $('#slideEyebrow');
   var slidePrev = $('#slidePrev');
   var slideNext = $('#slideNext');
-  var slideCounter = $('#slideCounter');
+  var slideBar = $('#slideProgress');
+  var slideBarFill = $('#slideProgressFill');
   var slideFinish = $('#slideFinish');
 
   /* ---- Persistencia ---- */
@@ -249,7 +250,10 @@
       slideReal.classList.add('hidden');
     }
 
-    slideCounter.textContent = (slideIndex + 1) + ' / ' + TOTAL;
+    slideBar.setAttribute('aria-label', App.i18n.t('slideCount').replace('{i}', slideIndex + 1).replace('{n}', TOTAL));
+    slideBar.setAttribute('aria-valuemax', String(TOTAL));
+    slideBar.setAttribute('aria-valuenow', String(slideIndex + 1));
+    slideBarFill.style.width = ((slideIndex + 1) / TOTAL * 100) + '%';
     slidePrev.disabled = slideIndex === 0;
     slideNext.disabled = slideIndex === TOTAL - 1;
     if (slideIndex === TOTAL - 1) {

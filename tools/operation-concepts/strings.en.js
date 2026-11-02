@@ -7,7 +7,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '➕ Operations',
+    title: '➕➖✖️➗ Operations',
     instruction: 'Choose an operation. Here you understand what each one means, without long sums.',
     pickTitle: 'Choose an operation.',
 
@@ -59,7 +59,7 @@
       mul: {
         name: 'Multiply', symbolName: 'Multiply', detail: 'Repeat the same group many times.',
         intro: {
-          1: { title: 'Multiplying is repeating a group', text: 'There are 3 packs and each pack has 4 batteries. That is 4 + 4 + 4 = 12.' },
+          1: { title: 'Multiplying is repeating a group', text: 'There are 3 packs and each pack has 4 batteries. That is 4 + 4 + 4 = 12. Multiplying, 3 × 4 = 12.' },
           2: { title: 'It is adding the same thing many times', text: '3 × 4 is read as «3 times 4»: the 4 repeats 3 times.' },
           3: { title: 'Changing the order of the groups', text: '4 groups of 3 are also 12: 3 + 3 + 3 + 3 = 12.' },
           4: { title: 'The order does not change the total', text: '3 × 4 = 4 × 3. The total is 12 both ways.' }
@@ -88,20 +88,20 @@
 
     picks: {
       prompt: 'Which operation would you use?',
-      hint: '🤔 Think about the story: are things put together, taken away, repeated or shared?',
+      hint: '🤔 Think about what happens: are things put together, taken away, repeated or shared?',
       add1: 'There are 12 people on the bus and 3 more get on.',
       add2: 'You have 2 dollars and someone gives you 5.',
       sub1: 'You had 9 sweets and you eat 4.',
-      sub2: 'You need 10 chairs and there are 6.',
+      sub2: 'You need 10 chairs and there are 6: how many are missing?',
       mul1: 'There are 4 boxes and each box has 6 pencils.',
       mul2: 'You have 5 bags with 2 marbles in each one.',
       div1: 'You have 12 pizza slices and share them among 3 friends, all the same.',
-      div2: 'You have 15 stickers and put them on sheets of 5.'
+      div2: 'You have 15 stickers and put 5 on each sheet. How many sheets do you need?'
     },
 
     q: {
       join: {
-        prompt: 'How many are there in total?',
+        prompt: 'You put the two groups together. How many are there in total?',
         hint: '🤔 Count all the drawings one by one, without counting any twice.',
         explain: 'We put {a} and {b} together: {T} in total.'
       },
@@ -121,17 +121,17 @@
         explain: '{g} × {e} is the same as {e} × {g}: the order does not change the total.'
       },
       take: {
-        prompt: 'How many are left?',
+        prompt: 'You had {n} biscuits and you eat {t}. How many are left?',
         hint: '🤔 Cross out what goes away and count what is left without a cross.',
         explain: 'We take away {t} from {n}: {r} are left.'
       },
       gap: {
-        prompt: 'How many are missing?',
+        prompt: 'You need {n} stars and you have {h}. How many are missing?',
         hint: '🤔 Count how many empty spaces are left.',
         explain: '{m} are missing, because {n} − {h} = {m}.'
       },
       times: {
-        prompt: 'How many are there in total?',
+        prompt: 'There are {g} groups with {e} in each one. How many are there in total?',
         hint: '🤔 Count how many groups there are and how many are in each group.',
         explain: '{g} groups of {e} make {T}.'
       },

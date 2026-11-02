@@ -49,17 +49,19 @@
   function rint(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
   /* ---- Drawings -------------------------------------------------------
-     Each drawing is HTML made of small icons. `cross` marks the first
+     Each drawing is HTML made of small icons. `cross` marks the last
      items as taken away; `empty` leaves the last ones as empty spaces. */
   function items(count, icon, opts) {
     var o = opts || {};
     var html = '';
     for (var i = 0; i < count; i += 1) {
       var cls = 'ops-item';
-      if (o.cross && i < o.cross) cls += ' ops-cross';
+      if (o.cross && i >= count - o.cross) cls += ' ops-cross';
       if (o.alt) cls += ' ops-alt';
       if (o.empty && i >= count - o.empty) cls = 'ops-item ops-empty';
-      html += '<span class="' + cls + '" aria-hidden="true">' + (o.empty && i >= count - o.empty ? '' : icon) + '</span>';
+      /* `from` numbers the items on from that value: the first one carries it, the rest count on. */
+      var num = o.from === undefined ? '' : '<b class="ops-num">' + (o.from + i) + '</b>';
+      html += '<span class="' + cls + '" aria-hidden="true">' + (o.empty && i >= count - o.empty ? '' : icon) + num + '</span>';
     }
     return html;
   }
@@ -79,7 +81,7 @@
   function swapHtml(a, b, icon, iconB) {
     return '<div class="ops-divide">' + joinHtml(a, b, icon, true, iconB) + joinHtml(b, a, iconB, true, icon) + '</div>';
   }
-  /* `n` items, the first `take` crossed out. `showResult` adds the items left, after «=». */
+  /* `n` items, the last `take` crossed out, counting from the right. `showResult` adds the items left, after «=». */
   function takeHtml(n, take, icon, showResult) {
     var html = '<div class="ops-line">' + row(n, icon, { cross: take });
     if (showResult) html += sign('=') + row(n - take, icon);
@@ -96,12 +98,28 @@
     return '<div class="ops-line"><div class="ops-row">' + html + '</div></div>';
   }
   /* `groups` framed boxes of `each` items: each box is one group that repeats. */
-  function groupsHtml(groups, each, icon, sumText, alt) {
+  function groupsHtml(groups, each, icon, sumText, alt, numbered) {
     var html = '<div class="ops-group-stack">';
-    for (var g = 0; g < groups; g += 1) html += '<div class="ops-group-box">' + row(each, icon, { alt: alt && g % 2 === 1 }) + '</div>';
+    for (var g = 0; g < groups; g += 1) {
+      html += '<div class="ops-group-box">' + row(each, icon, { alt: alt && g % 2 === 1, from: numbered ? g * each + 1 : undefined }) + '</div>';
+    }
     html += '</div>';
     if (sumText) html += '<p class="ops-expr">' + sumText + '</p>';
     return html;
+  }
+  /* The same groups as groupsHtml, each item numbered, so the count reads 1 … total. */
+  function numberedGroupsHtml(groups, each, icon) {
+    var html = '<div class="ops-group-stack">';
+    for (var g = 0; g < groups; g += 1) html += '<div class="ops-group-box">' + row(each, icon, { from: g * each + 1 }) + '</div>';
+    return html + '</div>';
+  }
+  /* The same total in two arrangements side by side: `a` groups of `b`, then `b` groups of `a`.
+     Both are numbered, so the count to the same total can be seen. */
+  function swapGroupsHtml(a, b, icon) {
+    return '<div class="ops-compare">' +
+      '<div class="ops-compare-side">' + numberedGroupsHtml(a, b, icon) + '<p class="ops-expr">' + a + ' × ' + b + '</p></div>' +
+      '<div class="ops-compare-side">' + numberedGroupsHtml(b, a, icon) + '<p class="ops-expr">' + b + ' × ' + a + '</p></div>' +
+      '</div>';
   }
   /* All items in one row, to be shared out by counting. */
   function flatHtml(total, icon) {
@@ -150,6 +168,7 @@
     var icon = spec.coin ? '<span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span>' : (spec.slice ? SLICE : spec.icon);
     if (spec.kind === 'join') return joinHtml(spec.a, spec.b, icon, true, spec.iconB, spec.alt);
     if (spec.kind === 'swap') return swapHtml(spec.a, spec.b, icon, spec.iconB);
+    if (spec.kind === 'swapgroups') return swapGroupsHtml(spec.a, spec.b, icon);
     if (spec.kind === 'take') return takeHtml(spec.n, spec.take, icon, spec.result);
     if (spec.kind === 'gap') return gapHtml(spec.need, spec.have, icon);
     if (spec.kind === 'groups') {
@@ -163,7 +182,8 @@
       } else if (spec.caption) {
         text = fill(t('ui.groupsOf'), { g: spec.groups, e: spec.each });
       }
-      return groupsHtml(spec.groups, spec.each, spec.icon, text, spec.alt);
+      /* A sum slide numbers its items: the sum counts them one by one. */
+      return groupsHtml(spec.groups, spec.each, spec.icon, text, spec.alt, spec.sum);
     }
     if (spec.kind === 'divide') return divideHtml(spec.total, spec.groups, spec.size, icon, spec.caption, spec.product, spec.alt);
     if (spec.kind === 'pack') {
@@ -206,7 +226,11 @@
     $('#introVisual').innerHTML = drawingHtml(slide.visual);
     $('#introVisual').setAttribute('aria-label', t('ui.visualAria'));
     $('#introText').textContent = t('ops.' + op.id + '.intro.' + (introIndex + 1) + '.text');
-    $('#introCount').textContent = fill(t('ui.count'), { i: introIndex + 1, n: op.intro.length });
+    var introBar = $('#introProgress');
+    introBar.setAttribute('aria-label', fill(t('ui.count'), { i: introIndex + 1, n: op.intro.length }));
+    introBar.setAttribute('aria-valuemax', String(op.intro.length));
+    introBar.setAttribute('aria-valuenow', String(introIndex + 1));
+    $('#introProgressFill').style.width = ((introIndex + 1) / op.intro.length * 100) + '%';
     $('#introPrev').disabled = introIndex === 0;
     $('#introNext').disabled = introIndex === op.intro.length - 1;
   }
@@ -216,7 +240,11 @@
     $('#realVisual').innerHTML = drawingHtml(op.real[realIndex].visual);
     $('#realVisual').setAttribute('aria-label', t('ui.visualAria'));
     $('#realText').textContent = t('ops.' + op.id + '.real.' + (realIndex + 1));
-    $('#realCount').textContent = fill(t('ui.count'), { i: realIndex + 1, n: op.real.length });
+    var realBar = $('#realProgress');
+    realBar.setAttribute('aria-label', fill(t('ui.count'), { i: realIndex + 1, n: op.real.length }));
+    realBar.setAttribute('aria-valuemax', String(op.real.length));
+    realBar.setAttribute('aria-valuenow', String(realIndex + 1));
+    $('#realProgressFill').style.width = ((realIndex + 1) / op.real.length * 100) + '%';
     $('#realPrev').disabled = realIndex === 0;
     $('#realNext').disabled = realIndex === op.real.length - 1;
   }
@@ -277,7 +305,7 @@
     if (type === 'take') {
       var n = rint(4, 9), take = rint(1, n - 1), r = n - take;
       return {
-        prompt: q, visual: takeHtml(n, take, '🍪'), hint: hint,
+        prompt: fill(q, { n: n, t: take }), visual: takeHtml(n, take, '🍪'), hint: hint,
         options: numericOptions(r, [n, r + 1, r - 1, take]),
         explanation: fill(t('q.take.explain'), { n: n, t: take, r: r })
       };
@@ -285,7 +313,7 @@
     if (type === 'gap') {
       var need = rint(3, 8), have = rint(1, need - 1), m = need - have;
       return {
-        prompt: q, visual: gapHtml(need, have, '⭐'), hint: hint,
+        prompt: fill(q, { n: need, h: have }), visual: gapHtml(need, have, '⭐'), hint: hint,
         options: numericOptions(m, [need, have, m + 1, m - 1]),
         explanation: fill(t('q.gap.explain'), { m: m, n: need, h: have })
       };
@@ -293,7 +321,7 @@
     if (type === 'times') {
       var gt = rint(2, 4), et = rint(2, 5), Tt = gt * et;
       return {
-        prompt: q, visual: groupsHtml(gt, et, '🔋'), hint: hint,
+        prompt: fill(q, { g: gt, e: et }), visual: groupsHtml(gt, et, '🔋'), hint: hint,
         options: numericOptions(Tt, [gt + et, Tt + et, Tt - 1, Tt + 1]),
         explanation: fill(t('q.times.explain'), { g: gt, e: et, T: Tt })
       };

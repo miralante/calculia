@@ -14,7 +14,7 @@
   <div class="container">
     <header class="tool-header">
       <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
-      <h1 data-i18n="title">➕ Operaciones</h1>
+      <h1 data-i18n="title">➕➖✖️➗ Operaciones</h1>
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
@@ -33,7 +33,7 @@
         <div class="ops-visual" id="introVisual"></div>
         <h3 class="concept-title" id="introTitle"></h3>
         <p class="concept-text" id="introText"></p>
-        <p class="concept-count" id="introCount"></p>
+        <div class="progress-bar" id="introProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="introProgressFill"></div></div>
         <div class="carousel-controls">
           <button type="button" class="btn btn-secondary" id="introPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>
           <button type="button" class="btn btn-secondary" id="introNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>
@@ -51,7 +51,7 @@
       <article class="card centered stack real-card">
         <div class="ops-visual" id="realVisual"></div>
         <p class="real-text" id="realText"></p>
-        <p class="concept-count" id="realCount"></p>
+        <div class="progress-bar" id="realProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="realProgressFill"></div></div>
         <div class="carousel-controls">
           <button type="button" class="btn btn-secondary" id="realPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>
           <button type="button" class="btn btn-secondary" id="realNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>
