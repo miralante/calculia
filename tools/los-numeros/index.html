@@ -25,6 +25,7 @@
       <div class="row center-row">
         <p class="instruction" data-i18n="galleryIntro">Mira y pasa las tarjetas.</p>
       </div>
+      <div class="progress-bar" id="slideProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="slideProgressFill"></div></div>
       <div class="card slide-card">
         <h2 class="slide-title" id="slideTitle"></h2>
         <!-- Eyebrow above the list of real-life examples. Visible
@@ -37,7 +38,6 @@
              from strings.<id>Real, split on ' · '. -->
         <ul class="slide-real hidden" id="slideReal"></ul>
       </div>
-      <div class="progress-bar" id="slideProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="slideProgressFill"></div></div>
       <div class="carousel-controls">
         <button type="button" class="btn btn-secondary" id="slidePrev" aria-label="Anterior">←</button>
         <button type="button" class="btn btn-secondary" id="slideNext" aria-label="Siguiente">→</button>

@@ -22,7 +22,6 @@
   var TOOL_ID = 'temperature';
   var $ = App.utils.$;
 
-  var screenMenu = $('#screenMenu');
   var screenLevels = $('#screenLevels');
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
@@ -147,30 +146,9 @@
   }
 
   function show(screen) {
-    [screenMenu, screenGame, screenEnd].forEach(function (p) {
+    [screenGame, screenEnd].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
-  }
-
-  /* ---- Activity menu (flat grid, same pattern as numbers/quantities) ---- */
-  function paintMenu() {
-    var cont = $('#activitiesMenu');
-    cont.innerHTML = '';
-    var grid = document.createElement('div');
-    grid.className = 'menu-grid';
-    Object.keys(DATA.activities).forEach(function (id) {
-      var act = DATA.activities[id];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-actividad';
-      btn.innerHTML =
-        '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
-        '<span>' + App.i18n.t('activity.' + id + '.name') + '</span>' +
-        '<span class="detail-card">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
-      btn.addEventListener('click', function () { openActivity(id); });
-      grid.appendChild(btn);
-    });
-    cont.appendChild(grid);
   }
 
   /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
@@ -439,7 +417,7 @@
 
   /* Initial paint. */
   paintStars();
-  paintMenu();
+  openActivity('water-temperature');
   /* End screen: the only button is "Volver al inicio", which goes back
      to the Calculia landing. The end screen is a closing card, not a
      second menu: picking another activity is a tap away on the home
