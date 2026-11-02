@@ -112,3 +112,6 @@
 .feedback { margin: 0; text-align: center; min-height: 1.4em; }
 .feedback.success { color: var(--color-texto); font-weight: 700; }
 .feedback.error { color: var(--color-texto-suave); }
+
+/* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
+.tool-header .activity-icon { width: 48px; height: 48px; flex: none; }

@@ -7,7 +7,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '➕➖✖️➗ Operations',
+    title: 'Operations',
     instruction: 'Choose an operation. Here you understand what each one means, without long sums.',
     pickTitle: 'Choose an operation.',
 
@@ -42,9 +42,9 @@
           3: { title: 'You can put them together in any order', text: '3 + 2 = 2 + 3 = 5' }
         },
         real: {
-          1: '🍪 You have 3 biscuits and you buy 2 more: now you have 5.',
-          2: '🚌 2 people get on at one stop and 2 at the next: 4 people on the bus.',
-          3: '🪙 You have 2 dollars in one hand and 5 in the other: you have 7 dollars.'
+          1: 'You have 3 biscuits and you buy 2 more: now you have 5.',
+          2: '2 people get on at one stop and 2 at the next: 4 people on the bus.',
+          3: 'You have 2 dollars in one hand and 5 in the other: you have 7 dollars.'
         }
       },
       sub: {
@@ -54,9 +54,9 @@
           2: { title: 'Subtracting also shows how many are missing', text: 'You need 5 dollars and you have 3. You are missing 2 dollars.' }
         },
         real: {
-          1: '🧃 You had 6 juice boxes and you drink 2: you have 4 left.',
-          2: '🚲 There are 6 bikes and 2 are taken: 4 are left.',
-          3: '🎈 You need 8 balloons for the party and you have 5: 3 are missing.'
+          1: 'You had 6 juice boxes and you drink 2: you have 4 left.',
+          2: 'There are 6 bikes and 2 are taken: 4 are left.',
+          3: 'You need 8 balloons for the party and you have 5: 3 are missing.'
         }
       },
       mul: {
@@ -68,9 +68,9 @@
           4: { title: 'The order does not change the total', text: '3 × 4 = 4 × 3. The total is 12 both ways.' }
         },
         real: {
-          1: '🥚 One box has 6 eggs. With 2 boxes, there are 12 eggs.',
-          2: '🪑 There are 4 rows of 5 chairs: 20 chairs.',
-          3: '🍕 3 pizzas, each cut into 4 slices: 12 slices.'
+          1: 'One box has 6 eggs. With 2 boxes, there are 12 eggs.',
+          2: 'There are 4 rows of 5 chairs: 20 chairs.',
+          3: '3 pizzas, each cut into 4 slices: 12 slices.'
         }
       },
       div: {
@@ -82,9 +82,9 @@
           4: { title: 'Dividing is the opposite of multiplying', text: 'Multiply: 4 × 2 = 8. Divide: 8 ÷ 2 = 4. If you know one, you know the other.' }
         },
         real: {
-          1: '🪙 You share 8 dollars among 4 friends: each friend gets 2 dollars.',
-          2: '📦 You have 6 books and put 2 on each shelf: you need 3 shelves.',
-          3: '🍪 You have 7 biscuits and put them in boxes of 3: 2 boxes are full and 1 is left over.'
+          1: 'You share 8 dollars among 4 friends: each friend gets 2 dollars.',
+          2: 'You have 6 books and put 2 on each shelf: you need 3 shelves.',
+          3: 'You have 7 biscuits and put them in boxes of 3: 2 boxes are full and 1 is left over.'
         }
       }
     },

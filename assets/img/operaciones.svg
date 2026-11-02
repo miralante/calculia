@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Sumar, restar, multiplicar y dividir">
+  <rect x="2" y="2" width="116" height="116" rx="24" fill="#FAF7F2" stroke="#1F5F5B" stroke-width="4"/>
+  <g fill="#1F5F5B">
+    <rect x="18" y="37" width="28" height="8" rx="4"/>
+    <rect x="28" y="27" width="8" height="28" rx="4"/>
+  </g>
+  <rect x="72" y="33" width="28" height="8" rx="4" fill="#B5542D"/>
+  <g stroke="#2E7D4F" stroke-width="8" stroke-linecap="round">
+    <line x1="22" y1="72" x2="46" y2="96"/>
+    <line x1="46" y1="72" x2="22" y2="96"/>
+  </g>
+  <g fill="#6A4C93">
+    <circle cx="86" cy="74" r="5"/>
+    <circle cx="86" cy="96" r="5"/>
+    <rect x="71" y="83" width="30" height="6" rx="3"/>
+  </g>
+</svg>

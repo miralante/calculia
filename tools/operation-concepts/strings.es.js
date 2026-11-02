@@ -8,7 +8,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '➕➖✖️➗ Operaciones',
+    title: 'Operaciones',
     instruction: 'Elige una operación. Aquí se entiende qué significa cada una, sin hacer cuentas largas.',
     pickTitle: 'Elige una operación.',
 
@@ -45,9 +45,9 @@
           3: { title: 'Puedes juntar en cualquier orden', text: '3 + 2 = 2 + 3 = 5' }
         },
         real: {
-          1: '🍪 Tienes 3 galletas y te compras 2 más: ahora tienes 5.',
-          2: '🚌 Suben 2 personas en una parada y 2 en la siguiente: van 4.',
-          3: '🪙 Tienes 2 euros en una mano y 5 en la otra: tienes 7 euros.'
+          1: 'Tienes 3 galletas y te compras 2 más: ahora tienes 5.',
+          2: 'Suben 2 personas en una parada y 2 en la siguiente: van 4.',
+          3: 'Tienes 2 euros en una mano y 5 en la otra: tienes 7 euros.'
         }
       },
       sub: {
@@ -57,9 +57,9 @@
           2: { title: 'Restar también es ver cuánto falta', text: 'Necesitas 5 euros y tienes 3. Te faltan 2 euros.' }
         },
         real: {
-          1: '🧃 Tenías 6 zumos y te bebes 2: te quedan 4.',
-          2: '🚲 Hay 6 bicis y se llevan 2: quedan 4.',
-          3: '🎈 Necesitas 8 globos para la fiesta y tienes 5: te faltan 3.'
+          1: 'Tenías 6 zumos y te bebes 2: te quedan 4.',
+          2: 'Hay 6 bicis y se llevan 2: quedan 4.',
+          3: 'Necesitas 8 globos para la fiesta y tienes 5: te faltan 3.'
         }
       },
       mul: {
@@ -71,9 +71,9 @@
           4: { title: 'El orden no cambia el total', text: '3 × 4 = 4 × 3. El total es 12 en los dos casos.' }
         },
         real: {
-          1: '🥚 Una caja tiene 6 huevos. Si hay 2 cajas, son 12 huevos.',
-          2: '🪑 Hay 4 filas de 5 sillas: son 20 sillas.',
-          3: '🍕 3 pizzas cortadas en 4 trozos cada una: son 12 trozos.'
+          1: 'Una caja tiene 6 huevos. Si hay 2 cajas, son 12 huevos.',
+          2: 'Hay 4 filas de 5 sillas: son 20 sillas.',
+          3: '3 pizzas cortadas en 4 trozos cada una: son 12 trozos.'
         }
       },
       div: {
@@ -85,9 +85,9 @@
           4: { title: 'Dividir es lo contrario de multiplicar', text: 'Multiplicas: 4 × 2 = 8. Divides: 8 ÷ 2 = 4. Si sabes una, sabes la otra.' }
         },
         real: {
-          1: '🪙 Repartes 8 euros entre 4 amigos: a cada amigo le tocan 2 euros.',
-          2: '📦 Tienes 6 libros y pones 2 en cada estante: necesitas 3 estantes.',
-          3: '🍪 Tienes 7 galletas y las metes en cajas de 3: llenas 2 cajas y sobra 1.'
+          1: 'Repartes 8 euros entre 4 amigos: a cada amigo le tocan 2 euros.',
+          2: 'Tienes 6 libros y pones 2 en cada estante: necesitas 3 estantes.',
+          3: 'Tienes 7 galletas y las metes en cajas de 3: llenas 2 cajas y sobra 1.'
         }
       }
     },

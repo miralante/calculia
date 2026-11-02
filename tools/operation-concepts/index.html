@@ -14,7 +14,8 @@
   <div class="container">
     <header class="tool-header">
       <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
-      <h1 data-i18n="title">➕➖✖️➗ Operaciones</h1>
+      <img class="activity-icon" src="../../assets/img/operaciones.svg?v=calculia-v150ebb49" alt="" width="48" height="48">
+      <h1 data-i18n="title">Operaciones</h1>
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
@@ -29,11 +30,11 @@
     <!-- 1. Explanation: slides with a drawing, one idea each. -->
     <section id="screenIntro" class="hidden stack">
       <h2 class="op-title" id="opTitle"></h2>
+      <div class="progress-bar" id="introProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="introProgressFill"></div></div>
       <article class="card stack gallery-card">
         <div class="ops-visual" id="introVisual"></div>
         <h3 class="concept-title" id="introTitle"></h3>
         <p class="concept-text" id="introText"></p>
-        <div class="progress-bar" id="introProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="introProgressFill"></div></div>
         <div class="carousel-controls">
           <button type="button" class="btn btn-secondary" id="introPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>
           <button type="button" class="btn btn-secondary" id="introNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>
@@ -48,10 +49,10 @@
       <div class="row center-row">
         <p class="instruction" data-i18n="ui.realLabel">Ejemplos de la vida real</p>
       </div>
+      <div class="progress-bar" id="realProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="realProgressFill"></div></div>
       <article class="card centered stack real-card">
         <div class="ops-visual" id="realVisual"></div>
         <p class="real-text" id="realText"></p>
-        <div class="progress-bar" id="realProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="realProgressFill"></div></div>
         <div class="carousel-controls">
           <button type="button" class="btn btn-secondary" id="realPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>
           <button type="button" class="btn btn-secondary" id="realNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>
