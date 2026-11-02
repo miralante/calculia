@@ -9,6 +9,8 @@
    - ops[]: id, símbolo e icono. intro[]: slides; cada uno tiene un
      `visual` (ver app.js renderVisual). Los textos NO están aquí: viven
      en strings.<locale>.js, con las mismas claves (ops.<id>.intro.<n>).
+     `alt: true` (en los ejemplos reales) tiñe de otro tono el segundo
+     grupo o los grupos impares, para que se vean separados.
    - picks[]: situaciones para la pregunta «¿qué operación usarías?».
      Cada una dice cuál es la operación correcta. El texto está en
      strings.<locale>.js (picks.<n>).
@@ -22,12 +24,12 @@ var DATA = {
       intro: [
         { visual: { kind: 'join', a: 3, b: 2, icon: '🍎', iconB: '🍏' } },
         { visual: { kind: 'join', a: 3, b: 2, icon: '🍎', iconB: '🍏' } },
-        { visual: { kind: 'join', a: 2, b: 3, icon: '🍏', iconB: '🍎' } }
+        { visual: { kind: 'swap', a: 3, b: 2, icon: '🍎', iconB: '🍏' } }
       ],
       real: [
-        { visual: { kind: 'join', a: 3, b: 2, icon: '🍪' } },
-        { visual: { kind: 'join', a: 2, b: 2, icon: '🧑' } },
-        { visual: { kind: 'join', a: 2, b: 5, coin: true } }
+        { visual: { kind: 'join', a: 3, b: 2, icon: '🍪', alt: true } },
+        { visual: { kind: 'join', a: 2, b: 2, icon: '🧑', alt: true } },
+        { visual: { kind: 'join', a: 2, b: 5, coin: true, alt: true } }
       ] },
     { id: 'sub', symbol: '−', icon: '➖',
       intro: [
@@ -47,9 +49,9 @@ var DATA = {
         { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', caption: true } }
       ],
       real: [
-        { visual: { kind: 'groups', groups: 2, each: 6, icon: '🥚', sum: true, product: true } },
-        { visual: { kind: 'groups', groups: 4, each: 5, icon: '🪑', sum: true, product: true } },
-        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🍕', sum: true, product: true } }
+        { visual: { kind: 'groups', groups: 2, each: 6, icon: '🥚', sum: true, product: true, alt: true } },
+        { visual: { kind: 'groups', groups: 4, each: 5, icon: '🪑', sum: true, product: true, alt: true } },
+        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🍕', sum: true, product: true, alt: true } }
       ] },
     { id: 'div', symbol: '÷', icon: '➗',
       intro: [
@@ -59,9 +61,9 @@ var DATA = {
         { visual: { kind: 'divide', total: 12, size: 4, icon: '🔴', caption: true, product: true } }
       ],
       real: [
-        { visual: { kind: 'divide', total: 12, groups: 4, coin: true, caption: true } },
-        { visual: { kind: 'divide', total: 15, size: 5, icon: '📚', caption: true } },
-        { visual: { kind: 'divide', total: 7, size: 3, icon: '🍪', caption: true } }
+        { visual: { kind: 'divide', total: 12, groups: 4, coin: true, caption: true, alt: true } },
+        { visual: { kind: 'divide', total: 15, size: 5, icon: '📚', caption: true, alt: true } },
+        { visual: { kind: 'divide', total: 7, size: 3, icon: '🍪', caption: true, alt: true } }
       ] }
   ],
 

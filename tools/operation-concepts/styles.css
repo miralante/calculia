@@ -31,6 +31,8 @@
   font-size: 36px;
   line-height: 1;
 }
+/* A second group of the same object, tinted a little, so the groups read apart (real-life examples). */
+.ops-alt { filter: hue-rotate(-25deg); }
 /* An empty place: a dashed outline, so it reads as «falta». */
 .ops-empty { border: 2px dashed var(--color-texto-suave); border-radius: var(--radio); background: transparent; }
 /* A crossed-out item (taken away): dimmed, with a heavy cross on top. */

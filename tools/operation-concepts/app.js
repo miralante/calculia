@@ -57,6 +57,7 @@
     for (var i = 0; i < count; i += 1) {
       var cls = 'ops-item';
       if (o.cross && i < o.cross) cls += ' ops-cross';
+      if (o.alt) cls += ' ops-alt';
       if (o.empty && i >= count - o.empty) cls = 'ops-item ops-empty';
       html += '<span class="' + cls + '" aria-hidden="true">' + (o.empty && i >= count - o.empty ? '' : icon) + '</span>';
     }
@@ -67,11 +68,16 @@
 
   /* Two groups and their sum (or their total). The second group has its own
      icon (another colour of the same fruit) so the two groups read apart. */
-  function joinHtml(a, b, icon, showTotal, iconB) {
+  function joinHtml(a, b, icon, showTotal, iconB, alt) {
     var second = iconB || icon;
-    var html = '<div class="ops-line">' + row(a, icon) + sign('+') + row(b, second);
-    if (showTotal) html += sign('=') + '<div class="ops-row">' + items(a, icon) + items(b, second) + '</div>';
+    var html = '<div class="ops-line">' + row(a, icon) + sign('+') + row(b, second, { alt: alt });
+    if (showTotal) html += sign('=') + '<div class="ops-row">' + items(a, icon) + items(b, second, { alt: alt }) + '</div>';
     return html + '</div>';
+  }
+  /* The same sum twice: first the groups in one order, then in the other, each with a total.
+     Both colours show, so the swapped sum reads as the same total, not a new one. */
+  function swapHtml(a, b, icon, iconB) {
+    return '<div class="ops-divide">' + joinHtml(a, b, icon, true, iconB) + joinHtml(b, a, iconB, true, icon) + '</div>';
   }
   /* `n` items, the first `take` crossed out. `showResult` adds the items left, after «=». */
   function takeHtml(n, take, icon, showResult) {
@@ -90,9 +96,9 @@
     return '<div class="ops-line"><div class="ops-row">' + html + '</div></div>';
   }
   /* `groups` framed boxes of `each` items: each box is one group that repeats. */
-  function groupsHtml(groups, each, icon, sumText) {
+  function groupsHtml(groups, each, icon, sumText, alt) {
     var html = '<div class="ops-group-stack">';
-    for (var g = 0; g < groups; g += 1) html += '<div class="ops-group-box">' + row(each, icon) + '</div>';
+    for (var g = 0; g < groups; g += 1) html += '<div class="ops-group-box">' + row(each, icon, { alt: alt && g % 2 === 1 }) + '</div>';
     html += '</div>';
     if (sumText) html += '<p class="ops-expr">' + sumText + '</p>';
     return html;
@@ -120,12 +126,12 @@
   }
   /* The total first, and next to it how it is divided: `groups` equal groups (sharing), or groups of `size`
      (packing). A leftover, if any, sits apart. `caption` writes the division underneath. */
-  function divideHtml(total, groups, size, icon, caption, product) {
+  function divideHtml(total, groups, size, icon, caption, product, alt) {
     var each = groups ? total / groups : size;
     var full = groups || Math.floor(total / size);
     var rem = groups ? 0 : total % size;
     var html = '<div class="ops-divide">' + row(total, icon) + sign('↓') + '<div class="ops-group-stack">';
-    for (var g = 0; g < full; g += 1) html += '<div class="ops-group-box">' + row(each, icon) + '</div>';
+    for (var g = 0; g < full; g += 1) html += '<div class="ops-group-box">' + row(each, icon, { alt: alt && g % 2 === 1 }) + '</div>';
     if (rem) html += '<div class="ops-row ops-left-row">' + items(rem, icon, {}).replace(/ops-item/g, 'ops-item ops-left') + '</div>';
     html += '</div></div>';
     if (caption) {
@@ -142,7 +148,8 @@
   function drawingHtml(spec) {
     /* A money drawing (`coin`) is drawn with the currency sign of the locale, not an emoji. */
     var icon = spec.coin ? '<span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span>' : (spec.slice ? SLICE : spec.icon);
-    if (spec.kind === 'join') return joinHtml(spec.a, spec.b, icon, true, spec.iconB);
+    if (spec.kind === 'join') return joinHtml(spec.a, spec.b, icon, true, spec.iconB, spec.alt);
+    if (spec.kind === 'swap') return swapHtml(spec.a, spec.b, icon, spec.iconB);
     if (spec.kind === 'take') return takeHtml(spec.n, spec.take, icon, spec.result);
     if (spec.kind === 'gap') return gapHtml(spec.need, spec.have, icon);
     if (spec.kind === 'groups') {
@@ -156,9 +163,9 @@
       } else if (spec.caption) {
         text = fill(t('ui.groupsOf'), { g: spec.groups, e: spec.each });
       }
-      return groupsHtml(spec.groups, spec.each, spec.icon, text);
+      return groupsHtml(spec.groups, spec.each, spec.icon, text, spec.alt);
     }
-    if (spec.kind === 'divide') return divideHtml(spec.total, spec.groups, spec.size, icon, spec.caption, spec.product);
+    if (spec.kind === 'divide') return divideHtml(spec.total, spec.groups, spec.size, icon, spec.caption, spec.product, spec.alt);
     if (spec.kind === 'pack') {
       var caption = spec.caption ? fill(t('ui.groupsOf'), { g: spec.total / spec.size, e: spec.size }) : null;
       return packHtml(spec.total, spec.size, spec.icon, caption);
