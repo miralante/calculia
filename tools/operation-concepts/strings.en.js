@@ -16,6 +16,9 @@
       prev: 'Previous',
       next: 'Next',
       count: '{i} of {n}',
+      dealOne: 'Share one',
+      dealReset: 'Start again',
+      dealResult: '{T} ÷ {g} = {e}',
       seeReal: 'See real examples →',
       startTest: 'Start practising →',
       right: '✅ Well done!',
@@ -73,14 +76,14 @@
       div: {
         name: 'Divide', symbolName: 'Divide', detail: 'Share into equal parts, or count how many groups fit.',
         intro: {
-          1: { title: 'Dividing is sharing into equal parts', text: '12 pizza slices for 3 friends: each friend gets 4.' },
-          2: { title: 'Dividing also counts how many groups fit', text: '12 balls in packs of 4: 3 packs.' },
-          3: { title: 'Some can be left over', text: '13 balls in packs of 4: 3 full packs and 1 is left over. This is division with a remainder.' },
-          4: { title: 'Dividing is the opposite of multiplying', text: 'Multiply: 3 × 4 = 12. Divide: 12 ÷ 4 = 3. If you know one, you know the other.' }
+          1: { title: 'Dividing is sharing into equal parts', text: '6 pizza slices for 2 friends: each friend gets 3.' },
+          2: { title: 'Dividing also counts how many groups fit', text: '8 balls in packs of 2: 4 packs.' },
+          3: { title: 'Some can be left over', text: '7 balls in packs of 3: 2 full packs and 1 is left over. This is division with a remainder.' },
+          4: { title: 'Dividing is the opposite of multiplying', text: 'Multiply: 4 × 2 = 8. Divide: 8 ÷ 2 = 4. If you know one, you know the other.' }
         },
         real: {
-          1: '🪙 You share 12 dollars among 4 friends: each friend gets 3 dollars.',
-          2: '📦 You have 15 books and put 5 on each shelf: you need 3 shelves.',
+          1: '🪙 You share 8 dollars among 4 friends: each friend gets 2 dollars.',
+          2: '📦 You have 6 books and put 2 on each shelf: you need 3 shelves.',
           3: '🍪 You have 7 biscuits and put them in boxes of 3: 2 boxes are full and 1 is left over.'
         }
       }
@@ -95,8 +98,8 @@
       sub2: 'You need 10 chairs and there are 6: how many are missing?',
       mul1: 'There are 4 boxes and each box has 6 pencils.',
       mul2: 'You have 5 bags with 2 marbles in each one.',
-      div1: 'You have 12 pizza slices and share them among 3 friends, all the same.',
-      div2: 'You have 15 stickers and put 5 on each sheet. How many sheets do you need?'
+      div1: 'You have 6 pizza slices and share them among 2 friends, all the same.',
+      div2: 'You have 8 stickers and put 2 on each sheet. How many sheets do you need?'
     },
 
     q: {

@@ -8,7 +8,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '🔗 Greatest common divisor',
+    title: 'GCD Greatest common divisor',
     instructionIntro: 'Read the explanation.',
     introContinue: 'Start practising →',
     intro: {

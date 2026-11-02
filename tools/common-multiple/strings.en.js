@@ -8,7 +8,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '🔁 Least common multiple',
+    title: 'LCM Least common multiple',
     instructionIntro: 'Read the explanation.',
     introContinue: 'Start practising →',
     intro: {

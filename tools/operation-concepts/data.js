@@ -55,14 +55,14 @@ var DATA = {
       ] },
     { id: 'div', symbol: '÷', icon: '➗',
       intro: [
-        { visual: { kind: 'divide', total: 12, groups: 3, slice: true, caption: true } },
-        { visual: { kind: 'divide', total: 12, size: 4, icon: '🔴', caption: true } },
-        { visual: { kind: 'divide', total: 13, size: 4, icon: '🔴', caption: true } },
-        { visual: { kind: 'divide', total: 12, size: 4, icon: '🔴', caption: true, product: true } }
+        { visual: { kind: 'deal', total: 6, groups: 2 } },
+        { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true } },
+        { visual: { kind: 'divide', total: 7, size: 3, icon: '🔴', caption: true } },
+        { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true, product: true } }
       ],
       real: [
-        { visual: { kind: 'divide', total: 12, groups: 4, coin: true, caption: true, alt: true } },
-        { visual: { kind: 'divide', total: 15, size: 5, icon: '📚', caption: true, alt: true } },
+        { visual: { kind: 'divide', total: 8, groups: 4, coin: true, caption: true, alt: true } },
+        { visual: { kind: 'divide', total: 6, size: 2, icon: '📚', caption: true, alt: true } },
         { visual: { kind: 'divide', total: 7, size: 3, icon: '🍪', caption: true, alt: true } }
       ] }
   ],

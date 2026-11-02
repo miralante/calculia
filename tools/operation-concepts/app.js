@@ -30,7 +30,12 @@
   var answered = false;
   var firstTry = true;
   var pickQueue = [];      // the «¿qué operación usarías?» stories of this round, not yet asked
-  var SLICE = '<span class="ops-slice" aria-hidden="true"></span>';   // one slice of a pizza
+  /* One slice of a pizza: a 60° wedge with its tip at the centre, crust along the outer arc, and pepperoni. */
+  var SLICE = '<svg class="ops-slice" viewBox="0 0 40 40" aria-hidden="true" focusable="false">' +
+    '<path d="M20 20 L11 4.4 A18 18 0 0 1 29 4.4 Z" fill="#f4c04a" stroke="#c98a2b" stroke-width="1.5" stroke-linejoin="round"/>' +
+    '<path d="M11 4.4 A18 18 0 0 1 29 4.4" fill="none" stroke="#b8741a" stroke-width="4" stroke-linecap="round"/>' +
+    '<circle cx="20" cy="10" r="2" fill="#d9452b"/><circle cx="19.5" cy="15" r="1.5" fill="#d9452b"/>' +
+    '</svg>';
 
   function save() { App.storage.set(TOOL_ID, progress); }
   function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
@@ -142,6 +147,26 @@
     for (var g = 0; g < groups; g += 1) html += '<div class="ops-group-box ops-empty-box"></div>';
     return html + '</div></div>';
   }
+  /* The deal drawing: a pool of pieces, empty groups, and two buttons. «Repartir uno» moves the next piece into the
+     next group, in turn, so the sharing is seen happening. The result line shows once the pool is empty. */
+  function dealInner(total, groups, result) {
+    var pieces = '';
+    for (var i = 0; i < total; i += 1) pieces += '<span class="ops-deal-piece">' + SLICE + '</span>';
+    var boxes = '';
+    for (var g = 0; g < groups; g += 1) boxes += '<div class="ops-group-box ops-empty-box ops-deal-group"></div>';
+    return '<div class="ops-deal-pool">' + pieces + '</div>' +
+      '<div class="ops-row ops-deal-groups">' + boxes + '</div>' +
+      '<p class="ops-expr ops-deal-result" hidden>' + result + '</p>' +
+      '<div class="ops-deal-actions">' +
+      '<button type="button" class="btn btn-secondary" data-deal="one">' + t('ui.dealOne') + '</button>' +
+      '<button type="button" class="btn btn-secondary" data-deal="reset">' + t('ui.dealReset') + '</button>' +
+      '</div>';
+  }
+  function dealHtml(total, groups) {
+    var result = fill(t('ui.dealResult'), { T: total, g: groups, e: total / groups });
+    return '<div class="ops-deal" data-total="' + total + '" data-groups="' + groups + '" data-result="' + result + '">' +
+      dealInner(total, groups, result) + '</div>';
+  }
   /* The total first, and next to it how it is divided: `groups` equal groups (sharing), or groups of `size`
      (packing). A leftover, if any, sits apart. `caption` writes the division underneath. */
   function divideHtml(total, groups, size, icon, caption, product, alt) {
@@ -169,6 +194,7 @@
     if (spec.kind === 'join') return joinHtml(spec.a, spec.b, icon, true, spec.iconB, spec.alt);
     if (spec.kind === 'swap') return swapHtml(spec.a, spec.b, icon, spec.iconB);
     if (spec.kind === 'swapgroups') return swapGroupsHtml(spec.a, spec.b, icon);
+    if (spec.kind === 'deal') return dealHtml(spec.total, spec.groups);
     if (spec.kind === 'take') return takeHtml(spec.n, spec.take, icon, spec.result);
     if (spec.kind === 'gap') return gapHtml(spec.need, spec.have, icon);
     if (spec.kind === 'groups') {
@@ -337,7 +363,7 @@
       };
     }
     if (type === 'share') {
-      var people = rint(2, 4), each = rint(2, 5), total = people * each;
+      var people = rint(2, 3), each = rint(2, 4), total = people * each;
       return {
         prompt: fill(q, { T: total, g: people }), visual: shareHtml(total, people), hint: hint,
         options: numericOptions(each, [each + 1, each - 1, people]),
@@ -345,7 +371,7 @@
       };
     }
     if (type === 'rest') {
-      var size = rint(3, 5), full = rint(2, 4), left = rint(1, size - 1);
+      var size = rint(2, 3), full = rint(2, 3), left = rint(1, size - 1);
       return {
         prompt: fill(q, { T: full * size + left, e: size }), visual: restHtml(full * size + left, size, '🔴'), hint: hint,
         options: numericOptions(full, [full + 1, full - 1, left]),
@@ -373,7 +399,7 @@
       };
     }
     /* relation */
-    var gl = rint(2, 4), el = rint(2, 5), Tl = gl * el;
+    var gl = rint(2, 3), el = rint(2, 4), Tl = gl * el;
     var division = Tl + ' ÷ ' + el + ' = ' + gl;
     return {
       prompt: fill(q, { T: Tl, e: el }), visual: groupsHtml(gl, el, '🔴'), hint: fill(hint, { e: el }),
@@ -491,6 +517,25 @@
     $('#introBack').addEventListener('click', renderMenu);
     $('#testBack').addEventListener('click', renderMenu);
   }
+
+  /* The deal drawing's buttons: «Repartir uno» moves one piece into the next group; «Empezar de nuevo» rebuilds it. */
+  document.addEventListener('click', function (e) {
+    var button = e.target.closest ? e.target.closest('[data-deal]') : null;
+    var box = button && button.closest('.ops-deal');
+    if (!box) return;
+    var total = parseInt(box.getAttribute('data-total'), 10);
+    var groups = parseInt(box.getAttribute('data-groups'), 10);
+    if (button.getAttribute('data-deal') === 'reset') {
+      box.innerHTML = dealInner(total, groups, box.getAttribute('data-result'));
+      return;
+    }
+    var piece = box.querySelector('.ops-deal-pool .ops-deal-piece');
+    if (!piece) return;
+    var boxes = box.querySelectorAll('.ops-deal-group');
+    var dealt = box.querySelectorAll('.ops-deal-group .ops-deal-piece').length;
+    boxes[dealt % boxes.length].appendChild(piece);
+    if (!box.querySelector('.ops-deal-pool .ops-deal-piece')) box.querySelector('.ops-deal-result').hidden = false;
+  });
 
   document.addEventListener('DOMContentLoaded', init);
 })();

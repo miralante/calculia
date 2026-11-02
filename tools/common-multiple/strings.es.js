@@ -8,7 +8,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '🔁 Mínimo común múltiplo',
+    title: 'mcm Mínimo común múltiplo',
     instructionIntro: 'Lee la explicación.',
     introContinue: 'Empezar a practicar →',
     intro: {

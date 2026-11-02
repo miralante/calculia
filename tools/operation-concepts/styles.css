@@ -68,14 +68,18 @@
 .real-text { font-size: var(--texto-grande); }
 .real-card { min-height: 180px; justify-content: center; }
 
-/* One slice of a pizza: a yellow triangle with a crust-coloured point at the top. */
-.ops-slice {
-  display: inline-block;
-  width: 34px;
-  height: 34px;
-  background: radial-gradient(circle at 50% 30%, #d9452b 0 4px, transparent 5px), #f4c04a;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-}
+/* One slice of a pizza: the inline SVG from app.js, at a size that reads on a phone. */
+.ops-slice { display: inline-block; width: 40px; height: 40px; }
+
+/* The deal drawing: a pool of pieces, the groups to fill, and the buttons under them. */
+.ops-deal { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-deal-pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; min-height: 44px; }
+.ops-deal-groups { justify-content: center; gap: 12px; }
+.ops-deal-group { min-width: 96px; min-height: 64px; flex-wrap: wrap; align-content: flex-start; gap: 4px; }
+.ops-deal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.ops-deal-piece { display: inline-flex; }
+.ops-deal-result { margin-top: 4px; }
+.ops-deal-result[hidden] { display: none; }
 
 /* A coin for money drawings: the currency sign of the locale (€ or $) on a round gold coin. */
 .ops-coin {

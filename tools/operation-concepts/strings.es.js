@@ -17,6 +17,9 @@
       prev: 'Anterior',
       next: 'Siguiente',
       count: '{i} de {n}',
+      dealOne: 'Repartir uno',
+      dealReset: 'Empezar de nuevo',
+      dealResult: '{T} ÷ {g} = {e}',
       seeReal: 'Ver ejemplos reales →',
       startTest: 'Empezar a practicar →',
       right: '✅ ¡Muy bien!',
@@ -76,14 +79,14 @@
       div: {
         name: 'Dividir', symbolName: 'Dividir', detail: 'Repartir en partes iguales, o contar cuántos grupos caben.',
         intro: {
-          1: { title: 'Dividir es repartir en partes iguales', text: '12 trozos de pizza entre 3 amigos: a cada uno le tocan 4.' },
-          2: { title: 'Dividir también es contar cuántos grupos caben', text: '12 bolas en paquetes de 4: salen 3 paquetes.' },
-          3: { title: 'Puede sobrar', text: '13 bolas en paquetes de 4: salen 3 paquetes llenos y sobra 1. Es la división con resto.' },
-          4: { title: 'Dividir es lo contrario de multiplicar', text: 'Multiplicas: 3 × 4 = 12. Divides: 12 ÷ 4 = 3. Si sabes una, sabes la otra.' }
+          1: { title: 'Dividir es repartir en partes iguales', text: '6 trozos de pizza entre 2 amigos: a cada uno le tocan 3.' },
+          2: { title: 'Dividir también es contar cuántos grupos caben', text: '8 bolas en paquetes de 2: salen 4 paquetes.' },
+          3: { title: 'Puede sobrar', text: '7 bolas en paquetes de 3: salen 2 paquetes llenos y sobra 1. Es la división con resto.' },
+          4: { title: 'Dividir es lo contrario de multiplicar', text: 'Multiplicas: 4 × 2 = 8. Divides: 8 ÷ 2 = 4. Si sabes una, sabes la otra.' }
         },
         real: {
-          1: '🪙 Repartes 12 euros entre 4 amigos: a cada amigo le tocan 3 euros.',
-          2: '📦 Tienes 15 libros y pones 5 en cada estante: necesitas 3 estantes.',
+          1: '🪙 Repartes 8 euros entre 4 amigos: a cada amigo le tocan 2 euros.',
+          2: '📦 Tienes 6 libros y pones 2 en cada estante: necesitas 3 estantes.',
           3: '🍪 Tienes 7 galletas y las metes en cajas de 3: llenas 2 cajas y sobra 1.'
         }
       }
@@ -99,8 +102,8 @@
       sub2: 'Necesitas 10 sillas y hay 6: ¿cuántas faltan?',
       mul1: 'Hay 4 cajas y en cada caja hay 6 lápices.',
       mul2: 'Tienes 5 bolsas con 2 canicas en cada una.',
-      div1: 'Tienes 12 trozos de pizza y los repartes entre 3 amigos, todos igual.',
-      div2: 'Tienes 15 pegatinas y pones 5 en cada hoja. ¿Cuántas hojas necesitas?'
+      div1: 'Tienes 6 trozos de pizza y los repartes entre 2 amigos, todos igual.',
+      div2: 'Tienes 8 pegatinas y pones 2 en cada hoja. ¿Cuántas hojas necesitas?'
     },
 
     /* Preguntas de la prueba: enunciado, pista (sin dar la respuesta) y

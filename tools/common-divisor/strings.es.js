@@ -8,7 +8,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '🔗 Máximo común divisor',
+    title: 'mcd Máximo común divisor',
     instructionIntro: 'Lee la explicación.',
     introContinue: 'Empezar a practicar →',
     intro: {

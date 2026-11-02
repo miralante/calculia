@@ -1,0 +1,40 @@
+/* ============================================================
+   Calculia — Word problems: the card, the statement and the answers.
+   Shared by the four «Resuelve problemas» activities.
+   ============================================================ */
+
+.problem-card {
+  width: min(100%, 560px);
+  margin: 0 auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.problem-icon {
+  font-size: 64px;
+  line-height: 1;
+}
+
+.problem-statement {
+  margin: 0;
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.problem-options {
+  display: grid;
+  gap: 12px;
+  width: min(100%, 320px);
+  margin: 0 auto;
+}
+
+.problem-option {
+  min-height: 56px;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.problem-option.correct { border-color: var(--color-acierto); }
+.problem-option.incorrect { opacity: 0.5; text-decoration: line-through; }
