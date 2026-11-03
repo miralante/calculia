@@ -1,9 +1,10 @@
 /* ============================================================
    Calculia — Divisibilidad
    Two stages, the flow of Operaciones: 1. explanation (slides with a
-   drawing: when a number divides exactly and when it does not, then the
-   rules for 2, 5, 10 and 3), 2. test (one question at a time). There is
-   no real-life stage: the test is the practice.
+   drawing: when a number divides exactly and when it does not, the rules
+   for 2, 5, 10 and 3, then the whole part and the decimal part of a
+   division that does not come out exact), 2. test (one question at a
+   time). There is no real-life stage: the test is the practice.
    Texts are in strings.<locale>.js, the slides and the test settings in data.js.
    ============================================================ */
 (function () {
@@ -42,6 +43,31 @@
   function digitSum(n) {
     return String(n).split('').reduce(function (sum, digit) { return sum + Number(digit); }, 0);
   }
+  /* The digits after the decimal separator of r ÷ d, three at most: 1 ÷ 2 gives 5,
+     1 ÷ 3 gives 333… (the dots mean the digits go on). r is never 0 here. */
+  function digitsOf(r, d) {
+    var out = '';
+    var rest = r;
+    for (var i = 0; i < 3 && rest; i += 1) {
+      rest *= 10;
+      out += Math.floor(rest / d);
+      rest %= d;
+    }
+    return rest ? out + '…' : out;
+  }
+  /* What a calculator shows for n ÷ d, with the locale's separator: 7 ÷ 3 gives 2,333… */
+  function valueText(n, d) {
+    var r = n % d;
+    return r ? Math.floor(n / d) + t('ui.decimalSep') + digitsOf(r, d) : String(n / d);
+  }
+  /* The decimal part on its own: what is left over, as a part of one pack. 1 ÷ 3 gives 0,333… */
+  function decimalPart(r, d) { return '0' + t('ui.decimalSep') + digitsOf(r, d); }
+  /* A number that does not divide exactly by d, with at least two full packs. */
+  function notExact(d) {
+    var n;
+    do { n = rint(2 * d + 1, 49); } while (n % d === 0);
+    return n;
+  }
 
   /* ---- Drawing ----------------------------------------------------------
      `total` items shared in rows of `size`: each full row is a framed group,
@@ -65,13 +91,30 @@
     html += '</div>';
     return html + '<p class="ops-expr">' + divisionText(total, size) + '</p>';
   }
+  /* The same packs as packHtml, but the leftover fills only part of a pack: the empty
+     places are dashed, so the decimal part reads as a part of one pack. The caption is
+     the calculator's answer, with its comma. */
+  function missing(count) {
+    var html = '';
+    for (var i = 0; i < count; i += 1) html += '<span class="ops-missing" aria-hidden="true"></span>';
+    return html;
+  }
+  function decimalHtml(total, size) {
+    var full = Math.floor(total / size);
+    var rest = total % size;
+    var html = '<div class="ops-group-stack">';
+    for (var g = 0; g < full; g += 1) html += '<div class="ops-group-box"><div class="ops-row">' + items(size, 'ops-item') + '</div></div>';
+    if (rest) html += '<div class="ops-group-box ops-part-box"><div class="ops-row">' + items(rest, 'ops-item') + missing(size - rest) + '</div></div>';
+    html += '</div>';
+    return html + '<p class="ops-expr">' + fill(t('ui.calc'), { T: total, d: size, v: valueText(total, size) }) + '</p>';
+  }
 
   /* ---- Menu-less explanation ----------------------------------------------- */
   function paintIntro() {
     var n = introIndex + 1;
     var slide = DATA.intro[introIndex].visual;
     $('#introTitle').textContent = t('intro.' + n + '.title');
-    $('#introVisual').innerHTML = packHtml(slide.total, slide.size);
+    $('#introVisual').innerHTML = slide.calc ? decimalHtml(slide.total, slide.size) : packHtml(slide.total, slide.size);
     $('#introVisual').setAttribute('aria-label', t('ui.visualAria'));
     $('#introText').textContent = t('intro.' + n + '.text');
     var bar = $('#introProgress');
@@ -98,16 +141,21 @@
     show('#screenIntro');
   }
 
+  /* Answers as text: the right one and up to two others, all different, in a shuffled order. */
+  function textOptions(correct, wrongs) {
+    var values = [correct];
+    wrongs.forEach(function (v) {
+      if (values.length < 3 && values.indexOf(v) === -1) values.push(v);
+    });
+    return App.utils.shuffle(values).map(function (v) {
+      return { html: v, aria: v, correct: v === correct };
+    });
+  }
+
   /* Numbers as answers: the right one and up to two others, all different and not
      below zero, in a shuffled order. */
   function numericOptions(correct, wrongs) {
-    var values = [correct];
-    wrongs.forEach(function (v) {
-      if (values.length < 3 && v >= 0 && values.indexOf(v) === -1) values.push(v);
-    });
-    return App.utils.shuffle(values).map(function (v) {
-      return { html: String(v), aria: String(v), correct: v === correct };
-    });
+    return textOptions(String(correct), wrongs.filter(function (v) { return v >= 0; }).map(String));
   }
 
   /* «Sí» and «No», in a shuffled order. */
@@ -173,10 +221,42 @@
     };
   }
 
+  /* The whole part: how many full packs come out when the calculator shows a decimal.
+     The wrong answers are the usual slips: one pack more, or the number of items. */
+  function makeInteger() {
+    var d = pick(DATA.divisors);
+    var n = notExact(d);
+    var q = Math.floor(n / d);
+    var values = { n: n, d: d, q: q, v: valueText(n, d) };
+    return {
+      prompt: fill(t('q.integer.prompt'), values),
+      hint: t('q.integer.hint'),
+      options: numericOptions(q, [q + 1, n]),
+      explanation: fill(t('q.integer.explain'), values)
+    };
+  }
+
+  /* The decimal part: what is left over, as a part of one pack. The wrong answers are the
+     leftover count (one ball, not one part of a pack) and the whole part. */
+  function makeDecimal() {
+    var d = pick(DATA.divisors);
+    var n = notExact(d);
+    var r = n % d;
+    var values = { n: n, d: d, q: Math.floor(n / d), r: r, v: valueText(n, d), dec: decimalPart(r, d) };
+    return {
+      prompt: fill(t('q.decimal.prompt'), values),
+      hint: t('q.decimal.hint'),
+      options: textOptions(values.dec, [String(r), String(values.q)]),
+      explanation: fill(t('q.decimal.explain'), values)
+    };
+  }
+
   function makeQuestion(type) {
     if (type === 'pick') return makePick();
     if (type === 'yesno') return makeYesNo();
     if (type === 'sum') return makeSum();
+    if (type === 'integer') return makeInteger();
+    if (type === 'decimal') return makeDecimal();
     return makeRest();
   }
 

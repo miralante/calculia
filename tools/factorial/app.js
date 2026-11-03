@@ -1,10 +1,12 @@
 /* ============================================================
-   Calculia — Factoriales
-   One activity, three parts: 1. explanation (slides with a drawing),
-   2. real life (short everyday examples), 3. test (one question at a time).
+   Calculia — Números factoriales
+   Socratic anatomy (SPEC §3.6 and §3.8): 1. what it is for and the rule
+   (explanation slides with a drawing), 2. real life, 3. practice where
+   the first miss shows a hint, not the answer, 4. a closing with the
+   round summary, what was practised and a transfer sentence.
+   The rule can be reopened during the round without losing the question.
    n! is the product 1 × 2 × … × n. It comes before divisibility because
    n! is divided exactly by every number from 1 to n: the last slide says so.
-   The numbers are small on purpose: this activity is about what «!» means.
    Texts are in strings.<locale>.js, the structure in data.js.
    ============================================================ */
 (function () {
@@ -25,8 +27,9 @@
   var qIndex = 0;
   var roundRight = 0;
   var question = null;
-  var answered = false;
-  var firstTry = true;
+  var resolved = false;    // the current question is answered right
+  var attempts = 0;        // wrong tries on the current question
+  var reviewing = false;   // the rule was opened from the test: «Volver a la práctica» goes back to the same question
 
   function save() { App.storage.set(TOOL_ID, progress); }
   function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
@@ -103,7 +106,7 @@
     return '';
   }
 
-  /* ---- 1. Explanation: slides with a drawing ------------------------------- */
+  /* ---- 1. What it is for, and the rule: slides with a drawing ------------ */
   function paintIntro() {
     var slide = DATA.intro[introIndex];
     $('#introTitle').textContent = t('intro.' + (introIndex + 1) + '.title');
@@ -115,6 +118,14 @@
     bar.setAttribute('aria-valuemax', String(DATA.intro.length));
     bar.setAttribute('aria-valuenow', String(introIndex + 1));
     $('#introProgressFill').style.width = ((introIndex + 1) / DATA.intro.length * 100) + '%';
+  }
+
+  /* The button under the slides: from the start it leads to the real-life examples. Opened from the test
+     it goes back to the same question. Only the second one is the start of a test, so only it is primary. */
+  function paintIntroContinue() {
+    var button = $('#introContinue');
+    button.textContent = t(reviewing ? 'ui.backToPractice' : 'ui.seeReal');
+    button.className = reviewing ? 'btn' : 'btn btn-secondary';
   }
 
   /* ---- 2. Real life: short examples ---------------------------------------- */
@@ -129,13 +140,14 @@
     $('#realProgressFill').style.width = ((realIndex + 1) / DATA.real.length * 100) + '%';
   }
 
-  /* ---- 3. Test -------------------------------------------------------------- */
+  /* ---- 3. Practice ------------------------------------------------------------ */
   function startRound() {
     round = [];
     /* Each question draws its type at random, so a round does not repeat the same mix of problems. */
     for (var i = 0; i < DATA.perRound; i += 1) round.push(makeQuestion(DATA.types[rint(0, DATA.types.length - 1)]));
     qIndex = 0;
     roundRight = 0;
+    reviewing = false;
     show('#screenGame');
     renderQuestion();
   }
@@ -206,16 +218,20 @@
     };
   }
 
+  function optionButtons() { return App.utils.$$('#testOptions .option-btn'); }
+
   function renderQuestion() {
     question = round[qIndex];
-    answered = false;
-    firstTry = true;
+    resolved = false;
+    attempts = 0;
     $('#progressFill').style.width = ((qIndex / round.length) * 100) + '%';
     $('#progressText').textContent = (qIndex + 1) + ' / ' + round.length;
     $('#testPrompt').textContent = question.prompt;
     $('#testVisual').innerHTML = question.visual;
     $('#feedback').textContent = '';
     $('#feedback').className = 'feedback';
+    $('#explanation').textContent = '';
+    $('#explanationWrap').classList.add('hidden');
     var box = $('#testOptions');
     box.innerHTML = '';
     question.options.forEach(function (option) {
@@ -230,30 +246,38 @@
     $('#btnNext').classList.add('hidden');
   }
 
+  /* Socratic order (SPEC §3.8): the first miss shows a hint that does not give the answer; the second miss shows
+     the explanation; a right answer shows the explanation at once. A miss never costs a star. */
   function answer(option, button) {
-    if (answered) return;
+    if (resolved) return;
     var feedback = $('#feedback');
+    var explanation = $('#explanation');
+    var wrap = $('#explanationWrap');
     if (option.correct) {
-      answered = true;
+      resolved = true;
       button.classList.add('correct');
-      feedback.textContent = t('ui.right') + ' ' + question.explanation;
-      feedback.className = 'feedback success';
-      if (firstTry) {
-        roundRight += 1;
-        progress.stars += 1;
-        save();
-        paintStars();
-      }
-      $('#testOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+      optionButtons().forEach(function (b) { b.disabled = true; });
+      App.feedback.success(feedback);
+      progress.stars += 1;
+      if (attempts === 0) roundRight += 1;
+      save();
+      paintStars();
+      explanation.textContent = question.explanation;
+      wrap.classList.remove('hidden');
       $('#btnNext').classList.remove('hidden');
+      $('#btnNext').focus();
       return;
     }
-    /* A wrong answer: the hint, and the option stays off. Nothing is punished. */
-    firstTry = false;
-    button.classList.add('incorrect');
+    attempts += 1;
+    button.classList.add('encourage');
     button.disabled = true;
-    feedback.textContent = question.hint;
-    feedback.className = 'feedback error';
+    App.feedback.encourage(feedback);
+    explanation.textContent = attempts === 1
+      ? t('ui.hintPrefix') + question.hint
+      : t('ui.wrongPrefix') + question.explanation;
+    wrap.classList.remove('hidden');
+    /* Locks the other options until «Entendido», so the hint is read before the next try. */
+    App.feedback.lockUntilAck(optionButtons(), wrap);
   }
 
   function nextQuestion() {
@@ -268,6 +292,16 @@
       n: roundRight, total: round.length, stars: progress.stars
     });
     show('#screenEnd');
+    App.feedback.celebrate(t('core.roundComplete'));
+  }
+
+  /* The rule opened from the test: the same slides, and the test is kept as it is. */
+  function openRule() {
+    reviewing = true;
+    introIndex = 0;
+    paintIntro();
+    paintIntroContinue();
+    show('#screenIntro');
   }
 
   /* ---- Wiring ----------------------------------------------------------- */
@@ -276,14 +310,26 @@
     paintStars();
     introIndex = 0;
     paintIntro();
+    paintIntroContinue();
     show('#screenIntro');
     /* Slides wrap around: the last one leads back to the first, and the first back to the last. */
     $('#introPrev').addEventListener('click', function () { introIndex = (introIndex + DATA.intro.length - 1) % DATA.intro.length; paintIntro(); });
     $('#introNext').addEventListener('click', function () { introIndex = (introIndex + 1) % DATA.intro.length; paintIntro(); });
-    $('#introContinue').addEventListener('click', function () { realIndex = 0; paintReal(); show('#screenReal'); });
+    $('#introContinue').addEventListener('click', function () {
+      if (reviewing) {
+        reviewing = false;
+        paintIntroContinue();
+        show('#screenGame');
+        return;
+      }
+      realIndex = 0;
+      paintReal();
+      show('#screenReal');
+    });
     $('#realPrev').addEventListener('click', function () { realIndex = (realIndex + DATA.real.length - 1) % DATA.real.length; paintReal(); });
     $('#realNext').addEventListener('click', function () { realIndex = (realIndex + 1) % DATA.real.length; paintReal(); });
     $('#realContinue').addEventListener('click', startRound);
+    $('#reviewRule').addEventListener('click', openRule);
     $('#btnNext').addEventListener('click', nextQuestion);
     $('#endBackToStart').addEventListener('click', function () { location.href = '../../'; });
   }

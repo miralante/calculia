@@ -23,7 +23,9 @@
       right: '✅ ¡Muy bien!',
       review: '← Repasar la explicación',
       startTest: 'Empezar a practicar →',
-      roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.'
+      roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.',
+      calc: '{T} ÷ {d} = {v}',
+      decimalSep: ','
     },
 
     /* La explicación: una idea por diapositiva. El dibujo está en data.js. */
@@ -34,7 +36,11 @@
       4: { title: 'Divisible entre 5: termina en 0 o en 5', text: '15 termina en 5: se divide exacto entre 5. Si termina en otra cifra, no.' },
       5: { title: 'Divisible entre 10: termina en 0', text: '30 termina en 0: se divide exacto entre 10. Si termina en otra cifra, no.' },
       6: { title: 'Divisible entre 3: suma las cifras', text: 'Suma las cifras de 12: 1 + 2 = 3. Como 3 se divide entre 3, 12 también.' },
-      7: { title: 'Si la suma no se divide entre 3, tampoco', text: 'Suma las cifras de 14: 1 + 4 = 5. Como 5 no se divide entre 3, 14 no es divisible entre 3.' }
+      7: { title: 'Si la suma no se divide entre 3, tampoco', text: 'Suma las cifras de 14: 1 + 4 = 5. Como 5 no se divide entre 3, 14 no es divisible entre 3.' },
+      8: { title: 'La parte entera: los paquetes llenos', text: '7 bolas en paquetes de 3: se llenan 2 paquetes. Esos 2 son la parte entera.' },
+      9: { title: 'Lo que sobra no llena un paquete', text: '13 bolas en paquetes de 5: se llenan 2 paquetes. Sobran 3 bolas, y 3 no llenan un paquete.' },
+      10: { title: 'La calculadora: lo de antes de la coma', text: 'La calculadora dice 2,333… Lo que está antes de la coma es la parte entera: 2 paquetes llenos.' },
+      11: { title: 'Después de la coma: la parte decimal', text: '13 ÷ 5 = 2,6. El 2 son paquetes llenos. El 0,6 es lo que sobra: 3 de 5 partes de un paquete.' }
     },
 
     /* La prueba: enunciado, pista (sin dar la respuesta) y explicación al acertar. */
@@ -61,6 +67,16 @@
         hint: '🤔 Busca el múltiplo de {d} que está antes de {n}, sin pasarte.',
         explain: '{n} ÷ {d} = {q}, y sobra {r}.',
         none: '{n} ÷ {d} = {q}: no sobra nada.'
+      },
+      integer: {
+        prompt: 'Metes {n} bolas en paquetes de {d}. La calculadora dice {v}. ¿Cuántos paquetes llenos salen?',
+        hint: '🤔 Mira el número que está antes de la coma. Lo que no llena un paquete no cuenta.',
+        explain: 'Antes de la coma está {q}: salen {q} paquetes llenos. Lo que va después de la coma es lo que sobra.'
+      },
+      decimal: {
+        prompt: 'Metes {n} bolas en paquetes de {d}. La calculadora dice {v}. ¿Cuál es la parte decimal?',
+        hint: '🤔 La parte decimal va después de la coma. ¿Qué parte de un paquete sobra?',
+        explain: 'La parte decimal es {dec}. Es {r} de {d} partes de un paquete.'
       }
     }
   }, 'es');

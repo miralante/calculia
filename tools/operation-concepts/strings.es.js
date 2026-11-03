@@ -20,6 +20,7 @@
       dealOne: 'Repartir uno',
       dealReset: 'Empezar de nuevo',
       dealResult: '{T} ÷ {g} = {e}',
+      friend: 'Amigo {n}',
       seeReal: 'Ver ejemplos reales →',
       startTest: 'Empezar a practicar →',
       right: '✅ ¡Muy bien!',
@@ -65,7 +66,7 @@
       mul: {
         name: 'Multiplicar', symbolName: 'Multiplicar', detail: 'Repetir el mismo grupo muchas veces.',
         intro: {
-          1: { title: 'Multiplicar es repetir un grupo', text: 'Hay 3 paquetes y en cada paquete hay 4 pilas. Son 4 + 4 + 4 = 12. Multiplicando, 3 × 4 = 12.' },
+          1: { title: 'Multiplicar es repetir un grupo', text: 'Hay 3 paquetes y en cada paquete hay 4 pilas. Son 4 + 4 + 4 = 12. Multiplicando, 3 veces 4 pilas: 3 × 4 = 12.' },
           2: { title: 'Es sumar lo mismo varias veces', text: '3 × 4 se lee «3 veces 4»: el 4 se repite 3 veces.' },
           3: { title: 'Cambiar el orden de los grupos', text: '4 grupos de 3 también son 12: 3 + 3 + 3 + 3 = 12.' },
           4: { title: 'El orden no cambia el total', text: '3 × 4 = 4 × 3. El total es 12 en los dos casos.' }
@@ -98,12 +99,24 @@
       hint: '🤔 Piensa qué pasa: ¿se juntan, se quitan, se repiten o se reparten?',
       add1: 'En el autobús hay 12 personas y suben 3 más.',
       add2: 'Tienes 2 euros y te dan 5.',
+      add3: 'En la tienda hay 9 personas y entran 6 más.',
+      add4: 'Tienes 6 cromos y tu amigo te da 7.',
+      add5: 'Ayer leíste 8 páginas y hoy leíste 5.',
       sub1: 'Tenías 9 caramelos y te comes 4.',
       sub2: 'Necesitas 10 sillas y hay 6: ¿cuántas faltan?',
+      sub3: 'Tenías 12 euros y te gastas 5 euros.',
+      sub4: 'Había 15 pájaros y se van 6.',
+      sub5: 'Tienes 11 lápices y prestas 4 a un amigo.',
       mul1: 'Hay 4 cajas y en cada caja hay 6 lápices.',
       mul2: 'Tienes 5 bolsas con 2 canicas en cada una.',
+      mul3: 'Hay 3 filas de 5 sillas. ¿Cuántas sillas hay?',
+      mul4: 'Cada persona tiene 4 canicas. Hay 6 personas.',
+      mul5: 'Una pizza tiene 8 trozos y compras 2 pizzas.',
       div1: 'Tienes 6 trozos de pizza y los repartes entre 2 amigos, todos igual.',
-      div2: 'Tienes 8 pegatinas y pones 2 en cada hoja. ¿Cuántas hojas necesitas?'
+      div2: 'Tienes 8 pegatinas y pones 2 en cada hoja. ¿Cuántas hojas necesitas?',
+      div3: 'Tienes 12 galletas y las repartes entre 4 amigos, todas igual.',
+      div4: 'Tienes 15 caramelos y los metes en bolsas de 3, todas igual.',
+      div5: 'Tienes 10 fichas y pones 5 en cada caja. ¿Cuántas cajas usas?'
     },
 
     /* Preguntas de la prueba: enunciado, pista (sin dar la respuesta) y
@@ -115,9 +128,9 @@
         explain: 'Juntamos {a} y {b}: son {T} en total.'
       },
       more: {
-        prompt: 'Tienes {a} manzanas rojas y te añaden {b} verdes. ¿Cuántas hay ahora?',
-        hint: '🤔 Empieza por las rojas que ya tenías y cuenta las verdes que se añaden.',
-        explain: 'Añadimos {b} verdes a las {a} rojas: son {T} en total.'
+        prompt: 'Hay {a} y se añaden {b} más. ¿Cuántos hay ahora?',
+        hint: '🤔 Empieza por lo que ya había y cuenta lo que se añade.',
+        explain: 'Añadimos {b} a los {a} que había: son {T} en total.'
       },
       swap: {
         prompt: '¿Qué suma da lo mismo que {a} + {b}?',
@@ -130,12 +143,12 @@
         explain: '{g} × {e} es lo mismo que {e} × {g}: el orden no cambia el total.'
       },
       take: {
-        prompt: 'Tenías {n} galletas y te comes {t}. ¿Cuántas te quedan?',
+        prompt: 'Tenías {n} y quitas {t}. ¿Cuántos quedan?',
         hint: '🤔 Tacha lo que se va y cuenta lo que queda sin tachar.',
         explain: 'Quitamos {t} de {n}: quedan {r}.'
       },
       gap: {
-        prompt: 'Necesitas {n} estrellas y tienes {h}. ¿Cuántas te faltan?',
+        prompt: 'Necesitas {n} y tienes {h}. ¿Cuántos faltan?',
         hint: '🤔 Cuenta cuántos huecos quedan vacíos.',
         explain: 'Faltan {m}, porque {n} − {h} = {m}.'
       },
@@ -150,14 +163,14 @@
         explain: '{g} × {e} es lo mismo que sumar {e} cada vez, {g} veces.'
       },
       share: {
-        prompt: 'Tienes {T} trozos de pizza y los repartes entre {g} amigos, todos igual. ¿Cuántos le tocan a cada uno?',
-        hint: '🤔 Reparte los trozos de uno en uno, en cada grupo de amigos.',
+        prompt: 'Tienes {T} y los repartes entre {g} amigos, todos igual. ¿Cuántos le tocan a cada uno?',
+        hint: '🤔 Reparte uno a uno, en cada grupo de amigos.',
         explain: 'Cada uno recibe {each}, porque {T} ÷ {g} = {each}.'
       },
       rest: {
-        prompt: 'Tienes {T} bolas y las metes en paquetes de {e}. ¿Cuántos paquetes llenos salen?',
-        hint: '🤔 Cuenta los paquetes que van completos. Lo que no llena un paquete, sobra.',
-        explain: 'Salen {q} paquetes llenos y sobran {r}.'
+        prompt: 'Tienes {T} y los metes en grupos de {e}. ¿Cuántos grupos llenos salen?',
+        hint: '🤔 Cuenta los grupos que van completos. Lo que no llena un grupo, sobra.',
+        explain: 'Salen {q} grupos llenos y sobran {r}.'
       },
       relation: {
         prompt: 'Repartes {T} en grupos de {e}. ¿Qué división sale?',

@@ -60,6 +60,12 @@
 .ops-sign { font-size: var(--texto-grande); font-weight: 800; color: var(--color-texto-suave); }
 .ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
 .ops-story { margin: 0; font-size: var(--texto-grande); text-align: center; line-height: 1.4; }
+/* An answer drawn as groups: the drawing above its «g × e» name. Small icons, so three answers fit one row or wrap. */
+.ops-option { display: flex; flex-direction: column; align-items: center; gap: 4px; max-width: 100%; }
+.ops-mini { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 100%; }
+.ops-mini-group { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 1px; padding: 2px 4px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
+.ops-mini .ops-item { min-width: 18px; min-height: 18px; font-size: 16px; }
+.ops-option-name { font-size: var(--texto-pequeno); font-weight: 700; font-variant-numeric: tabular-nums; }
 
 /* Text blocks */
 .concept-title, .concept-count, .concept-text, .real-text { text-align: center; margin: 0; }
@@ -73,11 +79,23 @@
 
 /* The deal drawing: a pool of pieces, the groups to fill, and the buttons under them. */
 .ops-deal { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.ops-deal-pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; min-height: 44px; }
+.ops-deal-pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; min-height: 80px; }
 .ops-deal-groups { justify-content: center; gap: 12px; }
-.ops-deal-group { min-width: 96px; min-height: 64px; flex-wrap: wrap; align-content: flex-start; gap: 4px; }
+/* Each friend: a name above the box that receives the slices. */
+.ops-deal-slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.ops-deal-label { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto); }
+.ops-deal-group { min-width: 120px; min-height: 80px; flex-wrap: wrap; align-content: flex-start; gap: 4px; }
 .ops-deal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-.ops-deal-piece { display: inline-flex; }
+/* A slice in the deal is drawn large, with its number on the lower edge. */
+.ops-deal-piece { display: inline-flex; position: relative; margin-bottom: 8px; }
+.ops-deal-piece .ops-slice { width: 64px; height: 64px; }
+
+/* A numbered drawing: room under each row for the number on its lower edge. */
+.ops-numbered .ops-row { padding-bottom: 10px; }
+/* The test's share drawing: the slices large and numbered, the friends named above their empty boxes. */
+.ops-share .ops-row { gap: 10px; padding-bottom: 10px; }
+.ops-share .ops-item { min-width: 64px; min-height: 64px; }
+.ops-share .ops-slice { width: 64px; height: 64px; }
 .ops-deal-result { margin-top: 4px; }
 .ops-deal-result[hidden] { display: none; }
 

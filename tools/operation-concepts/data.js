@@ -56,9 +56,9 @@ var DATA = {
     { id: 'div', symbol: '÷', icon: '➗',
       intro: [
         { visual: { kind: 'deal', total: 6, groups: 2 } },
-        { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true } },
-        { visual: { kind: 'divide', total: 7, size: 3, icon: '🔴', caption: true } },
-        { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true, product: true } }
+        { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true, numbered: true } },
+        { visual: { kind: 'divide', total: 7, size: 3, icon: '🔴', caption: true, numbered: true } },
+        { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true, product: true, numbered: true } }
       ],
       real: [
         { visual: { kind: 'divide', total: 8, groups: 4, coin: true, caption: true, alt: true } },
@@ -69,10 +69,14 @@ var DATA = {
 
   /* Pregunta «¿qué operación usarías?». `op` es la respuesta. */
   picks: [
-    { id: 'add1', op: 'add' }, { id: 'add2', op: 'add' },
-    { id: 'sub1', op: 'sub' }, { id: 'sub2', op: 'sub' },
-    { id: 'mul1', op: 'mul' }, { id: 'mul2', op: 'mul' },
-    { id: 'div1', op: 'div' }, { id: 'div2', op: 'div' }
+    { id: 'add1', op: 'add' }, { id: 'add2', op: 'add' }, { id: 'add3', op: 'add' },
+    { id: 'add4', op: 'add' }, { id: 'add5', op: 'add' },
+    { id: 'sub1', op: 'sub' }, { id: 'sub2', op: 'sub' }, { id: 'sub3', op: 'sub' },
+    { id: 'sub4', op: 'sub' }, { id: 'sub5', op: 'sub' },
+    { id: 'mul1', op: 'mul' }, { id: 'mul2', op: 'mul' }, { id: 'mul3', op: 'mul' },
+    { id: 'mul4', op: 'mul' }, { id: 'mul5', op: 'mul' },
+    { id: 'div1', op: 'div' }, { id: 'div2', op: 'div' }, { id: 'div3', op: 'div' },
+    { id: 'div4', op: 'div' }, { id: 'div5', op: 'div' }
   ],
 
   /* Tipos de pregunta de la prueba de cada operación. Cada ronda toma

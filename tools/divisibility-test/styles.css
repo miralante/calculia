@@ -56,6 +56,9 @@
 /* What is left over after the full groups (division with remainder). */
 .ops-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; border-radius: 50%; }
 .ops-left-row { padding-top: 4px; border-top: 2px dotted var(--color-texto-suave); }
+/* A pack only partly filled (the decimal part): a dashed frame, and a dashed circle for each empty place. */
+.ops-part-box { border-style: dashed; }
+.ops-missing { display: inline-block; width: 32px; height: 32px; margin: 5px; border: 2px dashed var(--color-texto-suave); border-radius: 50%; }
 .ops-sign { font-size: var(--texto-grande); font-weight: 800; color: var(--color-texto-suave); }
 .ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
 .ops-story { margin: 0; font-size: var(--texto-grande); text-align: center; line-height: 1.4; }

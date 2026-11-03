@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Factoriales: textos (ES)
+   Calculia — Números factoriales: textos (ES)
    Archivo específico del idioma. Se carga desde index.html.
    Frases cortas, una idea por frase (UNE 153101). Los números que
    cambian en las preguntas van entre llaves: {n}, {T}, {chain}…
@@ -8,9 +8,13 @@
   'use strict';
 
   App.i18n.register({
-    title: '❗ Factoriales',
-    instruction: 'Qué significa el signo «!» y para qué sirve.',
+    title: '❗ Números factoriales',
+    instruction: 'Aprende qué significa el signo «!».',
     btnMenu: 'Volver al inicio',
+
+    /* Para qué sirve fuera de la app (SPEC §3.6, clave contexto). */
+    contextTitle: 'Para qué sirve',
+    context: 'Los factoriales cuentan de cuántas formas se pueden ordenar las cosas.',
 
     ui: {
       prev: 'Anterior',
@@ -18,11 +22,14 @@
       count: '{i} de {n}',
       seeReal: 'Ver ejemplos reales →',
       startTest: 'Empezar a practicar →',
+      reviewRule: 'Repasar la regla',
+      backToPractice: 'Volver a la práctica →',
       realLabel: 'Ejemplos de la vida real',
-      right: '✅ ¡Muy bien!',
       roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Tienes {stars} ⭐.',
       visualAria: 'Dibujo que explica el factorial con números y cajas.',
-      noRest: 'Todas las divisiones salen exactas: no sobra nada.'
+      noRest: 'Todas las divisiones salen exactas: no sobra nada.',
+      hintPrefix: '💡 ',
+      wrongPrefix: 'Mira cómo se resuelve. '
     },
 
     /* Explicación en slides con dibujo. */
@@ -39,7 +46,7 @@
       3: '5 amigos se sientan en un banco. Hay 120 formas distintas de sentarse.'
     },
 
-    /* La prueba: una pregunta cada vez. */
+    /* La práctica: pregunta, pista (primer fallo), explicación. */
     q: {
       value: {
         prompt: '¿Cuánto vale {n}!?',
@@ -61,6 +68,10 @@
         hint: 'Divide {T} entre cada número. El que no deja nada sobrando es la respuesta.',
         explain: '{T} ÷ {k} = {g}, sin nada sobrando.'
       }
-    }
+    },
+
+    /* Cierre: resumen, lo practicado y la frase de transferencia (SPEC §3.8). */
+    recap: 'Recuerda: 4! = 4 × 3 × 2 × 1 = 24, y 0! = 1.',
+    transfer: 'Los factoriales sirven para contar las formas de ordenar cosas: en una fila, en un estante o en un banco.'
   }, 'es');
 })();
