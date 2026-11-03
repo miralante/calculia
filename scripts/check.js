@@ -385,7 +385,7 @@ function assertExactCatalog(label, actual, expected) {
     if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
   });
 }
-var PUBLIC_SLUGS = ['numbers-group', 'operation-concepts', 'common-group', 'order-numbers', 'quantities', 'ordinals', 'fractions-measures', 'time-group', 'percent', 'parity', 'primes', 'roman-numerals', 'lines', 'shapes', 'scale', 'math-tables', 'word-add', 'word-subtract', 'word-multiply', 'word-divide'];
+var PUBLIC_SLUGS = ['numbers-group', 'operation-concepts', 'factorial', 'common-group', 'order-numbers', 'quantities', 'ordinals', 'fractions-measures', 'time-group', 'percent', 'parity', 'primes', 'roman-numerals', 'lines', 'shapes', 'scale', 'math-tables', 'word-add', 'word-subtract', 'word-multiply', 'word-divide'];
 /* Public AND in dev/. Every name here must also be in PUBLIC_SLUGS,
    otherwise dev/ would carry an activity the landing hides, which is
    the inverse mistake and just as wrong. */

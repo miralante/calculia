@@ -1,0 +1,69 @@
+/* ==========================================================================
+   Calculia — Factoriales: styles
+   The drawings are chips (numbers in small boxes), cards and empty boxes.
+   Each one reads at a glance, and the × and = signs are written out.
+   ========================================================================== */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+/* Drawings */
+.fac-visual { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--espacio); min-height: 120px; }
+.fac-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+.fac-sign { font-size: var(--texto-grande); font-weight: 800; color: var(--color-texto-suave); }
+
+/* A number in a framed box: the factors of n!, and the result. */
+.fac-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 4px 10px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.fac-result { background: var(--mod-razonamiento-suave); }
+
+/* Growth: one card per factorial, the value under its name. */
+.fac-growth { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.fac-card { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 72px; padding: 8px 10px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
+.fac-name { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
+.fac-value { font-size: var(--texto-grande); font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* Divisibility: the big number, then its exact divisions as chips. */
+.fac-big { margin: 0; font-size: var(--texto-enorme, 2rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+.fac-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.fac-chips .fac-chip { min-width: 0; font-size: var(--texto-pequeno); font-weight: 700; }
+.fac-note { margin: 0; text-align: center; color: var(--color-texto-suave); }
+
+/* Places in a row: an empty box for each, with the number of choices over it. */
+.fac-slots { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.fac-slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.fac-slot-count { font-size: var(--texto-grande); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+.fac-box { display: inline-block; width: 52px; height: 52px; border: 2px dashed var(--color-texto-suave); border-radius: var(--radio); }
+
+/* A written expression, for example 4 × 3 × 2 × 1 = 24. */
+.fac-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+
+/* Text blocks */
+.concept-title, .concept-text, .real-text { text-align: center; margin: 0; }
+.concept-text, .real-text { font-size: var(--texto-grande); line-height: 1.45; }
+.real-card { min-height: 180px; justify-content: center; }
+
+/* Slide arrows: centred under the drawing. */
+.carousel-controls { display: flex; justify-content: center; gap: var(--espacio); }
+.carousel-controls .btn { min-width: 44px; min-height: 44px; }
+
+/* Test answers */
+.option-btn { min-width: 96px; min-height: var(--boton-min); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
+.option-btn.correct { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
+.option-btn.incorrect { opacity: 0.5; text-decoration: line-through; }
+.option-btn:disabled { opacity: 0.6; }
+.task-card { border-color: var(--mod-razonamiento-suave); }
+.prompt { margin: 0; text-align: center; font-size: var(--texto-grande); }
+.feedback { margin: 0; text-align: center; min-height: 1.4em; }
+.feedback.success { color: var(--color-texto); font-weight: 700; }
+.feedback.error { color: var(--color-texto-suave); }
