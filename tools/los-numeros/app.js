@@ -254,8 +254,6 @@
     slideBar.setAttribute('aria-valuemax', String(TOTAL));
     slideBar.setAttribute('aria-valuenow', String(slideIndex + 1));
     slideBarFill.style.width = ((slideIndex + 1) / TOTAL * 100) + '%';
-    slidePrev.disabled = slideIndex === 0;
-    slideNext.disabled = slideIndex === TOTAL - 1;
     if (slideIndex === TOTAL - 1) {
       slideFinish.classList.remove('hidden');
     } else {
@@ -263,10 +261,9 @@
     }
   }
 
+  /* The slides wrap around, like the other carousels; the finish button still shows on the last one. */
   function goSlide(delta) {
-    var next = slideIndex + delta;
-    if (next < 0 || next >= TOTAL) return;
-    slideIndex = next;
+    slideIndex = (slideIndex + delta + TOTAL) % TOTAL;
     renderSlide();
   }
 

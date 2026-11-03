@@ -605,8 +605,6 @@
       conceptBar.setAttribute('aria-valuemax', String(concepts.length));
       conceptBar.setAttribute('aria-valuenow', String(conceptIndex + 1));
       $('#conceptProgressFill').style.width = ((conceptIndex + 1) / concepts.length * 100) + '%';
-      $('#conceptPrev').disabled = conceptIndex === 0;
-      $('#conceptNext').disabled = conceptIndex === concepts.length - 1;
     }
 
     function paintExample() {
@@ -617,11 +615,15 @@
     }
 
     /* Events */
+    /* The concept slides wrap around, like the Roman numerals carousel:
+       the last one leads back to the first and the first back to the last. */
     $('#conceptPrev').addEventListener('click', function () {
-      if (conceptIndex > 0) { conceptIndex -= 1; paintConcept(); }
+      conceptIndex = (conceptIndex + concepts.length - 1) % concepts.length;
+      paintConcept();
     });
     $('#conceptNext').addEventListener('click', function () {
-      if (conceptIndex < concepts.length - 1) { conceptIndex += 1; paintConcept(); }
+      conceptIndex = (conceptIndex + 1) % concepts.length;
+      paintConcept();
     });
     $('#introContinue').addEventListener('click', function () { showScreen(screenReal); });
     $('#realPrev').addEventListener('click', function () {

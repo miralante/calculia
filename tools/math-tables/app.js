@@ -328,18 +328,15 @@
     demoBar.setAttribute('aria-valuemax', String(DATA.factsPerTable));
     demoBar.setAttribute('aria-valuenow', String(index + 1));
     $('#demoProgressFill').style.width = ((index + 1) / DATA.factsPerTable * 100) + '%';
-    $('#demoPrev').disabled = index === 0;
-    $('#demoNext').disabled = index === DATA.factsPerTable - 1;
     hide($('#factList'));
     show($('#learnDemo'));
     hide($('#practiceModes'));
     hide($('#learnBack'));
   }
 
+  /* The demo wraps around: the last fact leads back to the first, and the first back to the last. */
   function demoStep(delta) {
-    var next = demoIndex + delta;
-    if (next < 0 || next >= DATA.factsPerTable) return;
-    showDemo(next);
+    showDemo((demoIndex + delta + DATA.factsPerTable) % DATA.factsPerTable);
   }
 
   /* ---- Quiz screen ---- */
