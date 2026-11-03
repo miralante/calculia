@@ -53,6 +53,16 @@
   }
   function rint(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
+  /* The objects a question is drawn with. Each question picks one (two different ones for a sum), so the
+     pictures change too, not only the numbers. Every item of one question is the same object, so it can be counted. */
+  var ITEM_ICONS = ['🍎', '🍊', '🍇', '🍓', '🍪', '🍬', '🍭', '🌼', '🥚', '🍕', '🔋', '🎈', '⭐', '📖', '🚲', '🧃'];
+  function pickIcon() { return ITEM_ICONS[rint(0, ITEM_ICONS.length - 1)]; }
+  function pickTwoIcons() {
+    var first = pickIcon(), second = pickIcon();
+    while (second === first) second = pickIcon();
+    return [first, second];
+  }
+
   /* ---- Drawings -------------------------------------------------------
      Each drawing is HTML made of small icons. `cross` marks the last
      items as taken away; `empty` leaves the last ones as empty spaces. */
@@ -102,6 +112,8 @@
     }
     return '<div class="ops-line"><div class="ops-row">' + html + '</div></div>';
   }
+  /* The balls of a numbered division drawing: one colour per package, in order. */
+  var PACKAGE_BALLS = ['🔴', '🔵', '🟢', '🟡'];
   /* `groups` framed boxes of `each` items: each box is one group that repeats. */
   function groupsHtml(groups, each, icon, sumText, alt, numbered) {
     var html = '<div class="ops-group-stack">';
@@ -111,6 +123,12 @@
     html += '</div>';
     if (sumText) html += '<p class="ops-expr">' + sumText + '</p>';
     return html;
+  }
+  /* A small drawing of `g` groups of `e`, side by side, for an answer button: the groups read as one picture, and the button stays short. */
+  function optionGroupsHtml(g, e, icon) {
+    var html = '<span class="ops-mini" aria-hidden="true">';
+    for (var k = 0; k < g; k += 1) html += '<span class="ops-mini-group">' + items(e, icon) + '</span>';
+    return html + '</span>';
   }
   /* The same groups as groupsHtml, each item numbered, so the count reads 1 … total. */
   function numberedGroupsHtml(groups, each, icon) {
@@ -141,19 +159,24 @@
   }
   /* Like packHtml, but the leftover row is drawn apart so it reads as «sobra». */
   function restHtml(total, size, icon) { return packHtml(total, size, icon); }
-  /* The total, and below it the empty groups it has to be shared into: the user fills them in. */
-  function shareHtml(total, groups) {
-    var html = '<div class="ops-divide">' + row(total, SLICE) + sign('↓') + '<div class="ops-group-stack">';
-    for (var g = 0; g < groups; g += 1) html += '<div class="ops-group-box ops-empty-box"></div>';
+  /* The total, and below it the empty groups it has to be shared into, each named «Amigo n». The slices are numbered, so the count reads 1 … total. */
+  function shareHtml(total, groups, icon) {
+    var html = '<div class="ops-divide ops-share">' + row(total, icon, { from: 1 }) + sign('↓') + '<div class="ops-group-stack">';
+    for (var g = 0; g < groups; g += 1) {
+      html += '<div class="ops-deal-slot"><span class="ops-deal-label">' + fill(t('ui.friend'), { n: g + 1 }) + '</span><div class="ops-group-box ops-empty-box"></div></div>';
+    }
     return html + '</div></div>';
   }
   /* The deal drawing: a pool of pieces, empty groups, and two buttons. «Repartir uno» moves the next piece into the
      next group, in turn, so the sharing is seen happening. The result line shows once the pool is empty. */
   function dealInner(total, groups, result) {
     var pieces = '';
-    for (var i = 0; i < total; i += 1) pieces += '<span class="ops-deal-piece">' + SLICE + '</span>';
+    for (var i = 0; i < total; i += 1) pieces += '<span class="ops-deal-piece">' + SLICE + '<b class="ops-num">' + (i + 1) + '</b></span>';
     var boxes = '';
-    for (var g = 0; g < groups; g += 1) boxes += '<div class="ops-group-box ops-empty-box ops-deal-group"></div>';
+    for (var g = 0; g < groups; g += 1) {
+      boxes += '<div class="ops-deal-slot"><span class="ops-deal-label">' + fill(t('ui.friend'), { n: g + 1 }) + '</span>' +
+        '<div class="ops-group-box ops-empty-box ops-deal-group"></div></div>';
+    }
     return '<div class="ops-deal-pool">' + pieces + '</div>' +
       '<div class="ops-row ops-deal-groups">' + boxes + '</div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + result + '</p>' +
@@ -169,13 +192,22 @@
   }
   /* The total first, and next to it how it is divided: `groups` equal groups (sharing), or groups of `size`
      (packing). A leftover, if any, sits apart. `caption` writes the division underneath. */
-  function divideHtml(total, groups, size, icon, caption, product, alt) {
+  function divideHtml(total, groups, size, icon, caption, product, alt, numbered) {
     var each = groups ? total / groups : size;
     var full = groups || Math.floor(total / size);
     var rem = groups ? 0 : total % size;
-    var html = '<div class="ops-divide">' + row(total, icon) + sign('↓') + '<div class="ops-group-stack">';
-    for (var g = 0; g < full; g += 1) html += '<div class="ops-group-box">' + row(each, icon, { alt: alt && g % 2 === 1 }) + '</div>';
-    if (rem) html += '<div class="ops-row ops-left-row">' + items(rem, icon, {}).replace(/ops-item/g, 'ops-item ops-left') + '</div>';
+    /* A numbered drawing colours each package apart, so the balls in the total read as the packages they go in. */
+    var ball = function (g) { return numbered ? PACKAGE_BALLS[g % PACKAGE_BALLS.length] : icon; };
+    var top = row(total, icon);
+    if (numbered) {
+      top = '';
+      for (var p = 0; p < full; p += 1) top += items(each, ball(p), { from: p * each + 1 });
+      if (rem) top += items(rem, ball(full), { from: full * each + 1 });
+      top = '<div class="ops-row">' + top + '</div>';
+    }
+    var html = '<div class="ops-divide' + (numbered ? ' ops-numbered' : '') + '">' + top + sign('↓') + '<div class="ops-group-stack">';
+    for (var g = 0; g < full; g += 1) html += '<div class="ops-group-box">' + row(each, ball(g), { alt: alt && g % 2 === 1, from: numbered ? g * each + 1 : undefined }) + '</div>';
+    if (rem) html += '<div class="ops-row ops-left-row">' + items(rem, ball(full), { from: numbered ? full * each + 1 : undefined }).replace(/ops-item/g, 'ops-item ops-left') + '</div>';
     html += '</div></div>';
     if (caption) {
       var text = total + ' ÷ ' + (groups || size) + ' = ' + (groups ? each : full);
@@ -211,7 +243,7 @@
       /* A sum slide numbers its items: the sum counts them one by one. */
       return groupsHtml(spec.groups, spec.each, spec.icon, text, spec.alt, spec.sum);
     }
-    if (spec.kind === 'divide') return divideHtml(spec.total, spec.groups, spec.size, icon, spec.caption, spec.product, spec.alt);
+    if (spec.kind === 'divide') return divideHtml(spec.total, spec.groups, spec.size, icon, spec.caption, spec.product, spec.alt, spec.numbered);
     if (spec.kind === 'pack') {
       var caption = spec.caption ? fill(t('ui.groupsOf'), { g: spec.total / spec.size, e: spec.size }) : null;
       return packHtml(spec.total, spec.size, spec.icon, caption);
@@ -257,8 +289,6 @@
     introBar.setAttribute('aria-valuemax', String(op.intro.length));
     introBar.setAttribute('aria-valuenow', String(introIndex + 1));
     $('#introProgressFill').style.width = ((introIndex + 1) / op.intro.length * 100) + '%';
-    $('#introPrev').disabled = introIndex === 0;
-    $('#introNext').disabled = introIndex === op.intro.length - 1;
   }
 
   /* ---- 2. Real life: short examples ---------------------------------------- */
@@ -271,15 +301,14 @@
     realBar.setAttribute('aria-valuemax', String(op.real.length));
     realBar.setAttribute('aria-valuenow', String(realIndex + 1));
     $('#realProgressFill').style.width = ((realIndex + 1) / op.real.length * 100) + '%';
-    $('#realPrev').disabled = realIndex === 0;
-    $('#realNext').disabled = realIndex === op.real.length - 1;
   }
 
   /* ---- 3. Test -------------------------------------------------------------- */
   function startRound() {
     var types = DATA.questions[op.id];
     var list = [];
-    for (var i = 0; i < DATA.perRound; i += 1) list.push(types[i % types.length]);
+    /* Each question draws its type at random, so a round does not repeat the same mix of problems. */
+    for (var i = 0; i < DATA.perRound; i += 1) list.push(types[rint(0, types.length - 1)]);
     pickQueue = [];
     round = App.utils.shuffle(list).map(makeQuestion);
     qIndex = 0;
@@ -311,98 +340,106 @@
   function makeQuestion(type) {
     var q = t('q.' + type + '.prompt');
     var hint = t('q.' + type + '.hint');
+    var icon = pickIcon(), pair = pickTwoIcons();
     if (type === 'pick') return makePick();
     if (type === 'more') {
-      var ma = rint(2, 5), mb = rint(1, 4), MT = ma + mb;
+      var ma = rint(2, 8), mb = rint(1, 6), MT = ma + mb;
       return {
-        prompt: fill(q, { a: ma, b: mb }), visual: joinHtml(ma, mb, '🍎', false, '🍏'), hint: hint,
+        prompt: fill(q, { a: ma, b: mb }), visual: joinHtml(ma, mb, pair[0], false, pair[1]), hint: hint,
         options: numericOptions(MT, [MT + 1, MT - 1, MT + 2]),
         explanation: fill(t('q.more.explain'), { a: ma, b: mb, T: MT })
       };
     }
     if (type === 'join') {
-      var a = rint(1, 5), b = rint(1, 4), T = a + b;
+      var a = rint(1, 8), b = rint(1, 6), T = a + b;
       return {
-        prompt: q, visual: joinHtml(a, b, '🍎', false, '🍏'), hint: hint,
+        prompt: q, visual: joinHtml(a, b, pair[0], false, pair[1]), hint: hint,
         options: numericOptions(T, [T + 1, T - 1, T + 2]),
         explanation: fill(t('q.join.explain'), { a: a, b: b, T: T })
       };
     }
     if (type === 'take') {
-      var n = rint(4, 9), take = rint(1, n - 1), r = n - take;
+      var n = rint(4, 12), take = rint(1, n - 1), r = n - take;
       return {
-        prompt: fill(q, { n: n, t: take }), visual: takeHtml(n, take, '🍪'), hint: hint,
+        prompt: fill(q, { n: n, t: take }), visual: takeHtml(n, take, icon), hint: hint,
         options: numericOptions(r, [n, r + 1, r - 1, take]),
         explanation: fill(t('q.take.explain'), { n: n, t: take, r: r })
       };
     }
     if (type === 'gap') {
-      var need = rint(3, 8), have = rint(1, need - 1), m = need - have;
+      var need = rint(3, 10), have = rint(1, need - 1), m = need - have;
       return {
-        prompt: fill(q, { n: need, h: have }), visual: gapHtml(need, have, '⭐'), hint: hint,
+        prompt: fill(q, { n: need, h: have }), visual: gapHtml(need, have, icon), hint: hint,
         options: numericOptions(m, [need, have, m + 1, m - 1]),
         explanation: fill(t('q.gap.explain'), { m: m, n: need, h: have })
       };
     }
     if (type === 'times') {
-      var gt = rint(2, 4), et = rint(2, 5), Tt = gt * et;
+      var gt = rint(2, 5), et = rint(2, 6), Tt = gt * et;
       return {
-        prompt: fill(q, { g: gt, e: et }), visual: groupsHtml(gt, et, '🔋'), hint: hint,
+        prompt: fill(q, { g: gt, e: et }), visual: groupsHtml(gt, et, icon, gt + ' × ' + et + ' = ?'), hint: hint,
         options: numericOptions(Tt, [gt + et, Tt + et, Tt - 1, Tt + 1]),
         explanation: fill(t('q.times.explain'), { g: gt, e: et, T: Tt })
       };
     }
     if (type === 'repeat') {
-      var gr = rint(2, 4), er = rint(2, 5);
+      var gr = rint(2, 5), er = rint(2, 6);
       var sumOf = function (count) { return new Array(count).fill(er).join(' + '); };
       var correct = sumOf(gr);
       return {
-        prompt: fill(q, { g: gr, e: er }), visual: groupsHtml(gr, er, '🔋'), hint: hint,
+        prompt: fill(q, { g: gr, e: er }), visual: groupsHtml(gr, er, icon), hint: hint,
         options: textOptions(correct, [sumOf(gr + 1), gr + ' + ' + er, er + ' × ' + (gr - 1)]),
         explanation: fill(t('q.repeat.explain'), { g: gr, e: er })
       };
     }
     if (type === 'share') {
-      var people = rint(2, 3), each = rint(2, 4), total = people * each;
+      var people = rint(2, 4), each = rint(2, 6), total = people * each;
       return {
-        prompt: fill(q, { T: total, g: people }), visual: shareHtml(total, people), hint: hint,
+        prompt: fill(q, { T: total, g: people }), visual: shareHtml(total, people, icon), hint: hint,
         options: numericOptions(each, [each + 1, each - 1, people]),
         explanation: fill(t('q.share.explain'), { each: each, T: total, g: people })
       };
     }
     if (type === 'rest') {
-      var size = rint(2, 3), full = rint(2, 3), left = rint(1, size - 1);
+      var size = rint(2, 5), full = rint(2, 4), left = rint(1, size - 1);
       return {
-        prompt: fill(q, { T: full * size + left, e: size }), visual: restHtml(full * size + left, size, '🔴'), hint: hint,
+        prompt: fill(q, { T: full * size + left, e: size }), visual: restHtml(full * size + left, size, icon), hint: hint,
         options: numericOptions(full, [full + 1, full - 1, left]),
         explanation: fill(t('q.rest.explain'), { q: full, r: left })
       };
     }
     /* swap: changing the order of the two addends keeps the total (commutative). */
     if (type === 'swap') {
-      var sa = rint(2, 5), sb = rint(1, 5);
-      while (sb === sa) sb = rint(1, 5);
+      var sa = rint(2, 8), sb = rint(1, 8);
+      while (sb === sa) sb = rint(1, 8);
       return {
-        prompt: fill(q, { a: sa, b: sb }), visual: joinHtml(sa, sb, '🍎', false, '🍏'), hint: hint,
+        prompt: fill(q, { a: sa, b: sb }), visual: joinHtml(sa, sb, pair[0], false, pair[1]), hint: hint,
         options: textOptions(sb + ' + ' + sa, [sa + ' + ' + (sb + 1), (sa + 1) + ' + ' + (sb + 1), sa + ' + ' + sa]),
         explanation: fill(t('q.swap.explain'), { a: sa, b: sb, T: sa + sb })
       };
     }
     /* swapTimes: turning the groups around keeps the total (commutative). */
     if (type === 'swapTimes') {
-      var sg = rint(2, 4), se = rint(2, 5);
-      while (se === sg) se = rint(2, 5);
+      var sg = rint(2, 5), se = rint(2, 6);
+      while (se === sg) se = rint(2, 6);
+      /* Each answer is drawn as its own groups, so the equivalent arrangement is seen, not only read. */
+      var asGroups = function (g, e, correctOne) {
+        return {
+          html: '<span class="ops-option">' + optionGroupsHtml(g, e, icon) + '<span class="ops-option-name">' + g + ' × ' + e + '</span></span>',
+          aria: g + ' × ' + e, correct: correctOne
+        };
+      };
       return {
-        prompt: fill(q, { g: sg, e: se }), visual: groupsHtml(sg, se, '🔋'), hint: hint,
-        options: textOptions(se + ' × ' + sg, [sg + ' × ' + (se + 1), sg + ' + ' + se, (sg + 1) + ' × ' + se]),
+        prompt: fill(q, { g: sg, e: se }), visual: groupsHtml(sg, se, icon), hint: hint,
+        options: App.utils.shuffle([asGroups(se, sg, true), asGroups(sg, se + 1, false), asGroups(sg + 1, se, false)]),
         explanation: fill(t('q.swapTimes.explain'), { g: sg, e: se, T: sg * se })
       };
     }
     /* relation */
-    var gl = rint(2, 3), el = rint(2, 4), Tl = gl * el;
+    var gl = rint(2, 5), el = rint(2, 6), Tl = gl * el;
     var division = Tl + ' ÷ ' + el + ' = ' + gl;
     return {
-      prompt: fill(q, { T: Tl, e: el }), visual: groupsHtml(gl, el, '🔴'), hint: fill(hint, { e: el }),
+      prompt: fill(q, { T: Tl, e: el }), visual: groupsHtml(gl, el, icon), hint: fill(hint, { e: el }),
       options: textOptions(division, [
         Tl + ' ÷ ' + el + ' = ' + (gl + 1),
         Tl + ' ÷ ' + gl + ' = ' + (el + 1),
@@ -505,11 +542,12 @@
     App.i18n.apply();
     paintStars();
     renderMenu();
-    $('#introPrev').addEventListener('click', function () { introIndex -= 1; paintIntro(); });
-    $('#introNext').addEventListener('click', function () { introIndex += 1; paintIntro(); });
+    /* Slides wrap around: the last one leads back to the first, and the first back to the last. */
+    $('#introPrev').addEventListener('click', function () { introIndex = (introIndex + op.intro.length - 1) % op.intro.length; paintIntro(); });
+    $('#introNext').addEventListener('click', function () { introIndex = (introIndex + 1) % op.intro.length; paintIntro(); });
     $('#introContinue').addEventListener('click', function () { realIndex = 0; paintReal(); show('#screenReal'); });
-    $('#realPrev').addEventListener('click', function () { realIndex -= 1; paintReal(); });
-    $('#realNext').addEventListener('click', function () { realIndex += 1; paintReal(); });
+    $('#realPrev').addEventListener('click', function () { realIndex = (realIndex + op.real.length - 1) % op.real.length; paintReal(); });
+    $('#realNext').addEventListener('click', function () { realIndex = (realIndex + 1) % op.real.length; paintReal(); });
     $('#realContinue').addEventListener('click', startRound);
     $('#btnNext').addEventListener('click', nextQuestion);
     $('#newRound').addEventListener('click', startRound);
