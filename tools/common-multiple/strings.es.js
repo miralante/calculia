@@ -29,9 +29,9 @@
     /* La explicación: una idea por diapositiva. El dibujo está en data.js. */
     intro: {
       1: { title: 'El mínimo común múltiplo (mcm)', text: 'Es el menor número que sale en las dos listas de múltiplos. Es el primero en el que coinciden.' },
-      2: { title: 'Paquetes completos de los dos tamaños', text: '12 lápices se pueden repartir en paquetes de 4 y en paquetes de 6, sin que sobre ninguno. Por eso el mcm de 4 y 6 es 12.' },
+      2: { title: 'Paquetes completos de los dos tamaños', text: '12 lápices se pueden repartir en paquetes de 4 y en paquetes de 6, sin que sobre ninguno. Por eso el mínimo común múltiplo (mcm) de 4 y 6 es 12.' },
       3: { title: 'Busca el primero que se repite', text: 'Los múltiplos de 6 son 6, 12, 18 y 24. Los de 8 son 8, 16 y 24. El primero en las dos listas es el 24.' },
-      4: { title: 'Si uno es múltiplo del otro, el mcm es el mayor', text: '6 es múltiplo de 3. Por eso el mcm de 3 y 6 es 6.' }
+      4: { title: 'Si uno es múltiplo del otro, el mínimo común múltiplo (mcm) es el mayor', text: '6 es múltiplo de 3. Por eso el mínimo común múltiplo (mcm) de 3 y 6 es 6.' }
     },
 
     /* Ejemplos de la vida real: una situación por pantalla. */

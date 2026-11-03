@@ -29,10 +29,10 @@
 
     /* La explicación: una idea por diapositiva. El dibujo está en data.js. */
     intro: {
-      1: { title: 'El máximo común divisor (mcd)', text: 'Con 12 manzanas y 18 naranjas hacemos 6 cestas iguales. Nada sobra. Por eso el mcd de 12 y 18 es 6.' },
+      1: { title: 'El máximo común divisor (mcd)', text: 'Con 12 manzanas y 18 naranjas hacemos 6 cestas iguales. Nada sobra. Por eso el máximo común divisor (mcd) de 12 y 18 es 6.' },
       2: { title: 'Los divisores son los números que dividen exacto', text: 'Los divisores de 12 son 1, 2, 3, 4, 6 y 12. Los de 18 son 1, 2, 3, 6, 9 y 18. Los que están en las dos listas están marcados.' },
-      3: { title: 'El mayor de los que están en las dos listas', text: 'Los que están en las dos listas de 8 y 20 son 1, 2 y 4. El mayor es el 4. Por eso el mcd de 8 y 20 es 4.' },
-      4: { title: 'Si uno divide al otro, el mcd es el menor', text: 'El 4 divide al 12. Por eso el mcd de 4 y 12 es 4.' }
+      3: { title: 'El mayor de los que están en las dos listas', text: 'Los que están en las dos listas de 8 y 20 son 1, 2 y 4. El mayor es el 4. Por eso el máximo común divisor (mcd) de 8 y 20 es 4.' },
+      4: { title: 'Si uno divide al otro, el máximo común divisor (mcd) es el menor', text: 'El 4 divide al 12. Por eso el máximo común divisor (mcd) de 4 y 12 es 4.' }
     },
 
     /* Ejemplos de la vida real: una situación por pantalla. */

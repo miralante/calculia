@@ -29,10 +29,10 @@
 
     /* The explanation: one idea per slide. The drawing is in data.js. */
     intro: {
-      1: { title: 'The greatest common divisor (GCD)', text: 'With 12 apples and 18 oranges we make 6 equal baskets. Nothing is left over. So the GCD of 12 and 18 is 6.' },
+      1: { title: 'The greatest common divisor (GCD)', text: 'With 12 apples and 18 oranges we make 6 equal baskets. Nothing is left over. So the greatest common divisor (GCD) of 12 and 18 is 6.' },
       2: { title: 'Divisors are the numbers that divide exactly', text: 'The divisors of 12 are 1, 2, 3, 4, 6 and 12. The divisors of 18 are 1, 2, 3, 6, 9 and 18. The ones in both lists are marked.' },
-      3: { title: 'The biggest one that is in both lists', text: 'The ones in both lists of 8 and 20 are 1, 2 and 4. The biggest is 4. So the GCD of 8 and 20 is 4.' },
-      4: { title: 'If one divides the other, the GCD is the smaller one', text: '4 divides 12. So the GCD of 4 and 12 is 4.' }
+      3: { title: 'The biggest one that is in both lists', text: 'The ones in both lists of 8 and 20 are 1, 2 and 4. The biggest is 4. So the greatest common divisor (GCD) of 8 and 20 is 4.' },
+      4: { title: 'If one divides the other, the greatest common divisor (GCD) is the smaller one', text: '4 divides 12. So the greatest common divisor (GCD) of 4 and 12 is 4.' }
     },
 
     /* Real-life examples: one situation per screen. */

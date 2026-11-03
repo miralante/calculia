@@ -29,9 +29,9 @@
     /* The explanation: one idea per slide. The drawing is in data.js. */
     intro: {
       1: { title: 'The least common multiple (LCM)', text: 'It is the smallest number that is in both lists of multiples. It is the first one where they meet.' },
-      2: { title: 'Full packs of both sizes', text: '12 pencils can be put into packs of 4 and into packs of 6, with none left over. So the LCM of 4 and 6 is 12.' },
+      2: { title: 'Full packs of both sizes', text: '12 pencils can be put into packs of 4 and into packs of 6, with none left over. So the least common multiple (LCM) of 4 and 6 is 12.' },
       3: { title: 'Find the first one that repeats', text: 'The multiples of 6 are 6, 12, 18 and 24. The multiples of 8 are 8, 16 and 24. The first one in both lists is 24.' },
-      4: { title: 'If one is a multiple of the other, the LCM is the bigger one', text: '6 is a multiple of 3. So the LCM of 3 and 6 is 6.' }
+      4: { title: 'If one is a multiple of the other, the least common multiple (LCM) is the bigger one', text: '6 is a multiple of 3. So the least common multiple (LCM) of 3 and 6 is 6.' }
     },
 
     /* Real-life examples: one situation per screen. */
