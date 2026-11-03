@@ -47,17 +47,25 @@
     real: {
       0: {
         title: 'Shoes',
-        text: 'They go two by two: one foot and the other. If one shoe is alone, one is left over.'
+        text: 'A pair: one foot and the other. They go two by two and none is left over. Even.'
       },
       1: {
-        title: 'Eggs',
-        text: 'A dozen has 12 eggs: 6 exact pairs. If there are 7, one is left on its own.'
+        title: 'One slipper',
+        text: 'If there is only one slipper, one is left over. Odd.'
       },
       2: {
+        title: 'Half a dozen',
+        text: 'Six eggs: three exact pairs and none is left over. Even.'
+      },
+      3: {
+        title: 'Half a dozen and one',
+        text: 'Seven eggs: six go in pairs and one egg is left over. Odd.'
+      },
+      4: {
         title: 'Tricycle',
         text: 'Two back wheels, as a pair, and one front wheel on its own. Three wheels: odd.'
       },
-      3: {
+      5: {
         title: 'Clover',
         text: 'Two leaves below, as a pair, and one leaf on top on its own. Three leaves: odd.'
       }
@@ -96,8 +104,8 @@
     /* Explanations: shown on a right answer. Each part's hint is
        in blocks.<id>.hint. */
     explainParity: 'The {a} dots go two by two. If none is left, it is even; if one is left, it is odd.',
-    explainPairsEven: '{a} is even: two by two, none is left over.',
-    explainPairsOdd: '{a} is odd: two by two, one is left over.',
+    explainPairsEven: '{a} is even: two by two, none is left over. Look at the last digit: {d}, which is even.',
+    explainPairsOdd: '{a} is odd: two by two, one is left over. Look at the last digit: {d}, which is odd.',
     explainLast: 'The last digit of {a} is {d}. So {a} is {p}.',
 
     /* ---------- Closing ---------- */

@@ -46,15 +46,24 @@
         </div>
       </section>
 
-      <!-- Pantalla 2: la vida real. Cuatro ejemplos cotidianos. -->
+      <!-- Pantalla 2: la vida real. Cuatro ejemplos cotidianos, uno por
+           diapositiva, con las mismas flechas que la pantalla 1. -->
       <section id="screenParityReal" class="stack hidden">
         <div class="card reference-card stack">
           <h2 class="reference-title" data-i18n="realTitle">En la vida real</h2>
           <p class="reference-text" data-i18n="realText">Fíjate: lo par va en parejas y lo impar deja uno suelto.</p>
         </div>
-        <div class="stack" id="realCards"></div>
+        <div class="card stack parity-carousel-card">
+          <div class="parity-carousel-display parity-real-display" id="realDisplay" role="button" tabindex="0"></div>
+          <h3 class="parity-real-title" id="realExampleTitle"></h3>
+          <p class="parity-carousel-caption" id="realExampleText" aria-live="polite"></p>
+          <div class="parity-carousel-controls">
+            <button type="button" class="btn btn-secondary" id="realPrev">←</button>
+            <button type="button" class="btn btn-secondary" id="realArrowNext">→</button>
+          </div>
+        </div>
         <div class="row intro-buttons">
-          <button type="button" class="btn" id="parityRealNext" data-i18n="realNext">Ver la regla →</button>
+          <button type="button" class="btn btn-secondary" id="parityRealNext" data-i18n="realNext">Ver la regla →</button>
         </div>
       </section>
 

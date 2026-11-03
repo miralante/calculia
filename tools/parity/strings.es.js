@@ -56,17 +56,25 @@
     real: {
       0: {
         title: 'Zapatos',
-        text: 'Van de dos en dos: un pie y el otro. Si tienes un zapato suelto, sobra uno.'
+        text: 'Un par: un pie y el otro. Van de dos en dos y no sobra ninguno: es par.'
       },
       1: {
-        title: 'Huevos',
-        text: 'Una docena tiene 12 huevos: 6 parejas exactas. Si hay 7, uno se queda solo.'
+        title: 'Una zapatilla',
+        text: 'Si hay una sola zapatilla, sobra una. Es impar.'
       },
       2: {
+        title: 'Media docena',
+        text: 'Seis huevos: tres parejas exactas y no sobra ninguno. Es par.'
+      },
+      3: {
+        title: 'Media docena y uno',
+        text: 'Siete huevos: seis van en parejas y sobra un huevo. Es impar.'
+      },
+      4: {
         title: 'Triciclo',
         text: 'Dos ruedas detrás, en pareja, y una delante que va sola. Tres ruedas: impar.'
       },
-      3: {
+      5: {
         title: 'Trébol',
         text: 'Dos hojas abajo, en pareja, y una arriba que se queda sola. Tres hojas: impar.'
       }
@@ -105,8 +113,8 @@
     /* Explicaciones: se publican al acertar. Las pistas de cada parte
        están en blocks.<id>.hint. */
     explainParity: 'Los {a} puntos van de dos en dos. Si no sobra ninguno, es par; si sobra uno, es impar.',
-    explainPairsEven: '{a} es par: de dos en dos no sobra ninguno.',
-    explainPairsOdd: '{a} es impar: de dos en dos, sobra uno.',
+    explainPairsEven: '{a} es par: de dos en dos no sobra ninguno. Mira la última cifra: {d}, que es par.',
+    explainPairsOdd: '{a} es impar: de dos en dos, sobra uno. Mira la última cifra: {d}, que es impar.',
     explainLast: 'La última cifra de {a} es {d}. Así que {a} es {p}.',
 
     /* ---------- Cierre ---------- */

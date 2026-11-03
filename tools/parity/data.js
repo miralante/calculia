@@ -27,12 +27,13 @@ var DATA = {
   pairColor: '#1565C0',
   leftoverColor: '#E65100',
 
-  /* Ejemplos de la vida real (pantalla 2), en orden. Cada id dibuja
-     el número que dice su texto: dos zapatos, una docena de huevos
-     (pares), un triciclo y un trébol (impares, con una pieza sola
-     en el color de sobrante). El texto vive en strings.<locale>.js
-     bajo real.<índice>. */
-  examples: ['shoes', 'eggs', 'trike', 'clover'],
+  /* Ejemplos de la vida real (pantalla 2), en orden, uno por
+     diapositiva. Cada id dibuja el número que dice su texto: dos
+     zapatos y media docena de huevos (pares); una zapatilla y media
+     docena más un huevo (impares, con la pieza sola en el color de
+     sobrante); un triciclo y un trébol (impares). El texto vive en
+     strings.<locale>.js bajo real.<índice>. */
+  examples: ['shoes', 'shoe', 'eggs', 'eggs-odd', 'trike', 'clover'],
 
   /* Partes del test. count = preguntas de la parte; min/max = rango
      de valores. Las partes se hacen en el orden de esta lista. */

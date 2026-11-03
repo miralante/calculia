@@ -77,20 +77,21 @@
 .parity-carousel-controls { display: flex; justify-content: center; gap: var(--espacio); width: 100%; }
 .parity-carousel-controls .btn { min-width: 64px; }
 
-/* pantalla 2: un ejemplo por tarjeta, dibujo arriba y texto debajo.
-   El dibujo muestra el número que dice el texto. */
-.parity-example { display: grid; gap: var(--espacio); }
+/* pantalla 2: un ejemplo por diapositiva, dibujo arriba, título y texto
+   debajo. El dibujo muestra el número que dice el texto. */
+.parity-real-display { flex-direction: column; align-items: center; }
 .parity-real-visual { display: flex; justify-content: center; align-items: center; min-height: 64px; }
 .parity-real-row { gap: 8px; }
+.parity-real-column { flex-direction: column; gap: 8px; }
 .parity-real-emoji { font-size: 40px; line-height: 1; }
+.parity-real-leftover { border-radius: 50%; }
 .parity-real-eggs {
-  display: grid; grid-template-columns: repeat(6, auto);
+  display: grid; grid-template-columns: repeat(3, auto);
   gap: 2px 6px; justify-content: center;
 }
 .parity-real-eggs .parity-real-emoji { font-size: 30px; }
 .parity-real-svg { width: 170px; height: auto; }
-.parity-example h3 { margin: 0; color: var(--mod-razonamiento); }
-.parity-example p { margin: 4px 0 0; }
+.parity-real-title { margin: 0; text-align: center; color: var(--mod-razonamiento); }
 
 /* pantalla 4: la regla, plegada para no distraer durante la práctica */
 .parity-rule {

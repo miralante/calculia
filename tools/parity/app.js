@@ -208,10 +208,24 @@
      drawn in the pair colour; the one left alone is drawn in the
      leftover colour, so the odd example is visible at a glance. */
 
-  /* Shoes: two shoes, one pair. */
-  function shoesDrawing() {
+  /* An emoji ringed in the leftover colour: the one that is left alone. */
+  function leftoverEmoji(emoji) {
+    var span = document.createElement('span');
+    span.className = 'parity-real-emoji parity-real-leftover';
+    span.textContent = emoji;
+    span.style.boxShadow = '0 0 0 4px ' + DATA.leftoverColor;
+    return span;
+  }
+
+  /* Shoes: two shoes, one pair (even). Or one shoe alone, ringed in
+     the leftover colour (odd). */
+  function shoesDrawing(single) {
     var box = document.createElement('div');
     box.className = 'parity-real-visual parity-real-row';
+    if (single) {
+      box.appendChild(leftoverEmoji('👟'));
+      return box;
+    }
     for (var i = 0; i < 2; i += 1) {
       var shoe = document.createElement('span');
       shoe.className = 'parity-real-emoji';
@@ -221,17 +235,22 @@
     return box;
   }
 
-  /* A dozen eggs in a carton: two rows of six, so each column of
-     the carton is a pair of eggs. */
-  function eggsDrawing() {
+  /* Half a dozen eggs: two rows of three, so each column of the
+     carton is a pair of eggs (even). With one more egg (odd), that
+     egg stands alone below, ringed in the leftover colour. */
+  function eggsDrawing(extra) {
     var box = document.createElement('div');
-    box.className = 'parity-real-visual parity-real-eggs';
-    for (var i = 0; i < 12; i += 1) {
+    box.className = 'parity-real-visual parity-real-column';
+    var grid = document.createElement('div');
+    grid.className = 'parity-real-eggs';
+    for (var i = 0; i < 6; i += 1) {
       var egg = document.createElement('span');
       egg.className = 'parity-real-emoji';
       egg.textContent = '🥚';
-      box.appendChild(egg);
+      grid.appendChild(egg);
     }
+    box.appendChild(grid);
+    if (extra) box.appendChild(leftoverEmoji('🥚'));
     return box;
   }
 
@@ -285,33 +304,48 @@
   }
 
   function drawingFor(id) {
-    if (id === 'shoes') return shoesDrawing();
-    if (id === 'eggs') return eggsDrawing();
+    if (id === 'shoes') return shoesDrawing(false);
+    if (id === 'shoe') return shoesDrawing(true);
+    if (id === 'eggs') return eggsDrawing(false);
+    if (id === 'eggs-odd') return eggsDrawing(true);
     if (id === 'trike') return trikeDrawing();
     return cloverDrawing();
   }
 
-  function renderRealCards() {
-    var list = $('#realCards');
-    list.innerHTML = '';
-    DATA.examples.forEach(function (id, i) {
-      var card = document.createElement('article');
-      card.className = 'card parity-example';
+  /* The real-life stage is a set of slides, one example at a time, in
+     the order of DATA.examples. The drawing sits in the display, the
+     title and the sentence under it. Arrows (and a click on the
+     drawing) move through the slides; the order wraps around. */
+  var realIdx = 0;
 
-      var visual = drawingFor(id);
-      visual.setAttribute('aria-hidden', 'true');
+  function paintRealSlide() {
+    var display = $('#realDisplay');
+    display.innerHTML = '';
+    var visual = drawingFor(DATA.examples[realIdx]);
+    visual.setAttribute('aria-hidden', 'true');
+    display.appendChild(visual);
+    display.setAttribute('aria-label', t('real.' + realIdx + '.title'));
+    $('#realExampleTitle').textContent = t('real.' + realIdx + '.title');
+    $('#realExampleText').textContent = t('real.' + realIdx + '.text');
+  }
 
-      var body = document.createElement('div');
-      var title = document.createElement('h3');
-      title.textContent = t('real.' + i + '.title');
-      var text = document.createElement('p');
-      text.textContent = t('real.' + i + '.text');
-      body.appendChild(title);
-      body.appendChild(text);
+  function realStep(delta) {
+    var count = DATA.examples.length;
+    realIdx = (realIdx + delta + count) % count;
+    paintRealSlide();
+  }
 
-      card.appendChild(visual);
-      card.appendChild(body);
-      list.appendChild(card);
+  function renderRealSequence() {
+    paintRealSlide();
+    $('#realPrev').addEventListener('click', function () { realStep(-1); });
+    $('#realArrowNext').addEventListener('click', function () { realStep(1); });
+    var display = $('#realDisplay');
+    display.addEventListener('click', function () { realStep(1); });
+    display.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        realStep(1);
+      }
     });
   }
 
@@ -371,7 +405,7 @@
     if (item.block.id === 'big') {
       return fill(t('explainLast'), { a: format(n), d: n % 10, p: wordFor(n) });
     }
-    return fill(t(isEven(n) ? 'explainPairsEven' : 'explainPairsOdd'), { a: format(n) });
+    return fill(t(isEven(n) ? 'explainPairsEven' : 'explainPairsOdd'), { a: format(n), d: n % 10 });
   }
 
   function renderItem() {
@@ -461,7 +495,7 @@
     App.i18n.apply();
     paintStars();
     renderIntroSequence();
-    renderRealCards();
+    renderRealSequence();
     goTo('intro');
   }
 
