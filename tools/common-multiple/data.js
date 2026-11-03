@@ -1,16 +1,30 @@
 /* ============================================================
    Calculia — Mínimo común múltiplo — datos
-   Formato:
-   - DATA.perRound: preguntas por ronda.
-   - DATA.pairs: parejas de números. Ninguno es múltiplo del otro,
-     para que la respuesta no sea trivial.
-   Los textos NO están aquí: viven en strings.<locale>.js.
+   Explanation: one slide per idea. Each slide has a drawing (`visual`):
+   `lists` (the multiples of two numbers, the common ones marked, the first
+   common one filled in) or `packs` (the same total in packs of each size).
+   The texts are in strings.<locale>.js.
+   Real life: one example at a time (`real`), same drawings.
+   Test: each round mixes the `questions` types, `perRound` questions.
+   `pairs` are two numbers that share a factor, so the answer is never
+   simply their product.
    ============================================================ */
 var DATA = {
   perRound: 6,
+  questions: ['lcm', 'story', 'common'],
 
-  pairs: [
-    [4, 6], [3, 5], [6, 8], [4, 10], [6, 9], [8, 12],
-    [9, 12], [10, 15], [12, 15], [6, 10]
-  ]
+  intro: [
+    { visual: { kind: 'lists', a: 4, b: 6 } },
+    { visual: { kind: 'packs', a: 4, b: 6, icon: '✏️' } },
+    { visual: { kind: 'lists', a: 6, b: 8 } },
+    { visual: { kind: 'lists', a: 3, b: 6 } }
+  ],
+
+  real: [
+    { visual: { kind: 'lists', a: 4, b: 6 } },
+    { visual: { kind: 'packs', a: 6, b: 8, icon: '🥚' } },
+    { visual: { kind: 'lists', a: 6, b: 9 } }
+  ],
+
+  pairs: [[4, 6], [6, 8], [6, 9], [4, 10], [9, 12], [10, 15], [8, 12], [6, 10], [12, 15], [4, 12]]
 };

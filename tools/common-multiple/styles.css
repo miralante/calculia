@@ -1,11 +1,149 @@
-/* ============================================================
-   Calculia — Mínimo común múltiplo: estilos propios.
-   The shared pieces (cards, options, test sheet) come from
-   assets/css. Only the number inside each option is styled here.
-   ============================================================ */
+/* ==========================================================================
+   Calculia — Máximo común divisor and Mínimo común múltiplo: styles
+   The drawings reuse the drawing styles of Operaciones (.ops-*). The
+   cm-* classes add the baskets, the floor of tiles and the rows of numbers.
+   ========================================================================== */
 
-.answer-num {
-  font-size: 1.6rem;
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+/* Several baskets (or packs) side by side, wrapping on a narrow screen. */
+.cm-baskets { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+/* One pack is kept on one line, with smaller icons, so a full pack never breaks in two rows. */
+.cm-pack { flex-wrap: nowrap; }
+.cm-pack .ops-item { min-width: 34px; min-height: 34px; font-size: 28px; }
+
+/* A floor of square tiles: one row per row of tiles. */
+.cm-tiles { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.cm-tile { display: inline-block; width: 44px; height: 44px; border: 2px solid var(--mod-razonamiento); background: var(--mod-razonamiento-suave); }
+
+/* Rows of numbers (the divisors or the multiples), one row per number. */
+.cm-lists { display: flex; flex-direction: column; align-items: stretch; gap: 10px; width: 100%; }
+.cm-list { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cm-label { font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
+.cm-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.cm-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 1px solid var(--color-texto-suave);
+  border-radius: var(--radio);
+  font-size: var(--texto-grande);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
+/* A number in both lists: a thick border, so the shape tells it apart without colour. */
+.cm-common { border: 4px solid var(--mod-razonamiento); background: var(--mod-razonamiento-suave); }
+/* The answer: the greatest common divisor, or the least common multiple. */
+.cm-best { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
+
+.op-sym { font-size: 40px; font-weight: 800; line-height: 1; }
+
+/* Drawings */
+.ops-visual { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--espacio); min-height: 120px; }
+.ops-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
+.ops-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.ops-group-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+/* Two arrangements of the same total side by side; they wrap to one column on a narrow screen. */
+.ops-compare { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; }
+.ops-compare-side { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+/* The number on an item, in a small pill over its lower edge. */
+.ops-num { position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); padding: 0 4px; border-radius: 999px; background: var(--color-superficie); color: var(--color-texto); font-size: var(--texto-pequeno); font-weight: 900; line-height: 1.3; }
+/* An empty group to be filled in: a dashed frame with room for the items. */
+.ops-empty-box { min-width: 150px; min-height: 52px; border-style: dashed; }
+
+/* A total, a down arrow and the groups it is divided into, one above the other at any width. */
+.ops-divide { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+/* One group that repeats: a frame around its items, so the group reads as one unit. */
+.ops-group-box { display: flex; justify-content: center; padding: 6px 12px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
+.ops-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 42px;
+  font-size: 36px;
+  line-height: 1;
+}
+/* A second group of the same object, tinted a little, so the groups read apart (real-life examples). */
+.ops-alt { filter: hue-rotate(-25deg); }
+/* An empty place: a dashed outline, so it reads as «falta». */
+.ops-empty { border: 2px dashed var(--color-texto-suave); border-radius: var(--radio); background: transparent; }
+/* A crossed-out item (taken away): dimmed, with a heavy cross on top. */
+.ops-cross { opacity: 0.4; }
+.ops-cross::after {
+  content: '✕';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--color-texto);
+  text-shadow: 0 0 3px var(--color-superficie), 0 0 3px var(--color-superficie);
+}
+/* What is left over after the full groups (division with remainder). */
+.ops-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; border-radius: 50%; }
+.ops-left-row { padding-top: 4px; border-top: 2px dotted var(--color-texto-suave); }
+.ops-sign { font-size: var(--texto-grande); font-weight: 800; color: var(--color-texto-suave); }
+.ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+.ops-story { margin: 0; font-size: var(--texto-grande); text-align: center; line-height: 1.4; }
+
+/* Text blocks */
+.concept-title, .concept-count, .concept-text, .real-text { text-align: center; margin: 0; }
+.concept-text, .real-text { font-size: var(--texto-grande); line-height: 1.45; }
+.concept-count { color: var(--color-texto-suave); }
+.real-text { font-size: var(--texto-grande); }
+.real-card { min-height: 180px; justify-content: center; }
+
+/* One slice of a pizza: the inline SVG from app.js, at a size that reads on a phone. */
+.ops-slice { display: inline-block; width: 40px; height: 40px; }
+
+/* The deal drawing: a pool of pieces, the groups to fill, and the buttons under them. */
+.ops-deal { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-deal-pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; min-height: 44px; }
+.ops-deal-groups { justify-content: center; gap: 12px; }
+.ops-deal-group { min-width: 96px; min-height: 64px; flex-wrap: wrap; align-content: flex-start; gap: 4px; }
+.ops-deal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.ops-deal-piece { display: inline-flex; }
+.ops-deal-result { margin-top: 4px; }
+.ops-deal-result[hidden] { display: none; }
+
+/* A coin for money drawings: the currency sign of the locale (€ or $) on a round gold coin. */
+.ops-coin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #b8860b;
+  background: radial-gradient(circle at 35% 35%, #ffe38a, #d4a017);
+  color: #5c4300;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Slide arrows: centred under the drawing (number-sort.css, which styles them elsewhere, is not loaded here). */
+.carousel-controls { display: flex; justify-content: center; gap: var(--espacio); }
+.carousel-controls .btn { min-width: 44px; min-height: 44px; }
+
+/* Test answers */
+.option-btn { min-width: 96px; min-height: var(--boton-min); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
+.option-btn.correct { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
+.option-btn.incorrect { opacity: 0.5; text-decoration: line-through; }
+.option-btn:disabled { opacity: 0.6; }
+.option-btn .op-sym { font-size: var(--texto-grande); }
+.task-card { border-color: var(--mod-razonamiento-suave); }
+.prompt { margin: 0; text-align: center; font-size: var(--texto-grande); }
+.feedback { margin: 0; text-align: center; min-height: 1.4em; }
+.feedback.success { color: var(--color-texto); font-weight: 700; }
+.feedback.error { color: var(--color-texto-suave); }
+
+/* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
+.tool-header .activity-icon { width: 48px; height: 48px; flex: none; }

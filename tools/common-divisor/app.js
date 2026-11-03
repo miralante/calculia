@@ -1,242 +1,303 @@
 /* ============================================================
    Calculia — Máximo común divisor
-   Data in data.js. Shared modules in assets/js/.
-   Screens: explanation → test sheet. The whole round is on one
-   screen, as in Primos y compuestos.
+   Three stages, the flow of Operaciones: 1. explanation (slides with a
+   drawing: the biggest number of equal groups, the divisors of two numbers,
+   the common ones), 2. real life (one example at a time: bags, tiles,
+   boxes), 3. test (one question at a time). The numbers and the drawings are
+   built here; the texts are in strings.<locale>.js and the slides in data.js.
    ============================================================ */
 (function () {
   'use strict';
 
   var TOOL_ID = 'common-divisor';
   var $ = App.utils.$;
+  function t(key) { return App.i18n.t(key); }
 
-  var screenIntro = $('#screenIntro');
-  var screenGame = $('#screenGame');
-  var testSheetEl = $('#testSheet');
-  var btnCheck = $('#btnCheck');
-  var btnNewRound = $('#btnNewRound');
-  var progressFill = $('#progressFill');
-  var progressText = $('#progressText');
-  var starsEl = $('#stars');
-
-  /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
-  /* Round state. Each roundSheets entry is one question with the option
-     the person picked (selected, null until chosen) and whether
-     "Comprobar" accepted it (correct, null until it is checked). */
-  var roundCorrect = 0;
-  var roundSheets = [];
+  var SCREENS = ['#screenIntro', '#screenReal', '#screenGame', '#screenEnd'];
+  var introIndex = 0;
+  var realIndex = 0;
+  var round = [];
+  var qIndex = 0;
+  var roundRight = 0;
+  var question = null;
+  var answered = false;
+  var firstTry = true;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
-
-  function gcd(a, b) {
-    return b === 0 ? a : gcd(b, a % b);
+  function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
+  function show(screen) {
+    SCREENS.forEach(function (id) { $(id).classList.toggle('hidden', id !== screen); });
   }
-
-  function divisors(n) {
-    var out = [];
-    for (var d = 1; d <= n; d += 1) {
-      if (n % d === 0) out.push(d);
-    }
+  function fill(text, values) {
+    var out = text;
+    Object.keys(values).forEach(function (k) { out = out.split('{' + k + '}').join(values[k]); });
     return out;
   }
+  function rint(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
 
-  /* Checked at start-up, so bad data fails loudly: each pair has a common
-     divisor above 1 and is not one number twice. */
-  DATA.pairs.forEach(function (pair) {
-    if (gcd(pair[0], pair[1]) < 2 || pair[0] === pair[1]) {
-      throw new Error('common-divisor: bad pair ' + pair.join(', '));
+  /* ---- Numbers ----------------------------------------------------------- */
+  function divisorsOf(n) {
+    var list = [];
+    for (var d = 1; d <= n; d += 1) if (n % d === 0) list.push(d);
+    return list;
+  }
+  function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
+
+  /* ---- Drawing ----------------------------------------------------------
+     Every drawing shows the numbers as small icons, so the sharing can be
+     counted. A caption under it says what was counted. */
+  function items(count, icon, cls) {
+    var html = '';
+    for (var i = 0; i < count; i += 1) html += '<span class="' + cls + '" aria-hidden="true">' + icon + '</span>';
+    return html;
+  }
+  /* `g` baskets, each with its share of the two kinds of item. */
+  function basketsHtml(a, b, g, iconA, iconB) {
+    var html = '<div class="cm-baskets">';
+    for (var k = 0; k < g; k += 1) {
+      html += '<div class="ops-group-box"><div class="ops-row">' +
+        items(a / g, iconA, 'ops-item') + items(b / g, iconB, 'ops-item') + '</div></div>';
     }
-  });
+    return html + '</div><p class="ops-expr">' +
+      fill(t('ui.share'), { g: g, x: a / g, y: b / g }) + '</p>';
+  }
+  /* A floor of a × b, covered with squares of g × g: a/g squares wide, b/g high. */
+  function tilesHtml(a, b, g) {
+    var html = '<div class="cm-tiles">';
+    for (var r = 0; r < b / g; r += 1) {
+      html += '<div class="ops-row">' + items(a / g, '', 'cm-tile') + '</div>';
+    }
+    return html + '</div><p class="ops-expr">' + fill(t('ui.tiles'), { a: a, b: b, g: g }) + '</p>';
+  }
+  /* One row of numbers, the ones that are in both lists marked, the greatest of them filled in. */
+  function chipRow(label, values, common, best) {
+    var html = '<div class="cm-list"><span class="cm-label">' + label + '</span><div class="cm-chips">';
+    values.forEach(function (v) {
+      var cls = 'cm-chip';
+      if (common.indexOf(v) !== -1) cls += ' cm-common';
+      if (v === best) cls += ' cm-best';
+      html += '<span class="' + cls + '">' + v + '</span>';
+    });
+    return html + '</div></div>';
+  }
+  /* The divisors of a and of b; the common ones marked, the greatest common one filled. */
+  function divisorsHtml(a, b) {
+    var la = divisorsOf(a);
+    var lb = divisorsOf(b);
+    var common = la.filter(function (v) { return lb.indexOf(v) !== -1; });
+    var best = gcd(a, b);
+    return '<div class="cm-lists">' +
+      chipRow(fill(t('ui.divisorsOf'), { n: a }), la, common, best) +
+      chipRow(fill(t('ui.divisorsOf'), { n: b }), lb, common, best) +
+      '</div>';
+  }
+  function visualHtml(spec) {
+    if (spec.kind === 'baskets') return basketsHtml(spec.a, spec.b, spec.g, spec.iconA, spec.iconB);
+    if (spec.kind === 'tiles') return tilesHtml(spec.a, spec.b, spec.g);
+    return divisorsHtml(spec.a, spec.b);
+  }
 
-  /* The wrong answers are the mistakes people make: any other divisor of
-     one of the numbers (a common one that is too small, or one that only
-     divides one of them), and the least common multiple. */
-  function question(pair) {
-    var a = pair[0];
-    var b = pair[1];
-    var answer = gcd(a, b);
-    var lcm = a * b / answer;
-    var pool = divisors(a).concat(divisors(b))
-      .filter(function (d) { return d !== answer; })
-      .filter(function (d, i, all) { return all.indexOf(d) === i; });
-    var wrong = App.utils.shuffle(pool).slice(0, 2).concat([lcm]);
+  /* ---- 1. Explanation: slides with a drawing ------------------------------ */
+  function paintIntro() {
+    var n = introIndex + 1;
+    $('#introTitle').textContent = t('intro.' + n + '.title');
+    $('#introVisual').innerHTML = visualHtml(DATA.intro[introIndex].visual);
+    $('#introVisual').setAttribute('aria-label', t('ui.visualAria'));
+    $('#introText').textContent = t('intro.' + n + '.text');
+    var bar = $('#introProgress');
+    bar.setAttribute('aria-label', fill(t('ui.count'), { i: n, n: DATA.intro.length }));
+    bar.setAttribute('aria-valuemax', String(DATA.intro.length));
+    bar.setAttribute('aria-valuenow', String(n));
+    $('#introProgressFill').style.width = (n / DATA.intro.length * 100) + '%';
+  }
 
+  /* ---- 2. Real life: one example at a time ------------------------------- */
+  function paintReal() {
+    var n = realIndex + 1;
+    $('#realVisual').innerHTML = visualHtml(DATA.real[realIndex].visual);
+    $('#realVisual').setAttribute('aria-label', t('ui.visualAria'));
+    $('#realText').textContent = t('real.' + n);
+    var bar = $('#realProgress');
+    bar.setAttribute('aria-label', fill(t('ui.count'), { i: n, n: DATA.real.length }));
+    bar.setAttribute('aria-valuemax', String(DATA.real.length));
+    bar.setAttribute('aria-valuenow', String(n));
+    $('#realProgressFill').style.width = (n / DATA.real.length * 100) + '%';
+  }
+
+  /* ---- 3. Test -------------------------------------------------------------- */
+  function startRound() {
+    var list = [];
+    for (var i = 0; i < DATA.perRound; i += 1) list.push(DATA.questions[i % DATA.questions.length]);
+    round = App.utils.shuffle(list).map(makeQuestion);
+    qIndex = 0;
+    roundRight = 0;
+    show('#screenGame');
+    renderQuestion();
+  }
+
+  function reviewIntro() {
+    introIndex = 0;
+    paintIntro();
+    show('#screenIntro');
+  }
+
+  /* Numbers as answers: the right one and up to two others, all different and not
+     below zero, in a shuffled order. */
+  function numericOptions(correct, wrongs) {
+    var values = [correct];
+    wrongs.forEach(function (v) {
+      if (values.length < 3 && v >= 0 && values.indexOf(v) === -1) values.push(v);
+    });
+    return App.utils.shuffle(values).map(function (v) {
+      return { html: String(v), aria: String(v), correct: v === correct };
+    });
+  }
+
+  /* Two numbers from the pairs: the answer is their greatest common divisor. */
+  function pair() {
+    var g = pick(DATA.gcds);
+    var p = pick(DATA.factorPairs);
+    return { a: g * p[0], b: g * p[1], g: g };
+  }
+  function explanation(p) {
+    return fill(t('q.gcd.explain'), {
+      a: p.a, b: p.b, g: p.g,
+      la: divisorsOf(p.a).join(', '), lb: divisorsOf(p.b).join(', ')
+    });
+  }
+
+  /* The greatest common divisor, asked as a number. The wrong answers are other
+     common divisors that are too small, and numbers that are too big. */
+  function makeGcd() {
+    var p = pair();
+    var values = { a: p.a, b: p.b };
     return {
-      prompt: App.i18n.t('gen.prompt').replace('{a}', a).replace('{b}', b),
-      hint: App.i18n.t('gen.hint').replace('{a}', a).replace('{b}', b),
-      options: App.utils.shuffle([answer].concat(wrong).map(function (n) {
-        return {
-          html: '<span class="answer-num">' + n + '</span>',
-          aria: String(n),
-          correct: n === answer
-        };
-      })),
-      inline: true
+      prompt: fill(t('q.gcd.prompt'), values),
+      hint: fill(t('q.gcd.hint'), values),
+      options: numericOptions(p.g, [p.g * 2, p.g + 1, p.g - 1]),
+      explanation: explanation(p)
     };
   }
 
-  function show(screen) {
-    [screenIntro, screenGame].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
+  /* The same question as a story: how many equal baskets, with nothing left over. */
+  function makeStory() {
+    var p = pair();
+    var values = { a: p.a, b: p.b };
+    return {
+      prompt: fill(t('q.story.prompt'), values),
+      hint: t('q.story.hint'),
+      options: numericOptions(p.g, [p.g * 2, p.g + 1, p.g - 1]),
+      explanation: explanation(p)
+    };
   }
 
-  /* ---- Test sheet ----
-     The whole round is on one screen. Every question is generated when the
-     round starts, and the options inside each one are shuffled too. "Comprobar"
-     checks them all at once; "Otra ronda" deals a new round. */
-
-  function startRound() {
-    App.utils.drawRoundReset();
-    var questions = [];
-    for (var i = 0; i < DATA.perRound; i += 1) {
-      questions.push(question(App.utils.drawRound('common-divisor', DATA.pairs)));
-    }
-    roundSheets = App.utils.shuffle(questions).map(function (q) {
-      return { question: q, selected: null, correct: null };
+  /* Which number divides both: the right one is the greatest common divisor; the
+     others are numbers that do not divide both. */
+  function makeCommon() {
+    var p = pair();
+    var values = { a: p.a, b: p.b, g: p.g };
+    var wrongs = [p.a + 1, p.b + 1, p.a + p.b, p.g + 1].filter(function (x) {
+      return !(p.a % x === 0 && p.b % x === 0);
     });
-    roundCorrect = 0;
-    show(screenGame);
-    renderSheet();
+    return {
+      prompt: fill(t('q.common.prompt'), values),
+      hint: fill(t('q.common.hint'), values),
+      options: numericOptions(p.g, wrongs),
+      explanation: fill(t('q.common.explain'), values)
+    };
   }
 
-  /* Paints the whole round at once. The user can change a selection on any
-     question until "Comprobar" is pressed. Right answers lock; a missed
-     question shows its hint (never the answer) and stays open. */
-  function renderSheet() {
-    testSheetEl.innerHTML = '';
-    roundSheets.forEach(function (sheet, i) {
-      var card = document.createElement('article');
-      card.className = 'card stack test-sheet-card';
-
-      var promptEl = document.createElement('p');
-      promptEl.className = 'prompt';
-      promptEl.textContent = sheet.question.prompt;
-      card.appendChild(promptEl);
-
-      var optionsEl = document.createElement('div');
-      optionsEl.className = 'stack options';
-      if (sheet.question.inline) optionsEl.classList.add('options-row');
-      sheet.question.options.forEach(function (op, j) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'option-btn';
-        btn.innerHTML = op.html;
-        if (op.aria) btn.setAttribute('aria-label', op.aria);
-        btn.addEventListener('click', function () { selectOption(i, j); });
-        optionsEl.appendChild(btn);
-      });
-      card.appendChild(optionsEl);
-
-      var feedbackEl = document.createElement('p');
-      feedbackEl.className = 'feedback hidden';
-      feedbackEl.setAttribute('aria-live', 'polite');
-      card.appendChild(feedbackEl);
-
-      testSheetEl.appendChild(card);
-    });
-
-    btnCheck.classList.remove('hidden');
-    btnCheck.disabled = false;
-    btnNewRound.classList.add('hidden');
-    paintSheetProgress();
+  function makeQuestion(type) {
+    if (type === 'gcd') return makeGcd();
+    if (type === 'story') return makeStory();
+    return makeCommon();
   }
 
-  function selectOption(sheetIdx, optionIdx) {
-    var sheet = roundSheets[sheetIdx];
-    if (sheet.correct === true) return; /* already right: locked */
-    sheet.selected = optionIdx;
-    var card = testSheetEl.querySelectorAll('.test-sheet-card')[sheetIdx];
-    card.querySelectorAll('.option-btn').forEach(function (b, j) {
-      b.classList.toggle('selected', j === optionIdx);
-      b.classList.remove('incorrect');
+  function renderQuestion() {
+    question = round[qIndex];
+    answered = false;
+    firstTry = true;
+    $('#progressFill').style.width = ((qIndex / round.length) * 100) + '%';
+    $('#progressText').textContent = (qIndex + 1) + ' / ' + round.length;
+    $('#testPrompt').textContent = question.prompt;
+    $('#feedback').textContent = '';
+    $('#feedback').className = 'feedback';
+    var box = $('#testOptions');
+    box.innerHTML = '';
+    question.options.forEach(function (option) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'btn option-btn';
+      button.innerHTML = option.html;
+      button.setAttribute('aria-label', option.aria);
+      button.addEventListener('click', function () { answer(option, button); });
+      box.appendChild(button);
     });
-    paintSheetProgress();
+    $('#btnNext').classList.add('hidden');
   }
 
-  function checkAnswers() {
-    var firstUnanswered = -1;
-    for (var i = 0; i < roundSheets.length; i += 1) {
-      if (roundSheets[i].correct !== true && roundSheets[i].selected === null) {
-        firstUnanswered = i;
-        break;
+  function answer(option, button) {
+    if (answered) return;
+    var feedback = $('#feedback');
+    if (option.correct) {
+      answered = true;
+      button.classList.add('correct');
+      feedback.textContent = t('ui.right') + ' ' + question.explanation;
+      feedback.className = 'feedback success';
+      if (firstTry) {
+        roundRight += 1;
+        progress.stars += 1;
+        save();
+        paintStars();
       }
-    }
-    if (firstUnanswered !== -1) {
-      /* Not checked half-way: scroll to the first unanswered card and shake
-         it so it is noticed. The round does not count yet. */
-      var target = testSheetEl.querySelectorAll('.test-sheet-card')[firstUnanswered];
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      target.classList.add('shake');
-      setTimeout(function () { target.classList.remove('shake'); }, 500);
+      $('#testOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+      $('#btnNext').classList.remove('hidden');
       return;
     }
+    /* A wrong answer: the hint, and the option stays off. Nothing is punished. */
+    firstTry = false;
+    button.classList.add('incorrect');
+    button.disabled = true;
+    feedback.textContent = question.hint;
+    feedback.className = 'feedback error';
+  }
 
-    /* Only the first check of the round scores. Later checks walk through
-       the questions still wrong and add no stars. */
-    var firstCheck = roundSheets.every(function (sheet) { return sheet.correct === null; });
-    var rightFirstTry = 0;
-    var cards = testSheetEl.querySelectorAll('.test-sheet-card');
-    roundSheets.forEach(function (sheet, i) {
-      if (sheet.correct === true) return; /* already right: stays locked */
-      var card = cards[i];
-      var options = card.querySelectorAll('.option-btn');
-      var selected = sheet.question.options[sheet.selected];
-      sheet.correct = selected.correct;
-      if (selected.correct && firstCheck) rightFirstTry += 1;
-
-      options.forEach(function (b) { b.classList.remove('selected'); });
-      var feedbackEl = card.querySelector('.feedback');
-      feedbackEl.classList.remove('hidden', 'success', 'error', 'encourage');
-      if (selected.correct) {
-        options.forEach(function (b) { b.disabled = true; });
-        options[sheet.selected].classList.add('correct');
-        feedbackEl.textContent = '✅';
-        feedbackEl.classList.add('success');
-      } else {
-        /* Wrong: the hint shows, the answer does not. The card stays open. */
-        options[sheet.selected].classList.add('incorrect');
-        App.feedback.encourage(feedbackEl);
-        feedbackEl.textContent = ' ' + sheet.question.hint;
-        feedbackEl.classList.add('error');
-      }
-    });
-
-    if (firstCheck) {
-      roundCorrect = rightFirstTry;
-      progress.stars += roundCorrect;
-      save();
-      paintStars();
+  function nextQuestion() {
+    qIndex += 1;
+    if (qIndex < round.length) {
+      renderQuestion();
+      return;
     }
-
-    var allRight = roundSheets.every(function (sheet) { return sheet.correct === true; });
-    btnCheck.classList.toggle('hidden', allRight);
-    btnNewRound.classList.remove('hidden');
-    if (allRight) btnNewRound.focus();
-    paintSheetProgress();
+    progress.completedRounds += 1;
+    save();
+    $('#endSummary').textContent = fill(t('ui.roundDone'), {
+      n: roundRight, total: round.length, stars: progress.stars
+    });
+    show('#screenEnd');
   }
 
-  /* Before "Comprobar" the bar counts the questions with an option picked;
-     after it, the ones already right. The figure is always "x / total". */
-  function paintSheetProgress() {
-    var total = roundSheets.length;
-    var checked = roundSheets[0].correct !== null;
-    var numerator = checked
-      ? roundSheets.filter(function (s) { return s.correct === true; }).length
-      : roundSheets.filter(function (s) { return s.selected !== null; }).length;
-    progressFill.style.width = (numerator / total * 100) + '%';
-    progressText.textContent = numerator + ' / ' + total;
+  /* ---- Wiring ----------------------------------------------------------- */
+  function init() {
+    App.i18n.apply();
+    paintStars();
+    /* Slides wrap around: the last one leads back to the first, and the first back to the last. */
+    $('#introPrev').addEventListener('click', function () { introIndex = (introIndex + DATA.intro.length - 1) % DATA.intro.length; paintIntro(); });
+    $('#introNext').addEventListener('click', function () { introIndex = (introIndex + 1) % DATA.intro.length; paintIntro(); });
+    $('#introContinue').addEventListener('click', function () { realIndex = 0; paintReal(); show('#screenReal'); });
+    $('#realPrev').addEventListener('click', function () { realIndex = (realIndex + DATA.real.length - 1) % DATA.real.length; paintReal(); });
+    $('#realNext').addEventListener('click', function () { realIndex = (realIndex + 1) % DATA.real.length; paintReal(); });
+    $('#realContinue').addEventListener('click', startRound);
+    $('#testBack').addEventListener('click', reviewIntro);
+    $('#btnNext').addEventListener('click', nextQuestion);
+    $('#endBackToStart').addEventListener('click', function () { location.href = '../../'; });
+    paintIntro();
+    show('#screenIntro');
   }
 
-  /* ---- Events ---- */
-
-  $('#introContinue').addEventListener('click', startRound);
-  $('#btnCheck').addEventListener('click', checkAnswers);
-  $('#btnNewRound').addEventListener('click', startRound);
-
-  paintStars();
+  document.addEventListener('DOMContentLoaded', init);
 })();

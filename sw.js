@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v320';
+var VERSION = 'calculia-v329';
 
 var FILES = [
   './',
@@ -234,6 +234,12 @@ var FILES = [
   './tools/multiples/strings.es.js',
   './tools/multiples/strings.en.js',
   './tools/multiples/styles.css',
+  './tools/prime-composite/',
+  './tools/prime-composite/app.js',
+  './tools/prime-composite/data.js',
+  './tools/prime-composite/strings.es.js',
+  './tools/prime-composite/strings.en.js',
+  './tools/prime-composite/styles.css',
   './tools/divisibility-test/',
   './tools/divisibility-test/app.js',
   './tools/divisibility-test/data.js',

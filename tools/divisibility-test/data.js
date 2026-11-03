@@ -1,16 +1,23 @@
 /* ============================================================
-   Calculia — Divisibilidad: six questions, one number that divides
-   exactly by the given number.
-   The statements are in strings.<locale>.js (problems.<id>), with {a}
-   (the divisor) filled from here. `wrong` are two numbers that do not.
+   Calculia — Divisibilidad — datos
+   Explanation: one slide per idea. Each slide draws `total` items shared
+   in rows of `size`; the drawing writes the division under it. The texts
+   are in strings.<locale>.js (intro.<n>.title and intro.<n>.text).
+   Test: each round mixes the `questions` types, `perRound` questions.
+   `divisors` are the numbers whose rule is taught and practised.
    ============================================================ */
 var DATA = {
-  problems: [
-    { id: 1, icon: '✅', a: 2, b: 0, answer: 348, wrong: [347, 351] },
-    { id: 2, icon: '✅', a: 3, b: 0, answer: 57, wrong: [58, 62] },
-    { id: 3, icon: '✅', a: 5, b: 0, answer: 65, wrong: [66, 72] },
-    { id: 4, icon: '✅', a: 9, b: 0, answer: 81, wrong: [84, 88] },
-    { id: 5, icon: '✅', a: 4, b: 0, answer: 116, wrong: [114, 122] },
-    { id: 6, icon: '✅', a: 10, b: 0, answer: 540, wrong: [545, 504] }
+  perRound: 6,
+  divisors: [2, 3, 5, 10],
+  questions: ['pick', 'yesno', 'sum', 'rest'],
+
+  intro: [
+    { visual: { total: 12, size: 3 } },
+    { visual: { total: 13, size: 3 } },
+    { visual: { total: 14, size: 2 } },
+    { visual: { total: 15, size: 5 } },
+    { visual: { total: 30, size: 10 } },
+    { visual: { total: 12, size: 3 } },
+    { visual: { total: 14, size: 3 } }
   ]
 };

@@ -1,234 +1,301 @@
 /* ============================================================
    Calculia — Mínimo común múltiplo
-   Data in data.js. Shared modules in assets/js/.
-   Screens: explanation → test sheet. The whole round is on one
-   screen, as in Primos y compuestos.
+   Three stages, the flow of Operaciones: 1. explanation (slides with a
+   drawing: the multiples of two numbers, the first one they share, the same
+   total in packs), 2. real life (one example at a time: buses, eggs, lights),
+   3. test (one question at a time). The numbers and the drawings are built
+   here; the texts are in strings.<locale>.js and the slides in data.js.
    ============================================================ */
 (function () {
   'use strict';
 
   var TOOL_ID = 'common-multiple';
   var $ = App.utils.$;
+  function t(key) { return App.i18n.t(key); }
 
-  var screenIntro = $('#screenIntro');
-  var screenGame = $('#screenGame');
-  var testSheetEl = $('#testSheet');
-  var btnCheck = $('#btnCheck');
-  var btnNewRound = $('#btnNewRound');
-  var progressFill = $('#progressFill');
-  var progressText = $('#progressText');
-  var starsEl = $('#stars');
-
-  /* Persistent progress */
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
+  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
 
-  /* Round state. Each roundSheets entry is one question with the option
-     the person picked (selected, null until chosen) and whether
-     "Comprobar" accepted it (correct, null until it is checked). */
-  var roundCorrect = 0;
-  var roundSheets = [];
+  var SCREENS = ['#screenIntro', '#screenReal', '#screenGame', '#screenEnd'];
+  var introIndex = 0;
+  var realIndex = 0;
+  var round = [];
+  var qIndex = 0;
+  var roundRight = 0;
+  var question = null;
+  var answered = false;
+  var firstTry = true;
 
   function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
+  function show(screen) {
+    SCREENS.forEach(function (id) { $(id).classList.toggle('hidden', id !== screen); });
+  }
+  function fill(text, values) {
+    var out = text;
+    Object.keys(values).forEach(function (k) { out = out.split('{' + k + '}').join(values[k]); });
+    return out;
+  }
+  function rint(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
 
-  function gcd(a, b) {
-    return b === 0 ? a : gcd(b, a % b);
+  /* ---- Numbers ----------------------------------------------------------- */
+  function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
+  /* The least common multiple: the first number that is a multiple of both. */
+  function lcm(a, b) { return a * b / gcd(a, b); }
+  /* The multiples of n, from n up to `limit`, in order. */
+  function multiplesOf(n, limit) {
+    var list = [];
+    for (var m = n; m <= limit; m += n) list.push(m);
+    return list;
   }
 
-  /* Checked at start-up, so bad data fails loudly: each pair is not one
-     number twice, and neither number is a multiple of the other. */
-  DATA.pairs.forEach(function (pair) {
-    if (pair[0] === pair[1] || pair[1] % pair[0] === 0 || pair[0] % pair[1] === 0) {
-      throw new Error('common-multiple: bad pair ' + pair.join(', '));
-    }
-  });
+  /* ---- Drawing ----------------------------------------------------------
+     Numbers as chips and objects as small icons. A caption under each
+     drawing says what was counted. */
+  function items(count, icon, cls) {
+    var html = '';
+    for (var i = 0; i < count; i += 1) html += '<span class="' + cls + '" aria-hidden="true">' + icon + '</span>';
+    return html;
+  }
+  /* One row of numbers: the ones in both lists marked, the first common one filled. */
+  function chipRow(label, values, common, best) {
+    var html = '<div class="cm-list"><span class="cm-label">' + label + '</span><div class="cm-chips">';
+    values.forEach(function (v) {
+      var cls = 'cm-chip';
+      if (common.indexOf(v) !== -1) cls += ' cm-common';
+      if (v === best) cls += ' cm-best';
+      html += '<span class="' + cls + '">' + v + '</span>';
+    });
+    return html + '</div></div>';
+  }
+  /* The multiples of a and of b, up to their least common multiple. */
+  function listsHtml(a, b) {
+    var best = lcm(a, b);
+    var la = multiplesOf(a, best);
+    var lb = multiplesOf(b, best);
+    var common = la.filter(function (v) { return lb.indexOf(v) !== -1; });
+    return '<div class="cm-lists">' +
+      chipRow(fill(t('ui.multiplesOf'), { n: a }), la, common, best) +
+      chipRow(fill(t('ui.multiplesOf'), { n: b }), lb, common, best) +
+      '</div>';
+  }
+  /* The same total in packs of a and in packs of b, side by side. */
+  function packsHtml(a, b, icon) {
+    var total = lcm(a, b);
+    var html = '<div class="ops-compare">';
+    [a, b].forEach(function (size) {
+      var count = total / size;
+      var boxes = '<div class="cm-baskets">';
+      for (var k = 0; k < count; k += 1) {
+        boxes += '<div class="ops-group-box"><div class="ops-row cm-pack">' + items(size, icon, 'ops-item') + '</div></div>';
+      }
+      html += '<div class="ops-compare-side">' + boxes + '</div>' +
+        '<p class="ops-expr">' + fill(t('ui.packs'), { c: count, s: size, m: total }) + '</p>';
+    });
+    return html + '</div>';
+  }
+  function visualHtml(spec) {
+    if (spec.kind === 'packs') return packsHtml(spec.a, spec.b, spec.icon);
+    return listsHtml(spec.a, spec.b);
+  }
 
-  /* The wrong answers are the mistakes people make: the greatest common
-     divisor, the product of the two numbers, and common-looking multiples
-     that are too big or that are multiples of only one of them. */
-  function question(pair) {
-    var a = pair[0];
-    var b = pair[1];
-    var g = gcd(a, b);
-    var answer = a * b / g;
-    var pool = [g, a * b, answer * 2, answer + a, answer + b]
-      .filter(function (n) { return n !== answer; })
-      .filter(function (n, i, all) { return all.indexOf(n) === i; });
-    var wrong = App.utils.shuffle(pool).slice(0, 3);
+  /* ---- 1. Explanation: slides with a drawing ------------------------------ */
+  function paintIntro() {
+    var n = introIndex + 1;
+    $('#introTitle').textContent = t('intro.' + n + '.title');
+    $('#introVisual').innerHTML = visualHtml(DATA.intro[introIndex].visual);
+    $('#introVisual').setAttribute('aria-label', t('ui.visualAria'));
+    $('#introText').textContent = t('intro.' + n + '.text');
+    var bar = $('#introProgress');
+    bar.setAttribute('aria-label', fill(t('ui.count'), { i: n, n: DATA.intro.length }));
+    bar.setAttribute('aria-valuemax', String(DATA.intro.length));
+    bar.setAttribute('aria-valuenow', String(n));
+    $('#introProgressFill').style.width = (n / DATA.intro.length * 100) + '%';
+  }
 
+  /* ---- 2. Real life: one example at a time ------------------------------- */
+  function paintReal() {
+    var n = realIndex + 1;
+    $('#realVisual').innerHTML = visualHtml(DATA.real[realIndex].visual);
+    $('#realVisual').setAttribute('aria-label', t('ui.visualAria'));
+    $('#realText').textContent = t('real.' + n);
+    var bar = $('#realProgress');
+    bar.setAttribute('aria-label', fill(t('ui.count'), { i: n, n: DATA.real.length }));
+    bar.setAttribute('aria-valuemax', String(DATA.real.length));
+    bar.setAttribute('aria-valuenow', String(n));
+    $('#realProgressFill').style.width = (n / DATA.real.length * 100) + '%';
+  }
+
+  /* ---- 3. Test -------------------------------------------------------------- */
+  function startRound() {
+    var list = [];
+    for (var i = 0; i < DATA.perRound; i += 1) list.push(DATA.questions[i % DATA.questions.length]);
+    round = App.utils.shuffle(list).map(makeQuestion);
+    qIndex = 0;
+    roundRight = 0;
+    show('#screenGame');
+    renderQuestion();
+  }
+
+  function reviewIntro() {
+    introIndex = 0;
+    paintIntro();
+    show('#screenIntro');
+  }
+
+  /* Numbers as answers: the right one and up to two others, all different and not
+     below zero, in a shuffled order. */
+  function numericOptions(correct, wrongs) {
+    var values = [correct];
+    wrongs.forEach(function (v) {
+      if (values.length < 3 && v >= 0 && values.indexOf(v) === -1) values.push(v);
+    });
+    return App.utils.shuffle(values).map(function (v) {
+      return { html: String(v), aria: String(v), correct: v === correct };
+    });
+  }
+
+  function pair() {
+    var p = pick(DATA.pairs);
+    return { a: p[0], b: p[1], m: lcm(p[0], p[1]) };
+  }
+  function explanation(p) {
+    return fill(t('q.lcm.explain'), {
+      a: p.a, b: p.b, m: p.m,
+      la: multiplesOf(p.a, p.m).join(', '), lb: multiplesOf(p.b, p.m).join(', ')
+    });
+  }
+
+  /* The least common multiple, asked as a number. The wrong answers are common
+     multiples that are not the first one (the product, twice the answer), and
+     numbers that are not multiples of both. */
+  function makeLcm() {
+    var p = pair();
+    var values = { a: p.a, b: p.b };
     return {
-      prompt: App.i18n.t('gen.prompt').replace('{a}', a).replace('{b}', b),
-      hint: App.i18n.t('gen.hint').replace('{a}', a).replace('{b}', b),
-      options: App.utils.shuffle([answer].concat(wrong).map(function (n) {
-        return {
-          html: '<span class="answer-num">' + n + '</span>',
-          aria: String(n),
-          correct: n === answer
-        };
-      })),
-      inline: true
+      prompt: fill(t('q.lcm.prompt'), values),
+      hint: fill(t('q.lcm.hint'), values),
+      options: numericOptions(p.m, [p.a * p.b, p.m + 1, p.m * 2]),
+      explanation: explanation(p)
     };
   }
 
-  function show(screen) {
-    [screenIntro, screenGame].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
+  /* The same question as a story: the smallest number of items that fills packs of both sizes. */
+  function makeStory() {
+    var p = pair();
+    var values = { a: p.a, b: p.b };
+    return {
+      prompt: fill(t('q.story.prompt'), values),
+      hint: fill(t('q.story.hint'), values),
+      options: numericOptions(p.m, [p.a * p.b, p.m + 1, p.m * 2]),
+      explanation: explanation(p)
+    };
   }
 
-  /* ---- Test sheet ----
-     The whole round is on one screen. Every question is generated when the
-     round starts, and the options inside each one are shuffled too. "Comprobar"
-     checks them all at once; "Otra ronda" deals a new round. */
-
-  function startRound() {
-    App.utils.drawRoundReset();
-    var questions = [];
-    for (var i = 0; i < DATA.perRound; i += 1) {
-      questions.push(question(App.utils.drawRound('common-multiple', DATA.pairs)));
-    }
-    roundSheets = App.utils.shuffle(questions).map(function (q) {
-      return { question: q, selected: null, correct: null };
+  /* Which number is a multiple of both: the right one is the least common
+     multiple; the others are numbers that are not multiples of both. */
+  function makeCommon() {
+    var p = pair();
+    var values = { a: p.a, b: p.b, m: p.m };
+    var wrongs = [p.m + p.a, p.m + p.b, p.m + 1].filter(function (x) {
+      return !(x % p.a === 0 && x % p.b === 0);
     });
-    roundCorrect = 0;
-    show(screenGame);
-    renderSheet();
+    return {
+      prompt: fill(t('q.common.prompt'), values),
+      hint: fill(t('q.common.hint'), values),
+      options: numericOptions(p.m, wrongs),
+      explanation: fill(t('q.common.explain'), values)
+    };
   }
 
-  /* Paints the whole round at once. The user can change a selection on any
-     question until "Comprobar" is pressed. Right answers lock; a missed
-     question shows its hint (never the answer) and stays open. */
-  function renderSheet() {
-    testSheetEl.innerHTML = '';
-    roundSheets.forEach(function (sheet, i) {
-      var card = document.createElement('article');
-      card.className = 'card stack test-sheet-card';
-
-      var promptEl = document.createElement('p');
-      promptEl.className = 'prompt';
-      promptEl.textContent = sheet.question.prompt;
-      card.appendChild(promptEl);
-
-      var optionsEl = document.createElement('div');
-      optionsEl.className = 'stack options';
-      if (sheet.question.inline) optionsEl.classList.add('options-row');
-      sheet.question.options.forEach(function (op, j) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'option-btn';
-        btn.innerHTML = op.html;
-        if (op.aria) btn.setAttribute('aria-label', op.aria);
-        btn.addEventListener('click', function () { selectOption(i, j); });
-        optionsEl.appendChild(btn);
-      });
-      card.appendChild(optionsEl);
-
-      var feedbackEl = document.createElement('p');
-      feedbackEl.className = 'feedback hidden';
-      feedbackEl.setAttribute('aria-live', 'polite');
-      card.appendChild(feedbackEl);
-
-      testSheetEl.appendChild(card);
-    });
-
-    btnCheck.classList.remove('hidden');
-    btnCheck.disabled = false;
-    btnNewRound.classList.add('hidden');
-    paintSheetProgress();
+  function makeQuestion(type) {
+    if (type === 'lcm') return makeLcm();
+    if (type === 'story') return makeStory();
+    return makeCommon();
   }
 
-  function selectOption(sheetIdx, optionIdx) {
-    var sheet = roundSheets[sheetIdx];
-    if (sheet.correct === true) return; /* already right: locked */
-    sheet.selected = optionIdx;
-    var card = testSheetEl.querySelectorAll('.test-sheet-card')[sheetIdx];
-    card.querySelectorAll('.option-btn').forEach(function (b, j) {
-      b.classList.toggle('selected', j === optionIdx);
-      b.classList.remove('incorrect');
+  function renderQuestion() {
+    question = round[qIndex];
+    answered = false;
+    firstTry = true;
+    $('#progressFill').style.width = ((qIndex / round.length) * 100) + '%';
+    $('#progressText').textContent = (qIndex + 1) + ' / ' + round.length;
+    $('#testPrompt').textContent = question.prompt;
+    $('#feedback').textContent = '';
+    $('#feedback').className = 'feedback';
+    var box = $('#testOptions');
+    box.innerHTML = '';
+    question.options.forEach(function (option) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'btn option-btn';
+      button.innerHTML = option.html;
+      button.setAttribute('aria-label', option.aria);
+      button.addEventListener('click', function () { answer(option, button); });
+      box.appendChild(button);
     });
-    paintSheetProgress();
+    $('#btnNext').classList.add('hidden');
   }
 
-  function checkAnswers() {
-    var firstUnanswered = -1;
-    for (var i = 0; i < roundSheets.length; i += 1) {
-      if (roundSheets[i].correct !== true && roundSheets[i].selected === null) {
-        firstUnanswered = i;
-        break;
+  function answer(option, button) {
+    if (answered) return;
+    var feedback = $('#feedback');
+    if (option.correct) {
+      answered = true;
+      button.classList.add('correct');
+      feedback.textContent = t('ui.right') + ' ' + question.explanation;
+      feedback.className = 'feedback success';
+      if (firstTry) {
+        roundRight += 1;
+        progress.stars += 1;
+        save();
+        paintStars();
       }
-    }
-    if (firstUnanswered !== -1) {
-      /* Not checked half-way: scroll to the first unanswered card and shake
-         it so it is noticed. The round does not count yet. */
-      var target = testSheetEl.querySelectorAll('.test-sheet-card')[firstUnanswered];
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      target.classList.add('shake');
-      setTimeout(function () { target.classList.remove('shake'); }, 500);
+      $('#testOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+      $('#btnNext').classList.remove('hidden');
       return;
     }
+    /* A wrong answer: the hint, and the option stays off. Nothing is punished. */
+    firstTry = false;
+    button.classList.add('incorrect');
+    button.disabled = true;
+    feedback.textContent = question.hint;
+    feedback.className = 'feedback error';
+  }
 
-    /* Only the first check of the round scores. Later checks walk through
-       the questions still wrong and add no stars. */
-    var firstCheck = roundSheets.every(function (sheet) { return sheet.correct === null; });
-    var rightFirstTry = 0;
-    var cards = testSheetEl.querySelectorAll('.test-sheet-card');
-    roundSheets.forEach(function (sheet, i) {
-      if (sheet.correct === true) return; /* already right: stays locked */
-      var card = cards[i];
-      var options = card.querySelectorAll('.option-btn');
-      var selected = sheet.question.options[sheet.selected];
-      sheet.correct = selected.correct;
-      if (selected.correct && firstCheck) rightFirstTry += 1;
-
-      options.forEach(function (b) { b.classList.remove('selected'); });
-      var feedbackEl = card.querySelector('.feedback');
-      feedbackEl.classList.remove('hidden', 'success', 'error', 'encourage');
-      if (selected.correct) {
-        options.forEach(function (b) { b.disabled = true; });
-        options[sheet.selected].classList.add('correct');
-        feedbackEl.textContent = '✅';
-        feedbackEl.classList.add('success');
-      } else {
-        /* Wrong: the hint shows, the answer does not. The card stays open. */
-        options[sheet.selected].classList.add('incorrect');
-        App.feedback.encourage(feedbackEl);
-        feedbackEl.textContent = ' ' + sheet.question.hint;
-        feedbackEl.classList.add('error');
-      }
-    });
-
-    if (firstCheck) {
-      roundCorrect = rightFirstTry;
-      progress.stars += roundCorrect;
-      save();
-      paintStars();
+  function nextQuestion() {
+    qIndex += 1;
+    if (qIndex < round.length) {
+      renderQuestion();
+      return;
     }
-
-    var allRight = roundSheets.every(function (sheet) { return sheet.correct === true; });
-    btnCheck.classList.toggle('hidden', allRight);
-    btnNewRound.classList.remove('hidden');
-    if (allRight) btnNewRound.focus();
-    paintSheetProgress();
+    progress.completedRounds += 1;
+    save();
+    $('#endSummary').textContent = fill(t('ui.roundDone'), {
+      n: roundRight, total: round.length, stars: progress.stars
+    });
+    show('#screenEnd');
   }
 
-  /* Before "Comprobar" the bar counts the questions with an option picked;
-     after it, the ones already right. The figure is always "x / total". */
-  function paintSheetProgress() {
-    var total = roundSheets.length;
-    var checked = roundSheets[0].correct !== null;
-    var numerator = checked
-      ? roundSheets.filter(function (s) { return s.correct === true; }).length
-      : roundSheets.filter(function (s) { return s.selected !== null; }).length;
-    progressFill.style.width = (numerator / total * 100) + '%';
-    progressText.textContent = numerator + ' / ' + total;
+  /* ---- Wiring ----------------------------------------------------------- */
+  function init() {
+    App.i18n.apply();
+    paintStars();
+    /* Slides wrap around: the last one leads back to the first, and the first back to the last. */
+    $('#introPrev').addEventListener('click', function () { introIndex = (introIndex + DATA.intro.length - 1) % DATA.intro.length; paintIntro(); });
+    $('#introNext').addEventListener('click', function () { introIndex = (introIndex + 1) % DATA.intro.length; paintIntro(); });
+    $('#introContinue').addEventListener('click', function () { realIndex = 0; paintReal(); show('#screenReal'); });
+    $('#realPrev').addEventListener('click', function () { realIndex = (realIndex + DATA.real.length - 1) % DATA.real.length; paintReal(); });
+    $('#realNext').addEventListener('click', function () { realIndex = (realIndex + 1) % DATA.real.length; paintReal(); });
+    $('#realContinue').addEventListener('click', startRound);
+    $('#testBack').addEventListener('click', reviewIntro);
+    $('#btnNext').addEventListener('click', nextQuestion);
+    $('#endBackToStart').addEventListener('click', function () { location.href = '../../'; });
+    paintIntro();
+    show('#screenIntro');
   }
 
-  /* ---- Events ---- */
-
-  $('#introContinue').addEventListener('click', startRound);
-  $('#btnCheck').addEventListener('click', checkAnswers);
-  $('#btnNewRound').addEventListener('click', startRound);
-
-  paintStars();
+  document.addEventListener('DOMContentLoaded', init);
 })();
