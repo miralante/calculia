@@ -23,7 +23,9 @@
       right: '✅ Well done!',
       review: '← Review the explanation',
       startTest: 'Start practising →',
-      roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} stars.'
+      roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} stars.',
+      calc: '{T} ÷ {d} = {v}',
+      decimalSep: '.'
     },
 
     /* The explanation: one idea per slide. The drawing is in data.js. */
@@ -34,7 +36,11 @@
       4: { title: 'Divisible by 5: ends in 0 or 5', text: '15 ends in 5, so it divides exactly by 5. If it ends in another digit, it does not.' },
       5: { title: 'Divisible by 10: ends in 0', text: '30 ends in 0, so it divides exactly by 10. If it ends in another digit, it does not.' },
       6: { title: 'Divisible by 3: add the digits', text: 'Add the digits of 12: 1 + 2 = 3. Since 3 divides exactly by 3, 12 does too.' },
-      7: { title: 'If the sum is not divisible by 3, neither is the number', text: 'Add the digits of 14: 1 + 4 = 5. Since 5 is not divisible by 3, 14 is not divisible by 3.' }
+      7: { title: 'If the sum is not divisible by 3, neither is the number', text: 'Add the digits of 14: 1 + 4 = 5. Since 5 is not divisible by 3, 14 is not divisible by 3.' },
+      8: { title: 'The whole part: the full packs', text: '7 balls in packs of 3: 2 packs are full. Those 2 are the whole part.' },
+      9: { title: 'What is left over does not fill a pack', text: '13 balls in packs of 5: 2 packs are full. 3 balls are left over, and 3 do not fill a pack.' },
+      10: { title: 'The calculator: what is before the point', text: 'The calculator shows 2.333… The part before the decimal point is the whole part: 2 full packs.' },
+      11: { title: 'After the point: the decimal part', text: '13 ÷ 5 = 2.6. The 2 are full packs. The 0.6 is what is left over: 3 of 5 parts of a pack.' }
     },
 
     /* The test: the question, a hint (without the answer) and the explanation when right. */
@@ -61,6 +67,16 @@
         hint: '🤔 Find the multiple of {d} just below {n}, without going over.',
         explain: '{n} ÷ {d} = {q}, with {r} left over.',
         none: '{n} ÷ {d} = {q}: nothing is left over.'
+      },
+      integer: {
+        prompt: 'You put {n} balls into packs of {d}. The calculator shows {v}. How many full packs are there?',
+        hint: '🤔 Look at the number before the decimal point. What does not fill a pack does not count.',
+        explain: 'Before the decimal point is {q}, so {q} packs are full. What comes after the point is what is left over.'
+      },
+      decimal: {
+        prompt: 'You put {n} balls into packs of {d}. The calculator shows {v}. What is the decimal part?',
+        hint: '🤔 The decimal part comes after the point. What part of a pack is left over?',
+        explain: 'The decimal part is {dec}. It is {r} of {d} parts of a pack.'
       }
     }
   }, 'en');

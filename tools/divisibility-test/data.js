@@ -1,15 +1,17 @@
 /* ============================================================
    Calculia — Divisibilidad — datos
    Explanation: one slide per idea. Each slide draws `total` items shared
-   in rows of `size`; the drawing writes the division under it. The texts
-   are in strings.<locale>.js (intro.<n>.title and intro.<n>.text).
+   in rows of `size`; the drawing writes the division under it. A slide
+   with `calc: true` writes the calculator's answer instead, with its
+   decimal part, and draws the leftover as a pack only partly filled.
+   The texts are in strings.<locale>.js (intro.<n>.title and intro.<n>.text).
    Test: each round mixes the `questions` types, `perRound` questions.
    `divisors` are the numbers whose rule is taught and practised.
    ============================================================ */
 var DATA = {
   perRound: 6,
   divisors: [2, 3, 5, 10],
-  questions: ['pick', 'yesno', 'sum', 'rest'],
+  questions: ['pick', 'yesno', 'sum', 'rest', 'integer', 'decimal'],
 
   intro: [
     { visual: { total: 12, size: 3 } },
@@ -18,6 +20,10 @@ var DATA = {
     { visual: { total: 15, size: 5 } },
     { visual: { total: 30, size: 10 } },
     { visual: { total: 12, size: 3 } },
-    { visual: { total: 14, size: 3 } }
+    { visual: { total: 14, size: 3 } },
+    { visual: { total: 7, size: 3 } },
+    { visual: { total: 13, size: 5 } },
+    { visual: { total: 7, size: 3, calc: true } },
+    { visual: { total: 13, size: 5, calc: true } }
   ]
 };
