@@ -57,13 +57,21 @@
 .carousel-controls { display: flex; justify-content: center; gap: var(--espacio); }
 .carousel-controls .btn { min-width: 44px; min-height: 44px; }
 
+/* What it is for, and the rule: a reference card above the slides, as in Números ordinales. */
+.instruction { margin: 0; text-align: center; font-size: var(--texto-grande); color: var(--color-texto-suave); }
+.reference-card { text-align: center; }
+.reference-title { margin: 0; font-size: var(--texto-grande); color: var(--mod-razonamiento); }
+.reference-text { margin: 0; font-size: var(--texto-grande); line-height: 1.45; }
+
 /* Test answers */
+.options-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 .option-btn { min-width: 96px; min-height: var(--boton-min); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
 .option-btn.correct { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
-.option-btn.incorrect { opacity: 0.5; text-decoration: line-through; }
 .option-btn:disabled { opacity: 0.6; }
 .task-card { border-color: var(--mod-razonamiento-suave); }
 .prompt { margin: 0; text-align: center; font-size: var(--texto-grande); }
-.feedback { margin: 0; text-align: center; min-height: 1.4em; }
-.feedback.success { color: var(--color-texto); font-weight: 700; }
-.feedback.error { color: var(--color-texto-suave); }
+
+/* Closing screen: the summary, what was practised, and the transfer sentence. */
+.big-emoji { font-size: 64px; line-height: 1; }
+.recap, .transfer { margin: 0; max-width: 480px; text-align: center; }
+.transfer { color: var(--color-texto-suave); }

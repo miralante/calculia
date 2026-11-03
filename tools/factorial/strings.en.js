@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Factorials: texts (EN)
+   Calculia — Factorial Numbers: texts (EN)
    Language-specific file. Loaded from index.html.
    Short sentences, one idea per sentence (easy read). The numbers that
    change in the questions go between braces: {n}, {T}, {chain}…
@@ -8,9 +8,13 @@
   'use strict';
 
   App.i18n.register({
-    title: '❗ Factorials',
-    instruction: 'What the sign "!" means, and what it is for.',
+    title: '❗ Factorial Numbers',
+    instruction: 'Learn what the sign "!" means.',
     btnMenu: 'Back to start',
+
+    /* What it is for, outside the app (SPEC §3.6, key context). */
+    contextTitle: 'What it is for',
+    context: 'Factorials count the different ways things can be put in order.',
 
     ui: {
       prev: 'Previous',
@@ -18,11 +22,14 @@
       count: '{i} of {n}',
       seeReal: 'See real examples →',
       startTest: 'Start practising →',
+      reviewRule: 'Review the rule',
+      backToPractice: 'Back to practice →',
       realLabel: 'Real-life examples',
-      right: '✅ Well done!',
       roundDone: 'Round finished: {n} of {total} right the first time. You have {stars} ⭐.',
       visualAria: 'Drawing that explains factorials with numbers and boxes.',
-      noRest: 'Every division comes out exact: nothing is left over.'
+      noRest: 'Every division comes out exact: nothing is left over.',
+      hintPrefix: '💡 ',
+      wrongPrefix: 'Look at how it is solved. '
     },
 
     /* Explanation in slides with a drawing. */
@@ -39,7 +46,7 @@
       3: '5 friends sit on a bench. There are 120 different ways to sit.'
     },
 
-    /* The test: one question at a time. */
+    /* Practice: question, hint (first miss), explanation. */
     q: {
       value: {
         prompt: 'How much is {n}!?',
@@ -61,6 +68,10 @@
         hint: 'Divide {T} by each number. The one that leaves nothing over is the answer.',
         explain: '{T} ÷ {k} = {g}, nothing left over.'
       }
-    }
+    },
+
+    /* Closing: summary, what was practised, and the transfer sentence (SPEC §3.8). */
+    recap: 'Remember: 4! = 4 × 3 × 2 × 1 = 24, and 0! = 1.',
+    transfer: 'Factorials count the ways to put things in order: in a line, on a shelf or on a bench.'
   }, 'en');
 })();
