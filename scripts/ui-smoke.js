@@ -354,7 +354,12 @@ async function exerciseFontSizeSettings(browser, baseUrl) {
     assert.notStrictEqual(fontSizeAfter, fontSizeBefore,
       'El tamaño elegido debe modificar el tamaño calculado del texto de la app');
     assert.strictEqual(await page.locator('[data-settings-size="large"]').getAttribute('aria-pressed'), 'true');
-    const settingsKey = APP === 'ludia' ? 'enroca:locale:accessibility' : APP + ':locale:accessibility';
+    /* Read the key from the page's own config, as the theme check does, so
+       the test does not depend on the name of the folder it runs from. */
+    const settingsKey = await page.evaluate(() => {
+      const cfg = window.LocalePickerConfig || {};
+      return cfg.settingsStorageKey || ((cfg.storageKey || 'apptonomia:locale') + ':accessibility');
+    });
     const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), settingsKey);
     assert.strictEqual(saved.textSize, 'large', 'El tamaño elegido debe guardarse');
 
