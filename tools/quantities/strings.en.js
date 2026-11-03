@@ -52,9 +52,12 @@
 
     /* Socratic hints: they teach the mechanic, they never give the
        answer away (see SPEC: full socratic anatomy). */
-    hintRead: 'Group the digits in threes from the right. Read each group on its own, then add "thousand" or "million" when it applies.',
     hintWrite: 'Press 🔊 and write in words what you hear.',
     hintPoints: 'Count the digits in threes, from the right. Between one group and the next there is a comma.',
+
+    /* Reading: when wrong, the number is shown in digits and in words, and
+       the person writes it again after pressing "Entendido". */
+    typedSolution: '👀 This is how it is written: {n}. It is read: {words}. Write it yourself in the box.',
 
     /* Reinforcement: after the round, the missed exercises are
        replayed in a mini-round. Stars already earned are kept. */

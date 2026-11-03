@@ -55,9 +55,12 @@
 
     /* Pistas socráticas: enseñan el mecanismo, nunca dan la
        respuesta (ver SPEC: la anatomía socrática completa). */
-    hintRead: 'Agrupa las cifras de tres en tres desde la derecha. Cada grupo se lee aparte y, si es de miles o de millones, lleva su palabra.',
     hintWrite: 'Pulsa 🔊 y escribe con palabras lo que oigas.',
     hintPoints: 'Cuenta las cifras de tres en tres, desde la derecha. Entre un grupo y el siguiente va un punto.',
+
+    /* Leer: al fallar se enseña el número en cifras y en palabras, y la
+       persona lo escribe otra vez tras pulsar «Entendido». */
+    typedSolution: '👀 Así se escribe: {n}. Se lee: {words}. Escríbelo tú en la casilla.',
 
     /* Refuerzo: al terminar la ronda, los fallos se repiten en una
        mini-ronda. Las estrellas ya ganadas no se quitan. */

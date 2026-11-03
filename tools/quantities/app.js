@@ -692,11 +692,30 @@
          is stable because case_ is regenerated each round. */
       if (attempts === 1) App.reinforce.add(practice + ':' + case_.correct, case_);
       App.feedback.encourage($('#feedback'));
-      $('#feedback').textContent += ' ' + t('hint' + practice.charAt(0).toUpperCase() + practice.slice(1));
-      /* In typing mode we do not lock: the user can correct and
+      if (practice === 'read') {
+        showReadSolution();
+        return;
+      }
+      $('#feedback').textContent += ' ' + t('hintWrite');
+      /* In write mode we do not lock: the user can correct and
          press "Comprobar" again. */
       $('#answerInput').focus();
     }
+  }
+
+  /* Reading: a wrong answer shows the number in digits and in words, then
+     the box and "Comprobar" lock until "Entendido" (App.feedback.lockUntilAck),
+     as in the other socratic hints. A hint cannot help with a number, so the
+     solution is shown and the person writes the number again after it. */
+  function showReadSolution() {
+    var zone = $('#feedback');
+    zone.textContent += ' ' + t('typedSolution')
+      .replace('{n}', format(case_.n))
+      .replace('{words}', case_.correct);
+    App.feedback.lockUntilAck([$('#answerInput'), $('#checkAnswer')], zone, function () {
+      zone.textContent = '';
+      $('#answerInput').focus();
+    });
   }
 
   function correct() {
