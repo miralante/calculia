@@ -12,7 +12,8 @@
   DATA.activities.forEach(function (act) {
     var link = document.createElement('a');
     link.className = 'btn-actividad';
-    link.href = '../' + act.slug + '/';
+    /* `hash` opens one mechanic of the activity directly (clock/#situations). */
+    link.href = '../' + act.slug + '/' + (act.hash ? '#' + act.hash : '');
     link.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
       '<span>' + App.i18n.t(act.name) + '</span>' +
       '<span class="detail-card">' + App.i18n.t(act.detail) + '</span>';

@@ -12,9 +12,12 @@
     group: {
       units: { name: 'Units of time', detail: 'From century to second: explanation and real-life examples.' },
       clock: { name: 'The clock', detail: 'What time is it?' },
+      moments: { name: 'Moments of the day', detail: 'Pick the clock that matches each moment of the day.' },
+      elapsed: { name: 'How much time passes?', detail: 'Look at two clocks and say how much time is between them.' },
       convert: { name: 'Change the unit', detail: 'Turn hours into minutes, days into hours and more.' },
       durations: { name: 'How long does it take?', detail: 'Choose how long each everyday thing lasts.' },
-      compare: { name: 'Which lasts longer?', detail: 'Compare times written in different units.' }
+      compare: { name: 'Which lasts longer?', detail: 'Compare times written in different units.' },
+      dates: { name: 'Read dates', detail: 'Read 10/01/2025: day, month and year, and practise.' }
     }
   }, 'en');
 })();

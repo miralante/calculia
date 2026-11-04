@@ -88,25 +88,43 @@
   /* "08:00" — locale-neutral, two digits each. */
   function timeDigital(h, minute) { return pad2(h) + ':' + pad2(minute); }
 
+  /* The dial, the same for every clock face: the twelve hours as numbers
+     (1 to 12) round the edge, a short tick for each minute and a longer tick
+     on each hour. 12 is at the top, and the hours go round clockwise. */
+  function dialSvg() {
+    var ticks = '';
+    for (var m = 0; m < 60; m += 1) {
+      var a = m * 6 * Math.PI / 180;
+      var isHour = m % 5 === 0;
+      var inner = isHour ? 38 : 41.5;
+      var outer = 44;
+      ticks += '<line x1="' + (50 + inner * Math.sin(a)).toFixed(2) +
+        '" y1="' + (50 - inner * Math.cos(a)).toFixed(2) +
+        '" x2="' + (50 + outer * Math.sin(a)).toFixed(2) +
+        '" y2="' + (50 - outer * Math.cos(a)).toFixed(2) +
+        '" stroke="var(--color-texto)" stroke-width="' + (isHour ? 2 : 0.9) + '"/>';
+    }
+    var numbers = '';
+    for (var h = 1; h <= 12; h += 1) {
+      var ang = h * 30 * Math.PI / 180;
+      var r = 30.5;
+      numbers += '<text x="' + (50 + r * Math.sin(ang)).toFixed(2) +
+        '" y="' + (50 - r * Math.cos(ang) + 3.6).toFixed(2) + '" text-anchor="middle" ' +
+        'font-size="10" font-weight="700" fill="var(--color-texto)" ' +
+        'style="font-family:var(--fuente)">' + h + '</text>';
+    }
+    return '<circle cx="50" cy="50" r="45" fill="#FFFFFF" stroke="var(--color-texto)" stroke-width="4"/>' +
+      ticks + numbers;
+  }
+
   function clockSvg(h, minute) {
     var hourAngle = ((h % 12) + minute / 60) * 30;
     var minuteAngle = minute * 6;
-    var numbers = [
-      { n: 12, x: 50, y: 20 },
-      { n: 3,  x: 80, y: 52 },
-      { n: 6,  x: 50, y: 84 },
-      { n: 9,  x: 20, y: 52 }
-    ].map(function (p) {
-      return '<text x="' + p.x + '" y="' + p.y + '" text-anchor="middle" ' +
-        'font-size="12" font-weight="700" fill="var(--color-texto)" ' +
-        'style="font-family:var(--fuente)">' + p.n + '</text>';
-    }).join('');
     return '<svg viewBox="0 0 100 100" width="120" height="120" role="img" aria-hidden="true">' +
-      '<circle cx="50" cy="50" r="45" fill="#FFFFFF" stroke="var(--color-texto)" stroke-width="4"/>' +
-      numbers +
-      '<line x1="50" y1="50" x2="50" y2="28" stroke="var(--color-texto)" stroke-width="5" ' +
+      dialSvg() +
+      '<line x1="50" y1="50" x2="50" y2="30" stroke="var(--color-texto)" stroke-width="5" ' +
       'stroke-linecap="round" transform="rotate(' + hourAngle + ' 50 50)"/>' +
-      '<line x1="50" y1="50" x2="50" y2="18" stroke="var(--color-texto)" stroke-width="3.5" ' +
+      '<line x1="50" y1="50" x2="50" y2="24" stroke="var(--color-texto)" stroke-width="3.5" ' +
       'stroke-linecap="round" transform="rotate(' + minuteAngle + ' 50 50)"/>' +
       '<circle cx="50" cy="50" r="3" fill="var(--color-texto)"/>' +
       '</svg>';
@@ -118,22 +136,11 @@
   function referenceClockSvg(h, minute) {
     var hourAngle = ((h % 12) + minute / 60) * 30;
     var minuteAngle = minute * 6;
-    var numbers = [
-      { n: 12, x: 50, y: 20 },
-      { n: 3,  x: 80, y: 52 },
-      { n: 6,  x: 50, y: 84 },
-      { n: 9,  x: 20, y: 52 }
-    ].map(function (p) {
-      return '<text x="' + p.x + '" y="' + p.y + '" text-anchor="middle" ' +
-        'font-size="12" font-weight="700" fill="var(--color-texto)" ' +
-        'style="font-family:var(--fuente)">' + p.n + '</text>';
-    }).join('');
     return '<svg viewBox="0 0 100 100" width="150" height="150" role="img" aria-hidden="true">' +
-      '<circle cx="50" cy="50" r="45" fill="#FFFFFF" stroke="var(--color-texto)" stroke-width="4"/>' +
-      numbers +
-      '<line x1="50" y1="50" x2="50" y2="28" stroke="var(--color-foco)" stroke-width="6" ' +
+      dialSvg() +
+      '<line x1="50" y1="50" x2="50" y2="30" stroke="var(--color-foco)" stroke-width="6" ' +
       'stroke-linecap="round" transform="rotate(' + hourAngle + ' 50 50)"/>' +
-      '<line x1="50" y1="50" x2="50" y2="18" stroke="var(--color-animo)" stroke-width="3.5" ' +
+      '<line x1="50" y1="50" x2="50" y2="24" stroke="var(--color-animo)" stroke-width="3.5" ' +
       'stroke-linecap="round" transform="rotate(' + minuteAngle + ' 50 50)"/>' +
       '<circle cx="50" cy="50" r="3" fill="var(--color-texto)"/>' +
       '</svg>';
@@ -709,6 +716,14 @@
 
   paintModes();
   paintStars();
+
+  /* A link from the Tiempo y reloj group can open one mechanic straight
+     away: clock/#situations or clock/#elapsed. The hash is not sent to the
+     server, so the page still comes from the cache offline. */
+  var presetMode = DATA.modes.filter(function (m) {
+    return m.id === location.hash.replace('#', '');
+  })[0];
+  if (presetMode) chooseMode(presetMode);
   /* End screen: the only button is "Volver al inicio", which goes back
      to the Calculia landing. The end screen is a closing card, not a
      second menu: picking another activity is a tap away on the home

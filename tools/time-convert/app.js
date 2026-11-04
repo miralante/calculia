@@ -217,8 +217,47 @@
     progressText.textContent = numerator + ' / ' + total;
   }
 
+  /* ---- Explanation carousel ----
+     One card per step: a picto, the name and one sentence. Clicking the
+     card (or pressing Enter) moves forward. */
+  function paintExplain(step) {
+    var el = $('#carouselDisplay');
+    el.textContent = '';
+    var picto = document.createElement('span');
+    picto.className = 'carousel-figure';
+    picto.setAttribute('aria-hidden', 'true');
+    picto.textContent = step.picto;
+    var name = document.createElement('span');
+    name.className = 'carousel-name';
+    name.textContent = App.i18n.t('explain.' + step.id + '.name');
+    var text = document.createElement('p');
+    text.className = 'gallery-note';
+    text.textContent = App.i18n.t('explain.' + step.id + '.text');
+    el.appendChild(picto);
+    el.appendChild(name);
+    el.appendChild(text);
+  }
+
+  var explIdx = 0;
+  function explStep(delta) {
+    explIdx = (explIdx + delta + DATA.explain.length) % DATA.explain.length;
+    paintExplain(DATA.explain[explIdx]);
+  }
+
   /* ---- Events ---- */
 
+  $('#carouselPrev').addEventListener('click', function () { explStep(-1); });
+  $('#carouselNext').addEventListener('click', function () { explStep(1); });
+  var carouselDisplay = $('#carouselDisplay');
+  carouselDisplay.addEventListener('click', function () { explStep(1); });
+  carouselDisplay.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      explStep(1);
+    }
+  });
+
+  paintExplain(DATA.explain[explIdx]);
   $('#introContinue').addEventListener('click', startRound);
   $('#btnCheck').addEventListener('click', checkAnswers);
   $('#btnNewRound').addEventListener('click', startRound);

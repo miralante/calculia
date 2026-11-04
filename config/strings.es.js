@@ -36,7 +36,7 @@
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',
       'problems': 'Problemas', 'temperature': 'Temperatura del agua',
       'wallet': 'El Monedero', 'algebra': 'La balanza', 'charts': 'Datos y gráficos', 'calendar': 'El Calendario', 'clock': 'El Reloj', 'stories': 'Historias',
-      'time-group': 'Tiempo y reloj', 'time-units': 'Unidades de tiempo', 'time-convert': 'Cambia de unidad', 'time-durations': '¿Cuánto tarda?', 'time-compare': '¿Cuál dura más?',
+      'time-group': 'Tiempo y reloj', 'time-units': 'Unidades de tiempo', 'time-convert': 'Cambia de unidad', 'time-durations': '¿Cuánto tarda?', 'time-compare': '¿Cuál dura más?', 'date-format': 'Leer fechas',
       'odd-one-out': '¿Qué no encaja?', 'puzzle': 'Puzzle'
     },
 

@@ -1,0 +1,113 @@
+/* ============================================================
+   Calculia — Leer fechas: estilos propios.
+   Cards, buttons and progress come from assets/css/components.css.
+   The explanation carousel and the test sheet are styled here, in the
+   same way as time-units and time-convert, because assets/css/number-sort.css
+   is not loaded by this activity.
+   ============================================================ */
+
+/* Explanation: one card per step, with a picto, the name and one sentence. */
+.carousel-card { border-color: var(--mod-razonamiento-suave); align-items: center; }
+.carousel-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 160px;
+  width: 100%;
+  max-width: 480px;
+  padding: var(--espacio);
+  border: 2px dashed var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s ease;
+}
+.carousel-display:active { transform: scale(0.97); }
+.carousel-display:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 2px; }
+.carousel-figure { font-size: 56px; line-height: 1.1; }
+.carousel-name {
+  font-size: clamp(1.6rem, 5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--mod-razonamiento);
+}
+.gallery-note {
+  margin: 0;
+  max-width: 480px;
+  font-size: var(--texto-grande);
+  line-height: 1.4;
+  text-align: center;
+}
+.carousel-controls { display: flex; justify-content: center; gap: var(--espacio); width: 100%; }
+.carousel-controls .btn { min-width: 44px; min-height: 44px; }
+.intro-buttons { justify-content: center; }
+
+/* The number or the date inside each option. */
+.answer-num {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.answer-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Test sheet: one card per question, checked all at once. */
+.test-sheet { gap: var(--espacio); }
+.test-sheet-card { border-color: var(--mod-razonamiento-suave); }
+.test-sheet-card .prompt {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  color: var(--color-texto);
+}
+/* The options of a question sit in one row, wrapping on a narrow screen. */
+.options.options-row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.options.options-row .option-btn {
+  display: flex;
+  width: auto;
+  min-width: 120px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.test-sheet-card .option-btn.selected {
+  background: var(--mod-coordinacion);
+  color: var(--texto-sobre-acento, #FFFFFF);
+  border-color: var(--mod-coordinacion);
+}
+.test-sheet-card .option-btn.correct {
+  background: var(--color-acierto);
+  color: var(--texto-sobre-acento, #FFFFFF);
+  border-color: var(--color-acierto);
+}
+.test-sheet-card .option-btn.incorrect {
+  background: var(--color-error, #B0413E);
+  color: var(--texto-sobre-acento, #FFFFFF);
+  border-color: var(--color-error, #B0413E);
+}
+.test-sheet-card .feedback { margin: 0; min-height: 0; font-weight: 700; }
+.test-sheet-card .feedback.success { color: var(--color-acierto); }
+.test-sheet-card .feedback.error { color: var(--color-error, #B0413E); }
+@keyframes test-sheet-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.test-sheet-card.shake { animation: test-sheet-shake 0.4s ease; }
+.sheet-actions { justify-content: center; gap: var(--espacio); }
+
+@media (prefers-reduced-motion: reduce) {
+  .test-sheet-card.shake { animation: none; }
+}

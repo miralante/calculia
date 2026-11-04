@@ -11,6 +11,16 @@
 var DATA = {
   perRound: 6,
 
+  /* The explanation carousel: one card per step, from hours to minutes
+     and back. `picto` is the drawing; the name and sentence are in strings. */
+  explain: [
+    { id: 'hours', picto: '🕐' },
+    { id: 'multiply', picto: '✖️' },
+    { id: 'example', picto: '🧮' },
+    { id: 'back', picto: '➗' },
+    { id: 'real', picto: '🎬' }
+  ],
+
   conversions: [
     { id: 'hour-minute', factor: 60, ns: [2, 3, 4, 5, 6, 8, 10] },
     { id: 'minute-second', factor: 60, ns: [2, 3, 4, 5, 6, 10] },

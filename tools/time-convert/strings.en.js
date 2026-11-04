@@ -11,9 +11,14 @@
     title: '🔁 Change the unit',
     instructionIntro: 'Read the explanation.',
     introContinue: 'Start practising →',
-    intro: {
-      title: 'Change the unit',
-      text: 'An hour is 60 minutes. To find how many minutes are in 3 hours, multiply: 3 × 60 = 180.'
+    prev: '←',
+    nextArrow: '→',
+    explain: {
+      hours: { name: 'Hours to minutes', text: 'An hour is 60 minutes.' },
+      multiply: { name: 'Multiply by 60', text: 'To change hours into minutes, multiply the hours by 60.' },
+      example: { name: 'Example', text: '3 hours × 60 = 180 minutes.' },
+      back: { name: 'Minutes to hours', text: 'To change minutes into hours, divide by 60. 120 minutes ÷ 60 = 2 hours.' },
+      real: { name: 'In real life', text: 'A film lasts 2 hours. That is 120 minutes.' }
     },
     check: 'Check',
     newRound: 'Another round →',

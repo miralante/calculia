@@ -11,9 +11,14 @@
     title: '🔁 Cambia de unidad',
     instructionIntro: 'Lee la explicación.',
     introContinue: 'Empezar a practicar →',
-    intro: {
-      title: 'Cambia de unidad',
-      text: 'Una hora son 60 minutos. Para saber cuántos minutos hay en 3 horas, multiplica: 3 × 60 = 180.'
+    prev: '←',
+    nextArrow: '→',
+    explain: {
+      hours: { name: 'De horas a minutos', text: 'Una hora son 60 minutos.' },
+      multiply: { name: 'Multiplica por 60', text: 'Para pasar horas a minutos, multiplica las horas por 60.' },
+      example: { name: 'Ejemplo', text: '3 horas × 60 = 180 minutos.' },
+      back: { name: 'De minutos a horas', text: 'Para pasar minutos a horas, divide entre 60. 120 minutos ÷ 60 = 2 horas.' },
+      real: { name: 'En la vida real', text: 'Una película dura 2 horas. Son 120 minutos.' }
     },
     check: 'Comprobar',
     newRound: 'Otra ronda →',

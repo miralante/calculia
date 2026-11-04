@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v340';
+var VERSION = 'calculia-v341';
 
 var FILES = [
   './',
@@ -282,6 +282,12 @@ var FILES = [
   './tools/time-compare/strings.es.js',
   './tools/time-compare/strings.en.js',
   './tools/time-compare/styles.css',
+  './tools/date-format/',
+  './tools/date-format/app.js',
+  './tools/date-format/data.js',
+  './tools/date-format/strings.es.js',
+  './tools/date-format/strings.en.js',
+  './tools/date-format/styles.css',
   './tools/common-divisor/',
   './tools/common-divisor/app.js',
   './tools/common-divisor/data.js',
