@@ -17,12 +17,17 @@ var DATA = {
     { id: 'decade', picto: '🔟' },
     { id: 'lustro', picto: '🖐️' },
     { id: 'year', picto: '🗓️' },
-    { id: 'yearMonths', picto: '📋', grid: true },
+    { id: 'yearMonths', picto: '📋', grid: 'months' },
     { id: 'semester', picto: '6️⃣' },
+    { id: 'semesterParts', picto: '🧩', grid: 'parts', count: 2, size: 6 },
     { id: 'quadrimester', picto: '4️⃣' },
+    { id: 'quadrimesterParts', picto: '🧩', grid: 'parts', count: 3, size: 4 },
     { id: 'trimester', picto: '3️⃣' },
+    { id: 'trimesterParts', picto: '🧩', grid: 'parts', count: 4, size: 3 },
     { id: 'bimester', picto: '2️⃣' },
+    { id: 'bimesterParts', picto: '🧩', grid: 'parts', count: 6, size: 2 },
     { id: 'month', picto: '🌙' },
+    { id: 'monthDays', picto: '📆', grid: 'days' },
     { id: 'fortnight', picto: '🌓' },
     { id: 'week', picto: '📆' },
     { id: 'day', picto: '☀️' },
@@ -32,6 +37,10 @@ var DATA = {
     { id: 'minute', picto: '⏱️' },
     { id: 'second', picto: '⚡' }
   ],
+
+  /* Days in each month, January first. February has 28; in a leap year
+     it has 29 (the grid shows that note). */
+  monthDays: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 
   pairs: [
     { id: 'century', answer: 100 },

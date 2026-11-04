@@ -19,15 +19,15 @@
 /* Rows of numbers (the divisors or the multiples), one row per number. */
 .cm-lists { display: flex; flex-direction: column; align-items: stretch; gap: 10px; width: 100%; }
 .cm-list { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.cm-label { font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
+.cm-label { font-size: var(--texto-base); font-weight: 700; color: var(--color-texto); }
 .cm-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .cm-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0 8px;
+  min-width: 52px;
+  min-height: 52px;
+  padding: 0 10px;
   border: 1px solid var(--color-texto-suave);
   border-radius: var(--radio);
   font-size: var(--texto-grande);

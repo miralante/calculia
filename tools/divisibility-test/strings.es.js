@@ -25,20 +25,22 @@
       startTest: 'Empezar a practicar →',
       roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.',
       calc: '{T} ÷ {d} = {v}',
+      nextStep: 'Siguiente paso',
+      stepOf: 'Paso {i} de {n}',
       decimalSep: ','
     },
 
     /* La explicación: una idea por diapositiva. El dibujo está en data.js. */
     intro: {
       1: { title: 'Divisible: no sobra nada', text: '12 entre 3: salen 4 grupos y no sobra nada. Por eso 12 es divisible entre 3.' },
-      2: { title: 'No divisible: sobra algo', text: '13 entre 3: salen 4 grupos y sobra 1. Por eso 13 no es divisible entre 3.' },
+      2: { title: 'No divisible: sobra algo', text: '13 entre 3: salen 4 grupos y sobra 1. Ese 1 es el resto. Por eso 13 no es divisible entre 3.' },
       3: { title: 'Divisible entre 2: termina en cifra par', text: 'Las cifras pares son 0, 2, 4, 6 y 8. 14 termina en 4: se divide exacto entre 2.' },
       4: { title: 'Divisible entre 5: termina en 0 o en 5', text: '15 termina en 5: se divide exacto entre 5. Si termina en otra cifra, no.' },
       5: { title: 'Divisible entre 10: termina en 0', text: '30 termina en 0: se divide exacto entre 10. Si termina en otra cifra, no.' },
-      6: { title: 'Divisible entre 3: suma las cifras', text: 'Suma las cifras de 12: 1 + 2 = 3. Como 3 se divide entre 3, 12 también.' },
+      6: { title: 'Divisible entre 3: suma las cifras', text: 'Suma las cifras de 12: 1 + 2 = 3. El 3 se divide exacto entre 3. Por eso 12 es divisible entre 3.' },
       7: { title: 'Si la suma no se divide entre 3, tampoco', text: 'Suma las cifras de 14: 1 + 4 = 5. Como 5 no se divide entre 3, 14 no es divisible entre 3.' },
       8: { title: 'La parte entera: los paquetes llenos', text: '7 bolas en paquetes de 3: se llenan 2 paquetes. Esos 2 son la parte entera.' },
-      9: { title: 'Lo que sobra no llena un paquete', text: '13 bolas en paquetes de 5: se llenan 2 paquetes. Sobran 3 bolas, y 3 no llenan un paquete.' },
+      9: { title: 'Lo que sobra es el resto', text: '13 bolas en paquetes de 5: se llenan 2 paquetes. Sobran 3 bolas. Ese 3 es el resto: no llena un paquete.' },
       10: { title: 'La calculadora: lo de antes de la coma', text: 'La calculadora dice 2,333… Lo que está antes de la coma es la parte entera: 2 paquetes llenos.' },
       11: { title: 'Después de la coma: la parte decimal', text: '13 ÷ 5 = 2,6. El 2 son paquetes llenos. El 0,6 es lo que sobra: 3 de 5 partes de un paquete.' }
     },
@@ -56,17 +58,27 @@
         yes: '{n} ÷ {d} = {q}: no sobra nada. Sí se divide.',
         no: '{n} ÷ {d} = {q} y sobra {r}. No se divide exacto.'
       },
-      sum: {
-        prompt: 'Suma las cifras de {n}. ¿Se divide exacto entre 3?',
-        hint: '🤔 Suma las cifras una a una. ¿Ese total se divide entre 3?',
-        yes: 'Las cifras suman {s}. {s} se divide entre 3, así que {n} sí se divide entre 3.',
-        no: 'Las cifras suman {s}. {s} no se divide entre 3, así que {n} no se divide entre 3.'
-      },
-      rest: {
-        prompt: '¿Cuánto sobra al dividir {n} entre {d}?',
-        hint: '🤔 Busca el múltiplo de {d} que está antes de {n}, sin pasarte.',
-        explain: '{n} ÷ {d} = {q}, y sobra {r}.',
-        none: '{n} ÷ {d} = {q}: no sobra nada.'
+      /* Las reglas, paso a paso: cada paso es una pregunta con su pista y su explicación. */
+      rule: {
+        lastPrompt: 'Mira la última cifra de {n}. ¿Qué cifra es?',
+        lastHint: '🤔 La última cifra es la de la derecha del número.',
+        lastExplain: 'La última cifra de {n} es {c}.',
+        sumPrompt: 'Suma las cifras de {n}. ¿Cuánto suman?',
+        sumHint: '🤔 Suma la primera cifra con la segunda.',
+        sumExplain: 'Las cifras de {n} son {a} y {b}: {a} + {b} = {s}.',
+        div3Prompt: '¿Se divide exacto {s} entre 3?',
+        div3Hint: '🤔 Haz la división entre 3 y mira si sobra algo.',
+        div3Yes: '{s} ÷ 3 = {q3}: no sobra nada.',
+        div3No: '{s} ÷ 3 = {q3} y sobra {r}.',
+        check: {
+          2: { prompt: '¿La cifra {c} es par?', hint: '🤔 Las cifras pares son 0, 2, 4, 6 y 8.', yes: '{c} es par.', no: '{c} es impar.' },
+          5: { prompt: '¿La cifra {c} es 0 o 5?', hint: '🤔 Mira si la cifra es 0 o 5.', yes: '{c} es 0 o 5.', no: '{c} no es 0 ni 5.' },
+          10: { prompt: '¿La cifra {c} es 0?', hint: '🤔 Solo cuenta si la cifra es un cero.', yes: '{c} es 0.', no: '{c} no es 0.' }
+        },
+        finalPrompt: '¿Se divide exacto {n} entre {d}?',
+        finalHint: '🤔 Piensa en lo que has averiguado en los pasos anteriores.',
+        finalYes: 'Por eso {n} se divide exacto entre {d}.',
+        finalNo: 'Por eso {n} no se divide exacto entre {d}.'
       },
       integer: {
         prompt: 'Metes {n} bolas en paquetes de {d}. La calculadora dice {v}. ¿Cuántos paquetes llenos salen?',

@@ -9,9 +9,12 @@
    `divisors` are the numbers whose rule is taught and practised.
    ============================================================ */
 var DATA = {
-  perRound: 6,
+  perRound: 8,
   divisors: [2, 3, 5, 10],
-  questions: ['pick', 'yesno', 'sum', 'rest', 'integer', 'decimal'],
+  /* Every round has the four step-by-step rules (one question for each divisor),
+     plus the explanation questions: which number divides, yes or no, the whole
+     part and the decimal part. */
+  questions: ['rule2', 'rule3', 'rule5', 'rule10', 'pick', 'yesno', 'integer', 'decimal'],
 
   intro: [
     { visual: { total: 12, size: 3 } },

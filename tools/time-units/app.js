@@ -96,10 +96,88 @@
     el.appendChild(text);
   }
 
+  function monthName(m) {
+    return App.i18n.t('month.m' + (m < 10 ? '0' + m : String(m)));
+  }
+
+  /* The parts of the year (2 semesters, 3 quadrimesters, 4 trimesters, 6
+     bimesters): one tile per part, with its name and the months it covers. */
+  function paintPartGrid(el, unit, sentence) {
+    el.textContent = '';
+    var name = document.createElement('span');
+    name.className = 'carousel-name';
+    name.textContent = App.i18n.t('unit.' + unit.id + '.name');
+    var grid = document.createElement('ol');
+    grid.className = 'part-grid';
+    for (var k = 1; k <= unit.count; k += 1) {
+      var from = (k - 1) * unit.size + 1;
+      var to = k * unit.size;
+      var tile = document.createElement('li');
+      tile.className = 'part-tile';
+      var label = document.createElement('span');
+      label.className = 'part-label';
+      label.textContent = App.i18n.t('unit.' + unit.id + '.part').replace('{n}', String(k));
+      var first = document.createElement('span');
+      first.className = 'part-range';
+      first.textContent = monthName(from);
+      var last = document.createElement('span');
+      last.className = 'part-range';
+      last.textContent = '– ' + monthName(to);
+      tile.appendChild(label);
+      tile.appendChild(first);
+      tile.appendChild(last);
+      grid.appendChild(tile);
+    }
+    var text = document.createElement('p');
+    text.className = 'gallery-note';
+    text.textContent = sentence;
+    el.appendChild(name);
+    el.appendChild(grid);
+    el.appendChild(text);
+  }
+
+  /* The days of each month: one tile per month with its number of days.
+     February shows the leap-year note as well (29 days in a leap year). */
+  function paintDayGrid(el, unit, sentence) {
+    el.textContent = '';
+    var name = document.createElement('span');
+    name.className = 'carousel-name';
+    name.textContent = App.i18n.t('unit.' + unit.id + '.name');
+    var grid = document.createElement('ol');
+    grid.className = 'month-grid';
+    for (var m = 1; m <= 12; m += 1) {
+      var tile = document.createElement('li');
+      tile.className = 'month-tile';
+      var label = document.createElement('span');
+      label.className = 'month-name';
+      label.textContent = monthName(m);
+      var days = document.createElement('span');
+      days.className = 'month-num';
+      days.textContent = App.i18n.t('days').replace('{n}', String(DATA.monthDays[m - 1]));
+      tile.appendChild(label);
+      tile.appendChild(days);
+      if (m === 2) {
+        var leap = document.createElement('span');
+        leap.className = 'month-leap';
+        leap.textContent = App.i18n.t('leapDays');
+        tile.appendChild(leap);
+      }
+      grid.appendChild(tile);
+    }
+    var text = document.createElement('p');
+    text.className = 'gallery-note';
+    text.textContent = sentence;
+    el.appendChild(name);
+    el.appendChild(grid);
+    el.appendChild(text);
+  }
+
   function paintExplanation(unit) {
     var el = $('#carouselDisplay');
     var sentence = App.i18n.t('unit.' + unit.id + '.text');
-    if (unit.grid) paintMonthGrid(el, unit, sentence);
+    if (unit.grid === 'months') paintMonthGrid(el, unit, sentence);
+    else if (unit.grid === 'parts') paintPartGrid(el, unit, sentence);
+    else if (unit.grid === 'days') paintDayGrid(el, unit, sentence);
     else paintCard(el, unit, sentence);
   }
 

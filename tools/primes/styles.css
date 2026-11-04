@@ -92,11 +92,19 @@
   text-align: center;
   color: var(--color-texto-suave);
 }
+/* The real-life objects, drawn one by one in rows that wrap on a narrow screen. */
 .real-object {
-  min-height: 1.2em;
-  font-size: 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  max-width: 320px;
+  min-height: 80px;
+  font-size: 2.2rem;
   line-height: 1.2;
 }
+.real-item { display: inline-block; }
 .intro-buttons { justify-content: center; gap: var(--espacio); }
 
 

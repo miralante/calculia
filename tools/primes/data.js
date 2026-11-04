@@ -28,11 +28,12 @@ var DATA = {
     { id: 'factors' }
   ],
 
-  /* Ejemplos de la vida real. El objeto es el emoji que se ve en grande. */
+  /* Ejemplos de la vida real. `object` es el dibujo y `count` cuántos se ven:
+     7 caramelos, 12 baldosas, y un reloj (un solo dibujo grande). */
   real: [
-    { id: 'candies', object: '🍬' },
-    { id: 'tiles', object: '🧱' },
-    { id: 'clock', object: '⏰' }
+    { id: 'candies', object: '🍬', count: 7 },
+    { id: 'tiles', object: '🧱', count: 12 },
+    { id: 'clock', object: '⏰', count: 1 }
   ],
 
   numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,

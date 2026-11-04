@@ -4,7 +4,8 @@
    Se carga condicionalmente desde index.html según App.i18n.locale().
    'answer.*' son las tres respuestas de la pregunta de clasificar:
    app.js las compara con lo que sale de dividir el número.
-   Frases cortas, una idea por frase (UNE 153101).
+   Frases cortas, una idea por frase (UNE 153101). Se dice "repartir" y
+   "filas iguales" en vez de "divisor" o "múltiplo".
    ============================================================ */
 (function () {
   'use strict';
@@ -18,35 +19,35 @@
     concept: {
       prime: {
         title: 'Número primo',
-        text: 'Un número primo solo se puede dividir entre 1 y entre sí mismo, sin que sobre nada. Por ejemplo, el 7 solo se puede poner en una fila de 7 puntos.'
+        text: 'El 7 es primo. Solo lo puedes poner en una fila de 7 puntos. Con filas iguales de otro tamaño no cuadra.'
       },
       upto10: {
-        title: 'Los primos hasta el 10',
-        text: 'Son cuatro: el 2, el 3, el 5 y el 7. El 1 no es primo. El 4, el 6, el 8, el 9 y el 10 sí se pueden dividir entre otros números.'
+        title: 'Los primos del 1 al 10',
+        text: 'Son el 2, el 3, el 5 y el 7. Tienen un anillo para verlos mejor.'
       },
       composite: {
         title: 'Número compuesto',
-        text: 'Un número compuesto se puede dividir entre otros números, sin que sobre nada. Por ejemplo, el 6 se puede poner en 2 filas de 3 puntos.'
+        text: 'El 6 es compuesto. Lo puedes poner en 2 filas de 3 puntos. También en 3 filas de 2.'
       },
       notPrime: {
-        title: 'Ejemplos que no son primos',
-        text: 'El 4 = 2 × 2. El 6 = 2 × 3. El 8 = 2 × 2 × 2. El 9 = 3 × 3. El 10 = 2 × 5. Todos se pueden escribir como multiplicación.'
+        title: 'Se puede escribir como multiplicación',
+        text: 'El 4 = 2 × 2. El 6 = 2 × 3. El 9 = 3 × 3. Por eso son compuestos.'
       },
       one: {
-        title: 'El 1',
-        text: 'El 1 solo tiene un divisor: él mismo. Por eso no es primo ni compuesto.'
+        title: 'El 1 no es primo',
+        text: 'El 1 es solo 1 punto. No es primo ni compuesto.'
       },
       factors: {
-        title: 'Factorizar',
-        text: 'Es escribir un número como multiplicación de números primos. Por ejemplo: 12 = 2 × 2 × 3.'
+        title: 'Descomponer en primos',
+        text: 'Es escribir un número como multiplicación de primos. El 12 = 2 × 2 × 3.'
       }
     },
     realTitle: 'Los primos y los compuestos están en la vida diaria',
     realContinue: 'Empezar a practicar →',
     real: {
-      candies: 'Tienes 7 caramelos. Solo los puedes repartir iguales entre 1 o entre 7 personas. El 7 es primo.',
+      candies: 'Tienes 7 caramelos. Solo los puedes repartir iguales entre 1 persona o entre 7. El 7 es primo.',
       tiles: 'Tienes 12 baldosas. Las puedes poner en filas de 2, de 3, de 4 o de 6. El 12 es compuesto.',
-      clock: 'Un reloj tiene 60 minutos: 60 = 2 × 2 × 3 × 5. Por eso se parte en mitades, tercios, cuartos y quintos, y siempre sale exacto.'
+      clock: 'Un reloj tiene 60 minutos. Se puede partir en 2 mitades, 3 tercios, 4 cuartos o 5 quintos, sin que sobre nada.'
     },
     answer: {
       prime: 'Primo',
@@ -56,15 +57,15 @@
     check: 'Comprobar',
     newRound: 'Otra ronda →',
     btnMenu: 'Volver al inicio',
-    hint: '🤔 Prueba otra vez. Piensa en los divisores.',
+    hint: '🤔 Prueba otra vez. ¿Se puede repartir sin que sobre nada?',
     transfer: 'Esto te servirá para repartir cosas en grupos iguales y para simplificar fracciones.',
     gen: {
       classifyPrompt: '¿Este número es primo, compuesto o ninguno de los dos?',
       pickPrompt: '¿Cuál de estos números es primo?',
       factorsPrompt: '¿Cuál es la descomposición en primos de este número?',
-      hintClassify: '🤔 ¿Se puede dividir entre otro número, además de 1 y de sí mismo? Prueba con 2, 3 y 5.',
-      hintPick: '🤔 Un número primo solo se divide entre 1 y entre sí mismo. Pruébalos uno a uno.',
-      hintFactors: '🤔 Mira si cada número que multiplicas es primo. Multiplícalos para comprobar que dan el número.'
+      hintClassify: '🤔 ¿Se puede repartir en grupos iguales de otra forma? Prueba con 2, 3 y 5.',
+      hintPick: '🤔 Un primo solo se puede poner en una fila. Pruébalos uno a uno.',
+      hintFactors: '🤔 Mira si cada número que multiplicas es primo. Multiplícalos y mira si dan el número.'
     }
   }, 'es');
 })();

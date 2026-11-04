@@ -23,6 +23,7 @@
   var introIndex = 0;
   var round = [];
   var qIndex = 0;
+  var stepIndex = 0;
   var roundRight = 0;
   var question = null;
   var answered = false;
@@ -193,33 +194,48 @@
     };
   }
 
-  /* The rule for 3: the digits add up to a multiple of 3 exactly when the number is. */
-  function makeSum() {
-    var yes = Math.random() < 0.5;
-    var n;
-    do { n = rint(10, 98); } while ((digitSum(n) % 3 === 0) !== yes);
-    var values = { n: n, s: digitSum(n) };
-    return {
-      prompt: fill(t('q.sum.prompt'), values),
-      hint: t('q.sum.hint'),
-      options: yesNoOptions(yes),
-      explanation: fill(t(yes ? 'q.sum.yes' : 'q.sum.no'), values)
-    };
+  /* One step of a rule: a question with numbers as answers. */
+  function numberStep(prompt, hint, correct, wrongs, explanation) {
+    return { prompt: prompt, hint: hint, options: numericOptions(correct, wrongs), explanation: explanation };
+  }
+  /* One step of a rule: a yes-or-no question. */
+  function yesNoStep(prompt, hint, yes, yesExplanation, noExplanation) {
+    return { prompt: prompt, hint: hint, options: yesNoOptions(yes), explanation: yes ? yesExplanation : noExplanation };
   }
 
-  /* What is left over: the remainder of the division, 0 when nothing is left. */
-  function makeRest() {
-    var d = pick(DATA.divisors);
-    var n = rint(11, 99);
-    var r = n % d;
-    var values = { n: n, d: d, q: Math.floor(n / d), r: r };
-    return {
-      prompt: fill(t('q.rest.prompt'), values),
-      hint: fill(t('q.rest.hint'), values),
-      options: numericOptions(r, [r + 1, r + 2, r - 1]),
-      explanation: fill(t(r ? 'q.rest.explain' : 'q.rest.none'), values)
-    };
+  /* The rules, one step at a time. The person works out the last digit
+     (or the sum of the digits for 3), decides about that, and only then
+     answers the question. Every step is a choice, so the question is
+     answered at the last step, and the steps are practised, not skipped. */
+  function makeRule(d) {
+    var yes = Math.random() < 0.5;
+    var n;
+    do { n = rint(10, 98); } while ((n % d === 0) !== yes);
+    var a = Math.floor(n / 10);
+    var b = n % 10;
+    var steps = [];
+    if (d === 3) {
+      var s = digitSum(n);
+      var sumValues = { n: n, a: a, b: b, s: s, q3: Math.floor(s / 3), r: s % 3 };
+      steps.push(numberStep(fill(t('q.rule.sumPrompt'), sumValues), t('q.rule.sumHint'), s,
+        [s + 1, s + 2, s - 1], fill(t('q.rule.sumExplain'), sumValues)));
+      steps.push(yesNoStep(fill(t('q.rule.div3Prompt'), sumValues), t('q.rule.div3Hint'), s % 3 === 0,
+        fill(t('q.rule.div3Yes'), sumValues), fill(t('q.rule.div3No'), sumValues)));
+    } else {
+      var c = b;
+      var values = { n: n, d: d, c: c };
+      steps.push(numberStep(fill(t('q.rule.lastPrompt'), values), t('q.rule.lastHint'), c,
+        [(c + 1) % 10, (c + 3) % 10, (c + 5) % 10], fill(t('q.rule.lastExplain'), values)));
+      var digitOk = d === 2 ? c % 2 === 0 : (d === 5 ? c === 0 || c === 5 : c === 0);
+      steps.push(yesNoStep(fill(t('q.rule.check.' + d + '.prompt'), values), t('q.rule.check.' + d + '.hint'), digitOk,
+        fill(t('q.rule.check.' + d + '.yes'), values), fill(t('q.rule.check.' + d + '.no'), values)));
+    }
+    var finalValues = { n: n, d: d };
+    steps.push(yesNoStep(fill(t('q.rule.finalPrompt'), finalValues), t('q.rule.finalHint'), yes,
+      fill(t('q.rule.finalYes'), finalValues), fill(t('q.rule.finalNo'), finalValues)));
+    return steps;
   }
+
 
   /* The whole part: how many full packs come out when the calculator shows a decimal.
      The wrong answers are the usual slips: one pack more, or the number of items. */
@@ -251,27 +267,38 @@
     };
   }
 
+  /* A question is a list of steps: one step for most types, three for a rule. */
   function makeQuestion(type) {
-    if (type === 'pick') return makePick();
-    if (type === 'yesno') return makeYesNo();
-    if (type === 'sum') return makeSum();
-    if (type === 'integer') return makeInteger();
-    if (type === 'decimal') return makeDecimal();
-    return makeRest();
+    if (type.indexOf('rule') === 0) return { steps: makeRule(+type.slice(4)) };
+    if (type === 'pick') return { steps: [makePick()] };
+    if (type === 'yesno') return { steps: [makeYesNo()] };
+    if (type === 'integer') return { steps: [makeInteger()] };
+    return { steps: [makeDecimal()] };
   }
 
+  /* The current step: its question, its options and the step label (Paso 1 de 3). */
   function renderQuestion() {
     question = round[qIndex];
-    answered = false;
+    stepIndex = 0;
     firstTry = true;
     $('#progressFill').style.width = ((qIndex / round.length) * 100) + '%';
     $('#progressText').textContent = (qIndex + 1) + ' / ' + round.length;
-    $('#testPrompt').textContent = question.prompt;
+    renderStep();
+  }
+
+  function renderStep() {
+    var step = question.steps[stepIndex];
+    answered = false;
+    var steps = question.steps.length;
+    var label = $('#stepLabel');
+    label.textContent = fill(t('ui.stepOf'), { i: stepIndex + 1, n: steps });
+    label.classList.toggle('hidden', steps < 2);
+    $('#testPrompt').textContent = step.prompt;
     $('#feedback').textContent = '';
     $('#feedback').className = 'feedback';
     var box = $('#testOptions');
     box.innerHTML = '';
-    question.options.forEach(function (option) {
+    step.options.forEach(function (option) {
       var button = document.createElement('button');
       button.type = 'button';
       button.className = 'btn option-btn';
@@ -283,21 +310,26 @@
     $('#btnNext').classList.add('hidden');
   }
 
+  function isLastStep() { return stepIndex === question.steps.length - 1; }
+
   function answer(option, button) {
     if (answered) return;
+    var step = question.steps[stepIndex];
     var feedback = $('#feedback');
     if (option.correct) {
       answered = true;
       button.classList.add('correct');
-      feedback.textContent = t('ui.right') + ' ' + question.explanation;
+      feedback.textContent = t('ui.right') + ' ' + step.explanation;
       feedback.className = 'feedback success';
-      if (firstTry) {
+      /* The question scores once, at its last step, and only if no step was missed. */
+      if (isLastStep() && firstTry) {
         roundRight += 1;
         progress.stars += 1;
         save();
         paintStars();
       }
       $('#testOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+      $('#btnNext').textContent = isLastStep() ? t('ui.next') : t('ui.nextStep');
       $('#btnNext').classList.remove('hidden');
       return;
     }
@@ -305,11 +337,16 @@
     firstTry = false;
     button.classList.add('incorrect');
     button.disabled = true;
-    feedback.textContent = question.hint;
+    feedback.textContent = step.hint;
     feedback.className = 'feedback error';
   }
 
   function nextQuestion() {
+    if (!isLastStep()) {
+      stepIndex += 1;
+      renderStep();
+      return;
+    }
     qIndex += 1;
     if (qIndex < round.length) {
       renderQuestion();

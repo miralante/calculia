@@ -234,9 +234,14 @@
 
   /* ---- Real-life carousel ---- */
 
+  /* The objects are drawn one by one, so the count can be seen: 7 sweets, 12 tiles. */
   function paintRealExample() {
     var item = DATA.real[realIndex];
-    realObject.textContent = item.object;
+    var html = '';
+    for (var i = 0; i < item.count; i += 1) {
+      html += '<span class="real-item">' + item.object + '</span>';
+    }
+    realObject.innerHTML = html;
     realCaption.textContent = App.i18n.t('real.' + item.id);
   }
 
