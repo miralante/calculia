@@ -15,6 +15,7 @@
   var promptEl = $('#prompt');
   var visualEl = $('#visual');
   var legendEl = $('#legend');
+  var ruleTitleEl = $('#ruleTitle');
   var optionsEl = $('#options');
   var feedbackEl = $('#feedback');
   var explanationWrap = $('#explanationWrap');
@@ -163,6 +164,10 @@
     return html + '</span>';
   }
 
+  /* The number of points a dot drawing stands for, written above it. */
+  function dotsCount(n) {
+    return '<span class="dots-count">' + App.i18n.t('gen.dotsCount').replace(/\{n\}/g, n) + '</span>';
+  }
   function numberCard(n, markLast) {
     var s = String(n);
     if (!markLast) return '<span class="big-number">' + s + '</span>';
@@ -407,7 +412,7 @@
       return {
         prompt: App.i18n.t('gen.isMultiple')
           .replace(/\{n\}/g, n).replace(/\{base\}/g, base),
-        visual: '<div class="calc-stage">' + rowsOf(n, base, 1) + '</div>',
+        visual: '<div class="calc-stage">' + dotsCount(n) + rowsOf(n, base, 1) + '</div>',
         visualAria: App.i18n.t('gen.rowsAria')
           .replace(/\{n\}/g, n).replace(/\{base\}/g, base),
         legend: App.i18n.t('gen.multipleHint'),
@@ -447,13 +452,14 @@
       var yes = n % rule.divisor === 0;
       var digits = rule.id === 'by3';
       return {
+        /* The rule is the title; the question and the number it is about come below. */
+        title: App.i18n.t('rule.' + rule.id),
         prompt: App.i18n.t('gen.divides')
           .replace(/\{n\}/g, n).replace(/\{d\}/g, rule.divisor),
         visual: '<div class="calc-stage">' + numberCard(n, !digits) +
           (digits ? '<span class="digit-sum">' + String(n).split('').join(' + ') +
             ' = ' + digitSum(n) + '</span>' : '') + '</div>',
         visualAria: String(n),
-        legend: App.i18n.t('rule.' + rule.id),
         hint: App.i18n.t('gen.socraticCriterion'),
         options: yesNoOptions(yes)
       };
@@ -479,7 +485,7 @@
       }).slice(0, 3);
       return {
         prompt: App.i18n.t('gen.intDivision').replace(/\{n\}/g, n).replace(/\{d\}/g, d),
-        visual: '<div class="calc-stage">' + rowsOf(n, d, 1) + '</div>',
+        visual: '<div class="calc-stage">' + dotsCount(n) + rowsOf(n, d, 1) + '</div>',
         visualAria: App.i18n.t('gen.intDivisionAria').replace(/\{n\}/g, n).replace(/\{d\}/g, d),
         legend: App.i18n.t('gen.intDivisionLegend'),
         hint: App.i18n.t('gen.socraticIntDivision').replace(/\{n\}/g, n).replace(/\{d\}/g, d),
@@ -502,7 +508,7 @@
       tries.forEach(function (t) {
         var fits = n % t === 0;
         html += '<span class="try' + (fits ? ' is-fit' : '') + '">' +
-          '<span class="try-label">' + App.i18n.t('gen.inRowsOf').replace(/\{t\}/g, t) +
+          '<span class="try-label">' + App.i18n.t('gen.inRowsOf').replace(/\{n\}/g, n).replace(/\{t\}/g, t) +
           ' <span class="try-verdict" aria-hidden="true">' + (fits ? '✔' : '✖') + '</span></span>' +
           rowsOf(n, t, fits ? 1 : 2) + '</span>';
       });
@@ -720,6 +726,9 @@
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
+    /* A shortcut's rule is the title of its card, above the question. */
+    ruleTitleEl.textContent = question.title || '';
+    ruleTitleEl.classList.toggle('hidden', !question.title);
     legendEl.textContent = question.legend || '';
     legendEl.classList.toggle('hidden', !question.legend);
 

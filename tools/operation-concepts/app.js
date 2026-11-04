@@ -159,28 +159,25 @@
   }
   /* Like packHtml, but the leftover row is drawn apart so it reads as «sobra». */
   function restHtml(total, size, icon) { return packHtml(total, size, icon); }
-  /* The total, and below it the empty groups it has to be shared into, each named «Amigo n». The slices are numbered, so the count reads 1 … total. */
-  function shareHtml(total, groups, icon) {
-    var html = '<div class="ops-divide ops-share">' + row(total, icon, { from: 1 }) + sign('↓') + '<div class="ops-group-stack">';
-    for (var g = 0; g < groups; g += 1) {
-      html += '<div class="ops-deal-slot"><span class="ops-deal-label">' + fill(t('ui.friend'), { n: g + 1 }) + '</span><div class="ops-group-box ops-empty-box"></div></div>';
-    }
-    return html + '</div></div>';
+  /* The name of group `n` in a drawing: «Amigo n», «Paquete n», «Estante n» or «Caja n», in the same auxiliary style. */
+  function groupTag(key, n) {
+    return '<span class="ops-tag">' + fill(t('ui.' + key), { n: n }) + '</span>';
   }
   /* The deal drawing: a pool of pieces, empty groups, and two buttons. «Repartir uno» moves the next piece into the
      next group, in turn, so the sharing is seen happening. The result line shows once the pool is empty. */
   function dealInner(total, groups, result) {
     var pieces = '';
-    for (var i = 0; i < total; i += 1) pieces += '<span class="ops-deal-piece">' + SLICE + '<b class="ops-num">' + (i + 1) + '</b></span>';
+    for (var i = 0; i < total; i += 1) pieces += '<span class="ops-deal-piece" role="button" tabindex="0">' + SLICE + '<b class="ops-num">' + (i + 1) + '</b></span>';
     var boxes = '';
     for (var g = 0; g < groups; g += 1) {
-      boxes += '<div class="ops-deal-slot"><span class="ops-deal-label">' + fill(t('ui.friend'), { n: g + 1 }) + '</span>' +
+      boxes += '<div class="ops-deal-slot">' + groupTag('friend', g + 1) +
         '<div class="ops-group-box ops-empty-box ops-deal-group"></div></div>';
     }
+    /* The buttons stay hidden until the first slice is dealt: the slices themselves are the way to start. */
     return '<div class="ops-deal-pool">' + pieces + '</div>' +
       '<div class="ops-row ops-deal-groups">' + boxes + '</div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + result + '</p>' +
-      '<div class="ops-deal-actions">' +
+      '<div class="ops-deal-actions" hidden>' +
       '<button type="button" class="btn btn-secondary" data-deal="one">' + t('ui.dealOne') + '</button>' +
       '<button type="button" class="btn btn-secondary" data-deal="reset">' + t('ui.dealReset') + '</button>' +
       '</div>';
@@ -192,10 +189,12 @@
   }
   /* The total first, and next to it how it is divided: `groups` equal groups (sharing), or groups of `size`
      (packing). A leftover, if any, sits apart. `caption` writes the division underneath. */
-  function divideHtml(total, groups, size, icon, caption, product, alt, numbered) {
+  function divideHtml(total, groups, size, icon, caption, product, alt, numbered, labelKey) {
     var each = groups ? total / groups : size;
     var full = groups || Math.floor(total / size);
     var rem = groups ? 0 : total % size;
+    /* Each full group carries its name: «Amigo n» when shared, «Paquete n» when packed unless the spec names another (shelf, box). */
+    var tagKey = labelKey || (groups ? 'friend' : 'pack');
     /* A numbered drawing colours each package apart, so the balls in the total read as the packages they go in. */
     var ball = function (g) { return numbered ? PACKAGE_BALLS[g % PACKAGE_BALLS.length] : icon; };
     var top = row(total, icon);
@@ -206,7 +205,10 @@
       top = '<div class="ops-row">' + top + '</div>';
     }
     var html = '<div class="ops-divide' + (numbered ? ' ops-numbered' : '') + '">' + top + sign('↓') + '<div class="ops-group-stack">';
-    for (var g = 0; g < full; g += 1) html += '<div class="ops-group-box">' + row(each, ball(g), { alt: alt && g % 2 === 1, from: numbered ? g * each + 1 : undefined }) + '</div>';
+    for (var g = 0; g < full; g += 1) {
+      html += '<div class="ops-group-slot">' + groupTag(tagKey, g + 1) +
+        '<div class="ops-group-box">' + row(each, ball(g), { alt: alt && g % 2 === 1, from: numbered ? g * each + 1 : undefined }) + '</div></div>';
+    }
     if (rem) html += '<div class="ops-row ops-left-row">' + items(rem, ball(full), { from: numbered ? full * each + 1 : undefined }).replace(/ops-item/g, 'ops-item ops-left') + '</div>';
     html += '</div></div>';
     if (caption) {
@@ -243,7 +245,7 @@
       /* A sum slide numbers its items: the sum counts them one by one. */
       return groupsHtml(spec.groups, spec.each, spec.icon, text, spec.alt, spec.sum);
     }
-    if (spec.kind === 'divide') return divideHtml(spec.total, spec.groups, spec.size, icon, spec.caption, spec.product, spec.alt, spec.numbered);
+    if (spec.kind === 'divide') return divideHtml(spec.total, spec.groups, spec.size, icon, spec.caption, spec.product, spec.alt, spec.numbered, spec.label);
     if (spec.kind === 'pack') {
       var caption = spec.caption ? fill(t('ui.groupsOf'), { g: spec.total / spec.size, e: spec.size }) : null;
       return packHtml(spec.total, spec.size, spec.icon, caption);
@@ -395,7 +397,8 @@
     if (type === 'share') {
       var people = rint(2, 4), each = rint(2, 6), total = people * each;
       return {
-        prompt: fill(q, { T: total, g: people }), visual: shareHtml(total, people, icon), hint: hint,
+        /* The same deal drawing as the explanation: the slices can be dealt one by one, with the buttons to help. */
+        prompt: fill(q, { T: total, g: people }), visual: dealHtml(total, people), hint: hint,
         options: numericOptions(each, [each + 1, each - 1, people]),
         explanation: fill(t('q.share.explain'), { each: each, T: total, g: people })
       };
@@ -405,7 +408,16 @@
       return {
         prompt: fill(q, { T: full * size + left, e: size }), visual: restHtml(full * size + left, size, icon), hint: hint,
         options: numericOptions(full, [full + 1, full - 1, left]),
-        explanation: fill(t('q.rest.explain'), { q: full, r: left })
+        explanation: fill(t(left === 1 ? 'q.rest.explainOne' : 'q.rest.explain'), { q: full, r: left })
+      };
+    }
+    /* leftover: the same packs, asking for what is left outside the full groups. Small leftovers come up often. */
+    if (type === 'leftover') {
+      var lsize = rint(3, 5), lfull = rint(2, 4), lleft = rint(1, lsize - 1);
+      return {
+        prompt: fill(q, { T: lfull * lsize + lleft, e: lsize }), visual: restHtml(lfull * lsize + lleft, lsize, icon), hint: hint,
+        options: numericOptions(lleft, [lsize, lfull, lleft + 1, lleft - 1]),
+        explanation: fill(t(lleft === 1 ? 'q.leftover.explainOne' : 'q.leftover.explain'), { q: lfull, r: lleft })
       };
     }
     /* swap: changing the order of the two addends keeps the total (commutative). */
@@ -557,22 +569,39 @@
   }
 
   /* The deal drawing's buttons: «Repartir uno» moves one piece into the next group; «Empezar de nuevo» rebuilds it. */
-  document.addEventListener('click', function (e) {
-    var button = e.target.closest ? e.target.closest('[data-deal]') : null;
-    var box = button && button.closest('.ops-deal');
-    if (!box) return;
-    var total = parseInt(box.getAttribute('data-total'), 10);
-    var groups = parseInt(box.getAttribute('data-groups'), 10);
-    if (button.getAttribute('data-deal') === 'reset') {
-      box.innerHTML = dealInner(total, groups, box.getAttribute('data-result'));
-      return;
-    }
+  /* Deals one slice: the next piece of the pool goes into the next group, in turn. */
+  function dealOne(box) {
     var piece = box.querySelector('.ops-deal-pool .ops-deal-piece');
     if (!piece) return;
     var boxes = box.querySelectorAll('.ops-deal-group');
     var dealt = box.querySelectorAll('.ops-deal-group .ops-deal-piece').length;
     boxes[dealt % boxes.length].appendChild(piece);
+    box.querySelector('.ops-deal-actions').hidden = false;
     if (!box.querySelector('.ops-deal-pool .ops-deal-piece')) box.querySelector('.ops-deal-result').hidden = false;
+  }
+
+  /* A tap on a slice in the pool deals it. The buttons below appear after the first deal. */
+  document.addEventListener('click', function (e) {
+    var target = e.target.closest ? e.target : null;
+    var button = target ? target.closest('[data-deal]') : null;
+    var piece = target ? target.closest('.ops-deal-pool .ops-deal-piece') : null;
+    var box = button ? button.closest('.ops-deal') : (piece ? piece.closest('.ops-deal') : null);
+    if (!box) return;
+    if (button && button.getAttribute('data-deal') === 'reset') {
+      var total = parseInt(box.getAttribute('data-total'), 10);
+      var groups = parseInt(box.getAttribute('data-groups'), 10);
+      box.innerHTML = dealInner(total, groups, box.getAttribute('data-result'));
+      return;
+    }
+    dealOne(box);
+  });
+  /* The same for the keyboard: Enter or Space on a focused slice deals it. */
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var piece = e.target.closest ? e.target.closest('.ops-deal-pool .ops-deal-piece') : null;
+    if (!piece) return;
+    e.preventDefault();
+    dealOne(piece.closest('.ops-deal'));
   });
 
   document.addEventListener('DOMContentLoaded', init);

@@ -62,8 +62,8 @@ var DATA = {
       ],
       real: [
         { visual: { kind: 'divide', total: 8, groups: 4, coin: true, caption: true, alt: true } },
-        { visual: { kind: 'divide', total: 6, size: 2, icon: '📖', caption: true, alt: true } },
-        { visual: { kind: 'divide', total: 7, size: 3, icon: '🍪', caption: true, alt: true } }
+        { visual: { kind: 'divide', total: 6, size: 2, icon: '📖', caption: true, alt: true, label: 'shelf' } },
+        { visual: { kind: 'divide', total: 8, size: 3, icon: '🍪', caption: true, alt: true, label: 'box' } }
       ] }
   ],
 
@@ -85,6 +85,6 @@ var DATA = {
     add: ['pick', 'join', 'more', 'swap'],
     sub: ['pick', 'take', 'gap'],
     mul: ['pick', 'times', 'repeat', 'swapTimes'],
-    div: ['pick', 'share', 'rest', 'relation']
+    div: ['pick', 'share', 'rest', 'leftover', 'relation']
   }
 };

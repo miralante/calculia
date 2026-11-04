@@ -122,6 +122,8 @@
      odd and why. Arrows (and a click on the balls) move through the
      slides; the order wraps around. */
   var SEQ_MAX = 10;
+  /* One more slide after the numbers: the review. */
+  var SEQ_LAST = SEQ_MAX + 1;
   var seqIdx = 0;
 
   function seqCaptionFor(n) {
@@ -132,10 +134,36 @@
     return fill(t('seqOdd'), { n: n, p: p });
   }
 
+  /* The review slide, after the last number: the two lists side by side, and the rule in one line. */
+  function paintReview(display) {
+    var evens = [], odds = [];
+    for (var k = 0; k <= SEQ_MAX; k += 1) (isEven(k) ? evens : odds).push(String(k));
+    var box = document.createElement('div');
+    box.className = 'parity-review';
+    var lines = [
+      [t('reviewRule'), 'parity-review-rule'],
+      [fill(t('reviewEven'), { list: evens.join(', ') }), 'parity-review-line parity-review-even'],
+      [fill(t('reviewOdd'), { list: odds.join(', ') }), 'parity-review-line parity-review-odd']
+    ];
+    lines.forEach(function (line) {
+      var p = document.createElement('p');
+      p.className = line[1];
+      p.textContent = line[0];
+      box.appendChild(p);
+    });
+    display.appendChild(box);
+  }
+
   function paintSlide() {
     var display = $('#seqDisplay');
     display.innerHTML = '';
     display.classList.add('parity-carousel-balls');
+    if (seqIdx === SEQ_LAST) {
+      paintReview(display);
+      display.setAttribute('aria-label', t('reviewCaption'));
+      $('#seqCaption').textContent = t('reviewCaption');
+      return;
+    }
     if (seqIdx === 0) {
       /* No balls: the slide shows the words "0 = par" in the space
          where the balls would be, so it is never empty. */
@@ -151,7 +179,7 @@
   }
 
   function seqStep(delta) {
-    seqIdx = (seqIdx + delta + (SEQ_MAX + 1)) % (SEQ_MAX + 1);
+    seqIdx = (seqIdx + delta + (SEQ_LAST + 1)) % (SEQ_LAST + 1);
     paintSlide();
   }
 

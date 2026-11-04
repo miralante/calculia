@@ -20,6 +20,9 @@
       dealReset: 'Start again',
       dealResult: '{T} ÷ {g} = {e}',
       friend: 'Friend {n}',
+      pack: 'Package {n}',
+      shelf: 'Shelf {n}',
+      box: 'Box {n}',
       seeReal: 'See real examples →',
       startTest: 'Start practising →',
       right: '✅ Well done!',
@@ -85,7 +88,7 @@
         real: {
           1: 'You share 8 dollars among 4 friends: each friend gets 2 dollars.',
           2: 'You have 6 books and put 2 on each shelf: you need 3 shelves.',
-          3: 'You have 7 biscuits and put them in boxes of 3: 2 boxes are full and 1 is left over.'
+          3: 'You have 8 biscuits and put them in boxes of 3: 2 boxes are full and 2 are left over.'
         }
       }
     },
@@ -99,20 +102,20 @@
       add4: 'You have 6 stickers and your friend gives you 7.',
       add5: 'Yesterday you read 8 pages and today you read 5.',
       sub1: 'You had 9 sweets and you eat 4.',
-      sub2: 'You need 10 chairs and there are 6: how many are missing?',
+      sub2: 'You need 10 chairs and you have 6.',
       sub3: 'You had 12 dollars and you spend 5 dollars.',
       sub4: 'There were 15 birds and 6 fly away.',
       sub5: 'You have 11 pencils and you lend 4 to a friend.',
       mul1: 'There are 4 boxes and each box has 6 pencils.',
       mul2: 'You have 5 bags with 2 marbles in each one.',
-      mul3: 'There are 3 rows of 5 chairs. How many chairs are there?',
+      mul3: 'There are 3 rows of 5 chairs.',
       mul4: 'Each person has 4 marbles. There are 6 people.',
       mul5: 'One pizza has 8 slices and you buy 2 pizzas.',
       div1: 'You have 6 pizza slices and share them among 2 friends, all the same.',
-      div2: 'You have 8 stickers and put 2 on each sheet. How many sheets do you need?',
+      div2: 'You have 8 stickers and put 2 on each sheet.',
       div3: 'You have 12 cookies and share them equally among 4 friends.',
       div4: 'You have 15 sweets and put them into bags of 3, all the same.',
-      div5: 'You have 10 tokens and put 5 in each box. How many boxes do you use?'
+      div5: 'You have 10 tokens and put 5 in each box.'
     },
 
     q: {
@@ -164,7 +167,14 @@
       rest: {
         prompt: 'You have {T} and put them in groups of {e}. How many full groups are there?',
         hint: '🤔 Count the groups that are full. What does not fill a group is left over.',
-        explain: '{q} groups are full and {r} are left over.'
+        explain: '{q} groups are full and {r} are left over.',
+        explainOne: '{q} groups are full and 1 is left over.'
+      },
+      leftover: {
+        prompt: 'You have {T} and put them in groups of {e}. How many are left over?',
+        hint: '🤔 First count the full groups. What is outside them is left over.',
+        explain: '{q} groups are full and {r} are left over.',
+        explainOne: '{q} groups are full and 1 is left over.'
       },
       relation: {
         prompt: 'You share {T} into groups of {e}. Which division is it?',

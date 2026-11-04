@@ -47,6 +47,11 @@
     seqEven: '{n} bolas, todas en parejas: es {p}.',
     seqOne: 'Una bola, y se queda sola: es {p}.',
     seqOdd: '{n} bolas: una se queda sola y las demás van en parejas: es {p}.',
+    /* Diapositiva de repaso, al final de los números del 0 al 10. */
+    reviewRule: 'Par: sus puntos van de dos en dos y no sobra ninguno. Impar: sobra uno.',
+    reviewEven: 'Pares: {list}',
+    reviewOdd: 'Impares: {list}',
+    reviewCaption: 'Repaso: los pares van en parejas y los impares dejan uno suelto.',
     introNext: 'Ver en la vida real →',
 
     /* ---------- Pantalla 2: la vida real ---------- */

@@ -38,6 +38,11 @@
     seqEven: '{n} balls, all in pairs: it is {p}.',
     seqOne: 'One ball, left alone: it is {p}.',
     seqOdd: '{n} balls: one is left alone and the rest go in pairs: it is {p}.',
+    /* Review slide, after the numbers 0 to 10. */
+    reviewRule: 'Even: its dots go in pairs and none is left over. Odd: one is left over.',
+    reviewEven: 'Even: {list}',
+    reviewOdd: 'Odd: {list}',
+    reviewCaption: 'Review: even numbers go in pairs, and odd numbers leave one on its own.',
     introNext: 'See it in real life →',
 
     /* ---------- Screen 2: real life ---------- */

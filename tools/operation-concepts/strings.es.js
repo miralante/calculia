@@ -21,6 +21,9 @@
       dealReset: 'Empezar de nuevo',
       dealResult: '{T} ÷ {g} = {e}',
       friend: 'Amigo {n}',
+      pack: 'Paquete {n}',
+      shelf: 'Estante {n}',
+      box: 'Caja {n}',
       seeReal: 'Ver ejemplos reales →',
       startTest: 'Empezar a practicar →',
       right: '✅ ¡Muy bien!',
@@ -88,7 +91,7 @@
         real: {
           1: 'Repartes 8 euros entre 4 amigos: a cada amigo le tocan 2 euros.',
           2: 'Tienes 6 libros y pones 2 en cada estante: necesitas 3 estantes.',
-          3: 'Tienes 7 galletas y las metes en cajas de 3: llenas 2 cajas y sobra 1.'
+          3: 'Tienes 8 galletas y las metes en cajas de 3: llenas 2 cajas y sobran 2.'
         }
       }
     },
@@ -103,20 +106,20 @@
       add4: 'Tienes 6 cromos y tu amigo te da 7.',
       add5: 'Ayer leíste 8 páginas y hoy leíste 5.',
       sub1: 'Tenías 9 caramelos y te comes 4.',
-      sub2: 'Necesitas 10 sillas y hay 6: ¿cuántas faltan?',
+      sub2: 'Necesitas 10 sillas y tienes 6.',
       sub3: 'Tenías 12 euros y te gastas 5 euros.',
       sub4: 'Había 15 pájaros y se van 6.',
       sub5: 'Tienes 11 lápices y prestas 4 a un amigo.',
       mul1: 'Hay 4 cajas y en cada caja hay 6 lápices.',
       mul2: 'Tienes 5 bolsas con 2 canicas en cada una.',
-      mul3: 'Hay 3 filas de 5 sillas. ¿Cuántas sillas hay?',
+      mul3: 'Hay 3 filas de 5 sillas.',
       mul4: 'Cada persona tiene 4 canicas. Hay 6 personas.',
       mul5: 'Una pizza tiene 8 trozos y compras 2 pizzas.',
       div1: 'Tienes 6 trozos de pizza y los repartes entre 2 amigos, todos igual.',
-      div2: 'Tienes 8 pegatinas y pones 2 en cada hoja. ¿Cuántas hojas necesitas?',
+      div2: 'Tienes 8 pegatinas y pones 2 en cada hoja.',
       div3: 'Tienes 12 galletas y las repartes entre 4 amigos, todas igual.',
       div4: 'Tienes 15 caramelos y los metes en bolsas de 3, todas igual.',
-      div5: 'Tienes 10 fichas y pones 5 en cada caja. ¿Cuántas cajas usas?'
+      div5: 'Tienes 10 fichas y pones 5 en cada caja.'
     },
 
     /* Preguntas de la prueba: enunciado, pista (sin dar la respuesta) y
@@ -170,7 +173,14 @@
       rest: {
         prompt: 'Tienes {T} y los metes en grupos de {e}. ¿Cuántos grupos llenos salen?',
         hint: '🤔 Cuenta los grupos que van completos. Lo que no llena un grupo, sobra.',
-        explain: 'Salen {q} grupos llenos y sobran {r}.'
+        explain: 'Salen {q} grupos llenos y sobran {r}.',
+        explainOne: 'Salen {q} grupos llenos y sobra 1.'
+      },
+      leftover: {
+        prompt: 'Tienes {T} y los metes en grupos de {e}. ¿Cuántos sobran?',
+        hint: '🤔 Primero cuenta los grupos llenos. Lo que queda fuera de ellos, sobra.',
+        explain: 'Salen {q} grupos llenos y sobran {r}.',
+        explainOne: 'Salen {q} grupos llenos y sobra 1.'
       },
       relation: {
         prompt: 'Repartes {T} en grupos de {e}. ¿Qué división sale?',

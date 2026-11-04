@@ -36,7 +36,7 @@
       by2: 'By 2 it works if it ends in 0, 2, 4, 6 or 8.',
       by5: 'By 5 it works if it ends in 0 or 5.',
       by10: 'By 10 it works if it ends in 0.',
-      by3: 'By 3 it works if adding up its digits gives a number from the 3 times table.'
+      by3: 'By 3 it works if the sum of its digits is divisible by 3.'
     },
     activity: {
       division: { name: 'Whole division', detail: 'How many groups, and what is left over.', instruction: 'Share the dots into equal groups. Each full row is a group. What is left on the last row, if it is short, is what is left over.' },
@@ -98,7 +98,8 @@
       socraticIntDivision: '🤔 «{elegida}» is not the sharing: count the full rows, those are the groups, and see how many dots are left over on the last one.',
       divides: 'Can {n} be divided by {d} with nothing left over?',
       isPrime: 'Is {n} a prime number?',
-      inRowsOf: 'In rows of {t}:',
+      inRowsOf: '{n} dots in rows of {t}:',
+      dotsCount: '{n} dots',
       primeHint: 'If none of the three comes out full, the number is prime.',
       triesAria: 'The number {n} tried in rows of 2, of 3 and of 5.',
       meetEvery: 'One thing happens every {a} and another every {b}. How often do they meet?',

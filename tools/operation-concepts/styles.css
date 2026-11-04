@@ -83,11 +83,17 @@
 .ops-deal-groups { justify-content: center; gap: 12px; }
 /* Each friend: a name above the box that receives the slices. */
 .ops-deal-slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.ops-deal-label { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto); }
+/* The name of a group (Amigo, Paquete, Estante, Caja): a small auxiliary style, uppercase and spaced, so the names
+   identify the groups without competing with the numbers of the drawing. */
+.ops-tag { font-family: var(--fuente); font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-texto); line-height: 1.2; }
+.ops-group-slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .ops-deal-group { min-width: 120px; min-height: 80px; flex-wrap: wrap; align-content: flex-start; gap: 4px; }
 .ops-deal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-/* A slice in the deal is drawn large, with its number on the lower edge. */
-.ops-deal-piece { display: inline-flex; position: relative; margin-bottom: 8px; }
+/* The buttons of the deal are hidden until the first slice is dealt. */
+.ops-deal-actions[hidden] { display: none; }
+/* A slice in the deal is drawn large, with its number on the lower edge. It is a tap target to deal it. */
+.ops-deal-piece { display: inline-flex; position: relative; margin-bottom: 8px; cursor: pointer; border-radius: var(--radio); }
+.ops-deal-piece:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 3px; }
 .ops-deal-piece .ops-slice { width: 64px; height: 64px; }
 
 /* A numbered drawing: room under each row for the number on its lower edge. */

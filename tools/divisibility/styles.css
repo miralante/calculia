@@ -293,3 +293,7 @@
 
 .emoji-large { font-size: 96px; }
 .transfer { margin: 8px auto 24px; font-size: 1.1rem; color: var(--color-texto-suave, #555); max-width: 480px; }
+/* The rule of a shortcut: the title of its card, above the question. */
+.rule-title { margin: 0; font-size: var(--texto-grande); font-weight: 700; text-align: center; line-height: 1.3; }
+/* The number of points a dot drawing stands for, written above the rows. */
+.dots-count { display: block; width: 100%; margin-bottom: 6px; font-size: var(--texto-pequeno); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }

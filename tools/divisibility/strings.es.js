@@ -36,7 +36,7 @@
       by2: 'Entre 2 se puede si acaba en 0, 2, 4, 6 u 8.',
       by5: 'Entre 5 se puede si acaba en 0 o en 5.',
       by10: 'Entre 10 se puede si acaba en 0.',
-      by3: 'Entre 3 se puede si al sumar sus cifras sale un número de la tabla del 3.'
+      by3: 'Entre 3 se puede si la suma de sus cifras es divisible entre 3.'
     },
     activity: {
       division: { name: 'División entera', detail: 'Cuántos grupos salen y cuánto sobra.', instruction: 'Reparte los puntos en grupos iguales. Cada fila completa es un grupo. Lo que queda en la última fila, si sale corta, es lo que sobra.' },
@@ -98,7 +98,8 @@
       socraticIntDivision: '🤔 «{elegida}» no es el reparto: cuenta las filas completas, que son los grupos, y mira cuántos puntos sobran en la última.',
       divides: '¿Se puede dividir {n} entre {d} sin que sobre nada?',
       isPrime: '¿Es {n} un número primo?',
-      inRowsOf: 'En filas de {t}:',
+      inRowsOf: '{n} puntos en filas de {t}:',
+      dotsCount: '{n} puntos',
       primeHint: 'Si ninguna de las tres sale completa, el número es primo.',
       triesAria: 'El número {n} probado en filas de 2, de 3 y de 5.',
       meetEvery: 'Una cosa pasa cada {a} y otra cada {b}. ¿Cada cuánto coinciden?',
