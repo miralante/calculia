@@ -66,8 +66,41 @@
     el.appendChild(text);
   }
 
+  /* The twelve months as a grid of tiles: the number of the month over its
+     name, so the order and the number are read at a glance. */
+  function paintMonthGrid(el, unit, sentence) {
+    el.textContent = '';
+    var name = document.createElement('span');
+    name.className = 'carousel-name';
+    name.textContent = App.i18n.t('unit.' + unit.id + '.name');
+    var grid = document.createElement('ol');
+    grid.className = 'month-grid';
+    for (var m = 1; m <= 12; m += 1) {
+      var tile = document.createElement('li');
+      tile.className = 'month-tile';
+      var num = document.createElement('span');
+      num.className = 'month-num';
+      num.textContent = m < 10 ? '0' + m : String(m);
+      var label = document.createElement('span');
+      label.className = 'month-name';
+      label.textContent = App.i18n.t('month.m' + (m < 10 ? '0' + m : String(m)));
+      tile.appendChild(num);
+      tile.appendChild(label);
+      grid.appendChild(tile);
+    }
+    var text = document.createElement('p');
+    text.className = 'gallery-note';
+    text.textContent = sentence;
+    el.appendChild(name);
+    el.appendChild(grid);
+    el.appendChild(text);
+  }
+
   function paintExplanation(unit) {
-    paintCard($('#carouselDisplay'), unit, App.i18n.t('unit.' + unit.id + '.text'));
+    var el = $('#carouselDisplay');
+    var sentence = App.i18n.t('unit.' + unit.id + '.text');
+    if (unit.grid) paintMonthGrid(el, unit, sentence);
+    else paintCard(el, unit, sentence);
   }
 
   function paintExample(unit) {

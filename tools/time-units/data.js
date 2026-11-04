@@ -17,6 +17,7 @@ var DATA = {
     { id: 'decade', picto: '🔟' },
     { id: 'lustro', picto: '🖐️' },
     { id: 'year', picto: '🗓️' },
+    { id: 'yearMonths', picto: '📋', grid: true },
     { id: 'semester', picto: '6️⃣' },
     { id: 'quadrimester', picto: '4️⃣' },
     { id: 'trimester', picto: '3️⃣' },

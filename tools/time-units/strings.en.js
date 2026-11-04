@@ -22,7 +22,8 @@
       century: { name: 'Century', text: 'A century is 100 years.' },
       decade: { name: 'Decade', text: 'A decade is 10 years.' },
       lustro: { name: 'Lustrum', text: 'A lustrum is 5 years.' },
-      year: { name: 'Year', text: 'A year is 12 months: January (1), February (2), March (3), April (4), May (5), June (6), July (7), August (8), September (9), October (10), November (11) and December (12). A year has 365 days. Leap years have 366 days.' },
+      year: { name: 'Year', text: 'A year is 12 months. A year has 365 days. Leap years have 366 days.' },
+      yearMonths: { name: 'The months of the year', text: 'January is the first month. December is the last one.' },
       semester: { name: 'Semester', text: 'A semester is 6 months. A year has two semesters.' },
       quadrimester: { name: 'Quadrimester', text: 'A quadrimester is 4 months. A year has three quadrimesters.' },
       trimester: { name: 'Trimester', text: 'A trimester is 3 months. A year has four trimesters.' },
@@ -43,6 +44,7 @@
       decade: 'From 1990 to 2000 is one decade. In 1992 the Summer Olympics were held in Barcelona.',
       lustro: 'From your 10th birthday to your 15th birthday is one lustrum.',
       year: 'Your birthday comes once a year.',
+      yearMonths: 'December, January and February are the winter months.',
       semester: 'From January to June is one semester.',
       quadrimester: 'Many Spanish universities have two quadrimesters in one year.',
       trimester: 'From January to March is one trimester.',
@@ -74,6 +76,11 @@
       halfHour: 'How many minutes are there in half an hour?',
       quarterHour: 'How many minutes are there in a quarter of an hour?',
       minute: 'How many seconds are there in a minute?'
+    },
+
+    month: {
+      m01: 'January', m02: 'February', m03: 'March', m04: 'April', m05: 'May', m06: 'June',
+      m07: 'July', m08: 'August', m09: 'September', m10: 'October', m11: 'November', m12: 'December'
     },
 
     gen: {

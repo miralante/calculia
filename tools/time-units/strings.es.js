@@ -22,7 +22,8 @@
       century: { name: 'Siglo', text: 'Un siglo son 100 años.' },
       decade: { name: 'Década', text: 'Una década son 10 años.' },
       lustro: { name: 'Lustro', text: 'Un lustro son 5 años.' },
-      year: { name: 'Año', text: 'Un año son 12 meses: enero (1), febrero (2), marzo (3), abril (4), mayo (5), junio (6), julio (7), agosto (8), septiembre (9), octubre (10), noviembre (11) y diciembre (12). Un año tiene 365 días. Los años bisiestos tienen 366 días.' },
+      year: { name: 'Año', text: 'Un año son 12 meses. Un año tiene 365 días. Los años bisiestos tienen 366 días.' },
+      yearMonths: { name: 'Los meses del año', text: 'Enero es el primero y diciembre es el último.' },
       semester: { name: 'Semestre', text: 'Un semestre son 6 meses. Un año tiene dos semestres.' },
       quadrimester: { name: 'Cuatrimestre', text: 'Un cuatrimestre son 4 meses. Un año tiene tres cuatrimestres.' },
       trimester: { name: 'Trimestre', text: 'Un trimestre son 3 meses. Un año tiene cuatro trimestres.' },
@@ -43,6 +44,7 @@
       decade: 'Entre 1990 y 2000 pasa una década. En 1992 se celebraron los Juegos Olímpicos de Barcelona.',
       lustro: 'Entre tus 10 años y tus 15 años pasa un lustro.',
       year: 'Tu cumpleaños llega una vez al año.',
+      yearMonths: 'Diciembre, enero y febrero son los meses de invierno.',
       semester: 'De enero a junio pasa un semestre.',
       quadrimester: 'Muchas universidades dividen el curso en dos cuatrimestres.',
       trimester: 'De enero a marzo pasa un trimestre.',
@@ -74,6 +76,11 @@
       halfHour: '¿Cuántos minutos tiene media hora?',
       quarterHour: '¿Cuántos minutos tiene un cuarto de hora?',
       minute: '¿Cuántos segundos tiene un minuto?'
+    },
+
+    month: {
+      m01: 'enero', m02: 'febrero', m03: 'marzo', m04: 'abril', m05: 'mayo', m06: 'junio',
+      m07: 'julio', m08: 'agosto', m09: 'septiembre', m10: 'octubre', m11: 'noviembre', m12: 'diciembre'
     },
 
     gen: {
