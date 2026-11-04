@@ -1,5 +1,5 @@
 /* ============================================================
-   Calculia — Factorización: six numbers to break into prime factors.
+   Calculia — Factorización: six numbers and two factorials to break into prime factors.
    The statements are in strings.<locale>.js (problems.<id>), with
    {a} filled from here. The answers are written as products; `wrong`
    are two products that are not made only of prime factors.
@@ -11,6 +11,9 @@ var DATA = {
     { id: 3, icon: '🌳', a: 20, b: 0, answer: '2 × 2 × 5', wrong: ['4 × 5', '2 × 10'] },
     { id: 4, icon: '🌳', a: 30, b: 0, answer: '2 × 3 × 5', wrong: ['5 × 6', '2 × 15'] },
     { id: 5, icon: '🌳', a: 16, b: 0, answer: '2 × 2 × 2 × 2', wrong: ['4 × 4', '2 × 8'] },
-    { id: 6, icon: '🌳', a: 45, b: 0, answer: '3 × 3 × 5', wrong: ['5 × 9', '3 × 15'] }
+    { id: 6, icon: '🌳', a: 45, b: 0, answer: '3 × 3 × 5', wrong: ['5 × 9', '3 × 15'] },
+    /* Factorial numbers: 4! = 24 and 5! = 120. Their prime factors come from the product 4 × 3 × 2 × 1 and 5 × 4 × 3 × 2 × 1. */
+    { id: 7, icon: '❗', a: '4!', b: 0, answer: '2 × 2 × 2 × 3', wrong: ['4 × 6', '2 × 12'] },
+    { id: 8, icon: '❗', a: '5!', b: 0, answer: '2 × 2 × 2 × 3 × 5', wrong: ['5 × 24', '2 × 60'] }
   ]
 };

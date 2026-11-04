@@ -21,7 +21,9 @@
       3: 'What are the prime factors of {a}?',
       4: 'What are the prime factors of {a}?',
       5: 'What are the prime factors of {a}?',
-      6: 'What are the prime factors of {a}?'
+      6: 'What are the prime factors of {a}?',
+      7: 'What are the prime factors of {a}?',
+      8: 'What are the prime factors of {a}?'
     }
   }, 'en');
 })();

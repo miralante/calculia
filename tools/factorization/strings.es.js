@@ -21,7 +21,9 @@
       3: '¿Cuáles son los factores primos de {a}?',
       4: '¿Cuáles son los factores primos de {a}?',
       5: '¿Cuáles son los factores primos de {a}?',
-      6: '¿Cuáles son los factores primos de {a}?'
+      6: '¿Cuáles son los factores primos de {a}?',
+      7: '¿Cuáles son los factores primos de {a}?',
+      8: '¿Cuáles son los factores primos de {a}?'
     }
   }, 'es');
 })();
