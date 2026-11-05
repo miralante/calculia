@@ -125,6 +125,8 @@
 
   /* The concept slides. Each one draws its own idea. */
   var CONCEPT_DOTS = {
+    /* Six dots in two groups of three: 6 shared between 2 is 3 each. */
+    divide: [[36, 46, 6], [60, 46, 6], [84, 46, 6], [36, 74, 6], [60, 74, 6], [84, 74, 6]],
     prime: [[15, 60, 5], [29, 60, 5], [43, 60, 5], [57, 60, 5], [71, 60, 5], [85, 60, 5], [99, 60, 5]],
     composite: [[36, 46, 6], [60, 46, 6], [84, 46, 6], [36, 74, 6], [60, 74, 6], [84, 74, 6]],
     one: [[60, 60, 8]]

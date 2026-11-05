@@ -17,6 +17,10 @@
     galleryPrevious: 'Anterior',
     galleryNext: 'Siguiente',
     concept: {
+      divide: {
+        title: 'Repartir sin que sobre nada',
+        text: '6 se puede repartir entre 2. Salen 3 cada uno y no sobra nada. El 7 no: entre 2 sobra 1.'
+      },
       prime: {
         title: 'Número primo',
         text: 'El 7 es primo. Solo lo puedes poner en una fila de 7 puntos. Con filas iguales de otro tamaño no cuadra.'

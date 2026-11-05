@@ -20,6 +20,7 @@ var DATA = {
   /* Las diapositivas de conceptos, en orden. Las que llevan `numbers`
      dibujan esos números en cuadrícula; los primos llevan anillo. */
   concepts: [
+    { id: 'divide' },
     { id: 'prime' },
     { id: 'upto10', numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
     { id: 'composite' },

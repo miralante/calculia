@@ -17,6 +17,10 @@
     galleryPrevious: 'Previous',
     galleryNext: 'Next',
     concept: {
+      divide: {
+        title: 'Share with nothing left over',
+        text: '6 can be shared between 2. Each person gets 3, and nothing is left over. 7 cannot: between 2, 1 is left over.'
+      },
       prime: {
         title: 'Prime number',
         text: '7 is prime. You can only put it in one row of 7 dots. Equal rows of another size do not fit.'
