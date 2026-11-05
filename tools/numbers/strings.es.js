@@ -293,6 +293,10 @@
     /* Solución que se muestra al fallar en "leer" y "escribir números".
        Un número no se resuelve con una pista: se enseña cómo se escribe
        y la persona lo escribe otra vez tras pulsar «Entendido». */
+    /* Mismo mensaje, pero con lo que la persona escribió delante de la
+       solución, para que pueda comparar las dos cifras. Si no escribió
+       nada, se usa typedSolution. */
+    typedSolutionMine: '👀 Tú has escrito: {typed}. Así se escribe: {n}. Se lee: {words}. Escríbelo tú en la casilla.',
     typedSolution: '👀 Así se escribe: {n}. Se lee: {words}. Escríbelo tú en la casilla.'
 }, 'es');
 })();

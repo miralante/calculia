@@ -1107,9 +1107,19 @@
      (App.feedback.lockUntilAck). Then the solution is hidden and the
      input opens again so the user writes the number. */
   function showTypedSolution(input, buttons) {
-    explanationEl.textContent = App.i18n.t("typedSolution")
-      .replace("{n}", question.correct)
-      .replace("{words}", question.words);
+    /* Show what was typed next to the solution, so the person can
+       compare the two numbers. With nothing typed, the plain message. */
+    var typed = (input.value || "").trim();
+    if (typed) {
+      explanationEl.textContent = App.i18n.t("typedSolutionMine")
+        .replace("{typed}", function () { return typed; })
+        .replace("{n}", question.correct)
+        .replace("{words}", question.words);
+    } else {
+      explanationEl.textContent = App.i18n.t("typedSolution")
+        .replace("{n}", question.correct)
+        .replace("{words}", question.words);
+    }
     explanationWrap.classList.remove("hidden");
     App.feedback.lockUntilAck([input].concat(buttons), explanationWrap, function () {
       explanationWrap.classList.add("hidden");

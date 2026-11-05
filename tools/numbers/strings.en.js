@@ -295,6 +295,10 @@
     /* Solution shown on a wrong answer in "read" and "write numbers".
        A number is not solved with a hint: it shows how it is written
        and the person writes it again after pressing "Got it". */
+    /* Same message, with what the person wrote shown before the
+       solution so they can compare the two numbers. With nothing
+       written, typedSolution is used. */
+    typedSolutionMine: '👀 You wrote: {typed}. This is how it is written: {n}. It is read: {words}. Write it yourself in the box.',
     typedSolution: '👀 This is how it is written: {n}. It is read: {words}. Write it yourself in the box.'
 }, 'en');
 })();
