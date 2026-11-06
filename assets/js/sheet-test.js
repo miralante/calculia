@@ -18,15 +18,19 @@
        progressFill: #progressFill element
        progressText: #progressText element
        onScored:     function (rightFirstTry) { ... } (optional)
+       showExplanation: true to show the explanation after a right answer (optional)
+       hintFallback: text shown when a question has no hint (optional)
+       onAllRight:   function () called when every question is right (optional)
      });
-     sheetTest.set(questions);  // questions: [{ prompt, hint, inline, options: [{ html, aria, correct }] }]
+     sheetTest.set(questions);  // questions: [{ prompt, hint, explanation, visual, visualAria,
+                                //   visualDecorative, legend, inline, options: [{ html, aria, correct }] }]
      sheetTest.render();        // paints the sheet
      sheetTest.check;           // the «Comprobar» handler
 
    Used by the five time activities (time-units, time-convert,
-   time-durations, time-compare and date-format). The three-stage flow
-   in activity-flow-sheet.js has the same test, with explanations and
-   pictures on top; this module is the plain one.
+   time-durations, time-compare and date-format) and by the three-stage
+   flow of activity-flow-sheet.js, which passes the explanation, the
+   picture and the hook options. The sheet has no closing screen.
 
    Exposes window.App.sheetTest. Needs feedback.js (App.feedback.encourage).
    ============================================================ */
@@ -40,6 +44,9 @@
     var progressFill = config.progressFill;
     var progressText = config.progressText;
     var onScored = config.onScored || function () {};
+    var onAllRight = config.onAllRight || function () {};
+    var showExplanation = !!config.showExplanation;
+    var hintFallback = config.hintFallback || '';
 
     /* One entry per question: { question, selected, correct }.
        selected is the index of the option picked, or null; correct is
@@ -64,6 +71,28 @@
         promptEl.className = 'prompt';
         promptEl.textContent = sheet.question.prompt;
         card.appendChild(promptEl);
+
+        if (sheet.question.visual) {
+          var visualEl = document.createElement('div');
+          visualEl.className = 'visual';
+          visualEl.innerHTML = sheet.question.visual;
+          /* A picture gets a label when it needs one; a purely decorative one is
+             hidden from the screen reader. */
+          if (sheet.question.visualAria) {
+            visualEl.setAttribute('role', 'img');
+            visualEl.setAttribute('aria-label', sheet.question.visualAria);
+          } else if (sheet.question.visualDecorative) {
+            visualEl.setAttribute('aria-hidden', 'true');
+          }
+          card.appendChild(visualEl);
+        }
+
+        if (sheet.question.legend) {
+          var legendEl = document.createElement('p');
+          legendEl.className = 'legend';
+          legendEl.innerHTML = sheet.question.legend;
+          card.appendChild(legendEl);
+        }
 
         var optionsEl = document.createElement('div');
         optionsEl.className = 'stack options';
@@ -144,13 +173,14 @@
         if (selected.correct) {
           options.forEach(function (b) { b.disabled = true; });
           options[sheet.selected].classList.add('correct');
-          feedbackEl.textContent = '✅';
+          feedbackEl.textContent = showExplanation && sheet.question.explanation
+            ? '✅ ' + sheet.question.explanation : '✅';
           feedbackEl.classList.add('success');
         } else {
           /* Wrong: the hint shows, the answer does not. The card stays open. */
           options[sheet.selected].classList.add('incorrect');
           App.feedback.encourage(feedbackEl);
-          feedbackEl.textContent = ' ' + sheet.question.hint;
+          feedbackEl.textContent = ' ' + (sheet.question.hint || hintFallback);
           feedbackEl.classList.add('error');
         }
       });
@@ -160,7 +190,10 @@
       var allRight = roundSheets.every(function (sheet) { return sheet.correct === true; });
       btnCheck.classList.toggle('hidden', allRight);
       btnNewRound.classList.remove('hidden');
-      if (allRight) btnNewRound.focus();
+      if (allRight) {
+        onAllRight();
+        btnNewRound.focus();
+      }
       paintProgress();
     }
 
