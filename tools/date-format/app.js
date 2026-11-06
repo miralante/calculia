@@ -28,8 +28,13 @@
      "Comprobar" accepted it (correct, null until it is checked). */
   var roundSheets = [];
 
-  function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  var glue = App.activityGlue({
+    toolId: TOOL_ID,
+    progress: function () { return progress; },
+    starsEl: function () { return starsEl; },
+    show: function (el) { show(el); }
+  });
+  var save = glue.save, paintStars = glue.paintStars;
 
   function show(screen) {
     [screenIntro, screenGame].forEach(function (p) {

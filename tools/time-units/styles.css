@@ -42,8 +42,7 @@
   line-height: 1.4;
   text-align: center;
 }
-.carousel-controls { display: flex; justify-content: center; gap: var(--espacio); width: 100%; }
-.carousel-controls .btn { min-width: 44px; min-height: 44px; }
+.carousel-controls { width: 100% }
 .intro-buttons { justify-content: center; }
 
 /* The twelve months: three tiles a row, the number over the name. */
@@ -141,58 +140,19 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-
-/* Test sheet: one card per question, checked all at once. */
-.test-sheet { gap: var(--espacio); }
-.test-sheet-card { border-color: var(--mod-razonamiento-suave); }
-.test-sheet-card .prompt {
-  margin: 0;
-  font-weight: 700;
-  font-size: 1.1rem;
-  text-align: center;
-  color: var(--color-texto);
-}
-/* The options of a question sit in one row, wrapping on a narrow screen. */
-.options.options-row {
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.options.options-row .option-btn {
-  display: flex;
-  width: auto;
-  min-width: 120px;
+.test-sheet-card .prompt { text-align: center }
+.options.options-row .option-btn { display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   font-size: 1.3rem;
-  font-weight: 800;
-}
-.test-sheet-card .option-btn.selected {
-  background: var(--mod-coordinacion);
-  color: var(--texto-sobre-acento, #FFFFFF);
-  border-color: var(--mod-coordinacion);
-}
-.test-sheet-card .option-btn.correct {
-  background: var(--color-acierto);
-  color: var(--texto-sobre-acento, #FFFFFF);
-  border-color: var(--color-acierto);
-}
-.test-sheet-card .option-btn.incorrect {
-  background: var(--color-error, #B0413E);
-  color: var(--texto-sobre-acento, #FFFFFF);
-  border-color: var(--color-error, #B0413E);
-}
-.test-sheet-card .feedback { margin: 0; min-height: 0; font-weight: 700; }
-.test-sheet-card .feedback.success { color: var(--color-acierto); }
-.test-sheet-card .feedback.error { color: var(--color-error, #B0413E); }
+  font-weight: 800 }
+.test-sheet-card .feedback { min-height: 0 }
 @keyframes test-sheet-shake {
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-6px); }
   40%, 80% { transform: translateX(6px); }
 }
-.test-sheet-card.shake { animation: test-sheet-shake 0.4s ease; }
-.sheet-actions { justify-content: center; gap: var(--espacio); }
 
 @media (prefers-reduced-motion: reduce) {
   .test-sheet-card.shake { animation: none; }

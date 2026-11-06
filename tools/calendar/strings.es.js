@@ -12,20 +12,13 @@
   App.i18n.register({
     title: '📅 El Calendario',
     instructionMenu: 'Elige una actividad.',
-    contexto: 'Los días, los meses y las estaciones se repiten siempre en el mismo orden. Saberlo te ayuda a situarte en el tiempo.',
-    explicacion: '✅ Conocer el calendario te ayuda a recordar citas, planear la semana y saber cuándo llega algo que esperas.',
-    btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
-    otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
-    btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     day: {
       monday: 'lunes',
       tuesday: 'martes',
@@ -62,16 +55,6 @@
       estaciones: { name: 'Las estaciones', detail: 'Primavera, verano, otoño e invierno.', instruction: 'El año tiene 4 estaciones. En invierno hace frío (enero, febrero). En primavera salen las flores (abril, mayo). En verano hace calor (julio, agosto). En otoño caen las hojas (octubre, noviembre).' }
     },
     level: {
-      u1: '¿Cuántos tiene?',
-      u2: '¿Qué dura más?',
-      w1: 'El día siguiente',
-      w2: 'El día anterior',
-      w3: '¿Qué día falta?',
-      m1: 'El mes siguiente',
-      m2: 'El mes anterior',
-      m3: '¿Qué mes falta?',
-      s1: 'Del mes a la estación',
-      s2: 'De la estación al mes'
     },
     unit: {
       day: 'un día',

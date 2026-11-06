@@ -12,20 +12,13 @@
   App.i18n.register({
     title: '📅 The Calendar',
     instructionMenu: 'Choose an activity.',
-    contexto: 'Days, months and seasons always come round in the same order. Knowing it helps you find your place in time.',
-    explicacion: '✅ Knowing the calendar helps you remember appointments, plan your week and know when something you are waiting for arrives.',
-    btnBackToMenu: '← Other activities',
     btnMenu: 'Back to start',
-    otherLevel: 'Choose another level',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{name}»?',
-    btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     day: {
       monday: 'Monday',
       tuesday: 'Tuesday',
@@ -62,16 +55,6 @@
       estaciones: { name: 'The seasons', detail: 'Spring, summer, autumn and winter.', instruction: 'The year has 4 seasons. In winter it is cold (January, February). In spring the flowers come out (April, May). In summer it is hot (July, August). In autumn the leaves fall (October, November).' }
     },
     level: {
-      u1: 'How many has it got?',
-      u2: 'Which lasts longer?',
-      w1: 'The next day',
-      w2: 'The day before',
-      w3: 'Which day is missing?',
-      m1: 'The next month',
-      m2: 'The month before',
-      m3: 'Which month is missing?',
-      s1: 'From month to season',
-      s2: 'From season to month'
     },
     unit: {
       day: 'a day',

@@ -29,8 +29,13 @@
   var roundCorrect = 0;
   var roundSheets = [];
 
-  function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  var glue = App.activityGlue({
+    toolId: TOOL_ID,
+    progress: function () { return progress; },
+    starsEl: function () { return starsEl; },
+    show: function (el) { show(el); }
+  });
+  var save = glue.save, paintStars = glue.paintStars;
 
   /* Checked at start-up, so bad data fails loudly: each task has one
      correct duration and two wrong ones, and the three are different. */
