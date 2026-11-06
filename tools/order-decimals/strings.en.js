@@ -8,17 +8,10 @@
   App.i18n.register({
     title: '🔹 Order decimals',
     instructionIntro: 'See how decimals are compared.',
-    realTitle: 'Decimals are in real life.',
     transfer: 'You use this to compare times, prices and weights with cents and tenths.',
 
     ui: {
-      prev: 'Previous',
-      next: 'Next',
-      conceptCount: '{i} of {n}',
-      introContinue: 'See real examples →',
-      realContinue: 'Start practising →',
-      check: 'Check',
-      newRound: 'Another round →',
+      realLabel: 'Decimals are in real life.',
     },
 
     /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */

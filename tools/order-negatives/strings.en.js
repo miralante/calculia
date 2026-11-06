@@ -8,17 +8,10 @@
   App.i18n.register({
     title: '➖ Order negatives',
     instructionIntro: 'See how numbers below zero are ordered.',
-    realTitle: 'Negative numbers are in real life.',
     transfer: 'You use this to read a thermometer or the floors of a car park.',
 
     ui: {
-      prev: 'Previous',
-      next: 'Next',
-      conceptCount: '{i} of {n}',
-      introContinue: 'See real examples →',
-      realContinue: 'Start practising →',
-      check: 'Check',
-      newRound: 'Another round →',
+      realLabel: 'Negative numbers are in real life.',
     },
 
     /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */

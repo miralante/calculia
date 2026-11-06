@@ -8,17 +8,10 @@
   App.i18n.register({
     title: '🔢 Ordenar positivos',
     instructionIntro: 'Mira cómo se comparan los números.',
-    realTitle: 'Estos números están en la vida real.',
     transfer: 'Lo usas cada vez que buscas el precio más bajo o la puntuación más alta de una lista.',
 
     ui: {
-      prev: 'Anterior',
-      next: 'Siguiente',
-      conceptCount: '{i} de {n}',
-      introContinue: 'Ver ejemplos reales →',
-      realContinue: 'Empezar a practicar →',
-      check: 'Comprobar',
-      newRound: 'Otra ronda →',
+      realLabel: 'Estos números están en la vida real.',
     },
 
     /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */

@@ -8,17 +8,10 @@
   App.i18n.register({
     title: '🔢 Order positives',
     instructionIntro: 'See how numbers are compared.',
-    realTitle: 'These numbers are in real life.',
     transfer: 'You use this every time you look for the lowest price or the highest score on a list.',
 
     ui: {
-      prev: 'Previous',
-      next: 'Next',
-      conceptCount: '{i} of {n}',
-      introContinue: 'See real examples →',
-      realContinue: 'Start practising →',
-      check: 'Check',
-      newRound: 'Another round →',
+      realLabel: 'These numbers are in real life.',
     },
 
     /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */

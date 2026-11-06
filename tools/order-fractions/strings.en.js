@@ -10,17 +10,10 @@
   App.i18n.register({
     title: '🍰 Ordering fractions',
     instructionIntro: 'See how fractions are compared.',
-    realTitle: 'Fractions are in real life.',
     transfer: 'You use it to tell which part of a pizza, a cake or an hour is bigger.',
 
     ui: {
-      prev: 'Previous',
-      next: 'Next',
-      conceptCount: '{i} of {n}',
-      introContinue: 'See real examples →',
-      realContinue: 'Start practising →',
-      check: 'Check',
-      newRound: 'Another round →',
+      realLabel: 'Fractions are in real life.',
     },
 
     /* Questions. {a}, {b}, {rel} are filled in by the engine. The

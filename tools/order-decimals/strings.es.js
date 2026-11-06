@@ -8,17 +8,10 @@
   App.i18n.register({
     title: '🔹 Ordenar decimales',
     instructionIntro: 'Mira cómo se comparan los decimales.',
-    realTitle: 'Los decimales están en la vida real.',
     transfer: 'Lo usas para comparar tiempos, precios y pesos con céntimos y décimas.',
 
     ui: {
-      prev: 'Anterior',
-      next: 'Siguiente',
-      conceptCount: '{i} de {n}',
-      introContinue: 'Ver ejemplos reales →',
-      realContinue: 'Empezar a practicar →',
-      check: 'Comprobar',
-      newRound: 'Otra ronda →',
+      realLabel: 'Los decimales están en la vida real.',
     },
 
     /* Questions. {a}, {b}, {v}, {list}, {row} are filled in by the engine. */
