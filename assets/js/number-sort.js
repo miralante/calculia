@@ -1,12 +1,11 @@
 /* ============================================================
-   Calculia — Ordering numbers: shared engine.
+   Calculia — Ordering numbers: shared generators.
 
-   order-numbers (positives), order-negatives and order-decimals share
-   the question kinds and the three stages of
-   the Formas flow:
-     1. explanation: concept slides with ← → (the rule, with a picture),
-     2. real life: everyday examples of the same comparison,
-     3. test: the round as a sheet of questions, checked all at once.
+   The order-* activities (positives, negatives, decimals, fractions) share
+   their questions and drawings here: the question kinds (KINDS), how a
+   question is made (makeQuestion, makeRound) and how a number is drawn
+   (visualHtml, columnHtml). The three stages and the test sheet are the
+   shared engine's (assets/js/activity-flow.js), set up by setup(config).
 
    Each activity brings its data (levels, slides, examples) in data.js
    and its texts in strings.<locale>.js. Numbers are whole units of a
@@ -18,18 +17,11 @@
 (function () {
   'use strict';
 
-  var $ = App.utils.$;
 
-  function rint(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  var rint = App.utils.rint;
   function pow10(k) { return Math.pow(10, k); }
   function t(key) { return App.i18n.t(key); }
-  function fill(text, values) {
-    var out = text;
-    Object.keys(values).forEach(function (k) {
-      out = out.split('{' + k + '}').join(values[k]);
-    });
-    return out;
-  }
+  var fill = App.utils.fill;
 
   /* ---- Kinds of value -------------------------------------------------
      Each kind draws a whole number of units. `scale` says how many units
@@ -321,72 +313,6 @@
     return out;
   }
 
-  /* ---- Question cards (shared by the test sheet and the challenge) ----- */
-  function questionCard(question, index) {
-    var card = document.createElement('article');
-    card.className = 'card stack test-sheet-card';
-    card.dataset.sheet = String(index);
-
-    var promptEl = document.createElement('p');
-    promptEl.className = 'prompt';
-    promptEl.textContent = question.prompt;
-    card.appendChild(promptEl);
-
-    if (question.visual) {
-      var visualEl = document.createElement('div');
-      visualEl.className = 'visual';
-      visualEl.innerHTML = question.visual;
-      if (question.visualAria) {
-        visualEl.setAttribute('role', 'img');
-        visualEl.setAttribute('aria-label', question.visualAria);
-      } else {
-        visualEl.setAttribute('aria-hidden', 'true');
-      }
-      card.appendChild(visualEl);
-    }
-
-    var optionsEl = document.createElement('div');
-    optionsEl.className = 'stack options';
-    if (question.inline) optionsEl.classList.add('options-row');
-    question.options.forEach(function (op, j) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'option-btn';
-      btn.innerHTML = op.html;
-      if (op.aria) btn.setAttribute('aria-label', op.aria);
-      optionsEl.appendChild(btn);
-    });
-    card.appendChild(optionsEl);
-
-    var feedbackEl = document.createElement('p');
-    feedbackEl.className = 'feedback hidden';
-    feedbackEl.setAttribute('aria-live', 'polite');
-    card.appendChild(feedbackEl);
-    return card;
-  }
-
-  /* Marks the chosen option. Right: it locks in green with the explanation.
-     Wrong: it is marked and the socratic hint shows; the card stays open. */
-  function paintAnswer(card, question, selected) {
-    var options = card.querySelectorAll('.option-btn');
-    var feedbackEl = card.querySelector('.feedback');
-    var op = question.options[selected];
-    options.forEach(function (b) { b.classList.remove('selected'); });
-    feedbackEl.classList.remove('hidden', 'success', 'error', 'encourage');
-    if (op.correct) {
-      options.forEach(function (b) { b.disabled = true; });
-      options[selected].classList.add('correct');
-      feedbackEl.textContent = '✅ ' + question.explanation;
-      feedbackEl.classList.add('success');
-    } else {
-      options[selected].classList.add('incorrect');
-      App.feedback.encourage(feedbackEl);
-      feedbackEl.textContent += ' ' + question.hint;
-      feedbackEl.classList.add('error');
-    }
-    return op.correct;
-  }
-
   /* ---- Visuals for the concept slides --------------------------------- */
   function lineSvg(spec) {
     var W = 320;
@@ -441,217 +367,67 @@
        concepts: [{ title, text, visual }], examples: [{ emoji, caption }],
        buildRound(level) -> questions (the activity shuffles them)
      } */
+
+  /* ---- The activity: the three stages and the test sheet come from the shared
+     engine (assets/js/activity-flow.js). This file only says what is specific to
+     numbers: the levels, the concept slides, the examples and the questions. ----
+     config = {
+       toolId, legacyToolId (optional), perRound,
+       levels: [{ id, name, detail, pool, types }],
+       concepts: [{ title, text, visual }], examples: [{ emoji | column, caption }],
+       buildRound(level) -> questions of the round, already shuffled
+     }
+     The sheet has one level per round: the level rises with the rounds done. */
   function setup(config) {
-    /* An activity that moved to a new slug keeps the stars of its old one. */
-    var progress = App.storage.get(config.toolId);
-    if (typeof progress.stars !== 'number' && config.legacyToolId) {
-      var legacy = App.storage.get(config.legacyToolId);
-      if (typeof legacy.stars === 'number') progress = legacy;
-    }
-    if (typeof progress.stars !== 'number') progress.stars = 0;
-    if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
-    if (!progress.roundsByLevel || typeof progress.roundsByLevel !== 'object') progress.roundsByLevel = {};
-
-    var levels = config.levels;
-    var concepts = config.concepts;
-    var examples = config.examples;
-
-    var screenIntro = $('#screenIntro');
-    var screenReal = $('#screenReal');
-    var screenGame = $('#screenGame');
-    var testSheet = $('#testSheet');
-    var btnCheck = $('#btnCheck');
-    var btnNewRound = $('#btnNewRound');
-    var btnNext = $('#btnNext');
-    var progressFill = $('#progressFill');
-    var progressText = $('#progressText');
-    var difficulty = $('#difficulty');
-    var transfer = $('#transfer');
-    var starsEl = $('#stars');
-
-    var level = null;
-    var sheets = [];
-    var current = 0;
-    var conceptIndex = 0;
-    var exampleIndex = 0;
-
-    function save() { App.storage.set(config.toolId, progress); }
-    function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
-    function showScreen(screen) {
-      [screenIntro, screenReal, screenGame].forEach(function (p) {
-        p.classList.toggle('hidden', p !== screen);
-      });
-    }
-
-    /* One test for the whole activity. It starts at the first level that
-       has no completed round yet, so the level rises by itself as rounds
-       are finished. The last level stays once it is reached. */
-    function currentLevel() {
-      for (var i = 0; i < levels.length; i += 1) {
-        if ((progress.roundsByLevel[levels[i].id] || 0) < 1) return levels[i];
+    App.activityFlow.setup({
+      toolId: config.toolId,
+      test: 'sheet',
+      intro: config.concepts.map(function (concept) { return { visual: concept }; }),
+      real: config.examples.map(function (example) { return { visual: example }; }),
+      introHeading: function () { return t('instructionIntro'); },
+      introCopy: function (i) {
+        var concept = config.concepts[i];
+        return { title: t(concept.title), text: t(concept.text) };
+      },
+      realText: function (i) { return t(config.examples[i].caption); },
+      visualHtml: function (concept) { return visualHtml(concept.visual); },
+      realVisualHtml: function (example) {
+        var inner = example.column ? columnHtml(example.column) : example.emoji;
+        return '<div class="real-object" aria-hidden="true">' + inner + '</div>';
+      },
+      activities: [{
+        id: config.toolId,
+        levels: config.levels,
+        buildRound: function (level) { return config.buildRound(level); }
+      }],
+      makeQuestion: function (question) { return question; },
+      levelName: function (level) { return t(level.name); },
+      transferKey: 'transfer',
+      showExplanation: true,
+      /* The stars of the older slug of this activity carry over, and its rounds
+         per level become the rounds of the activity, which is how the level is found. */
+      prepareProgress: function (progress) {
+        if (config.legacyToolId && progress.stars === 0 && progress.completedRounds === 0) {
+          var legacy = App.storage.get(config.legacyToolId);
+          if (typeof legacy.stars === 'number') {
+            Object.keys(legacy).forEach(function (key) { progress[key] = legacy[key]; });
+          }
+        }
+        if (progress.roundsByActivity[config.toolId] === undefined && progress.roundsByLevel) {
+          var n = 0;
+          while (n < config.levels.length && (progress.roundsByLevel[config.levels[n].id] || 0) >= 1) n += 1;
+          progress.roundsByActivity[config.toolId] = n;
+        }
       }
-      return levels[levels.length - 1];
-    }
-
-    function startRound() {
-      level = currentLevel();
-      sheets = config.buildRound(level).map(function (q) {
-        return { question: q, selected: null, correct: null, missed: false };
-      });
-      current = 0;
-      difficulty.textContent = t(level.name);
-      transfer.classList.add('hidden');
-      showScreen(screenGame);
-      renderQuestion();
-    }
-
-    /* One question on the screen at a time. Picking an option only marks it;
-       "Comprobar" checks it. A wrong answer shows the hint and stays open; a
-       right one shows the explanation and "Siguiente" moves on. The round
-       ends after the last question. */
-    function renderQuestion() {
-      var sheet = sheets[current];
-      testSheet.innerHTML = '';
-      var card = questionCard(sheet.question, current);
-      testSheet.appendChild(card);
-      card.querySelectorAll('.option-btn').forEach(function (btn, j) {
-        btn.addEventListener('click', function () { selectOption(j); });
-      });
-      btnCheck.classList.remove('hidden');
-      btnCheck.disabled = false;
-      btnNext.classList.add('hidden');
-      btnNewRound.classList.add('hidden');
-      paintSheetProgress();
-    }
-
-    function selectOption(optionIdx) {
-      var sheet = sheets[current];
-      if (sheet.correct === true) return;
-      sheet.selected = optionIdx;
-      var card = testSheet.querySelector('.test-sheet-card');
-      card.querySelectorAll('.option-btn').forEach(function (b, j) {
-        b.classList.toggle('selected', j === optionIdx);
-        b.classList.remove('incorrect');
-      });
-    }
-
-    function checkAnswer() {
-      var sheet = sheets[current];
-      var card = testSheet.querySelector('.test-sheet-card');
-      if (sheet.selected === null) {
-        /* Nothing picked yet: shake the card so it is noticed. */
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        card.classList.add('shake');
-        setTimeout(function () { card.classList.remove('shake'); }, 500);
-        return;
-      }
-      var ok = paintAnswer(card, sheet.question, sheet.selected);
-      if (!ok) {
-        sheet.missed = true;
-        paintSheetProgress();
-        return;
-      }
-      sheet.correct = true;
-      /* A question right at the first try scores a star. */
-      if (!sheet.missed) {
-        progress.stars += 1;
-        save();
-        paintStars();
-      }
-      btnCheck.classList.add('hidden');
-      if (current === sheets.length - 1) {
-        finishRound();
-      } else {
-        btnNext.classList.remove('hidden');
-        btnNext.focus();
-      }
-      paintSheetProgress();
-    }
-
-    function nextQuestion() {
-      current += 1;
-      renderQuestion();
-    }
-
-    /* The round is complete: the level counts it, so the next round starts at
-       the next level, and the transfer sentence appears. */
-    function finishRound() {
-      progress.completedRounds = (progress.completedRounds || 0) + 1;
-      progress.roundsByLevel[level.id] = (progress.roundsByLevel[level.id] || 0) + 1;
-      save();
-      transfer.classList.remove('hidden');
-      btnNewRound.classList.remove('hidden');
-      btnNewRound.focus();
-    }
-
-    /* How many questions of the round are already right, out of the total. */
-    function paintSheetProgress() {
-      var total = sheets.length;
-      var numerator = sheets.filter(function (s) { return s.correct === true; }).length;
-      progressFill.style.width = (total ? numerator / total * 100 : 0) + '%';
-      progressText.textContent = numerator + ' / ' + total;
-    }
-
-    /* Concept slides */
-    function paintConcept() {
-      var slide = concepts[conceptIndex];
-      $('#conceptTitle').textContent = t(slide.title);
-      $('#conceptText').textContent = t(slide.text);
-      $('#conceptVisual').innerHTML = visualHtml(slide.visual);
-      var conceptBar = $('#conceptProgress');
-      conceptBar.setAttribute('aria-label', fill(t('ui.conceptCount'), {
-        i: String(conceptIndex + 1), n: String(concepts.length)
-      }));
-      conceptBar.setAttribute('aria-valuemax', String(concepts.length));
-      conceptBar.setAttribute('aria-valuenow', String(conceptIndex + 1));
-      $('#conceptProgressFill').style.width = ((conceptIndex + 1) / concepts.length * 100) + '%';
-    }
-
-    function paintExample() {
-      var ex = examples[exampleIndex];
-      if (ex.column) $('#realObject').innerHTML = columnHtml(ex.column);
-      else $('#realObject').textContent = ex.emoji;
-      $('#realCaption').textContent = t(ex.caption);
-    }
-
-    /* Events */
-    /* The concept slides wrap around, like the Roman numerals carousel:
-       the last one leads back to the first and the first back to the last. */
-    $('#conceptPrev').addEventListener('click', function () {
-      conceptIndex = (conceptIndex + concepts.length - 1) % concepts.length;
-      paintConcept();
     });
-    $('#conceptNext').addEventListener('click', function () {
-      conceptIndex = (conceptIndex + 1) % concepts.length;
-      paintConcept();
-    });
-    $('#introContinue').addEventListener('click', function () { showScreen(screenReal); });
-    $('#realPrev').addEventListener('click', function () {
-      exampleIndex = (exampleIndex + examples.length - 1) % examples.length;
-      paintExample();
-    });
-    $('#realNext').addEventListener('click', function () {
-      exampleIndex = (exampleIndex + 1) % examples.length;
-      paintExample();
-    });
-    $('#realContinue').addEventListener('click', startRound);
-    btnCheck.addEventListener('click', checkAnswer);
-    btnNext.addEventListener('click', nextQuestion);
-    btnNewRound.addEventListener('click', startRound);
-
-    paintConcept();
-    paintExample();
-    paintStars();
-    showScreen($('#screenIntro'));
   }
 
   window.App.numberSort = {
     KINDS: KINDS,
-    show: show,
     makeQuestion: makeQuestion,
     makeRound: makeRound,
-    questionCard: questionCard,
-    paintAnswer: paintAnswer,
+    visualHtml: visualHtml,
+    columnHtml: columnHtml,
     setup: setup
   };
 })();

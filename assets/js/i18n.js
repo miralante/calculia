@@ -46,6 +46,26 @@
       feedback: {
         success: ['¡Muy bien!', '¡Genial!', '¡Lo has conseguido!', '¡Estupendo!', '¡Sigue así!'],
         encourage: ['Casi. ¡Inténtalo otra vez!', 'No pasa nada. ¡Otra vez!', 'Prueba de nuevo. ¡Tú puedes!']
+      },
+      /* Screen texts shared by the activities. An activity overrides any of them in its own `ui`. */
+      ui: {
+        prev: 'Anterior',
+        next: 'Siguiente',
+        count: '{i} de {n}',
+        seeReal: 'Ver ejemplos reales →',
+        startTest: 'Empezar a practicar →',
+        stepOf: 'Paso {i} de {n}',
+        nextStep: 'Siguiente paso',
+        newRound: 'Otra ronda →',
+        check: 'Comprobar',
+        review: '← Repasar la explicación',
+        menuBack: '← Volver al menú',
+        visualAria: 'Dibujo que acompaña a la explicación.',
+        right: '✅ ¡Muy bien!',
+        rightPrefix: '',
+        roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.',
+        reinforceTitle: 'Refuerzo',
+        reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.'
       }
     },
     en: {
@@ -72,6 +92,26 @@
       feedback: {
         success: ['Well done!', 'Great!', 'You got it!', 'Fantastic!', 'Keep it up!'],
         encourage: ['Almost. Try again!', "That's okay. Try again!", 'Try once more. You can do it!']
+      },
+      /* Screen texts shared by the activities. An activity overrides any of them in its own `ui`. */
+      ui: {
+        prev: 'Previous',
+        next: 'Next',
+        count: '{i} of {n}',
+        seeReal: 'See real examples →',
+        startTest: 'Start practising →',
+        stepOf: 'Step {i} of {n}',
+        nextStep: 'Next step',
+        newRound: 'Another round →',
+        check: 'Check',
+        review: '← Review the explanation',
+        menuBack: '← Back to the menu',
+        visualAria: 'A drawing that goes with the explanation.',
+        right: '✅ Well done!',
+        rightPrefix: '',
+        roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} stars.',
+        reinforceTitle: 'Practice',
+        reinforceIntro: 'Let us repeat the {n} questions you got wrong until you get them all right.'
       }
     }
   };
@@ -123,17 +163,27 @@
    *  2. Legacy (single file with both languages): App.i18n.register({es: {...}, en: {...}})
    *       Registers into every locale present in the dict.
    */
+  /* Objects are merged key by key, so an activity can add to a block the core
+     already has (for example `ui`) without replacing it. Anything else is replaced. */
+  function mergeInto(target, source) {
+    for (var key in source) {
+      if (!Object.prototype.hasOwnProperty.call(source, key)) continue;
+      var value = source[key];
+      var current = target[key];
+      var both = value && typeof value === 'object' && !Array.isArray(value) &&
+        current && typeof current === 'object' && !Array.isArray(current);
+      if (both) mergeInto(current, value);
+      else target[key] = value;
+    }
+  }
+
   function register(dict, locale) {
     // New signature: (dict, locale)
     if (typeof locale === 'string') {
       if (SUPPORTED.indexOf(locale) === -1) return;
       if (!dict || typeof dict !== 'object') return;
       DICT[locale] = DICT[locale] || {};
-      for (var key in dict) {
-        if (Object.prototype.hasOwnProperty.call(dict, key)) {
-          DICT[locale][key] = dict[key];
-        }
-      }
+      mergeInto(DICT[locale], dict);
       return;
     }
     // Old signature: ({es: {...}, en: {...}})

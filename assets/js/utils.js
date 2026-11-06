@@ -203,6 +203,46 @@
     }
   }
 
+  /* Replaces each {name} in a text with the value given for it. */
+  function fill(text, values) {
+    var out = text;
+    Object.keys(values).forEach(function (k) { out = out.split('{' + k + '}').join(values[k]); });
+    return out;
+  }
+  /* A whole number from min to max, both included. */
+  function rint(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  /* One element of a list, at random. */
+  function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
+  /* A whole number from min to max, both included, that is not `avoid` when it can be helped. */
+  function pickRandomInt(min, max, avoid) {
+    if (max <= min) return min;
+    var range = max - min + 1;
+    for (var i = 0; i < 8; i++) {
+      var v = min + Math.floor(Math.random() * range);
+      if (v !== avoid) return v;
+    }
+    return min;
+  }
+  /* The text of a piece of html (its visible text, not its tags). */
+  function plainText(html) {
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent;
+  }
+  /* The character that separates thousands in the current locale. */
+  function thousandsSeparator() { return App.i18n.locale() === 'en' ? ',' : '.'; }
+  /* Answer options for a numeric question: the correct value plus up to two of the wrong ones
+     (non-negative, no repeats), shuffled. Each option is { html, aria, correct }. */
+  function numericOptions(correct, wrongs) {
+    var values = [correct];
+    wrongs.forEach(function (v) {
+      if (values.length < 3 && v >= 0 && values.indexOf(v) === -1) values.push(v);
+    });
+    return shuffle(values).map(function (v) {
+      return { html: String(v), aria: String(v), correct: v === correct };
+    });
+  }
+
   window.App.utils = {
     shuffle: shuffle,
     drawRound: drawRound,
@@ -212,6 +252,13 @@
     $$: $$,
     today: today,
     reducedMotion: reducedMotion,
-    injectFooter: injectFooter
+    injectFooter: injectFooter,
+    fill: fill,
+    rint: rint,
+    pick: pick,
+    pickRandomInt: pickRandomInt,
+    plainText: plainText,
+    thousandsSeparator: thousandsSeparator,
+    numericOptions: numericOptions
   };
 })();

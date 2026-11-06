@@ -1,0 +1,96 @@
+/* ==========================================================================
+   Calculia — Three-stage activity flow: styles (assets/js/activity-flow.js)
+   The rules that every activity of the flow shares: the drawing container,
+   the arrows under a slide, the text of a slide or example, and the test
+   (the answers, the prompt and the feedback). An activity adds its own
+   drawings in its own file, or in a shared file of its family.
+   ========================================================================== */
+
+/* The drawing of a slide or of an example. */
+.ops-visual { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--espacio); min-height: 120px; }
+
+/* The title of the activity picked from the menu, above its slides. */
+.activity-title { margin: 0; text-align: center; color: var(--mod-razonamiento); }
+
+/* Text blocks */
+.concept-title, .concept-count, .concept-text, .real-text { text-align: center; margin: 0; }
+.concept-text, .real-text { font-size: var(--texto-grande); line-height: 1.45; }
+.concept-count { color: var(--color-texto-suave); }
+.real-text { font-size: var(--texto-grande); }
+.real-card { min-height: 180px; justify-content: center; }
+
+/* Slide arrows: centred under the drawing. */
+.carousel-controls { display: flex; justify-content: center; gap: var(--espacio); }
+.carousel-controls .btn { min-width: 44px; min-height: 44px; }
+
+/* Test answers */
+:where(#activity) .option-btn { min-width: 96px; min-height: var(--boton-min); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
+:where(#activity) .option-btn.correct { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
+.option-btn.incorrect { opacity: 0.5; text-decoration: line-through; }
+.option-btn:disabled { opacity: 0.6; }
+.option-btn .op-sym { font-size: var(--texto-grande); }
+.task-card { border-color: var(--mod-razonamiento-suave); }
+.prompt { margin: 0; text-align: center; font-size: var(--texto-grande); }
+:where(#activity) .feedback { margin: 0; text-align: center; min-height: 1.4em; }
+:where(#activity) .feedback.success { color: var(--color-texto); font-weight: 700; }
+.feedback.error { color: var(--color-texto-suave); }
+/* «Paso 1 de 3» above the prompt of a question made of steps. */
+.step-label { margin: 0; text-align: center; font-weight: 700; color: var(--color-texto-suave); }
+
+/* A question whose options sit in one row (inline: true). Without this
+   rule the class is inert and the answers stack in a column. */
+.options.options-row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+.options.options-row .option-btn { width: auto; min-width: 180px; }
+
+/* ---- Test sheet ----
+   One card per question, all visible at once. Chosen options are marked
+   before «Comprobar»; right and wrong ones after it. */
+.test-sheet { gap: var(--espacio); }
+.test-sheet-card { border-color: var(--mod-razonamiento-suave); }
+.test-sheet-card .prompt {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-texto);
+}
+.test-sheet-card .visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 96px;
+}
+.test-sheet-card .option-btn.selected {
+  background: var(--mod-coordinacion);
+  color: var(--texto-sobre-acento, #FFFFFF);
+  border-color: var(--mod-coordinacion);
+}
+.test-sheet-card .option-btn.correct {
+  background: var(--color-acierto);
+  color: var(--texto-sobre-acento, #FFFFFF);
+  border-color: var(--color-acierto);
+}
+.test-sheet-card .option-btn.incorrect {
+  background: var(--color-error, #B0413E);
+  color: var(--texto-sobre-acento, #FFFFFF);
+  border-color: var(--color-error, #B0413E);
+}
+.test-sheet-card .feedback {
+  margin: 0;
+  font-weight: 700;
+}
+.test-sheet-card .feedback.success { color: var(--color-acierto); }
+.test-sheet-card .feedback.error { color: var(--color-error, #B0413E); }
+@keyframes test-sheet-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.test-sheet-card.shake { animation: test-sheet-shake 0.4s ease; }
+.sheet-actions {
+  justify-content: center;
+  gap: var(--espacio);
+}
+
+@media (max-width: 600px) {
+  .options.options-row .option-btn { min-width: 0; width: 100%; }
+}
