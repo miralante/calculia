@@ -769,6 +769,7 @@ in §2.1 above are the canonical rationale).
 | `storage.js` | `App.storage.{get, set, remove}` | only pages that read or write `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | only the activity's `app.js` |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | activities that keep their own round loop (not `App.activityFlow`) |
+| `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | the activities that show a row of dots or a shuffled Yes / No (divisibility-test, multiples, prime-composite) |
 
 The load order is `utils.js → i18n.js → tts.js → storage.js →
 feedback.js → strings.<locale>.js → data.js → app.js`. `i18n.js`

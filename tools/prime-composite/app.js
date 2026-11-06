@@ -35,11 +35,7 @@
      Dots in rows: a row is one line of the array. The product is written
      under it, so the rows and columns can be counted. */
   var DOT = '🔴';
-  function items(count, cls) {
-    var html = '';
-    for (var i = 0; i < count; i += 1) html += '<span class="' + cls + '" aria-hidden="true">' + DOT + '</span>';
-    return html;
-  }
+  function items(count, cls) { return App.answerOptions.dotRow(count, cls, DOT); }
   function arrayHtml(rows, cols) {
     var html = '<div class="ops-group-stack">';
     for (var r = 0; r < rows; r += 1) html += '<div class="ops-row">' + items(cols, 'ops-item') + '</div>';
@@ -74,10 +70,7 @@
   /* ---- Test: the questions ------------------------------------------------ */
   /* «Sí» and «No», in a shuffled order. */
   function yesNoOptions(yes) {
-    return App.utils.shuffle([
-      { html: t('ui.yes'), aria: t('ui.yes'), correct: yes },
-      { html: t('ui.no'), aria: t('ui.no'), correct: !yes }
-    ]);
+    return App.answerOptions.yesNo(yes, { yes: t('ui.yes'), no: t('ui.no') });
   }
 
   /* Is it prime? One number from the primes or from the composites; now and then the 1. */

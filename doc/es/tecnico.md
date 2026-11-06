@@ -799,6 +799,7 @@ justificación canónica).
 | `storage.js` | `App.storage.{get, set, remove}` | solo páginas que leen o escriben `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | solo el `app.js` de la actividad |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | actividades que llevan su propio bucle de ronda (no `App.activityFlow`) |
+| `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | las actividades que muestran una fila de puntos o un Sí / No barajado (divisibility-test, multiples, prime-composite) |
 
 El orden de carga es `utils.js → i18n.js → tts.js → storage.js →
 feedback.js → strings.<locale>.js → data.js → app.js`. `i18n.js`

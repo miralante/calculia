@@ -21,11 +21,7 @@
      Every drawing is made of small dots. A row of dots is a group; the
      product of its groups is written under it («3 × 4 = 12»). */
   var DOT = '🔴';
-  function items(count, cls) {
-    var html = '';
-    for (var i = 0; i < count; i += 1) html += '<span class="' + cls + '" aria-hidden="true">' + DOT + '</span>';
-    return html;
-  }
+  function items(count, cls) { return App.answerOptions.dotRow(count, cls, DOT); }
   function productText(count, each) {
     return fill(t('ui.product'), { k: count, d: each, m: count * each });
   }
@@ -65,10 +61,7 @@
   /* ---- Test: the questions ------------------------------------------------ */
   /* «Sí» and «No», in a shuffled order. */
   function yesNoOptions(yes) {
-    return App.utils.shuffle([
-      { html: t('ui.yes'), aria: t('ui.yes'), correct: yes },
-      { html: t('ui.no'), aria: t('ui.no'), correct: !yes }
-    ]);
+    return App.answerOptions.yesNo(yes, { yes: t('ui.yes'), no: t('ui.no') });
   }
 
   /* Which number is a multiple of d: the right one is d × k; the others are not. */

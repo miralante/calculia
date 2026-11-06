@@ -51,11 +51,7 @@
   /* ---- Drawing ----------------------------------------------------------
      `total` items shared in rows of `size`: each full row is a framed group,
      and what is left over sits apart, so «sobra» reads at a glance. */
-  function items(count, cls) {
-    var html = '';
-    for (var i = 0; i < count; i += 1) html += '<span class="' + cls + '" aria-hidden="true">' + DOT + '</span>';
-    return html;
-  }
+  function items(count, cls) { return App.answerOptions.dotRow(count, cls, DOT); }
   function divisionText(total, size) {
     var text = fill(t('ui.division'), { T: total, d: size, q: Math.floor(total / size) });
     if (total % size) text += ', ' + fill(t('ui.remainder'), { r: total % size });
@@ -111,10 +107,7 @@
 
   /* «Sí» and «No», in a shuffled order. */
   function yesNoOptions(yes) {
-    return App.utils.shuffle([
-      { html: t('ui.yes'), aria: t('ui.yes'), correct: yes },
-      { html: t('ui.no'), aria: t('ui.no'), correct: !yes }
-    ]);
+    return App.answerOptions.yesNo(yes, { yes: t('ui.yes'), no: t('ui.no') });
   }
 
   /* Which number divides exactly: the right one is a multiple of `d`; the others are not. */
