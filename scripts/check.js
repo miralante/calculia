@@ -177,6 +177,20 @@ var parseJobs = Promise.all(jsFiles.map(function (archivo) {
 /* --- 2. Standard anatomy of tools/<slug>/ --- */
 var CANONICAL_BASE = ['index.html', 'app.js', 'data.js', 'styles.css'];
 var STRING_LOCALES = ['es', 'en'];
+
+/* Modules an activity may split its code into, next to app.js: model.js (what does not touch the page)
+   and comma.js (an exercise with its own state, given what it needs by a host object). The checks that
+   read what an activity does read them all, because a split moves the code, not the behaviour. */
+var EXTRA_MODULES = ['model.js', 'comma.js', 'screens.js', 'counter.js', 'art.js'];
+
+function slugCode(dir) {
+  var text = fs.readFileSync(path.join(dir, 'app.js'), 'utf8');
+  EXTRA_MODULES.forEach(function (name) {
+    var file = path.join(dir, name);
+    if (fs.existsSync(file)) text += '\n' + fs.readFileSync(file, 'utf8');
+  });
+  return text;
+}
 var toolsDir = path.join(ROOT, 'tools');
 var slugs = fs.readdirSync(toolsDir, { withFileTypes: true })
   .filter(function (e) { return e.isDirectory(); })
@@ -192,7 +206,8 @@ slugs.forEach(function (slug) {
     .map(function (loc) { return 'strings.' + loc + '.js'; })
     .filter(function (f) { return files.indexOf(f) === -1; });
   var expected = CANONICAL_BASE.concat(STRING_LOCALES.map(function (loc) { return 'strings.' + loc + '.js'; }));
-  var extras = files.filter(function (a) { return expected.indexOf(a) === -1; });
+  /* the split modules of an activity (see EXTRA_MODULES below) are allowed next to app.js */
+  var extras = files.filter(function (a) { return expected.indexOf(a) === -1 && EXTRA_MODULES.indexOf(a) === -1; });
   if (missingBase.length || missingStrings.length || extras.length) {
     var detail = [];
     if (missingBase.length) detail.push('faltan base: ' + missingBase.join(', '));
@@ -229,6 +244,13 @@ swPaths.forEach(function (entry) {
   if (!fs.existsSync(filePath)) {
     failures.push('sw.js: FILES incluye ' + entry + ' pero no existe en disco');
   }
+});
+
+/* Every shared shell file (assets/css, js, img, fonts) must be in FILES. The
+   same rule is enforced by scripts/sync-sw-files.js, which can add them. */
+checks += 1;
+require('./sync-sw-files.js').missingShellFiles(swContent).forEach(function (entry) {
+  failures.push('sw.js: falta ' + entry + ' en FILES (ejecuta node scripts/sync-sw-files.js)');
 });
 
 slugs.forEach(function (slug) {
@@ -275,8 +297,8 @@ function compareEsEnPair(dir, label) {
     failures.push(label + ': no se han podido extraer los dicts es/en');
     return;
   }
-  var keysEs = flatKeys(dictEs, '').sort();
-  var keysEn = flatKeys(dictEn, '').sort();
+  var keysEs = flatKeys(dictEs, '').filter(notCoreUiKey).sort();
+  var keysEn = flatKeys(dictEn, '').filter(notCoreUiKey).sort();
   var onlyEs = keysEs.filter(function (c) { return keysEn.indexOf(c) === -1; });
   var onlyEn = keysEn.filter(function (c) { return keysEs.indexOf(c) === -1; });
   if (onlyEs.length || onlyEn.length) {
@@ -312,8 +334,8 @@ function compareEsEn(dir, label) {
     failures.push(label + ': no se han podido extraer los dicts es/en');
     return;
   }
-  var keysEs = flatKeys(dictEs, '').sort();
-  var keysEn = flatKeys(dictEn, '').sort();
+  var keysEs = flatKeys(dictEs, '').filter(notCoreUiKey).sort();
+  var keysEn = flatKeys(dictEn, '').filter(notCoreUiKey).sort();
   var onlyEs = keysEs.filter(function (c) { return keysEn.indexOf(c) === -1; });
   var onlyEn = keysEn.filter(function (c) { return keysEs.indexOf(c) === -1; });
   if (onlyEs.length || onlyEn.length) {
@@ -444,7 +466,7 @@ var NO_SHUFFLE = ['temperature', 'los-numeros', 'quantities', 'order-numbers', '
 slugs.forEach(function (slug) {
   if (NO_SHUFFLE.indexOf(slug) !== -1) return;
   checks += 1;
-  var appJs = fs.readFileSync(path.join(toolsDir, slug, 'app.js'), 'utf8');
+  var appJs = slugCode(path.join(toolsDir, slug));
   if (appJs.indexOf('App.utils.shuffle') === -1) {
     failures.push('tools/' + slug + '/app.js: la ronda no llama a App.utils.shuffle ' +
       '(contrato §2.2.1: barajar preguntas u opciones)');
@@ -463,6 +485,21 @@ slugs.forEach(function (slug) {
       'Usar App.utils.spreadRepeats (assets/js/utils.js).');
   }
 });
+/* --- 5c. Shared helpers: an activity does not define its own copy of a helper App.utils already has.
+   The copies drifted apart before (the same function, two bodies); the alias keeps one source. */
+var SHARED_HELPERS = ['plainText', 'pickRandomInt', 'thousandsSeparator', 'randInt', 'numericOptions'];
+slugs.forEach(function (slug) {
+  checks += 1;
+  var code = slugCode(path.join(toolsDir, slug));
+  SHARED_HELPERS.forEach(function (name) {
+    if (new RegExp('\\bfunction\\s+' + name + '\\s*\\(').test(code)) {
+      failures.push('tools/' + slug + '/: define su propia `function ' + name + '(`. ' +
+        'Usar App.utils (assets/js/utils.js) con un alias: var ' + name + ' = App.utils.' +
+        (name === 'randInt' ? 'rint' : name) + ';');
+    }
+  });
+});
+
 /* --- 6. Mandatory rule: zero disability / occupational therapy / minors mentions ---
    doc/<locale>/SPEC.md §4: the end user never sees terms naming
    intellectual disability, occupational therapy, minors, or equivalents.
@@ -651,6 +688,24 @@ function extractKeysFromAppJs(archivo) {
   return keys;
 }
 
+/* The ui.* keys that the core dictionary (assets/js/i18n.js) gives every
+   activity in both locales. An activity does not need to repeat them. */
+var CORE_UI_KEYS = null;
+function coreUiKeys() {
+  /* Not `=== null`: the checks below run before this file reaches the declaration above. */
+  if (!CORE_UI_KEYS) {
+    var src = fs.readFileSync(path.join(ROOT, 'assets', 'js', 'i18n.js'), 'utf8');
+    var start = src.indexOf('      ui: {');
+    var end = src.indexOf('\n      }', start);
+    CORE_UI_KEYS = (src.slice(start, end).match(/^\s+\w+: /gm) || []).map(function (line) {
+      return 'ui.' + line.trim().replace(/:$/, '');
+    });
+  }
+  return CORE_UI_KEYS;
+}
+function isCoreUiKey(key) { return coreUiKeys().indexOf(key) !== -1; }
+function notCoreUiKey(key) { return !isCoreUiKey(key); }
+
 var GLOBAL_KEY_PREFIXES = ['core.', 'feedback.'];
 function isGlobalKey(key) {
   return GLOBAL_KEY_PREFIXES.some(function (p) { return key.indexOf(p) === 0; });
@@ -667,11 +722,15 @@ function checkUsageVsRegistration(dir, label) {
   var keysEs = flatKeys(dictEs, '');
   var keysEn = flatKeys(dictEn, '');
   var used = extractKeysFromHtml(path.join(dir, 'index.html'))
-    .concat(extractKeysFromAppJs(path.join(dir, 'app.js')));
+    .concat(extractKeysFromAppJs(path.join(dir, 'app.js')))
+    .concat(EXTRA_MODULES.reduce(function (acc, name) {
+      var file = path.join(dir, name);
+      return fs.existsSync(file) ? acc.concat(extractKeysFromAppJs(file)) : acc;
+    }, []));
   var seen = {};
   used = used.filter(function (u) {
     var id = (u.prefix ? 'prefijo:' : 'exacta:') + u.key;
-    if (isGlobalKey(u.key) || seen[id]) return false;
+    if (isGlobalKey(u.key) || isCoreUiKey(u.key) || seen[id]) return false;
     seen[id] = true;
     return true;
   });
@@ -807,7 +866,7 @@ var cssIndex = indexCssSelectors(listCssFiles());
 slugs.forEach(function (slug) {
   var appJs = path.join(toolsDir, slug, 'app.js');
   if (!fs.existsSync(appJs)) return;
-  var content = fs.readFileSync(appJs, 'utf8');
+  var content = slugCode(path.join(toolsDir, slug));
   var emitted = extractDynamicClasses(content);
   var orphanLiterals = [];
   var orphanPrefixes = [];
@@ -1157,8 +1216,8 @@ checks += 1;
 slugs.forEach(function (slug) {
   var appJs = path.join(toolsDir, slug, 'app.js');
   if (!fs.existsSync(appJs)) return;
-  var content = fs.readFileSync(appJs, 'utf8');
-  var generic = /\.textContent\s*=\s*App\.i18n\.t\((['"])(?:hint|pista)\1\)\s*;/.exec(content);
+  var content = slugCode(path.join(toolsDir, slug));
+  var generic =/\.textContent\s*=\s*App\.i18n\.t\((['"])(?:hint|pista)\1\)\s*;/.exec(content);
   if (generic) {
     failures.push('tools/' + slug + '/app.js: showHint() escribe la frase genérica ('
       + generic[0].trim() + ') sin mirar la pregunta; cada tipo de pregunta debe traer la suya.');

@@ -958,7 +958,7 @@ async function exerciseShapes(page, baseUrl) {
   await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
   actions += 1;
 
-  const introCards = page.locator('#galleryVisual .shape-compare-item');
+  const introCards = page.locator('#introVisual .shape-compare-item');
   assert.equal(await introCards.count(), 2,
     'La primera diapositiva no compara visualmente una forma plana y un cuerpo');
   assert.deepEqual(await introCards.locator('h2').allInnerTexts(),
@@ -969,10 +969,10 @@ async function exerciseShapes(page, baseUrl) {
   'La explicación inicial no usa ejemplos visuales y palabras cotidianas');
   assert.equal(await introCards.locator('.intro-side-mark, .intro-corner-mark').count(), 0,
     'La primera diapositiva adelanta las marcas de lado y esquina');
-  assert.ok(await page.locator('#galleryCaption').isHidden(),
+  assert.ok(await page.locator('#introTitle').isHidden(),
     'La primera diapositiva muestra una explicación duplicada');
-  await page.locator('#galleryNext').click();
-  const partCards = page.locator('#galleryVisual .shape-part-item');
+  await page.locator('#introNext').click();
+  const partCards = page.locator('#introVisual .shape-part-item');
   /* Los tres conceptos, en el orden en que se construyen: el lado, el
      vértice donde se juntan dos lados, y el perímetro, que es la vuelta
      por todos ellos. "Esquina" es la palabra de cada día y "vértice" la de
@@ -1012,8 +1012,8 @@ async function exerciseShapes(page, baseUrl) {
      propia forma de enseñar el concepto en el dibujo. Sin esto, añadir un
      concepto al carrusel podría dejarse sin comprobar ometerlo en la
      diapositiva que le toca. */
-  await page.locator('#galleryNext').click();
-  const insideCards = page.locator('#galleryVisual .shape-part-item');
+  await page.locator('#introNext').click();
+  const insideCards = page.locator('#introVisual .shape-part-item');
   assert.deepEqual(await insideCards.locator('h2').allInnerTexts(),
     ['Área', 'Volumen'],
   'La tercera diapositiva no presenta área y volumen');
@@ -1030,8 +1030,8 @@ async function exerciseShapes(page, baseUrl) {
   assert.equal(await insideCards.nth(1).locator('.intro-space-mark').count(), 1,
     'El volumen deja de enseñar el hueco que hay dentro del cuerpo');
 
-  await page.locator('#galleryNext').click();
-  const sameCards = page.locator('#galleryVisual .shape-part-item');
+  await page.locator('#introNext').click();
+  const sameCards = page.locator('#introVisual .shape-part-item');
   assert.deepEqual(await sameCards.locator('h2').allInnerTexts(),
     ['Simetría', 'Semejanza'],
   'La cuarta diapositiva no presenta simetría y semejanza');
@@ -1043,46 +1043,46 @@ async function exerciseShapes(page, baseUrl) {
     'La simetría no se enseña con una raya de doblar');
   assert.equal(await sameCards.nth(1).locator('svg polygon').count(), 2,
     'La semejanza no enseña la misma forma en dos tamaños distintos');
-  await page.locator('#galleryNext').click();
+  await page.locator('#introNext').click();
   /* Primero el área como cuadraditos que se cuentan dentro de la figura. */
-  const countCards = page.locator('#galleryVisual .shape-part-item');
+  const countCards = page.locator('#introVisual .shape-part-item');
   assert.deepEqual(await countCards.locator('h2').allInnerTexts(),
     ['Cuadrado', 'Rectángulo', 'Triángulo'],
   'La diapositiva de contar cuadraditos no presenta cuadrado, rectángulo y triángulo');
   assert.match(await countCards.nth(2).innerText(), /mitad del cuadrado/,
     'El triángulo no dice que cubre la mitad del cuadrado');
-  await page.locator('#galleryNext').click();
+  await page.locator('#introNext').click();
   /* Las áreas por fórmula: cada figura lleva las palabras de su fórmula y el
      triángulo, que es la mitad de un rectángulo, va debajo de las otras dos. */
-  const formulaCards = page.locator('#galleryVisual .shape-part-item');
+  const formulaCards = page.locator('#introVisual .shape-part-item');
   assert.deepEqual(await formulaCards.locator('h2').allInnerTexts(),
     ['Cuadrado', 'Rectángulo', 'Triángulo'],
   'La diapositiva de áreas por fórmula no presenta cuadrado, rectángulo y triángulo');
   assert.match(await formulaCards.nth(2).innerText(), /÷ 2/,
     'El área del triángulo no dice que se divide entre 2');
-  await page.locator('#galleryNext').click();
+  await page.locator('#introNext').click();
   /* Los triángulos, primero por sus lados y luego por sus ángulos. */
-  const sideCards = page.locator('#galleryVisual .shape-part-item');
+  const sideCards = page.locator('#introVisual .shape-part-item');
   assert.deepEqual(await sideCards.locator('h2').allInnerTexts(),
     ['Equilátero', 'Isósceles', 'Escaleno'],
   'La diapositiva de triángulos por lados no está completa');
-  await page.locator('#galleryNext').click();
-  const angleCards = page.locator('#galleryVisual .shape-part-item');
+  await page.locator('#introNext').click();
+  const angleCards = page.locator('#introVisual .shape-part-item');
   assert.deepEqual(await angleCards.locator('h2').allInnerTexts(),
     ['Rectángulo', 'Acutángulo', 'Obtusángulo'],
   'La diapositiva de triángulos por ángulos no está completa');
-  await page.locator('#galleryNext').click();
+  await page.locator('#introNext').click();
 
   const galleryNames = [];
   const galleryCount = await page.evaluate(() => window.DATA.gallery.length);
   for (let i = 0; i < galleryCount; i += 1) {
-    galleryNames.push(await page.locator('#galleryVisual').getAttribute('aria-label'));
-    assert.ok((await page.locator('#galleryCaption').innerText()).trim(),
+    galleryNames.push(await page.locator('#introVisual').getAttribute('aria-label'));
+    assert.ok((await page.locator('#introTitle').innerText()).trim(),
       'Falta la explicación de una forma en la galería');
-    assert.equal(await page.locator('#galleryCaption').evaluate(node =>
+    assert.equal(await page.locator('#introTitle').evaluate(node =>
       getComputedStyle(node).textTransform), 'capitalize',
     'El nombre de la forma no destaca con mayúscula inicial');
-    assert.equal(await page.locator('#galleryCaption').evaluate(node => node.textContent.trim()),
+    assert.equal(await page.locator('#introTitle').evaluate(node => node.textContent.trim()),
       galleryNames[galleryNames.length - 1],
       'La galería añade detalles sobre lados, esquinas o caras en vez de presentar la forma');
     const galleryItem = await page.evaluate(index => window.DATA.gallery[index], i);
@@ -1091,16 +1091,16 @@ async function exerciseShapes(page, baseUrl) {
        los concept slides y se preguntan en el test, así que listarlos aquí
        partiría la atención entre la figura y un número que todavía no toca. */
     if (galleryShapeId === 'rectangularPrism') {
-      assert.equal(await page.locator('#galleryVisual .solid-left').getAttribute('points'),
+      assert.equal(await page.locator('#introVisual .solid-left').getAttribute('points'),
         '10,42 88,42 88,102 10,102',
       'La cara más larga del prisma rectangular no queda de frente');
     }
     if (galleryShapeId === 'pyramid') {
-      assert.equal(await page.locator('#galleryVisual .solid-left').count(), 2,
+      assert.equal(await page.locator('#introVisual .solid-left').count(), 2,
         'La pirámide no muestra sus caras triangulares');
     }
     if (galleryShapeId === 'cylinder') {
-      const cylinder = await page.locator('#galleryVisual svg').evaluate(svg => ({
+      const cylinder = await page.locator('#introVisual svg').evaluate(svg => ({
         sideHeight: svg.querySelector('rect.solid-side')?.getAttribute('height'),
         baseRx: svg.querySelector('.solid-cylinder-base')?.getAttribute('rx'),
         baseOpacity: getComputedStyle(svg.querySelector('.solid-cylinder-base')).fillOpacity,
@@ -1116,7 +1116,7 @@ async function exerciseShapes(page, baseUrl) {
       }, 'La base del cilindro no parece una tapa diferenciada');
     }
     if (i < galleryCount - 1) {
-      await page.locator('#galleryNext').click();
+      await page.locator('#introNext').click();
       actions += 1;
     }
   }
@@ -1126,7 +1126,7 @@ async function exerciseShapes(page, baseUrl) {
     galleryNames.includes('octágono') && galleryNames.includes('cubo') &&
     galleryNames.includes('cono'),
   'La galería no incluye formas planas y cuerpos geométricos');
-  await page.locator('#galleryNext').click();
+  await page.locator('#introNext').click();
   assert.equal(await introCards.count(), 2,
     'La galería no vuelve a la primera diapositiva al terminar');
 
@@ -1146,9 +1146,9 @@ async function exerciseShapes(page, baseUrl) {
   const realCount = await page.evaluate(() => window.DATA.gallery.length);
   for (let i = 0; i < realCount; i += 1) {
     const realShapeId = await page.evaluate(index => window.DATA.gallery[index].id, i);
-    assert.equal(await page.locator('#realObject .intro-side-mark').count(), 0,
+    assert.equal(await page.locator('#realVisual .real-object .intro-side-mark').count(), 0,
       'El ejemplo cotidiano marca un lado sin que haya nada que señalar');
-    realExamples.push((await page.locator('#realCaption').innerText()).trim());
+    realExamples.push((await page.locator('#realText').innerText()).trim());
 
     /* Los ejemplos de la vida real solo muestran el nombre del objeto:
        contar lados, vértices o caras sobre la foto distrae de la forma
@@ -1172,22 +1172,22 @@ async function exerciseShapes(page, baseUrl) {
       rectangularPrism: 3, triangularPrism: 3, pyramid: 2,
     };
     if (DRAWN_REAL.indexOf(realShapeId) !== -1) {
-      assert.ok(await page.locator('#realObject svg').count() > 0,
+      assert.ok(await page.locator('#realVisual .real-object svg').count() > 0,
         'El ejemplo cotidiano de ' + realShapeId + ' se queda en el emoji sin dibujo');
     }
     if (realShapeId in EXPECTED_REAL_POLYGONS) {
-      const polygonCount = await page.locator('#realObject svg polygon').count();
+      const polygonCount = await page.locator('#realVisual .real-object svg polygon').count();
       assert.equal(polygonCount, EXPECTED_REAL_POLYGONS[realShapeId],
         'La ilustración real no muestra con claridad la forma esperada');
     }
     /* The window is the square: a square frame, and the mullions drawn as
        lines so they cannot be mistaken for sides of the frame. */
     if (realShapeId === 'square') {
-      const frame = await page.locator('#realObject svg polygon').boundingBox();
+      const frame = await page.locator('#realVisual .real-object svg polygon').boundingBox();
       assert.ok(Math.abs(frame.width - frame.height) <= 2,
         'La ventana no es un cuadrado: el marco mide ' + Math.round(frame.width) +
         ' por ' + Math.round(frame.height));
-      assert.equal(await page.locator('#realObject svg line').count(), 2,
+      assert.equal(await page.locator('#realVisual .real-object svg line').count(), 2,
         'La ventana ha perdido el montante o el travesaño');
     }
     /* The badge carries a sheriff's star so it reads as "badge" without a
@@ -1196,11 +1196,11 @@ async function exerciseShapes(page, baseUrl) {
        quietly make that check meaningless. One path for the star, one
        circle for the seal in its middle. */
     if (realShapeId === 'pentagon') {
-      assert.equal(await page.locator('#realObject svg circle').count(), 1,
+      assert.equal(await page.locator('#realVisual .real-object svg circle').count(), 1,
         'El escudo deja de enseñar el sello del centro de la estrella');
-      assert.equal(await page.locator('#realObject svg path').count(), 1,
+      assert.equal(await page.locator('#realVisual .real-object svg path').count(), 1,
         'El escudo deja de enseñar la estrella del sheriff');
-      assert.ok(await page.locator('#realObject svg path').first()
+      assert.ok(await page.locator('#realVisual .real-object svg path').first()
         .getAttribute('d').then(d => /M60\.0 29\.0L/.test(d) || d.split('L').length === 12),
       'La estrella del escudo no tiene seis puntas');
     }
@@ -1208,9 +1208,9 @@ async function exerciseShapes(page, baseUrl) {
        The guy line and the pennant it used to carry were clutter — they
        sat next to the outline of the prism and read as extra edges. */
     if (realShapeId === 'triangularPrism') {
-      assert.equal(await page.locator('#realObject svg line').count(), 0,
+      assert.equal(await page.locator('#realVisual .real-object svg line').count(), 0,
         'La tienda ha vuelto a llevar cuerda o mástil');
-      assert.equal(await page.locator('#realObject svg path').count(), 0,
+      assert.equal(await page.locator('#realVisual .real-object svg path').count(), 0,
         'La tienda ha vuelto a llevar la banderola');
     }
     /* The courses of stone are what make a pyramid something people built
@@ -1218,9 +1218,9 @@ async function exerciseShapes(page, baseUrl) {
        the front corner, and no ground line under it: the mass ends on its
        own footprint. */
     if (realShapeId === 'pyramid') {
-      assert.equal(await page.locator('#realObject svg polyline').count(), 3,
+      assert.equal(await page.locator('#realVisual .real-object svg polyline').count(), 3,
         'La pirámide ha perdido sus hiladas de piedra');
-      assert.equal(await page.locator('#realObject svg line').count(), 4,
+      assert.equal(await page.locator('#realVisual .real-object svg line').count(), 4,
         'La pirámide ha perdido las juntas entre sillares o ha vuelto a la raya del suelo');
     }
     /* The swirl has to reach down into the cone. A ball resting on top of a
@@ -1237,8 +1237,8 @@ async function exerciseShapes(page, baseUrl) {
         assert.ok(await first.count() > 0, 'El cucurucho ha perdido su ' + selector);
         return first.boundingBox();
       }
-      const swirl = await boxOf('#realObject svg path[stroke-linecap="round"]');
-      const cone = await boxOf('#realObject svg path[fill]:not([fill="none"])');
+      const swirl = await boxOf('#realVisual .real-object svg path[stroke-linecap="round"]');
+      const cone = await boxOf('#realVisual .real-object svg path[fill]:not([fill="none"])');
       const swirlInCone = swirl.y < cone.y + cone.height && swirl.y + swirl.height > cone.y;
       assert.ok(swirlInCone,
         'El helado se queda encima del cucurucho en vez de dentro: vuelve a ser una bola sobre un triángulo');
@@ -1251,7 +1251,7 @@ async function exerciseShapes(page, baseUrl) {
          the same kind of regression, a set of same-sized scoops, leaves
          every turn the same width and fails the descent below. */
       const turns = await page.evaluate(() => [...document.querySelectorAll(
-        '#realObject svg path[stroke-linecap="round"]')]
+        '#realVisual .real-object svg path[stroke-linecap="round"]')]
         .filter(p => p.getAttribute('stroke') === '#FCF0D6')
         .map(p => Number(p.getAttribute('stroke-width'))));
       assert.ok(turns.length >= 3,
@@ -1262,12 +1262,12 @@ async function exerciseShapes(page, baseUrl) {
       /* The wafer has to be a lattice, not a handful of lines that happen to
          cross: both families of diagonals, enough of them to show the
          diamond, and all of them inside the single clip. */
-      assert.equal(await page.locator('#realObject svg clipPath').count(), 1,
+      assert.equal(await page.locator('#realVisual .real-object svg clipPath').count(), 1,
         'El gofra del cucurucho se sale del cucurucho al no recortarse');
-      const waffle = await page.locator('#realObject svg g[clip-path] path').count();
+      const waffle = await page.locator('#realVisual .real-object svg g[clip-path] path').count();
       assert.ok(waffle >= 12,
         'El gofra del cucurucho ha vuelto a ser un puñado de rayas: faltan las diagonales de la rejilla');
-      assert.ok(await page.locator('#realObject svg path').count() >= 8,
+      assert.ok(await page.locator('#realVisual .real-object svg path').count() >= 8,
         'El cucurucho ha perdido el enrejado de la gofra');
     }
     /* The bee has to stay off the comb. The caption says the cells are
@@ -1283,17 +1283,17 @@ async function exerciseShapes(page, baseUrl) {
         return found;
       }
       const beeBoxes = [
-        ...await boxesOf('#realObject svg circle'),
-        ...await boxesOf('#realObject svg ellipse'),
+        ...await boxesOf('#realVisual .real-object svg circle'),
+        ...await boxesOf('#realVisual .real-object svg ellipse'),
       ];
-      const cellBoxes = await boxesOf('#realObject svg polygon');
+      const cellBoxes = await boxesOf('#realVisual .real-object svg polygon');
       assert.equal(cellBoxes.length, 8, 'El panal tiene que enseñar siete celdas y ' +
         'la suelta; ahora enseña ' + cellBoxes.length);
       /* Six sides on every cell, the lone one included: the caption says
          hexagon, so the cell drawn on its own has to be the very polygon
          the comb is made of, not a lookalike parked next to it. */
       const vertices = await page.evaluate(() =>
-        [...document.querySelectorAll('#realObject svg polygon')]
+        [...document.querySelectorAll('#realVisual .real-object svg polygon')]
           .map(p => p.getAttribute('points').trim().split(/\s+/).length));
       assert.ok(vertices.every(n => n === 6), 'Alguna celda ha dejado de tener seis ' +
         'vértices: ' + vertices.join(', '));
@@ -1343,8 +1343,8 @@ async function exerciseShapes(page, baseUrl) {
       /* Point at the polygon, not at the class: solid-right is also the
          bowl and the berries on the label, and a locator that matches
          five elements resolves to none. */
-      const front = await page.locator('#realObject svg polygon.solid-left').boundingBox();
-      const side = await page.locator('#realObject svg polygon.solid-right').boundingBox();
+      const front = await page.locator('#realVisual .real-object svg polygon.solid-left').boundingBox();
+      const side = await page.locator('#realVisual .real-object svg polygon.solid-right').boundingBox();
       assert.ok(side.width / front.width <= 0.4,
         'La caja de cereales se dibuja demasiado profunda: el grosor es casi la mitad del ancho');
     }
@@ -1361,9 +1361,9 @@ async function exerciseShapes(page, baseUrl) {
   }
   /* Back at the triangle slide: still the plain three-sided sign, now with
      nothing drawn on top of it. */
-  assert.ok((await page.locator('#realCaption').innerText()).includes('señal de peligro'),
+  assert.ok((await page.locator('#realText').innerText()).includes('señal de peligro'),
     'Al volver atrás el ejemplo del triángulo no se corresponde con su dibujo');
-  assert.equal(await page.locator('#realObject svg polygon').count(), 1,
+  assert.equal(await page.locator('#realVisual .real-object svg polygon').count(), 1,
     'El ejemplo del triángulo deja de enseñar un triángulo al volver atrás');
   await page.locator('#realNext').click();
   await page.locator('#realContinue').click();
@@ -1587,8 +1587,8 @@ async function exerciseShapes(page, baseUrl) {
      el carrusel. */
   const conceptTitles = [];
   for (let slide = 0; slide < 8; slide += 1) {
-    conceptTitles.push(...await page.locator('#galleryVisual h2').allInnerTexts());
-    await page.locator('#galleryNext').click();
+    conceptTitles.push(...await page.locator('#introVisual h2').allInnerTexts());
+    await page.locator('#introNext').click();
   }
   assert.deepEqual(conceptTitles,
     ['Flat shape', 'Solid', 'Side', 'Vertex', 'Perimeter',
@@ -1604,17 +1604,17 @@ async function exerciseShapes(page, baseUrl) {
      el caption es la propia etiqueta accesible del dibujo. textContent
      (no innerText) para no arrastrar el text-transform: capitalize del
      CSS, que rompería la comparación con el aria-label en minúsculas. */
-  const captionText = await page.locator('#galleryCaption').evaluate(node =>
+  const captionText = await page.locator('#introTitle').evaluate(node =>
     node.textContent.trim());
-  const ariaLabel = await page.locator('#galleryVisual').getAttribute('aria-label');
+  const ariaLabel = await page.locator('#introVisual').getAttribute('aria-label');
   assert.equal(captionText, ariaLabel.trim(),
     'La galería añade detalles en vez de quedarse en el nombre');
   const cubeIndex = await page.evaluate(() =>
     window.DATA.gallery.findIndex(item => item.id === 'cube'));
-  for (let step = 0; step < cubeIndex; step += 1) await page.locator('#galleryNext').click();
-  assert.equal(await page.locator('#galleryCaption').evaluate(node =>
+  for (let step = 0; step < cubeIndex; step += 1) await page.locator('#introNext').click();
+  assert.equal(await page.locator('#introTitle').evaluate(node =>
     node.textContent.trim()),
-  (await page.locator('#galleryVisual').getAttribute('aria-label')).trim(),
+  (await page.locator('#introVisual').getAttribute('aria-label')).trim(),
   'La galería de los cuerpos añade detalles en vez de quedarse en el nombre');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
@@ -1627,7 +1627,7 @@ async function exerciseShapes(page, baseUrl) {
     await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
     await page.locator('#introContinue').click();
     await page.locator('#realNext').click();
-    const captionText = (await page.locator('#realCaption').innerText()).trim();
+    const captionText = (await page.locator('#realText').innerText()).trim();
     assert.ok(captionText.length > 0,
       `El ejemplo cotidiano está vacío en ${locale}`);
   }
