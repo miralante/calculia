@@ -8,14 +8,13 @@
 
   App.i18n.register({
     title: 'Operations',
-    instruction: 'Choose an operation. Here you understand what each one means, without long sums.',
-    pickTitle: 'Choose an operation.',
+    btnMenu: 'Back to start',
 
     ui: {
+      menuInstruction: 'Choose an operation.',
+      menuTitle: 'Add, subtract, multiply and divide',
+      menuText: 'Here you understand what each one means, without long sums.',
       coin: '$',
-      prev: 'Previous',
-      next: 'Next',
-      count: '{i} of {n}',
       dealOne: 'Share one',
       dealReset: 'Start again',
       dealResult: '{T} ÷ {g} = {e}',
@@ -23,11 +22,7 @@
       pack: 'Package {n}',
       shelf: 'Shelf {n}',
       box: 'Box {n}',
-      seeReal: 'See real examples →',
-      startTest: 'Start practising →',
-      right: '✅ Well done!',
       roundDone: 'You finished the round: {n} of {total} right the first time. You now have {stars} stars.',
-      newRound: 'Another round →',
       otherOps: '← Other operations',
       realTitle: 'It is used in real life:',
       introTitle: 'This is how it works',

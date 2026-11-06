@@ -12,20 +12,13 @@
   App.i18n.register({
     title: '➗ Quick sums',
     instructionMenu: 'Choose an activity.',
-    contexto: 'A big sum is not a hard sum: it is a small sum done twice.',
-    explicacion: '✅ There is no new sum to learn here. Only how to cut one into parts you already know.',
-    btnBackToMenu: '← Other activities',
     btnMenu: 'Back to start',
-    otherLevel: 'Choose another level',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{name}»?',
-    btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     activity: {
       consigno: { name: 'With a sign', detail: 'When negatives turn up.', instruction: 'When there are negative numbers there is no rule to learn. Find on the line where you start and walk the steps you are told: to the right if you go up and to the left if you go down. Where you land is the answer.' },
       voltear: { name: 'Turn it round', detail: 'The order changes nothing.', instruction: 'In a multiplication the order does not matter: 3 times 4 and 4 times 3 are the same number of dots, arranged another way. If you know one, you already know the other.' },
@@ -34,15 +27,6 @@
       orden: { name: 'What comes first', detail: 'Times and brackets.', instruction: 'When there are two operations, the multiplication is done before the addition. But if there are brackets, what is inside the brackets goes first. Brackets are in charge.' }
     },
     level: {
-      g1: 'Up from a negative',
-      g2: 'Down into a negative',
-      v1: 'Turn it round',
-      d1: 'Cut at five',
-      d2: 'Cut at the tens',
-      r1: 'How many each one gets',
-      r2: 'How many groups come out',
-      o1: 'What is done first?',
-      o2: 'How much is it?'
     },
     gen: {
       walkUp: 'You are at {from}. You go up {step}. Where do you land?',

@@ -9,14 +9,13 @@
 
   App.i18n.register({
     title: 'Operaciones',
-    instruction: 'Elige una operación. Aquí se entiende qué significa cada una, sin hacer cuentas largas.',
-    pickTitle: 'Elige una operación.',
+    btnMenu: 'Volver al inicio',
 
     ui: {
+      menuInstruction: 'Elige una operación.',
+      menuTitle: 'Sumar, restar, multiplicar y dividir',
+      menuText: 'Aquí se entiende qué significa cada una, sin hacer cuentas largas.',
       coin: '€',
-      prev: 'Anterior',
-      next: 'Siguiente',
-      count: '{i} de {n}',
       dealOne: 'Repartir uno',
       dealReset: 'Empezar de nuevo',
       dealResult: '{T} ÷ {g} = {e}',
@@ -24,11 +23,6 @@
       pack: 'Paquete {n}',
       shelf: 'Estante {n}',
       box: 'Caja {n}',
-      seeReal: 'Ver ejemplos reales →',
-      startTest: 'Empezar a practicar →',
-      right: '✅ ¡Muy bien!',
-      roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.',
-      newRound: 'Otra ronda →',
       otherOps: '← Otras operaciones',
       realTitle: 'Se usa en la vida real:',
       introTitle: 'Así funciona',

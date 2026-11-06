@@ -12,7 +12,6 @@
 
   App.i18n.register({
     title: '📈 Functions',
-    instructionIntro: 'See how a rule turns one number into another.',
 
     /* ---- The four ideas, before any question ---- */
     concept: {
@@ -34,12 +33,17 @@
       }
     },
 
-    galleryPrevious: 'Previous',
-    galleryNext: 'Next',
-    introContinue: 'See them in real life →',
-    realTitle: 'Functions are all around you',
-    realContinue: 'Start practising →',
-    instructionMenu: 'Choose what you want to practise.',
+    /* The shared screens (slides, examples, menu, test) take their texts from here. */
+    ui: {
+      seeReal: 'See them in real life →',
+      realLabel: 'Functions are all around you',
+      menuInstruction: 'Choose what you want to practise.',
+      menuTitle: 'Practise with one activity',
+      menuText: 'You start at the first level. When you finish a round, you move on to the next.',
+      hintPrefix: '',
+      wrongPrefix: '❌ Look: the right answer is ',
+      rightPrefix: '✅ Correct! The answer is: '
+    },
 
     /* ---- Real-life examples ---- */
     real: {
@@ -71,15 +75,7 @@
     },
 
     endSummary: 'You have answered {n} questions of {activity}. Now you have {stars} stars.',
-    btnHarder: 'Do you want to try "{name}"?',
     btnMenu: 'Back to the start',
-    btnOtherActivity: 'Another activity',
-    correctExplanation: '✅ Correct! The answer is: ',
-    incorrectExplanationA: '❌ Look: the right answer is ',
-    hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
-    reinforceTitle: 'Practice',
-    reinforceIntro: 'Let us repeat the {n} questions you got wrong until you get them all right.',
-    reinforceDone: 'Extra practice finished. You have them all.',
     transfer: 'It will help you work out how much a taxi costs or how much you will have saved each week.',
 
     gen: {

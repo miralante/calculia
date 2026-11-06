@@ -13,7 +13,6 @@
 
   App.i18n.register({
     title: '📈 Funciones',
-    instructionIntro: 'Mira cómo una regla convierte un número en otro.',
 
     /* ---- Las cuatro ideas, antes de preguntar ---- */
     concept: {
@@ -35,12 +34,17 @@
       }
     },
 
-    galleryPrevious: 'Anterior',
-    galleryNext: 'Siguiente',
-    introContinue: 'Verlo en la vida real →',
-    realTitle: 'Las funciones están a tu alrededor',
-    realContinue: 'Empezar a practicar →',
-    instructionMenu: 'Elige qué quieres practicar.',
+    /* The shared screens (slides, examples, menu, test) take their texts from here. */
+    ui: {
+      seeReal: 'Verlo en la vida real →',
+      realLabel: 'Las funciones están a tu alrededor',
+      menuInstruction: 'Elige qué quieres practicar.',
+      menuTitle: 'Practica con una actividad',
+      menuText: 'Empiezas por el primer nivel. Cuando terminas una ronda, pasas al siguiente.',
+      hintPrefix: '',
+      wrongPrefix: '❌ Mira: la respuesta correcta es ',
+      rightPrefix: '✅ ¡Correcto! La respuesta es: '
+    },
 
     /* ---- Ejemplos de la vida real ---- */
     real: {
@@ -72,15 +76,7 @@
     },
 
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
     btnMenu: 'Volver al inicio',
-    btnOtherActivity: 'Otra actividad',
-    correctExplanation: '✅ ¡Correcto! La respuesta es: ',
-    incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
-    reinforceTitle: 'Refuerzo',
-    reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     transfer: 'Te servirá para saber cuánto pagas en un taxi o cuánto tendrás ahorrado cada semana.',
 
     gen: {

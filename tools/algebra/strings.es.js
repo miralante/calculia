@@ -14,23 +14,14 @@
   App.i18n.register({
     title: '⚖️ La balanza',
     instructionMenu: 'Elige una actividad.',
-    contexto: 'Una balanza tiene que quedar equilibrada. Una letra es el nombre de un número que todavía no sabes. Y una gráfica cuenta si algo sube o baja.',
-    explicacion: '✅ Aquí no hay que despejar nada ni aprenderse reglas. Solo mirar qué falta para que los dos platos pesen igual.',
-    btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
-    otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
-    btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     answer: {
-      yes: 'Sí',
-      no: 'No'
     },
     trend: {
       up: 'Sube',
@@ -53,21 +44,6 @@
       graficas: { name: 'Las gráficas', detail: 'Si sube o si baja.', instruction: 'Una gráfica dibuja cómo cambia algo con las horas. Si las barras van creciendo, sube. Si van bajando, baja. Si son iguales, se queda igual.' }
     },
     level: {
-      s1: 'La pareja que cuadra',
-      s2: '¿Qué lado pesa más?',
-      q1: 'Si x por x es tanto',
-      c1: '¿Cómo crece?',
-      c2: 'Busca la que sube igual',
-      b1: 'Una bolsa y pesas',
-      b2: 'Varias bolsas iguales',
-      b3: 'Pesas en los dos lados',
-      l1: 'Si la x vale...',
-      l2: 'Cómo se escribe',
-      g1: '¿Sube o baja?',
-      t1: '¿Cómo se escribe el montón?',
-      t2: 'El lado del cuadrado',
-      t3: 'El lado que falta',
-      g2: '¿Cuándo es lo más alto?'
     },
     grow: {
       same: 'Siempre lo mismo',

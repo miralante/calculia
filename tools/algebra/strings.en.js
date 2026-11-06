@@ -13,23 +13,14 @@
   App.i18n.register({
     title: '⚖️ The balance',
     instructionMenu: 'Choose an activity.',
-    contexto: 'A balance has to stay level. A letter is the name of a number you do not know yet. And a graph tells you whether something is going up or down.',
-    explicacion: '✅ There is nothing to rearrange here and no rules to learn. Only look at what is missing so both pans weigh the same.',
-    btnBackToMenu: '← Other activities',
     btnMenu: 'Back to start',
-    otherLevel: 'Choose another level',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{name}»?',
-    btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     answer: {
-      yes: 'Yes',
-      no: 'No'
     },
     trend: {
       up: 'It goes up',
@@ -52,21 +43,6 @@
       graficas: { name: 'Graphs', detail: 'Whether it goes up or down.', instruction: 'A graph draws how something changes through the hours. If the bars grow, it goes up. If they shrink, it goes down. If they are the same, it stays the same.' }
     },
     level: {
-      s1: 'The pair that fits',
-      s2: 'Which side is heavier?',
-      q1: 'If x times x is this much',
-      c1: 'How does it grow?',
-      c2: 'Find the one that climbs the same',
-      b1: 'One bag and weights',
-      b2: 'Several equal bags',
-      b3: 'Weights on both sides',
-      l1: 'If x is worth...',
-      l2: 'How it is written',
-      g1: 'Up or down?',
-      t1: 'How is the pile written?',
-      t2: 'The side of the square',
-      t3: 'The missing side',
-      g2: 'When is it highest?'
     },
     grow: {
       same: 'The same each time',

@@ -12,9 +12,14 @@
   App.i18n.register({
     title: '🛤️ Lines',
     instructionIntro: 'Look at the lines.',
-    introContinue: 'See them in real life →',
-    galleryPrevious: 'Previous',
-    galleryNext: 'Next',
+
+    /* Screen texts (shared by the flow engine, assets/js/activity-flow.js). */
+    ui: {
+      seeReal: 'See them in real life →',
+      realLabel: 'Lines are all around us',
+      hint: '🤔 Try again. Look at the picture calmly.'
+    },
+
     concept: {
       line: {
         title: 'Line',
@@ -33,8 +38,6 @@
         text: 'Two lines that cross and make a square corner.'
       }
     },
-    realTitle: 'Lines are all around us',
-    realContinue: 'Start practising →',
     real: {
       rails: 'The railway tracks are parallel: they never touch.',
       scissors: 'The scissors cross at one point, but they do not make a square corner: they are intersecting.',
@@ -46,11 +49,6 @@
       crossing: 'Intersecting',
       perpendicular: 'Perpendicular'
     },
-    check: 'Check',
-    newRound: 'Another round →',
-    btnMenu: 'Back to start',
-    hint: '🤔 Try again. Look at the picture calmly.',
-    transfer: 'This will help you see whether two streets cross or never meet, and understand plans and maps.',
     gen: {
       kindPrompt: 'What are these two lines like?',
       linesAria: 'Two lines inside a box.',

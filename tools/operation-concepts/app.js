@@ -1,8 +1,10 @@
 /* ============================================================
    Calculia — Operaciones
-   Four sub-activities (+ − × ÷), one per operation. Each follows the
-   Formas flow: 1. explanation (slides with a drawing), 2. real life
-   (short everyday examples), 3. test (one question at a time).
+   Four operations (+ − × ÷), one activity per operation in the menu. Each
+   one follows the three stages of the shared flow (assets/js/activity-flow.js):
+   1. slides with a drawing, 2. real-life examples, 3. the test, one question at
+   a time. The menu, the stages and the closing screen are the engine's; this
+   file has the drawings, the questions and the operation-specific parts.
    The drawings count things with small icons (dots of sweets, bags,
    boxes). The numbers in the test are small on purpose: this activity
    is about what an operation means, not about calculating fast.
@@ -11,24 +13,10 @@
 (function () {
   'use strict';
 
-  var TOOL_ID = 'operation-concepts';
-  var $ = App.utils.$;
   function t(key) { return App.i18n.t(key); }
+  var fill = App.utils.fill;
+  var rint = App.utils.rint;
 
-  var progress = App.storage.get(TOOL_ID);
-  if (typeof progress.stars !== 'number') progress.stars = 0;
-  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
-
-  var SCREENS = ['#screenMenu', '#screenIntro', '#screenReal', '#screenGame', '#screenEnd'];
-  var op = null;           // the operation chosen in the menu (an entry of DATA.ops)
-  var introIndex = 0;
-  var realIndex = 0;
-  var round = [];
-  var qIndex = 0;
-  var roundRight = 0;
-  var question = null;
-  var answered = false;
-  var firstTry = true;
   var pickQueue = [];      // the «¿qué operación usarías?» stories of this round, not yet asked
   /* One slice of a pizza: a 60° wedge with its tip at the centre, crust along the outer arc, and pepperoni. */
   var SLICE = '<svg class="ops-slice" viewBox="0 0 40 40" aria-hidden="true" focusable="false">' +
@@ -37,21 +25,10 @@
     '<circle cx="20" cy="10" r="2" fill="#d9452b"/><circle cx="19.5" cy="15" r="1.5" fill="#d9452b"/>' +
     '</svg>';
 
-  function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
-  function show(screen) {
-    SCREENS.forEach(function (id) { $(id).classList.toggle('hidden', id !== screen); });
-  }
-  function fill(text, values) {
-    var out = text;
-    Object.keys(values).forEach(function (k) { out = out.split('{' + k + '}').join(values[k]); });
-    return out;
-  }
   function opEntry(id) {
     for (var i = 0; i < DATA.ops.length; i += 1) if (DATA.ops[i].id === id) return DATA.ops[i];
     return null;
   }
-  function rint(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
   /* The objects a question is drawn with. Each question picks one (two different ones for a sum), so the
      pictures change too, not only the numbers. Every item of one question is the same object, so it can be counted. */
@@ -254,82 +231,33 @@
     return '';
   }
 
-  /* ---- Menu -------------------------------------------------------------- */
-  function renderMenu() {
-    var grid = $('#opGrid');
-    grid.innerHTML = '';
-    DATA.ops.forEach(function (entry) {
-      var button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'btn-actividad';
-      button.innerHTML = '<span class="picto" aria-hidden="true">' + entry.symbol + '</span>' +
-        '<span>' + t('ops.' + entry.id + '.name') + '</span>' +
-        '<span class="detail-card">' + t('ops.' + entry.id + '.detail') + '</span>';
-      button.addEventListener('click', function () { openOp(entry); });
-      grid.appendChild(button);
-    });
-    show('#screenMenu');
-  }
 
-  function openOp(entry) {
-    op = entry;
-    introIndex = 0;
-    $('#opTitle').textContent = entry.symbol + ' ' + t('ops.' + entry.id + '.name');
-    paintIntro();
-    show('#screenIntro');
-  }
+  /* ---- Activities: one per operation, each with its own slides, examples and questions ---- */
 
-  /* ---- 1. Explanation: slides with a drawing --------------------------- */
-  function paintIntro() {
-    var slide = op.intro[introIndex];
-    $('#introTitle').textContent = t('ops.' + op.id + '.intro.' + (introIndex + 1) + '.title');
-    $('#introVisual').innerHTML = drawingHtml(slide.visual);
-    $('#introVisual').setAttribute('aria-label', t('ui.visualAria'));
-    $('#introText').textContent = t('ops.' + op.id + '.intro.' + (introIndex + 1) + '.text');
-    var introBar = $('#introProgress');
-    introBar.setAttribute('aria-label', fill(t('ui.count'), { i: introIndex + 1, n: op.intro.length }));
-    introBar.setAttribute('aria-valuemax', String(op.intro.length));
-    introBar.setAttribute('aria-valuenow', String(introIndex + 1));
-    $('#introProgressFill').style.width = ((introIndex + 1) / op.intro.length * 100) + '%';
-  }
-
-  /* ---- 2. Real life: short examples ---------------------------------------- */
-  function paintReal() {
-    $('#realVisual').innerHTML = drawingHtml(op.real[realIndex].visual);
-    $('#realVisual').setAttribute('aria-label', t('ui.visualAria'));
-    $('#realText').textContent = t('ops.' + op.id + '.real.' + (realIndex + 1));
-    var realBar = $('#realProgress');
-    realBar.setAttribute('aria-label', fill(t('ui.count'), { i: realIndex + 1, n: op.real.length }));
-    realBar.setAttribute('aria-valuemax', String(op.real.length));
-    realBar.setAttribute('aria-valuenow', String(realIndex + 1));
-    $('#realProgressFill').style.width = ((realIndex + 1) / op.real.length * 100) + '%';
-  }
-
-  /* ---- 3. Test -------------------------------------------------------------- */
-  function startRound() {
-    var types = DATA.questions[op.id];
+  /* The question types of one round of an operation (def is its entry of ACTIVITIES). Each question draws its
+     type at random, so a round does not repeat the same mix of problems. */
+  function buildRound(def) {
+    var types = DATA.questions[def.id];
     var list = [];
-    /* Each question draws its type at random, so a round does not repeat the same mix of problems. */
     for (var i = 0; i < DATA.perRound; i += 1) list.push(types[rint(0, types.length - 1)]);
     pickQueue = [];
-    round = App.utils.shuffle(list).map(makeQuestion);
-    qIndex = 0;
-    roundRight = 0;
-    show('#screenGame');
-    renderQuestion();
+    return App.utils.shuffle(list);
   }
+
+  var ACTIVITIES = DATA.ops.map(function (entry) {
+    return {
+      id: entry.id,
+      picto: entry.symbol,
+      name: function () { return t('ops.' + entry.id + '.name'); },
+      detail: function () { return t('ops.' + entry.id + '.detail'); },
+      intro: entry.intro,
+      real: entry.real
+    };
+  });
 
   /* Numbers as answers: the right one and two others, all different and not
      below zero, in a shuffled order. */
-  function numericOptions(correct, wrongs) {
-    var values = [correct];
-    wrongs.forEach(function (v) {
-      if (values.length < 3 && v >= 0 && values.indexOf(v) === -1) values.push(v);
-    });
-    return App.utils.shuffle(values).map(function (v) {
-      return { html: String(v), aria: String(v), correct: v === correct };
-    });
-  }
+  var numericOptions = App.utils.numericOptions;
 
   function textOptions(correctText, wrongTexts) {
     var texts = [correctText];
@@ -339,11 +267,12 @@
     });
   }
 
-  function makeQuestion(type) {
+  /* A question of the round: def is the operation being practised (its entry of ACTIVITIES). */
+  function makeQuestion(type, index, def) {
     var q = t('q.' + type + '.prompt');
     var hint = t('q.' + type + '.hint');
     var icon = pickIcon(), pair = pickTwoIcons();
-    if (type === 'pick') return makePick();
+    if (type === 'pick') return makePick(def);
     if (type === 'more') {
       var ma = rint(2, 8), mb = rint(1, 6), MT = ma + mb;
       return {
@@ -462,10 +391,10 @@
   }
 
   /* «¿Qué operación usarías?»: a short situation, four operations to choose. */
-  function makePick() {
+  function makePick(def) {
     /* Only the stories of the operation being practised, each one once per round. */
     if (!pickQueue.length) {
-      pickQueue = App.utils.shuffle(DATA.picks.filter(function (p) { return p.op === op.id; }));
+      pickQueue = App.utils.shuffle(DATA.picks.filter(function (p) { return p.op === def.id; }));
     }
     var item = pickQueue.shift();
     var answer = opEntry(item.op);
@@ -483,89 +412,6 @@
       options: options,
       explanation: fill(t('pickExplain'), { op: t('answerName.' + answer.id) })
     };
-  }
-
-  function renderQuestion() {
-    question = round[qIndex];
-    answered = false;
-    firstTry = true;
-    $('#progressFill').style.width = ((qIndex / round.length) * 100) + '%';
-    $('#progressText').textContent = (qIndex + 1) + ' / ' + round.length;
-    $('#testPrompt').textContent = question.prompt;
-    $('#testVisual').innerHTML = question.visual;
-    $('#feedback').textContent = '';
-    $('#feedback').className = 'feedback';
-    var box = $('#testOptions');
-    box.innerHTML = '';
-    question.options.forEach(function (option) {
-      var button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'btn option-btn';
-      button.innerHTML = option.html;
-      button.setAttribute('aria-label', option.aria);
-      button.addEventListener('click', function () { answer(option, button); });
-      box.appendChild(button);
-    });
-    $('#btnNext').classList.add('hidden');
-  }
-
-  function answer(option, button) {
-    if (answered) return;
-    var feedback = $('#feedback');
-    if (option.correct) {
-      answered = true;
-      button.classList.add('correct');
-      feedback.textContent = t('ui.right') + ' ' + question.explanation;
-      feedback.className = 'feedback success';
-      if (firstTry) {
-        roundRight += 1;
-        progress.stars += 1;
-        save();
-        paintStars();
-      }
-      $('#testOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
-      $('#btnNext').classList.remove('hidden');
-      return;
-    }
-    /* A wrong answer: the hint, and the option stays off. Nothing is punished. */
-    firstTry = false;
-    button.classList.add('incorrect');
-    button.disabled = true;
-    feedback.textContent = question.hint;
-    feedback.className = 'feedback error';
-  }
-
-  function nextQuestion() {
-    qIndex += 1;
-    if (qIndex < round.length) {
-      renderQuestion();
-      return;
-    }
-    progress.completedRounds += 1;
-    save();
-    $('#endSummary').textContent = fill(t('ui.roundDone'), {
-      n: roundRight, total: round.length, stars: progress.stars
-    });
-    show('#screenEnd');
-  }
-
-  /* ---- Wiring ----------------------------------------------------------- */
-  function init() {
-    App.i18n.apply();
-    paintStars();
-    renderMenu();
-    /* Slides wrap around: the last one leads back to the first, and the first back to the last. */
-    $('#introPrev').addEventListener('click', function () { introIndex = (introIndex + op.intro.length - 1) % op.intro.length; paintIntro(); });
-    $('#introNext').addEventListener('click', function () { introIndex = (introIndex + 1) % op.intro.length; paintIntro(); });
-    $('#introContinue').addEventListener('click', function () { realIndex = 0; paintReal(); show('#screenReal'); });
-    $('#realPrev').addEventListener('click', function () { realIndex = (realIndex + op.real.length - 1) % op.real.length; paintReal(); });
-    $('#realNext').addEventListener('click', function () { realIndex = (realIndex + 1) % op.real.length; paintReal(); });
-    $('#realContinue').addEventListener('click', startRound);
-    $('#btnNext').addEventListener('click', nextQuestion);
-    $('#newRound').addEventListener('click', startRound);
-    $('#otherOps').addEventListener('click', renderMenu);
-    $('#introBack').addEventListener('click', renderMenu);
-    $('#testBack').addEventListener('click', renderMenu);
   }
 
   /* The deal drawing's buttons: «Repartir uno» moves one piece into the next group; «Empezar de nuevo» rebuilds it. */
@@ -604,5 +450,24 @@
     dealOne(piece.closest('.ops-deal'));
   });
 
-  document.addEventListener('DOMContentLoaded', init);
+
+  App.activityFlow.setup({
+    toolId: 'operation-concepts',
+    test: 'options',
+    activities: ACTIVITIES,
+    menuBackKey: 'ui.otherOps',
+    testVisuals: true,
+    testVisualClass: 'ops-visual',
+    visualHtml: drawingHtml,
+    introCopy: function (i, def) {
+      return {
+        title: t('ops.' + def.id + '.intro.' + (i + 1) + '.title'),
+        text: t('ops.' + def.id + '.intro.' + (i + 1) + '.text')
+      };
+    },
+    realText: function (i, def) { return t('ops.' + def.id + '.real.' + (i + 1)); },
+    buildRound: buildRound,
+    makeQuestion: makeQuestion,
+    backHref: '../../'
+  });
 })();

@@ -12,20 +12,13 @@
   App.i18n.register({
     title: '➗ Cuentas rápidas',
     instructionMenu: 'Elige una actividad.',
-    contexto: 'Una cuenta grande no es una cuenta difícil: es una cuenta pequeña hecha dos veces.',
-    explicacion: '✅ Aquí no hay que aprenderse ninguna cuenta nueva. Solo partirla en trozos que ya sabes.',
-    btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
-    otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
-    btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     activity: {
       consigno: { name: 'Con signo', detail: 'Cuando hay negativos.', instruction: 'Cuando hay números negativos no hace falta aprenderse ninguna regla. Busca en la recta dónde empiezas y anda los pasos que te dicen: hacia la derecha si subes y hacia la izquierda si bajas. Donde llegas es la respuesta.' },
       voltear: { name: 'Dar la vuelta', detail: 'El orden no cambia nada.', instruction: 'En una multiplicación da igual el orden: 3 por 4 y 4 por 3 son la misma cantidad de puntos, puestos de otra manera. Si te sabes una, ya te sabes la otra.' },
@@ -34,15 +27,6 @@
       orden: { name: 'Qué va primero', detail: 'Multiplicar y los paréntesis.', instruction: 'Cuando hay dos operaciones, la multiplicación se hace antes que la suma. Pero si hay paréntesis, lo de dentro del paréntesis va primero. Los paréntesis mandan.' }
     },
     level: {
-      g1: 'Subir desde un negativo',
-      g2: 'Bajar hasta un negativo',
-      v1: 'Dar la vuelta',
-      d1: 'Partir por cinco',
-      d2: 'Partir por las decenas',
-      r1: 'Cuánto le toca a cada uno',
-      r2: 'Cuántos grupos salen',
-      o1: '¿Qué se hace primero?',
-      o2: '¿Cuánto es?'
     },
     gen: {
       walkUp: 'Estás en el {from}. Subes {step}. ¿A dónde llegas?',

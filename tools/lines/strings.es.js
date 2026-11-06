@@ -12,9 +12,14 @@
   App.i18n.register({
     title: '🛤️ Rectas',
     instructionIntro: 'Mira las rectas.',
-    introContinue: 'Verlas en la vida real →',
-    galleryPrevious: 'Anterior',
-    galleryNext: 'Siguiente',
+
+    /* Textos de la pantalla (los comparte el motor assets/js/activity-flow.js). */
+    ui: {
+      seeReal: 'Verlas en la vida real →',
+      realLabel: 'Las rectas están a nuestro alrededor',
+      hint: '🤔 Prueba otra vez. Mira el dibujo con calma.'
+    },
+
     concept: {
       line: {
         title: 'Recta',
@@ -33,8 +38,6 @@
         text: 'Dos rectas que se cruzan haciendo esquina de cuadrado.'
       }
     },
-    realTitle: 'Las rectas están a nuestro alrededor',
-    realContinue: 'Empezar a practicar →',
     real: {
       rails: 'Las vías del tren son paralelas: nunca se tocan.',
       scissors: 'Las tijeras se cruzan en un punto, pero no hacen esquina de cuadrado: son secantes.',
@@ -46,11 +49,6 @@
       crossing: 'Secantes',
       perpendicular: 'Perpendiculares'
     },
-    check: 'Comprobar',
-    newRound: 'Otra ronda →',
-    btnMenu: 'Volver al inicio',
-    hint: '🤔 Prueba otra vez. Mira el dibujo con calma.',
-    transfer: 'Esto te servirá para ver si dos calles se cruzan o nunca se juntan, y para entender los planos y los mapas.',
     gen: {
       kindPrompt: '¿Cómo son estas dos rectas?',
       linesAria: 'Dos rectas dentro de un cuadro.',

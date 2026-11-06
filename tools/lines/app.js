@@ -1,47 +1,17 @@
 /* ============================================================
    Calculia — Rectas
-   Data in data.js. Shared modules in assets/js/.
-   Screens: concepts → real examples → test sheet. The test sheet shows
-   every question of the round at once, as in Formas.
+   Three stages, in the flow of the test sheet: 1. the concepts (slides
+   with a drawing), 2. real life (one example at a time), 3. the test sheet,
+   where the whole round is on one screen, as in Formas.
+   The stages and the sheet are built by assets/js/activity-flow.js; this
+   file has the drawings and the questions. The data is in data.js and the
+   texts in strings.<locale>.js.
    ============================================================ */
 (function () {
   'use strict';
 
-  var TOOL_ID = 'lines';
-  var $ = App.utils.$;
-
-  var screenIntro = $('#screenIntro');
-  var screenReal = $('#screenReal');
-  var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
-  var galleryVisual = $('#galleryVisual');
-  var galleryCaption = $('#galleryCaption');
-  var galleryNote = $('#galleryNote');
-  var realObject = $('#realObject');
-  var realCaption = $('#realCaption');
-  var testSheetEl = $('#testSheet');
-  var btnCheck = $('#btnCheck');
-  var btnNewRound = $('#btnNewRound');
-  var progressFill = $('#progressFill');
-  var progressText = $('#progressText');
-  var starsEl = $('#stars');
-
-  /* Persistent progress */
-  var progress = App.storage.get(TOOL_ID);
-  if (typeof progress.stars !== 'number') progress.stars = 0;
-
-  /* Round state. Each roundSheets entry is one question of the round with
-     the option the person picked (selected, null until chosen) and whether
-     "Comprobar" accepted it (correct, null until it is checked). */
-  var roundCorrect = 0;
-  var roundSheets = [];
-  var galleryIndex = 0;
-  var realIndex = 0;
-
+  var t = App.i18n.t;
   var KINDS = ['parallel', 'crossing', 'perpendicular'];
-
-  function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ---- Nothing that can be worked out is stored ----
      Which pair it is comes out of the drawing: the slopes of the two lines
@@ -118,14 +88,14 @@
   function questionFor(pair) {
     var kind = pairKind(pair);
     return {
-      prompt: App.i18n.t('gen.kindPrompt'),
-      hint: App.i18n.t('gen.socraticKind'),
+      prompt: t('gen.kindPrompt'),
+      hint: t('gen.socraticKind'),
       visual: '<div class="grid-stage">' + linesSvg(pair) + '</div>',
-      visualAria: App.i18n.t('gen.linesAria'),
+      visualAria: t('gen.linesAria'),
       options: App.utils.shuffle(KINDS.map(function (k) {
         return {
-          html: '<span class="answer-name">' + App.i18n.t('kind.' + k) + '</span>',
-          aria: App.i18n.t('kind.' + k),
+          html: '<span class="answer-name">' + t('kind.' + k) + '</span>',
+          aria: t('kind.' + k),
           correct: k === kind
         };
       })),
@@ -133,215 +103,32 @@
     };
   }
 
-  /* ---- Screens ---- */
-
-  function show(screen) {
-    [screenIntro, screenReal, screenGame, screenEnd].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
-  }
-
-  /* ---- Concept carousel ---- */
-
-  function paintGallery() {
-    var item = DATA.concepts[galleryIndex];
-    galleryVisual.innerHTML = '<div class="grid-stage">' + conceptSvg(item.id) + '</div>';
-    galleryCaption.textContent = App.i18n.t('concept.' + item.id + '.title');
-    galleryNote.textContent = App.i18n.t('concept.' + item.id + '.text');
-  }
-
-  /* ---- Real-life carousel ---- */
-
-  function paintRealExample() {
-    var item = DATA.real[realIndex];
-    realObject.textContent = item.object;
-    realCaption.textContent = App.i18n.t('real.' + item.id);
-  }
-
-  /* ---- Test sheet ----
-     The whole round is on one screen. Every question is generated when the
-     round starts, and the options inside each one are shuffled too. "Comprobar"
-     checks them all at once; "Otra ronda" deals a new round. */
-
-  function startRound() {
-    App.utils.drawRoundReset();
-    var questions = [];
-    for (var i = 0; i < DATA.perRound; i += 1) {
-      questions.push(questionFor(App.utils.drawRound('lines', DATA.linePairs)));
+  App.activityFlow.setup({
+    toolId: 'lines',
+    test: 'sheet',
+    slideProgress: false,
+    intro: DATA.concepts.map(function (concept) { return { visual: concept }; }),
+    real: DATA.real.map(function (item) { return { visual: item }; }),
+    introHeading: function () { return t('instructionIntro'); },
+    introCopy: function (i) {
+      var id = DATA.concepts[i].id;
+      return { title: t('concept.' + id + '.title'), text: t('concept.' + id + '.text') };
+    },
+    realText: function (i) { return t('real.' + DATA.real[i].id); },
+    visualHtml: function (concept) {
+      return '<div class="grid-stage">' + conceptSvg(concept.id) + '</div>';
+    },
+    realVisualHtml: function (item) {
+      return '<div class="real-object" aria-hidden="true">' + item.object + '</div>';
+    },
+    /* The round is a shuffled list of question types; every type is one question. */
+    buildRound: function () {
+      var list = [];
+      for (var i = 0; i < DATA.perRound; i += 1) list.push('pair');
+      return App.utils.shuffle(list);
+    },
+    makeQuestion: function () {
+      return questionFor(App.utils.drawRound('lines', DATA.linePairs));
     }
-    roundSheets = App.utils.shuffle(questions).map(function (q) {
-      return { question: q, selected: null, correct: null };
-    });
-    roundCorrect = 0;
-    show(screenGame);
-    renderSheet();
-  }
-
-  /* Paints the whole round at once. The user can change a selection on any
-     question until "Comprobar" is pressed. Right answers lock; a missed
-     question shows its hint (never the answer) and stays open. */
-  function renderSheet() {
-    testSheetEl.innerHTML = '';
-    roundSheets.forEach(function (sheet, i) {
-      var card = document.createElement('article');
-      card.className = 'card stack test-sheet-card';
-
-      var promptEl = document.createElement('p');
-      promptEl.className = 'prompt';
-      promptEl.textContent = sheet.question.prompt;
-      card.appendChild(promptEl);
-
-      var visualEl = document.createElement('div');
-      visualEl.className = 'visual';
-      visualEl.innerHTML = sheet.question.visual;
-      visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', sheet.question.visualAria);
-      card.appendChild(visualEl);
-
-      var optionsEl = document.createElement('div');
-      optionsEl.className = 'stack options';
-      if (sheet.question.inline) optionsEl.classList.add('options-row');
-      sheet.question.options.forEach(function (op, j) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'option-btn';
-        btn.innerHTML = op.html;
-        if (op.aria) btn.setAttribute('aria-label', op.aria);
-        btn.addEventListener('click', function () { selectOption(i, j); });
-        optionsEl.appendChild(btn);
-      });
-      card.appendChild(optionsEl);
-
-      var feedbackEl = document.createElement('p');
-      feedbackEl.className = 'feedback hidden';
-      feedbackEl.setAttribute('aria-live', 'polite');
-      card.appendChild(feedbackEl);
-
-      testSheetEl.appendChild(card);
-    });
-
-    btnCheck.classList.remove('hidden');
-    btnCheck.disabled = false;
-    btnNewRound.classList.add('hidden');
-    paintSheetProgress();
-  }
-
-  function selectOption(sheetIdx, optionIdx) {
-    var sheet = roundSheets[sheetIdx];
-    if (sheet.correct === true) return; /* already right: locked */
-    sheet.selected = optionIdx;
-    var card = testSheetEl.querySelectorAll('.test-sheet-card')[sheetIdx];
-    card.querySelectorAll('.option-btn').forEach(function (b, j) {
-      b.classList.toggle('selected', j === optionIdx);
-      b.classList.remove('incorrect');
-    });
-    paintSheetProgress();
-  }
-
-  function checkAnswers() {
-    var firstUnanswered = -1;
-    for (var i = 0; i < roundSheets.length; i += 1) {
-      if (roundSheets[i].correct !== true && roundSheets[i].selected === null) {
-        firstUnanswered = i;
-        break;
-      }
-    }
-    if (firstUnanswered !== -1) {
-      /* Not checked half-way: scroll to the first unanswered card and shake
-         it so it is noticed. The round does not count yet. */
-      var target = testSheetEl.querySelectorAll('.test-sheet-card')[firstUnanswered];
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      target.classList.add('shake');
-      setTimeout(function () { target.classList.remove('shake'); }, 500);
-      return;
-    }
-
-    /* Only the first check of the round scores. Later checks walk through
-       the questions still wrong and add no stars. */
-    var firstCheck = roundSheets.every(function (sheet) { return sheet.correct === null; });
-    var rightFirstTry = 0;
-    var cards = testSheetEl.querySelectorAll('.test-sheet-card');
-    roundSheets.forEach(function (sheet, i) {
-      if (sheet.correct === true) return; /* already right: stays locked */
-      var card = cards[i];
-      var options = card.querySelectorAll('.option-btn');
-      var selected = sheet.question.options[sheet.selected];
-      sheet.correct = selected.correct;
-      if (selected.correct && firstCheck) rightFirstTry += 1;
-
-      options.forEach(function (b) { b.classList.remove('selected'); });
-      var feedbackEl = card.querySelector('.feedback');
-      feedbackEl.classList.remove('hidden', 'success', 'error', 'encourage');
-      if (selected.correct) {
-        options.forEach(function (b) { b.disabled = true; });
-        options[sheet.selected].classList.add('correct');
-        feedbackEl.textContent = '✅';
-        feedbackEl.classList.add('success');
-      } else {
-        /* Wrong: the hint shows, the answer does not. The card stays open. */
-        options[sheet.selected].classList.add('incorrect');
-        App.feedback.encourage(feedbackEl);
-        feedbackEl.textContent = ' ' + (sheet.question.hint || App.i18n.t('hint'));
-        feedbackEl.classList.add('error');
-      }
-    });
-
-    if (firstCheck) {
-      roundCorrect = rightFirstTry;
-      progress.stars += roundCorrect;
-      save();
-      paintStars();
-    }
-
-    var allRight = roundSheets.every(function (sheet) { return sheet.correct === true; });
-    btnCheck.classList.toggle('hidden', allRight);
-    btnNewRound.classList.remove('hidden');
-    if (allRight) btnNewRound.focus();
-    paintSheetProgress();
-  }
-
-  /* Before "Comprobar" the bar counts the questions with an option picked;
-     after it, the ones already right. The figure is always "x / total". */
-  function paintSheetProgress() {
-    var total = roundSheets.length;
-    var checked = roundSheets[0].correct !== null;
-    var numerator = checked
-      ? roundSheets.filter(function (s) { return s.correct === true; }).length
-      : roundSheets.filter(function (s) { return s.selected !== null; }).length;
-    progressFill.style.width = (numerator / total * 100) + '%';
-    progressText.textContent = numerator + ' / ' + total;
-  }
-
-  /* ---- Events ---- */
-
-  $('#galleryPrev').addEventListener('click', function () {
-    galleryIndex = (galleryIndex + DATA.concepts.length - 1) % DATA.concepts.length;
-    paintGallery();
   });
-  $('#galleryNext').addEventListener('click', function () {
-    galleryIndex = (galleryIndex + 1) % DATA.concepts.length;
-    paintGallery();
-  });
-  $('#realPrev').addEventListener('click', function () {
-    realIndex = (realIndex + DATA.real.length - 1) % DATA.real.length;
-    paintRealExample();
-  });
-  $('#realNext').addEventListener('click', function () {
-    realIndex = (realIndex + 1) % DATA.real.length;
-    paintRealExample();
-  });
-  $('#introContinue').addEventListener('click', function () { show(screenReal); });
-  $('#realContinue').addEventListener('click', startRound);
-  $('#btnCheck').addEventListener('click', checkAnswers);
-  $('#btnNewRound').addEventListener('click', startRound);
-
-  /* End screen: the only button is "Volver al inicio", which goes back to
-     the Calculia landing. The test sheet never reaches it; the guard keeps
-     the wire the same as the other activities. */
-  var endBackToStart = $('#endBackToStart');
-  if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
-
-  paintGallery();
-  paintRealExample();
-  paintStars();
 })();

@@ -5,12 +5,8 @@
    ========================================================================== */
 
 .tool-header h1 { color: var(--mod-razonamiento); }
-.op-title { margin: 0; text-align: center; color: var(--mod-razonamiento); }
 
 .op-sym { font-size: 40px; font-weight: 800; line-height: 1; }
-
-/* Drawings */
-.ops-visual { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--espacio); min-height: 120px; }
 .ops-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
 .ops-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .ops-group-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }
@@ -67,13 +63,6 @@
 .ops-mini .ops-item { min-width: 18px; min-height: 18px; font-size: 16px; }
 .ops-option-name { font-size: var(--texto-pequeno); font-weight: 700; font-variant-numeric: tabular-nums; }
 
-/* Text blocks */
-.concept-title, .concept-count, .concept-text, .real-text { text-align: center; margin: 0; }
-.concept-text, .real-text { font-size: var(--texto-grande); line-height: 1.45; }
-.concept-count { color: var(--color-texto-suave); }
-.real-text { font-size: var(--texto-grande); }
-.real-card { min-height: 180px; justify-content: center; }
-
 /* One slice of a pizza: the inline SVG from app.js, at a size that reads on a phone. */
 .ops-slice { display: inline-block; width: 40px; height: 40px; }
 
@@ -120,22 +109,6 @@
   font-weight: 800;
   line-height: 1;
 }
-
-/* Slide arrows: centred under the drawing (number-sort.css, which styles them elsewhere, is not loaded here). */
-.carousel-controls { display: flex; justify-content: center; gap: var(--espacio); }
-.carousel-controls .btn { min-width: 44px; min-height: 44px; }
-
-/* Test answers */
-.option-btn { min-width: 96px; min-height: var(--boton-min); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
-.option-btn.correct { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
-.option-btn.incorrect { opacity: 0.5; text-decoration: line-through; }
-.option-btn:disabled { opacity: 0.6; }
-.option-btn .op-sym { font-size: var(--texto-grande); }
-.task-card { border-color: var(--mod-razonamiento-suave); }
-.prompt { margin: 0; text-align: center; font-size: var(--texto-grande); }
-.feedback { margin: 0; text-align: center; min-height: 1.4em; }
-.feedback.success { color: var(--color-texto); font-weight: 700; }
-.feedback.error { color: var(--color-texto-suave); }
 
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
 .tool-header .activity-icon { width: 48px; height: 48px; flex: none; }

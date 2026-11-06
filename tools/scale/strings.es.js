@@ -14,7 +14,6 @@
 
   App.i18n.register({
     title: '📏 Escala',
-    instructionIntro: 'Mira cómo se lee una escala.',
 
     /* ---- Las cuatro ideas, antes de preguntar ---- */
     concept: {
@@ -36,14 +35,17 @@
       }
     },
 
-    galleryPrevious: 'Anterior',
-    galleryNext: 'Siguiente',
-    introContinue: 'Verlas en la vida real →',
-    realTitle: 'Las escalas están a tu alrededor',
-    realBack: '← Volver a las ideas',
-    realContinue: 'Empezar a practicar →',
-    instructionMenu: 'Elige qué quieres practicar.',
-    menuBack: '← Volver a los instrumentos',
+    /* The shared screens (slides, examples, menu, test) take their texts from here. */
+    ui: {
+      seeReal: 'Verlas en la vida real →',
+      realLabel: 'Las escalas están a tu alrededor',
+      menuInstruction: 'Elige qué quieres practicar.',
+      menuTitle: 'Practica con una actividad',
+      menuText: 'Empiezas por el primer nivel. Cuando terminas una ronda, pasas al siguiente.',
+      hintPrefix: '',
+      wrongPrefix: '❌ Mira: la respuesta correcta es ',
+      rightPrefix: '✅ ¡Correcto! La respuesta es: '
+    },
 
     real: {
       regla: {
@@ -67,28 +69,9 @@
       plano: { name: 'La escala de un plano', detail: 'Del dibujo a la vida real.' },
       test: { name: '¡Vamos a practicar!', detail: 'Una ronda con preguntas de todo.' }
     },
-    level: {
-      l1: 'Rayitas con número',
-      l2: 'Un número de cada dos rayitas',
-      l3: 'Un número de cada cinco rayitas',
-      p1: 'Cuánto vale una rayita',
-      p2: 'Cuántas rayitas hay',
-      t1: 'El termómetro',
-      t2: 'La jarra',
-      d1: 'Del plano a la realidad',
-      d2: 'De la realidad al plano'
-    },
-
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
     btnMenu: 'Volver al inicio',
-    btnOtherActivity: 'Otra actividad',
-    correctExplanation: '✅ ¡Correcto! La respuesta es: ',
-    incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
-    reinforceTitle: 'Refuerzo',
-    reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
 
     gen: {
       /* --- leer y los instrumentos: la misma lectura, tres recipientes --- */
@@ -116,7 +99,6 @@
       planBackPrompt: 'De verdad son {real} {unit}. ¿Cuántos centímetros mide en el plano?',
       planBackAria: 'En el plano, cada centímetro son {key} {unit}. De verdad son {real} {unit}.',
       planBackHint: 'Reparte los {real} {unit} en trozos de {key}.',
-      planBackWrong: 'En el plano son {real} cm de verdad.',
       planLabel: 'Escala',
       planPath: 'El camino en el mapa',
       planReal: 'Vida real',

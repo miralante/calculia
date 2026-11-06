@@ -14,7 +14,6 @@
 
   App.i18n.register({
     title: '📏 Scale',
-    instructionIntro: 'Look at how a scale is read.',
 
     /* ---- The four ideas, before any question ---- */
     concept: {
@@ -36,14 +35,17 @@
       }
     },
 
-    galleryPrevious: 'Previous',
-    galleryNext: 'Next',
-    introContinue: 'See them in real life →',
-    realTitle: 'Scales are all around you',
-    realBack: '← Back to the ideas',
-    realContinue: 'Start practising →',
-    instructionMenu: 'Choose what you want to practise.',
-    menuBack: '← Back to the tools',
+    /* The shared screens (slides, examples, menu, test) take their texts from here. */
+    ui: {
+      seeReal: 'See them in real life →',
+      realLabel: 'Scales are all around you',
+      menuInstruction: 'Choose what you want to practise.',
+      menuTitle: 'Practise with one activity',
+      menuText: 'You start at the first level. When you finish a round, you move on to the next.',
+      hintPrefix: '',
+      wrongPrefix: '❌ Look: the correct answer is ',
+      rightPrefix: '✅ Correct! The answer is: '
+    },
 
     real: {
       regla: {
@@ -67,28 +69,9 @@
       plano: { name: 'The scale of a plan', detail: 'From the drawing to real life.' },
       test: { name: "Let's practice!", detail: 'A round with questions from everything.' }
     },
-    level: {
-      l1: 'Marks with numbers',
-      l2: 'A number every two marks',
-      l3: 'A number every five marks',
-      p1: 'What one mark is worth',
-      p2: 'How many marks there are',
-      t1: 'The thermometer',
-      t2: 'The jug',
-      d1: 'From the plan to reality',
-      d2: 'From reality to the plan'
-    },
-
     endSummary: 'You answered {n} questions in {activity}. You now have {stars} stars.',
-    btnHarder: 'Do you want to try "{name}"?',
     btnMenu: 'Back to the start',
-    btnOtherActivity: 'Another activity',
-    correctExplanation: '✅ Correct! The answer is: ',
-    incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
-    reinforceTitle: 'Extra practice',
-    reinforceIntro: 'Let us repeat the {n} questions you got wrong until you get them all right.',
-    reinforceDone: 'Extra practice finished. You have them all.',
 
     gen: {
       /* --- reading and the tools: the same reading, three vessels --- */
@@ -116,7 +99,6 @@
       planBackPrompt: 'In real life it is {real} {unit}. How many centimetres is that on the plan?',
       planBackAria: 'On the plan, each centimetre is {key} {unit}. In real life it is {real} {unit}.',
       planBackHint: 'Share the {real} {unit} into pieces of {key}.',
-      planBackWrong: 'On the plan it is {real} cm in real life.',
       planLabel: 'Scale',
       planPath: 'The road on the map',
       planReal: 'Real life',

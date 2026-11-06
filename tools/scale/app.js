@@ -1,73 +1,13 @@
 /* ============================================================
    Calculia — Escala
-   Data and levels in data.js. Shared modules in assets/js/.
-   Questions are generated on the fly based on the level type.
+   The flow is the shared one (assets/js/activity-flow.js, test 'options'):
+   the four ideas, the real-life examples, a menu of activities with levels,
+   and a socratic test with a reinforcement at the end of each round. What is
+   specific here is the ruler, the gauge and the plan drawings, and the question
+   generators. The data is in data.js and the texts in strings.<locale>.js.
    ============================================================ */
 (function () {
   'use strict';
-
-  var TOOL_ID = 'scale';
-  var $ = App.utils.$;
-
-  var screenIntro = $('#screenIntro');
-  var screenReal = $('#screenReal');
-  var screenMenu = $('#screenMenu');
-  var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
-  var conceptVisual = $('#conceptVisual');
-  var conceptTitle = $('#conceptTitle');
-  var conceptText = $('#conceptText');
-  var conceptPrev = $('#conceptPrev');
-  var conceptNext = $('#conceptNext');
-  var realObject = $('#realObject');
-  var realCaption = $('#realCaption');
-  var realNote = $('#realNote');
-  var realPrev = $('#realPrev');
-  var realNext = $('#realNext');
-  var promptEl = $('#prompt');
-  var visualEl = $('#visual');
-  var legendEl = $('#legend');
-  var optionsEl = $('#options');
-  var feedbackEl = $('#feedback');
-  var explanationWrap = $('#explanationWrap');
-  var explanationEl = $('#explanation');
-  var btnNext = $('#btnNext');
-  var progressFill = $('#progressFill');
-  var progressText = $('#progressText');
-  var starsEl = $('#stars');
-
-  /* Persistent progress */
-  var progress = App.storage.get(TOOL_ID);
-  if (typeof progress.stars !== 'number') progress.stars = 0;
-  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
-  if (!progress.roundsByActivity || typeof progress.roundsByActivity !== 'object' ||
-      Array.isArray(progress.roundsByActivity)) progress.roundsByActivity = {};
-
-  /* Round state */
-  var activity = null;
-  var level = null;
-  var index = 0;
-  var roundCorrect = 0;
-  var answered = false;
-  var attempts = 0;
-  var question = null;
-  var conceptIndex = 0;
-  var realIndex = 0;
-  /* Reinforcement: see core in assets/js/feedback.js (App.reinforce).
-     inReinforce controls the mini-round flow; `fixed` lets render()
-     replay a question the round already asked. */
-  var inReinforce = false;
-  var reinforceList = [];
-  var reinforceIndex = 0;
-  /* The mixed round is pre-built once at startRound(): six questions,
-     each taken from a random (activity, level) among the four. paintQuestion
-     reads it by index and never regenerates, so the question in slot 3
-     stays in slot 3 across renders. Set to null for any non-test round. */
-  var mixedRoundQueue = null;
-
-  function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
-
   /* ---- Utilities ---- */
 
   /* The round takes elements from the pool without repeating: the
@@ -554,25 +494,6 @@
        halves at once, with the equation that joins them. */
     return planCompareSvg({ key: 1, unit: 'km', cm: 3, real: 3 });
   }
-
-  function paintConcept() {
-    var id = CONCEPTS[conceptIndex];
-    conceptVisual.innerHTML = conceptSvg(id);
-    conceptTitle.textContent = App.i18n.t('concept.' + id + '.title');
-    conceptText.textContent = App.i18n.t('concept.' + id + '.text');
-    conceptPrev.setAttribute('aria-label', App.i18n.t('galleryPrevious'));
-    conceptNext.setAttribute('aria-label', App.i18n.t('galleryNext'));
-  }
-
-  function paintReal() {
-    var item = DATA.real[realIndex];
-    realObject.textContent = item.picto;
-    realCaption.textContent = App.i18n.t('real.' + item.id + '.name');
-    realNote.textContent = App.i18n.t('real.' + item.id + '.text');
-    realPrev.setAttribute('aria-label', App.i18n.t('galleryPrevious'));
-    realNext.setAttribute('aria-label', App.i18n.t('galleryNext'));
-  }
-
   /* ---- Question generators ----
      Every generator returns { prompt, visual, visualAria, legend,
      options }. The prompt is always the whole question in one sentence:
@@ -722,304 +643,86 @@
       };
     }
   };
+  /* Visible text of an option (its html may wrap spans). */
+  var plainText = App.utils.plainText;
 
-  /* ============================================================
-     Screens and flow
-     ============================================================ */
+  function t(key) { return App.i18n.t(key); }
 
-  function show(screen) {
-    [screenIntro, screenReal, screenMenu, screenGame, screenEnd].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
-  }
-
-  /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
-  function paintMenu() {
-    var cont = $('#activitiesMenu');
-    cont.innerHTML = '';
-    var grid = document.createElement('div');
-    grid.className = 'menu-grid';
-    Object.keys(DATA.activities).forEach(function (id) {
-      var act = DATA.activities[id];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-actividad';
-      btn.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
-        '<span>' + App.i18n.t('activity.' + id + '.name') + '</span>' +
-        '<span class="detail-card">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
-      btn.addEventListener('click', function () { openActivity(id); });
-      grid.appendChild(btn);
-    });
-    cont.appendChild(grid);
-  }
-
-  /* The level rises one step per completed round, capped at the last
-     one, so a person who comes back continues where they were. */
-  function levelFromProgress(activityId) {
-    var levels = activity.levels;
-    var completed = progress.roundsByActivity[activityId];
-    if (typeof completed !== 'number' || completed < 0) completed = 0;
-    return levels[Math.min(Math.floor(completed), levels.length - 1)];
-  }
-
-  function roundLength() {
-    return DATA.perRound;
-  }
-
-  function openActivity(id) {
-    activity = DATA.activities[id];
-    activity.id = id;
-    startRound(levelFromProgress(id));
-  }
-
-  /* ---- Game ---- */
-
-  function startRound(nv) {
-    level = nv;
-    index = 0;
-    roundCorrect = 0;
-    App.utils.drawRoundReset();
-    reinforceList = [];
-    reinforceIndex = 0;
-    inReinforce = false;
-    App.reinforce.banner.hide();
-    /* Mixed round: pre-build once so the order of questions stays
-       stable across renders. A mixed round never calls a generator
-       twice (one to build, one to paint). */
-    mixedRoundQueue = (nv.tipo === 'mixedTest') ? buildMixedRound() : null;
-    /* Registers the callback that runs when the normal round ends with
-       pending failures; it mounts the mini-round with just those. */
-    App.reinforce.start(function (fallos) { startReinforce(fallos); });
-    show(screenGame);
-    render();
-  }
-
-  /* A round whose questions come from one (activity, level) pair chosen
-     at random for each round position. The 'test' activity is the only
-     caller, and it's the only thing special about the round: every other
-     round paints straight from its own generator by (level, index). */
+  /* A round for the test activity mixes the levels of the others, one per question, at random. */
   function buildMixedRound() {
     var ids = Object.keys(DATA.activities).filter(function (k) { return k !== 'test'; });
     var out = [];
     for (var i = 0; i < DATA.perRound; i += 1) {
-      var aid = ids[Math.floor(Math.random() * ids.length)];
-      var act = DATA.activities[aid];
-      var lvl = act.levels[Math.floor(Math.random() * act.levels.length)];
-      out.push(GENERATORS[lvl.tipo](lvl, i));
+      var act = DATA.activities[ids[Math.floor(Math.random() * ids.length)]];
+      out.push(act.levels[Math.floor(Math.random() * act.levels.length)]);
     }
     return out;
   }
 
-  function startReinforce(fallos) {
-    reinforceList = fallos.map(function (f) { return f.payload; });
-    reinforceIndex = 0;
-    inReinforce = true;
-    attempts = 0;
-    App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
-      App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
-    );
-    showReinforceQuestion(reinforceList[0]);
+  /* The round is a list of level entries: the mixed test draws them, any other level repeats its own. */
+  function buildRound(def, level) {
+    if (level.tipo === 'mixedTest') return buildMixedRound();
+    var out = [];
+    for (var i = 0; i < DATA.perRound; i += 1) out.push(level);
+    return out;
   }
 
-  /* Paints one question. `fixed` replays a question from the reinforce
-     queue; without it a new one is generated for the current level, or
-     pulled from the pre-built mixed queue when this is the test round. */
-  function paintQuestion(fixed) {
-    if (fixed) {
-      question = fixed;
-    } else if (mixedRoundQueue) {
-      question = mixedRoundQueue[index];
-    } else {
-      question = GENERATORS[level.tipo](level, index);
-    }
-    answered = false;
-    attempts = 0;
-
-    promptEl.textContent = question.prompt;
-    visualEl.innerHTML = question.visual || '';
-    if (question.visualAria) {
-      visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', question.visualAria);
-    } else {
-      visualEl.removeAttribute('role');
-      visualEl.removeAttribute('aria-label');
-    }
-    legendEl.innerHTML = question.legend || '';
-    legendEl.classList.toggle('hidden', !question.legend);
-
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('hidden');
-    explanationEl.textContent = '';
-    btnNext.classList.add('hidden');
-
-    optionsEl.innerHTML = '';
-    question.options.forEach(function (op) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'option-btn';
-      btn.innerHTML = op.html;
-      if (op.aria) btn.setAttribute('aria-label', op.aria);
-      btn.addEventListener('click', function () { answer(op, btn); });
-      optionsEl.appendChild(btn);
-    });
-
-    progressFill.style.width = (inReinforce
-      ? ((reinforceIndex + 1) / reinforceList.length)
-      : (index / roundLength())) * 100 + '%';
-    progressText.textContent = '';
-    paintStars();
+  /* A level entry becomes a question: the generator of its type. After a right answer the flow shows
+     the right answer (the text of the option). */
+  function makeQuestion(entry, index) {
+    var q = GENERATORS[entry.tipo](entry, index);
+    var correct = q.options.filter(function (o) { return o.correct; })[0];
+    return {
+      prompt: q.prompt,
+      hint: q.hint || t('hint'),
+      visual: q.visual,
+      visualAria: q.visualAria,
+      legend: q.legend,
+      inline: q.inline,
+      options: q.options,
+      explanation: plainText(correct.html) + '.'
+    };
   }
 
-  function showReinforceQuestion(p) { paintQuestion(p); }
-
-  function render() { paintQuestion(null); }
-
-  /* Visible text of an option (its html may wrap spans). */
-  function plainText(html) {
-    var div = document.createElement('div');
-    div.innerHTML = html;
-    return div.textContent;
-  }
-
-  function showExplanation(isCorrect) {
-    if (isCorrect && inReinforce) {
-      explanationEl.textContent = '';
-      explanationWrap.classList.add('hidden');
-      return;
-    }
-    var correct = question.options.filter(function (o) { return o.correct; })[0];
-    explanationEl.textContent =
-      (isCorrect ? App.i18n.t('correctExplanation') : App.i18n.t('incorrectExplanationA')) +
-      plainText(correct.html) + '.';
-    explanationWrap.classList.remove('hidden');
-  }
-
-  /* Socratic method: the first mistake does not give the answer away,
-     it invites another look. Only the second one explains it.
-     The invitation is the one written for THIS question —whether it
-     asks to read a ruler, to value one mark, to count the marks an
-     object crosses, or to go from a plan to real life— and not the
-     same sentence for every question. The generic line is only the
-     fallback, for a question that forgot to bring its own. */
-  function showHint(op) {
-    explanationEl.textContent = App.feedback.hintText(
-      (question && question.hint) || App.i18n.t('hint'), op ? plainText(op.html) : '');
-    explanationWrap.classList.remove('hidden');
-  }
-
-  function answer(op, btn) {
-    if (answered) return;
-    if (op.correct) {
-      showExplanation(true);
-      answered = true;
-      btn.classList.add('correct');
-      App.feedback.success(feedbackEl);
-      /* The reinforcement mini-round replays questions this round already
-         asked, so counting it here reported more correct answers than the
-         round has — "Has resuelto 11 preguntas" for a 6-question round —
-         and pushed roundCorrect past DATA.perRound, which is the exact
-         value endRound() compares against to offer the next level. The
-         button therefore vanished for anyone who had to repeat a
-         question, which is precisely the person who should be moving
-         up. Stars move with the score so the two numbers stay
-         consistent. */
-      if (!inReinforce) {
-        progress.stars += 1;
-        roundCorrect += 1;
-      }
-      save();
-      paintStars();
-      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
-      btnNext.classList.remove('hidden');
-      btnNext.focus();
-    } else {
-      attempts += 1;
-      App.reinforce.add(level.id + ':' + index, question);
-      var respuestaTrasPista = attempts > 1;
-      showHint(op);
-      /* Reveal the explanation only after the hint is acknowledged. */
-      btn.classList.add('encourage');
-      btn.disabled = true;
-      App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(false); });
-    }
-  }
-
-  function next() {
-    if (inReinforce) {
-      reinforceIndex += 1;
-      if (reinforceIndex >= reinforceList.length) {
-        inReinforce = false;
-        App.reinforce.clear();
-        App.reinforce.banner.hide();
-        endRound();
-      } else {
-        showReinforceQuestion(reinforceList[reinforceIndex]);
-      }
-      return;
-    }
-    index += 1;
-    if (index >= roundLength()) {
-      /* consume() returns [] when nothing was failed; otherwise it fires
-         the callback that mounts the mini-round, which ends the round
-         itself, so endRound must not also run here. */
-      if (App.reinforce.consume().length === 0) endRound();
-    } else {
-      render();
-    }
-  }
-
-  function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    progress.roundsByActivity[activity.id] =
-      (progress.roundsByActivity[activity.id] || 0) + 1;
-    save();
-    show(screenEnd);
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
-        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
-        .replace('{stars}', progress.stars);
-    }
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
-  }
-
-  /* ---- Events ---- */
-
-  $('#btnNext').addEventListener('click', next);
-
-
-
-  function moveConcept(step) {
-    conceptIndex = (conceptIndex + step + CONCEPTS.length) % CONCEPTS.length;
-    paintConcept();
-  }
-
-  conceptPrev.addEventListener('click', function () { moveConcept(-1); });
-  conceptNext.addEventListener('click', function () { moveConcept(1); });
-  realPrev.addEventListener('click', function () {
-    realIndex = (realIndex + DATA.real.length - 1) % DATA.real.length;
-    paintReal();
+  /* The menu entries: one per activity of DATA.activities, in its order. */
+  var ACTIVITIES = Object.keys(DATA.activities).map(function (id) {
+    var act = DATA.activities[id];
+    return {
+      id: id,
+      picto: act.picto,
+      levels: act.levels,
+      name: function () { return t('activity.' + id + '.name'); },
+      detail: function () { return t('activity.' + id + '.detail'); }
+    };
   });
-  realNext.addEventListener('click', function () {
-    realIndex = (realIndex + 1) % DATA.real.length;
-    paintReal();
+
+  App.activityFlow.setup({
+    toolId: 'scale',
+    test: 'options',
+    socratic: true,
+    review: 'none',
+    reinforce: true,
+    menuPlacement: 'afterReal',
+    activities: ACTIVITIES,
+    testVisuals: true,
+    testVisualClass: 'visual',
+    /* The four ideas are the slides; the real-life examples are the three of the data. */
+    intro: CONCEPTS.map(function (id) { return { visual: { concept: id } }; }),
+    real: DATA.real.map(function (item) { return { visual: item }; }),
+    visualHtml: function (spec) { return conceptSvg(spec.concept); },
+    realVisualHtml: function (item) {
+      return '<span class="real-object" aria-hidden="true">' + item.picto + '</span>' +
+        '<p class="real-caption">' + t('real.' + item.id + '.name') + '</p>';
+    },
+    introCopy: function (i) {
+      var id = CONCEPTS[i];
+      return { title: t('concept.' + id + '.title'), text: t('concept.' + id + '.text') };
+    },
+    realText: function (i) { return t('real.' + DATA.real[i].id + '.text'); },
+    buildRound: buildRound,
+    makeQuestion: makeQuestion,
+    endNotes: [{ key: 'transfer', cls: 'transfer' }],
+    endSummaryKey: 'endSummary',
+    backHref: '../../'
   });
-  $('#introContinue').addEventListener('click', function () { show(screenReal); });
-  $('#realContinue').addEventListener('click', function () { show(screenMenu); });
-
-  paintConcept();
-  paintReal();
-  paintMenu();
-  paintStars();
-  /* End screen: the only button is "Volver al inicio", which goes back
-     to the Calculia landing. The end screen is a closing card, not a
-     second menu: picking another activity is a tap away on the home
-     page, so it does not need its own button here. */
-  var endBackToStart = $('#endBackToStart');
-  if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
-
 })();

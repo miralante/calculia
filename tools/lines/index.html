@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rectas | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
-  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v1089d2b6">
-  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v42206f15">
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
+  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
   <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v2a2b6135">
+  <link rel="stylesheet" href="../../assets/css/activity-flow.css?v=calculia-v9d75537c">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,76 +19,25 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-    <section id="screenIntro" class="stack">
-      <div class="row center-row">
-        <p class="instruction" data-i18n="instructionIntro">Mira las rectas.</p>
-      </div>
-      <div class="card stack gallery-card">
-        <div class="gallery-visual" id="galleryVisual"></div>
-        <p class="gallery-caption" id="galleryCaption"></p>
-        <p class="gallery-note" id="galleryNote"></p>
-        <div class="carousel-controls">
-          <button type="button" class="btn btn-secondary" id="galleryPrev" data-i18n-aria="galleryPrevious" aria-label="Anterior">←</button>
-          <button type="button" class="btn btn-secondary" id="galleryNext" data-i18n-aria="galleryNext" aria-label="Siguiente">→</button>
-        </div>
-      </div>
-      <button type="button" class="btn btn-secondary" id="introContinue" data-i18n="introContinue">Verlas en la vida real →</button>
-    </section>
+    <!-- The three stages (concepts, real life, test sheet) are built by
+         assets/js/activity-flow.js into this element. -->
+    <div id="activity"></div>
 
-    <section id="screenReal" class="hidden stack">
-      <div class="row center-row">
-        <p class="instruction" data-i18n="realTitle">Las rectas están a nuestro alrededor</p>
-      </div>
-      <div class="card centered stack real-card">
-        <div class="real-object" id="realObject" aria-hidden="true"></div>
-        <p class="gallery-caption" id="realCaption"></p>
-        <div class="carousel-controls">
-          <button type="button" class="btn btn-secondary" id="realPrev" data-i18n-aria="galleryPrevious" aria-label="Anterior">←</button>
-          <button type="button" class="btn btn-secondary" id="realNext" data-i18n-aria="galleryNext" aria-label="Siguiente">→</button>
-        </div>
-      </div>
-      <div class="row intro-buttons">
-        <button type="button" class="btn" id="realContinue" data-i18n="realContinue">Empezar a practicar →</button>
-      </div>
-    </section>
-
-    <section id="screenGame" class="hidden stack">
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-        <span class="progress-text" id="progressText">0 / 6</span>
-        <span class="difficulty" id="difficulty"></span>
-      </div>
-
-      <!-- Hoja de prueba: app.js pinta una tarjeta por pregunta con su
-           dibujo y sus opciones. La persona va eligiendo y al final
-           pulsa "Comprobar" para que se verifiquen todas a la vez. -->
-      <div class="stack test-sheet" id="testSheet" aria-live="polite"></div>
-
-      <div class="row sheet-actions">
-        <button type="button" class="btn" id="btnCheck" data-i18n="check">Comprobar</button>
-        <button type="button" class="btn hidden" id="btnNewRound" data-i18n="newRound">Otra ronda →</button>
-      </div>
-    </section>
-
-    <section id="screenEnd" class="hidden centered stack" aria-live="polite">
-      <div class="emoji-large" aria-hidden="true">🎉</div>
-      <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
-      <p id="endSummary"></p>
-      <p id="transfer" class="transfer" data-i18n="transfer"></p>
-      <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>
-    </section>
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
 
-  <script src="../../assets/js/utils.js?v=calculia-v4a0c88f5"></script>
-  <script src="../../assets/js/i18n.js?v=calculia-v612d54ba"></script>
+  <script src="../../assets/js/utils.js?v=calculia-v46cca253"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-v9fe34f5a"></script>
   <script src="../../assets/js/storage.js?v=calculia-vaa34f830"></script>
   <script src="../../assets/js/achievements.js?v=calculia-v24e909e3"></script>
   <script src="../../assets/js/feedback.js?v=calculia-vd06b628a"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
+  <script src="../../assets/js/activity-flow.js?v=calculia-vbf25fa38"></script>
+  <script src="../../assets/js/activity-flow-options.js?v=calculia-v1d15ebfe"></script>
+  <script src="../../assets/js/activity-flow-sheet.js?v=calculia-v7928521a"></script>
   <script src="app.js"></script>
-  <script src="../../assets/js/sw-register.js?v=calculia-vd8558f03"></script>
+  <script src="../../assets/js/sw-register.js?v=calculia-v4a242865"></script>
 </body>
 </html>
