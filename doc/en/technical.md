@@ -770,6 +770,7 @@ in §2.1 above are the canonical rationale).
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | only the activity's `app.js` |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | activities that keep their own round loop (not `App.activityFlow`) |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | the activities that show a row of dots or a shuffled Yes / No (divisibility-test, multiples, prime-composite) |
+| `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | the five time activities and date-format (the whole round on one sheet, checked at once) |
 
 The load order is `utils.js → i18n.js → tts.js → storage.js →
 feedback.js → strings.<locale>.js → data.js → app.js`. `i18n.js`
