@@ -73,7 +73,7 @@
      una y otra vez. La cifra y el nombre ya van en el visual, así
      que el caption era redundante y se quita. */
 
-  function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  var randomInt = App.utils.rint;
   function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
 
   /* Abreviatura del ordinal: el dígito pegado al indicador de

@@ -65,7 +65,7 @@
     }
     return true;
   }
-  function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
+  var gcd = App.commonFactors.gcd;
   function lcm(a, b) { return (a * b) / gcd(a, b); }
   function digitSum(n) {
     return String(n).split('').reduce(function (s, d) { return s + Number(d); }, 0);

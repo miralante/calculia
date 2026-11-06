@@ -17,7 +17,7 @@
   var pick = App.utils.pick;
   var numericOptions = App.utils.numericOptions;
   function t(key) { return App.i18n.t(key); }
-  function shuffled(list) { return App.utils.shuffle(list.slice()); }
+  var shuffled = App.utils.shuffle;
 
   /* ---- Numbers -----------------------------------------------------------
      The divisors of n, from 1 to n, in order. A prime has exactly two:

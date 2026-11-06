@@ -36,7 +36,7 @@
   });
   var save = glue.save, paintStars = glue.paintStars;
   function localeData() { return DATA[App.i18n.locale()] || DATA.es; }
-  function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
+  var pickRandom = App.utils.pick;
 
   /* ---- Screens ---- */
   var SCREENS = ['screenMenu', 'screenQuizGame',

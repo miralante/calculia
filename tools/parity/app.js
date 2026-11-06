@@ -38,17 +38,8 @@
   function hide(el) { if (el) el.classList.add('hidden'); }
   function t(key) { return App.i18n.t(key); }
 
-  /* Replaces every {name} in text with values[name]. Replacing
-     all occurrences (not only the first) keeps the helper safe for
-     texts that repeat a placeholder, such as "{n} es {p}". */
-  function fill(text, values) {
-    Object.keys(values).forEach(function (name) {
-      text = text.split('{' + name + '}').join(String(values[name]));
-    });
-    return text;
-  }
-
-  function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  var fill = App.utils.fill;
+  var randomInt = App.utils.rint;
   function isEven(n) { return n % 2 === 0; }
   function wordFor(n) { return t(isEven(n) ? 'wordEven' : 'wordOdd'); }
   function format(n) { return n.toLocaleString(App.i18n.locale() === 'en' ? 'en-US' : 'es-ES'); }

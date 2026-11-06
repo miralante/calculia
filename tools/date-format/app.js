@@ -75,7 +75,7 @@
      checks them all at once; "Otra ronda" deals a new round. */
 
   function pad(n) { return n < 10 ? '0' + n : String(n); }
-  function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  var randomInt = App.utils.rint;
 
   /* A random date. The day is 1–28 so it exists in every month. */
   function randomDate() {
