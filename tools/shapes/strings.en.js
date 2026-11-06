@@ -57,43 +57,22 @@
     introCountTriangleText: 'The squares cut by the diagonal are halves. Two halves make one whole square, so the triangle covers half of the square.',
     introSolidTitle: 'Solid',
     introSolidText: 'It is not flat. You can hold it, like a ball.',
-    galleryPrevious: 'Previous',
-    galleryNext: 'Next',
-    introContinue: 'See it in real life →',
-    realTitle: 'Shapes are all around us',
-    realBack: '← Back to the shapes',
-    realContinue: 'Start practising →',
-    instructionMenu: 'Take one test with all the content.',
-    testTitle: 'One complete test',
-    testText: 'One round with shapes, solids, and nets.',
+    /* Screen texts (shared by the flow engine, assets/js/activity-flow.js). */
+    ui: {
+      seeReal: 'See it in real life →',
+      realLabel: 'Shapes are all around us',
+      newRound: 'New round →',
+      hint: '🤔 Try again. Look at the picture calmly.',
+      menuInstruction: 'Take one test with all the content.',
+      menuTitle: 'One complete test',
+      menuText: 'One round with shapes, solids, and nets.'
+    },
     /* The test sheet shows every question at once. The person picks an
        option for each one, then taps "Check" to verify them all.
        "New round" re-shuffles and starts again without going through
        the end screen. */
-    check: 'Check',
-    newRound: 'New round →',
-    menuBack: '← Back to the examples',
-    contexto: 'A road sign, a window, a ball, a tin. Shapes are in everything you touch and see.',
-    explicacion: '✅ Recognising shapes helps you describe things and understand signs, plans and drawings.',
-    btnBackToMenu: '← Other activities',
     btnMenu: 'Back to start',
-    otherLevel: 'Choose another level',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{name}»?',
-    btnOtherActivity: 'Another activity',
-    explicacionCorrecta: '✅ Correct! The answer is: ',
-    correctExplanation: '✅ Correct! The answer is: ',
-    explicacionIncorrectaA: '❌ Look: the correct answer is ',
-    incorrectExplanationA: '❌ Look: the correct answer is ',
-    /* The generic line stays only as showHint()'s fallback, for a question
-       that forgets to bring its own: the `pista` key that used to sit here
-       was this very sentence duplicated, and nothing read it. */
-    hint: '🤔 Try again. Look at the picture calmly.',
-    refuerzoTitulo: 'Reinforcement',
-    reinforceTitle: 'Reinforcement',
-    refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     shape: {
       circle: 'circle',
       square: 'square',
@@ -169,8 +148,6 @@
       mitad: { name: 'Fold in half', detail: 'Does it match or not, and is a figure moved or turned?' }
     },
     level: {
-      test: 'Complete test',
-      mitad: 'Fold in half'
     },
     net: {
       cube: { name: 'cube', gloss: '6 squares' },
@@ -186,34 +163,27 @@
       netPiecesAria: 'A solid opened up, with {n} pieces.',
       shapeNamePrompt: 'Which shape is it?',
       sidesPrompt: 'How many sides does it have?',
-      sidesHint: 'Count the straight lines around the edge.',
       cornersPrompt: 'How many vertices does it have?',
       perimeterPrompt: 'Each side is {side} cm long. How long is the perimeter?',
-      perimeterHint: 'Add up all the sides: the perimeter is the whole way round.',
       /* The area is not counted here yet: the question is which part of the
          shape it is, and the two wrong answers are exactly what it gets
          confused with — the edge just counted and the vertices. */
       areaPrompt: 'Which part of this shape is its area?',
-      areaHint: 'Think of the part you stand on when you step on it.',
       areaAria: 'A flat shape with the inside hatched.',
       areaEdge: 'The outside edge',
       areaInside: 'All of the inside',
       areaCorners: 'The vertices',
       volumePrompt: 'Which of these solids takes up more room?',
-      volumeHint: 'The one that takes up more room is the one with more volume.',
       volumeAria: 'Three solids of different sizes: a {name} and two smaller ones.',
       symmetryPrompt: 'Which way do you fold a {name} so the two halves match?',
-      symmetryHint: 'The two halves have to come out exactly the same.',
       axis: {
         vertical: 'Folded on the vertical line',
         horizontal: 'Folded on the horizontal line',
         diagonal: 'Folded on the diagonal line'
       },
       similarPrompt: 'Which figure is similar?',
-      similarHint: 'It has to be the same shape; it does not have to be as big.',
       solidToNamePrompt: 'What shape is this object?',
       solidToObjectPrompt: 'Which of these objects is a {name}?',
-      solidHint: 'Think about the shape of the object, not what it is for.',
       triangleAria: 'A triangle.',
       triangleSidesPrompt: 'What kind of triangle is it, by its sides?',
       triangleAnglesPrompt: 'What kind of triangle is it, by its angles?',

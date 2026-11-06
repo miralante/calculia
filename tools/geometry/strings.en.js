@@ -13,20 +13,13 @@
   App.i18n.register({
     title: '📐 Geometry',
     instructionMenu: 'Choose an activity.',
-    contexto: 'Corners, edges and halves are in every door, every floor tile and any piece of paper you fold.',
-    explicacion: '✅ Everything here can be counted or seen. There is no formula to learn.',
-    btnBackToMenu: '← Other activities',
     btnMenu: 'Back to start',
-    otherLevel: 'Choose another level',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{name}»?',
-    btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     /* The real name, with its everyday-words gloss beside it: the word is
        taught, not hidden. */
     angle: {
@@ -39,14 +32,6 @@
       angulos: { name: 'Angles', detail: 'Right, acute or obtuse.', instruction: 'An angle is how open a corner is. A right angle is like the corner of a sheet of paper: in the picture it is marked with a grey line. If the line reaches exactly the grey line, the angle is right. If it stops before, it is acute: more closed. If it goes past, it is obtuse: more open.' },
     },
     level: {
-      q1: 'How many equal sides?',
-      q2: 'The name of the triangle',
-      q3: 'The name of the 4-sided figure',
-      n1: 'Right or acute',
-      n2: 'Right or obtuse',
-      n3: 'All three together',
-      n4: 'How many degrees?',
-      n5: 'The degrees on a clock'
     },
     figure: {
       equilateral: { name: 'equilateral', gloss: 'all three sides equal' },

@@ -13,20 +13,13 @@
   App.i18n.register({
     title: '📐 Geometría',
     instructionMenu: 'Elige una actividad.',
-    contexto: 'Las esquinas, los bordes y las mitades están en las puertas, en las baldosas y en cualquier papel que dobles.',
-    explicacion: '✅ Aquí todo se puede contar o mirar. No hay que aprenderse ninguna fórmula.',
-    btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
-    otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
-    btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     /* El nombre de verdad, con su explicación en palabras de todos los
        días al lado: se enseña la palabra, no se esconde. */
     angle: {
@@ -39,14 +32,6 @@
       angulos: { name: 'Los ángulos', detail: 'Recto, agudo u obtuso.', instruction: 'Un ángulo es lo abierta que está una esquina. El ángulo recto es como la esquina de una hoja de papel: en el dibujo lo tienes marcado con una raya gris. Si la línea llega justo a la raya gris, el ángulo es recto. Si se queda antes, es agudo: está más cerrado. Si se pasa, es obtuso: está más abierto.' },
     },
     level: {
-      q1: '¿Cuántos lados iguales?',
-      q2: 'El nombre del triángulo',
-      q3: 'El nombre de la figura de 4 lados',
-      n1: 'Recto o agudo',
-      n2: 'Recto u obtuso',
-      n3: 'Los tres juntos',
-      n4: '¿Cuántos grados mide?',
-      n5: 'Los grados del reloj'
     },
     figure: {
       equilateral: { name: 'equilátero', gloss: 'los tres lados iguales' },

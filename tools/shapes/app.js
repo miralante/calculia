@@ -1,59 +1,26 @@
 /* ============================================================
-   Calculia — Shapes
-   Data and levels in data.js. Shared modules in assets/js/.
-   Questions are generated on the fly based on the level type.
+   Calculia — Formas
+   Two sheets with levels (Formas, and Doblar por la mitad, data in data.js).
+   The stages (explanation, real life, the menu and the test sheet) are built
+   by assets/js/activity-flow.js. This file has the drawings, the generators of
+   the questions, and the adapters that give the engine its slides, examples
+   and sheets. The texts are in strings.<locale>.js.
    ============================================================ */
 (function () {
   'use strict';
 
-  var TOOL_ID = 'shapes';
-  var $ = App.utils.$;
-
-  var screenIntro = $('#screenIntro');
-  var screenReal = $('#screenReal');
-  var screenMenu = $('#screenMenu');
-  var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
-  var galleryVisual = $('#galleryVisual');
-  var galleryCaption = $('#galleryCaption');
-  var galleryPrev = $('#galleryPrev');
-  var galleryNext = $('#galleryNext');
-  var realObject = $('#realObject');
-  var realCaption = $('#realCaption');
-  var realPrev = $('#realPrev');
-  var realNext = $('#realNext');
-  /* Hoja de prueba: el #screenGame ya no muestra una pregunta a la vez,
-     sino todas las preguntas de la ronda en tarjetas. Los botones son
-     "Comprobar" (verifica todo) y "Otra ronda" (re-baraja y empieza). */
-  var testSheetEl = $('#testSheet');
-  var btnCheck = $('#btnCheck');
-  var btnNewRound = $('#btnNewRound');
-  var progressFill = $('#progressFill');
-  var progressText = $('#progressText');
-  var starsEl = $('#stars');
-
-  /* Persistent progress */
-  var progress = App.storage.get(TOOL_ID);
-  if (typeof progress.stars !== 'number') progress.stars = 0;
-  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
-  if (!progress.roundsByActivity || typeof progress.roundsByActivity !== 'object' ||
-      Array.isArray(progress.roundsByActivity)) progress.roundsByActivity = {};
-
-  /* Round state */
-  var activity = null;
-  var level = null;
-  var roundCorrect = 0;
-  /* Cada entrada de roundSheets es una pregunta de la ronda actual con
-     la opción que la persona ha elegido (selected, null si todavía no)
-     y si la verificación la dio por buena (correct, null hasta que se
-     pulsa "Comprobar"). La ronda termina cuando todas tienen
-     correct !== null. */
-  var roundSheets = [];
-  var galleryIndex = -1;
-  var realIndex = 0;
-
-  function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  var M = App.shapesModel;
+  var SHAPE_FILL = M.SHAPE_FILL, polygonPoints = M.polygonPoints, pointsAttr = M.pointsAttr, CELL_OFFSETS = M.CELL_OFFSETS, cellPoints = M.cellPoints, pathFromPoints = M.pathFromPoints;
+  var starPath = M.starPath, cornerDots = M.cornerDots, shapeSvg = M.shapeSvg, shapeName = M.shapeName, solidName = M.solidName, solidSvg = M.solidSvg;
+  var realObjectSvg = M.realObjectSvg, CONCEPT_SLIDES = M.CONCEPT_SLIDES, triangleAxisMark = M.triangleAxisMark, axisMark = M.axisMark, areaSvg = M.areaSvg, TRIANGLE_KINDS = M.TRIANGLE_KINDS;
+  var TRIANGLE_CORNERS = M.TRIANGLE_CORNERS, TRIANGLE_TICKS = M.TRIANGLE_TICKS, AREA_SHAPES = M.AREA_SHAPES, sideTicks = M.sideTicks, triangleKindSvg = M.triangleKindSvg, countSvg = M.countSvg;
+  var AREA_UNIT = M.AREA_UNIT, turnedLabel = M.turnedLabel, flatLabel = M.flatLabel, areaCalcSvg = M.areaCalcSvg, volumeSvg = M.volumeSvg, similaritySvg = M.similaritySvg;
+  var triangleWith = M.triangleWith, conceptCards = M.conceptCards, buildCounts = M.buildCounts, perimeterOptions = M.perimeterOptions, PIECE = M.PIECE, netPieces = M.netPieces;
+  var REGULAR_SIDES = M.REGULAR_SIDES, SYMMETRY_SHAPES = M.SYMMETRY_SHAPES, netSvg = M.netSvg, netName = M.netName, netGloss = M.netGloss, faceOptions = M.faceOptions;
+  var shapeThumb = M.shapeThumb, solidThumb = M.solidThumb, foldCells = M.foldCells, isSymmetricRows = M.isSymmetricRows, turnedRows = M.turnedRows, mirroredRows = M.mirroredRows;
+  var sameRows = M.sameRows, paddedCells = M.paddedCells, gridFigureSvg = M.gridFigureSvg, AXES = M.AXES, GENERATORS = M.GENERATORS, t = M.t;
+  var galleryName = M.galleryName, galleryDrawing = M.galleryDrawing, INTRO = M.INTRO, introCopy = M.introCopy, introVisualAria = M.introVisualAria, realVisualHtml = M.realVisualHtml;
+  var SHEETS = M.SHEETS, makeQuestion = M.makeQuestion;
 
   /* ---- Utilidades ---- */
 
@@ -66,161 +33,25 @@
      and DATA.sides can never drift apart. The square and the rectangle are
      drawn explicitly instead: a 4-sided regular polygon comes out as a
      diamond, which is not what a square should look like. */
-  var SHAPE_FILL = 'var(--mod-razonamiento)';
-
   /* Regular polygons, so the drawing and the caption can never disagree on
      how many sides a shape has. `phase` rotates the first vertex for the
      shapes that are only right side-on: a stop sign has a flat top edge, so
      its octagon starts a quarter step further round. */
-  function polygonPoints(n, cx, cy, r, phase) {
-    var pts = [];
-    for (var i = 0; i < n; i++) {
-      /* Start at the top so a triangle points up, the way it is drawn
-         everywhere else. */
-      var a = -Math.PI / 2 + (phase || 0) + (i * 2 * Math.PI) / n;
-      pts.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
-    }
-    return pts;
-  }
-
-  function pointsAttr(points) {
-    return points.map(function (p) {
-      return p.x.toFixed(1) + ',' + p.y.toFixed(1);
-    }).join(' ');
-  }
-
   /* One cell of the honeycomb, from the same six offsets every time it is
      drawn. The comb and the cell drawn on its own are the same polygon this
      way, so the one that answers "this is the hexagon" cannot quietly drift
      into a different shape than the one the caption is about. */
-  var CELL_OFFSETS = [[16, 0], [8, 14], [-8, 14], [-16, 0], [-8, -14], [8, -14]];
-  function cellPoints(cx, cy) {
-    return CELL_OFFSETS.map(function (offset) {
-      return (cx + offset[0]) + ',' + (cy + offset[1]);
-    }).join(' ');
-  }
-
-  /* The same list of points, as the `d` of a path. */
-  function pathFromPoints(points, close) {
-    return points.map(function (p, index) {
-      return (index === 0 ? 'M' : 'L') + p.x.toFixed(1) + ' ' + p.y.toFixed(1);
-    }).join('') + (close ? 'Z' : '');
-  }
-
   /* A star: `spikes` points out at `outer` radius, one point in between at
      `inner`. It is a path and not a polygon on purpose: the number of
      polygons in a drawing is what proves the shape on screen has the sides
      the caption claims, and a badge built out of polygons would quietly
      make that count lie. */
-  function starPath(spikes, cx, cy, outer, inner, phase) {
-    var pts = [];
-    for (var i = 0; i < spikes * 2; i++) {
-      var r = i % 2 === 0 ? outer : inner;
-      var a = -Math.PI / 2 + (phase || 0) + (i * Math.PI) / spikes;
-      pts.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
-    }
-    return pathFromPoints(pts, true);
-  }
-
-  function cornerDots(points) {
-    return points.map(function (p) {
-      return '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) +
-        '" r="7" class="corner-dot"/>';
-    }).join('');
-  }
-
   /* `marks` puts a dot on every corner, so corners can be counted by
      looking instead of from memory. `thin` swaps the 4px outline for a
      1.5px one, which is what the perimeter question needs: the shape
      must be visible, but the four corners must not look like "painted
      vertices" sitting on top of the figure. The default 4px stroke is
      what the rest of the test wants. */
-  function shapeSvg(id, marks, thin) {
-    var POLY = { triangle: 3, pentagon: 5, hexagon: 6, octagon: 8 };
-    var SW = thin ? '1.5' : '4';
-    var body = '';
-    var dots = '';
-
-    if (id === 'circle') {
-      body = '<circle cx="60" cy="60" r="46" fill="' + SHAPE_FILL +
-        '" stroke="var(--color-texto)" stroke-width="' + SW + '"/>';
-    } else if (id === 'square') {
-      body = '<rect x="18" y="18" width="84" height="84" fill="' + SHAPE_FILL +
-        '" stroke="var(--color-texto)" stroke-width="' + SW + '"/>';
-      if (marks) {
-        dots = cornerDots([{ x: 18, y: 18 }, { x: 102, y: 18 },
-          { x: 102, y: 102 }, { x: 18, y: 102 }]);
-      }
-    } else if (id === 'rectangle') {
-      body = '<rect x="8" y="32" width="104" height="56" fill="' + SHAPE_FILL +
-        '" stroke="var(--color-texto)" stroke-width="' + SW + '"/>';
-      if (marks) {
-        dots = cornerDots([{ x: 8, y: 32 }, { x: 112, y: 32 },
-          { x: 112, y: 88 }, { x: 8, y: 88 }]);
-      }
-    } else if (id === 'rhombus' || id === 'trapezoid') {
-      var quad = id === 'rhombus'
-        ? [{ x: 60, y: 10 }, { x: 97, y: 60 }, { x: 60, y: 110 }, { x: 23, y: 60 }]
-        : [{ x: 30, y: 16 }, { x: 90, y: 16 }, { x: 110, y: 104 }, { x: 10, y: 104 }];
-      body = '<polygon points="' + quad.map(function (p) {
-        return p.x + ',' + p.y;
-      }).join(' ') + '" fill="' + SHAPE_FILL +
-        '" stroke="var(--color-texto)" stroke-width="' + SW + '"/>';
-      if (marks) dots = cornerDots(quad);
-    } else {
-      var pts = polygonPoints(POLY[id], 60, 62, 48);
-      body = '<polygon points="' + pts.map(function (p) {
-        return p.x.toFixed(1) + ',' + p.y.toFixed(1);
-      }).join(' ') + '" fill="' + SHAPE_FILL +
-        '" stroke="var(--color-texto)" stroke-width="' + SW + '"/>';
-      if (marks) dots = cornerDots(pts);
-    }
-    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
-      body + dots + '</svg>';
-  }
-
-  function shapeName(id) { return App.i18n.t('shape.' + id); }
-  function solidName(id) { return App.i18n.t('solid.' + id); }
-
-  function solidSvg(id) {
-    var body = '';
-    if (id === 'cube') {
-      body = '<polygon points="25,35 65,15 105,35 65,55" class="solid-top"/>' +
-        '<polygon points="25,35 65,55 65,105 25,85" class="solid-left"/>' +
-        '<polygon points="65,55 105,35 105,85 65,105" class="solid-right"/>';
-    } else if (id === 'rectangularPrism') {
-      body = '<polygon points="10,42 32,28 110,28 88,42" class="solid-top"/>' +
-        '<polygon points="10,42 88,42 88,102 10,102" class="solid-left"/>' +
-        '<polygon points="88,42 110,28 110,88 88,102" class="solid-right"/>';
-    } else if (id === 'triangularPrism') {
-      body = '<polygon points="20,70 45,85 69,45 44,30" class="solid-left"/>' +
-        '<polygon points="44,30 69,45 93,85 68,70" class="solid-top"/>' +
-        '<polygon points="20,70 68,70 93,85 45,85" class="solid-right"/>' +
-        '<polygon points="20,70 44,30 68,70" class="solid-base"/>';
-    } else if (id === 'pyramid') {
-      body = '<polygon points="20,82 60,60 100,82 60,104" class="solid-base"/>' +
-        '<polygon points="60,18 20,82 60,60" class="solid-left"/>' +
-        '<polygon points="60,18 60,60 100,82" class="solid-top"/>' +
-        '<polygon points="60,18 100,82 60,104" class="solid-right"/>' +
-        '<polygon points="60,18 60,104 20,82" class="solid-left"/>';
-    } else if (id === 'sphere') {
-      body = '<circle cx="60" cy="60" r="45" class="solid-sphere"/>' +
-        '<ellipse cx="45" cy="40" rx="12" ry="7" class="solid-highlight"/>';
-    } else if (id === 'cylinder') {
-      body = '<rect x="20" y="28" width="80" height="64" class="solid-side"/>' +
-        '<ellipse cx="60" cy="92" rx="40" ry="13" class="solid-cylinder-base"/>' +
-        '<path d="M20 92a40 13 0 0 1 80 0" class="solid-cylinder-back"/>' +
-        '<path d="M20 92a40 13 0 0 0 80 0" class="solid-cylinder-front"/>' +
-        '<ellipse cx="60" cy="28" rx="40" ry="13" class="solid-top"/>';
-    } else if (id === 'cone') {
-      body = '<path d="M60 16 18 92c0 14 84 14 84 0Z" class="solid-side"/>' +
-        '<ellipse cx="60" cy="92" rx="42" ry="13" class="solid-bottom"/>';
-    }
-    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
-      '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-      body + '</g></svg>';
-  }
-
   /* The everyday objects below are drawn, not left to the object's emoji.
      The emoji were wrong in a way only a picture shows: the shield is a
      rounded heater shield with no pentagon in it, the stop sign comes
@@ -228,339 +59,12 @@
      Anything drawn with a fixed colour (a yellow sign, a red stop sign)
      keeps its own ink instead of following --color-texto, because the
      background it sits on does not change with the theme either. */
-  function realObjectSvg(id) {
-    if (id === 'square') {
-      /* A window with four panes. It used to be left to the 🪟 emoji, and
-         that emoji is a tall narrow strip: on the carousel it read as a
-         scratch on the card rather than as a window, which is a poor way to
-         introduce the square when the very next slide says "the door is a
-         rectangle".
-         The frame is a real square, 84 by 84, so the panes are square too,
-         and it is a polygon because the count below is what proves it.
-         The mullions are lines and never extra polygons, for the same
-         reason the sheriff's star is a path: every polygon in this drawing
-         is a side of the window. */
-      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
-        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        '<polygon points="18,13 102,13 102,97 18,97" class="solid-left"/>' +
-        '<rect x="27" y="22" width="66" height="66" fill="var(--color-superficie)" ' +
-        'stroke="none"/>' +
-        '<line x1="60" y1="22" x2="60" y2="88" stroke-width="2.5"/>' +
-        '<line x1="27" y1="55" x2="93" y2="55" stroke-width="2.5"/>' +
-        '</g></svg>';
-    }
-    if (id === 'triangle') {
-      var sign = polygonPoints(3, 60, 58, 46);
-      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
-        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        '<polygon points="' + pointsAttr(sign) + '" fill="#F4C95D"/></g>' +
-        '<text x="60" y="72" text-anchor="middle" font-size="38" font-weight="700" ' +
-        'fill="#1E1A12" stroke="none">!</text></svg>';
-    }
-    if (id === 'pentagon') {
-      /* A sheriff's badge: flat top, two straight flanks and two more
-         flanks meeting at the bottom point. Five straight sides, so the
-         pentagon in the caption is visible and countable.
-         The mark in the middle is the star of a sheriff of the old west,
-         which is the one thing that says "badge" without a word. It is a
-         path and a circle, never polygons: the polygon count above is what
-         proves the badge has five sides, and a star drawn out of polygons
-         would make that check meaningless. */
-      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
-        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        '<polygon points="26,16 94,16 102,52 60,100 18,52" class="solid-left"/>' +
-        '<polygon points="37,27 83,27 88,52 60,86 32,52" class="solid-highlight" ' +
-        'stroke="none"/>' +
-        '<path d="' + starPath(6, 60, 52, 23, 9.5) + '" class="solid-right" ' +
-        'stroke-width="2.5"/>' +
-        '<circle cx="60" cy="52" r="7" fill="var(--color-superficie)" stroke="none"/>' +
-        '</g></svg>';
-    }
-    if (id === 'octagon') {
-      /* Red and white like every stop sign on the road, so the octagon is
-         eight sides with the word inside it — not a blank red octagon. */
-      var stop = polygonPoints(8, 60, 58, 46, Math.PI / 8);
-      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
-        '<polygon points="' + pointsAttr(stop) + '" fill="#C62828" ' +
-        'stroke="#FFFFFF" stroke-width="6" stroke-linejoin="round"/>' +
-        '<text x="60" y="66" text-anchor="middle" font-size="21" font-weight="700" ' +
-        'letter-spacing="1" fill="#FFFFFF" stroke="none">STOP</text></svg>';
-    }
-    if (id === 'rectangularPrism') {
-      /* The same prism the gallery draws, standing upright instead of on
-         its side: a cereal box is taller than it is wide, and the caption
-         promises a cereal box. The gallery keeps the long face square to
-         the viewer on purpose — that is the rectangular face the activity
-         is about — so the two drawings differ in proportion and agree in
-         shape.
-         Both proportions come off a real box, about 19 x 27 x 6 cm: the
-         front is a bit over half as wide as it is tall, and the thickness
-         is a third of the width. Drawn deeper than that it stops being a
-         cereal box and becomes a crate — which is what the earlier
-         version was, with a thickness near half the width.
-         The label and the bowl of cereal are on the front panel: a bare
-         carton could be any box. */
-      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
-        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        '<polygon points="24,26 40,16 95,16 79,26" class="solid-top"/>' +
-        '<polygon points="24,26 79,26 79,104 24,104" class="solid-left"/>' +
-        '<polygon points="79,26 95,16 95,94 79,104" class="solid-right"/>' +
-        '<rect x="31" y="40" width="41" height="48" rx="4" fill="#F4C95D" ' +
-        'stroke-width="2.5"/>' +
-        '<circle cx="44" cy="65" r="3" class="solid-right" stroke="none"/>' +
-        '<circle cx="52" cy="62" r="3.8" class="solid-right" stroke="none"/>' +
-        '<circle cx="61" cy="66" r="3" class="solid-right" stroke="none"/>' +
-        '<path d="M37 72h29a14.5 9 0 0 1-29 0Z" class="solid-right" stroke-width="2.5"/>' +
-        '<path d="M37 72h29" fill="none" stroke-width="2.5"/>' +
-        '</g></svg>';
-    }
-    if (id === 'trapezoid') {
-      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
-        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        '<path d="M35 36Q60 4 85 36" fill="none"/>' +
-        '<polygon points="24,34 96,34 84,92 36,92" fill="#7CC8C3"/>' +
-        '<ellipse cx="60" cy="34" rx="36" ry="8" fill="#B6E2DC"/>' +
-        '<path d="M36 92Q60 100 84 92" fill="none"/></g></svg>';
-    }
-    if (id === 'hexagon') {
-      /* The comb sits on the left of a wider canvas and the bee flies
-         beside it, not inside it. The bee used to sit in the middle cell,
-         which hid the one cell the caption is about: seven cells, each
-         visibly a hexagon. Beside the comb it still says "this is where
-         bees live" without covering the thing being counted.
-         And one cell is now drawn on its own, well clear of the comb,
-         because that is the question a child really has in front of a
-         honeycomb: "which bit of it is the hexagon?". The comb alone
-         answers "all of it at once", so the shape never actually gets
-         looked at. On its own it can be pointed at and its six sides
-         counted. It is the same polygon at the same size, so it is one
-         cell of the comb and not some other shape that happens to sit
-         nearby; and it sits below the comb and to the right of it, far
-         enough that nobody counts eight cells in the comb.
-         The canvas grew downwards to make room for it: at 156 x 100 the
-         drawing used barely two thirds of the card's height and left
-         empty bands above and below, which none of the other drawings
-         here have. */
-      var cells = [
-        { x: 20, y: 30 }, { x: 44, y: 44 }, { x: 68, y: 30 },
-        { x: 20, y: 58 }, { x: 44, y: 72 }, { x: 68, y: 58 },
-        { x: 44, y: 16 }
-      ];
-      var cellsSvg = cells.map(function (cell, index) {
-        return '<polygon points="' + cellPoints(cell.x, cell.y) + '" fill="' +
-          (index % 2 ? '#EFBF47' : '#F4C95D') + '"/>';
-      }).join('');
-      /* The lone cell: the wax and the outline of the comb, because it is
-         one of those cells and nothing more. */
-      var looseSvg = '<polygon points="' + cellPoints(118, 116) +
-        '" fill="#F4C95D"/>';
-      /* The bee keeps the wax yellow and the ink of the theme, the same
-         split the comb uses. Its body cannot be the surface colour any
-         more: outside the comb that is the colour of the card, so the bee
-         would disappear into the background instead of into a cell. The
-         outline is what carries it against a light card.
-         Drawn with ellipses and circles, not polygons, so the cells stay
-         countable: seven in the comb and one on its own. The gap to the
-         comb is deliberately wide: the smoke measures the bee's box, and a
-         rotated wing reports a box wider than the wing. */
-      var bee =
-        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        '<ellipse cx="107" cy="38" rx="11" ry="6" fill="var(--color-superficie)" ' +
-        'transform="rotate(-35 107 38)"/>' +
-        '<ellipse cx="135" cy="38" rx="11" ry="6" fill="var(--color-superficie)" ' +
-        'transform="rotate(35 135 38)"/>' +
-        '<ellipse cx="121" cy="53" rx="15" ry="11" fill="#F4C95D"/>' +
-        '<path d="M112 44v18M121 42.5v21M130 44v18" fill="none" stroke-width="2.5"/>' +
-        '<circle cx="121" cy="35" r="7.5" fill="#1E1A12"/>' +
-        '<circle cx="118.5" cy="34" r="1.6" fill="#F4C95D" stroke="none"/>' +
-        '<circle cx="123.5" cy="34" r="1.6" fill="#F4C95D" stroke="none"/>' +
-        '</g>';
-      return '<svg viewBox="0 0 156 140" aria-hidden="true">' +
-        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        cellsSvg + looseSvg + '</g>' + bee + '</svg>';
-    }
-    if (id === 'triangularPrism') {
-      /* A tent: the triangular gable at the front, the ridge running back
-         to the right, and the door open. Drawn as a prism with its length
-         visible on purpose — a flat triangle would read as the flat shape,
-         not as the solid the caption names.
-         The front gable is the pale one and the long side is the dark one.
-         With both faces in the same pale colour the tent does not read as
-         a tent at all: the side turns into a blank panel and the whole
-         thing looks like a folded card standing up.
-         No ground line: the tent ends on its own feet, and a horizontal
-         rule under it reads as a bar of the layout, not as grass. */
-      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
-        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        '<polygon points="46,28 82,16 100,72 74,90" class="solid-right"/>' +
-        '<polygon points="18,90 46,28 74,90" class="solid-top"/>' +
-        '<polygon points="38,90 46,56 54,90" class="solid-left"/>' +
-        '</g></svg>';
-    }
-    if (id === 'pyramid') {
-      /* Corner-on, the way a pyramid is photographed: two triangular faces
-         meeting at the front edge, standing on a square base.
-         The proportions are the point. The Great Pyramid of Giza is 230 m
-         on a side and 146 m tall, so each face leans at about 52° and the
-         whole thing reads as a broad mass. The previous drawing leaned at
-         65°, which is a ridge tent, not a pyramid: narrow and steep was
-         the one shape nobody mistakes for Giza.
-         The masonry is what makes it something people built rather than
-         something somebody pitched: the courses of stone run level all the
-         way round, so every joint bends down at the front corner exactly
-         the way the base does. They are generated from the corners rather
-         than written out one by one, so they cannot drift away from the
-         outline if the drawing is ever resized. Three courses and not four:
-         at this size a fourth turns the face into a grid instead of a wall,
-         and the point is stone, not scaffolding.
-         The two faces are limestone, lit and in shade, and the joints are
-         the brown of the mortar between the blocks. Fixed ink, like the
-         yellow of the warning sign: a teal pyramid is a piece of glass, and
-         this one is supposed to be Giza.
-         Two faces only — the back edges would have to cross the front
-         ones to be drawn, which no solid does.
-         No ground line: the mass ends on its own footprint, and a
-         horizontal rule under it reads as a bar of the layout, not as
-         sand. */
-      var APEX = { x: 60, y: 42 };
-      var NEAR = { x: 60, y: 104 };
-      var LEFT = { x: 12, y: 94 };
-      var RIGHT = { x: 108, y: 94 };
-      function towards(edge, t) {
-        return {
-          x: APEX.x + (edge.x - APEX.x) * t,
-          y: APEX.y + (edge.y - APEX.y) * t
-        };
-      }
-      function downCourse(t, edge, at) {
-        var from = towards(edge, t);
-        var to = towards(NEAR, t);
-        return {
-          x: from.x + (to.x - from.x) * at,
-          y: from.y + (to.y - from.y) * at
-        };
-      }
-      var STEPS = [0.25, 0.5, 0.75];
-      var masonry = STEPS.map(function (t) {
-        var points = [towards(LEFT, t), towards(NEAR, t), towards(RIGHT, t)];
-        return '<polyline points="' + pointsAttr(points) + '" fill="none" ' +
-          'stroke="#8A7346" stroke-width="1.8"/>';
-      }).join('');
-      /* One upright joint per course, staggered on the two faces so the
-         stones do not line up in a column up the middle. */
-      STEPS.slice(1).forEach(function (t, index) {
-        var above = STEPS[index];
-        [[LEFT, 0.34], [RIGHT, 0.66]].forEach(function (face) {
-          var low = downCourse(t, face[0], face[1]);
-          var high = downCourse(above, face[0], face[1]);
-          masonry += '<line x1="' + low.x.toFixed(1) + '" y1="' + low.y.toFixed(1) +
-            '" x2="' + high.x.toFixed(1) + '" y2="' + high.y.toFixed(1) +
-            '" stroke="#8A7346" stroke-width="1.8"/>';
-        });
-      });
-      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
-        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        '<polygon points="60,42 12,94 60,104" fill="#E3D3AC"/>' +
-        '<polygon points="60,42 60,104 108,94" fill="#BFA274"/>' +
-        masonry +
-        '</g></svg>';
-    }
-    if (id === 'cone') {
-      /* A cucurucho, drawn the way you actually see one.
-         The ice cream is a swirl and not a pile of balls: circles with a
-         curl on them read as two spheres resting on the rim, which is the
-         drawing this replaced. Stacked coils tapering to a tip read as
-         ice cream from across the room, and the little drip over the front
-         edge is what says it is soft and not carved. Each coil is lighter
-         than the one below it, because the light comes from above and a
-         swirl drawn in one flat colour reads as a stack of rings.
-         The cone keeps its bowed sides and its rolled rim, and the wafer
-         is scored in a diamond lattice — the ridges of a real waffle run
-         across the cone, not up to the tip, and the earlier radial version
-         looked like a basket. The lattice is clipped to the cone so it
-         follows its curve instead of hanging over the card.
-         The waffle colour is literal, like the yellow sign and the red
-         stop sign, because a cone that is teal is not a cone. The outline
-         still follows the theme, so it does not vanish on a light card.
-
-         ORDER IS WHAT MAKES THE LATTICE VISIBLE. The clipped group sits
-         directly on top of the body fill and before every ice cream
-         shape: a full-size "inside of the cone" path drawn after it
-         covers the whole silhouette, and the lattice is then in the DOM,
-         correctly clipped, correctly coloured — and invisible, because
-         it is simply painted over. Nothing in the markup says which
-         layer wins; the same markup in another order shows the waffle
-         perfectly. The mouth is now an ellipse and the front rim an arc,
-         so neither of them can cover the wafer.
-
-         The wafer is two families of parallel diagonals, the way a cone is
-         actually pressed, and not a handful of lines that happen to
-         cross: too few ridges and it reads as scratches on a plain cone.
-         The ends run past the cone on purpose — the clip is what cuts
-         them, so the lattice follows the bowed sides instead of stopping
-         short of them. */
-      var CONE = 'M35 52Q41 82 60 106Q79 82 85 52A25 9 0 0 1 35 52Z';
-      var waffle = '';
-      var i;
-      for (i = -4; i <= 6; i += 1) {
-        waffle += '<path d="M20 ' + (20 + i * 13) + 'L100 ' + (100 + i * 13) + '"/>';
-      }
-      for (i = 6; i <= 15; i += 1) {
-        waffle += '<path d="M20 ' + (i * 13 - 20) + 'L100 ' + (i * 13 - 100) + '"/>';
-      }
-      /* The swirl. Each turn is a rope of cream: the same arc stroked
-         twice, a fat one in the outline colour and a thinner one in the
-         cream over it. Stacked ellipses and full rings were both tried and
-         both read as a beehive or a stack of pancakes; what says "soft" is a
-         line that curls, and a curl is a stroked arc. Each turn is narrower
-         and higher than the one below it, so the stack tapers into a tip
-         instead of repeating. The mound underneath joins the turns into one
-         mass — without it they are a pile of separate rings. */
-      var turns = ['M40 47Q60 62 80 47', 'M45 38.5Q60 50 75 38.5',
-        'M50 31Q60 40 70 31', 'M55 24Q60 31 65 24'];
-      var turnsWide = [9, 7.5, 6, 4.5];
-      var swirl = turns.map(function (d, k) {
-        return '<path d="' + d + '" fill="none" stroke="var(--color-texto)" ' +
-          'stroke-width="' + (turnsWide[k] + 2.4) + '" stroke-linecap="round"/>' +
-          '<path d="' + d + '" fill="none" stroke="#FCF0D6" stroke-width="' +
-          turnsWide[k] + '" stroke-linecap="round"/>';
-      }).join('');
-      return '<svg viewBox="0 0 120 110" aria-hidden="true">' +
-        '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-        '<path d="' + CONE + '" fill="#D99A2E"/>' +
-        '<defs><clipPath id="cucuruchoWaffle"><path d="' + CONE + '"/></clipPath></defs>' +
-        '<g clip-path="url(#cucuruchoWaffle)" stroke="#7A4E12" stroke-width="2" ' +
-        'opacity="0.45" fill="none">' + waffle + '</g>' +
-        /* The mouth of the cone, seen from a little above. Its top edge is
-           the same arc as the outline, so it reads as the opening and not
-           as a stripe painted across the cone. */
-        '<ellipse cx="60" cy="52" rx="25" ry="9" fill="#E8AE4A" stroke="none"/>' +
-        '<path d="M40 52Q42 40 48 33 54 27 57 20 60 14 63 20 66 27 72 33 78 40 80 52Z" ' +
-        'fill="#F7E7C0" stroke="none"/>' +
-        swirl +
-        /* The near rim, drawn over the swirl: it is what makes the ice
-           cream sit inside the cone instead of balancing on it. It is an
-           open path on purpose, so only the curve is outlined and no
-           straight line is drawn across the mouth. */
-        '<path d="M35 52A25 9 0 0 0 85 52" fill="#D99A2E" stroke-width="2.5"/>' +
-        /* And the drip that runs down the front of it: a neck that comes off
-           the swirl and a round drop at the end. A closed blob with no neck
-           reads as an egg lying on the rim. */
-        '<path d="M44.6 49C44.6 53 42.8 54 42.8 57A3.2 3.2 0 0 0 49.2 57' +
-        'C49.2 54 47.4 53 47.4 49Z" fill="#F7E7C0" stroke-width="2"/>' +
-        '</g></svg>';
-    }
-    return '';
-  }
-
   /* ---- Concept slides ----
      More than one, and the number is CONCEPT_SLIDES: both the carousel
      arithmetic and the smoke read it from here, so adding a concept slide is
      adding one entry and nothing else. The count is arithmetic, not data —
      it has to match the branches below or the carousel wraps into a
      gallery slide it should never show. */
-  var CONCEPT_SLIDES = 8;
-
   /* The fold line of the symmetry slide: from the top vertex of the
      triangle to the middle of its base, which are two of its own three
      points, so the line cannot drift away from the figure it marks.
@@ -571,207 +75,34 @@
      the other. --color-superficie is the one that works on the fill in all
      three themes (the perimeter mark measures the same), and on the card it
      is simply the card, so the line is only ever seen on the figure. */
-  function triangleAxisMark() {
-    var pts = polygonPoints(3, 60, 62, 48);
-    return axisMark(pts[0].x, pts[0].y, (pts[1].x + pts[2].x) / 2, (pts[1].y + pts[2].y) / 2);
-  }
-
   /* A dashed fold line through the figure. Used by symmetry, and by nothing
      else: the perimeter is the edge of the shape, not a line through it. */
-  function axisMark(x1, y1, x2, y2) {
-    return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 +
-      '" class="intro-axis-mark"/>';
-  }
-
   /* The area: the inside, covered. Diagonal hatching clipped to the shape,
      so the fill can only ever be inside it. The clip path is a fixed id
      because exactly one area card exists in the document at a time. */
-  function areaSvg() {
-    var pts = polygonPoints(3, 60, 62, 48);
-    var hatch = [];
-    for (var i = -60; i < 200; i += 16) {
-      hatch.push('<line x1="' + i + '" y1="0" x2="' + (i + 120) + '" y2="120"/>');
-    }
-    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
-      '<defs><clipPath id="shapesAreaClip"><polygon points="' +
-      pointsAttr(pts) + '"/></clipPath></defs>' +
-      '<polygon points="' + pointsAttr(pts) + '" fill="var(--mod-razonamiento)" ' +
-      'stroke="var(--color-texto)" stroke-width="4" stroke-linejoin="round"/>' +
-      '<g clip-path="url(#shapesAreaClip)" class="area-hatch">' + hatch.join('') + '</g>' +
-      '</svg>';
-  }
-
   /* ---- Triangles and the area by formula ----
      Each kind of triangle is three corners, fixed here once. The marks that
      say which sides are equal, and the square that says which corner is a
      right angle, are drawn from those same corners, so they cannot come
      loose from the triangle they describe. */
-  var TRIANGLE_KINDS = {
-    sides: ['equilateral', 'isosceles', 'scalene'],
-    angles: ['right', 'acute', 'obtuse']
-  };
-
-  var TRIANGLE_CORNERS = {
-    equilateral: [[60, 14], [101.6, 86], [18.4, 86]],
-    isosceles: [[60, 8], [96, 98], [24, 98]],
-    scalene: [[12, 98], [110, 96], [34, 16]],
-    right: [[20, 98], [104, 98], [20, 22]],
-    acute: [[34, 14], [10, 98], [110, 96]],
-    obtuse: [[10, 96], [110, 96], [56, 60]]
-  };
-
   /* Tick marks per side, in the order the corners are listed: side 0 runs
      from corner 0 to corner 1, and so on. Sides with the same number of
      ticks are the same length. */
-  var TRIANGLE_TICKS = {
-    equilateral: [1, 1, 1],
-    isosceles: [2, 0, 2],
-    scalene: [0, 0, 0]
-  };
-
-  var AREA_SHAPES = ['square', 'rectangle', 'triangle'];
-
-  /* One short stroke across the middle of a side, or several spread along it. */
-  function sideTicks(a, b, count) {
-    var length = Math.hypot(b[0] - a[0], b[1] - a[1]);
-    var ux = (b[0] - a[0]) / length;
-    var uy = (b[1] - a[1]) / length;
-    var out = '';
-    for (var k = 0; k < count; k += 1) {
-      var along = (k - (count - 1) / 2) * 7;
-      var x = (a[0] + b[0]) / 2 + ux * along;
-      var y = (a[1] + b[1]) / 2 + uy * along;
-      out += '<line x1="' + (x - uy * 6).toFixed(1) + '" y1="' + (y + ux * 6).toFixed(1) +
-        '" x2="' + (x + uy * 6).toFixed(1) + '" y2="' + (y - ux * 6).toFixed(1) + '"/>';
-    }
-    return out;
-  }
-
-  function triangleKindSvg(kind) {
-    var corners = TRIANGLE_CORNERS[kind];
-    var ticks = TRIANGLE_TICKS[kind] || [0, 0, 0];
-    var marks = ticks.map(function (count, i) {
-      return sideTicks(corners[i], corners[(i + 1) % 3], count);
-    }).join('');
-    /* The right angle is the small square in its corner, as on paper. */
-    if (kind === 'right') marks += '<polyline points="20,88 30,88 30,98" fill="none"/>';
-    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
-      '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-      '<polygon points="' + corners.map(function (c) { return c[0] + ',' + c[1]; }).join(' ') +
-      '" fill="' + SHAPE_FILL + '" stroke-width="4"/>' + marks + '</g></svg>';
-  }
-
   /* The area counted: a figure over its grid of little squares. The squares
      are lines drawn over the fill, so each one can be pointed at. The
      triangle is the half of a square that the diagonal leaves. */
-  function countSvg(kind) {
-    var cell = 20;
-    var cols = kind === 'rectangle' ? 5 : 4;
-    var rows = kind === 'rectangle' ? 3 : 4;
-    var w = cols * cell;
-    var h = rows * cell;
-    var left = (120 - w) / 2;
-    var top = (120 - h) / 2;
-    var fill = kind === 'triangle'
-      ? '<polygon points="' + left + ',' + top + ' ' + left + ',' + (top + h) + ' ' +
-          (left + w) + ',' + (top + h) + '" fill="' + SHAPE_FILL + '" stroke-width="3"/>'
-      : '<rect x="' + left + '" y="' + top + '" width="' + w + '" height="' + h +
-          '" fill="' + SHAPE_FILL + '" stroke-width="3"/>';
-    var lines = '';
-    for (var c = 0; c <= cols; c++) {
-      lines += '<line x1="' + (left + c * cell) + '" y1="' + top + '" x2="' + (left + c * cell) +
-        '" y2="' + (top + h) + '"/>';
-    }
-    for (var r = 0; r <= rows; r++) {
-      lines += '<line x1="' + left + '" y1="' + (top + r * cell) + '" x2="' + (left + w) +
-        '" y2="' + (top + r * cell) + '"/>';
-    }
-    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
-      '<g stroke="var(--color-texto)" stroke-width="1" stroke-linejoin="round">' +
-      fill + lines + '</g></svg>';
-  }
-
   /* An area drawn to scale: each measure is a fixed number of drawing units,
      so the picture and the numbers written on it agree. `withNumbers` writes
      the measures for a question; the formula slide leaves them out and only
      names the parts, so its drawing does not give the answer away. */
-  var AREA_UNIT = 17;
-
   /* `halo` outlines the text in the card colour, for a label that sits on
      the dark fill of the triangle: the text stays readable in both themes. */
-  function turnedLabel(x, y, text, halo) {
-    return '<text x="' + x + '" y="' + y + '" transform="rotate(-90 ' + x + ' ' + y +
-      ')" text-anchor="middle" font-size="10" fill="var(--color-texto)" ' +
-      (halo ? 'paint-order="stroke" stroke="var(--color-superficie)" stroke-width="3"'
-        : 'stroke="none"') + '>' + text + '</text>';
-  }
-
-  function flatLabel(x, y, text) {
-    return '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-size="10" ' +
-      'fill="var(--color-texto)" stroke="none">' + text + '</text>';
-  }
-
-  function areaCalcSvg(shape, base, height, withNumbers) {
-    var w = base * AREA_UNIT;
-    var h = height * AREA_UNIT;
-    var left = (120 - w) / 2;
-    var bottom = 102;
-    var top = bottom - h;
-    var centre = left + w / 2;
-    var middle = (top + bottom) / 2;
-    var square = shape === 'square';
-    var measure = function (word, value) {
-      return App.i18n.t(word) +
-        (withNumbers ? ' ' + App.i18n.t('gen.cmValue').replace('{n}', value) : '');
-    };
-    /* The triangle's height is the dashed line from the top corner down to
-       the middle of the base; the rectangles have no line, their sides are
-       the height. */
-    var body = shape === 'triangle'
-      ? '<polygon points="' + left + ',' + bottom + ' ' + (left + w) + ',' + bottom + ' ' +
-          centre + ',' + top + '" fill="' + SHAPE_FILL + '" stroke-width="4"/>' +
-        '<line x1="' + centre + '" y1="' + top + '" x2="' + centre + '" y2="' + bottom +
-          '" class="intro-axis-mark"/>'
-      : '<rect x="' + left + '" y="' + top + '" width="' + w + '" height="' + h +
-          '" fill="' + SHAPE_FILL + '" stroke-width="4"/>';
-    /* The triangle's height is written beside its dashed line, inside the
-       fill, with a halo; outside the slope the text would not fit the
-       drawing. The rectangles name their side outside the figure. */
-    var heightLabel = shape === 'triangle'
-      ? turnedLabel(centre + 7, middle, measure('gen.heightLabel', height), true)
-      : turnedLabel(left - 7, middle, measure(square ? 'gen.sideLabel' : 'gen.heightLabel', height), false);
-    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
-      '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' + body + '</g>' +
-      flatLabel(centre, bottom + 14, measure(square ? 'gen.sideLabel' : 'gen.baseLabel', base)) +
-      heightLabel + '</svg>';
-  }
-
   /* The volume: the space inside. A solid drawn inside a dashed outline of
      the whole space it would fill, so "there is room inside" is the thing
      on screen and not a word in the caption. */
-  function volumeSvg() {
-    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
-      '<rect x="8" y="8" width="104" height="104" rx="8" class="intro-space-mark"/>' +
-      '<g stroke="var(--color-texto)" stroke-width="3" stroke-linejoin="round">' +
-      '<polygon points="28,42 64,24 96,42 60,60" class="solid-top"/>' +
-      '<polygon points="28,42 60,60 60,96 28,78" class="solid-left"/>' +
-      '<polygon points="60,60 96,42 96,78 60,96" class="solid-right"/>' +
-      '</g></svg>';
-  }
-
   /* Similarity: the same figure at two sizes, side by side. Both are
      equilateral triangles from the same helper, so they differ in size and
      in nothing else — which is the whole point of the concept. */
-  function similaritySvg() {
-    return '<svg viewBox="0 0 120 120" width="160" height="160" aria-hidden="true">' +
-      '<polygon points="' + pointsAttr(polygonPoints(3, 36, 62, 32)) +
-      '" fill="var(--mod-razonamiento)" stroke="var(--color-texto)" stroke-width="4" ' +
-      'stroke-linejoin="round"/>' +
-      '<polygon points="' + pointsAttr(polygonPoints(3, 90, 62, 19)) +
-      '" fill="var(--mod-razonamiento)" stroke="var(--color-texto)" stroke-width="4" ' +
-      'stroke-linejoin="round"/></svg>';
-  }
-
   /* One card of a concept slide. `wide` cards take the whole row: a concept
      that is built out of the others goes underneath them instead of sitting
      beside them. */
@@ -793,249 +124,16 @@
     return item;
   }
 
-  function triangleWith(mark) {
-    return shapeSvg('triangle', false).replace('</svg>', mark + '</svg>');
-  }
-
-  function conceptCards(n) {
-    if (n === 0) {
-      /* The opening: what the two kinds of thing in this activity are. */
-      return {
-        layout: 'compare',
-        cards: [
-          { kind: 'flat', title: 'introFlatTitle', text: 'introFlatText',
-            html: shapeSvg('triangle', false) },
-          { kind: 'solid', title: 'introSolidTitle', text: 'introSolidText',
-            html: solidSvg('sphere') }
-        ]
-      };
-    }
-    if (n === 1) {
-      /* The edges of a flat figure, in the order they build on each other: a
-         side, the vertex where two of them meet, and the perimeter, which
-         is all the sides added up. The perimeter is not a third thing
-         parallel to the other two — it is what they are for — so it takes
-         its own row underneath. */
-      return {
-        layout: 'parts',
-        cards: [
-          { id: 'side', title: 'introSideTitle', text: 'introSideText',
-            html: triangleWith('<line x1="18" y1="86" x2="102" y2="86" class="intro-side-mark"/>') },
-          { id: 'corner', title: 'introCornerTitle', text: 'introCornerText',
-            html: triangleWith('<circle cx="18" cy="86" r="7" class="intro-corner-mark"/>') },
-          { id: 'perimeter', wide: true, title: 'introPerimeterTitle', text: 'introPerimeterText',
-            /* The whole way round, not one piece of it: the outline as a
-               dashed line just inside the triangle, the way you would walk
-               it. Generated from the same centre and radius as the shape,
-               only 8 units in, so it can never come loose from the figure
-               it is describing. */
-            html: triangleWith('<polygon points="' +
-              pointsAttr(polygonPoints(3, 60, 62, 40)) + '" class="intro-perimeter-mark"/>') }
-        ]
-      };
-    }
-    if (n === 2) {
-      /* What is inside, for the two kinds of thing: a flat figure has an
-         area and a solid has a volume. Both are "the space it takes up",
-         and the pairing is the reason they sit on the same slide. */
-      return {
-        layout: 'parts',
-        cards: [
-          { id: 'area', title: 'introAreaTitle', text: 'introAreaText', html: areaSvg() },
-          { id: 'volume', title: 'introVolumeTitle', text: 'introVolumeText', html: volumeSvg() }
-        ]
-      };
-    }
-    /* Two figures compared: the same shape at another size, and the same
-       shape folded onto itself. Both are about what a figure can do, not
-       about how many sides it has, so they close the first concepts. */
-    if (n === 3) {
-      return {
-        layout: 'parts',
-        cards: [
-          { id: 'symmetry', title: 'introSymmetryTitle', text: 'introSymmetryText',
-            html: triangleWith(triangleAxisMark()) },
-          { id: 'similarity', title: 'introSimilarityTitle', text: 'introSimilarityText',
-            html: similaritySvg() }
-        ]
-      };
-    }
-    /* The area as the little squares inside, counted. The triangle is wide
-       because it covers half of a square, the same idea as its formula. */
-    if (n === 4) {
-      return {
-        layout: 'parts',
-        cards: [
-          { id: 'count-square', title: 'introCountSquareTitle', text: 'introCountSquareText',
-            html: countSvg('square') },
-          { id: 'count-rectangle', title: 'introCountRectangleTitle', text: 'introCountRectangleText',
-            html: countSvg('rectangle') },
-          { id: 'count-triangle', wide: true, title: 'introCountTriangleTitle', text: 'introCountTriangleText',
-            html: countSvg('triangle') }
-        ]
-      };
-    }
-    /* The area by formula, one figure per shape, with the words of the
-       formula on each drawing. The triangle is wide because its formula is
-       the other two cut in half, so it goes underneath them. */
-    if (n === 5) {
-      return {
-        layout: 'parts',
-        cards: [
-          { id: 'area-square', title: 'introAreaSquareTitle', text: 'introAreaSquareText',
-            html: areaCalcSvg('square', 5, 5, false) },
-          { id: 'area-rectangle', title: 'introAreaRectangleTitle', text: 'introAreaRectangleText',
-            html: areaCalcSvg('rectangle', 5, 3, false) },
-          { id: 'area-triangle', wide: true, title: 'introAreaTriangleTitle', text: 'introAreaTriangleText',
-            html: areaCalcSvg('triangle', 6, 4, false) }
-        ]
-      };
-    }
-    /* The triangles by their sides, then by their angles. The scalene and
-       the obtuse triangles are the wide cards: they are the ones with no
-       pair to show, so they go underneath the other two. */
-    if (n === 6) {
-      return {
-        layout: 'parts',
-        cards: [
-          { id: 'equilateral', title: 'introEquilateralTitle', text: 'introEquilateralText',
-            html: triangleKindSvg('equilateral') },
-          { id: 'isosceles', title: 'introIsoscelesTitle', text: 'introIsoscelesText',
-            html: triangleKindSvg('isosceles') },
-          { id: 'scalene', wide: true, title: 'introScaleneTitle', text: 'introScaleneText',
-            html: triangleKindSvg('scalene') }
-        ]
-      };
-    }
-    return {
-      layout: 'parts',
-      cards: [
-        { id: 'right', title: 'introRightTitle', text: 'introRightText',
-          html: triangleKindSvg('right') },
-        { id: 'acute', title: 'introAcuteTitle', text: 'introAcuteText',
-          html: triangleKindSvg('acute') },
-        { id: 'obtuse', wide: true, title: 'introObtuseTitle', text: 'introObtuseText',
-          html: triangleKindSvg('obtuse') }
-      ]
-    };
-  }
-
-  function paintConcept(n) {
-    var slide = conceptCards(n);
-    galleryVisual.removeAttribute('role');
-    galleryVisual.removeAttribute('aria-label');
-    galleryVisual.classList.add('gallery-intro');
-    /* The grid itself lives in .gallery-intro; .gallery-part-intro only
-       stretches the cards. Taking the first one off the parts slides left
-       them in a plain block, and a card told to span the whole row simply
-       did not, because there was no row to span. */
-    galleryVisual.classList.toggle('gallery-part-intro', slide.layout === 'parts');
-    galleryVisual.textContent = '';
-
-    if (slide.layout === 'compare') {
-      slide.cards.forEach(function (card) {
-        var item = document.createElement('div');
-        item.className = 'shape-compare-item shape-compare-' + card.kind;
-        var visual = document.createElement('div');
-        visual.className = 'shape-compare-visual';
-        visual.setAttribute('aria-hidden', 'true');
-        visual.innerHTML = card.html;
-        var title = document.createElement('h2');
-        title.textContent = App.i18n.t(card.title);
-        var description = document.createElement('p');
-        description.textContent = App.i18n.t(card.text);
-        item.appendChild(visual);
-        item.appendChild(title);
-        item.appendChild(description);
-        galleryVisual.appendChild(item);
-      });
-    } else {
-      slide.cards.forEach(function (card) {
-        galleryVisual.appendChild(conceptCard(card));
-      });
-    }
-    galleryCaption.classList.add('hidden');
-  }
-
-
-  function paintGallery() {
-    galleryPrev.setAttribute('aria-label', App.i18n.t('galleryPrevious'));
-    galleryNext.setAttribute('aria-label', App.i18n.t('galleryNext'));
-
-    /* The concept slides count backwards from -1, so -1 is the opening one
-       and -CONCEPT_SLIDES the last. Anything else is a gallery shape. */
-    if (galleryIndex < 0) {
-      paintConcept(-1 - galleryIndex);
-      return;
-    }
-
-    var item = DATA.gallery[galleryIndex];
-    var name = item.type === 'flat' ? shapeName(item.id) : solidName(item.id);
-    galleryVisual.classList.remove('gallery-intro', 'gallery-part-intro');
-    galleryVisual.innerHTML = item.type === 'flat'
-      ? '<div class="shape-stage">' + shapeSvg(item.id, false) + '</div>'
-      : '<div class="shape-stage">' + solidSvg(item.id) + '</div>';
-    galleryVisual.setAttribute('role', 'img');
-    galleryVisual.setAttribute('aria-label', name);
-    galleryCaption.textContent = App.i18n.t('gallery.' + item.type + '.' + item.id)
-      .replace('{name}', name);
-    galleryCaption.classList.remove('hidden');
-    /* Gallery only shows the name: sides, vertices and faces live on the
-       concept slides and the questions, so listing them here would split
-       the user's attention between the figure and a number they do not
-       need yet. */
-  }
-
-  function paintRealExample() {
-    var item = DATA.gallery[realIndex];
-    var illustration = realObjectSvg(item.id);
-    if (illustration) realObject.innerHTML = illustration;
-    else realObject.textContent = item.object;
-    realCaption.textContent = App.i18n.t('gallery.real.' + item.id);
-    /* Everyday examples only show the name: counting sides, vertices or
-       faces on the photo of a real object pulls attention to the count
-       and away from the shape itself. */
-    realPrev.setAttribute('aria-label', App.i18n.t('galleryPrevious'));
-    realNext.setAttribute('aria-label', App.i18n.t('galleryNext'));
-  }
-
   /* Three counts around the right one: one fewer, the answer, one more.
      Being out by one is the mistake this level actually produces, not
      picking a wild number. */
-  function buildCounts(value) {
-    var values = [value, value - 1, value + 1].filter(function (v) { return v > 0; });
-    var extra = value + 2;
-    while (values.length < 3) { values.push(extra); extra += 1; }
-    return App.utils.shuffle(values.slice(0, 3)).map(function (v) {
-      return { html: String(v), correct: v === value };
-    });
-  }
-
   /* The perimeter options. The mistake this question produces is not a wild
      number: it is leaving the last side out, or counting one twice. So the
      two wrong answers are exactly one side short and one side long — the
      same "out by one" the counting questions produce, one level up. */
-  function perimeterOptions(total, side) {
-    return App.utils.shuffle([total - side, total, total + side].map(function (v) {
-      return { html: String(v), correct: v === total };
-    }));
-  }
-
   /* ---- Nets ----
      A net is drawn open, piece by piece, so the faces of a solid can be
      counted instead of imagined. Each letter of a row is one piece. */
-  var PIECE = 34;
-
-  function netPieces(net) {
-    var out = [];
-    net.rows.forEach(function (row, r) {
-      row.split('').forEach(function (ch, c) {
-        if (ch !== '.') out.push({ kind: ch, r: r, c: c });
-      });
-    });
-    return out;
-  }
-
   /* The pieces drawn have to be exactly as many as the faces claimed, or
      counting them would give the wrong answer. */
   DATA.nets.forEach(function (net) {
@@ -1052,16 +150,12 @@
      so one number cannot describe them.
      Checked at start-up for the same reason the nets are: a question added
      later without noticing must fail loudly, not quietly teach a lie. */
-  var REGULAR_SIDES = ['triangle', 'square', 'rhombus', 'pentagon', 'hexagon', 'octagon'];
-
   /* The symmetry question offers three fold lines and only one can be
      right, so it may only be asked of figures with exactly one vertical fold
      and no horizontal or diagonal one. A square or a hexagon has all three
      and the question would have no answer; the circle has every line and is
      worse. Which figures those are is decided here, once, instead of being
      a habit everybody has to remember. */
-  var SYMMETRY_SHAPES = ['triangle', 'pentagon', 'trapezoid'];
-
   /* One big option and two small ones, and all three different: with two
      big options the question has no answer, and with the same body twice
      the child could answer from the drawing alone. */
@@ -1101,158 +195,23 @@
     });
   });
 
-  function netSvg(net) {
-    var cols = Math.max.apply(Math, net.rows.map(function (r) { return r.length; }));
-    var w = cols * PIECE;
-    var h = net.rows.length * PIECE;
-    var body = '';
-    netPieces(net).forEach(function (p) {
-      var x = p.c * PIECE;
-      var y = p.r * PIECE;
-      if (p.kind === 'T') {
-        /* A triangle piece, drawn pointing away from the middle of the net
-           so the shape reads as a flap that folds up. */
-        var up = p.r < net.rows.length / 2;
-        body += '<polygon points="' +
-          (up ? (x + PIECE / 2) + ',' + y + ' ' + (x + PIECE) + ',' + (y + PIECE) +
-                ' ' + x + ',' + (y + PIECE)
-              : x + ',' + y + ' ' + (x + PIECE) + ',' + y + ' ' +
-                (x + PIECE / 2) + ',' + (y + PIECE)) +
-          '" class="net-piece net-tri"/>';
-      } else {
-        /* A rectangle piece is drawn a little shorter, so a prism's long
-           faces do not look like squares. */
-        var inset = p.kind === 'R' ? 5 : 0;
-        body += '<rect x="' + x + '" y="' + (y + inset) + '" width="' + PIECE +
-          '" height="' + (PIECE - inset * 2) + '" class="net-piece net-' +
-          (p.kind === 'R' ? 'rect' : 'square') + '"/>';
-      }
-    });
-    return '<div class="net-stage"><svg viewBox="-3 -3 ' + (w + 6) + ' ' + (h + 6) +
-      '" width="' + (w + 6) + '" height="' + (h + 6) +
-      '" class="net-svg" aria-hidden="true">' + body + '</svg></div>';
-  }
-
-  function netName(id) { return App.i18n.t('net.' + id + '.name'); }
-  function netGloss(id) { return App.i18n.t('net.' + id + '.gloss'); }
-
   /* The face counts the solids here actually have, so the options are the
      real confusions and never a random number. */
-  function faceOptions(correct) {
-    var counts = DATA.nets.map(function (n) { return n.faces; });
-    var seen = {};
-    var list = [correct];
-    seen[correct] = true;
-    counts.concat([correct + 1, correct - 1]).forEach(function (v) {
-      if (v > 0 && !seen[v] && list.length < 3) { seen[v] = true; list.push(v); }
-    });
-    return App.utils.shuffle(list).map(function (v) {
-      return { html: String(v), correct: v === correct };
-    });
-  }
-
   /* Small figures for the answer buttons. They reuse the very same drawing
      code as the question and the gallery, at a smaller size, so an option
      can never show a shape the activity would not draw elsewhere. */
-  function shapeThumb(id, extra) {
-    return '<span class="thumb">' +
-      shapeSvg(id, false).replace('</svg>', (extra || '') + '</svg>') + '</span>';
-  }
-
-  function solidThumb(id, big) {
-    return '<span class="thumb' + (big ? ' thumb-big' : '') + '">' + solidSvg(id) + '</span>';
-  }
-
   /* ---- Folding in half ----
      A figure drawn square by square, with the fold line down its middle when
      the question asks about it. Whether a figure folds exactly in half is
      worked out from its rows (every row reads the same backwards), never
      stored, so the drawing and the answer cannot drift apart. */
-  function foldCells(rows) {
-    return rows.map(function (row) {
-      return row.split('').map(function (ch) { return ch === '#'; });
-    });
-  }
-
-  function isSymmetricRows(rows) {
-    return rows.every(function (row) {
-      return row === row.split('').reverse().join('');
-    });
-  }
-
   /* A figure turned a quarter of the way round is the transpose of its rows,
      reversed, so the options cannot drift from what the question claims. */
-  function turnedRows(rows) {
-    var h = rows.length;
-    var w = rows[0].length;
-    var out = [];
-    for (var x = 0; x < w; x++) {
-      var line = '';
-      for (var y = h - 1; y >= 0; y--) line += rows[y][x];
-      out.push(line);
-    }
-    return out;
-  }
-
-  function mirroredRows(rows) {
-    return rows.map(function (row) { return row.split('').reverse().join(''); });
-  }
-
-  function sameRows(a, b) { return a.join('|') === b.join('|'); }
-
   /* The same figure in a grid with one free row and column, so a moved copy
      really sits somewhere else on the card. */
-  function paddedCells(rows, shiftX, shiftY) {
-    var w = rows[0].length + 1;
-    var h = rows.length + 1;
-    var cells = [];
-    for (var r = 0; r < h; r++) {
-      cells.push([]);
-      for (var c = 0; c < w; c++) cells[r].push(false);
-    }
-    rows.forEach(function (row, r) {
-      row.split('').forEach(function (ch, c) {
-        if (ch === '#') cells[r + shiftY][c + shiftX] = true;
-      });
-    });
-    return cells;
-  }
-
   /* The cells drawn inside a 120-unit square, the cell size chosen so the
      whole grid fits. `axis` puts the fold line down the middle; `size` is the
      width and height of the drawing on screen. */
-  function gridFigureSvg(cells, axis, size) {
-    var rows = cells.length;
-    var cols = cells[0].length;
-    var cell = Math.floor(100 / Math.max(rows, cols));
-    var x0 = (120 - cols * cell) / 2;
-    var y0 = (120 - rows * cell) / 2;
-    var body = '';
-    cells.forEach(function (row, r) {
-      row.forEach(function (on, c) {
-        if (on) {
-          body += '<rect x="' + (x0 + c * cell) + '" y="' + (y0 + r * cell) +
-            '" width="' + cell + '" height="' + cell + '"/>';
-        }
-      });
-    });
-    if (axis) {
-      var mid = x0 + cols * cell / 2;
-      var top = y0 - 6;
-      var bottom = y0 + rows * cell + 6;
-      /* A light band under the dashes. The dark dashes alone disappear on the
-         dark fill of the figure; the band is the card colour, so outside the
-         figure it does not show at all. */
-      body += '<line x1="' + mid + '" y1="' + top + '" x2="' + mid + '" y2="' + bottom +
-        '" class="fold-halo"/>' +
-        '<line x1="' + mid + '" y1="' + top + '" x2="' + mid + '" y2="' + bottom +
-        '" class="fold-line"/>';
-    }
-    return '<svg viewBox="0 0 120 120" width="' + size + '" height="' + size +
-      '" aria-hidden="true"><g fill="' + SHAPE_FILL + '" stroke="var(--color-texto)" ' +
-      'stroke-width="2" stroke-linejoin="round">' + body + '</g></svg>';
-  }
-
   /* Checked at start-up: the fold question needs a figure of each kind, the
      figures must be drawn square, and a moved figure must not look the same
      turned or mirrored, or "moved" and "turned" would have two answers. */
@@ -1290,711 +249,64 @@
      vertical fold line and neither of the other two, so exactly one option
      can be right — a square would have all three and the question would
      have no answer. app.js checks that at start-up. */
-  var AXES = {
-    vertical: '<line x1="60" y1="4" x2="60" y2="116" class="axis-mark"/>',
-    horizontal: '<line x1="4" y1="62" x2="116" y2="62" class="axis-mark"/>',
-    diagonal: '<line x1="8" y1="112" x2="112" y2="8" class="axis-mark"/>'
-  };
-
-  var GENERATORS = {
-
-    /* How many flat faces a solid has. The net is drawn open, so the faces
-       can be counted one by one instead of imagined. */
-    solidParts: function (nv) {
-      var net = nv.net
-        ? DATA.nets.find(function (item) { return item.id === nv.net; })
-        : App.utils.drawRound(nv.id, DATA.nets);
-      return {
-        prompt: App.i18n.t('gen.howManyFaces').replace(/\{name\}/g, netName(net.id)),
-        visual: netSvg(net),
-        visualAria: App.i18n.t('gen.netAria')
-          .replace(/\{n\}/g, net.faces).replace(/\{name\}/g, netName(net.id)),
-        legend: App.i18n.t('gen.facesHint'),
-        hint: App.i18n.t('gen.socraticFaces'),
-        options: faceOptions(net.faces)
-      };
-    },
-
-    /* And which solid it makes when folded. Every net is on screen and the
-       three solids are named with their own shapes, so the answer comes
-       from looking at the pieces, not from remembering a list. */
-    fromNet: function (nv) {
-      var net = nv.net
-        ? DATA.nets.find(function (item) { return item.id === nv.net; })
-        : App.utils.drawRound(nv.id, DATA.nets);
-      return {
-        prompt: App.i18n.t('gen.fromNet'),
-        visual: netSvg(net),
-        visualAria: App.i18n.t('gen.netPiecesAria').replace(/\{n\}/g, net.faces),
-        legend: App.i18n.t('gen.netHint'),
-        hint: App.i18n.t('gen.socraticNet'),
-        options: App.utils.shuffle(DATA.nets.map(function (o) {
-          return {
-            html: '<span class="solid-name">' + netName(o.id) + '</span>' +
-              '<span class="solid-gloss">' + netGloss(o.id) + '</span>',
-            aria: netName(o.id),
-            correct: o.id === net.id
-          };
-        })),
-        inline: true
-      };
-    },
-
-
-    /* Name the flat shape. The alternatives are the other shapes of this
-       same level, so the confusion on offer is the real one (a square
-       against a rectangle), never a random word. */
-    shapeName: function (nv) {
-      var shapes = nv.shapes || DATA.gallery.filter(function (item) {
-        return item.type === 'flat';
-      }).map(function (item) { return item.id; });
-      var id = nv.shape || App.utils.drawRound(nv.id, shapes);
-      var others = App.utils.shuffle(shapes.filter(function (s) {
-        return s !== id;
-      })).slice(0, 2);
-      return {
-        prompt: App.i18n.t('gen.shapeNamePrompt'),
-        visual: '<div class="shape-stage">' + shapeSvg(id, false) + '</div>',
-        visualAria: shapeName(id),
-        hint: App.i18n.t('gen.socraticName'),
-        options: App.utils.shuffle(
-          [{ html: shapeName(id), correct: true }].concat(
-            others.map(function (s) {
-              return { html: shapeName(s), correct: false };
-            })
-          ))
-      };
-    },
-
-    /* Count the sides or the corners. Every corner carries a dot, so the
-       answer can be reached by counting what is on screen. The "count
-       the marked dots" reminder used to live as a `<p class="hint">`
-       under the figure, but the dots are already on the drawing, so the
-       text was a duplicate of the picture. It moved to the socratic
-       hint, which only fires when the answer is wrong, so the screen
-       stays clean during the test. */
-    shapeCount: function (nv) {
-      var id = nv.shape || App.utils.drawRound(nv.id + nv.count, nv.shapes);
-      var counting = nv.count === 'corners';
-      return {
-        prompt: App.i18n.t(counting ? 'gen.cornersPrompt' : 'gen.sidesPrompt'),
-        visual: '<div class="shape-stage">' + shapeSvg(id, true) + '</div>',
-        visualAria: shapeName(id),
-        hint: App.i18n.t(counting ? 'gen.socraticCorners' : 'gen.socraticSides'),
-        options: buildCounts(DATA.sides[id][nv.count])
-      };
-    },
-
-    /* The perimeter: going all the way round the shape. The answer is
-       never stored — it is the length of a side times the number of sides,
-       read from the same DATA.sides the drawing and the counting questions
-       use, so the picture, the caption and the right answer cannot drift
-       apart. The side length travels in the question (it is the one number
-       given, like the shape), the total is worked out here. */
-    shapePerimeter: function (nv) {
-      var total = DATA.sides[nv.shape].sides * nv.side;
-      return {
-        prompt: App.i18n.t('gen.perimeterPrompt').replace(/\{side\}/g, nv.side),
-        /* The figure is drawn with a thin 1.5px outline (`thin=true`) so the
-           four corners of the square, pentagon, etc. don't look like
-           painted vertices sitting on top of an already visible figure.
-           The visible "sum all the sides" line used to live under the
-           drawing; it was a duplicate of the prompt and made the screen
-           noisy, so it moved to the socratic hint, which only fires on
-           a wrong answer. */
-        visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false, true) + '</div>',
-        visualAria: shapeName(nv.shape),
-        hint: App.i18n.t('gen.socraticPerimeter'),
-        options: perimeterOptions(total, nv.side)
-      };
-    },
-
-    /* The area: not a number yet, the other half of the perimeter. The
-       question is which part of a flat figure is its area, and the two wrong
-       answers are the two things a child actually confuses it with: the
-       outline it has just been counting, and the corners on it. Counting
-       the area is `geometry`'s job, not this one's. */
-    shapeArea: function () {
-      return {
-        prompt: App.i18n.t('gen.areaPrompt'),
-        visual: '<div class="shape-stage">' + areaSvg() + '</div>',
-        visualAria: App.i18n.t('gen.areaAria'),
-        hint: App.i18n.t('gen.socraticArea'),
-        options: App.utils.shuffle([
-          { html: App.i18n.t('gen.areaEdge'), correct: false },
-          { html: App.i18n.t('gen.areaInside'), correct: true },
-          { html: App.i18n.t('gen.areaCorners'), correct: false }
-        ])
-      };
-    },
-
-    /* A triangle named by its sides or by its angles. The drawing is one kind
-       and the three kinds of its family are the answers, so every wrong
-       option is a real confusion, never a random word. */
-    triangleKind: function (nv) {
-      var kinds = TRIANGLE_KINDS[nv.basis];
-      var id = App.utils.drawRound(nv.id, kinds);
-      return {
-        prompt: App.i18n.t(nv.basis === 'angles' ? 'gen.triangleAnglesPrompt' : 'gen.triangleSidesPrompt'),
-        visual: '<div class="shape-stage">' + triangleKindSvg(id) + '</div>',
-        visualAria: App.i18n.t('gen.triangleAria'),
-        hint: App.i18n.t(nv.basis === 'angles' ? 'gen.socraticTriangleAngles' : 'gen.socraticTriangleSides'),
-        options: App.utils.shuffle(kinds.map(function (kind) {
-          return { html: App.i18n.t('triKind.' + kind), correct: kind === id };
-        }))
-      };
-    },
-
-    /* The area by formula. The two wrong answers are the two mistakes this
-       formula gets: the perimeter (all the sides added up), and the sum of
-       the two measures; for the triangle, the product without halving it. */
-    shapeAreaCalc: function (nv) {
-      var base = nv.shape === 'square' ? nv.side : nv.base;
-      var height = nv.shape === 'square' ? nv.side : nv.height;
-      var area = nv.shape === 'triangle' ? base * height / 2 : base * height;
-      var wrong = nv.shape === 'triangle'
-        ? [base * height, base + height]
-        : [2 * (base + height), base + height];
-      return {
-        prompt: App.i18n.t('gen.areaCalcPrompt').replace(/\{name\}/g, shapeName(nv.shape)),
-        visual: '<div class="shape-stage">' + areaCalcSvg(nv.shape, base, height, true) + '</div>',
-        visualAria: shapeName(nv.shape),
-        hint: App.i18n.t('gen.socraticAreaCalc'),
-        options: App.utils.shuffle([area].concat(wrong).map(function (v) {
-          return { html: String(v), correct: v === area };
-        }))
-      };
-    },
-
-    /* The volume, in its plainest form: the thing that takes up more room
-       has more of it. The big one is drawn bigger on purpose, so the answer
-       and the picture cannot disagree; counting the cubes inside is
-       `geometry`'s job. */
-    solidVolume: function (nv) {
-      var others = nv.against.map(function (id) {
-        return {
-          html: solidThumb(id),
-          aria: App.i18n.t('solid.' + id),
-          correct: false
-        };
-      });
-      return {
-        prompt: App.i18n.t('gen.volumePrompt'),
-        /* The visible "compare the three solids" reminder used to live
-           under the prompt; the three big/mini thumbs are already on
-           screen, so the line was repeating the picture. It moved to
-           the socratic hint, which only fires on a wrong answer. */
-        visualAria: App.i18n.t('gen.volumeAria').replace(/\{name\}/g, solidName(nv.solid)),
-        hint: App.i18n.t('gen.socraticVolume'),
-        options: App.utils.shuffle(others.concat([{
-          html: solidThumb(nv.solid, true),
-          aria: App.i18n.t('solid.' + nv.solid),
-          correct: true
-        }])),
-        inline: true
-      };
-    },
-
-    /* Symmetry: which fold line makes the two halves match. The three
-       options are the three candidate lines on the same figure, so the
-       answer comes from folding in your head rather than from knowing a
-       list of symmetric shapes. */
-    shapeSymmetry: function (nv) {
-      var keys = App.utils.shuffle(['vertical', 'horizontal', 'diagonal']);
-      return {
-        prompt: App.i18n.t('gen.symmetryPrompt').replace(/\{name\}/g, shapeName(nv.shape)),
-        visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false) + '</div>',
-        visualAria: shapeName(nv.shape),
-        hint: App.i18n.t('gen.socraticSymmetry'),
-        options: keys.map(function (key) {
-          return {
-            html: shapeThumb(nv.shape, AXES[key]),
-            aria: App.i18n.t('gen.axis.' + key) + '. ' + shapeName(nv.shape),
-            correct: key === 'vertical'
-          };
-        }),
-        inline: true
-      };
-    },
-
-    /* Similarity: the same shape at another size. All three options are
-       drawn at the same small size, so only the shape tells them apart —
-       picking the biggest or the smallest would be a different question. */
-    shapeSimilar: function (nv) {
-      return {
-        prompt: App.i18n.t('gen.similarPrompt').replace(/\{name\}/g, shapeName(nv.shape)),
-        visual: '<div class="shape-stage">' + shapeSvg(nv.shape, false) + '</div>',
-        visualAria: shapeName(nv.shape),
-        hint: App.i18n.t('gen.socraticSimilar'),
-        options: App.utils.shuffle(
-          [{ id: nv.shape, correct: true }].concat(nv.against.map(function (id) {
-            return { id: id, correct: false };
-          })).map(function (option) {
-            return {
-              html: shapeThumb(option.id),
-              aria: shapeName(option.id),
-              correct: option.correct
-            };
-          })
-        ),
-        inline: true
-      };
-    },
-
-    /* Solids, always through an object you could pick up: "cilindro"
-       means something before it becomes a word. New solids enter in
-       later levels so the first round remains familiar. */
-    solidName: function (nv) {
-      var solidPool = nv.solids ? DATA.solids.filter(function (s) {
-        return nv.solids.indexOf(s.id) !== -1;
-      }) : DATA.solids;
-      var solid = nv.solid
-        ? solidPool.find(function (item) { return item.id === nv.solid; })
-        : App.utils.drawRound(nv.id, solidPool);
-      var object = App.utils.shuffle(solid.objects)[0];
-      var others = App.utils.shuffle(solidPool.filter(function (s) {
-        return s.id !== solid.id;
-      })).slice(0, 2);
-      var nameOf = function (s) { return App.i18n.t('solid.' + s.id); };
-
-      if (nv.dir === 'toObject') {
-        return {
-          prompt: App.i18n.t('gen.solidToObjectPrompt').replace('{name}', nameOf(solid)),
-          /* The visible "think about the shape, not what it's for"
-             reminder used to live under the prompt; the three object
-             thumbs are already on screen, so the line was repeating
-             the picture. It moved to the socratic hint, which only
-             fires on a wrong answer. */
-          visualAria: nameOf(solid),
-          hint: App.i18n.t('gen.socraticSolid'),
-          options: App.utils.shuffle(
-            [{ html: '<span class="solid-object">' + object + '</span>',
-               aria: nameOf(solid), correct: true }].concat(
-              others.map(function (s) {
-                return {
-                  html: '<span class="solid-object">' + App.utils.shuffle(s.objects)[0] + '</span>',
-                  aria: nameOf(s), correct: false
-                };
-              })
-            )),
-          inline: true
-        };
-      }
-      return {
-        prompt: App.i18n.t('gen.solidToNamePrompt'),
-        /* The pyramid (🏜️ → cactus) and the triangular prism
-           (⛺ → camping scene with trees, fire and moon) are drawn
-           instead of being left to their emoji: both render on the
-           platforms that matter here as something a child can't read
-           as a solid. solidSvg() is the same drawing the gallery
-           uses, so the test and the carousel agree on what those two
-           solids look like. The rest (🎲 cube, ⚽ sphere, 🥫
-           cylinder, 📦 prism, 🍦 cone) ride the emoji because those
-           read unambiguously. */
-        visual: '<div class="shape-stage">' +
-          (solid.id === 'pyramid' || solid.id === 'triangularPrism'
-            ? solidSvg(solid.id)
-            : '<span class="solid-object solid-big">' + object + '</span>') +
-          '</div>',
-        visualAria: nameOf(solid),
-        hint: App.i18n.t('gen.socraticSolid'),
-        options: App.utils.shuffle(
-          [{ html: nameOf(solid), correct: true }].concat(
-            others.map(function (s) {
-              return { html: nameOf(s), correct: false };
-            })
-          ))
-      };
-    },
-
-    /* Does it match when you fold it along the line? The drawing is the only
-       evidence: the fold line is on it, and the answer comes from its rows. */
-    foldYesNo: function (nv) {
-      var fig = App.utils.drawRound(nv.id, DATA.folds);
-      var yes = isSymmetricRows(fig.rows);
-      return {
-        prompt: App.i18n.t('gen.foldPrompt'),
-        hint: App.i18n.t('gen.socraticFold'),
-        visual: '<div class="shape-stage">' + gridFigureSvg(foldCells(fig.rows), true, 160) + '</div>',
-        /* The aria text does not say yes or no: that would give the answer away. */
-        visualAria: App.i18n.t('gen.foldAria'),
-        legend: App.i18n.t('gen.foldHint'),
-        options: App.utils.shuffle([true, false].map(function (v) {
-          return {
-            html: '<span class="fold-answer">' + App.i18n.t(v ? 'gen.foldYes' : 'gen.foldNo') + '</span>',
-            aria: App.i18n.t(v ? 'gen.foldYes' : 'gen.foldNo'),
-            correct: v === yes
-          };
-        })),
-        inline: true
-      };
-    },
-
-    /* Which of the two folds exactly in half. Both are drawn the same size, so
-       only the shape tells them apart. */
-    foldPick: function (nv) {
-      var good = App.utils.drawRound(nv.id + 'yes', DATA.folds.filter(function (f) {
-        return isSymmetricRows(f.rows);
-      }));
-      var bad = App.utils.drawRound(nv.id + 'no', DATA.folds.filter(function (f) {
-        return !isSymmetricRows(f.rows);
-      }));
-      return {
-        prompt: App.i18n.t('gen.foldPickPrompt'),
-        hint: App.i18n.t('gen.socraticFoldPick'),
-        legend: App.i18n.t('gen.foldHint'),
-        options: App.utils.shuffle([
-          { html: gridFigureSvg(foldCells(good.rows), true, 110),
-            aria: App.i18n.t('gen.foldOption'), correct: true },
-          { html: gridFigureSvg(foldCells(bad.rows), true, 110),
-            aria: App.i18n.t('gen.foldOption'), correct: false }
-        ]),
-        inline: true
-      };
-    },
-
-    /* Moved, or turned? A figure that has only been moved still faces the same
-       way; a turned one does not. The three choices come from the same rows. */
-    movedOrTurned: function (nv) {
-      var fig = App.utils.drawRound(nv.id, DATA.movedFigures);
-      return {
-        prompt: App.i18n.t('gen.whichMoved'),
-        hint: App.i18n.t('gen.socraticMoved'),
-        visual: '<div class="shape-stage">' + gridFigureSvg(paddedCells(fig.rows, 0, 0), false, 160) + '</div>',
-        visualAria: App.i18n.t('gen.movedAria'),
-        legend: App.i18n.t('gen.movedHint'),
-        options: App.utils.shuffle([
-          { html: gridFigureSvg(paddedCells(fig.rows, 1, 1), false, 110),
-            aria: App.i18n.t('gen.ariaMoved'), correct: true },
-          { html: gridFigureSvg(paddedCells(turnedRows(fig.rows), 0, 1), false, 110),
-            aria: App.i18n.t('gen.ariaTurned'), correct: false },
-          { html: gridFigureSvg(paddedCells(mirroredRows(fig.rows), 1, 0), false, 110),
-            aria: App.i18n.t('gen.ariaFlipped'), correct: false }
-        ]),
-        inline: true
-      };
-    }
-  };
-
   /* ============================================================
-     Screens and flow
+     Adapters: the stages and the sheets come from the shared engine
      ============================================================ */
 
-  function show(screen) {
-    [screenIntro, screenReal, screenMenu, screenGame, screenEnd].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
-  }
-
-  /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
-  function paintMenu() {
-    var cont = $('#activitiesMenu');
-    cont.innerHTML = '';
-    var grid = document.createElement('div');
-    grid.className = 'menu-grid';
-    Object.keys(DATA.activities).forEach(function (id) {
-      var act = DATA.activities[id];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-actividad';
-      btn.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
-        '<span>' + App.i18n.t('activity.' + id + '.name') + '</span>' +
-        '<span class="detail-card">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
-      btn.addEventListener('click', function () { openActivity(id); });
-      grid.appendChild(btn);
-    });
-    cont.appendChild(grid);
-  }
-
-  /* The level rises one step per completed round, capped at the last
-     one, so a person who comes back continues where they were. */
-  function levelFromProgress(activityId) {
-    var levels = activity.levels;
-    var completed = progress.roundsByActivity[activityId];
-    if (typeof completed !== 'number' || completed < 0) completed = 0;
-    return levels[Math.min(Math.floor(completed), levels.length - 1)];
-  }
-
-  function roundLength() {
-    return level.tipo === 'mixed' ? level.questions.length : DATA.perRound;
-  }
-
-  function openActivity(id) {
-    activity = DATA.activities[id];
-    activity.id = id;
-    startRound(levelFromProgress(id));
-  }
-
-  /* "Hacer el test" only asks which test when there is more than one.
-     With a single test the menu said "Elige un test" above a grid with
-     exactly one button, so the child paid a tap for a decision there was
-     no way to make — and the button's own promise ("do the test") was not
-     kept on the press. The menu is not removed: the moment DATA grows a
-     second activity it comes back by itself, and it is still how the end
-     screen gets back to the list. */
-  function startTest() {
-    var ids = Object.keys(DATA.activities);
-    if (ids.length === 1) { openActivity(ids[0]); return; }
-    show(screenMenu);
-  }
-
-  /* ---- Game (test-sheet) ----
-     The whole round is on one screen. Every question in the level is
-     pre-generated when the round starts, the order of the questions
-     and the order of the options inside each one are both shuffled
-     (so two rounds never look the same), and the user picks an
-     option for each question. A single "Comprobar" button checks
-     them all at once and paints inline feedback per question; an
-     "Otra ronda" button re-shuffles and starts again.
-
-     The previous per-question flow (one card at a time, with
-     "Siguiente" between questions and a reinforce mini-round at
-     the end) is gone. The pieces are still here — `GENERATORS`,
-     `App.reinforce`, the `plainText` helper — so a future activity
-     that wants the old mechanic can bring it back without a
-     refactor. */
-
-  function startRound(nv) {
-    level = nv;
-    App.utils.drawRoundReset();
-    if (level.tipo === 'mixed') {
-      var generated = level.questions.map(function (q, i) {
-        return GENERATORS[q.tipo](q, i);
-      });
-      App.utils.shuffle(generated);
-      roundSheets = generated.map(function (q) {
-        return { question: q, selected: null, correct: null };
+  /* One concept slide: its cards (the layout of the slide decides how they sit).
+     The cards are built as before, into a holder, and handed to the engine as HTML. */
+  function conceptSlideHtml(n) {
+    var slide = conceptCards(n);
+    var holder = document.createElement('div');
+    holder.className = 'gallery-intro' + (slide.layout === 'parts' ? ' gallery-part-intro' : '');
+    if (slide.layout === 'compare') {
+      slide.cards.forEach(function (card) {
+        var item = document.createElement('div');
+        item.className = 'shape-compare-item shape-compare-' + card.kind;
+        var visual = document.createElement('div');
+        visual.className = 'shape-compare-visual';
+        visual.setAttribute('aria-hidden', 'true');
+        visual.innerHTML = card.html;
+        var title = document.createElement('h2');
+        title.textContent = t(card.title);
+        var description = document.createElement('p');
+        description.textContent = t(card.text);
+        item.appendChild(visual);
+        item.appendChild(title);
+        item.appendChild(description);
+        holder.appendChild(item);
       });
     } else {
-      roundSheets = [];
+      slide.cards.forEach(function (card) { holder.appendChild(conceptCard(card)); });
     }
-    roundCorrect = 0;
-    show(screenGame);
-    renderSheet();
+    return holder.outerHTML;
   }
 
-  /* Paints the whole round at once: one card per question, in the
-     shuffled order, with the options also in their shuffled order.
-     The user can change their selection on any question until
-     "Comprobar" is pressed. The right answers lock; a missed question
-     shows its socratic hint (never the answer) and stays open for
-     another try. */
-  function renderSheet() {
-    testSheetEl.innerHTML = '';
-    roundSheets.forEach(function (sheet, i) {
-      var card = document.createElement('article');
-      card.className = 'card stack test-sheet-card';
-      card.dataset.sheet = String(i);
+  /* The explanation: the concept slides first, then the figures of the gallery. A
+     concept slide carries its own text in its cards, so it has no title of its own. */
+  for (var c = 0; c < CONCEPT_SLIDES; c += 1) INTRO.push({ visual: { concept: c } });
+  DATA.gallery.forEach(function (item) { INTRO.push({ visual: { gallery: item } }); });
 
-      var promptEl = document.createElement('p');
-      promptEl.className = 'prompt';
-      promptEl.textContent = sheet.question.prompt;
-      card.appendChild(promptEl);
-
-      if (sheet.question.visual) {
-        var visualEl = document.createElement('div');
-        visualEl.className = 'visual';
-        visualEl.innerHTML = sheet.question.visual;
-        if (sheet.question.visualAria) {
-          visualEl.setAttribute('role', 'img');
-          visualEl.setAttribute('aria-label', sheet.question.visualAria);
-        } else {
-          visualEl.setAttribute('aria-hidden', 'true');
-        }
-        card.appendChild(visualEl);
-      }
-
-      if (sheet.question.legend) {
-        var legendEl = document.createElement('p');
-        legendEl.className = 'legend';
-        legendEl.innerHTML = sheet.question.legend;
-        card.appendChild(legendEl);
-      }
-
-      var optionsEl = document.createElement('div');
-      optionsEl.className = 'stack options';
-      if (sheet.question.inline) optionsEl.classList.add('options-row');
-      sheet.question.options.forEach(function (op, j) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'option-btn';
-        btn.innerHTML = op.html;
-        if (op.aria) btn.setAttribute('aria-label', op.aria);
-        btn.addEventListener('click', function () { selectOption(i, j); });
-        optionsEl.appendChild(btn);
-      });
-      card.appendChild(optionsEl);
-
-      var feedbackEl = document.createElement('p');
-      feedbackEl.className = 'feedback hidden';
-      feedbackEl.setAttribute('aria-live', 'polite');
-      card.appendChild(feedbackEl);
-
-      testSheetEl.appendChild(card);
-    });
-
-    btnCheck.classList.remove('hidden');
-    btnCheck.disabled = false;
-    btnNewRound.classList.add('hidden');
-    paintSheetProgress();
+  function visualHtml(spec) {
+    if (spec.concept !== undefined) return conceptSlideHtml(spec.concept);
+    return galleryDrawing(spec.gallery);
   }
 
-  function selectOption(sheetIdx, optionIdx) {
-    var sheet = roundSheets[sheetIdx];
-    if (sheet.correct === true) return; /* already right: locked */
-    sheet.selected = optionIdx;
-    var card = testSheetEl.querySelectorAll('.test-sheet-card')[sheetIdx];
-    var options = card.querySelectorAll('.option-btn');
-    options.forEach(function (b, j) {
-      b.classList.toggle('selected', j === optionIdx);
-      b.classList.remove('incorrect');
-    });
-    paintSheetProgress();
-  }
-
-  function checkAnswers() {
-    var firstUnanswered = -1;
-    for (var i = 0; i < roundSheets.length; i += 1) {
-      if (roundSheets[i].correct !== true && roundSheets[i].selected === null) {
-        firstUnanswered = i;
-        break;
-      }
-    }
-    if (firstUnanswered !== -1) {
-      /* No se verifica a medias: si falta alguna, se hace scroll a la
-         primera sin contestar y se le sacude la tarjeta para que se
-         note. La ronda sigue sin contar. */
-      var target = testSheetEl.querySelectorAll('.test-sheet-card')[firstUnanswered];
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      target.classList.add('shake');
-      setTimeout(function () { target.classList.remove('shake'); }, 500);
-      return;
-    }
-
-    /* La primera comprobación de la ronda es la que puntúa. Las siguientes
-       solo recorren las preguntas que siguen falladas: no suman estrellas. */
-    var firstCheck = roundSheets.every(function (sheet) { return sheet.correct === null; });
-    var rightFirstTry = 0;
-    var cards = testSheetEl.querySelectorAll('.test-sheet-card');
-    roundSheets.forEach(function (sheet, i) {
-      if (sheet.correct === true) return; /* ya acertada: sigue bloqueada */
-      var card = cards[i];
-      var options = card.querySelectorAll('.option-btn');
-      var selected = sheet.question.options[sheet.selected];
-      sheet.correct = selected.correct;
-      if (selected.correct && firstCheck) rightFirstTry += 1;
-
-      options.forEach(function (b) { b.classList.remove('selected'); });
-      var feedbackEl = card.querySelector('.feedback');
-      feedbackEl.classList.remove('hidden', 'success', 'error', 'encourage');
-      if (selected.correct) {
-        /* Acertada: se bloquea y se ve en verde. */
-        options.forEach(function (b) { b.disabled = true; });
-        options[sheet.selected].classList.add('correct');
-        feedbackEl.textContent = '✅';
-        feedbackEl.classList.add('success');
-      } else {
-        /* Fallada: se marca la opción elegida y sale la pista socrática,
-           sin decir cuál era la respuesta (SPEC §3.8). La tarjeta sigue
-           abierta para volver a intentarlo. */
-        options[sheet.selected].classList.add('incorrect');
-        App.feedback.encourage(feedbackEl);
-        feedbackEl.textContent += ' ' + (sheet.question.hint || App.i18n.t('hint'));
-        feedbackEl.classList.add('error');
-      }
-    });
-
-    /* Stars y contadores de ronda se actualizan aquí, no en una pantalla
-       de fin, y solo en la primera comprobación. */
-    if (firstCheck) {
-      roundCorrect = rightFirstTry;
-      progress.stars += roundCorrect;
-      progress.completedRounds = (progress.completedRounds || 0) + 1;
-      progress.roundsByActivity[activity.id] =
-        (progress.roundsByActivity[activity.id] || 0) + 1;
-      save();
-      paintStars();
-    }
-
-    var allRight = roundSheets.every(function (sheet) { return sheet.correct === true; });
-    btnCheck.classList.toggle('hidden', allRight);
-    btnNewRound.classList.remove('hidden');
-    if (allRight) btnNewRound.focus();
-    paintSheetProgress();
-  }
-
-  function nextRound() {
-    startRound(level);
-  }
-
-  /* Barra de progreso: antes de verificar cuenta cuántas preguntas
-     tienen ya una opción marcada; después de verificar, cuántas
-     se han acertado. La cifra siempre es "x / total". */
-  function paintSheetProgress() {
-    var total = roundSheets.length;
-    if (total === 0) {
-      progressFill.style.width = '0%';
-      progressText.textContent = '0 / 0';
-      return;
-    }
-    var checked = roundSheets[0].correct !== null;
-    var numerator = checked
-      ? roundSheets.filter(function (s) { return s.correct === true; }).length
-      : roundSheets.filter(function (s) { return s.selected !== null; }).length;
-    progressFill.style.width = (numerator / total * 100) + '%';
-    progressText.textContent = numerator + ' / ' + total;
-  }
-
-  /* ---- Events ---- */
-
-  $('#btnCheck').addEventListener('click', checkAnswers);
-  $('#btnNewRound').addEventListener('click', nextRound);
-  /* End screen: the only button is "Volver al inicio", which goes back
-     to the Calculia landing. The end screen is a closing card, not a
-     second menu: picking another activity is a tap away on the home
-     page, so it does not need its own button here. */
-  var endBackToStart = $('#endBackToStart');
-  if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
-
-
-
-  function moveGallery(step) {
-    /* The carousel is a ring of CONCEPT_SLIDES + gallery stops, but the
-       index is not a ring: the concept slides count backwards from -1 and
-       the gallery items count up from 0, so -1 and 0 are neighbours in the
-       ring and nothing like each other in the index. Walking the ring with
-       one offset put the wrap in the wrong place — it jumped from the last
-       gallery item to the LAST concept slide instead of back to the
-       opening. Converting through a linear position is the only way to get
-       both ends right. */
-    var stops = CONCEPT_SLIDES + DATA.gallery.length;
-    var position = galleryIndex < 0
-      ? -1 - galleryIndex
-      : CONCEPT_SLIDES + galleryIndex;
-    position = (position + step + stops) % stops;
-    galleryIndex = position < CONCEPT_SLIDES ? -1 - position : position - CONCEPT_SLIDES;
-    paintGallery();
-  }
-
-  $('#galleryPrev').addEventListener('click', function () {
-    moveGallery(-1);
+  /* The two sheets of the activity, with their levels. Each level is a list of
+     questions; the round shuffles them, and each one is generated when it starts. */
+  App.activityFlow.setup({
+    toolId: 'shapes',
+    test: 'sheet',
+    slideProgress: false,
+    intro: INTRO,
+    real: DATA.gallery.map(function (item) { return { visual: item }; }),
+    introHeading: function () { return t('instructionIntro'); },
+    introCopy: introCopy,
+    introVisualAria: introVisualAria,
+    realText: function (i) { return t('gallery.real.' + DATA.gallery[i].id); },
+    visualHtml: visualHtml,
+    realVisualHtml: realVisualHtml,
+    activities: SHEETS,
+    makeQuestion: makeQuestion
   });
-  $('#galleryNext').addEventListener('click', function () {
-    moveGallery(1);
-  });
-  $('#realPrev').addEventListener('click', function () {
-    realIndex = (realIndex + DATA.gallery.length - 1) % DATA.gallery.length;
-    paintRealExample();
-  });
-  $('#realNext').addEventListener('click', function () {
-    realIndex = (realIndex + 1) % DATA.gallery.length;
-    paintRealExample();
-  });
-  $('#introContinue').addEventListener('click', function () { show(screenReal); });
-  $('#realContinue').addEventListener('click', startTest);
-
-  paintGallery();
-  paintRealExample();
-  paintMenu();
-  paintStars();
 })();

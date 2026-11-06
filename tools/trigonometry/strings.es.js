@@ -15,10 +15,8 @@
     title: '⛰️ Trigonometría',
     btnReference: 'Ver el ejemplo',
     btnStartLesson: 'Empezar a practicar →',
-    btnReturnQuestion: 'Volver a la pregunta →',
     btnRealExamples: 'Ver en la vida real →',
     realTitle: 'La trigonometría en la vida real',
-    realBack: '← Volver al ejemplo',
     realContinue: 'Empezar a practicar →',
     galleryPrevious: 'Anterior',
     galleryNext: 'Siguiente',
@@ -49,15 +47,12 @@
       steep: 'Empinada'
     },
     btnMenu: 'Ver el ejemplo',
-    otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     answer: {
       yes: 'Sí',
       no: 'No'
@@ -78,7 +73,6 @@
       }
     },
     level: {
-      test: 'Prueba completa'
     },
     /* Qué parte de la escalera es cuál, para nombrar el lado inclinado
        con una palabra y no solo con un dibujo. */
@@ -105,7 +99,6 @@
       sameInclinationExample: 'Ejemplo',
       sameReasonHint: 'Compara cuánto suben y cuánto avanzan. Pueden tener distinto tamaño y la misma inclinación.',
       threeAria: 'Ejemplo: sube {a} y avanza {b}. La rampa {x} sube {c} y avanza {d}. La rampa {y} sube {e} y avanza {f}.',
-      twoAria: 'Dos triángulos: uno sube {a} y avanza {b}; el otro sube {c} y avanza {d}.',
       whichSameReason: 'Esta rampa sube {up} y avanza {along}. ¿Cuál tiene la misma inclinación?',
       whichSameReasonHint: 'Uno es el mismo triángulo, pero el doble de grande.',
       reasonOf: 'Sube {up} y avanza {along}.',

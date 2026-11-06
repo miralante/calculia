@@ -57,43 +57,21 @@
     introCountTriangleText: 'Los cuadraditos cortados por la diagonal son medios. Dos medios forman uno entero, así que el triángulo cubre la mitad del cuadrado.',
     introSolidTitle: 'Cuerpo',
     introSolidText: 'No es plana. Es como una pelota que puedes coger.',
-    galleryPrevious: 'Anterior',
-    galleryNext: 'Siguiente',
-    introContinue: 'Ver en la vida real →',
-    realTitle: 'Las formas están a nuestro alrededor',
-    realBack: '← Volver a las formas',
-    realContinue: 'Empezar a practicar →',
-    instructionMenu: 'Haz una prueba con todos los contenidos.',
-    testTitle: 'Una prueba completa',
-    testText: 'Una ronda con formas, cuerpos y desarrollos.',
+    /* Textos de la pantalla (los comparte el motor assets/js/activity-flow.js). */
+    ui: {
+      seeReal: 'Ver en la vida real →',
+      realLabel: 'Las formas están a nuestro alrededor',
+      hint: '🤔 Prueba otra vez. Mira el dibujo con calma.',
+      menuInstruction: 'Haz una prueba con todos los contenidos.',
+      menuTitle: 'Una prueba completa',
+      menuText: 'Una ronda con formas, cuerpos y desarrollos.'
+    },
     /* La hoja de prueba muestra todas las preguntas a la vez. La persona
        va eligiendo una opción por pregunta y al final pulsa "Comprobar"
        para que se verifique todo. "Otra ronda" re-baraja y vuelve a
        empezar sin pasar por la pantalla de fin. */
-    check: 'Comprobar',
-    newRound: 'Otra ronda →',
-    menuBack: '← Volver a los ejemplos',
-    contexto: 'Una señal de tráfico, una ventana, una pelota, una lata. Las formas están en todo lo que tocas y ves.',
-    explicacion: '✅ Reconocer las formas te ayuda a describir las cosas y a entender señales, planos y dibujos.',
-    btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
-    otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
-    btnOtherActivity: 'Otra actividad',
-    explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
-    correctExplanation: '✅ ¡Correcto! La respuesta es: ',
-    explicacionIncorrectaA: '❌ Mira: la respuesta correcta es ',
-    incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    /* La genérica se queda solo como respaldo de showHint(), para una
-       pregunta que se olvide de traer la suya: la clave `pista` que había
-       aquí era esta misma frase duplicada y nadie la leía. */
-    hint: '🤔 Prueba otra vez. Mira el dibujo con calma.',
-    refuerzoTitulo: 'Refuerzo',
-    reinforceTitle: 'Refuerzo',
-    refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     shape: {
       circle: 'círculo',
       square: 'cuadrado',
@@ -169,8 +147,6 @@
       mitad: { name: 'Doblar por la mitad', detail: 'Si coincide o no, y si una figura está movida o girada.' }
     },
     level: {
-      test: 'Prueba completa',
-      mitad: 'Doblar por la mitad'
     },
     net: {
       cube: { name: 'cubo', gloss: '6 cuadrados' },
@@ -186,34 +162,27 @@
       netPiecesAria: 'Un cuerpo abierto, con {n} piezas.',
       shapeNamePrompt: '¿Qué forma es?',
       sidesPrompt: '¿Cuántos lados tiene?',
-      sidesHint: 'Cuenta las rayas rectas del borde.',
       cornersPrompt: '¿Cuántos vértices tiene?',
       perimeterPrompt: 'Cada lado mide {side} cm. ¿Cuánto mide el perímetro?',
-      perimeterHint: 'Suma todos los lados: el perímetro es la vuelta entera.',
       /* El área todavía no se cuenta aquí: se pregunta por la parte de la
          forma que es, y las dos opciones falsas son justo por lo que se
          confunde — el borde que se acaba de contar y los vértices. */
       areaPrompt: '¿Qué parte de esta forma es su área?',
-      areaHint: 'Piensa en la parte que pisas cuando te pones encima.',
       areaAria: 'Una forma plana con la parte de dentro rayada.',
       areaEdge: 'El borde de fuera',
       areaInside: 'Todo lo de dentro',
       areaCorners: 'Los vértices',
       volumePrompt: '¿Cuál de estos cuerpos ocupa más sitio?',
-      volumeHint: 'Lo que ocupa más sitio es el que tiene más volumen.',
       volumeAria: 'Tres cuerpos de distinto tamaño: un {name} y dos más pequeños.',
       symmetryPrompt: '¿Por dónde se dobla un {name} para que las dos mitades coincidan?',
-      symmetryHint: 'Las dos mitades tienen que quedar exactamente iguales.',
       axis: {
         vertical: 'Doblada por la raya vertical',
         horizontal: 'Doblada por la raya horizontal',
         diagonal: 'Doblada por la raya diagonal'
       },
       similarPrompt: '¿Cuál es la figura semejante?',
-      similarHint: 'Tiene que ser la misma forma, no hace falta que sea igual de grande.',
       solidToNamePrompt: '¿Qué forma tiene este objeto?',
       solidToObjectPrompt: '¿Cuál de estos objetos es un {name}?',
-      solidHint: 'Piensa en la forma del objeto, no en para qué sirve.',
       triangleAria: 'Un triángulo.',
       triangleSidesPrompt: '¿Qué tipo de triángulo es según sus lados?',
       triangleAnglesPrompt: '¿Qué tipo de triángulo es según sus ángulos?',

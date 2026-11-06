@@ -1,6 +1,4 @@
-/* Shapes — tool-specific styles. Shared styles live in assets/css/. */
 
-.tool-header h1 { font-size: 1.5rem; }
 
 /* ---- Shape stage: one big picture, centred ---- */
 .shape-stage {
@@ -55,11 +53,6 @@
 .real-card {
   align-items: center;
   border-color: var(--mod-razonamiento-suave);
-}
-
-.carousel-controls .btn {
-  min-width: 44px;
-  min-height: 44px;
 }
 
 .gallery-visual {
@@ -222,33 +215,32 @@
    columna son una torre que empuja el botón de siguiente fuera de la
    pantalla. La clase la pone app.js con `inline`, y aquí no había ninguna
    regla: el resto de actividades sí la tiene. */
-.options.options-row {
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.options.options-row .option-btn {
-  display: flex;
-  width: auto;
-  min-width: 148px;
+
+.options.options-row .option-btn { display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-}
+  text-align: center }
 
-.gallery-caption {
+/* The name of a figure in the gallery, and the caption of a real-life example:
+   the flow's classes, with the sizes of this activity. */
+.concept-title,
+.real-text {
   min-height: 3em;
   max-width: 560px;
   margin: 0;
   text-align: center;
 }
-
-.gallery-card .gallery-caption {
+.real-text { line-height: inherit }
+.gallery-card .concept-title {
   color: var(--mod-razonamiento);
   font-size: 1.35rem;
   font-weight: 800;
   text-transform: capitalize;
 }
+/* The slides fill the card: the grid of the concept slides needs the full width. */
+#introVisual { align-items: stretch; }
+/* The button that starts the test sits in the middle, as in the other activities of the flow. */
+#realContinue { align-self: center; }
 
 .real-object {
   min-height: 1.2em;
@@ -300,72 +292,3 @@
 /* Centred instead of left-hugging the screen edge. A lone button
    lands centred; back/next stay side by side. Same as scale. */
 .intro-buttons { justify-content: center; gap: var(--espacio); }
-
-/* ---- Test sheet ----
-   Una tarjeta por pregunta, todas visibles a la vez. Las opciones
-   se marcan en "selected" antes de verificar, y en "correct" /
-   "incorrect" después. "Comprobar" y "Otra ronda" comparten fila
-   al final, como en las hojas de examen que ya tienen otras
-   actividades de la suite. */
-.test-sheet {
-  gap: var(--espacio);
-}
-.test-sheet-card {
-  /* Same card chrome as the gallery / real cards, but with room for
-     a stack of options below the figure. */
-  border-color: var(--mod-razonamiento-suave);
-}
-.test-sheet-card .prompt {
-  margin: 0;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--color-texto);
-}
-.test-sheet-card .visual {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 96px;
-}
-/* El botón seleccionado se pinta con el color de acento, pero
-   conservando el borde: el ojo debe poder seguir leyendo el texto
-   (AAA). El estado por defecto es el de la hoja de examen normal. */
-.test-sheet-card .option-btn.selected {
-  background: var(--mod-coordinacion);
-  color: var(--texto-sobre-acento, #FFFFFF);
-  border-color: var(--mod-coordinacion);
-}
-/* Después de "Comprobar", la opción correcta se pinta en verde y la
-   selección equivocada en rojo. El resto queda neutro para no
-   acumular información que ya no sirve. */
-.test-sheet-card .option-btn.correct {
-  background: var(--color-acierto);
-  color: var(--texto-sobre-acento, #FFFFFF);
-  border-color: var(--color-acierto);
-}
-.test-sheet-card .option-btn.incorrect {
-  background: var(--color-error, #B0413E);
-  color: var(--texto-sobre-acento, #FFFFFF);
-  border-color: var(--color-error, #B0413E);
-}
-.test-sheet-card .feedback {
-  margin: 0;
-  font-weight: 700;
-}
-.test-sheet-card .feedback.success { color: var(--color-acierto); }
-.test-sheet-card .feedback.error { color: var(--color-error, #B0413E); }
-/* Sacudida breve cuando alguien pulsa "Comprobar" sin haber
-   contestado todo: la tarjeta vibra para que se note, no se
-   queda en silencio y la persona piensa que ha verificado. */
-@keyframes test-sheet-shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
-}
-.test-sheet-card.shake {
-  animation: test-sheet-shake 0.4s ease;
-}
-.sheet-actions {
-  justify-content: center;
-  gap: var(--espacio);
-}

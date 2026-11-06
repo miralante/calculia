@@ -1,6 +1,4 @@
-/* Trigonometry — tool-specific styles. Shared styles live in assets/css/. */
 
-.tool-header h1 { font-size: 1.5rem; }
 
 .lesson-card { border-color: var(--mod-secuencia); }
 .lesson-card h2 { margin: 0; }
@@ -34,8 +32,6 @@
 .real-label { fill: var(--color-texto); font-size: 12px; font-weight: 700; text-anchor: middle; }
 .real-guide { fill: none; stroke: var(--color-borde); stroke-width: 3; stroke-dasharray: 6 5; }
 .real-angle-mark { fill: none; stroke: var(--mod-razonamiento, var(--color-texto)); stroke-width: 4; stroke-linecap: round; }
-.carousel-controls { display: flex; justify-content: center; gap: var(--espacio); }
-.carousel-controls .btn { min-width: 44px; min-height: 44px; }
 .intro-buttons { justify-content: center; gap: var(--espacio); }
 
 /* ---- The stage ----
@@ -158,12 +154,6 @@
   display: block;
   font-size: 0.9em;
 }
-
-/* app.js toggles .options-row for questions marked inline: true.
-   Without this rule the class is inert and those answers stack in a
-   column. Same rule as geometry/measures/numbers. */
-.options.options-row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
-.options.options-row .option-btn { width: auto; min-width: 150px; }
 /* A picture option has to keep its own shape: without this the SVG would
    be squeezed by the button's padding. */
 .options.options-row .option-btn .tri-svg { display: block; margin: 0 auto; }

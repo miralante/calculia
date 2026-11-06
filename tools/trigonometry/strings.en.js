@@ -15,10 +15,8 @@
     title: '⛰️ Trigonometry',
     btnReference: 'See the example',
     btnStartLesson: 'Start practising →',
-    btnReturnQuestion: 'Back to the question →',
     btnRealExamples: 'See it in real life →',
     realTitle: 'Trigonometry in real life',
-    realBack: '← Back to the example',
     realContinue: 'Start practising →',
     galleryPrevious: 'Previous',
     galleryNext: 'Next',
@@ -49,15 +47,12 @@
       steep: 'Steep'
     },
     btnMenu: 'See the example',
-    otherLevel: 'Choose another level',
     endSummary: 'You answered {n} questions of {activity}. Now you have {stars} stars.',
-    btnHarder: 'Do you want to try «{name}»?',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Practice again',
     reinforceIntro: 'We are going to repeat the {n} questions you got wrong until you get them all right.',
-    reinforceDone: 'Practice finished! You have them all now.',
     answer: {
       yes: 'Yes',
       no: 'No'
@@ -76,7 +71,6 @@
       }
     },
     level: {
-      test: 'Full test'
     },
     ladderPart: {
       ladder: { name: 'The ladder', gloss: 'the slanted one' },
@@ -101,7 +95,6 @@
       sameInclinationExample: 'Example',
       sameReasonHint: 'Compare how far they rise and go. They can be different sizes and have the same slope.',
       threeAria: 'Example: rises {a} and goes {b}. Ramp {x} rises {c} and goes {d}. Ramp {y} rises {e} and goes {f}.',
-      twoAria: 'Two triangles: one rises {a} and goes {b}; the other rises {c} and goes {d}.',
       whichSameReason: 'This ramp rises {up} and goes {along}. Which one has the same slope?',
       whichSameReasonHint: 'One is the same triangle, but twice as big.',
       reasonOf: 'It rises {up} and goes {along}.',
