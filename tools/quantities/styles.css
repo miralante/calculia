@@ -27,7 +27,7 @@
 /* ============================================================
    Prácticas de escritura
    ============================================================ */
-.task-card { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); text-align: center; border-color: var(--mod-razonamiento-suave); }
+.task-card { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); text-align: center }
 .task-card h2 { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); }
 .task-detail { margin: 0; color: var(--color-texto-suave); }
 

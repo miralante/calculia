@@ -77,8 +77,6 @@
 
     /* ---------- Pantalla 4: los pasos ---------- */
     chooseLevel: 'Elige un paso.',
-    chooseAnother: 'Elegir otro paso',
-    btnHome: 'Volver al inicio',
 
     /* ---------- La serie ----------
        Tres formas por ordinal —la cifra, la palabra y el lugar— porque
@@ -213,7 +211,6 @@
     buildingArrowUp: 'Subir al piso de arriba',
     buildingArrowDown: 'Bajar al piso de abajo',
     queueLabel: 'La cola',
-    queuePosition: '{n}º',
     queueAriaLabel: 'Cola de {n} personas. La primera está delante; la última, detrás.',
 
     /* ---------- El podio y la clasificación ---------- */

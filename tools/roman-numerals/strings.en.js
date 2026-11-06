@@ -62,8 +62,6 @@
     /* ---------- Screen 2: famous Roman numerals ---------- */
     "introFamousTitle": "A famous Roman numeral",
     "introFamousSubtitle": "Look at this example:",
-    "introFamousExample": "Henry VIII → the 8 (VIII) is a Roman numeral.",
-    "famousPrev": "← Previous",
     "famousNext": "Learn the rule →",
 
     /* ---------- Screen 3: reminder (the mechanics) ---------- */
@@ -75,8 +73,6 @@
     "symbol{X}": "X is worth 10",
     "ruleSubtract": "If a smaller letter comes BEFORE a larger one, it subtracts:",
     "ruleAdd": "If it comes AFTER, it adds:",
-    "exampleSubtract": "IV = 1 − 5 = 4",
-    "exampleAdd": "VI = 5 + 1 = 6",
 
     /* ---------- Screen 4: levels ---------- */
     /* Levels are grouped into 3 buttons (down from the previous 6)
@@ -84,27 +80,15 @@
        sub-levels that chain automatically, preserving the gradual
        progression (rule 13): each sub-level still changes only one
        variable at a time. */
-    "levelsTitle": "Choose an activity",
   btnMenu: "Back to start",
-  proximoNivel: "Next step: {n}",
     "test": "Test",
-    "testInfo": "Mixes the 4 activities in random order",
     "level1": "Symbols I, V, X",
-    "level1Info": "Numbers 1 to 10",
     "level2": "Numbers 11 to 21",
-    "level2Info": "Combine X with I and V",
     "level3": "Which century is it?",
-    "level3Info": "Read the century in Roman numerals",
     "level4": "Write the number in Roman",
-    "level4Info": "Choose the correct Roman numeral",
     "level5": "Kings and queens",
-    "level5Info": "Read their real name and guess their number",
     "read": "Learn the Roman numerals",
-    "readInfo": "From 1 to 10, then 11 to 21",
     "apply": "Apply them in real life",
-    "applyInfo": "Centuries, write the Roman numeral, kings and queens",
-    "done": " ✔ Done",
-    "chooseAnotherLevel": "Choose another activity",
 
     /* ---------- Quiz ---------- */
     "whichNumber": "What number is this?",
@@ -120,15 +104,10 @@
        the normal round ends, the items the user got wrong are
        replayed in a mini-round until every one is answered right.
        Stars already earned are kept. */
-    "reinforceTitle": "Reinforcement",
-    "reinforceIntro": "Repeat these {n} until you get them all right.",
-    "reinforceDone": "Reinforcement done! You've mastered those numbers.",
-    "contexto": "You are reading Roman numerals. You will see them in real places: books, monuments or clocks.",
     "transfer": "This will help you read real Roman numerals: on a plaque, in a book or on the century of a painting.",
 
     /* Template for the final equals sign of a single-chunk example
        (see formatEquals in app.js): {stars} = result. */
-    "decompositionEquals": " = {stars}",
 
     /* Carousel: each letter with its role and a usage example.
        Letter mentions inside the caption use the {I}, {V} and
@@ -186,7 +165,6 @@
        with their color from app.js; only the inter-addend
        connector lives here. The formula ends with "=N", not
        ", which makes N", also built by app.js. */
-    "formulaSep": "+",
 
     /* Socratic hints by letter, so the hint guides the mechanics
        instead of just repeating the number. */

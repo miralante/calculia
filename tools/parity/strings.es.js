@@ -35,8 +35,6 @@
 
     /* Tecla del menú raíz: la palabra "Pares e impares" que sale
        en la tarjeta de la portada y de dev/. */
-    parityName: 'Pares e impares',
-    parityDetail: 'Mira los puntos: ¿sobra uno o van todos en parejas?',
 
     /* ---------- Pantalla 1: qué es par y qué es impar ---------- */
     introTitle: '¿Qué es par y qué es impar?',

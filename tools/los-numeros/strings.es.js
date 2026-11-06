@@ -19,30 +19,18 @@
        una de exposición (visual) y otra de vida real (los ejemplos
        cotidianos). La frase de vida real puede tener varios
        ejemplos separados por « · »; el JS los rompe en una lista. */
-    slideNaturalesTitle: 'Naturales',
-    slideNaturalesReal: '🧮 3 manzanas · 5 dedos · 10 años',
-    slideEnterosTitle: 'Enteros',
-    slideEnterosReal: '🌡️ −5 °C · sótano −1 · 3 plantas',
-    slideFraccionesTitle: 'Fracciones',
-    slideFraccionesReal: '🍕 1/2 pizza · 1/4 de hora',
-    slideDecimalesTitle: 'Decimales',
-    slideDecimalesReal: '💰 1,99 € · 1,5 m · 3,14',
     /* Etiquetas dentro del SVG de la pizza de fracciones. */
     fraccionOneHalf: '1/2',
-    fraccionOneFourth: '1/4',
 
     /* Eyebrow que aparece sobre la lista de ejemplos de vida real. */
     realEyebrow: 'En la vida real:',
 
     /* ---- Slides de comparación: solo título ---- */
-    slideVsEnterosTitle: 'Naturales y Enteros',
-    slideVsDecimalesTitle: 'Naturales y Decimales',
 
     /* ---- Cierre ---- */
     finish: 'Terminar →',
     endTitle: '¡Has terminado!',
     endSummary: 'Has repasado los cuatro tipos de números. Ahora tienes {stars} estrellas.',
-    btnRepeat: 'Ver otra vez',
     btnMenu: 'Volver al inicio',
     transfer: 'Esto te servirá para saber qué tipo de número tienes delante: en una cuenta, en un precio, en una receta o en un termómetro.'
   }, 'es');

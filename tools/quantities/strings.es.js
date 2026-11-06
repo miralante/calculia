@@ -24,12 +24,6 @@
     /* ---------- Menú de prácticas ----------
        Claves '<id>Name' / '<id>Detail': una entrada por práctica
        de DATA.practices. */
-    readName: 'Leer números',
-    readDetail: 'Mira el número y escríbelo con letras.',
-    writeName: 'Escribir con letras',
-    writeDetail: 'Escucha el número y escríbelo con letras.',
-    pointsName: 'Escribir con cifras y puntos',
-    pointsDetail: 'Escribe el número con cifras y coloca sus puntos. De miles a miles de millones.',
 
     /* ---------- Prácticas de escritura ----------
        {n} = número ya formateado. */
@@ -68,7 +62,6 @@
     reinforceIntro: 'Vamos a repetir los {n} ejercicios que has fallado hasta acertarlos todos.',
 
     check: 'Comprobar',
-    chooseAnother: 'Elegir otra práctica',
     roundComplete: '¡Ronda terminada!',
     roundSummary: 'Has resuelto {count} ejercicios. Ahora tienes {stars} estrellas.',
     progress: '{current} de {stars}',

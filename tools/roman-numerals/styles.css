@@ -199,19 +199,11 @@
   min-height: 1.2em;
 }
 
-.carousel-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--espacio);
-  width: 100%;
-}
+.carousel-controls { align-items: center;
+  width: 100% }
 
-.carousel-controls .btn {
-  min-width: 64px;
-  align-self: center;
-  padding: 4px 14px;
-}
+.carousel-controls .btn { align-self: center;
+  padding: 4px 14px }
 
 
 .famosos-card {

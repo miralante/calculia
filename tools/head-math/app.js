@@ -24,7 +24,8 @@
   function saveProgress() { App.storage.set(TOOL_ID, progress); }
   function show(element) { element.classList.remove('hidden'); }
   function hide(element) { element.classList.add('hidden'); }
-  function randInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+  var randInt = App.utils.rint;
+
 
   function fill(key, values) {
     var text = App.i18n.t(key);

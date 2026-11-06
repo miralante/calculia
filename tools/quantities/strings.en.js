@@ -21,12 +21,6 @@
     /* ---------- Practice menu ----------
        Keys '<id>Name' / '<id>Detail': one entry per entry in
        DATA.practices. */
-    readName: 'Read numbers',
-    readDetail: 'Look at the number and write it in words.',
-    writeName: 'Write in words',
-    writeDetail: 'Listen to the number and write it in words.',
-    pointsName: 'Write in digits with commas',
-    pointsDetail: 'Write the number in digits and place its commas. From thousands to billions.',
 
     /* ---------- Reading and writing practices ----------
        {n} = formatted number. */
@@ -65,7 +59,6 @@
     reinforceIntro: 'Let us repeat the {n} exercises you got wrong until you get them all right.',
 
     check: 'Check',
-    chooseAnother: 'Choose another practice',
     roundComplete: 'Round finished!',
     roundSummary: 'You solved {count} exercises. Now you have {stars} stars.',
     progress: '{current} of {stars}',

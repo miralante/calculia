@@ -65,6 +65,12 @@
 (function () {
   'use strict';
 
+  var M = App.romanNumeralsModel;
+  var t = M.t, CAROUSEL_ORDER = M.CAROUSEL_ORDER, wrapRomanLetters = M.wrapRomanLetters, wrapTrailingRoman = M.wrapTrailingRoman, applyRomanPlaceholders = M.applyRomanPlaceholders, coloredCaption = M.coloredCaption;
+  var paintFamousPhrase = M.paintFamousPhrase, famousFor = M.famousFor, totalColorClass = M.totalColorClass, speakForQuiz = M.speakForQuiz, ordinalFor = M.ordinalFor, cardinalFor = M.cardinalFor;
+  var letterClass = M.letterClass, romanFor = M.romanFor, sourcePool = M.sourcePool, baseLevels = M.baseLevels, entryKey = M.entryKey, itemsForLevel = M.itemsForLevel;
+  var realContext = M.realContext, pickHint = M.pickHint;
+
   var TOOL_ID = 'roman-numerals';
   var $ = App.utils.$;
 
@@ -133,10 +139,13 @@
   if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
   if (!progress.completed) progress.completed = {};
 
-  function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
-  function t(key) { return App.i18n.t(key); }
-
+  var glue = App.activityGlue({
+    toolId: TOOL_ID,
+    progress: function () { return progress; },
+    starsEl: function () { return starsEl; },
+    show: function (el) { show(el); }
+  });
+  var save = glue.save, paintStars = glue.paintStars;
   function show(screen) {
     resetAudioUI();
     SCREENS.forEach(function (s) { s.classList.toggle('hidden', s !== screen); });
@@ -152,7 +161,6 @@
      adding letters in sequence is settled, the rule "a smaller
      letter before a larger one subtracts" lands as a deliberate
      exception, not as a gotcha hiding in the second example. */
-  var CAROUSEL_ORDER = ['i', 'v', 'x', 'vi', 'xi', 'iv', 'ix'];
   var carouselIdx = 0;
 
   function paintCarousel() {
@@ -191,18 +199,6 @@
      Each letter span is aria-hidden so the screen reader reads
      the parent textContent (the same string we passed in)
      instead of the broken-up per-letter HTML. */
-  function wrapRomanLetters(raw) {
-    if (!raw) return '';
-    return raw.split('').map(function (ch, i, arr) {
-      if (ch === 'I' || ch === 'V' || ch === 'X') {
-        var subtract = ch === 'I' && i + 1 < arr.length && (arr[i + 1] === 'V' || arr[i + 1] === 'X');
-        var cls = 'letter-' + ch.toLowerCase() + (subtract ? ' letter-subtract' : '');
-        return '<span aria-hidden="true" class="' + cls + '">' + ch + '</span>';
-      }
-      return ch;
-    }).join('');
-  }
-
   /* Colours only the trailing Roman numeral in `label`, leaving
      any earlier letters untouched. This is the right rule for the
      famous-screen label: each entry in DATA.famousRomans ends
@@ -226,24 +222,6 @@
      span so the screen reader still reads the full label as a
      single string ("Carlos tercero") instead of swallowing the
      numeral inside per-letter spans. */
-  function wrapTrailingRoman(label) {
-    if (!label) return '';
-    var suffixStart = label.length;
-    while (suffixStart > 0) {
-      var ch = label.charAt(suffixStart - 1);
-      if (ch === 'I' || ch === 'V' || ch === 'X') {
-        suffixStart -= 1;
-      } else {
-        break;
-      }
-    }
-    if (suffixStart === label.length) return label; /* no I/V/X at all */
-    var head = label.slice(0, suffixStart);
-    var tail = label.slice(suffixStart);
-    var coloredTail = wrapRomanLetters(tail);
-    return head + coloredTail;
-  }
-
   /* Replaces the placeholders {I}, {V}, {X} (the letter) and
      {i}, {v}, {x} (its decimal value) inside `raw` with spans in
      each letter's colour, so the explanation prose and the
@@ -265,23 +243,6 @@
      IX, XI and the 19th century). aria-hidden on each span so
      the screen reader announces only the placeholder text (the
      CSS classes are decorative, not semantic). */
-  function applyRomanPlaceholders(raw, isSubtract) {
-    if (!raw) return '';
-    var iClass = 'letter-i' + (isSubtract ? ' letter-subtract' : '');
-    return raw
-      .replace(/\{V\}/g, '<span aria-hidden="true" class="letter-v">V</span>')
-      .replace(/\{X\}/g, '<span aria-hidden="true" class="letter-x">X</span>')
-      .replace(/\{I\}/g, '<span aria-hidden="true" class="' + iClass + '">I</span>')
-      .replace(/\{v\}/g, '<span aria-hidden="true" class="letter-v">5</span>')
-      .replace(/\{x\}/g, '<span aria-hidden="true" class="letter-x">10</span>')
-      .replace(/\{i\}/g, '<span aria-hidden="true" class="' + iClass + '">1</span>')
-      .replace(/\{i4\}/g, '<span aria-hidden="true" class="' + iClass + '">4</span>')
-      .replace(/\{i6\}/g, '<span aria-hidden="true" class="' + iClass + '">6</span>')
-      .replace(/\{i9\}/g, '<span aria-hidden="true" class="' + iClass + '">9</span>')
-      .replace(/\{i11\}/g, '<span aria-hidden="true" class="' + iClass + '">11</span>')
-      .replace(/\{i19\}/g, '<span aria-hidden="true" class="' + iClass + '">19</span>');
-  }
-
   /* Paints the carousel caption by replacing the {I}/{V}/{X} /
      {i}/{v}/{x} placeholders in `raw` with spans in each letter's
      colour, like the coloured formula of the reminder
@@ -297,11 +258,6 @@
      with red on the same chip. The {i4}/{i6}/{i9}/{i11}/{i19} result also takes
      I's colour so the final "4"/"6" closes the operation with
      the same letter. */
-  function coloredCaption(key, raw) {
-    var isSubtract = key === 'iv' || key === 'ix';
-    return applyRomanPlaceholders(raw, isSubtract);
-  }
-
   /* Paints the famous-screen sentence with the same colour code
      as the carousel and the reminder: every {I}/{V}/{X} letter
      mention and every {i}/{v}/{x} value mention is wrapped in a
@@ -312,23 +268,12 @@
      the actual Roman numeral of the current famous item, not
      assumed — the famous set currently has no IV/IX entries, but
      if one is added later the rule is already in place. */
-  function paintFamousPhrase(roman, raw) {
-    var deco = DATA.decompose(roman);
-    var hasSubtract = deco.tokens.some(function (tok) { return tok.sign === '-'; });
-    return applyRomanPlaceholders(raw, hasSubtract);
-  }
-
   function carouselStep(delta) {
     carouselIdx = (carouselIdx + delta + CAROUSEL_ORDER.length) % CAROUSEL_ORDER.length;
     paintCarousel();
   }
 
   /* ---------- Screen 2: famous Roman numerals ---------- */
-
-  function famousFor() {
-    var locale = App.i18n.locale();
-    return DATA.famousRomans.filter(function (f) { return !f.locale || f.locale === locale; });
-  }
 
   var famousIdx = 0;
   var currentFamous = null;
@@ -372,11 +317,6 @@
      coloredFormula (famous screen), formatEquals (reminder) and
      paintQuizDecomposition (quiz) so all three render the total
      with the same colour rule. */
-  function totalColorClass(deco) {
-    if (deco.mode === 'subtract') return 'letter-i letter-subtract';
-    return 'letter-' + deco.chunks[0].letters[0].toLowerCase();
-  }
-
   /* Returns the HTML for one chunk's value, in the colour of the
      letter that contributes it. A pair (IV/IX) is already
      resolved into its final value, so the chunk keeps the
@@ -591,44 +531,6 @@
 
   /* Returns the spoken phrase for the current quiz item, based on
      the round mode. */
-  function speakForQuiz(entry) {
-    var mode = entry.mode;
-    var item = entry.item;
-    if (mode === 'romanToNumber') {
-      /* Stimulus to read: the letters as-is. */
-      return item.roman;
-    }
-    if (mode === 'centuryToNumber') {
-      /* "Twentieth century" → "Twentieth " + ordinal(item.n) */
-      return t('centuryRomanLabel').split('{roman}')[0] + ordinalFor(item.n);
-    }
-    if (mode === 'numberToRoman') {
-      /* The decimal number is shown: read as cardinal, not as ordinal
-         (TTS for "nineteen" sounds natural; for "nineteenth" it
-         would sound obscure for a number that appears alone on
-         screen). */
-      return cardinalFor(item.n);
-    }
-    /* monarchToNumber: monarch name + ordinal ("Felipe sixth",
-       "Henry eighth"). The name already comes in the active locale
-       (es/en) from DATA.monarchs. */
-    return item.name + ' ' + ordinalFor(item.n);
-  }
-
-  function ordinalFor(n) {
-    var text = t('ordinales.' + n);
-    /* t() returns the key itself when missing; in that case we fall
-       back to the cardinal so we don't stay silent. */
-    if (text === 'ordinales.' + n) return cardinalFor(n);
-    return text;
-  }
-
-  function cardinalFor(n) {
-    var text = t('cardinales.' + n);
-    if (text === 'cardinales.' + n) return String(n);
-    return text;
-  }
-
   /* Marks/unmarks the button as "speaking" while the TTS plays the
      phrase, and disables the button so several speak() calls
      cannot overlap. The state is removed when it finishes. */
@@ -652,8 +554,6 @@
   }
 
   /* ---------- Screen 3: reminder ---------- */
-
-  function letterClass(letter) { return 'letter-' + letter.toLowerCase(); }
 
   /* Paints a Roman numeral letter by letter with colours inside a
      .roman-join (used in the two examples of the reminder) and
@@ -774,18 +674,6 @@
   var resolved = false;
   var attempts = 0;
 
-  function romanFor(n) {
-    var found = DATA.numbers.filter(function (x) { return x.n === n; })[0];
-    return found ? found.roman : '';
-  }
-
-  function sourcePool(level) {
-    if (level.pool === 'monarchs') {
-      return DATA.monarchs[App.i18n.locale()] || DATA.monarchs.es;
-    }
-    return DATA.numbers.filter(function (x) { return x.n >= level.min && x.n <= level.max; });
-  }
-
   /* Returns the flat list of "base" sub-levels (those that have their
      own mode, not the groups). Used by 'test' (mixed round) and by
      the chained sub-levels within a group.
@@ -796,18 +684,6 @@
      random) is included as-is. So baseLevels() returns exactly the
      5 practice modes (level1..level5) and the test can sample from
      them at random. */
-  function baseLevels() {
-    var out = [];
-    DATA.levels.forEach(function (n) {
-      if (n.pool === 'group') {
-        if (n.sublevels) out = out.concat(n.sublevels);
-      } else if (n.pool !== 'random' && n.mode !== 'random') {
-        out.push(n);
-      }
-    });
-    return out;
-  }
-
   /* Returns the list of { item, mode } entries for a round. The
      'test' level (mixed round) picks for each round position a
      random base level among the 5 modes.
@@ -817,42 +693,6 @@
      settle the mechanic without making the round too long. */
   /* Identity of a round entry: the same number (or monarch) asked in the
      same mode is the same question on screen. */
-  function entryKey(entry) {
-    var item = entry.item || {};
-    return (item.id || item.n) + '|' + entry.mode;
-  }
-
-  function itemsForLevel(level) {
-    if (level.pool === 'random' || level.mode === 'random') {
-      var modes = baseLevels();
-      var out = [];
-      for (var i = 0; i < DATA.perRound; i++) {
-        /* Redraw if the pick repeats the previous question, for the same
-           reason as spreadRepeats above. */
-        var entry, tries = 0;
-        do {
-          var baseLevel = modes[Math.floor(Math.random() * modes.length)];
-          var basePool = sourcePool(baseLevel);
-          entry = { item: App.utils.shuffle(basePool)[0], mode: baseLevel.mode };
-          tries += 1;
-        } while (out.length && tries < 10 &&
-                 entryKey(entry) === entryKey(out[out.length - 1]));
-        out.push(entry);
-      }
-      return out;
-    }
-    var pool = sourcePool(level);
-    var reps = DATA.repetitions || 1;
-    var picked = App.utils.shuffle(pool).slice(0, DATA.perRound).map(function (item) {
-      return { item: item, mode: level.mode };
-    });
-    var repeated = [];
-    for (var r = 0; r < reps; r++) {
-      repeated = repeated.concat(picked);
-    }
-    return App.utils.spreadRepeats(repeated, entryKey);
-  }
-
   /* Starts a round. If 'level' is a group (pool 'group'), starts
      with its first sub-level and stores currentGroup + currentSubIdx
      so the next sub-levels are chained automatically when each round
@@ -906,11 +746,6 @@
      reign) via i18n. t() falls back to returning the key itself when
      missing (see i18n.js), so that's the signal a given item has no
      real-life sentence attached. */
-  function realContext(key) {
-    var text = t(key);
-    return text !== key ? text : '';
-  }
-
   /* Builds the 2 distractor options for a round from the components
      of the Roman numeral being taught.
 
@@ -1261,17 +1096,6 @@
      read together with a following I as a plain sum, which the
      general X hint ("how much is an X worth?") wouldn't make
      obvious. */
-  function pickHint(roman) {
-    if (!roman) return t('pistaGeneral');
-    if (roman.indexOf('IX') !== -1) return t('pistaIX');
-    if (roman.indexOf('IV') !== -1) return t('pistaIV');
-    if (roman.indexOf('XI') !== -1) return t('pistaXI');
-    if (roman.indexOf('X') !== -1) return t('pistaX');
-    if (roman.indexOf('V') !== -1) return t('pistaV');
-    if (roman.indexOf('I') !== -1) return t('pistaI');
-    return t('pistaGeneral');
-  }
-
   function render() {
     var entry = items[idx];
     currentEntry = entry;

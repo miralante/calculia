@@ -26,8 +26,6 @@
 
     /* Root-menu key: the "Pares e impares" / "Even and odd"
        word used on the landing card and dev/. */
-    parityName: 'Even and odd',
-    parityDetail: 'Look at the dots: one left alone or all paired up?',
 
     /* ---------- Screen 1: what is even and what is odd ---------- */
     introTitle: 'What is even and what is odd?',

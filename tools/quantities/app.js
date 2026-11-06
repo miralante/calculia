@@ -42,7 +42,13 @@
   var progress = App.storage.get(TOOL_ID);
   if (typeof progress.stars !== 'number') progress.stars = 0;
 
-  function save() { App.storage.set(TOOL_ID, progress); }
+  var glue = App.activityGlue({
+    toolId: TOOL_ID,
+    progress: function () { return progress; },
+    starsEl: function () { return starsEl; },
+    show: function (el) { show(el); }
+  });
+  var save = glue.save, paintStars = glue.paintStars;
   function show(el) { if (el) el.classList.remove('hidden'); }
   function hide(el) { if (el) el.classList.add('hidden'); }
   function t(key) { return App.i18n.t(key); }
@@ -81,7 +87,6 @@
 
   function randomInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
 
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* ----------- Number formatting ----------- */
 

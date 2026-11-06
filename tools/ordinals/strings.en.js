@@ -71,8 +71,6 @@
 
     /* ---------- Screen 4: the steps ---------- */
     chooseLevel: 'Choose a step.',
-    chooseAnother: 'Choose another step',
-    btnHome: 'Back to the start',
 
     /* ---------- The series ----------
        Three forms per ordinal — the figure, the word, and the place —
@@ -212,7 +210,6 @@
     buildingArrowUp: 'Go up one floor',
     buildingArrowDown: 'Go down one floor',
     queueLabel: 'The queue',
-    queuePosition: '{n}th',
     queueAriaLabel: 'Queue of {n} people. The first one is at the front; the last one, at the back.',
 
     /* ---------- The podium and the ranking ---------- */

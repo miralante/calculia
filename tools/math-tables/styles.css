@@ -63,14 +63,9 @@
 .learn-demo .visual-card { align-items: center; }
 .ten-frame { padding: 6px; border: 3px solid var(--mod-razonamiento); border-radius: var(--radio); background: var(--mod-razonamiento-suave); }
 .visual-sign { font-size: var(--texto-grande); font-weight: 700; color: var(--color-texto-suave); }
-
-/* Quiz */
-.task-card { border-color: var(--mod-razonamiento-suave); }
 .equation { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
 .option-row { display: flex; gap: var(--espacio); justify-content: center; flex-wrap: wrap; }
-.option-btn { min-width: 96px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
-.option-btn:disabled { opacity: 0.45; }
-.explanation { margin: 0; color: var(--color-texto-suave); }
+.explanation { color: var(--color-texto-suave) }
 #nextFact { align-self: center; }
 
 /* ---- Division input ---- */
@@ -146,3 +141,7 @@
 }
 
 .emoji-large { font-size: 96px; }
+
+/* Option and feedback rules of this activity (kept per page; see scripts/css-drift.js). */
+.option-btn { min-width: 96px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
+.option-btn:disabled { opacity: 0.45; }

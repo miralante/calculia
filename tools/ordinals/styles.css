@@ -197,8 +197,8 @@
   min-height: 1.2em;
 }
 
-.carousel-controls { display: flex; align-items: center; justify-content: center; gap: var(--espacio); width: 100%; }
-.carousel-controls .btn { min-width: var(--boton-min); align-self: center; padding: 4px 14px; }
+.carousel-controls { align-items: center; width: 100% }
+.carousel-controls .btn { align-self: center; padding: 4px 14px }
 
 /* ----- Pantalla 2: escenario (edificio o cola) ----- */
 .famosos-card { border-color: var(--mod-razonamiento-suave); }

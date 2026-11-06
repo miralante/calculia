@@ -49,7 +49,12 @@
   if (typeof progress.stars !== 'number') progress.stars = 0;
   if (!progress.completed) progress.completed = {};
 
-  function save() { App.storage.set(TOOL_ID, progress); }
+  var glue = App.activityGlue({
+    toolId: TOOL_ID,
+    progress: function () { return progress; },
+    show: function (el) { show(el); }
+  });
+  var save = glue.save;
   function t(key) { return App.i18n.t(key); }
   function show(el) { if (el) el.classList.remove('hidden'); }
   function hide(el) { if (el) el.classList.add('hidden'); }

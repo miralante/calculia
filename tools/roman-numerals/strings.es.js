@@ -65,8 +65,6 @@
     /* ---------- Pantalla 2: números romanos famosos ---------- */
     "introFamousTitle": "Un número romano famoso",
     "introFamousSubtitle": "Fíjate en este ejemplo:",
-    "introFamousExample": "Felipe VI → el 6 (VI) es el número romano.",
-    "famousPrev": "← Anterior",
     "famousNext": "Aprender la regla →",
 
     /* ---------- Pantalla 3: recordatorio (el valor de cada letra) ---------- */
@@ -78,8 +76,6 @@
     "symbol{X}": "X vale 10",
     "ruleSubtract": "Si una letra menor va DELANTE de una mayor, resta:",
     "ruleAdd": "Si va DETRÁS, suma:",
-    "exampleSubtract": "IV = 1 − 5 = 4",
-    "exampleAdd": "VI = 5 + 1 = 6",
 
     /* ---------- Pantalla 4: niveles ---------- */
     /* Los niveles se agrupan en 3 botones (en vez de los 6
@@ -87,27 +83,15 @@
        primeras opciones agrupan sub-niveles que se encadenan
        automáticamente, conservando la progresión gradual (regla
        13): cada sub-nivel cambia solo una variable. */
-    "levelsTitle": "Elige una actividad",
   btnMenu: "Volver al inicio",
-  proximoNivel: "Siguiente paso: {n}",
     "test": "Test",
-    "testInfo": "Mezcla las 4 actividades en orden aleatorio",
     "level1": "Símbolos I, V, X",
-    "level1Info": "Números del 1 al 10",
     "level2": "Números del 11 al 21",
-    "level2Info": "Combina X con I y V",
     "level3": "¿Qué siglo es?",
-    "level3Info": "Lee el siglo en números romanos",
     "level4": "Escribe el número en romano",
-    "level4Info": "Elige el número romano correcto",
     "level5": "Reyes y reinas",
-    "level5Info": "Lee su nombre real y adivina su número",
     "read": "Aprende los números romanos",
-    "readInfo": "Del 1 al 10, luego del 11 al 21",
     "apply": "Aplícalos en la vida real",
-    "applyInfo": "Siglos, escribir el romano, reyes y reinas",
-    "done": " ✔ Hecho",
-    "chooseAnotherLevel": "Elegir otra actividad",
 
     /* ---------- Quiz ---------- */
     "whichNumber": "¿Qué número es?",
@@ -123,15 +107,10 @@
        normal, los items fallados se vuelven a presentar en una
        mini-ronda hasta acertarlos todos. Las estrellas ya sumadas
        no se pierden. */
-    "reinforceTitle": "Refuerzo",
-    "reinforceIntro": "Repite estos {n} hasta acertarlos todos.",
-    "reinforceDone": "¡Refuerzo terminado! Ya dominas esos números.",
-    "contexto": "Estás leyendo números romanos. Los verás en sitios reales: libros, monumentos o relojes.",
     "transfer": "Esto te servirá para leer números romanos de verdad: en una placa, en un libro o en el siglo de un cuadro.",
 
     /* Plantilla para la igualdad final de un ejemplo de solo un
        chunk (ver formatEquals en app.js): {stars} = resultado. */
-    "decompositionEquals": " = {stars}",
 
     /* Carrusel: cada letra con su rol y un ejemplo de uso.
        Las menciones de letras dentro del caption usan los
@@ -194,7 +173,6 @@
        con su color desde app.js; aquí solo va el conector entre
        sumandos. La fórmula termina con "=N", no con ", es decir N",
        también construido por app.js. */
-    "formulaSep": "+",
 
     /* Pistas Socráticas por letra, para que la pista guíe
        la mecánica y no se limite a repetir el número. */

@@ -86,16 +86,7 @@
 .slide-real li:last-child { margin-bottom: 0; }
 
 /* ---- Controles del carrusel (← / → / contador) ---- */
-.carousel-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--espacio);
-}
-.carousel-controls .btn {
-  min-width: 64px;
-  min-height: 44px;
-}
+.carousel-controls { align-items: center }
 .carousel-controls .btn[disabled] {
   opacity: 0.4;
   cursor: not-allowed;
