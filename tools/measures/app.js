@@ -49,8 +49,16 @@
   var reinforceIndex = 0;
   var reinforceTotal = 0;
 
-  function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  var glue = App.activityGlue({
+    toolId: TOOL_ID,
+    progress: function () { return progress; },
+    starsEl: function () { return starsEl; },
+    activity: function () { return activity; },
+    roundCorrect: function () { return roundCorrect; },
+    screenEnd: function () { return screenEnd; },
+    show: function (el) { show(el); }
+  });
+  var save = glue.save, paintStars = glue.paintStars, levelFromProgress = glue.levelFromProgress, endRound = glue.endRound;
 
   /* ---- Utilidades ---- */
 
@@ -254,10 +262,6 @@
 
   /* The level rises one step per completed round, capped at the last
      one, so a person who comes back continues where they were. */
-  function levelFromProgress() {
-    var levels = activity.levels;
-    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
-  }
 
   function openActivity(id) {
     activity = DATA.activities[id];
@@ -344,11 +348,8 @@
   function render() { paintQuestion(null); }
 
   /* Visible text of an option (its html may wrap spans). */
-  function plainText(html) {
-    var div = document.createElement('div');
-    div.innerHTML = html;
-    return div.textContent;
-  }
+  var plainText = App.utils.plainText;
+
 
   function showExplanation(isCorrect) {
     if (isCorrect && inReinforce) {
@@ -426,20 +427,6 @@
     }
   }
 
-  function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    save();
-    show(screenEnd);
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
-        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
-        .replace('{stars}', progress.stars);
-    }
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
-
-  }
 
   /* ---- Events ---- */
 

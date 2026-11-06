@@ -12,25 +12,13 @@
   App.i18n.register({
     title: '📏 Measures',
     instructionMenu: 'Choose an activity.',
-    contexto: 'You measure a room, weigh fruit on the scales or fill a bottle. Measures are everywhere.',
-    explicacion: '✅ Knowing measures helps you buy just what you need and understand how much something takes up or weighs.',
-    btnBackToMenu: '← Other activities',
     btnMenu: 'Back to start',
-    otherLevel: 'Choose another level',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{name}»?',
-    btnOtherActivity: 'Another activity',
-    explicacionCorrecta: '✅ Correct! The answer is: ',
     correctExplanation: '✅ Correct! The answer is: ',
-    explicacionIncorrectaA: '❌ Look: the correct answer is ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
-    pista: '🤔 «{elegida}» is not the answer. Think calmly.',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
-    refuerzoTitulo: 'Reinforcement',
     reinforceTitle: 'Reinforcement',
-    refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     /* The name of each rung of the ladder. The key is the symbol,
        which is notation and lives in data.js */
     unit: {
@@ -86,12 +74,6 @@
       escalera: { name: 'The ladder', detail: 'Each step, times 10.', instruction: 'The units sit on a ladder. The top rung is the biggest one. Every time you go down a rung, it is multiplied by 10. That 10 is written between each rung and the next: count them.' }
     },
     level: {
-      me1: 'Length: metres',
-      me2: 'Weight: kilos',
-      me3: 'Capacity: litres',
-      es1: 'How many rungs?',
-      es2: 'Times what?',
-      es3: 'Change the unit'
     },
     gen: {
       timesTen: '×10',

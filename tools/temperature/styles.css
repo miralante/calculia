@@ -12,19 +12,6 @@
   font-size: var(--texto-pequeno);
   color: var(--color-texto-suave, #666);
 }
-
-/* Activity menu (same flat grid as other tools). */
-.menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--espacio); }
-.btn-actividad {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  min-height: var(--boton-min); padding: 20px;
-  border: 3px solid var(--color-borde); border-radius: var(--radio);
-  background: var(--color-superficie); color: var(--color-texto);
-  font-size: var(--texto-base); font-weight: 700; text-align: center;
-}
-.btn-actividad:hover { border-color: var(--mod-razonamiento); }
-.btn-actividad .picto { font-size: 48px; }
-.btn-actividad .detail-card { font-weight: 400; font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
 .extra-note { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }

@@ -13,23 +13,14 @@
   App.i18n.register({
     title: '💯 Percentages',
     instructionMenu: 'Choose an activity.',
-    contexto: 'Per cent means "out of a hundred". Percentages are in the sales, on labels and in the news.',
-    explicacion: '✅ A percentage can be counted: you just look at how many of the hundred little squares are coloured in.',
-    btnBackToMenu: '← Other activities',
     btnMenu: 'Back to start',
-    otherLevel: 'Choose another level',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{name}»?',
-    btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     answer: {
-      yes: 'Yes',
-      no: 'No'
     },
     ingredient: {
       flourSugar: { a: 'flour', b: 'sugar' },
@@ -66,18 +57,6 @@
       escala: { name: 'Plans', detail: 'One square is worth metres.', instruction: 'On a plan everything is smaller than it really is. Each square of the plan is worth some real metres: if each one is 2 metres and there are 3 squares, that is 6 metres.' }
     },
     level: {
-      p1: 'In tens',
-      p2: 'In fives',
-      p3: 'Find the grid',
-      r1: 'How much is the discount?',
-      r2: 'How much is left to pay?',
-      r3: 'How much with the rise?',
-      o1: 'Twice as much',
-      o2: 'Three times as much',
-      o3: 'The other way: more people, less time',
-      l1: 'How many can I buy?',
-      l2: 'How much have I got left?',
-      e1: 'From the plan to the metres'
     },
     gen: {
       whatPercent: 'What percentage is coloured in?',

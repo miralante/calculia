@@ -12,25 +12,13 @@
   App.i18n.register({
     title: '📏 Medidas',
     instructionMenu: 'Elige una actividad.',
-    contexto: 'Mides una habitación, pesas la fruta en la báscula o llenas una botella. Las medidas están en todas partes.',
-    explicacion: '✅ Saber las medidas te ayuda a comprar lo justo y a entender cuánto ocupa o pesa algo.',
-    btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
-    otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
-    btnOtherActivity: 'Otra actividad',
-    explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
-    explicacionIncorrectaA: '❌ Mira: la respuesta correcta es ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
-    pista: '🤔 «{elegida}» no es la respuesta. Piensa con calma.',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
-    refuerzoTitulo: 'Refuerzo',
     reinforceTitle: 'Refuerzo',
-    refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     /* Nombre de cada escalón de la escalera. La clave es el símbolo,
        que es notación y vive en data.js */
     unit: {
@@ -86,12 +74,6 @@
       escalera: { name: 'La escalera', detail: 'Cada escalón, por 10.', instruction: 'Las unidades están en una escalera. El escalón de arriba es el más grande. Cada vez que bajas un escalón, se multiplica por 10. Entre un escalón y el siguiente está escrito ese 10: cúéntalos.' }
     },
     level: {
-      me1: 'Longitud: metros',
-      me2: 'Peso: kilos',
-      me3: 'Capacidad: litros',
-      es1: '¿Cuántos escalones?',
-      es2: '¿Por cuánto se multiplica?',
-      es3: 'Cambiar de unidad'
     },
     gen: {
       timesTen: '×10',

@@ -13,23 +13,14 @@
   App.i18n.register({
     title: '💯 Porcentajes',
     instructionMenu: 'Elige una actividad.',
-    contexto: 'Por ciento quiere decir «de cada cien». Los porcentajes están en las rebajas, en las etiquetas y en las noticias.',
-    explicacion: '✅ Un porcentaje se puede contar: basta mirar cuántos cuadraditos de cien están pintados.',
-    btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
-    otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
-    btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     answer: {
-      yes: 'Sí',
-      no: 'No'
     },
     ingredient: {
       flourSugar: { a: 'harina', b: 'azúcar' },
@@ -66,18 +57,6 @@
       escala: { name: 'Planos', detail: 'Un cuadrado vale metros.', instruction: 'En un plano todo está más pequeño de verdad. Cada cuadrado del plano vale unos metros de verdad: si cada uno vale 2 metros y hay 3 cuadrados, son 6 metros.' }
     },
     level: {
-      p1: 'De diez en diez',
-      p2: 'De cinco en cinco',
-      p3: 'Busca la cuadrícula',
-      r1: '¿Cuánto es el descuento?',
-      r2: '¿Cuánto queda por pagar?',
-      r3: '¿Cuánto es con el aumento?',
-      o1: 'El doble',
-      o2: 'El triple',
-      o3: 'Al revés: más gente, menos rato',
-      l1: '¿Cuántas puedo comprar?',
-      l2: '¿Cuánto me sobra?',
-      e1: 'Del plano a los metros'
     },
     gen: {
       whatPercent: '¿Qué porcentaje está pintado?',

@@ -9,11 +9,7 @@
   App.i18n.register({
     "title": "💶 El Monedero",
     "instruction": "Aquí practicas el dinero de verdad: contarlo, pagar, comprobar el cambio y ahorrar.",
-    "backToMenu": "← Menú",
-    "chooseLevel": "Elige un paso",
     "btnMenu": "Volver al inicio",
-    "proximoNivel": "Siguiente paso: {n}",
-    "btnAnotherLevel": "Elegir otro paso",
     "menuCount": "¿Cuánto hay?",
     "menuCountDetail": "Mira el dinero y elige el total.",
     "menuPay": "Paga justo",
@@ -34,7 +30,6 @@
     "addMoney": "Añadir {d}",
     "countPrompt": "¿Cuánto dinero hay?",
     "tableAria": "Dinero sobre la mesa",
-    "listenHintAria": "Escuchar la ayuda",
     "countHint": "«{elegida}» no es el total: cuenta otra vez, despacio, y empieza por el dinero más grande.",
     "correctExplanation": "¡Eso es! Hay {d}. En total, {stars}.",
     "almostExplanation": "Mira: hay {d}. En total, {stars}.",
@@ -43,7 +38,6 @@
     "payWithHint": "«{elegida}» no sirve para pagar: mira el precio. ¿Ese dinero es más o menos que el precio?",
     "payCorrectExplanation": "¡Eso es! Pagas con {pagado}. Te devuelven {cambio}.",
     "payAlmostExplanation": "Mira: ese dinero es menos que el precio. Se paga con {pagado}. Te devuelven {cambio}.",
-    "changeBack": "Te devuelven:",
     "payWithSummary": "Has pagado bien a la primera {n} de {t}.",
     "changePrompt": "Cuesta {precio}. Pagas con {pagado}. Te devuelven esto. ¿Está bien el cambio?",
     "answerYes": "Sí",
@@ -84,8 +78,6 @@
     "removeHint2": "Toca el botón marcado para quitar dinero.",
     "checkHint": "Tu total es igual al precio. ¡Toca Comprobar!",
   "contexto": "Tienes dinero en la mesa. Vas a contarlo, pagar, comprobar el cambio y ahorrar para algo que quieres.",
-  "pista": "🤔 Cuenta el dinero despacio. ¿Cuánto hay en total?",
-  "explicacion": "✅ Así se usa el dinero. La próxima vez que tengas monedas, prueba a contarlas así.",
   "transfer": "Esto te servirá para manejarte con dinero de verdad: contar, pagar, comprobar el cambio y ahorrar.",
   }, 'es');
 })();

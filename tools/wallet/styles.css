@@ -20,13 +20,6 @@
 
 .progress-bar { margin-top: var(--espacio); }
 
-/* Visual money (.money, .m5c….b50e, .money-table) is shared:
-   lives in assets/css/components.css + assets/js/dinero.js. Here we
-   only override tool-specific tweaks. */
-
-/* The table with the Reasoning-module tint */
-.money-table { background: var(--mod-razonamiento-suave); }
-
 /* Money marked by the 💡 hint (2nd tap) */
 .sugerida {
   outline: 4px solid var(--mod-razonamiento);
@@ -44,7 +37,4 @@
 .options .money { align-self: center; }
 
 /* ---- Quiz compartido ---- */
-.prompt {
-  font-size: var(--texto-grande);
-  font-weight: 700;
-}
+.prompt { font-weight: 700 }

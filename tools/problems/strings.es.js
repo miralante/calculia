@@ -14,20 +14,13 @@
   App.i18n.register({
     title: '🤔 Problemas',
     instructionMenu: 'Elige una actividad.',
-    contexto: 'Un problema es una situación contada con palabras. Primero se entiende lo que pasa. Después se calcula.',
-    explicacion: '✅ Lo importante de un problema no es la cuenta: es darse cuenta de qué hay que hacer.',
-    btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
-    otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
-    btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     op: {
       add: 'sumar',
       sub: 'restar'
@@ -38,13 +31,6 @@
       resultado: { name: '¿Cuánto es?', detail: 'Resuelve el problema.', instruction: 'Lee el problema y di cuántos quedan. Tienes el dibujo delante: puedes contar. Lo tachado es lo que ya se ha ido.' }
     },
     level: {
-      o1: 'Con palabra pista',
-      o2: 'Sin palabra pista',
-      t1: 'Los dos hacia el mismo lado',
-      t2: 'Uno hacia cada lado',
-      r1: 'Problemas de sumar',
-      r2: 'Problemas de restar',
-      r3: 'Sumar y restar'
     },
     gen: {
       whatToDo: '¿Qué hay que hacer?',

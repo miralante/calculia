@@ -81,8 +81,13 @@
      step in the same mission. Reset on exit/re-enter. */
   var thermoCelebrated = false;
 
-  function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+  var glue = App.activityGlue({
+    toolId: TOOL_ID,
+    progress: function () { return progress; },
+    starsEl: function () { return starsEl; },
+    show: function (el) { show(el); }
+  });
+  var save = glue.save, paintStars = glue.paintStars;
 
   /* ============================================================
      Screen flow
@@ -91,18 +96,8 @@
   /* Pick a random integer in [min, max] inclusive, avoiding
      `avoid` (the level's starting temperature). Shared helper so
      the temperature tool and the elevator tool use the same logic. */
-  function pickRandomInt(min, max, avoid) {
-    if (max <= min) return min;
-    var range = max - min + 1;
-    /* Try up to 8 times to avoid the starting value; if every
-       value in the range equals `avoid` (degenerate input) just
-       return min. */
-    for (var i = 0; i < 8; i++) {
-      var v = min + Math.floor(Math.random() * range);
-      if (v !== avoid) return v;
-    }
-    return min;
-  }
+  var pickRandomInt = App.utils.pickRandomInt;
+
 
   /* Pick a random temperature to suggest for the current level.
      Avoids the starting temperature and biases toward values

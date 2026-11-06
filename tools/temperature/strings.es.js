@@ -8,27 +8,16 @@
 
   App.i18n.register({
     title: '🌡️ Temperatura del agua',
-    instructionMenu: 'Aprende qué pasa con el agua cuando cambia la temperatura.',
     contexto: 'En la vida real, el agua se congela, se calienta o hierve según los grados. Aquí lo ves y lo tocas.',
-    explicacion: '✅ Entender la temperatura y los números negativos te sirve para cocinar, para el tiempo del día y para cualquier cosa que se enfría o se calienta.',
     transfer: 'Esto te servirá para leer el termómetro del tiempo, entender una receta o saber cuándo algo está caliente sin tocarlo.',
-    btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
-    otherLevel: 'Elegir otro reto',
-    btnOtherActivity: 'Otra actividad',
 
     activity: {
       'water-temperature': {
-        name: 'Temperatura del agua',
-        detail: 'Sube y baja la temperatura con los botones.',
-        instruction: 'Tienes un termómetro. Empieza en 0 °C. Pulsa + y − para cambiar la temperatura. Cada cambio se ve en el agua: se congela (hielo), sigue líquida o hierve (vapor). Llega al objetivo de cada reto.'
       }
     },
 
     level: {
-      freeze:  '🧊 Congelar el agua',
-      heat:    '♨️ Hervir el agua',
-      balance: '🌡️ Equilibrio: 20 °C'
     },
 
     gen: {
@@ -36,10 +25,6 @@
       stateIce: 'hielo',
       stateLiquid: 'agua líquida',
       stateSteam: 'vapor',
-      btnMinus10: '−10',
-      btnMinus1:  '−1',
-      btnPlus1:   '+1',
-      btnPlus10:  '+10',
       btnReset:   '↺ Volver a 0 °C',
       btnAudio:   'Escuchar la temperatura',
       btnExit:    '✅ Salir',

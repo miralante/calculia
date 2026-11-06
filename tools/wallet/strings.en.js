@@ -9,11 +9,7 @@
   App.i18n.register({
     "title": "💶 The Coin Purse",
     "instruction": "Here you practise real money: counting it, paying, checking the change and saving.",
-    "backToMenu": "← Menu",
-    "chooseLevel": "Choose a step",
     "btnMenu": "Back to start",
-    "proximoNivel": "Next step: {n}",
-    "btnAnotherLevel": "Choose another step",
     "menuCount": "How much is there?",
     "menuCountDetail": "Look at the money and choose the total.",
     "menuPay": "Pay the exact price",
@@ -34,7 +30,6 @@
     "addMoney": "Add {d}",
     "countPrompt": "How much money is there?",
     "tableAria": "Money on the table",
-    "listenHintAria": "Listen to the help",
     "countHint": "«{elegida}» is not the total: count again, slowly, and start with the biggest money.",
     "correctExplanation": "That is it! There is {d}. In total, {stars}.",
     "almostExplanation": "Look: there is {d}. In total, {stars}.",
@@ -43,7 +38,6 @@
     "payWithHint": "«{elegida}» does not pay it: look at the price. Is that money more or less than the price?",
     "payCorrectExplanation": "That is it! You pay with {pagado}. You get {cambio} back.",
     "payAlmostExplanation": "Look: that money is less than the price. You pay with {pagado}. You get {cambio} back.",
-    "changeBack": "You get back:",
     "payWithSummary": "You paid right first time {n} out of {t}.",
     "changePrompt": "It costs {precio}. You pay with {pagado}. You get this back. Is the change right?",
     "answerYes": "Yes",
@@ -84,8 +78,6 @@
     "removeHint2": "Touch the marked button to remove money.",
     "checkHint": "Your total equals the price. Touch Check!",
   "contexto": "You have money on the table. You will count it, pay, check the change and save for something you want.",
-  "pista": "🤔 Count the money slowly. How much is there altogether?",
-  "explicacion": "✅ That is how to use money. Next time you have coins, try counting them like this.",
   "transfer": "This will help you handle real money: count it, pay, check the change and save.",
   }, 'en');
 })();

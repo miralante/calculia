@@ -14,20 +14,13 @@
   App.i18n.register({
     title: '🤔 Problems',
     instructionMenu: 'Choose an activity.',
-    contexto: 'A problem is a situation told in words. First you understand what happens. Then you work it out.',
-    explicacion: '✅ The important part of a problem is not the sum: it is noticing what needs doing.',
-    btnBackToMenu: '← Other activities',
     btnMenu: 'Back to start',
-    otherLevel: 'Choose another level',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{name}»?',
-    btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     op: {
       add: 'add',
       sub: 'take away'
@@ -38,13 +31,6 @@
       resultado: { name: 'How many?', detail: 'Solve the problem.', instruction: 'Read the problem and say how many there are. You have the picture in front of you: you can count. What is crossed out has already gone.' }
     },
     level: {
-      o1: 'With a clue word',
-      o2: 'Without a clue word',
-      t1: 'Both the same way',
-      t2: 'One each way',
-      r1: 'Adding problems',
-      r2: 'Taking-away problems',
-      r3: 'Adding and taking away'
     },
     gen: {
       whatToDo: 'What needs doing?',
