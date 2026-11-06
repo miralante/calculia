@@ -185,6 +185,219 @@ and that every activity with a pool larger than the round shuffles
 the order. Mechanical activities (`puzzle`, `stories`, `odd-one-out`)
 and `temperature` are excluded from the check.
 
+#### 2.2.2.1 Splitting a large activity (`model.js`, `comma.js`)
+
+An activity whose code grows large is split by what it does:
+
+- `model.js` holds the code that does not touch the page: question
+  generators, drawings as HTML text, number words, level rules. It can be
+  checked in Node. It publishes its names as `App.<name>Model`.
+- `app.js` keeps the page: the DOM, the flow and the events. It reads the
+  model's names through aliases at the top of the file.
+- An exercise with its own state and events goes to its own file, as a
+  factory `App.<name>(host)`. The page passes what it needs (the shared
+  progress, `save`, `paintStars`, the screens, the round count) in the `host`
+  object, so the exercise does not reach into the rest of the activity. The
+  comma exercise of Fractions and measures is the example.
+
+`model.js`, `comma.js`, `screens.js`, `counter.js` and `art.js` are the only
+extra files an activity may have (`EXTRA_MODULES` in `scripts/check.js`).
+Each one is listed in `sw.js` and loaded by `index.html` before `app.js`.
+`art.js` holds the drawings (`shapes`): SVG as text, published as
+`App.shapesArt`, which `model.js` reads through aliases.
+
+#### 2.2.2.2 Shared styles and the drift rule
+
+`assets/css/components.css` is the one definition of a shared component
+(`.option-btn`, `.feedback`, `.tool-header h1`, …). `assets/css/activity-flow.css`
+adds only what the flow screens need, and its rules that touch a component are
+scoped with `:where(#activity)`, so they add no specificity and keep the cascade.
+
+An activity's `styles.css` may add properties a component does not set, and may
+colour its own accent with `color: var(--mod-…)` (its identity). It may not
+change a value the component already sets: that is drift.
+`node scripts/css-drift.js` lists every override of that kind; the rest of the
+dedupe (identical declarations) is applied when a value is identical to the
+shared one. The two option and feedback copies still listed by the report
+(divisibility-test, head-math, math-tables, multiples, prime-composite) keep the
+flow look on pages that do not use the flow engine: that is a per-page decision
+(migrate them to the engine, or keep the variant), not something the script changes.
+
+#### 2.2.3 Three-stage flow (`assets/js/activity-flow.js`)
+
+Activities with explanation slides, real life and a test
+(`App.activityFlow`) do not repeat the flow: `app.js` supplies its data,
+its drawings (`visualHtml`), the shuffle of each round (`buildRound`,
+which still calls `App.utils.shuffle`) and the question generator
+(`makeQuestion`). The engine builds the screens inside
+`<div id="activity">` and handles the stars, the saved progress and the
+end screen. The generic styles are in `assets/css/activity-flow.css`,
+and the drawings shared by a family in their own file (for example
+`assets/css/common-factors.css`). A design change to the flow is then
+made in one place. There are two test modes: `test: 'options'` (one
+question at a time, with a closing screen; `common-multiple` and
+`common-divisor`) and `test: 'sheet'` (the whole round on one sheet with
+«Check» and «Another round», no closing screen; `lines`, `primes` and,
+with several sheets, a menu and levels per sheet, `shapes`).
+
+In the `options` mode, `socratic: true` gives the socratic feedback of
+`factorial` (first miss, a hint; second miss, the explanation; the other
+options lock until «Understood»), `review: 'rule'` puts «Review the rule»
+under the question, `introCard` adds a card above the slides, and
+`endNotes` adds texts to the closing screen.
+
+The four order activities (`order-*`) use the `sheet` mode through
+`App.numberSort.setup`, which delegates to the engine: the level is shown as
+a badge (`levelName`), the transfer sentence appears when the round is
+complete (`transferKey`), and a right answer shows its explanation
+(`showExplanation`). `operation-concepts` follows the closing-screen rule:
+one button, «Back to start»; «New round» lives inside the test.
+
+#### 2.2.3.1 Options of the 'options' mode: no real-life stage, several steps
+
+Two options let an activity use the 'options' mode without copying its flow:
+
+- `skipReal: true` makes the explanation slides lead straight to the test. The
+  button under the slides reads «Start practising», and the real-life stage is
+  not shown. Multiples, Prime or composite and Divisibility use it.
+- A question may carry `steps: [ {prompt, hint, options, explanation}, … ]`
+  instead of its own prompt and options. The steps are answered one at a time,
+  under «Step 1 of 3»; the question scores once, at its last step, and only if no
+  step was missed. Divisibility uses it for the rules (last digit, then the check).
+
+#### 2.2.4 Activity skeletons: general, teach–real life–test, and play
+
+Every activity is built from two layers. The **general skeleton** is the
+part all activities share: the page shell, the data and texts, the round, the
+stars and the closing screen. On top of it sits one **flow family**, chosen
+before anything else:
+
+- **A. Teach → real life → test**: explanation slides, real-life examples and
+  a test. Built by the shared engine (`App.activityFlow`).
+- **B. Play**: rounds of items with immediate feedback and no explanation stage
+  (puzzles, pickers, sequences, riddles). Shared through `App.reinforce` and
+  `App.activityGlue`; the common loop is the target described below.
+
+Adding an activity means choosing its family and filling in its data and its
+mechanic. The rules below are what the code already does; where a family is
+not yet shared by an engine, the section says so.
+
+##### 2.2.4.1 General skeleton (every activity)
+
+| Layer | What it contains | Who owns it |
+|---|---|---|
+| Page shell | `index.html`: header (back link, title, stars), footer, script order. Engine pages inject their stages into `<div id="activity">`. | Skeleton; the activity only lists its scripts |
+| Data | `data.js`: locale-neutral numbers, layouts, slide specs, `perRound`, the question types | Activity |
+| Texts | `strings.es.js` and `strings.en.js` (`App.i18n.register`). No text in `app.js`. | Activity; keys must match in both locales |
+| Logic | `app.js`: round generation, question makers, drawings. Large files split into `model.js` (and extra modules), see 2.2.2.1 | Activity |
+| Progress | `App.storage` under the activity's key: `stars`, `completedRounds`, and `roundsByActivity` for menus | Skeleton (helpers in `App.activityGlue`) |
+| Round | `buildRound` returns the question types of a round, shuffled. `makeQuestion(type)` returns `{ prompt, hint, options, explanation }`, with options `[{ html, aria, correct }]` (contract in 2.2.1) | Activity |
+| Feedback | Right answer: a star and the explanation. Wrong answer: the hint, and the option stays off. Nothing is punished. `App.feedback` for the tone and the locks | Skeleton |
+| Closing screen | One primary button, «Back to start», to the landing. The summary uses `ui.roundDone` or `endSummaryKey`. | Skeleton (see the closing-screen rule in `CLAUDE.md`) |
+| Shared helpers | `App.utils` (`fill`, `rint`, `pick`, `shuffle`, `numericOptions`, …). Local copies are forbidden for the names listed in `scripts/check.js` | Core |
+
+The contract in every family: no timers, no lives, no negative score, and
+every error leads to a hint and a retry.
+
+##### 2.2.4.2 Family A: teach → real life → test (`App.activityFlow`)
+
+The engine has three stages, each optional in the ways listed:
+
+1. **Explanation**: `intro` is a list of slides `{ visual }`. The title and
+   text come from `intro.<n>.title` and `intro.<n>.text` (or `introCopy`).
+   Slides wrap around, and a progress bar shows the position.
+2. **Real life** (optional): `real` is a list of examples `{ visual }`,
+   with `realVisualHtml` or `visualHtml` and the text from `realText` or
+   `real.<n>`. Skipped with `skipReal: true`.
+3. **Test**, in one of two modes:
+   - `options` (default): one question at a time, a star for each right
+     answer, and a closing screen.
+   - `sheet` (`test: 'sheet'`): the whole round on one sheet, with «Check» and
+     «Another round» and no closing screen.
+
+The configuration keys the engine reads:
+
+| Key | Meaning |
+|---|---|
+| `toolId` | Storage key, and the activity's progress |
+| `intro`, `real` | Slides and examples (`real: []` when there is no real-life stage) |
+| `visualHtml(spec)` | HTML of one drawing (slides; examples too, unless `realVisualHtml`) |
+| `introCopy`, `introVisualAria`, `realText` | Texts and labels that depend on the slide |
+| `introHeading`, `introCard` | Line above the slides, and a card above them |
+| `buildRound(def, level)`, `makeQuestion(type, index, def)` | The round and its questions |
+| `test` | `'sheet'` for the sheet mode; default `options` |
+| `socratic` | First miss: hint. Second miss: explanation. Other options lock until «Understood» |
+| `review` | `'back'` (default), `'rule'` (review the rule under the question) or `'none'` |
+| `reinforce` | Missed questions are replayed in a mini-round until all are right (`App.reinforce`) |
+| `activities`, `menuPlacement` | A menu of activities, first (default) or after the examples; each activity can have its own slides and examples |
+| `skipReal` | The slides lead straight to the test (button «Start practising») |
+| `steps` (in a question) | A question made of several steps, answered one at a time (`Step 1 of 3`); it scores once, at its last step, and only if no step was missed |
+| `testVisuals`, `testVisualClass` | A picture in each test question |
+| `endSummaryKey`, `endNotes`, `endEmoji` | Summary text, extra texts and emoji of the closing screen |
+| `prepareProgress`, `slideProgress`, `backHref`, `menuBackKey` | Progress conversion, progress bars, back link, menu label |
+
+Which family-A variant fits which activity:
+
+- **Full flow with real life**: `common-multiple`, `common-divisor`, `factorial`
+  (socratic), `linear-functions`, `scale`, `operation-concepts`.
+- **Sheet**: `lines`, `primes`, `shapes` (several sheets, with a menu).
+- **Menu of activities**: the four `order-*` (through `App.numberSort`, which
+  delegates to the engine) and `operation-concepts`.
+- **Teach → test, no real life**: `multiples`, `prime-composite`,
+  `divisibility-test` (the last one also uses `steps`).
+
+Rules of thumb: leave out real life when no real example adds a new case; use
+`steps` when a question is a chain of checks, each one needed for the next;
+use the sheet when the person must compare or order everything at once.
+
+##### 2.2.4.3 Family B: play (games)
+
+Activities of this family give the person a mechanic and a round, not an
+explanation first: `puzzle` (tap a piece and its place), `odd-one-out`
+(tap the intruder), `stories` (tap the captions in time order), `patterns`
+(complete a series), `riddles` (choose the answer). The learning comes from
+the feedback after each try, and a missed item is replayed in a mini-round
+(`App.reinforce`).
+
+Current state: each of these is written by hand in its own `app.js`, with
+`App.reinforce` and the helpers of `App.activityGlue`. There is no shared
+loop yet, so each game repeats the round, the selection and the closing.
+
+Target contract (to be built as the engine's «solo prueba» mode, menu → round,
+without slides):
+
+- **Entry**: a menu of mechanics or levels. The level comes from progress
+  (`levelOf`), as in family A.
+- **Round**: `buildRound(def, level)` returns N items; the mechanic makes each
+  item one action (tap, drag, choose).
+- **Check**: `check(item, action)` returns `{ correct, hint, explanation }`.
+  Right: a star and a short praise. Wrong: the hint, and a retry.
+- **Reinforce**: `reinforce: true` replays the misses until all are right.
+- **Close**: the closing screen with one button, as in family A.
+- **Not allowed**: timers, lives, negative score, «game over».
+
+Two activities need more than this contract, and stay outside it until the
+engine has the pieces: `head-math` and `math-tables` have levels that the
+person picks, and a learn screen with a demonstration. Both are menu-led
+flows, not rounds of items.
+
+##### 2.2.4.4 Choosing a skeleton and adding an activity
+
+1. Does the activity teach a rule before it asks? Yes: family A. No: family B.
+2. Does a real-life example add a case? Yes: keep `real`. No: `skipReal: true`.
+3. Does a question chain several checks? Use `steps`.
+4. Must the person see the whole round at once? Use the `sheet` mode.
+5. Create the six canonical files in `tools/<slug>/`, plus `model.js` when the
+   logic is large (2.2.2.1). Register the card in `index.html`, its progress
+   row in `settings/`, and its files in `sw.js` (`ARCHIVOS`), then bump
+   `VERSION`.
+6. Run `node scripts/check.js`, `node scripts/smoke-sw.js` and the UI test,
+   and refresh `?v=` tokens with `scripts/asset-tokens.js`.
+
+Families and their users are listed in the doc at the time of each change;
+verify them with a search of `App.activityFlow.setup` and `App.reinforce`
+before relying on a list.
+
 ### 2.3 `settings/` — trimmed relative to Apptonomia's
 
 Two actions, same two-step-confirmation pattern as Apptonomia:
@@ -555,6 +768,7 @@ in §2.1 above are the canonical rationale).
 | `tts.js` | `App.tts.speak` | only pages that read aloud (most do) |
 | `storage.js` | `App.storage.{get, set, remove}` | only pages that read or write `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | only the activity's `app.js` |
+| `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | activities that keep their own round loop (not `App.activityFlow`) |
 
 The load order is `utils.js → i18n.js → tts.js → storage.js →
 feedback.js → strings.<locale>.js → data.js → app.js`. `i18n.js`
@@ -753,8 +967,6 @@ in one repo, mirror it across the others in the same PR.
   no-clinical-mention invariants every page must respect.
 
 ---
-
-
 
 ## Compact application header
 

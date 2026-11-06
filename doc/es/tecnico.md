@@ -194,6 +194,224 @@ las opciones y que toda actividad con un pool mayor que la ronda baraja
 el orden. Las actividades mecánicas (`puzzle`, `stories`,
 `odd-one-out`) y `temperature` están excluidas del check.
 
+#### 2.2.2.1 Partir una actividad grande (`model.js`, `comma.js`)
+
+Una actividad cuyo código crece se parte según lo que hace:
+
+- `model.js` guarda el código que no toca la página: los generadores de
+  preguntas, los dibujos como texto HTML, los números en palabras, las reglas
+  de nivel. Se puede comprobar en Node. Publica sus nombres como
+  `App.<nombre>Model`.
+- `app.js` conserva la página: el DOM, el flujo y los eventos. Lee los nombres
+  del modelo mediante alias al principio del fichero.
+- Un ejercicio con estado y eventos propios va a su propio fichero, como una
+  fábrica `App.<nombre>(host)`. La página le pasa lo que necesita (el progreso
+  compartido, `save`, `paintStars`, las pantallas, el número de aciertos) en el
+  objeto `host`, así el ejercicio no entra en el resto de la actividad. El
+  ejercicio de la coma de Fracciones y medidas es el ejemplo.
+
+`model.js`, `comma.js`, `screens.js`, `counter.js` y `art.js` son los únicos
+ficheros extra que puede tener una actividad (`EXTRA_MODULES` en
+`scripts/check.js`). Cada uno aparece en `sw.js` y lo carga `index.html` antes
+de `app.js`. `art.js` guarda los dibujos (`shapes`): SVG como texto, publicado
+como `App.shapesArt`, que `model.js` lee mediante alias.
+
+#### 2.2.2.2 Estilos compartidos y la regla de deriva
+
+`assets/css/components.css` es la única definición de un componente compartido
+(`.option-btn`, `.feedback`, `.tool-header h1`, …). `assets/css/activity-flow.css`
+añade solo lo que necesitan las pantallas del flujo, y sus reglas que tocan un
+componente van con `:where(#activity)`: no suman especificidad y el orden en
+cascada no cambia.
+
+El `styles.css` de una actividad puede añadir propiedades que el componente no
+fija, y puede colorear su acento con `color: var(--mod-…)` (su identidad). No
+puede cambiar un valor que el componente ya fija: eso es deriva.
+`node scripts/css-drift.js` lista cada override de ese tipo; las copias idénticas
+se eliminan. Las copias de opción y de respuesta que el informe sigue marcando
+(divisibility-test, head-math, math-tables, multiples, prime-composite) mantienen
+el aspecto del flujo en páginas que no usan el motor: es una decisión por página
+(migrarlas al motor o mantener la variante), no algo que el script cambie.
+
+#### 2.2.3 Flujo de tres etapas (`assets/js/activity-flow.js`)
+
+Las actividades con explicación en diapositivas, vida real y test
+(`App.activityFlow`) no repiten el flujo: `app.js` aporta sus datos,
+sus dibujos (`visualHtml`), la baraja de cada ronda (`buildRound`, que
+sigue llamando a `App.utils.shuffle`) y el generador de preguntas
+(`makeQuestion`). El motor monta las pantallas en `<div id="activity">`
+y gestiona estrellas, progreso guardado y pantalla final. Los estilos
+genéricos están en `assets/css/activity-flow.css` y los dibujos
+compartidos de una familia en su propio fichero (p. ej.
+`assets/css/common-factors.css`). Así un cambio de diseño del flujo se
+hace en un único sitio. Hay dos modos de test: `test: 'options'` (una
+pregunta cada vez, con pantalla final; `common-multiple` y
+`common-divisor`) y `test: 'sheet'` (toda la ronda en una hoja con
+«Comprobar» y «Otra ronda», sin pantalla final; `lines`, `primes` y, con
+varias hojas, un menú y niveles por hoja, `shapes`).
+
+En el modo `options`, `socratic: true` da la retroalimentación socrática
+de `factorial` (primer fallo, pista; segundo, explicación; las demás
+opciones se bloquean hasta «Entendido»), `review: 'rule'` pone «Repasar
+la regla» bajo la pregunta, `introCard` añade una tarjeta sobre las
+diapositivas y `endNotes` añade textos a la pantalla final.
+
+Las cuatro actividades de orden (`order-*`) usan el modo `sheet` a través
+de `App.numberSort.setup`, que delega en el motor: el nivel se muestra como
+etiqueta (`levelName`), la frase de transferencia aparece al completar la
+ronda (`transferKey`) y un acierto muestra su explicación
+(`showExplanation`). `operation-concepts` cumple la regla de la pantalla
+final: un único botón, «Volver al inicio»; «Otra ronda» vive dentro del test.
+
+#### 2.2.3.1 Opciones del modo 'options': sin etapa de vida real, varios pasos
+
+Dos opciones permiten usar el modo 'options' sin copiar su flujo:
+
+- `skipReal: true` hace que las diapositivas de explicación lleven directamente
+  al test. El botón bajo las diapositivas dice «Empezar a practicar», y la etapa
+  de vida real no se muestra. Usan esta opción Múltiplos, Primo o compuesto y
+  Divisibilidad.
+- Una pregunta puede llevar `steps: [ {prompt, hint, options, explanation}, … ]`
+  en lugar de su propio enunciado y sus opciones. Los pasos se responden uno a
+  uno, bajo «Paso 1 de 3»; la pregunta puntúa una vez, en su último paso, y solo
+  si no se falló ningún paso. Divisibilidad lo usa para las reglas (última cifra,
+  y después la comprobación).
+
+#### 2.2.4 Esqueletos de actividad: general, enseñar–vida real–test y juegos
+
+Cada actividad se construye en dos capas. El **esqueleto general** es la parte
+que comparten todas: la cáscara de la página, los datos y los textos, la ronda,
+las estrellas y la pantalla final. Encima va una **familia de flujo**, que se
+elige antes que nada:
+
+- **A. Enseñar → vida real → test**: diapositivas de explicación, ejemplos de
+  vida real y un test. Lo construye el motor compartido (`App.activityFlow`).
+- **B. Juego**: rondas de elementos con retroalimentación inmediata y sin
+  etapa de explicación (puzzles, selectores, secuencias, adivinanzas).
+  Se comparte mediante `App.reinforce` y `App.activityGlue`; el bucle común es
+  el objetivo que se describe más abajo.
+
+Añadir una actividad consiste en elegir su familia y rellenar sus datos y su
+mecánica. Las reglas de abajo son lo que el código ya hace; donde una familia
+todavía no tiene motor compartido, la sección lo dice.
+
+##### 2.2.4.1 Esqueleto general (toda actividad)
+
+| Capa | Qué contiene | Quién la posee |
+|---|---|---|
+| Cáscara de página | `index.html`: cabecera (enlace de volver, título, estrellas), pie y orden de scripts. Las páginas del motor inyectan sus etapas en `<div id="activity">`. | Esqueleto; la actividad solo enumera sus scripts |
+| Datos | `data.js`: números, disposiciones, especificaciones de diapositivas, `perRound`, tipos de pregunta; independiente del idioma | Actividad |
+| Textos | `strings.es.js` y `strings.en.js` (`App.i18n.register`). Ningún texto en `app.js`. | Actividad; las claves deben coincidir en ambos idiomas |
+| Lógica | `app.js`: generación de la ronda, creadores de preguntas, dibujos. Los ficheros grandes se parten en `model.js` (y módulos extra), ver 2.2.2.1 | Actividad |
+| Progreso | `App.storage` bajo la clave de la actividad: `stars`, `completedRounds` y `roundsByActivity` para los menús | Esqueleto (ayudas en `App.activityGlue`) |
+| Ronda | `buildRound` devuelve los tipos de pregunta de la ronda, barajados. `makeQuestion(tipo)` devuelve `{ prompt, hint, options, explanation }`, con opciones `[{ html, aria, correct }]` (contrato en 2.2.1) | Actividad |
+| Retroalimentación | Acierto: una estrella y la explicación. Fallo: la pista, y la opción se apaga. Nunca se castiga. `App.feedback` para el tono y los bloqueos | Esqueleto |
+| Pantalla final | Un único botón principal, «Volver al inicio», a la portada. El resumen usa `ui.roundDone` o `endSummaryKey`. | Esqueleto (regla de pantalla final en `CLAUDE.md`) |
+| Ayudas compartidas | `App.utils` (`fill`, `rint`, `pick`, `shuffle`, `numericOptions`, …). Las copias locales están prohibidas para los nombres de `scripts/check.js` | Núcleo |
+
+El contrato en todas las familias: sin temporizadores, sin vidas, sin
+puntuación negativa, y cada error lleva a una pista y a otro intento.
+
+##### 2.2.4.2 Familia A: enseñar → vida real → test (`App.activityFlow`)
+
+El motor tiene tres etapas, cada una opcional en las formas que se indican:
+
+1. **Explicación**: `intro` es una lista de diapositivas `{ visual }`. El título
+   y el texto salen de `intro.<n>.title` e `intro.<n>.text` (o de `introCopy`).
+   Las diapositivas dan la vuelta, y una barra de progreso muestra la posición.
+2. **Vida real** (opcional): `real` es una lista de ejemplos `{ visual }`, con
+   `realVisualHtml` o `visualHtml` y el texto de `realText` o `real.<n>`.
+   Se omite con `skipReal: true`.
+3. **Test**, en uno de dos modos:
+   - `options` (por defecto): una pregunta cada vez, una estrella por cada
+     acierto, y una pantalla final.
+   - `sheet` (`test: 'sheet'`): la ronda entera en una hoja, con «Comprobar» y
+     «Otra ronda», y sin pantalla final.
+
+Las claves de configuración que lee el motor:
+
+| Clave | Significado |
+|---|---|
+| `toolId` | Clave de almacenamiento, y el progreso de la actividad |
+| `intro`, `real` | Diapositivas y ejemplos (`real: []` cuando no hay etapa de vida real) |
+| `visualHtml(spec)` | HTML de un dibujo (diapositivas; los ejemplos también, salvo `realVisualHtml`) |
+| `introCopy`, `introVisualAria`, `realText` | Textos y etiquetas que dependen de la diapositiva |
+| `introHeading`, `introCard` | Línea sobre las diapositivas, y una tarjeta encima de ellas |
+| `buildRound(def, level)`, `makeQuestion(tipo, índice, def)` | La ronda y sus preguntas |
+| `test` | `'sheet'` para el modo hoja; por defecto `options` |
+| `socratic` | Primer fallo: pista. Segundo fallo: explicación. Las demás opciones se bloquean hasta «Entendido» |
+| `review` | `'back'` (por defecto), `'rule'` (repasar la regla bajo la pregunta) o `'none'` |
+| `reinforce` | Las preguntas falladas se repiten en una mini-ronda hasta acertarlas todas (`App.reinforce`) |
+| `activities`, `menuPlacement` | Un menú de actividades, primero (por defecto) o después de los ejemplos; cada actividad puede tener sus propias diapositivas y ejemplos |
+| `skipReal` | Las diapositivas llevan directamente al test (botón «Empezar a practicar») |
+| `steps` (en una pregunta) | Una pregunta de varios pasos, respondidos uno a uno («Paso 1 de 3»); puntúa una vez, en su último paso, y solo si no se falló ningún paso |
+| `testVisuals`, `testVisualClass` | Un dibujo en cada pregunta del test |
+| `endSummaryKey`, `endNotes`, `endEmoji` | Texto del resumen, textos extra y emoji de la pantalla final |
+| `prepareProgress`, `slideProgress`, `backHref`, `menuBackKey` | Conversión del progreso, barras de progreso, enlace de volver, etiqueta del menú |
+
+Qué variante de la familia A encaja con cada actividad:
+
+- **Flujo completo con vida real**: `common-multiple`, `common-divisor`, `factorial`
+  (socrático), `linear-functions`, `scale`, `operation-concepts`.
+- **Hoja**: `lines`, `primes`, `shapes` (varias hojas, con menú).
+- **Menú de actividades**: las cuatro `order-*` (mediante `App.numberSort`, que
+  delega en el motor) y `operation-concepts`.
+- **Enseñar → test, sin vida real**: `multiples`, `prime-composite`,
+  `divisibility-test` (esta última usa además `steps`).
+
+Reglas prácticas: quitar la vida real cuando ningún ejemplo real añade un caso
+nuevo; usar `steps` cuando una pregunta encadena comprobaciones y cada una hace
+falta para la siguiente; usar la hoja cuando la persona tiene que comparar u
+ordenar todo a la vez.
+
+##### 2.2.4.3 Familia B: juego
+
+Las actividades de esta familia dan una mecánica y una ronda, no primero una
+explicación: `puzzle` (tocar una pieza y su sitio), `odd-one-out` (tocar el
+intruso), `stories` (tocar los textos en orden de tiempo), `patterns` (completar
+una serie), `riddles` (elegir la respuesta). El aprendizaje viene de la
+retroalimentación tras cada intento, y un elemento fallado se repite en una
+mini-ronda (`App.reinforce`).
+
+Estado actual: cada una está escrita a mano en su propio `app.js`, con
+`App.reinforce` y las ayudas de `App.activityGlue`. Todavía no hay un bucle
+compartido, así que cada juego repite la ronda, la selección y el cierre.
+
+Contrato objetivo (que se construirá como el modo «solo prueba» del motor:
+menú → ronda, sin diapositivas):
+
+- **Entrada**: un menú de mecánicas o niveles. El nivel sale del progreso
+  (`levelOf`), como en la familia A.
+- **Ronda**: `buildRound(def, level)` devuelve N elementos; la mecánica hace de
+  cada elemento una sola acción (tocar, arrastrar, elegir).
+- **Comprobación**: `check(elemento, acción)` devuelve `{ correct, hint, explanation }`.
+  Acierto: una estrella y una frase breve de ánimo. Fallo: la pista y otro intento.
+- **Refuerzo**: `reinforce: true` repite los fallos hasta acertarlos todos.
+- **Cierre**: la pantalla final con un único botón, como en la familia A.
+- **No permitido**: temporizadores, vidas, puntuación negativa, «fin del juego».
+
+Dos actividades necesitan más que este contrato, y quedan fuera hasta que el
+motor tenga las piezas: `head-math` y `math-tables` tienen niveles que elige la
+persona y una pantalla de aprendizaje con demostración. Ambas son flujos guiados
+por menú, no rondas de elementos.
+
+##### 2.2.4.4 Elegir el esqueleto y añadir una actividad
+
+1. ¿La actividad enseña una regla antes de preguntar? Sí: familia A. No: familia B.
+2. ¿Un ejemplo de vida real añade un caso? Sí: mantener `real`. No: `skipReal: true`.
+3. ¿Una pregunta encadena varias comprobaciones? Usar `steps`.
+4. ¿La persona debe ver la ronda entera a la vez? Usar el modo `sheet`.
+5. Crear los seis ficheros canónicos en `tools/<slug>/`, más `model.js` cuando la
+   lógica es grande (2.2.2.1). Registrar la tarjeta en `index.html`, su fila de
+   progreso en `settings/` y sus ficheros en `sw.js` (`ARCHIVOS`), y subir
+   `VERSION`.
+6. Ejecutar `node scripts/check.js`, `node scripts/smoke-sw.js` y la prueba de
+   interfaz, y refrescar los tokens `?v=` con `scripts/asset-tokens.js`.
+
+Las familias y sus usuarios se anotan en la documentación en el momento de cada
+cambio; compruébalos buscando `App.activityFlow.setup` y `App.reinforce` antes
+de fiarte de una lista.
+
 ### 2.3 `settings/` — recortado respecto al de Apptonomia
 
 Dos acciones, mismo patrón de confirmación en dos pasos que Apptonomia:
@@ -580,6 +798,7 @@ justificación canónica).
 | `tts.js` | `App.tts.speak` | solo páginas que leen en voz alta (la mayoría) |
 | `storage.js` | `App.storage.{get, set, remove}` | solo páginas que leen o escriben `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | solo el `app.js` de la actividad |
+| `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | actividades que llevan su propio bucle de ronda (no `App.activityFlow`) |
 
 El orden de carga es `utils.js → i18n.js → tts.js → storage.js →
 feedback.js → strings.<locale>.js → data.js → app.js`. `i18n.js`
@@ -789,8 +1008,6 @@ demás en el mismo PR.
   página debe respetar.
 
 ---
-
-
 
 ## Cabecera compacta de la aplicación
 
