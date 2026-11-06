@@ -11,7 +11,6 @@
     instruction: 'Read the riddle. Then choose the answer.',
     question: 'What is it?',
     btnMenu: 'Back to start',
-    proximoNivel: 'Next step: {n}',
     endSummary: 'You won {n} stars. You now have {stars} stars.',
     explicacionCorrecta: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ ',
@@ -19,7 +18,6 @@
     pista: '🤔 «{elegida}» does not fit the riddle. Read the clue again: ',
     refuerzoTitulo: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     transfer: 'This will help you think cleverly in everyday life: when a problem has a simple solution you did not expect.'
   }, 'en');
 })();

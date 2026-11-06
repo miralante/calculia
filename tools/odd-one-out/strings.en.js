@@ -11,14 +11,9 @@
     instruction: 'Look at the three pictures. Tap the one that does not go with the others.',
     startButton: 'Start practising →',
     question: 'Which one does not belong?',
-    otherLevel: 'Choose another activity',
-    pictureAria: 'Picture',
     dibujoAria: 'Picture',
     btnMenu: 'Back to start',
     endSummary: 'You won {n} stars. You now have {stars} stars.',
-    level1Desc: 'Very different groups',
-    level2Desc: 'Similar groups',
-    level3Desc: 'Groups with a fine relationship',
     rondaCompletadaTitulo: 'Round complete!',
     explicacionCorrecta: '✅ Correct! That is the one that does not go with the others.',
     explicacionIncorrectaA: '❌ That one does go with the others. The odd one out is: ',
@@ -31,7 +26,6 @@
     pistaIntruso: '🤔 «{elegida}» is not the odd one out: check whether two of the three go together and which one is left out.',
     refuerzoTitulo: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     transfer: 'This will help you spot similarities and differences in real life: at the shop (\"does this go with this?\"), sorting laundry or arranging cutlery.'
   }, 'en');
 })();

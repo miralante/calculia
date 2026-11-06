@@ -11,26 +11,19 @@
     instruction: 'Toca las viñetas en el orden correcto, de primero a último.',
     startButton: 'Empezar a practicar →',
     nivelDescripcion: '{n} viñetas',
-    levelDescription: '{n} viñetas',
     orderLabel: 'Tu orden',
     panelsLabel: 'Viñetas',
-    panelAria: 'Viñeta',
     vinetaAria: 'Viñeta',
     finalTitulo: '¡Ronda completada!',
     endTitle: '¡Ronda completada!',
     btnMenu: 'Volver al inicio',
     endSummary: 'Has ordenado {n} historias. Ahora tienes {stars} estrellas.',
-    otherLevel: 'Elegir otra actividad',
     pista: '🤔 «{elegida}» no es la viñeta que va primero. Mira las viñetas: ¿cuál es el principio de la historia?',
     /* ---- Pista socrática ----
        `pista` se queda como respaldo de showHint(): era la misma para
        todas las historias. Esta dice qué hacer con las viñetas de esta
        historia y nunca dice cuál va la primera. */
     pistaOrden: '🤔 «{elegida}» no puede ser el principio: piensa qué viñeta puede ser la primera y qué pasa después.',
-    refuerzoTitulo: 'Refuerzo',
-    refuerzoIntro: 'Vamos a repetir las {n} historias que has fallado hasta acertarlas todas.',
-    explicacionCorrecta: '✅ ¡Correcto!',
-    explicacionIncorrectaA: '❌ Ese no es el orden. Vuelve a mirar las viñetas.',
     explanation: '❌ Ese no es el orden. Vuelve a mirar las viñetas.',
     transfer: 'Esto te servirá para contar lo que has hecho en el día en orden, o para seguir el argumento de un cuento o una película.',
     historia: {

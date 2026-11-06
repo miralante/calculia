@@ -37,9 +37,14 @@
   var selectedPiece = null;
   var slotsEl = [];
 
-  function save() { App.storage.set(TOOL_ID, progress); }
+  var glue = App.activityGlue({
+    toolId: TOOL_ID,
+    progress: function () { return progress; },
+    starsEl: function () { return starsEl; },
+    show: function (el) { show(el); }
+  });
+  var save = glue.save, paintStars = glue.paintStars;
 
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   function bank() { return DATA[App.i18n.locale()] || DATA.es; }
 

@@ -15,11 +15,9 @@
     piecesLabel: 'Piezas',
     pieceAria: 'Pieza',
     hint: '«{elegida}» no encaja en ese hueco: compara el dibujo con el modelo y fíjate en su posición.',
-    otherLevel: 'Elegir otra actividad',
     endSummary: 'Has completado {n} puzles. Ahora tienes {stars} estrellas.',
     btnMenu: 'Volver al inicio',
     contexto: 'Cuando ordenas una habitación, montas un mueble o preparas la mesa, miras la imagen completa y decides dónde va cada cosa.',
-    explicacion: '✅ Comparar pieza a pieza con el modelo entrena la atención visual: fíjate en la forma, el color y la posición antes de colocar.',
     transfer: 'Esto te ayuda a fijarte en la imagen completa cuando ordenas o montas.'
   }, 'es');
 })();

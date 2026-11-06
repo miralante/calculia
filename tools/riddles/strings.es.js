@@ -11,7 +11,6 @@
     instruction: 'Lee la adivinanza. Después elige la respuesta.',
     question: '¿Qué es?',
     btnMenu: 'Volver al inicio',
-    proximoNivel: 'Siguiente paso: {n}',
     endSummary: 'Has ganado {n} estrellas. Ahora tienes {stars} estrellas.',
     explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ ',
@@ -19,7 +18,6 @@
     pista: '🤔 «{elegida}» no encaja con la adivinanza. Vuelve a leer la pista: ',
     refuerzoTitulo: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     transfer: 'Esto te servirá para pensar con ingenio en la vida de cada día: cuando un problema tenga una solución sencilla que no esperabas.'
   }, 'es');
 })();

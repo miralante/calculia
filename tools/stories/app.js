@@ -43,9 +43,14 @@
      toca a esta pregunta. */
   var pistaActual = null;
 
-  function save() { App.storage.set(TOOL_ID, progress); }
+  var glue = App.activityGlue({
+    toolId: TOOL_ID,
+    progress: function () { return progress; },
+    starsEl: function () { return starsEl; },
+    show: function (el) { show(el); }
+  });
+  var save = glue.save, paintStars = glue.paintStars;
 
-  function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
 
   /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
   function levelFromProgress() {

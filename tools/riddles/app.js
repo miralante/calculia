@@ -59,9 +59,12 @@
     App.storage.set(CONFIG.toolId, progress);
   }
 
-  function paintStars() {
-    starsEl.textContent = '⭐ ' + progress.stars;
-  }
+  var glue = App.activityGlue({
+    progress: function () { return progress; },
+    starsEl: function () { return starsEl; },
+    show: function (el) { show(el); }
+  });
+  var paintStars = glue.paintStars;
 
   function paintProgress() {
     progressFill.style.width = ((index / CONFIG.perRound) * 100) + '%';

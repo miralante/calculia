@@ -15,11 +15,9 @@
     piecesLabel: 'Pieces',
     pieceAria: 'Piece',
     hint: '«{elegida}» does not fit that gap: compare the picture with the model and notice its position.',
-    otherLevel: 'Choose another activity',
     endSummary: 'You completed {n} puzzles. You now have {stars} stars.',
     btnMenu: 'Back to start',
     contexto: 'When you tidy a room, build a piece of furniture or set the table, you look at the whole picture and decide where each thing goes.',
-    explicacion: '✅ Comparing each piece to the model trains visual attention: look at the shape, the colour and the position before placing it.',
     transfer: 'This helps you pay attention to the whole picture when you sort or assemble things.'
   }, 'en');
 })();

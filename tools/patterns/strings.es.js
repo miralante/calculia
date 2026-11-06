@@ -15,7 +15,6 @@
     queSigueAudio: '¿Qué sigue?',
     btnMenu: 'Volver al inicio',
     endSummary: 'Has ganado {n} estrellas. Ahora tienes {stars} estrellas.',
-    chooseOtherLevel: 'Elegir otra actividad',
     explicacionCorrecta: '✅ ¡Correcto! Después de la serie viene: ',
     explicacionIncorrectaA: '❌ Eso no sigue el patrón. Lo que sigue es: ',
     pista: '🤔 «{elegida}» no es la respuesta. Mira la serie con calma.',
@@ -32,7 +31,6 @@
     pistaCodigo: '🤔 «{elegida}» no es la letra que acompaña al símbolo: mira qué letra acompaña siempre a cada símbolo.',
     refuerzoTitulo: 'Refuerzo',
     refuerzoIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     transfer: 'Esto te servirá para reconocer patrones del día a día: los días de la semana, el orden de la rutina, las rayas del pijama o los azulejos del baño.'
   }, 'es');
 })();
