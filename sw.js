@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v346';
+var VERSION = 'calculia-v368';
 
 var FILES = [
   './',
@@ -54,6 +54,8 @@ var FILES = [
   './assets/css/components.css',
   './assets/css/number-sort.css',
   './assets/css/word-problems.css',
+  './assets/css/activity-flow.css',
+  './assets/css/common-factors.css',
   './assets/fonts/atkinson-hyperlegible-400.woff2',
   './assets/fonts/atkinson-hyperlegible-700.woff2',
   './assets/fonts/nunito-variable.woff2',
@@ -62,8 +64,13 @@ var FILES = [
   './assets/js/tts.js',
   './assets/js/storage.js',
   './assets/js/feedback.js',
+  './assets/js/activity-glue.js',
   './assets/js/number-sort.js',
   './assets/js/word-problems.js',
+  './assets/js/activity-flow.js',
+  './assets/js/activity-flow-options.js',
+  './assets/js/activity-flow-sheet.js',
+  './assets/js/common-factors.js',
   './assets/img/operaciones.svg',
   './assets/js/achievements.js',
   './assets/js/dinero.js',
@@ -98,6 +105,8 @@ var FILES = [
   './tools/clock/styles.css',
   './tools/fractions-measures/',
   './tools/fractions-measures/app.js',
+  './tools/fractions-measures/model.js',
+  './tools/fractions-measures/comma.js',
   './tools/fractions-measures/data.js',
   './tools/fractions-measures/strings.es.js',
   './tools/fractions-measures/strings.en.js',
@@ -110,6 +119,8 @@ var FILES = [
   './tools/lines/styles.css',
   './tools/shapes/',
   './tools/shapes/app.js',
+  './tools/shapes/art.js',
+  './tools/shapes/model.js',
   './tools/shapes/data.js',
   './tools/shapes/strings.es.js',
   './tools/shapes/strings.en.js',
@@ -152,6 +163,7 @@ var FILES = [
   './tools/head-math/styles.css',
   './tools/mental-math/',
   './tools/mental-math/app.js',
+  './tools/mental-math/model.js',
   './tools/mental-math/data.js',
   './tools/mental-math/strings.es.js',
   './tools/mental-math/strings.en.js',
@@ -308,6 +320,9 @@ var FILES = [
   './tools/los-numeros/styles.css',
   './tools/numbers/',
   './tools/numbers/app.js',
+  './tools/numbers/model.js',
+  './tools/numbers/screens.js',
+  './tools/numbers/counter.js',
   './tools/numbers/data.js',
   './tools/numbers/strings.es.js',
   './tools/numbers/strings.en.js',
@@ -398,6 +413,7 @@ var FILES = [
   './tools/riddles/styles.css',
   './tools/roman-numerals/',
   './tools/roman-numerals/app.js',
+  './tools/roman-numerals/model.js',
   './tools/roman-numerals/data.js',
   './tools/roman-numerals/strings.es.js',
   './tools/roman-numerals/strings.en.js',
