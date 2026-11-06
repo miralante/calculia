@@ -13,20 +13,13 @@
   App.i18n.register({
     title: '✖️ Grupos exactos',
     instructionMenu: 'Elige una actividad.',
-    contexto: 'Hay números que se reparten exactos y números que siempre dejan algo suelto. Saber cuáles son ahorra mucho trabajo.',
-    explicacion: '✅ Todo se puede comprobar poniendo los puntos en filas y mirando si la última fila queda completa.',
-    btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
-    otherLevel: 'Elegir otro nivel',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
-    btnHarder: '¿Quieres probar «{name}»?',
-    btnOtherActivity: 'Otra actividad',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
-    reinforceDone: '¡Refuerzo terminado! Ya las tienes todas.',
     answer: {
       yes: 'Sí',
       no: 'No'
@@ -49,21 +42,6 @@
       cuadrados: { name: 'Cuadrados', detail: 'Elevar al cuadrado y volver.', instruction: 'Un número al cuadrado es un cuadrado de verdad: 5 al cuadrado son 5 filas de 5. La raíz cuadrada es lo contrario: te dan los cuadraditos y buscas el lado.' }
     },
     level: {
-      s3: 'La raíz del cubo',
-      s4: 'Multiplicar negativos',
-      s5: '¿Cuántas veces?',
-      z1: '¿Cuántos ceros?',
-      z2: 'Escrito corto',
-      i1: '¿Sale exacto?',
-      m1: '¿Es múltiplo?',
-      m2: 'Busca el múltiplo',
-      d1: 'Entre 2 y entre 5',
-      d2: 'Entre 10 y entre 3',
-      p1: '¿Es primo?',
-      c1: 'Cuándo coinciden',
-      c2: 'El trozo más grande',
-      s1: 'Al cuadrado',
-      s2: 'La raíz'
     },
     big: {
       '2': 'cien',

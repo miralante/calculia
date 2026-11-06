@@ -50,12 +50,12 @@
 
 /* Text blocks */
 .concept-title, .concept-text, .real-text { text-align: center; margin: 0; }
-.concept-text, .real-text { font-size: var(--texto-grande); line-height: 1.45; }
-.real-card { min-height: 180px; justify-content: center; }
+
+
 
 /* Slide arrows: centred under the drawing. */
-.carousel-controls { display: flex; justify-content: center; gap: var(--espacio); }
-.carousel-controls .btn { min-width: 44px; min-height: 44px; }
+
+
 
 /* What it is for, and the rule: a reference card above the slides, as in Números ordinales. */
 .instruction { margin: 0; text-align: center; font-size: var(--texto-grande); color: var(--color-texto-suave); }
@@ -65,11 +65,11 @@
 
 /* Test answers */
 .options-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
-.option-btn { min-width: 96px; min-height: var(--boton-min); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
-.option-btn.correct { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
-.option-btn:disabled { opacity: 0.6; }
-.task-card { border-color: var(--mod-razonamiento-suave); }
-.prompt { margin: 0; text-align: center; font-size: var(--texto-grande); }
+
+
+
+
+
 
 /* Closing screen: the summary, what was practised, and the transfer sentence. */
 .big-emoji { font-size: 64px; line-height: 1; }

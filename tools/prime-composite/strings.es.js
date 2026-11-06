@@ -12,17 +12,10 @@
     btnMenu: 'Volver al inicio',
 
     ui: {
-      prev: 'Anterior',
-      next: 'Siguiente',
-      count: '{i} de {n}',
       visualAria: 'Dibujo con puntos en filas que muestra el número.',
       product: '{k} × {d} = {m}',
       yes: 'Sí',
       no: 'No',
-      right: '✅ ¡Muy bien!',
-      review: '← Repasar la explicación',
-      startTest: 'Empezar a practicar →',
-      roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.'
     },
 
     /* La explicación: una idea por diapositiva. El dibujo está en data.js. */

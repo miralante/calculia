@@ -13,18 +13,10 @@
     btnMenu: 'Volver al inicio',
 
     ui: {
-      prev: 'Anterior',
-      next: 'Siguiente',
-      count: '{i} de {n}',
       visualAria: 'Dibujo con números u objetos que muestra los saltos al contar.',
-      seeReal: 'Ver ejemplos reales →',
       realLabel: 'Ejemplos de la vida real',
-      startTest: 'Empezar a practicar →',
-      review: '← Repasar la explicación',
       multiplesOf: 'Al contar de {n} en {n}:',
       packs: '{c} paquetes de {s} = {m}',
-      right: '✅ ¡Muy bien!',
-      roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.'
     },
 
     /* La explicación: una idea por diapositiva. El dibujo está en data.js. */

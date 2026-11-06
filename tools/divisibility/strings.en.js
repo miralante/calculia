@@ -13,20 +13,13 @@
   App.i18n.register({
     title: '✖️ Exact groups',
     instructionMenu: 'Choose an activity.',
-    contexto: 'Some numbers share out exactly and some always leave something over. Knowing which is which saves a lot of work.',
-    explicacion: '✅ Everything can be checked by putting the dots in rows and seeing whether the last row comes out full.',
-    btnBackToMenu: '← Other activities',
     btnMenu: 'Back to start',
-    otherLevel: 'Choose another level',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
-    btnHarder: 'Want to try «{name}»?',
-    btnOtherActivity: 'Another activity',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    reinforceDone: "Reinforcement done! You've got them all.",
     answer: {
       yes: 'Yes',
       no: 'No'
@@ -49,21 +42,6 @@
       cuadrados: { name: 'Squares', detail: 'Squaring and back again.', instruction: 'A number squared is a real square: 5 squared is 5 rows of 5. The square root is the other way round: you are given the little squares and you look for the side.' }
     },
     level: {
-      s3: 'The root of a cube',
-      s4: 'Multiplying negatives',
-      s5: 'How many times?',
-      z1: 'How many zeros?',
-      z2: 'Written short',
-      i1: 'Does it come out exact?',
-      m1: 'Is it a multiple?',
-      m2: 'Find the multiple',
-      d1: 'By 2 and by 5',
-      d2: 'By 10 and by 3',
-      p1: 'Is it prime?',
-      c1: 'When they meet',
-      c2: 'The biggest chunk',
-      s1: 'Squared',
-      s2: 'The root'
     },
     big: {
       '2': 'a hundred',

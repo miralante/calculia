@@ -12,18 +12,11 @@
     btnMenu: 'Volver al inicio',
 
     ui: {
-      prev: 'Anterior',
-      next: 'Siguiente',
-      count: '{i} de {n}',
       visualAria: 'Dibujo con puntos que muestra el reparto en grupos.',
       division: '{T} ÷ {d} = {q}',
       remainder: 'sobra {r}',
       yes: 'Sí',
       no: 'No',
-      right: '✅ ¡Muy bien!',
-      review: '← Repasar la explicación',
-      startTest: 'Empezar a practicar →',
-      roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.',
       calc: '{T} ÷ {d} = {v}',
       nextStep: 'Siguiente paso',
       stepOf: 'Paso {i} de {n}',

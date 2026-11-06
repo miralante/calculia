@@ -12,20 +12,13 @@
     btnMenu: 'Back to the start',
 
     ui: {
-      prev: 'Previous',
-      next: 'Next',
       nextStep: 'Next step',
       stepOf: 'Step {i} of {n}',
-      count: '{i} of {n}',
       visualAria: 'Drawing of dots shared into groups.',
       division: '{T} ÷ {d} = {q}',
       remainder: '{r} left over',
       yes: 'Yes',
       no: 'No',
-      right: '✅ Well done!',
-      review: '← Review the explanation',
-      startTest: 'Start practising →',
-      roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} stars.',
       calc: '{T} ÷ {d} = {v}',
       decimalSep: '.'
     },

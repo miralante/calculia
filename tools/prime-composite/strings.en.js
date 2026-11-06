@@ -12,17 +12,10 @@
     btnMenu: 'Back to the start',
 
     ui: {
-      prev: 'Previous',
-      next: 'Next',
-      count: '{i} of {n}',
       visualAria: 'Drawing of dots in rows that shows the number.',
       product: '{k} × {d} = {m}',
       yes: 'Yes',
       no: 'No',
-      right: '✅ Well done!',
-      review: '← Review the explanation',
-      startTest: 'Start practising →',
-      roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} stars.'
     },
 
     /* The explanation: one idea per slide. The drawing is in data.js. */

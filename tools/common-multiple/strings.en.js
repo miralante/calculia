@@ -12,18 +12,10 @@
     btnMenu: 'Back to the start',
 
     ui: {
-      prev: 'Previous',
-      next: 'Next',
-      count: '{i} of {n}',
       visualAria: 'Drawing of numbers or objects that shows the jumps when counting.',
-      seeReal: 'See real examples →',
       realLabel: 'Real-life examples',
-      startTest: 'Start practising →',
-      review: '← Review the explanation',
       multiplesOf: 'Counting up by {n}:',
       packs: '{c} packs of {s} = {m}',
-      right: '✅ Well done!',
-      roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} stars.'
     },
 
     /* The explanation: one idea per slide. The drawing is in data.js. */

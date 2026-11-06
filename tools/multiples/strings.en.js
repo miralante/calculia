@@ -12,19 +12,12 @@
     btnMenu: 'Back to the start',
 
     ui: {
-      prev: 'Previous',
-      next: 'Next',
-      count: '{i} of {n}',
       visualAria: 'Drawing of groups that show the multiples.',
       product: '{k} × {d} = {m}',
       division: '{T} ÷ {d} = {q}',
       remainder: '{r} left over',
       yes: 'Yes',
       no: 'No',
-      right: '✅ Well done!',
-      review: '← Review the explanation',
-      startTest: 'Start practising →',
-      roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} stars.'
     },
 
     /* The explanation: one idea per slide. The drawing is in data.js. */

@@ -17,11 +17,6 @@
     context: 'Factorials count the different ways things can be put in order.',
 
     ui: {
-      prev: 'Previous',
-      next: 'Next',
-      count: '{i} of {n}',
-      seeReal: 'See real examples →',
-      startTest: 'Start practising →',
       reviewRule: 'Review the rule',
       backToPractice: 'Back to practice →',
       realLabel: 'Real-life examples',

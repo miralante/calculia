@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Números factoriales | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
-  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v1089d2b6">
-  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v42206f15">
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
+  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
   <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v2a2b6135">
+  <link rel="stylesheet" href="../../assets/css/activity-flow.css?v=calculia-v9d75537c">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,90 +19,25 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-    <main>
-      <!-- Pantalla 1: para qué sirve (contexto) y la regla, en slides con dibujo.
-           Es la primera pantalla: se enseña antes de preguntar (SPEC §3.6).
-           Desde la práctica se vuelve a abrir con «Repasar la regla». -->
-      <section id="screenIntro" class="stack">
-        <div class="row center-row">
-          <p class="instruction" data-i18n="instruction">Aprende qué significa el signo «!».</p>
-        </div>
-        <div class="card reference-card stack intro-card">
-          <h2 class="reference-title" data-i18n="contextTitle">Para qué sirve</h2>
-          <p class="reference-text" data-i18n="context">Los factoriales cuentan de cuántas formas se pueden ordenar las cosas.</p>
-        </div>
-        <div class="progress-bar" id="introProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="introProgressFill"></div></div>
-        <article class="card stack gallery-card">
-          <div class="fac-visual" id="introVisual"></div>
-          <h2 class="concept-title" id="introTitle"></h2>
-          <p class="concept-text" id="introText"></p>
-          <div class="carousel-controls">
-            <button type="button" class="btn btn-secondary" id="introPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>
-            <button type="button" class="btn btn-secondary" id="introNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>
-          </div>
-        </article>
-        <button type="button" class="btn btn-secondary" id="introContinue" data-i18n="ui.seeReal">Ver ejemplos reales →</button>
-      </section>
-
-      <!-- Pantalla 2: la vida real, un ejemplo cada vez. -->
-      <section id="screenReal" class="hidden stack">
-        <div class="row center-row">
-          <p class="instruction" data-i18n="ui.realLabel">Ejemplos de la vida real</p>
-        </div>
-        <div class="progress-bar" id="realProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="realProgressFill"></div></div>
-        <article class="card centered stack real-card">
-          <div class="fac-visual" id="realVisual"></div>
-          <p class="real-text" id="realText"></p>
-          <div class="carousel-controls">
-            <button type="button" class="btn btn-secondary" id="realPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>
-            <button type="button" class="btn btn-secondary" id="realNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>
-          </div>
-        </article>
-        <button type="button" class="btn" id="realContinue" data-i18n="ui.startTest">Empezar a practicar →</button>
-      </section>
-
-      <!-- Pantalla 3: la práctica, una pregunta cada vez. Pregunta → pista → explicación. -->
-      <section id="screenGame" class="hidden stack">
-        <div class="progress-bar" aria-hidden="true">
-          <div class="progress-fill" id="progressFill"></div>
-          <span class="progress-text" id="progressText">0 / 0</span>
-        </div>
-        <article class="card centered stack task-card">
-          <h2 class="prompt" id="testPrompt"></h2>
-          <div class="fac-visual" id="testVisual"></div>
-          <div class="options-row" id="testOptions"></div>
-          <div class="feedback" id="feedback" aria-live="polite"></div>
-          <div class="explanation hidden" id="explanationWrap">
-            <p id="explanation" aria-live="polite"></p>
-          </div>
-        </article>
-        <button type="button" class="btn btn-secondary" id="reviewRule" data-i18n="ui.reviewRule">Repasar la regla</button>
-        <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
-      </section>
-
-      <!-- Pantalla final: resumen, lo practicado y la frase de transferencia. Un solo botón. -->
-      <section id="screenEnd" class="stack hidden centered" aria-live="polite">
-        <div class="big-emoji" aria-hidden="true">❗</div>
-        <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
-        <p id="endSummary"></p>
-        <p class="recap" data-i18n="recap">Recuerda: 4! = 4 × 3 × 2 × 1 = 24, y 0! = 1.</p>
-        <p class="transfer" data-i18n="transfer">Los factoriales sirven para contar las formas de ordenar cosas: en una fila, en un estante o en un banco.</p>
-        <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>
-      </section>
-    </main>
+    <!-- The stages (explanation, real life, the practice and the closing) are
+         built by assets/js/activity-flow.js into this element. -->
+    <div id="activity"></div>
 
     <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
   </div>
 
-  <script src="../../assets/js/utils.js?v=calculia-v4a0c88f5"></script>
-  <script src="../../assets/js/i18n.js?v=calculia-v612d54ba"></script>
+  <script src="../../assets/js/utils.js?v=calculia-v46cca253"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-v9fe34f5a"></script>
   <script src="../../assets/js/storage.js?v=calculia-vaa34f830"></script>
   <script src="../../assets/js/achievements.js?v=calculia-v24e909e3"></script>
   <script src="../../assets/js/feedback.js?v=calculia-vd06b628a"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
+  <script src="../../assets/js/activity-flow.js?v=calculia-vbf25fa38"></script>
+  <script src="../../assets/js/activity-flow-options.js?v=calculia-v1d15ebfe"></script>
+  <script src="../../assets/js/activity-flow-sheet.js?v=calculia-v7928521a"></script>
   <script src="app.js"></script>
-  <script src="../../assets/js/sw-register.js?v=calculia-vd8558f03"></script>
+  <script src="../../assets/js/sw-register.js?v=calculia-v4a242865"></script>
 </body>
 </html>

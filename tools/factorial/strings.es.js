@@ -17,11 +17,6 @@
     context: 'Los factoriales cuentan de cuántas formas se pueden ordenar las cosas.',
 
     ui: {
-      prev: 'Anterior',
-      next: 'Siguiente',
-      count: '{i} de {n}',
-      seeReal: 'Ver ejemplos reales →',
-      startTest: 'Empezar a practicar →',
       reviewRule: 'Repasar la regla',
       backToPractice: 'Volver a la práctica →',
       realLabel: 'Ejemplos de la vida real',

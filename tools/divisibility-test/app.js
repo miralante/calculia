@@ -4,43 +4,21 @@
    drawing: when a number divides exactly and when it does not, the rules
    for 2, 5, 10 and 3, then the whole part and the decimal part of a
    division that does not come out exact), 2. test (one question at a
-   time). There is no real-life stage: the test is the practice.
+   time). There is no real-life stage: the test is the practice. The stages
+   and the screens are built by assets/js/activity-flow.js (mode 'options',
+   skipReal); a question of a rule has several steps (`steps`), scored once.
    Texts are in strings.<locale>.js, the slides and the test settings in data.js.
    ============================================================ */
 (function () {
   'use strict';
 
-  var TOOL_ID = 'divisibility-test';
   var $ = App.utils.$;
+  var fill = App.utils.fill;
+  var rint = App.utils.rint;
+  var pick = App.utils.pick;
   function t(key) { return App.i18n.t(key); }
 
-  var progress = App.storage.get(TOOL_ID);
-  if (typeof progress.stars !== 'number') progress.stars = 0;
-  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
-
-  var SCREENS = ['#screenIntro', '#screenGame', '#screenEnd'];
   var DOT = '🔴';
-  var introIndex = 0;
-  var round = [];
-  var qIndex = 0;
-  var stepIndex = 0;
-  var roundRight = 0;
-  var question = null;
-  var answered = false;
-  var firstTry = true;
-
-  function save() { App.storage.set(TOOL_ID, progress); }
-  function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
-  function show(screen) {
-    SCREENS.forEach(function (id) { $(id).classList.toggle('hidden', id !== screen); });
-  }
-  function fill(text, values) {
-    var out = text;
-    Object.keys(values).forEach(function (k) { out = out.split('{' + k + '}').join(values[k]); });
-    return out;
-  }
-  function rint(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
-  function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
   function digitSum(n) {
     return String(n).split('').reduce(function (sum, digit) { return sum + Number(digit); }, 0);
   }
@@ -109,39 +87,11 @@
     html += '</div>';
     return html + '<p class="ops-expr">' + fill(t('ui.calc'), { T: total, d: size, v: valueText(total, size) }) + '</p>';
   }
-
-  /* ---- Menu-less explanation ----------------------------------------------- */
-  function paintIntro() {
-    var n = introIndex + 1;
-    var slide = DATA.intro[introIndex].visual;
-    $('#introTitle').textContent = t('intro.' + n + '.title');
-    $('#introVisual').innerHTML = slide.calc ? decimalHtml(slide.total, slide.size) : packHtml(slide.total, slide.size);
-    $('#introVisual').setAttribute('aria-label', t('ui.visualAria'));
-    $('#introText').textContent = t('intro.' + n + '.text');
-    var bar = $('#introProgress');
-    bar.setAttribute('aria-label', fill(t('ui.count'), { i: n, n: DATA.intro.length }));
-    bar.setAttribute('aria-valuemax', String(DATA.intro.length));
-    bar.setAttribute('aria-valuenow', String(n));
-    $('#introProgressFill').style.width = (n / DATA.intro.length * 100) + '%';
+  function visualHtml(spec) {
+    return spec.calc ? decimalHtml(spec.total, spec.size) : packHtml(spec.total, spec.size);
   }
 
-  /* ---- Test -------------------------------------------------------------- */
-  function startRound() {
-    var list = [];
-    for (var i = 0; i < DATA.perRound; i += 1) list.push(DATA.questions[i % DATA.questions.length]);
-    round = App.utils.shuffle(list).map(makeQuestion);
-    qIndex = 0;
-    roundRight = 0;
-    show('#screenGame');
-    renderQuestion();
-  }
-
-  function reviewIntro() {
-    introIndex = 0;
-    paintIntro();
-    show('#screenIntro');
-  }
-
+  /* ---- Test: the questions ------------------------------------------------ */
   /* Answers as text: the right one and up to two others, all different, in a shuffled order. */
   function textOptions(correct, wrongs) {
     var values = [correct];
@@ -155,7 +105,7 @@
 
   /* Numbers as answers: the right one and up to two others, all different and not
      below zero, in a shuffled order. */
-  function numericOptions(correct, wrongs) {
+  function numericTextOptions(correct, wrongs) {
     return textOptions(String(correct), wrongs.filter(function (v) { return v >= 0; }).map(String));
   }
 
@@ -174,7 +124,7 @@
     return {
       prompt: fill(t('q.pick.prompt'), { d: d }),
       hint: fill(t('q.pick.hint'), { d: d }),
-      options: numericOptions(n, [n + 1, n - 1, n + d - 1]),
+      options: numericTextOptions(n, [n + 1, n - 1, n + d - 1]),
       explanation: fill(t('q.pick.explain'), { n: n, d: d })
     };
   }
@@ -196,7 +146,7 @@
 
   /* One step of a rule: a question with numbers as answers. */
   function numberStep(prompt, hint, correct, wrongs, explanation) {
-    return { prompt: prompt, hint: hint, options: numericOptions(correct, wrongs), explanation: explanation };
+    return { prompt: prompt, hint: hint, options: numericTextOptions(correct, wrongs), explanation: explanation };
   }
   /* One step of a rule: a yes-or-no question. */
   function yesNoStep(prompt, hint, yes, yesExplanation, noExplanation) {
@@ -236,7 +186,6 @@
     return steps;
   }
 
-
   /* The whole part: how many full packs come out when the calculator shows a decimal.
      The wrong answers are the usual slips: one pack more, or the number of items. */
   function makeInteger() {
@@ -247,7 +196,7 @@
     return {
       prompt: fill(t('q.integer.prompt'), values),
       hint: t('q.integer.hint'),
-      options: numericOptions(q, [q + 1, n]),
+      options: numericTextOptions(q, [q + 1, n]),
       explanation: fill(t('q.integer.explain'), values)
     };
   }
@@ -276,104 +225,17 @@
     return { steps: [makeDecimal()] };
   }
 
-  /* The current step: its question, its options and the step label (Paso 1 de 3). */
-  function renderQuestion() {
-    question = round[qIndex];
-    stepIndex = 0;
-    firstTry = true;
-    $('#progressFill').style.width = ((qIndex / round.length) * 100) + '%';
-    $('#progressText').textContent = (qIndex + 1) + ' / ' + round.length;
-    renderStep();
-  }
-
-  function renderStep() {
-    var step = question.steps[stepIndex];
-    answered = false;
-    var steps = question.steps.length;
-    var label = $('#stepLabel');
-    label.textContent = fill(t('ui.stepOf'), { i: stepIndex + 1, n: steps });
-    label.classList.toggle('hidden', steps < 2);
-    $('#testPrompt').textContent = step.prompt;
-    $('#feedback').textContent = '';
-    $('#feedback').className = 'feedback';
-    var box = $('#testOptions');
-    box.innerHTML = '';
-    step.options.forEach(function (option) {
-      var button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'btn option-btn';
-      button.innerHTML = option.html;
-      button.setAttribute('aria-label', option.aria);
-      button.addEventListener('click', function () { answer(option, button); });
-      box.appendChild(button);
-    });
-    $('#btnNext').classList.add('hidden');
-  }
-
-  function isLastStep() { return stepIndex === question.steps.length - 1; }
-
-  function answer(option, button) {
-    if (answered) return;
-    var step = question.steps[stepIndex];
-    var feedback = $('#feedback');
-    if (option.correct) {
-      answered = true;
-      button.classList.add('correct');
-      feedback.textContent = t('ui.right') + ' ' + step.explanation;
-      feedback.className = 'feedback success';
-      /* The question scores once, at its last step, and only if no step was missed. */
-      if (isLastStep() && firstTry) {
-        roundRight += 1;
-        progress.stars += 1;
-        save();
-        paintStars();
-      }
-      $('#testOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
-      $('#btnNext').textContent = isLastStep() ? t('ui.next') : t('ui.nextStep');
-      $('#btnNext').classList.remove('hidden');
-      return;
-    }
-    /* A wrong answer: the hint, and the option stays off. Nothing is punished. */
-    firstTry = false;
-    button.classList.add('incorrect');
-    button.disabled = true;
-    feedback.textContent = step.hint;
-    feedback.className = 'feedback error';
-  }
-
-  function nextQuestion() {
-    if (!isLastStep()) {
-      stepIndex += 1;
-      renderStep();
-      return;
-    }
-    qIndex += 1;
-    if (qIndex < round.length) {
-      renderQuestion();
-      return;
-    }
-    progress.completedRounds += 1;
-    save();
-    $('#endSummary').textContent = fill(t('ui.roundDone'), {
-      n: roundRight, total: round.length, stars: progress.stars
-    });
-    show('#screenEnd');
-  }
-
-  /* ---- Wiring ----------------------------------------------------------- */
-  function init() {
-    App.i18n.apply();
-    paintStars();
-    /* Slides wrap around: the last one leads back to the first, and the first back to the last. */
-    $('#introPrev').addEventListener('click', function () { introIndex = (introIndex + DATA.intro.length - 1) % DATA.intro.length; paintIntro(); });
-    $('#introNext').addEventListener('click', function () { introIndex = (introIndex + 1) % DATA.intro.length; paintIntro(); });
-    $('#introContinue').addEventListener('click', startRound);
-    $('#testBack').addEventListener('click', reviewIntro);
-    $('#btnNext').addEventListener('click', nextQuestion);
-    $('#endBackToStart').addEventListener('click', function () { location.href = '../../'; });
-    paintIntro();
-    show('#screenIntro');
-  }
-
-  document.addEventListener('DOMContentLoaded', init);
+  App.activityFlow.setup({
+    toolId: 'divisibility-test',
+    intro: DATA.intro,
+    real: [],
+    skipReal: true,
+    visualHtml: visualHtml,
+    buildRound: function () {
+      var list = [];
+      for (var i = 0; i < DATA.perRound; i += 1) list.push(DATA.questions[i % DATA.questions.length]);
+      return App.utils.shuffle(list);
+    },
+    makeQuestion: makeQuestion
+  });
 })();

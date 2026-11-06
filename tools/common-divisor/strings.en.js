@@ -12,19 +12,11 @@
     btnMenu: 'Back to the start',
 
     ui: {
-      prev: 'Previous',
-      next: 'Next',
-      count: '{i} of {n}',
       visualAria: 'Drawing of objects that shows the sharing.',
-      seeReal: 'See real examples →',
       realLabel: 'Real-life examples',
-      startTest: 'Start practising →',
-      review: '← Review the explanation',
       share: 'There are {g} equal groups. In each group there are {x} and {y}.',
       tiles: 'A floor of {a} × {b} cm, covered with tiles of {g} × {g} cm.',
       divisorsOf: 'Numbers that fit exactly into {n}:',
-      right: '✅ Well done!',
-      roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} stars.'
     },
 
     /* The explanation: one idea per slide. The drawing is in data.js. */

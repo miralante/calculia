@@ -13,9 +13,14 @@
   App.i18n.register({
     title: '🔍 Primes and composites',
     instructionIntro: 'Look at the numbers.',
-    introContinue: 'See them in real life →',
-    galleryPrevious: 'Previous',
-    galleryNext: 'Next',
+
+    /* Screen texts (shared by the flow engine, assets/js/activity-flow.js). */
+    ui: {
+      seeReal: 'See them in real life →',
+      realLabel: 'Primes and composites are in everyday life',
+      hint: '🤔 Try again. Can it be shared with nothing left over?'
+    },
+
     concept: {
       divide: {
         title: 'Share with nothing left over',
@@ -46,8 +51,6 @@
         text: 'It is writing a number as a multiplication of primes. 12 = 2 × 2 × 3.'
       }
     },
-    realTitle: 'Primes and composites are in everyday life',
-    realContinue: 'Start practising →',
     real: {
       candies: 'You have 7 sweets. You can only share them equally between 1 person or 7 people. 7 is prime.',
       tiles: 'You have 12 tiles. You can put them in rows of 2, 3, 4 or 6. 12 is composite.',
@@ -58,11 +61,6 @@
       composite: 'Composite',
       neither: 'Neither prime nor composite'
     },
-    check: 'Check',
-    newRound: 'Another round →',
-    btnMenu: 'Back to start',
-    hint: '🤔 Try again. Can it be shared with nothing left over?',
-    transfer: 'This helps you share things into equal groups and simplify fractions.',
     gen: {
       classifyPrompt: 'Is this number prime, composite or neither?',
       pickPrompt: 'Which of these numbers is prime?',

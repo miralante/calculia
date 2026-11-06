@@ -13,9 +13,14 @@
   App.i18n.register({
     title: '🔍 Primos y compuestos',
     instructionIntro: 'Mira los números.',
-    introContinue: 'Verlos en la vida real →',
-    galleryPrevious: 'Anterior',
-    galleryNext: 'Siguiente',
+
+    /* Textos de la pantalla (los comparte el motor assets/js/activity-flow.js). */
+    ui: {
+      seeReal: 'Verlos en la vida real →',
+      realLabel: 'Los primos y los compuestos están en la vida diaria',
+      hint: '🤔 Prueba otra vez. ¿Se puede repartir sin que sobre nada?'
+    },
+
     concept: {
       divide: {
         title: 'Repartir sin que sobre nada',
@@ -46,8 +51,6 @@
         text: 'Es escribir un número como multiplicación de primos. El 12 = 2 × 2 × 3.'
       }
     },
-    realTitle: 'Los primos y los compuestos están en la vida diaria',
-    realContinue: 'Empezar a practicar →',
     real: {
       candies: 'Tienes 7 caramelos. Solo los puedes repartir iguales entre 1 persona o entre 7. El 7 es primo.',
       tiles: 'Tienes 12 baldosas. Las puedes poner en filas de 2, de 3, de 4 o de 6. El 12 es compuesto.',
@@ -58,11 +61,6 @@
       composite: 'Compuesto',
       neither: 'Ni primo ni compuesto'
     },
-    check: 'Comprobar',
-    newRound: 'Otra ronda →',
-    btnMenu: 'Volver al inicio',
-    hint: '🤔 Prueba otra vez. ¿Se puede repartir sin que sobre nada?',
-    transfer: 'Esto te servirá para repartir cosas en grupos iguales y para simplificar fracciones.',
     gen: {
       classifyPrompt: '¿Este número es primo, compuesto o ninguno de los dos?',
       pickPrompt: '¿Cuál de estos números es primo?',

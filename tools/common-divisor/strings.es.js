@@ -13,19 +13,11 @@
     btnMenu: 'Volver al inicio',
 
     ui: {
-      prev: 'Anterior',
-      next: 'Siguiente',
-      count: '{i} de {n}',
       visualAria: 'Dibujo con objetos que muestra el reparto.',
-      seeReal: 'Ver ejemplos reales →',
       realLabel: 'Ejemplos de la vida real',
-      startTest: 'Empezar a practicar →',
-      review: '← Repasar la explicación',
       share: 'Caben {g} grupos iguales. En cada grupo hay {x} y {y}.',
       tiles: 'Suelo de {a} × {b} cm, cubierto con baldosas de {g} × {g} cm.',
       divisorsOf: 'Números que caben exacto en {n}:',
-      right: '✅ ¡Muy bien!',
-      roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.'
     },
 
     /* La explicación: una idea por diapositiva. El dibujo está en data.js. */

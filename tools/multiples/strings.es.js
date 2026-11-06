@@ -12,19 +12,12 @@
     btnMenu: 'Volver al inicio',
 
     ui: {
-      prev: 'Anterior',
-      next: 'Siguiente',
-      count: '{i} de {n}',
       visualAria: 'Dibujo con grupos que muestran los múltiplos.',
       product: '{k} × {d} = {m}',
       division: '{T} ÷ {d} = {q}',
       remainder: 'sobra {r}',
       yes: 'Sí',
       no: 'No',
-      right: '✅ ¡Muy bien!',
-      review: '← Repasar la explicación',
-      startTest: 'Empezar a practicar →',
-      roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.'
     },
 
     /* La explicación: una idea por diapositiva. El dibujo está en data.js. */
