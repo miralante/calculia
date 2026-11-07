@@ -41,15 +41,9 @@
 
   /* Round state */
   var activity = null;
-  var level = null;
   var roundQuestions = [];
   var realIndex = 0;
   var lessonReturnTo = 'menu';
-  var index = 0;
-  var roundCorrect = 0;
-  var answered = false;
-  var attempts = 0;
-  var question = null;
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
   var reinforcement = App.reinforce.session({ titleKey: 'reinforceTitle', introKey: 'reinforceIntro', show: paintQuestion });
 
@@ -58,11 +52,24 @@
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
     activity: function () { return activity; },
-    roundCorrect: function () { return roundCorrect; },
+    roundCorrect: function () { return round.roundCorrect; },
     screenEnd: function () { return screenEnd; },
     show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars, endRound = glue.endRound;
+
+  /* The round state and the shared answer, hint and next step (assets/js/classic-quiz.js). */
+  var round = { level: null, index: 0, roundCorrect: 0, answered: false, attempts: 0, question: null };
+  var quiz = App.classicQuiz({
+    round: round, progress: progress, reinforcement: reinforcement,
+    save: function () { save(); }, paintStars: function () { paintStars(); },
+    feedback: feedbackEl, explanation: explanationEl, explanationWrap: explanationWrap, btnNext: btnNext,
+    perRound: DATA.perRound,
+    showExplanation: function (isCorrect) { showExplanation(isCorrect); },
+    render: function () { render(); },
+    endRound: function () { endRound(); }
+  });
+  var answer = quiz.answer, showHint = quiz.showHint, next = quiz.next;
 
   var F = App.trigonometryFigures;
   var Q = App.trigonometryQuestions;
@@ -207,12 +214,12 @@
   /* ---- Game ---- */
 
   function startRound(nv) {
-    level = nv;
-    roundQuestions = level.tipo === 'mixed'
-      ? App.utils.shuffle(level.questions.slice())
+    round.level = nv;
+    roundQuestions = round.level.tipo === 'mixed'
+      ? App.utils.shuffle(round.level.questions.slice())
       : [];
-    index = 0;
-    roundCorrect = 0;
+    round.index = 0;
+    round.roundCorrect = 0;
     App.utils.drawRoundReset();
     reinforcement.begin();
     show(screenGame);
@@ -222,35 +229,35 @@
   /* Paints one question. `fixed` replays a question from the reinforce
      queue; without it a new one is generated for the current level. */
   function paintQuestion(fixed) {
-    var questionLevel = level;
-    if (!fixed && level.tipo === 'mixed') questionLevel = roundQuestions[index];
-    question = fixed || GENERATOR_FOR[questionLevel.tipo](questionLevel, index);
+    var questionLevel = round.level;
+    if (!fixed && round.level.tipo === 'mixed') questionLevel = roundQuestions[round.index];
+    round.question = fixed || GENERATOR_FOR[questionLevel.tipo](questionLevel, round.index);
     /* Every question must have exactly ONE right answer, and the answer
        list must be something the screen can hold. This is the guard that
        catches a generator quietly dropping its own correct option: the
        page would otherwise accept nothing at all, and the explanation
        code below would throw on `undefined` while trying to explain a
        question that has no answer. */
-    var right = question.options.filter(function (o) { return o.correct; });
-    if (right.length !== 1 || question.options.length < 2) {
-      throw new Error('trigonometry: level "' + level.id + '" built a question with ' +
-        right.length + ' correct answer(s) out of ' + question.options.length);
+    var right = round.question.options.filter(function (o) { return o.correct; });
+    if (right.length !== 1 || round.question.options.length < 2) {
+      throw new Error('trigonometry: level "' + round.level.id + '" built a question with ' +
+        right.length + ' correct answer(s) out of ' + round.question.options.length);
     }
-    answered = false;
-    attempts = 0;
+    round.answered = false;
+    round.attempts = 0;
 
-    promptEl.textContent = question.prompt;
-    visualEl.innerHTML = question.visual || '';
-    visualEl.classList.toggle('hidden', !question.visual);
-    if (question.visualAria) {
+    promptEl.textContent = round.question.prompt;
+    visualEl.innerHTML = round.question.visual || '';
+    visualEl.classList.toggle('hidden', !round.question.visual);
+    if (round.question.visualAria) {
       visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', question.visualAria);
+      visualEl.setAttribute('aria-label', round.question.visualAria);
     } else {
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.textContent = question.legend || '';
-    legendEl.classList.toggle('hidden', !question.legend);
+    legendEl.textContent = round.question.legend || '';
+    legendEl.classList.toggle('hidden', !round.question.legend);
 
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
@@ -259,8 +266,8 @@
     btnNext.classList.add('hidden');
 
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('options-row', !!question.inline);
-    question.options.forEach(function (op) {
+    optionsEl.classList.toggle('options-row', !!round.question.inline);
+    round.question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'option-btn';
@@ -272,7 +279,7 @@
 
     progressFill.style.width = (reinforcement.active()
       ? ((reinforcement.position() + 1) / reinforcement.total())
-      : (index / DATA.perRound)) * 100 + '%';
+      : (round.index / DATA.perRound)) * 100 + '%';
     progressText.textContent = '';
     paintStars();
   }
@@ -290,14 +297,14 @@
       explanationWrap.classList.add('hidden');
       return;
     }
-    var correct = question.options.filter(function (o) { return o.correct; })[0];
+    var correct = round.question.options.filter(function (o) { return o.correct; })[0];
     /* A picture option has no words of its own, so the explanation falls
        back to its aria text rather than saying nothing. */
     var said = plainText(correct.html).replace(/\s+/g, ' ').trim();
     explanationEl.textContent =
       (isCorrect ? App.i18n.t('correctExplanation') : App.i18n.t('incorrectExplanationA')) +
       (said || correct.aria || '') + '.' +
-      (question.explanation ? ' ' + question.explanation : '');
+      (round.question.explanation ? ' ' + round.question.explanation : '');
     explanationWrap.classList.remove('hidden');
   }
 
@@ -307,55 +314,6 @@
      to do with the figure in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
-  function showHint(op) {
-    explanationEl.textContent = App.feedback.hintText(
-      (question && question.hint) || App.i18n.t('hint'), op ? plainText(op.html) : '');
-    explanationWrap.classList.remove('hidden');
-  }
-
-  function answer(op, btn) {
-    if (answered) return;
-    if (op.correct) {
-      showExplanation(true);
-      answered = true;
-      btn.classList.add('correct');
-      App.feedback.success(feedbackEl);
-      progress.stars += 1;
-      roundCorrect += 1;
-      save();
-      paintStars();
-      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
-      btnNext.classList.remove('hidden');
-      btnNext.focus();
-    } else {
-      attempts += 1;
-      App.reinforce.add(level.id + ':' + index, question);
-      var respuestaTrasPista = attempts > 1;
-      showHint(op);
-      /* Reveal the explanation only after the hint is acknowledged. */
-      btn.classList.add('encourage');
-      btn.disabled = true;
-      App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(false); });
-    }
-  }
-
-  function next() {
-    if (reinforcement.active()) {
-      if (!reinforcement.nextItem()) endRound();
-      return;
-    }
-    index += 1;
-    if (index >= DATA.perRound) {
-      /* consume() returns [] when nothing was failed; otherwise it fires
-         the callback that mounts the mini-round, which ends the round
-         itself, so endRound must not also run here. */
-      if (App.reinforce.consume().length === 0) endRound();
-    } else {
-      render();
-    }
-  }
-
 
   /* ---- Events ---- */
 
