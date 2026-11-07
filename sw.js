@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v373';
+var VERSION = 'calculia-v374';
 
 var FILES = [
   './',
@@ -130,6 +130,8 @@ var FILES = [
   './tools/trigonometry/',
   './tools/trigonometry/app.js',
   './tools/trigonometry/data.js',
+  './tools/trigonometry/figures.js',
+  './tools/trigonometry/questions.js',
   './tools/trigonometry/strings.es.js',
   './tools/trigonometry/strings.en.js',
   './tools/trigonometry/styles.css',
@@ -166,6 +168,7 @@ var FILES = [
   './tools/mental-math/',
   './tools/mental-math/app.js',
   './tools/mental-math/model.js',
+  './tools/mental-math/groups.js',
   './tools/mental-math/data.js',
   './tools/mental-math/strings.es.js',
   './tools/mental-math/strings.en.js',
@@ -362,6 +365,7 @@ var FILES = [
   './tools/ordinals/',
   './tools/ordinals/app.js',
   './tools/ordinals/data.js',
+  './tools/ordinals/screens.js',
   './tools/ordinals/strings.es.js',
   './tools/ordinals/strings.en.js',
   './tools/ordinals/styles.css',
@@ -416,6 +420,7 @@ var FILES = [
   './tools/roman-numerals/',
   './tools/roman-numerals/app.js',
   './tools/roman-numerals/model.js',
+  './tools/roman-numerals/screens.js',
   './tools/roman-numerals/data.js',
   './tools/roman-numerals/strings.es.js',
   './tools/roman-numerals/strings.en.js',
