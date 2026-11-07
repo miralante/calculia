@@ -633,6 +633,15 @@
     }
 
     /* ---- Wire-up of the groups walkthrough ---- */
+    /* Leaves the walkthrough for the activities menu. The classic show() only
+       toggles the menu, the game and the end screen, so every group screen is
+       hidden here first; otherwise the menu would open under the walkthrough. */
+    function leaveToMenu() {
+      GROUPS_ALL_SCREENS.forEach(function (s) { s.classList.add('hidden'); });
+      show(screenMenu);
+      paintStars();
+    }
+
     $('#carouselDisplay').addEventListener('click', function () { carouselStep(1); });
     $('#carouselDisplay').addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -653,19 +662,18 @@
     $('#referenceNext').addEventListener('click', function () { groupsSwitchTo(gLevelsScreen); });
 
     $('#levelsBack').addEventListener('click', function () { groupsSwitchTo(gReminderScreen); });
-    $('#levelsBackToMenu').addEventListener('click', function () { groupsSwitchTo(gIntroScreen); });
     /* Sub-implementación más natural: "Volver al menú" desde la
        cuadrícula de niveles debe devolver al menú de actividades
        (no al intro del recorrido) — esa es la única ruta en la que
        la persona dice "ya no quiero contar en grupos", y todo el
        recorrido se cierra. Las otras vueltas atrás son internas. */
-    $('#levelsBackToMenu').addEventListener('click', function () { show(screenMenu); paintStars(); });
+    $('#levelsBackToMenu').addEventListener('click', leaveToMenu);
 
     $('#groupsBackLevels').addEventListener('click', function () { groupsSwitchTo(gLevelsScreen); });
     $('#groupsNext').addEventListener('click', groupsNext);
     $('#groupsReplay').addEventListener('click', function () { groupsStartLevel(currentLevel); });
     $('#groupsChooseLevel').addEventListener('click', function () { groupsSwitchTo(gLevelsScreen); });
-    $('#groupsEndMenu').addEventListener('click', function () { show(screenMenu); paintStars(); });
+    $('#groupsEndMenu').addEventListener('click', leaveToMenu);
 
 
 
