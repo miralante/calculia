@@ -14,7 +14,7 @@
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
-var VERSION = 'calculia-v382';
+var VERSION = 'calculia-v383';
 
 var FILES = [
   './',
@@ -463,7 +463,7 @@ var FILES = [
   './tools/wallet/data.js',
   './tools/wallet/strings.es.js',
   './tools/wallet/strings.en.js',
-  './tools/wallet/styles.css'
+  './tools/wallet/styles.css',
   // shared shell files added by scripts/sync-sw-files.js
   './assets/js/classic-quiz.js',
 ];
