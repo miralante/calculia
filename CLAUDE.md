@@ -381,18 +381,18 @@ of the card, big. The end-screen section must not add a second
 replay path, the right place is a small "Otra ronda" inside
 the test, not a "Jugar otra vez" on the close.
 
-The wire is shared and lives in the activity's `app.js` near
-the other addEventListener calls:
+The wire is shared: `App.utils.bindEndBackToStart()` in
+`assets/js/utils.js` binds the button, and each activity's `app.js`
+calls it once, near the other addEventListener calls:
 
 ```js
-var endBackToStart = $('#endBackToStart');
-if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
+App.utils.bindEndBackToStart();
 ```
 
-The `if (endBackToStart)` guard is for the Formas flow specifically,
-where the test sheet never reaches the end screen at all (it has
-"Otra ronda" inline instead); the other 29 activities always
-have the button in the DOM.
+The helper does nothing when the button is missing. That is the
+Formas flow: its test sheet never reaches the end screen at all (it
+has "Otra ronda" inline instead). The other 29 activities always have
+the button in the DOM.
 
 ## Public-facing wording: "usuario/a tipo" euphemism
 

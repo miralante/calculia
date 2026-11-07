@@ -37,9 +37,7 @@
   var listenBtn = $('#btnListen');
 
   /* Persistent progress */
-  var progress = App.storage.get(TOOL_ID);
-  if (typeof progress.stars !== 'number') progress.stars = 0;
-  if (typeof progress.completedRounds !== 'number') progress.completedRounds = 0;
+  var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0 });
 
   /* Round state */
   var mode = null;     // { id, stars }   chosen mechanic
@@ -709,7 +707,6 @@
      to the Calculia landing. The end screen is a closing card, not a
      second menu: picking another activity is a tap away on the home
      page, so it does not need its own button here. */
-  var endBackToStart = $('#endBackToStart');
-  if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
+  App.utils.bindEndBackToStart();
 
 })();

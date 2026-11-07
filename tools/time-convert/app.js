@@ -20,8 +20,7 @@
   var starsEl = $('#stars');
 
   /* Persistent progress */
-  var progress = App.storage.get(TOOL_ID);
-  if (typeof progress.stars !== 'number') progress.stars = 0;
+  var progress = App.storage.progressWith(TOOL_ID, { stars: 0 });
 
   /* Right answers of the round, counted at the first check. */
   var roundCorrect = 0;

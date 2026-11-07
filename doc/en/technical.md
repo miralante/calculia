@@ -763,10 +763,10 @@ in §2.1 above are the canonical rationale).
 
 | Module | Surface | Required by |
 |---|---|---|
-| `utils.js` | `App.utils.shuffle / $ / $$ / reducedMotion / wakeLock` | every page |
+| `utils.js` | `App.utils.shuffle / $ / $$ / reducedMotion / wakeLock / bindEndBackToStart` | every page |
 | `i18n.js` | `App.i18n.{locale, setLocale, lang, register, t, pick, apply, SUPPORTED, DEFAULT_LOCALE, LABEL, FLAG}` | every page |
 | `tts.js` | `App.tts.speak` | only pages that read aloud (most do) |
-| `storage.js` | `App.storage.{get, set, remove}` | only pages that read or write `localStorage` (`index.html`, `config/`) |
+| `storage.js` | `App.storage.{get, set, remove, progressWith}` | only pages that read or write `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | only the activity's `app.js` |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | activities that keep their own round loop (not `App.activityFlow`) |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | the activities that show a row of dots or a shuffled Yes / No (divisibility-test, multiples, prime-composite) |

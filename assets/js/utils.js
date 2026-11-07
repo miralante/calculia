@@ -243,9 +243,17 @@
     });
   }
 
+  /* The end screen's only button, "Volver al inicio": goes back to the Calculia
+     landing. Does nothing on pages without the button. */
+  function bindEndBackToStart() {
+    var el = $('#endBackToStart');
+    if (el) el.addEventListener('click', function () { location.href = '../../'; });
+  }
+
   window.App.utils = {
     shuffle: shuffle,
     drawRound: drawRound,
+    bindEndBackToStart: bindEndBackToStart,
     drawRoundReset: drawRoundReset,
     spreadRepeats: spreadRepeats,
     $: $,

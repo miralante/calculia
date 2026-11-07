@@ -29,8 +29,7 @@
   var endSummary = $('#endSummary');
 
   /* Persistent progress (kept across browser closes) */
-  var progress = App.storage.get(CONFIG.toolId);
-  if (typeof progress.stars !== 'number') progress.stars = 0;
+  var progress = App.storage.progressWith(CONFIG.toolId, { stars: 0 });
   if (typeof progress.completedRounds !== 'number') progress.completedRounds = progress.rondas || 0;
 
   /* Current round state */
@@ -227,8 +226,7 @@
      to the Calculia landing. The end screen is a closing card, not a
      second menu: picking another activity is a tap away on the home
      page, so it does not need its own button here. */
-  var endBackToStart = $('#endBackToStart');
-  if (endBackToStart) endBackToStart.addEventListener('click', function () { location.href = '../../'; });
+  App.utils.bindEndBackToStart();
 
 })();
 

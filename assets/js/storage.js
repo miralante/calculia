@@ -151,10 +151,24 @@
     return out;
   }
 
+  /* The progress of a tool with its defaults filled in, in memory only (the
+     activity saves it when it changes). A number default fills a key that is not
+     a number; an object default fills a key that is missing or falsy. */
+  function progressWith(toolId, defaults) {
+    var data = get(toolId);
+    Object.keys(defaults).forEach(function (key) {
+      var fallback = defaults[key];
+      var missing = typeof fallback === 'number' ? typeof data[key] !== 'number' : !data[key];
+      if (missing) data[key] = fallback;
+    });
+    return data;
+  }
+
   window.App.storage = {
     get: get,
     set: set,
     remove: remove,
+    progressWith: progressWith,
     totalStars: totalStars,
     toolIds: toolIds
   };
