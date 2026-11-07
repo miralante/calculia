@@ -34,13 +34,7 @@
 
   /* Round state */
   var activity = null;
-  var level = null;
-  var index = 0;
-  var roundCorrect = 0;
   var answered = false;
-  var attempts = 0;
-  var resolved = false;
-  var question = null;
   /* Refuerzo: ver core en assets/js/feedback.js (App.reinforce).
      fixedQuestion permite reutilizar render() con una question
      externa (la del refuerzo); si es null, render() genera una
@@ -58,11 +52,24 @@
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
     activity: function () { return activity; },
-    roundCorrect: function () { return roundCorrect; },
+    roundCorrect: function () { return round.roundCorrect; },
     screenEnd: function () { return screenEnd; },
     show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars, levelFromProgress = glue.levelFromProgress, endRound = glue.endRound;
+
+  /* The round state and the shared answer, hint and next step (assets/js/classic-quiz.js). */
+  var round = { level: null, index: 0, roundCorrect: 0, answered: false, attempts: 0, question: null };
+  var quiz = App.classicQuiz({
+    round: round, progress: progress, reinforcement: reinforcement,
+    save: function () { save(); }, paintStars: function () { paintStars(); },
+    feedback: feedbackEl, explanation: explanationEl, explanationWrap: explanationWrap, btnNext: btnNext,
+    perRound: DATA.perRound,
+    showExplanation: function (isCorrect) { showExplanation(isCorrect); },
+    render: function () { render(); },
+    endRound: function () { endRound(); }
+  });
+  var answer = quiz.answer, showHint = quiz.showHint, next = quiz.next;
 
   /* ---- Utilidades ---- */
 
@@ -251,25 +258,6 @@
   }
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
-  function paintMenu() {
-    var cont = $('#activitiesMenu');
-    cont.innerHTML = '';
-    var grid = document.createElement('div');
-    grid.className = 'menu-grid';
-    Object.keys(DATA.activities).forEach(function (id) {
-      var act = DATA.activities[id];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-actividad';
-      btn.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
-        '<span>' + App.i18n.t('activity.' + id + '.name') + '</span>' +
-        '<span class="detail-card">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
-      btn.addEventListener('click', function () { openActivity(id); });
-      grid.appendChild(btn);
-    });
-    cont.appendChild(grid);
-  }
-
   /* ---- Levels of an activity (now automatic via levelFromProgress) ---- */
 
   /* ---- Game ---- */
@@ -282,10 +270,12 @@
     startRound(levelFromProgress());
   }
 
+  var activityMenu = App.activityMenu({ container: $('#activitiesMenu'), activities: DATA.activities, open: openActivity });
+
   function startRound(levelArg) {
-    level = levelArg;
-    index = 0;
-    roundCorrect = 0;
+    round.level = levelArg;
+    round.index = 0;
+    round.roundCorrect = 0;
     App.utils.drawRoundReset();
     fixedQuestion = null;
     reinforcement.begin();
@@ -304,22 +294,22 @@
   }
 
   function render() {
-    resolved = false;
-    attempts = 0;
-    question = fixedQuestion || GENERATORS[level.tipo](level, index);
+    round.answered = false;
+    round.attempts = 0;
+    round.question = fixedQuestion || GENERATORS[round.level.tipo](round.level, round.index);
     fixedQuestion = null;
 
-    promptEl.textContent = question.prompt;
-    visualEl.innerHTML = question.visual || '';
-    if (question.visualAria) {
+    promptEl.textContent = round.question.prompt;
+    visualEl.innerHTML = round.question.visual || '';
+    if (round.question.visualAria) {
       visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', question.visualAria);
+      visualEl.setAttribute('aria-label', round.question.visualAria);
     } else {
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.innerHTML = question.legend || '';
-    legendEl.classList.toggle('hidden', !question.legend);
+    legendEl.innerHTML = round.question.legend || '';
+    legendEl.classList.toggle('hidden', !round.question.legend);
 
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
@@ -328,8 +318,8 @@
     btnNext.classList.add('hidden');
 
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('options-row', !!question.inline);
-    question.options.forEach(function (op) {
+    optionsEl.classList.toggle('options-row', !!round.question.inline);
+    round.question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'option-btn';
@@ -339,7 +329,7 @@
       optionsEl.appendChild(btn);
     });
 
-    progressFill.style.width = ((index / DATA.perRound) * 100) + '%';
+    progressFill.style.width = ((round.index / DATA.perRound) * 100) + '%';
     progressText.textContent = '';
     paintStars();
   }
@@ -354,7 +344,7 @@
       explanationWrap.classList.add('hidden');
       return;
     }
-    var correct = question.options.filter(function (o) { return o.correct; })[0];
+    var correct = round.question.options.filter(function (o) { return o.correct; })[0];
     var text = (isCorrect ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
       plainText(correct.html) + '.';
     explanationEl.textContent = text;
@@ -368,55 +358,6 @@
      question —which is what to do with the figure in front of you— and
      not the same sentence for every question. The generic line is only
      the fallback, for a question that forgot to bring its own. */
-  function showHint(op) {
-    explanationEl.textContent = App.feedback.hintText(
-      (question && question.hint) || App.i18n.t('hint'), op ? plainText(op.html) : '');
-    explanationWrap.classList.remove('hidden');
-  }
-
-  function answer(op, btn) {
-    if (resolved) return;
-    if (op.correct) {
-      showExplanation(op.correct);
-      resolved = true;
-      btn.classList.add('correct');
-      App.feedback.success(feedbackEl);
-      progress.stars += 1;
-      roundCorrect += 1;
-      save();
-      paintStars();
-      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
-      btnNext.classList.remove('hidden');
-      btnNext.focus();
-    } else {
-      attempts += 1;
-      if (attempts === 1) App.reinforce.add(level.id + ':' + index, question);
-      var respuestaTrasPista = attempts > 1;
-      showHint(op);
-      /* Reveal the explanation only after the hint is acknowledged. */
-      btn.classList.add('encourage');
-      btn.disabled = true;
-      App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(op.correct); });
-    }
-  }
-
-  function next() {
-    if (reinforcement.active()) {
-      if (!reinforcement.nextItem()) {
-        endRound();
-      }
-      return;
-    }
-    index += 1;
-    if (index >= DATA.perRound) {
-      var consume = App.reinforce.consume();
-      if (consume.length === 0) endRound();
-      return;
-    }
-    render();
-  }
-
 
   /* ---- Eventos ---- */
 
@@ -427,7 +368,7 @@
   $('#noteExtra').innerHTML = App.i18n.t('notaMonedero')
     .replace('{link}', '<a href="../wallet/">' + App.i18n.t('notaMonederoLink') + '</a>');
 
-  paintMenu();
+  activityMenu.paint();
   paintStars();
   /* End screen: the only button is "Volver al inicio", which goes back
      to the Calculia landing. The end screen is a closing card, not a

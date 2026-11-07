@@ -121,13 +121,7 @@
   });
   /* Round state */
   var activity = null;
-  var level = null;
-  var index = 0;
-  var roundCorrect = 0;
   var answered = false;
-  var attempts = 0;
-  var question = null;
-  var resolved = false;
   var glue = App.activityGlue({
     toolId: TOOL_ID,
     progress: function () { return progress; },
@@ -135,6 +129,19 @@
     show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars;
+
+  /* The round state and the shared answer, hint and next step (assets/js/classic-quiz.js). */
+  var round = { level: null, index: 0, roundCorrect: 0, answered: false, attempts: 0, question: null };
+  var quiz = App.classicQuiz({
+    round: round, progress: progress, reinforcement: reinforcement,
+    save: function () { save(); }, paintStars: function () { paintStars(); },
+    feedback: feedbackEl, explanation: explanationEl, explanationWrap: explanationWrap, btnNext: btnNext,
+    perRound: DATA.perRound,
+    showExplanation: function (isCorrect) { showExplanation(isCorrect); },
+    render: function () { render(); },
+    endRound: function () { endRound(); }
+  });
+  var answer = quiz.answer, showHint = quiz.showHint, next = quiz.next;
 
   /* ---- Utilidades ---- */
 
@@ -176,25 +183,6 @@
   }
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
-  function paintMenu() {
-    var cont = $('#activitiesMenu');
-    cont.innerHTML = '';
-    var grid = document.createElement('div');
-    grid.className = 'menu-grid';
-    Object.keys(DATA.activities).forEach(function (id) {
-      var act = DATA.activities[id];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-actividad';
-      btn.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
-        '<span>' + App.i18n.t('activity.' + id + '.name') + '</span>' +
-        '<span class="detail-card">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
-      btn.addEventListener('click', function () { openActivity(id); });
-      grid.appendChild(btn);
-    });
-    cont.appendChild(grid);
-  }
-
   /* ---- Levels of an activity (now automatic via levelFromProgress) ---- */
 
   /* ---- Game ---- */
@@ -222,12 +210,14 @@
     startRound(levelFromProgress());
   }
 
+  var activityMenu = App.activityMenu({ container: $('#activitiesMenu'), activities: DATA.activities, open: openActivity });
+
   /* ---- Exposition + real-life screens for hasExpoReal activities ---- */
 
   function startRound(nv) {
-    level = nv;
-    index = 0;
-    roundCorrect = 0;
+    round.level = nv;
+    round.index = 0;
+    round.roundCorrect = 0;
     App.utils.drawRoundReset();
     fixedQuestion = null;
     reinforcement.begin();
@@ -246,16 +236,16 @@
   }
 
   function render() {
-    resolved = false;
-    attempts = 0;
-    question = fixedQuestion || GENERATORS[level.tipo](level, index);
+    round.answered = false;
+    round.attempts = 0;
+    round.question = fixedQuestion || GENERATORS[round.level.tipo](round.level, round.index);
     fixedQuestion = null;
 
     /* The 'counter' level isn't a quiz: it returns a marker, not a
        question, and render() hands off to renderCounter() which
        hides everything else and shows the free-exploration UI. */
-    if (question.tipo === 'counter') {
-      renderCounter(question);
+    if (round.question.tipo === 'counter') {
+      renderCounter(round.question);
       return;
     }
 
@@ -263,8 +253,8 @@
        also not a quiz: the generator returns a marker, and
        render() hands off to renderElevator() which hides the quiz
        parts and shows the free-exploration UI. */
-    if (question.tipo === 'elevator') {
-      renderElevator(question);
+    if (round.question.tipo === 'elevator') {
+      renderElevator(round.question);
       return;
     }
 
@@ -272,8 +262,8 @@
        a typed input + "Comprobar" / "Ver resultado" instead of
        multiple-choice options. Hands off to renderLecturaInput
        which owns its own UI. */
-    if (question.tipo === 'lecturaInput') {
-      typing.renderLecturaInput(question);
+    if (round.question.tipo === 'lecturaInput') {
+      typing.renderLecturaInput(round.question);
       return;
     }
 
@@ -282,8 +272,8 @@
        but the number is played as AUDIO when "Generar" is
        clicked, with no visual representation. Hands off to
        renderEscribirInput. */
-    if (question.tipo === 'escribirInput') {
-      typing.renderEscribirInput(question);
+    if (round.question.tipo === 'escribirInput') {
+      typing.renderEscribirInput(round.question);
       return;
     }
 
@@ -296,17 +286,17 @@
     lecturaUI.classList.add('hidden');
     escribirUI.classList.add('hidden');
 
-    promptEl.textContent = question.prompt;
-    visualEl.innerHTML = question.visual || '';
-    if (question.visualAria) {
+    promptEl.textContent = round.question.prompt;
+    visualEl.innerHTML = round.question.visual || '';
+    if (round.question.visualAria) {
       visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', question.visualAria);
+      visualEl.setAttribute('aria-label', round.question.visualAria);
     } else {
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.innerHTML = question.legend || '';
-    legendEl.classList.toggle('hidden', !question.legend);
+    legendEl.innerHTML = round.question.legend || '';
+    legendEl.classList.toggle('hidden', !round.question.legend);
 
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
@@ -315,8 +305,8 @@
     btnNext.classList.add('hidden');
 
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('options-row', !!question.inline);
-    question.options.forEach(function (op) {
+    optionsEl.classList.toggle('options-row', !!round.question.inline);
+    round.question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'option-btn';
@@ -326,7 +316,7 @@
       optionsEl.appendChild(btn);
     });
 
-    progressFill.style.width = ((index / DATA.perRound) * 100) + '%';
+    progressFill.style.width = ((round.index / DATA.perRound) * 100) + '%';
     progressText.textContent = '';
     paintStars();
   }
@@ -341,7 +331,7 @@
       explanationWrap.classList.add('hidden');
       return;
     }
-    var correct = question.options.filter(function (o) { return o.correct; })[0];
+    var correct = round.question.options.filter(function (o) { return o.correct; })[0];
     var text = (isCorrect ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
       plainText(correct.html) + '.';
     explanationEl.textContent = text;
@@ -355,58 +345,6 @@
      question —which is what to do with the figure in front of you— and
      not the same sentence for every question. The generic line is only
      the fallback, for a question that forgot to bring its own. */
-  function showHint(op) {
-    /* The hint names the answer just tried («{elegida}») and says why it
-       does not fit and where to look, never the right answer. */
-    explanationEl.textContent = App.feedback.hintText(
-      (question && question.hint) || App.i18n.t('hint'),
-      op ? plainText(op.html) : '');
-    explanationWrap.classList.remove('hidden');
-  }
-
-  function answer(op, btn) {
-    if (resolved) return;
-    if (op.correct) {
-      showExplanation(op.correct);
-      resolved = true;
-      btn.classList.add('correct');
-      App.feedback.success(feedbackEl);
-      progress.stars += 1;
-      roundCorrect += 1;
-      save();
-      paintStars();
-      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
-      btnNext.classList.remove('hidden');
-      btnNext.focus();
-    } else {
-      attempts += 1;
-      if (attempts === 1) App.reinforce.add(level.id + ':' + index, question);
-      var respuestaTrasPista = attempts > 1;
-      showHint(op);
-      /* Reveal the explanation only after the hint is acknowledged. */
-      btn.classList.add('encourage');
-      btn.disabled = true;
-      App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(op.correct); });
-    }
-  }
-
-  function next() {
-    if (reinforcement.active()) {
-      if (!reinforcement.nextItem()) {
-        endRound();
-      }
-      return;
-    }
-    index += 1;
-    if (index >= DATA.perRound) {
-      var consume = App.reinforce.consume();
-      if (consume.length === 0) endRound();
-      return;
-    }
-    render();
-  }
-
   function endRound() {
     if (activity.id === 'positivos-y-negativos') {
       progress.signedRounds += 1;
@@ -416,25 +354,25 @@
     save();
     show(screenEnd);
     var summaryEl = $('#endSummary');
-    if (level.tipo === 'counter') {
+    if (round.level.tipo === 'counter') {
     var summaryEl = $('#endSummary');
     if (summaryEl) {
       summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
+        .replace('{n}', round.roundCorrect)
         .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
         .replace('{stars}', progress.stars);
     }
     } else if (activity.id === 'positivos-y-negativos') {
       summaryEl.textContent = App.i18n.t('signed.endSummary')
         .replace('{stars}', progress.stars);
-    } else if (level.tipo === 'ascensorLibre' || level.tipo === 'ascensorMeta') {
+    } else if (round.level.tipo === 'ascensorLibre' || round.level.tipo === 'ascensorMeta') {
       /* Free-exploration elevator: no question count, only a star
          tally. Different from the counter summary to keep each
          tool's closing line distinct. */
       summaryEl.textContent = '';
     } else {
       summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
+        .replace('{n}', round.roundCorrect)
         .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
         .replace('{stars}', progress.stars);
     }
@@ -443,9 +381,9 @@
 
   /* The typed-answer modes (reading and writing numbers) are built by typing.js. */
   var typing = App.numbersTyping({
-    current: function () { return { level: level, index: index, question: question }; },
-    roundCorrect: function () { roundCorrect += 1; },
-    wrong: function () { attempts += 1; return attempts; },
+    current: function () { return { level: round.level, index: round.index, question: round.question }; },
+    roundCorrect: function () { round.roundCorrect += 1; },
+    wrong: function () { round.attempts += 1; return round.attempts; },
     next: next,
     save: save,
     paintStars: paintStars,
@@ -515,7 +453,7 @@
     endRound: endRound,
     show: show,
     screenMenu: screenMenu,
-    level: function () { return level; },
+    level: function () { return round.level; },
     el: { feedbackEl: feedbackEl, progressBar: progressBar, quizCard: quizCard, optionsEl: optionsEl,
       btnNext: btnNext, progressFill: progressFill, progressText: progressText, counterUI: counterUI, elevatorUI: elevatorUI }
   });
@@ -562,7 +500,7 @@
   $('#noteExtra').innerHTML = App.i18n.t('notaTablas')
     .replace('{link}', '<a href="../math-tables/">' + App.i18n.t('notaTablasLink') + '</a>');
 
-  paintMenu();
+  activityMenu.paint();
   paintStars();
   /* End screen: the only button is "Volver al inicio", which goes back
      to the Calculia landing. The end screen is a closing card, not a

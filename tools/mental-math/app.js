@@ -42,12 +42,6 @@
 
   /* Round state */
   var activity = null;
-  var level = null;
-  var idx = 0;
-  var roundCorrect = 0;
-  var answered = false;
-  var attempts = 0;
-  var question = null;
   /* Reinforce: when the normal round ends and some items were
      failed, a mini-round is mounted using only those. The session in
      App.reinforce keeps the items and the position, and stops a
@@ -63,11 +57,24 @@
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
     activity: function () { return activity; },
-    roundCorrect: function () { return roundCorrect; },
+    roundCorrect: function () { return round.roundCorrect; },
     screenEnd: function () { return screenEnd; },
     show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars, levelFromProgress = glue.levelFromProgress, endRound = glue.endRound;
+
+  /* The round state and the shared answer, hint and next step (assets/js/classic-quiz.js). */
+  var round = { level: null, index: 0, roundCorrect: 0, answered: false, attempts: 0, question: null };
+  var quiz = App.classicQuiz({
+    round: round, progress: progress, reinforcement: reinforcement,
+    save: function () { save(); }, paintStars: function () { paintStars(); },
+    feedback: feedbackEl, explanation: explanationEl, explanationWrap: explanationWrap, btnNext: btnNext,
+    perRound: DATA.perRound,
+    showExplanation: function (isCorrect) { showExplanation(isCorrect); },
+    render: function () { render(); },
+    endRound: function () { endRound(); }
+  });
+  var answer = quiz.answer, showHint = quiz.showHint, next = quiz.next;
 
   /* ---- Utilities ---- */
 
@@ -116,25 +123,6 @@
   }
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
-  function paintMenu() {
-    var cont = $('#activitiesMenu');
-    cont.innerHTML = '';
-    var grid = document.createElement('div');
-    grid.className = 'menu-grid';
-    Object.keys(DATA.activities).forEach(function (id) {
-      var act = DATA.activities[id];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-actividad';
-      btn.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
-        '<span>' + App.i18n.t('activity.' + id + '.name') + '</span>' +
-        '<span class="detail-card">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
-      btn.addEventListener('click', function () { openActivity(id); });
-      grid.appendChild(btn);
-    });
-    cont.appendChild(grid);
-  }
-
   /* ---- Levels for an activity ---- */
   /* (openActivity now auto via levelFromProgress) */
 
@@ -157,10 +145,12 @@
     startRound(levelFromProgress());
   }
 
+  var activityMenu = App.activityMenu({ container: $('#activitiesMenu'), activities: DATA.activities, open: openActivity });
+
   function startRound(nv) {
-    level = nv;
-    idx = 0;
-    roundCorrect = 0;
+    round.level = nv;
+    round.index = 0;
+    round.roundCorrect = 0;
     /* Reinforce: registers the callback that runs when the
        normal round ends with pending failures. The callback
        launches the mini-round with the failed questions. */
@@ -180,28 +170,28 @@
      regenerating it with Math.random. The progress bar uses
      position()+1 / total() to show how much is left. */
   function showReinforceQuestion(p) {
-    question = p;
-    answered = false;
-    attempts = 0;
-    promptEl.textContent = question.prompt;
-    visualEl.innerHTML = question.visual || '';
-    if (question.visualAria) {
+    round.question = p;
+    round.answered = false;
+    round.attempts = 0;
+    promptEl.textContent = round.question.prompt;
+    visualEl.innerHTML = round.question.visual || '';
+    if (round.question.visualAria) {
       visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', question.visualAria);
+      visualEl.setAttribute('aria-label', round.question.visualAria);
     } else {
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.innerHTML = question.legend || '';
-    legendEl.classList.toggle('hidden', !question.legend);
+    legendEl.innerHTML = round.question.legend || '';
+    legendEl.classList.toggle('hidden', !round.question.legend);
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
     explanationWrap.classList.add('hidden');
     explanationEl.textContent = '';
     btnNext.classList.add('hidden');
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('options-row', !!question.inline);
-    question.options.forEach(function (op) {
+    optionsEl.classList.toggle('options-row', !!round.question.inline);
+    round.question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'option-btn';
@@ -216,21 +206,21 @@
   }
 
   function render() {
-    answered = false;
-    attempts = 0;
-    question = GENERATORS[level.tipo](level, idx);
+    round.answered = false;
+    round.attempts = 0;
+    round.question = GENERATORS[round.level.tipo](round.level, round.index);
 
-    promptEl.textContent = question.prompt;
-    visualEl.innerHTML = question.visual || '';
-    if (question.visualAria) {
+    promptEl.textContent = round.question.prompt;
+    visualEl.innerHTML = round.question.visual || '';
+    if (round.question.visualAria) {
       visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', question.visualAria);
+      visualEl.setAttribute('aria-label', round.question.visualAria);
     } else {
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.innerHTML = question.legend || '';
-    legendEl.classList.toggle('hidden', !question.legend);
+    legendEl.innerHTML = round.question.legend || '';
+    legendEl.classList.toggle('hidden', !round.question.legend);
 
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
@@ -239,8 +229,8 @@
     btnNext.classList.add('hidden');
 
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('options-row', !!question.inline);
-    question.options.forEach(function (op) {
+    optionsEl.classList.toggle('options-row', !!round.question.inline);
+    round.question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'option-btn';
@@ -250,7 +240,7 @@
       optionsEl.appendChild(btn);
     });
 
-    progressFill.style.width = ((idx / DATA.perRound) * 100) + '%';
+    progressFill.style.width = ((round.index / DATA.perRound) * 100) + '%';
     progressText.textContent = '';
     paintStars();
   }
@@ -265,7 +255,7 @@
       explanationWrap.classList.add('hidden');
       return;
     }
-    var correct = question.options.filter(function (o) { return o.correct; })[0];
+    var correct = round.question.options.filter(function (o) { return o.correct; })[0];
     var text = (isCorrect ? App.i18n.t('explicacionCorrecta') : App.i18n.t('explicacionIncorrectaA')) +
       plainText(correct.html) + '.';
     explanationEl.textContent = text;
@@ -279,68 +269,6 @@
      question —what to do with what is on screen— and not the same
      sentence for every question. The generic line is only the
      fallback, for a question that forgot to bring its own. */
-  function showHint(op) {
-    explanationEl.textContent = App.feedback.hintText(
-      (question && question.hint) || App.i18n.t('hint'), op ? plainText(op.html) : '');
-    explanationWrap.classList.remove('hidden');
-  }
-
-  function answer(op, btn) {
-    if (answered) return;
-    if (op.correct) {
-      showExplanation(op.correct);
-      answered = true;
-      btn.classList.add('correct');
-      App.feedback.success(feedbackEl);
-      progress.stars += 1;
-      roundCorrect += 1;
-      save();
-      paintStars();
-      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
-      btnNext.classList.remove('hidden');
-      btnNext.focus();
-    } else {
-      attempts += 1;
-      /* Reinforce: registers the failure the first time (retries
-         on the same item are not duplicated, see deduplication in
-         feedback.js). In mini-round it is also registered, in case
-         the same item is failed again within the reinforce. */
-      App.reinforce.add(level.id + ':' + idx, question);
-      var respuestaTrasPista = attempts > 1;
-      showHint(op);
-      /* Reveal the explanation only after the hint is acknowledged. */
-      btn.classList.add('encourage');
-      btn.disabled = true;
-      App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(op.correct); });
-    }
-  }
-
-  function next() {
-    /* Reinforce: if we are in a mini-round, advance to the next
-       reinforce item or close the mini-round and go to the
-       endScreen. Stars were already added when each item was
-       answered; roundCorrect is not incremented here (it is the
-       counter for the normal round). */
-    if (reinforcement.active()) {
-      if (!reinforcement.nextItem()) {
-        endRound();
-      }
-      return;
-    }
-    idx += 1;
-    if (idx >= DATA.perRound) {
-      /* consume() returns [] if there are no failures and fires the
-         callback (which mounts the mini-round) if there are. If
-         consume() fired the callback, we must not end the normal
-         round — the callback already handles it. */
-      var consumeResult = App.reinforce.consume();
-      if (consumeResult.length === 0) endRound();
-    } else {
-      render();
-    }
-  }
-
 
   /* ---- Events ---- */
 
@@ -351,7 +279,7 @@
   var groups = App.mentalMathGroups({ progress: progress, show: show, paintStars: paintStars });
   var groupsStart = groups.start;
 
-  paintMenu();
+  activityMenu.paint();
   paintStars();
   /* End screen: the only button is "Volver al inicio", which goes back
      to the Calculia landing. The end screen is a closing card, not a
