@@ -12,7 +12,7 @@
   'use strict';
 
   var fill = App.activityFlow.fill;
-  var pick = App.activityFlow.pick;
+  var pick = App.utils.pick;
   var items = App.activityFlow.items;
   function t(key) { return App.i18n.t(key); }
 

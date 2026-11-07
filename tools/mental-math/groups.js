@@ -10,10 +10,9 @@
 
   var M = App.mentalMathModel;
   var $ = App.utils.$;
-  var randInt = M.randInt,
+  var rint = App.utils.rint,
       digits = M.digits,
       groupsT = M.groupsT,
-      randomInt = M.randomInt,
       groupsFormat = M.groupsFormat,
       RULE_EXAMPLES = M.RULE_EXAMPLES,
       DOZEN_EXAMPLES = M.DOZEN_EXAMPLES,
@@ -64,9 +63,6 @@
        (instead of calling App.i18n.t directly) so data.js stays loadable
        before i18n registers the dictionary; it reads App.i18n.t at call
        time, which is always after register(). */
-    /* The walkthrough code uses `randomInt` (the name it had in
-       Cantidades). Mental-math calls the equivalent helper `randInt`
-       above. Alias once so the rest of the block reads naturally. */
     /* Persistent progress lives in its own slot. The stars kept by
        Cantidades for this practice still sit under the 'quantities'
        key of localStorage until a reset — that history is intentionally
@@ -282,13 +278,13 @@
        hoping the digit is non-zero) means the question never lands on
        a 0, which carries no information about the group. */
     function groupsNumberWithTargetDigit(positions) {
-      var targetId = positions[randomInt(0, positions.length - 1)];
+      var targetId = positions[rint(0, positions.length - 1)];
       var target = groupById(targetId);
-      var digit = randomInt(1, 9);
+      var digit = rint(1, 9);
       var n = digit * target.size;
       positions.forEach(function (id) {
         if (id === targetId) return;
-        if (Math.random() < 0.6) n += randomInt(0, 9) * groupById(id).size;
+        if (Math.random() < 0.6) n += rint(0, 9) * groupById(id).size;
       });
       return {
         n: n,
@@ -306,8 +302,8 @@
       var mode = level.mode;
       if (mode === 'groupToNumber' || mode === 'dozenToNumber') {
         var pool = level.pools || ['unit', 'ten'];
-        var groupId = pool[randomInt(0, pool.length - 1)];
-        var count = randomInt(1, level.maxCount || 9);
+        var groupId = pool[rint(0, pool.length - 1)];
+        var count = rint(1, level.maxCount || 9);
         var g = groupById(groupId);
         return {
           mode: mode, groupId: groupId, count: count,
@@ -316,8 +312,8 @@
       }
       if (mode === 'numberToGroup' || mode === 'numberToDozen') {
         var pool2 = level.pools || ['unit', 'ten'];
-        var groupId2 = pool2[randomInt(0, pool2.length - 1)];
-        var count2 = randomInt(1, level.maxCount || 9);
+        var groupId2 = pool2[rint(0, pool2.length - 1)];
+        var count2 = rint(1, level.maxCount || 9);
         var g2 = groupById(groupId2);
         return {
           mode: mode, groupId: groupId2, count: count2,
@@ -358,7 +354,7 @@
         for (var i = 0; i < total; i++) {
           var entry, tries = 0;
           do {
-            var base = modes[randomInt(0, modes.length - 1)];
+            var base = modes[rint(0, modes.length - 1)];
             entry = groupsEntryFor(base);
             tries += 1;
           } while (out.length && tries < 10 &&

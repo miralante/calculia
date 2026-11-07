@@ -11,7 +11,7 @@
   'use strict';
 
   var M = App.numbersModel;
-  var randInt = M.randInt, pickRandomInt = M.pickRandomInt, POS_CLASS = M.POS_CLASS, thousandsSeparator = M.thousandsSeparator, legendPos = M.legendPos, digits = M.digits;
+  var pickRandomInt = M.pickRandomInt, POS_CLASS = M.POS_CLASS, thousandsSeparator = M.thousandsSeparator, legendPos = M.legendPos, digits = M.digits;
   var paintNumber = M.paintNumber, paintSign = M.paintSign, buildOptions = M.buildOptions, repeat = M.repeat, numberAsBlocks = M.numberAsBlocks, GENERATORS = M.GENERATORS;
   var counterSay = M.counterSay, DIGIT_NAMES_ES = M.DIGIT_NAMES_ES, DIGIT_NAMES_EN = M.DIGIT_NAMES_EN, numberNameEs = M.numberNameEs, numberNameEn = M.numberNameEn, SMALL_ES = M.SMALL_ES;
   var TENS_ES = M.TENS_ES, HUNDREDS_ES = M.HUNDREDS_ES, SMALL_EN = M.SMALL_EN, TENS_EN = M.TENS_EN, under100Es = M.under100Es, under1000Es = M.under1000Es;

@@ -9,10 +9,10 @@
   'use strict';
 
   var M = App.mentalMathModel;
-  var randInt = M.randInt, POS_CLASS = M.POS_CLASS, thousandsSeparator = M.thousandsSeparator, legendPos = M.legendPos, digits = M.digits;
+  var POS_CLASS = M.POS_CLASS, thousandsSeparator = M.thousandsSeparator, legendPos = M.legendPos, digits = M.digits;
   var paintNumber = M.paintNumber, paintSign = M.paintSign, buildOptions = M.buildOptions, repeat = M.repeat, dotsGroup = M.dotsGroup, dotsGroupSubtract = M.dotsGroupSubtract;
   var unitDots = M.unitDots, baseTen = M.baseTen, addedPieces = M.addedPieces, anchorStart = M.anchorStart, baseTenBorrow = M.baseTenBorrow, carryStart = M.carryStart;
-  var borrowStart = M.borrowStart, GENERATORS = M.GENERATORS, groupsT = M.groupsT, randomInt = M.randomInt, groupsFormat = M.groupsFormat, RULE_EXAMPLES = M.RULE_EXAMPLES;
+  var borrowStart = M.borrowStart, GENERATORS = M.GENERATORS, groupsT = M.groupsT, groupsFormat = M.groupsFormat, RULE_EXAMPLES = M.RULE_EXAMPLES;
   var DOZEN_EXAMPLES = M.DOZEN_EXAMPLES, groupsLevelStars = M.groupsLevelStars, groupsLevelIcon = M.groupsLevelIcon, groupsEntryKey = M.groupsEntryKey, groupsTakeTwo = M.groupsTakeTwo, GROUPS_DIGIT_CLASSES = M.GROUPS_DIGIT_CLASSES;
   var groupsColoredDigits = M.groupsColoredDigits, groupsPlainShown = M.groupsPlainShown, groupsPickHint = M.groupsPickHint;
 

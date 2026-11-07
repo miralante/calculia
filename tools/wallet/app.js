@@ -35,7 +35,7 @@
   });
   var save = glue.save, paintStars = glue.paintStars;
   function localeData() { return DATA[App.i18n.locale()] || DATA.es; }
-  var pickRandom = App.utils.pick;
+  var pick = App.utils.pick;
 
   /* ---- Screens ---- */
   var SCREENS = ['screenMenu', 'screenQuizGame',
@@ -99,8 +99,8 @@
       var prices = gapAmounts(pair[1], pair[0], step);
       if (prices.length) candidates.push({ paid: pair[0], lower: pair[1], prices: prices });
     });
-    var c = pickRandom(candidates);
-    return { paid: c.paid, lower: c.lower, price: pickRandom(c.prices) };
+    var c = pick(candidates);
+    return { paid: c.paid, lower: c.lower, price: pick(c.prices) };
   }
 
   /* Amount distractors: close, distinct, positive. */
@@ -261,7 +261,7 @@
         var pieces = [];
         var total = 0;
         for (var k = 0; k < n; k++) {
-          var v = pickRandom(level.cents);
+          var v = pick(level.cents);
           pieces.push(v);
           total += v;
         }
@@ -308,12 +308,12 @@
       levels: function () { return localeData().amount.levels; },
       generate: function (level) {
         var pair = generatePair(level.step);
-        var product = pickRandom(allProducts());
+        var product = pick(allProducts());
         var lowers = [500, 200, 100, 50].filter(function (c) { return c < pair.lower; });
         var options = App.utils.shuffle([
           { cent: pair.paid, correct: true },
           { cent: pair.lower, correct: false },
-          { cent: pickRandom(lowers), correct: false }
+          { cent: pick(lowers), correct: false }
         ]);
         return {
           picto: product.picto,
@@ -395,7 +395,7 @@
         /* Targets: the PRODUCTS bank for the level's bucket. */
         var bank = localeData().pay.levels.filter(function (n) { return n.id === level.id; })[0];
         var candidates = bank.products.filter(function (p) { return p.priceCent >= 2 * level.step; });
-        var product = pickRandom(candidates);
+        var product = pick(candidates);
         var steps = product.priceCent / level.step;
         var have = level.step * (1 + Math.floor(Math.random() * (steps - 1)));
         var missing = product.priceCent - have;
@@ -438,15 +438,15 @@
       levels: function () { return localeData().rounding.levels; },
       generate: function (level) {
         var target = 2 + Math.floor(Math.random() * 8);   /* 2-9 € */
-        var delta = pickRandom(level.deltas);
+        var delta = pick(level.deltas);
         /* The ,50 always below the target: x,50 rounds UP to x+1. */
-        var sign = delta === 50 ? -1 : pickRandom([-1, 1]);
+        var sign = delta === 50 ? -1 : pick([-1, 1]);
         var shown = target * 100 + sign * delta;
         /* Flavoured product with a nearby reference price. */
         var close = allProducts().filter(function (p) {
           return Math.abs(p.priceCent - shown) <= 150;
         });
-        var product = pickRandom(close.length ? close : allProducts());
+        var product = pick(close.length ? close : allProducts());
         return {
           picto: product.picto,
           name: product.name,

@@ -69,11 +69,11 @@
      checks them all at once; "Otra ronda" deals a new round. */
 
   function pad(n) { return n < 10 ? '0' + n : String(n); }
-  var randomInt = App.utils.rint;
+  var rint = App.utils.rint;
 
   /* A random date. The day is 1–28 so it exists in every month. */
   function randomDate() {
-    return { day: randomInt(1, 28), month: randomInt(1, 12), year: randomInt(2020, 2030) };
+    return { day: rint(1, 28), month: rint(1, 12), year: rint(2020, 2030) };
   }
 
   /* 10/01/2025: day, month and year, with slashes. */

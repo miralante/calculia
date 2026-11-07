@@ -15,7 +15,7 @@
   'use strict';
 
   var fill = App.activityFlow.fill;
-  var rint = App.activityFlow.rint;
+  var rint = App.utils.rint;
   function t(key) { return App.i18n.t(key); }
 
   /* ---- Factorials ---------------------------------------------------------

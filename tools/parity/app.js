@@ -38,7 +38,7 @@
   function t(key) { return App.i18n.t(key); }
 
   var fill = App.utils.fill;
-  var randomInt = App.utils.rint;
+  var rint = App.utils.rint;
   function isEven(n) { return n % 2 === 0; }
   function wordFor(n) { return t(isEven(n) ? 'wordEven' : 'wordOdd'); }
   function format(n) { return n.toLocaleString(App.i18n.locale() === 'en' ? 'en-US' : 'es-ES'); }
@@ -384,7 +384,7 @@
       var taken = {};
       for (var i = 0; i < block.count; i += 1) {
         var value;
-        do { value = randomInt(block.min, block.max); } while (taken[value]);
+        do { value = rint(block.min, block.max); } while (taken[value]);
         taken[value] = true;
         out.push({ block: block, a: value });
       }

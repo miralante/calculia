@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var randInt = App.utils.rint;
+  var rint = App.utils.rint;
 
 
   var pickRandomInt = App.utils.pickRandomInt;
@@ -119,13 +119,13 @@
        towards the bigger number. */
     comparar: function (nv) {
       var relations = ['lt', 'gt', 'eq'];
-      var rel = relations[randInt(0, 2)];
-      var a = randInt(nv.min, nv.max);
+      var rel = relations[rint(0, 2)];
+      var a = rint(nv.min, nv.max);
       var b;
       if (rel === 'eq') {
         b = a;
       } else {
-        do { b = randInt(nv.min, nv.max); } while (b === a);
+        do { b = rint(nv.min, nv.max); } while (b === a);
         /* Swap so the pair actually shows the relation that was drawn. */
         if ((rel === 'lt') !== (a < b)) { var swap = a; a = b; b = swap; }
       }
@@ -159,7 +159,7 @@
     },
 
     bloques: function (nv) {
-      var n = nv.max === 99 ? randInt(11, 99) : randInt(111, 999);
+      var n = nv.max === 99 ? rint(11, 99) : rint(111, 999);
       var c = Math.floor(n / 100);
       var d = Math.floor((n % 100) / 10);
       var u = n % 10;
@@ -201,7 +201,7 @@
       var hint = App.i18n.t('gen.canjePista' + nv.lugar);
       if (i % 2 === 0) {
         /* Big blocks get large fast: fewer groups for bigger places. */
-        var k = randInt(2, [5, 4, 3][nv.lugar]);
+        var k = rint(2, [5, 4, 3][nv.lugar]);
         var n = k * 10;
         var statement = App.i18n.t('gen.canjeDirecto' + nv.lugar).replace('{n}', n);
         return {
@@ -216,7 +216,7 @@
             function (v) { return paintNumber(v); })
         };
       }
-      var kInv = randInt(2, 9);
+      var kInv = rint(2, 9);
       var statementInv = App.i18n.t('gen.canjeInverso' + nv.lugar).replace('{k}', kInv);
       return {
         prompt: statementInv,
@@ -281,15 +281,15 @@
          a stable value to compare against. If the user wants
          another number mid-question they re-click "Generar" (handled
          in paintLecturaInput) and the value is replaced. */
-      var digits = randInt(minD, maxD);
+      var digits = rint(minD, maxD);
       var n;
       if (digits === 1) {
-        n = randInt(1, 9);
+        n = rint(1, 9);
       } else {
         /* First digit 1–9 (no leading zero), rest 0–9. */
-        var first = randInt(1, 9);
+        var first = rint(1, 9);
         var rest = '';
-        for (var k = 1; k < digits; k++) rest += randInt(0, 9);
+        for (var k = 1; k < digits; k++) rest += rint(0, 9);
         n = parseInt(first + rest, 10);
       }
       return {
@@ -318,14 +318,14 @@
     escribirInput: function (nv) {
       var minD = (typeof nv.minDigits === 'number') ? nv.minDigits : 1;
       var maxD = (typeof nv.maxDigits === 'number') ? nv.maxDigits : 10;
-      var digits = randInt(minD, maxD);
+      var digits = rint(minD, maxD);
       var n;
       if (digits === 1) {
-        n = randInt(1, 9);
+        n = rint(1, 9);
       } else {
-        var first = randInt(1, 9);
+        var first = rint(1, 9);
         var rest = '';
-        for (var k = 1; k < digits; k++) rest += randInt(0, 9);
+        for (var k = 1; k < digits; k++) rest += rint(0, 9);
         n = parseInt(first + rest, 10);
       }
       return {
@@ -444,7 +444,6 @@
 
 
   App.numbersModel = {
-    randInt: randInt,
     pickRandomInt: pickRandomInt,
     POS_CLASS: POS_CLASS,
     thousandsSeparator: thousandsSeparator,

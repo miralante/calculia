@@ -8,7 +8,7 @@
   'use strict';
 
 
-  var randInt = App.utils.rint;
+  var rint = App.utils.rint;
 
 
   var POS_CLASS = ['digit-u', 'digit-d', 'digit-c'];
@@ -120,15 +120,15 @@
   function anchorStart(nv) {
     var step = nv.step;
     var adding = nv.op === 'add';
-    var tens = randInt(0, Math.floor(nv.max / 10));
+    var tens = rint(0, Math.floor(nv.max / 10));
     var units;
     if (step === 10) {
-      units = randInt(0, 9);
+      units = rint(0, 9);
       if (!adding && tens === 0) tens = 1;
     } else if (adding) {
-      units = randInt(0, 9 - step);
+      units = rint(0, 9 - step);
     } else {
-      units = randInt(step, 9);
+      units = rint(step, 9);
     }
     var a = tens * 10 + units;
     return a === 0 ? step : a;
@@ -150,16 +150,16 @@
   }
 
   function carryStart() {
-    var tens = randInt(1, 8);
-    var units = randInt(5, 9);
-    var b = randInt(Math.max(1, 10 - units), 9);
+    var tens = rint(1, 8);
+    var units = rint(5, 9);
+    var b = rint(Math.max(1, 10 - units), 9);
     return { a: tens * 10 + units, b: b };
   }
 
   function borrowStart() {
-    var tens = randInt(2, 8);
-    var units = randInt(0, 4);
-    var b = randInt(units + 1, 9);
+    var tens = rint(2, 8);
+    var units = rint(0, 4);
+    var b = rint(units + 1, 9);
     return { a: tens * 10 + units, b: b };
   }
 
@@ -196,8 +196,8 @@
        (47 - 7). Nothing crosses a ten, so the tens bar never changes. */
     placeValue: function (nv) {
       var adding = nv.op === 'add';
-      var tens = randInt(1, 6);
-      var units = randInt(1, 9);
+      var tens = rint(1, 6);
+      var units = rint(1, 9);
       var whole = tens * 10;
       if (adding) {
         var sum = whole + units;
@@ -278,8 +278,8 @@
     },
 
     restar: function (nv) {
-      var a = randInt(nv.a[0], nv.a[1]);
-      var b = randInt(1, Math.min(nv.maxB, a));
+      var a = rint(nv.a[0], nv.a[1]);
+      var b = rint(1, Math.min(nv.maxB, a));
       var correct = a - b;
       return {
         prompt: App.i18n.t('gen.restarEnunciado').replace('{a}', a).replace('{b}', b),
@@ -294,7 +294,7 @@
     },
 
     doubles: function () {
-      var a = randInt(2, 12);
+      var a = rint(2, 12);
       return {
         prompt: App.i18n.t('gen.doblesEnunciado').replace(/\{a\}/g, a),
         visual: '<div class="expression">' + paintNumber(a) + paintSign('+') + paintNumber(a) +
@@ -311,16 +311,16 @@
     sumLarge: function (nv) {
       var n, highlight, hint;
       if (nv.suma === 10) {
-        n = randInt(1, 8) * 10 + randInt(1, 9);
-        if (Math.random() < 0.4) n += randInt(1, 4) * 100;
+        n = rint(1, 8) * 10 + rint(1, 9);
+        if (Math.random() < 0.4) n += rint(1, 4) * 100;
         highlight = 1;
         hint = App.i18n.t('gen.hintDecenas');
       } else if (nv.suma === 100) {
-        n = randInt(1, 8) * 100 + randInt(0, 99);
+        n = rint(1, 8) * 100 + rint(0, 99);
         highlight = 2;
         hint = App.i18n.t('gen.hintCentenas');
       } else {
-        n = randInt(1, 8) * 1000 + randInt(0, 999);
+        n = rint(1, 8) * 1000 + rint(0, 999);
         highlight = 3;
         hint = App.i18n.t('gen.hintMiles');
       }
@@ -342,16 +342,16 @@
     subtractLarge: function (nv) {
       var n, highlight, hint;
       if (nv.resta === 10) {
-        n = randInt(1, 8) * 10 + randInt(1, 9);
-        if (Math.random() < 0.4) n += randInt(1, 4) * 100;
+        n = rint(1, 8) * 10 + rint(1, 9);
+        if (Math.random() < 0.4) n += rint(1, 4) * 100;
         highlight = 1;
         hint = App.i18n.t('gen.hintDecenas');
       } else if (nv.resta === 100) {
-        n = randInt(1, 8) * 100 + randInt(0, 99);
+        n = rint(1, 8) * 100 + rint(0, 99);
         highlight = 2;
         hint = App.i18n.t('gen.hintCentenas');
       } else {
-        n = randInt(1, 8) * 1000 + randInt(0, 999);
+        n = rint(1, 8) * 1000 + rint(0, 999);
         highlight = 3;
         hint = App.i18n.t('gen.hintMiles');
       }
@@ -371,7 +371,7 @@
     },
 
     multiplyLarge: function (nv) {
-      var n = randInt(2, 99);
+      var n = rint(2, 99);
       var correct = n * nv.factor;
       var zeros = App.i18n.t(nv.factor === 10 ? 'gen.cerosUno' : 'gen.cerosDos');
       var distractors = nv.factor === 10 ?
@@ -392,8 +392,6 @@
   function groupsT(key) {
     return (typeof App !== 'undefined' && App.i18n && App.i18n.t) ? App.i18n.t(key) : key;
   }
-
-  function randomInt(min, max) { return randInt(min, max); }
 
   function groupsFormat(n) {
     var sep = App.i18n.locale() === 'en' ? ',' : '.';
@@ -492,7 +490,6 @@
 
 
   App.mentalMathModel = {
-    randInt: randInt,
     POS_CLASS: POS_CLASS,
     thousandsSeparator: thousandsSeparator,
     legendPos: legendPos,
@@ -512,7 +509,6 @@
     borrowStart: borrowStart,
     GENERATORS: GENERATORS,
     groupsT: groupsT,
-    randomInt: randomInt,
     groupsFormat: groupsFormat,
     RULE_EXAMPLES: RULE_EXAMPLES,
     DOZEN_EXAMPLES: DOZEN_EXAMPLES,

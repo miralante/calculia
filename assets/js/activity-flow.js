@@ -249,8 +249,6 @@
   /* ---- setup: the context, the markup, the stages and the mode ----------- */
   App.activityFlow = {
     fill: fill,
-    rint: rint,
-    pick: pick,
     items: items,
     modes: modes,
     menuHtml: MENU_HTML,

@@ -71,7 +71,7 @@
      una y otra vez. La cifra y el nombre ya van en el visual, así
      que el caption era redundante y se quita. */
 
-  var randomInt = App.utils.rint;
+  var rint = App.utils.rint;
   function paintStars() { $('#stars').textContent = '⭐ ' + progress.stars; }
 
   /* Abreviatura del ordinal: el dígito pegado al indicador de
@@ -213,14 +213,14 @@
      + 11, 12, 20, 30) sin saltar a los 29 huecos intermedios que la
      pantalla 1 no enseña. */
   function pickFromPool(pool) {
-    return pool[randomInt(0, pool.length - 1)];
+    return pool[rint(0, pool.length - 1)];
   }
 
   function entryFor(level) {
     var mode = level.mode;
     if (mode === 'positionToName' || mode === 'nameToMember') {
       var itemsCount = Math.min(level.items || 3, DATA.maxQueue);
-      return { mode: mode, items: itemsCount, target: randomInt(1, itemsCount) };
+      return { mode: mode, items: itemsCount, target: rint(1, itemsCount) };
     }
     if (level.pool && Array.isArray(level.pool)) {
       var n = pickFromPool(level.pool);
@@ -228,7 +228,7 @@
     }
     return {
       mode: mode,
-      n: randomInt(level.min || 1, level.max || 10),
+      n: rint(level.min || 1, level.max || 10),
       min: level.min || 1,
       max: level.max || 10
     };
@@ -256,7 +256,7 @@
       for (var i = 0; i < total; i++) {
         var entry, tries = 0;
         do {
-          var pick = base[randomInt(0, base.length - 1)];
+          var pick = base[rint(0, base.length - 1)];
           entry = entryFor(pick);
           tries += 1;
         } while (out.length && tries < 10 && entryKey(entry) === entryKey(out[out.length - 1]));

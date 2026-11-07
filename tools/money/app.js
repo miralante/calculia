@@ -71,7 +71,7 @@
 
   /* ---- Utilidades ---- */
 
-  var randInt = App.utils.rint;
+  var rint = App.utils.rint;
 
 
   /* The round takes elements from the pool without repeating: the
@@ -128,8 +128,8 @@
     precios: function () {
       var prod = App.utils.drawRound('prod', DATA.productos);
       var nombreProd = App.i18n.t('producto.' + prod.id);
-      var e = randInt(1, 9);
-      var c = [5, 10, 25, 50, 75, 90][randInt(0, 5)];
+      var e = rint(1, 9);
+      var c = [5, 10, 25, 50, 75, 90][rint(0, 5)];
       var cent = e * 100 + c;
       var mal1 = App.i18n.t('precioConCentimos')
         .replace('{euros}', App.i18n.t('euroVarios').replace('{e}', c === e ? e + 1 : c))
@@ -152,14 +152,14 @@
     comparaPrecios: function () {
       var prods = App.utils.shuffle(DATA.productos).slice(0, 2);
       var nombres = prods.map(function (p) { return App.i18n.t('producto.' + p.id); });
-      var e = randInt(1, 4);
+      var e = rint(1, 4);
       var pares = [
         [e * 100 + 5, e * 100 + 50],
         [e * 100 + 90, (e + 1) * 100 + 10],
         [e * 100, e * 100 + 50],
         [e * 100 + 25, e * 100 + 75]
       ];
-      var par = App.utils.shuffle(pares[randInt(0, pares.length - 1)]);
+      var par = App.utils.shuffle(pares[rint(0, pares.length - 1)]);
       var caro = Math.max(par[0], par[1]);
       return {
         prompt: App.i18n.t('gen.comparaPreciosEnunciado'),

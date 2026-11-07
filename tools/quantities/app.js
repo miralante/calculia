@@ -85,7 +85,7 @@
   var placed = [];
   var wrongGaps = [];
 
-  var randomInt = App.utils.rint;
+  var rint = App.utils.rint;
 
 
   /* ----------- Number formatting ----------- */
@@ -311,7 +311,7 @@
        write: the number is only spoken (🔊); nothing is shown. */
   function genWords() {
     var digits = round[index].digits;
-    var n = randomInt(Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
+    var n = rint(Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
     var words = readNumber(n, App.i18n.locale());
     var reading = practice === 'read';
     return {
@@ -343,7 +343,7 @@
 
   function genPoints() {
     var digits = round[index].digits;
-    var n = randomInt(Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
+    var n = rint(Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
     var gaps = correctGaps(n);
     return {
       n: n,

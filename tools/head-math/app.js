@@ -24,7 +24,7 @@
   function saveProgress() { App.storage.set(TOOL_ID, progress); }
   function show(element) { element.classList.remove('hidden'); }
   function hide(element) { element.classList.add('hidden'); }
-  var randInt = App.utils.rint;
+  var rint = App.utils.rint;
 
 
   function fill(key, values) {
@@ -210,8 +210,8 @@
     for (var i = 0; i < DATA.perRound; i += 1) {
       var subtract = i % 2 === 1;
       var base;
-      if (inRows) base = step * randInt(1, DATA.stepMultipleMax);
-      else base = subtract ? randInt(step, DATA.stepBaseMax) : randInt(1, DATA.stepBaseMax);
+      if (inRows) base = step * rint(1, DATA.stepMultipleMax);
+      else base = subtract ? rint(step, DATA.stepBaseMax) : rint(1, DATA.stepBaseMax);
       items.push({ a: base, b: step, sym: subtract ? '−' : '+' });
     }
     return App.utils.shuffle(items);
