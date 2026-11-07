@@ -92,6 +92,14 @@ const CONFIG = {
 
 const SUITE_ROOT = path.resolve(__dirname, '..');
 
+/* Cloned on its own, this folder is the project itself: it sits next to its
+   _headers, so SUITE_ROOT is the project and the one project is named after
+   it. Inside the suite the copy lives in <suite>/scripts and SUITE_ROOT is
+   the suite, so the projects are its subfolders as before. Without this,
+   `node scripts/asset-tokens.js calculia` looked for calculia/calculia and
+   silently checked nothing. */
+const STANDALONE = fs.existsSync(path.join(SUITE_ROOT, '_headers'));
+
 /* ---- Read the project's own _headers: which paths are immutable? ----
    `_headers` is a list of blocks: a path pattern line, then header lines
    until the next path. A block whose Cache-Control contains `immutable`
@@ -260,11 +268,11 @@ function main() {
   const check = args.includes('--check');
   const only = args.find(a => CONFIG[a]);
 
-  const names = only ? [only] : Object.keys(CONFIG);
+  const names = STANDALONE ? [path.basename(SUITE_ROOT)] : (only ? [only] : Object.keys(CONFIG));
   let total = 0, files = 0;
 
   for (const name of names) {
-    const projectRoot = path.join(SUITE_ROOT, name);
+    const projectRoot = STANDALONE ? SUITE_ROOT : path.join(SUITE_ROOT, name);
     if (!fs.existsSync(projectRoot)) continue;
     root = projectRoot;
     const cfg = CONFIG[name];
