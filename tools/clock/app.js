@@ -48,12 +48,13 @@
   var roundIndex = 0;
   var roundCorrect = 0;
   /* Reinforcement: missed questions replay at the end of the round.
-     inReinforce prevents the mini-round from chaining itself.
+     reinforcement.active() tells a mini-round from a normal one.
      currentQ is what render() paints. */
-  var inReinforce = false;
-  var reinforceIndex = 0;
-  var reinforceList = [];
-  var reinforceTotal = 0;
+  var reinforcement = App.reinforce.session({
+    titleKey: 'reinforceTitle',
+    introKey: 'reinforceIntro',
+    show: function (q) { currentQ = q; paintReinforceProgress(); render(); }
+  });
   var currentQ = null;
   var answered = false;
   var attempts = 0;
@@ -356,11 +357,8 @@
     questions = App.utils.shuffle(questions);
     roundIndex = 0;
     roundCorrect = 0;
-    inReinforce = false;
-    reinforceIndex = 0;
     currentQ = null;
-    App.reinforce.banner.hide();
-    App.reinforce.start(function (fallos) { startReinforce(fallos); });
+    reinforcement.begin();
     screenStart.classList.add('hidden');
     screenLearn.classList.add('hidden');
     screenEnd.classList.add('hidden');
@@ -372,22 +370,8 @@
      the progress inside the reinforcement. Stars are already added
      on each correct item (see answer); roundCorrect is not incremented
      here (it is the normal round counter). */
-  function startReinforce(fallos) {
-    reinforceList = fallos.map(function (f) { return f.payload; });
-    reinforceTotal = reinforceList.length;
-    reinforceIndex = 0;
-    inReinforce = true;
-    App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
-      App.i18n.t('reinforceIntro').replace('{n}', reinforceTotal)
-    );
-    currentQ = reinforceList[0];
-    paintReinforceProgress();
-    render();
-  }
-
   function paintReinforceProgress() {
-    progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
+    progressFill.style.width = (((reinforcement.position() + 1) / reinforcement.total()) * 100) + '%';
     progressText.textContent = '';
   }
 
@@ -607,7 +591,7 @@
   }
 
   function showExplanation(isCorrect, p) {
-    if (isCorrect && inReinforce) {
+    if (isCorrect && reinforcement.active()) {
       explanationEl.textContent = '';
       explanationWrap.classList.add('hidden');
       return;
@@ -664,20 +648,12 @@
   }
 
   function goNext() {
-    if (inReinforce) {
-      reinforceIndex += 1;
-      if (reinforceIndex >= reinforceTotal) {
-        inReinforce = false;
-        currentQ = null;
-        App.reinforce.clear();
-        App.reinforce.banner.hide();
-        endRound();
-        return;
-      }
-      currentQ = reinforceList[reinforceIndex];
-      paintReinforceProgress();
+    if (reinforcement.active()) {
       optionsEl.className = 'stack';
-      render();
+      if (!reinforcement.nextItem()) {
+        currentQ = null;
+        endRound();
+      }
       return;
     }
     roundIndex += 1;

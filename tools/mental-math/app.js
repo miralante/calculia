@@ -67,14 +67,15 @@
   var attempts = 0;
   var question = null;
   /* Reinforce: when the normal round ends and some items were
-     failed, a mini-round is mounted using only those. reinforceIdx/
-     reinforceList are filled from onRefuerzo; inReinforce prevents
-     the mini-round from chaining with another mini-round
-     indefinitely. The reinforce banner is created dynamically
-     from here so the shared HTML is not touched. */
-  var reinforceList = [];
-  var reinforceIndex = 0;
-  var inReinforce = false;
+     failed, a mini-round is mounted using only those. The session in
+     App.reinforce keeps the items and the position, and stops a
+     mini-round from chaining with another one. The reinforce banner
+     is created dynamically so the shared HTML is not touched. */
+  var reinforcement = App.reinforce.session({
+    titleKey: 'refuerzoTitulo',
+    introKey: 'refuerzoIntro',
+    show: showReinforceQuestion
+  });
   var glue = App.activityGlue({
     toolId: TOOL_ID,
     progress: function () { return progress; },
@@ -178,14 +179,10 @@
     level = nv;
     idx = 0;
     roundCorrect = 0;
-    reinforceList = [];
-    reinforceIndex = 0;
-    inReinforce = false;
-    App.reinforce.banner.hide();
     /* Reinforce: registers the callback that runs when the
        normal round ends with pending failures. The callback
        launches the mini-round with the failed questions. */
-    App.reinforce.start(function (fallos) { startReinforce(fallos); });
+    reinforcement.begin();
     show(screenGame);
     render();
   }
@@ -196,22 +193,10 @@
      regenerating it randomly). Stars already earned are not
      taken away; the normal round progress is recorded and
      only reset when the mini-round ends. */
-  function startReinforce(fallos) {
-    reinforceList = fallos.map(function (f) { return f.payload; });
-    reinforceIndex = 0;
-    inReinforce = true;
-    attempts = 0;
-    App.reinforce.banner.set(
-      App.i18n.t('refuerzoTitulo') + ' — ' +
-      App.i18n.t('refuerzoIntro').replace('{n}', reinforceList.length)
-    );
-    showReinforceQuestion(reinforceList[0]);
-  }
-
   /* Helper: renders a fixed question (from the reinforce queue)
      using the same visual flow as render() but without
      regenerating it with Math.random. The progress bar uses
-     reinforceIndex+1 / length to show how much is left. */
+     position()+1 / total() to show how much is left. */
   function showReinforceQuestion(p) {
     question = p;
     answered = false;
@@ -243,7 +228,7 @@
       btn.addEventListener('click', function () { answer(op, btn); });
       optionsEl.appendChild(btn);
     });
-    progressFill.style.width = (((reinforceIndex + 1) / reinforceList.length) * 100) + '%';
+    progressFill.style.width = (((reinforcement.position() + 1) / reinforcement.total()) * 100) + '%';
     progressText.textContent = '';
     paintStars();
   }
@@ -293,7 +278,7 @@
 
 
   function showExplanation(isCorrect) {
-    if (isCorrect && inReinforce) {
+    if (isCorrect && reinforcement.active()) {
       explanationEl.textContent = '';
       explanationWrap.classList.add('hidden');
       return;
@@ -355,15 +340,9 @@
        endScreen. Stars were already added when each item was
        answered; roundCorrect is not incremented here (it is the
        counter for the normal round). */
-    if (inReinforce) {
-      reinforceIndex += 1;
-      if (reinforceIndex >= reinforceList.length) {
-        inReinforce = false;
-        App.reinforce.clear();
-        App.reinforce.banner.hide();
+    if (reinforcement.active()) {
+      if (!reinforcement.nextItem()) {
         endRound();
-      } else {
-        showReinforceQuestion(reinforceList[reinforceIndex]);
       }
       return;
     }

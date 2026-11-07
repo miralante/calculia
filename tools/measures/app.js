@@ -42,12 +42,9 @@
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce).
      fixedQuestion allows reusing render() with an external question
      (the reinforcement one); if null, render() generates a new one
-     as before. inReinforce controls the mini-round flow. */
+     as before. reinforcement.active() tells the mini-round flow apart. */
   var fixedQuestion = null;
-  var inReinforce = false;
-  var reinforceList = [];
-  var reinforceIndex = 0;
-  var reinforceTotal = 0;
+  var reinforcement = App.reinforce.session({ titleKey: 'reinforceTitle', introKey: 'reinforceIntro', show: paintQuestion });
 
   var glue = App.activityGlue({
     toolId: TOOL_ID,
@@ -276,27 +273,11 @@
     index = 0;
     roundCorrect = 0;
     App.utils.drawRoundReset();
-    reinforceList = [];
-    reinforceIndex = 0;
-    inReinforce = false;
-    App.reinforce.banner.hide();
     /* Registers the callback that runs when the normal round ends with
        pending failures; it mounts the mini-round with just those. */
-    App.reinforce.start(function (fallos) { startReinforce(fallos); });
+    reinforcement.begin();
     show(screenGame);
     render();
-  }
-
-  function startReinforce(fallos) {
-    reinforceList = fallos.map(function (f) { return f.payload; });
-    reinforceIndex = 0;
-    inReinforce = true;
-    attempts = 0;
-    App.reinforce.banner.set(
-      App.i18n.t('reinforceTitle') + ' — ' +
-      App.i18n.t('reinforceIntro').replace('{n}', reinforceList.length)
-    );
-    showReinforceQuestion(reinforceList[0]);
   }
 
   /* Paints one question. `fixed` replays a question from the reinforce
@@ -336,14 +317,12 @@
       optionsEl.appendChild(btn);
     });
 
-    progressFill.style.width = (inReinforce
-      ? ((reinforceIndex + 1) / reinforceList.length)
+    progressFill.style.width = (reinforcement.active()
+      ? ((reinforcement.position() + 1) / reinforcement.total())
       : (index / DATA.perRound)) * 100 + '%';
     progressText.textContent = '';
     paintStars();
   }
-
-  function showReinforceQuestion(p) { paintQuestion(p); }
 
   function render() { paintQuestion(null); }
 
@@ -352,7 +331,7 @@
 
 
   function showExplanation(isCorrect) {
-    if (isCorrect && inReinforce) {
+    if (isCorrect && reinforcement.active()) {
       explanationEl.textContent = '';
       explanationWrap.classList.add('hidden');
       return;
@@ -404,16 +383,8 @@
   }
 
   function next() {
-    if (inReinforce) {
-      reinforceIndex += 1;
-      if (reinforceIndex >= reinforceList.length) {
-        inReinforce = false;
-        App.reinforce.clear();
-        App.reinforce.banner.hide();
-        endRound();
-      } else {
-        showReinforceQuestion(reinforceList[reinforceIndex]);
-      }
+    if (reinforcement.active()) {
+      if (!reinforcement.nextItem()) endRound();
       return;
     }
     index += 1;

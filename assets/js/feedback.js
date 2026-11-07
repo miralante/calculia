@@ -312,6 +312,71 @@
     set: function (text) { setBanner(true, text); }
   };
 
+  /* A reinforcement session for one activity. It keeps the mini-round state
+     (the failed items, which one is on screen, whether the mini-round runs)
+     that each activity used to declare by hand:
+
+       var reinforcement = App.reinforce.session({
+         titleKey: 'reinforceTitle',   // banner title, looked up with App.i18n.t
+         introKey: 'reinforceIntro',   // banner line; {n} is the number of items
+         show: paintQuestion           // paints one item of the mini-round
+       });
+
+     begin()     at the start of a round: clears the state and the banner, and
+                 arms App.reinforce.start so that consume() starts the mini-round.
+     active()    true while the mini-round runs.
+     position()  0-based index of the item on screen.
+     total()     number of items in the mini-round.
+     nextItem()  on Next while active(): shows the next item and returns true,
+                 or ends the mini-round (clears the state and the banner) and
+                 returns false. The activity then ends the round itself. */
+  function makeReinforceSession(options) {
+    var items = [];
+    var index = 0;
+    var running = false;
+
+    function startMini(fallos) {
+      items = fallos.map(function (f) { return f.payload; });
+      index = 0;
+      running = true;
+      App.reinforce.banner.set(
+        App.i18n.t(options.titleKey) + ' — ' +
+        App.i18n.t(options.introKey).replace('{n}', items.length)
+      );
+      options.show(items[0]);
+    }
+
+    function begin() {
+      items = [];
+      index = 0;
+      running = false;
+      App.reinforce.banner.hide();
+      App.reinforce.start(startMini);
+    }
+
+    function nextItem() {
+      index += 1;
+      if (index < items.length) {
+        options.show(items[index]);
+        return true;
+      }
+      running = false;
+      App.reinforce.clear();
+      App.reinforce.banner.hide();
+      return false;
+    }
+
+    return {
+      begin: begin,
+      active: function () { return running; },
+      position: function () { return index; },
+      total: function () { return items.length; },
+      nextItem: nextItem
+    };
+  }
+
+  App.reinforce.session = makeReinforceSession;
+
   window.App.feedback = {
     success: success,
     encourage: encourage,

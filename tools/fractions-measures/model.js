@@ -9,7 +9,6 @@
 
   var resolved = false;
   var fixedQuestion = null;
-  var reinforceTotal = 0;
 
   function leyendaFrac() {
     return '<span class="digit-u">' + App.i18n.t('leyendaPartesPintadasTxt') + '</span> · ' +
@@ -621,7 +620,6 @@
   App.fractionsMeasuresModel = {
     resolved: resolved,
     fixedQuestion: fixedQuestion,
-    reinforceTotal: reinforceTotal,
     leyendaFrac: leyendaFrac,
     svgFraccion: svgFraccion,
     htmlFraccion: htmlFraccion,

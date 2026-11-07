@@ -44,13 +44,14 @@
   /* Refuerzo: ver core en assets/js/feedback.js (App.reinforce).
      fixedQuestion permite reutilizar render() con una question
      externa (la del refuerzo); si es null, render() genera una
-     nueva como antes. inReinforce controla el flujo de la mini-
+     nueva como antes. reinforcement.active() controla el flujo de la mini-
      ronda. */
   var fixedQuestion = null;
-  var inReinforce = false;
-  var reinforceList = [];
-  var reinforceIndex = 0;
-  var reinforceTotal = 0;
+  var reinforcement = App.reinforce.session({
+    titleKey: 'refuerzoTitulo',
+    introKey: 'refuerzoIntro',
+    show: function (p) { showReinforceQuestion(p); paintReinforceProgress(); }
+  });
 
   var glue = App.activityGlue({
     toolId: TOOL_ID,
@@ -286,26 +287,10 @@
     index = 0;
     roundCorrect = 0;
     App.utils.drawRoundReset();
-    inReinforce = false;
     fixedQuestion = null;
-    reinforceList = [];
-    reinforceIndex = 0;
-    App.reinforce.banner.hide();
-    App.reinforce.start(function (fallos) { startReinforce(fallos); });
+    reinforcement.begin();
     show(screenGame);
     render();
-  }
-
-  function startReinforce(fallos) {
-    reinforceList = fallos.map(function (f) { return f.payload; });
-    reinforceTotal = reinforceList.length;
-    reinforceIndex = 0;
-    inReinforce = true;
-    App.reinforce.banner.set(
-      App.i18n.t('refuerzoTitulo') + ' — ' +
-      App.i18n.t('refuerzoIntro').replace('{n}', reinforceTotal)
-    );
-    showReinforceQuestion(reinforceList[0]);
   }
 
   function showReinforceQuestion(p) {
@@ -314,7 +299,7 @@
   }
 
   function paintReinforceProgress() {
-    progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
+    progressFill.style.width = (((reinforcement.position() + 1) / reinforcement.total()) * 100) + '%';
     progressText.textContent = '';
   }
 
@@ -364,7 +349,7 @@
 
 
   function showExplanation(isCorrect) {
-    if (isCorrect && inReinforce) {
+    if (isCorrect && reinforcement.active()) {
       explanationEl.textContent = '';
       explanationWrap.classList.add('hidden');
       return;
@@ -417,17 +402,10 @@
   }
 
   function next() {
-    if (inReinforce) {
-      reinforceIndex += 1;
-      if (reinforceIndex >= reinforceTotal) {
-        inReinforce = false;
-        App.reinforce.clear();
-        App.reinforce.banner.hide();
+    if (reinforcement.active()) {
+      if (!reinforcement.nextItem()) {
         endRound();
-        return;
       }
-      showReinforceQuestion(reinforceList[reinforceIndex]);
-      paintReinforceProgress();
       return;
     }
     index += 1;

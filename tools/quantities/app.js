@@ -75,10 +75,11 @@
      fixedCase allows reusing paint() with an external case (the
      reinforcement one); if null, paint() takes the current case. */
   var fixedCase = null;
-  var inReinforce = false;
-  var reinforceList = [];
-  var reinforceIndex = 0;
-  var reinforceTotal = 0;
+  var reinforcement = App.reinforce.session({
+    titleKey: 'reinforceTitle',
+    introKey: 'reinforceIntro',
+    show: function (c) { showReinforce(c); paintReinforceProgress(); }
+  });
   /* Points game: the gaps the user has filled, and the ones the last
      check marked as wrong. A gap is numbered from the left: gap i
      sits after digit i. */
@@ -740,17 +741,10 @@
   function goNext() {
     waitingCheck = false;
     /* Mini-round: go to the next item of the reinforcement or close. */
-    if (inReinforce) {
-      reinforceIndex += 1;
-      if (reinforceIndex >= reinforceTotal) {
-        inReinforce = false;
-        App.reinforce.clear();
-        App.reinforce.banner.hide();
+    if (reinforcement.active()) {
+      if (!reinforcement.nextItem()) {
         closeRound();
-        return;
       }
-      showReinforce(reinforceList[reinforceIndex]);
-      paintReinforceProgress();
       return;
     }
     index += 1;
@@ -795,27 +789,11 @@
       round = DATA.wordDigits.map(function (digits) { return { digits: digits }; });
     }
     index = 0;
-    inReinforce = false;
     fixedCase = null;
-    reinforceList = [];
-    reinforceIndex = 0;
-    App.reinforce.banner.hide();
-    App.reinforce.start(function (fallos) { startReinforce(fallos); });
+    reinforcement.begin();
     case_ = GENERATORS[practice]();
     switchTo(taskScreen);
     paint();
-  }
-
-  function startReinforce(fallos) {
-    reinforceList = fallos.map(function (f) { return f.payload; });
-    reinforceTotal = reinforceList.length;
-    reinforceIndex = 0;
-    inReinforce = true;
-    App.reinforce.banner.set(
-      t('reinforceTitle') + ' — ' +
-      t('reinforceIntro').replace('{n}', reinforceTotal)
-    );
-    showReinforce(reinforceList[0]);
   }
 
   function showReinforce(c) {
@@ -825,8 +803,8 @@
 
   function paintReinforceProgress() {
     $('#progressText').textContent = t('progress')
-      .replace('{current}', reinforceIndex + 1)
-      .replace('{stars}', reinforceTotal);
+      .replace('{current}', reinforcement.position() + 1)
+      .replace('{stars}', reinforcement.total());
   }
 
 

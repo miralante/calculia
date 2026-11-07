@@ -40,20 +40,20 @@
   var answered = false;
   var attempts = 0;
   var resolved = false;
-  /* Reinforce: failed items are replayed at the end. inReinforce
-     prevents the mini-round from chaining with another mini-round.
+  /* Reinforce: failed items are replayed at the end. The session in
+     App.reinforce stops the mini-round from chaining with another one.
      Original items of the normal round are NOT modified (they are
      reused as fallback if the reinforce ends). */
-  var inReinforce = false;
-  var reinforceIndex = 0;
+  var reinforcement = App.reinforce.session({
+    titleKey: 'refuerzoTitulo',
+    introKey: 'refuerzoIntro',
+    show: function (item) { currentItem = item; paintReinforceProgress(); render(); }
+  });
   /* currentItem is what render() paints. In a normal round it equals
-     items[index]; in a mini-round it equals reinforceList[reinforceIndex].
+     items[index]; in a mini-round it is the item the session is on.
      Keeping a single read point simplifies the code and avoids
      passing item through every call. */
   var currentItem = null;
-  /* Reinforce list and total (needed to close). */
-  var reinforceList = [];
-  var reinforceTotal = 0;
 
   function save() {
     App.storage.set(CONFIG.toolId, progress);
@@ -76,13 +76,10 @@
     items = App.utils.shuffle(bank).slice(0, CONFIG.perRound);
     index = 0;
     roundCorrect = 0;
-    inReinforce = false;
-    reinforceIndex = 0;
     currentItem = null;
-    App.reinforce.banner.hide();
     /* Reinforce: the callback is called with the failed items when
-       the normal round ends. startReinforce mounts the mini-round. */
-    App.reinforce.start(function (fallos) { startReinforce(fallos); });
+       the normal round ends, and the session mounts the mini-round. */
+    reinforcement.begin();
     screenEnd.classList.add('hidden');
     screenGame.classList.remove('hidden');
     render();
@@ -93,22 +90,8 @@
      roundCorrect is NOT incremented here (it is the normal round
      counter); stars ARE added when each reinforce item is answered
      correctly (see answer). */
-  function startReinforce(fallos) {
-    reinforceList = fallos.map(function (f) { return f.payload; });
-    reinforceTotal = reinforceList.length;
-    reinforceIndex = 0;
-    inReinforce = true;
-    App.reinforce.banner.set(
-      App.i18n.t('refuerzoTitulo') + ' — ' +
-      App.i18n.t('refuerzoIntro').replace('{n}', reinforceTotal)
-    );
-    currentItem = reinforceList[0];
-    paintReinforceProgress();
-    render();
-  }
-
   function paintReinforceProgress() {
-    progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
+    progressFill.style.width = (((reinforcement.position() + 1) / reinforcement.total()) * 100) + '%';
     progressText.textContent = '';
   }
 
@@ -144,7 +127,7 @@
   }
 
   function showExplanation(optionText, isCorrect, item) {
-    if (isCorrect && inReinforce) {
+    if (isCorrect && reinforcement.active()) {
       explanationEl.textContent = '';
       explanationWrap.classList.add('hidden');
       return;
@@ -201,19 +184,11 @@
 
   function goNext() {
     /* Mini-round: go to the next item or close. */
-    if (inReinforce) {
-      reinforceIndex += 1;
-      if (reinforceIndex >= reinforceTotal) {
-        inReinforce = false;
+    if (reinforcement.active()) {
+      if (!reinforcement.nextItem()) {
         currentItem = null;
-        App.reinforce.clear();
-        App.reinforce.banner.hide();
         endRound();
-        return;
       }
-      currentItem = reinforceList[reinforceIndex];
-      paintReinforceProgress();
-      render();
       return;
     }
     /* Normal round: index++ and consume at the end. */

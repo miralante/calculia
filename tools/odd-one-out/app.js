@@ -42,10 +42,11 @@
      data.js y no se construyen aquí, así que no hay un objeto pregunta
      al que añadirle un campo: se guarda solo la pista que le toca. */
   var pistaActual = null;
-  var inReinforce = false;
-  var reinforceList = [];
-  var reinforceIndex = 0;
-  var reinforceTotal = 0;
+  var reinforcement = App.reinforce.session({
+    titleKey: 'refuerzoTitulo',
+    introKey: 'refuerzoIntro',
+    show: function (group) { currentGroup = group; paintReinforceProgress(); render(); }
+  });
 
   var glue = App.activityGlue({
     toolId: TOOL_ID,
@@ -69,34 +70,16 @@
     groups = App.utils.shuffle(level.groups).slice(0, bank().perRound);
     index = 0;
     roundCorrect = 0;
-    inReinforce = false;
     currentGroup = null;
-    reinforceList = [];
-    reinforceIndex = 0;
-    App.reinforce.banner.hide();
-    App.reinforce.start(function (failures) { startReinforce(failures); });
+    reinforcement.begin();
     screenStart.classList.add('hidden');
     screenEnd.classList.add('hidden');
     screenGame.classList.remove('hidden');
     render();
   }
 
-  function startReinforce(failures) {
-    reinforceList = failures.map(function (f) { return f.payload; });
-    reinforceTotal = reinforceList.length;
-    reinforceIndex = 0;
-    inReinforce = true;
-    App.reinforce.banner.set(
-      App.i18n.t('refuerzoTitulo') + ' — ' +
-      App.i18n.t('refuerzoIntro').replace('{n}', reinforceTotal)
-    );
-    currentGroup = reinforceList[0];
-    paintReinforceProgress();
-    render();
-  }
-
   function paintReinforceProgress() {
-    progressFill.style.width = (((reinforceIndex + 1) / reinforceTotal) * 100) + '%';
+    progressFill.style.width = (((reinforcement.position() + 1) / reinforcement.total()) * 100) + '%';
     progressText.textContent = '';
   }
 
@@ -148,7 +131,7 @@
   }
 
   function showExplanation(isCorrect, group) {
-    if (isCorrect && inReinforce) {
+    if (isCorrect && reinforcement.active()) {
       explanationEl.textContent = '';
       explanationWrap.classList.add('hidden');
       return;
@@ -202,18 +185,10 @@
   }
 
   function next() {
-    if (inReinforce) {
-      reinforceIndex += 1;
-      if (reinforceIndex >= reinforceTotal) {
-        inReinforce = false;
-        App.reinforce.clear();
-        App.reinforce.banner.hide();
+    if (reinforcement.active()) {
+      if (!reinforcement.nextItem()) {
         endRound();
-        return;
       }
-      currentGroup = reinforceList[reinforceIndex];
-      paintReinforceProgress();
-      render();
       return;
     }
     index += 1;
