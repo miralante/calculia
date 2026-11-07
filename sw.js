@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v375';
+var VERSION = 'calculia-v376';
 
 var FILES = [
   './',
@@ -450,6 +450,8 @@ var FILES = [
   './tools/wallet/strings.es.js',
   './tools/wallet/strings.en.js',
   './tools/wallet/styles.css'
+  // shared shell files added by scripts/sync-sw-files.js
+  './assets/js/classic-quiz.js',
 ];
 
 /* Cloudflare answers EVERY "/x.html" URL with a 307 to its extensionless form

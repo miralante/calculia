@@ -50,12 +50,6 @@
 
   /* Round state */
   var activity = null;
-  var level = null;
-  var index = 0;
-  var roundCorrect = 0;
-  var answered = false;
-  var attempts = 0;
-  var question = null;
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce).
      fixedQuestion allows reusing render() with an external question
      (the reinforcement one); if null, render() generates a new one
@@ -68,6 +62,19 @@
     show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars;
+
+  /* The round state and the shared answer, hint and next step (assets/js/classic-quiz.js). */
+  var round = { level: null, index: 0, roundCorrect: 0, answered: false, attempts: 0, question: null };
+  var quiz = App.classicQuiz({
+    round: round, progress: progress, reinforcement: reinforcement,
+    save: function () { save(); }, paintStars: function () { paintStars(); },
+    feedback: feedbackEl, explanation: explanationEl, explanationWrap: explanationWrap, btnNext: btnNext,
+    perRound: DATA.perRound,
+    showExplanation: function (isCorrect) { showExplanation(isCorrect); },
+    render: function () { render(); },
+    endRound: function () { endRound(); }
+  });
+  var answer = quiz.answer, showHint = quiz.showHint, next = quiz.next;
 
   /* ---- Utilidades ---- */
 
@@ -172,25 +179,6 @@
   }
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
-  function paintMenu() {
-    var cont = $('#activitiesMenu');
-    cont.innerHTML = '';
-    var grid = document.createElement('div');
-    grid.className = 'menu-grid';
-    Object.keys(DATA.activities).forEach(function (id) {
-      var act = DATA.activities[id];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-actividad';
-      btn.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
-        '<span>' + App.i18n.t('activity.' + id + '.name') + '</span>' +
-        '<span class="detail-card">' + App.i18n.t('activity.' + id + '.detail') + '</span>';
-      btn.addEventListener('click', function () { openActivity(id); });
-      grid.appendChild(btn);
-    });
-    cont.appendChild(grid);
-  }
-
   /* The level rises one step per completed round of THIS activity, capped
      at the last one, so a person who comes back continues where they were. */
   function roundsDone(id) {
@@ -209,6 +197,8 @@
     if (activity.intro) { openIntro(); return; }
     startRound(levelFromProgress());
   }
+
+  var activityMenu = App.activityMenu({ container: $('#activitiesMenu'), activities: DATA.activities, open: openActivity });
 
   /* ---- Intro: what a fraction is, then the same idea in real life ----
      Both are carousels the person can go back through before the first
@@ -273,9 +263,9 @@
   /* ---- Game ---- */
 
   function startRound(nv) {
-    level = nv;
-    index = 0;
-    roundCorrect = 0;
+    round.level = nv;
+    round.index = 0;
+    round.roundCorrect = 0;
     App.utils.drawRoundReset();
     /* Registers the callback that runs when the normal round ends with
        pending failures; it mounts the mini-round with just those. */
@@ -287,21 +277,21 @@
   /* Paints one question. `fixed` replays a question from the reinforce
      queue; without it a new one is generated for the current level. */
   function paintQuestion(fixed) {
-    question = fixed || GENERATORS[level.tipo](level, index);
-    answered = false;
-    attempts = 0;
+    round.question = fixed || GENERATORS[round.level.tipo](round.level, round.index);
+    round.answered = false;
+    round.attempts = 0;
 
-    promptEl.textContent = question.prompt;
-    visualEl.innerHTML = question.visual || '';
-    if (question.visualAria) {
+    promptEl.textContent = round.question.prompt;
+    visualEl.innerHTML = round.question.visual || '';
+    if (round.question.visualAria) {
       visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', question.visualAria);
+      visualEl.setAttribute('aria-label', round.question.visualAria);
     } else {
       visualEl.removeAttribute('role');
       visualEl.removeAttribute('aria-label');
     }
-    legendEl.innerHTML = question.legend || '';
-    legendEl.classList.toggle('hidden', !question.legend);
+    legendEl.innerHTML = round.question.legend || '';
+    legendEl.classList.toggle('hidden', !round.question.legend);
 
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
@@ -310,8 +300,8 @@
     btnNext.classList.add('hidden');
 
     optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('options-row', !!question.inline);
-    question.options.forEach(function (op) {
+    optionsEl.classList.toggle('options-row', !!round.question.inline);
+    round.question.options.forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'option-btn';
@@ -323,10 +313,10 @@
 
     progressFill.style.width = (reinforcement.active()
       ? ((reinforcement.position() + 1) / reinforcement.total())
-      : (index / DATA.perRound)) * 100 + '%';
+      : (round.index / DATA.perRound)) * 100 + '%';
     progressText.textContent = reinforcement.active()
       ? (reinforcement.position() + 1) + ' / ' + reinforcement.total()
-      : (index + 1) + ' / ' + DATA.perRound;
+      : (round.index + 1) + ' / ' + DATA.perRound;
     paintStars();
   }
 
@@ -342,7 +332,7 @@
       explanationWrap.classList.add('hidden');
       return;
     }
-    var correct = question.options.filter(function (o) { return o.correct; })[0];
+    var correct = round.question.options.filter(function (o) { return o.correct; })[0];
     explanationEl.textContent =
       (isCorrect ? App.i18n.t('correctExplanation') : App.i18n.t('incorrectExplanationA')) +
       /* Fraction options draw a pie, so their visible text would read
@@ -357,55 +347,6 @@
      to do with the figure in front of you— and not the same sentence for
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
-  function showHint(op) {
-    explanationEl.textContent = App.feedback.hintText(
-      (question && question.hint) || App.i18n.t('hint'), op ? plainText(op.html) : '');
-    explanationWrap.classList.remove('hidden');
-  }
-
-  function answer(op, btn) {
-    if (answered) return;
-    if (op.correct) {
-      showExplanation(true);
-      answered = true;
-      btn.classList.add('correct');
-      App.feedback.success(feedbackEl);
-      progress.stars += 1;
-      roundCorrect += 1;
-      save();
-      paintStars();
-      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
-      btnNext.classList.remove('hidden');
-      btnNext.focus();
-    } else {
-      attempts += 1;
-      App.reinforce.add(level.id + ':' + index, question);
-      var respuestaTrasPista = attempts > 1;
-      showHint(op);
-      /* Reveal the explanation only after the hint is acknowledged. */
-      btn.classList.add('encourage');
-      btn.disabled = true;
-      App.feedback.encourage(feedbackEl);
-      App.feedback.lockUntilAck(App.utils.$$('#options .option-btn'), explanationWrap, function () { if (respuestaTrasPista) showExplanation(false); });
-    }
-  }
-
-  function next() {
-    if (reinforcement.active()) {
-      if (!reinforcement.nextItem()) endRound();
-      return;
-    }
-    index += 1;
-    if (index >= DATA.perRound) {
-      /* consume() returns [] when nothing was failed; otherwise it fires
-         the callback that mounts the mini-round, which ends the round
-         itself, so endRound must not also run here. */
-      if (App.reinforce.consume().length === 0) endRound();
-    } else {
-      render();
-    }
-  }
-
   function endRound() {
     progress.completedRounds = (progress.completedRounds || 0) + 1;
     progress.rounds[activity.id] = roundsDone(activity.id) + 1;
@@ -414,7 +355,7 @@
     var summaryEl = $('#endSummary');
     if (summaryEl) {
       summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
+        .replace('{n}', round.roundCorrect)
         .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
         .replace('{stars}', progress.stars);
     }
@@ -428,8 +369,8 @@
     save: save,
     paintStars: paintStars,
     steps: function () { return activity.steps; },
-    countCorrect: function () { roundCorrect += 1; },
-    resetCorrect: function () { roundCorrect = 0; },
+    countCorrect: function () { round.roundCorrect += 1; },
+    resetCorrect: function () { round.roundCorrect = 0; },
     endRound: endRound,
     showComma: function () { show(screenComma); },
     showMenu: function () { show(screenMenu); }
@@ -447,7 +388,7 @@
 
 
 
-  paintMenu();
+  activityMenu.paint();
   paintStars();
   /* End screen: the only button is "Volver al inicio", which goes back
      to the Calculia landing. The end screen is a closing card, not a
