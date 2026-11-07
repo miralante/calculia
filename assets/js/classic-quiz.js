@@ -1,7 +1,8 @@
 /* ==========================================================================
    Calculia — Classic quiz engine: the answer, the hint and the next step of
-   the one-question-at-a-time activities, and the activities menu they open
-   from. Shared by the activities that predate the three-stage flow.
+   the one-question-at-a-time activities, the painting of a question and the
+   activities menu they open from. Shared by the activities that predate the
+   three-stage flow.
 
    The round state lives in one object per activity (App.classicRound()), so
    the shared functions and the activity read and write the same values:
@@ -119,7 +120,85 @@
     return { paint: paint };
   }
 
+  /* host: {
+       round:          the object from classicRound()
+       reinforcement:  the activity's App.reinforce.session
+       els:            { prompt, visual, legend, options, feedback, explanationWrap,
+                         explanation, btnNext, progressFill, progressText }
+       perRound:       questions in a round
+       generate(level, index): the question for that position of the level
+       answer(op, btn): the activity's answer (from classicQuiz)
+       paintStars(), showGame()
+     }
+     Returns { startRound(level), paintQuestion(fixed), render() }.
+     paintQuestion(fixed) replays `fixed` (a question from the reinforce queue);
+     without it a new one is generated for the current level. */
+  function classicPainter(host) {
+    var R = host.round;
+    var reinforcement = host.reinforcement;
+    var el = host.els;
+
+    function paintQuestion(fixed) {
+      R.question = fixed || host.generate(R.level, R.index);
+      R.answered = false;
+      R.attempts = 0;
+      var q = R.question;
+
+      el.prompt.textContent = q.prompt;
+      el.visual.innerHTML = q.visual || '';
+      el.visual.classList.toggle('hidden', !q.visual);
+      if (q.visualAria) {
+        el.visual.setAttribute('role', 'img');
+        el.visual.setAttribute('aria-label', q.visualAria);
+      } else {
+        el.visual.removeAttribute('role');
+        el.visual.removeAttribute('aria-label');
+      }
+      el.legend.textContent = q.legend || '';
+      el.legend.classList.toggle('hidden', !q.legend);
+
+      el.feedback.textContent = '';
+      el.feedback.className = 'feedback';
+      el.explanationWrap.classList.add('hidden');
+      el.explanation.textContent = '';
+      el.btnNext.classList.add('hidden');
+
+      el.options.innerHTML = '';
+      el.options.classList.toggle('options-row', !!q.inline);
+      q.options.forEach(function (op) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-btn';
+        btn.innerHTML = op.html;
+        if (op.aria) btn.setAttribute('aria-label', op.aria);
+        btn.addEventListener('click', function () { host.answer(op, btn); });
+        el.options.appendChild(btn);
+      });
+
+      el.progressFill.style.width = (reinforcement.active()
+        ? ((reinforcement.position() + 1) / reinforcement.total())
+        : (R.index / host.perRound)) * 100 + '%';
+      el.progressText.textContent = '';
+      host.paintStars();
+    }
+
+    function render() { paintQuestion(null); }
+
+    function startRound(nv) {
+      R.level = nv;
+      R.index = 0;
+      R.roundCorrect = 0;
+      App.utils.drawRoundReset();
+      reinforcement.begin();
+      host.showGame();
+      render();
+    }
+
+    return { startRound: startRound, paintQuestion: paintQuestion, render: render };
+  }
+
   window.App.classicRound = classicRound;
   window.App.classicQuiz = classicQuiz;
   window.App.activityMenu = activityMenu;
+  window.App.classicPainter = classicPainter;
 })();

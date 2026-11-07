@@ -771,7 +771,7 @@ in §2.1 above are the canonical rationale).
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | activities that keep their own round loop (not `App.activityFlow`) |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | the activities that show a row of dots or a shuffled Yes / No (divisibility-test, multiples, prime-composite) |
 | `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | the five time activities, date-format and the sheet mode of the activity flow (the whole round on one sheet, checked at once) |
-| `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}` | the classic one-question activities (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): the round state object and the shared answer, hint, next step and menu |
+| `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}`, `App.classicPainter(host)` → `{startRound, paintQuestion, render}` | the classic one-question activities (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): the round state object and the shared answer, hint, next step, menu, and the start and painting of a question (geometry, operations and percent so far) |
 
 The load order is `utils.js → i18n.js → tts.js → storage.js →
 feedback.js → strings.<locale>.js → data.js → app.js`. `i18n.js`

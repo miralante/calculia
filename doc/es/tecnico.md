@@ -801,7 +801,7 @@ justificación canónica).
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | actividades que llevan su propio bucle de ronda (no `App.activityFlow`) |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | las actividades que muestran una fila de puntos o un Sí / No barajado (divisibility-test, multiples, prime-composite) |
 | `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | las cinco actividades de tiempo, date-format y el modo hoja del flujo de actividad (toda la ronda en una hoja, comprobada de una vez) |
-| `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}` | las actividades clásicas de una pregunta (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): el objeto de estado de la ronda y la respuesta, la pista, el siguiente paso y el menú compartidos |
+| `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}`, `App.classicPainter(host)` → `{startRound, paintQuestion, render}` | las actividades clásicas de una pregunta (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): el objeto de estado de la ronda, la respuesta, la pista, el siguiente paso, el menú y el inicio y pintado de una pregunta compartidos (de momento geometry, operations y percent) |
 
 El orden de carga es `utils.js → i18n.js → tts.js → storage.js →
 feedback.js → strings.<locale>.js → data.js → app.js`. `i18n.js`

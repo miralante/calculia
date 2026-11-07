@@ -30,7 +30,7 @@
   /* Round state */
   var activity = null;
   /* Reinforcement: see core in assets/js/feedback.js (App.reinforce). */
-  var reinforcement = App.reinforce.session({ titleKey: 'reinforceTitle', introKey: 'reinforceIntro', show: paintQuestion });
+  var reinforcement = App.reinforce.session({ titleKey: 'reinforceTitle', introKey: 'reinforceIntro', show: function (q) { paintQuestion(q); } });
 
   var glue = App.activityGlue({
     toolId: TOOL_ID,
@@ -55,6 +55,20 @@
     endRound: function () { endRound(); }
   });
   var answer = quiz.answer, showHint = quiz.showHint, next = quiz.next;
+
+  /* Painting and starting a round, shared with the other classic activities (assets/js/classic-quiz.js). */
+  var painter = App.classicPainter({
+    round: round, reinforcement: reinforcement,
+    els: { prompt: promptEl, visual: visualEl, legend: legendEl, options: optionsEl, feedback: feedbackEl,
+      explanationWrap: explanationWrap, explanation: explanationEl, btnNext: btnNext,
+      progressFill: progressFill, progressText: progressText },
+    perRound: DATA.perRound,
+    generate: function (level, index) { return GENERATORS[level.tipo](level, index); },
+    answer: answer,
+    paintStars: function () { paintStars(); },
+    showGame: function () { show(screenGame); }
+  });
+  var startRound = painter.startRound, paintQuestion = painter.paintQuestion, render = painter.render;
 
   /* ---- Nothing that can be worked out is stored ----
      The percentage, the discount, the doubled recipe and the real-world
@@ -391,63 +405,6 @@
   var activityMenu = App.activityMenu({ container: $('#activitiesMenu'), activities: DATA.activities, open: openActivity });
 
   /* ---- Game ---- */
-
-  function startRound(nv) {
-    round.level = nv;
-    round.index = 0;
-    round.roundCorrect = 0;
-    App.utils.drawRoundReset();
-    reinforcement.begin();
-    show(screenGame);
-    render();
-  }
-
-  /* Paints one question. `fixed` replays a question from the reinforce
-     queue; without it a new one is generated for the current level. */
-  function paintQuestion(fixed) {
-    round.question = fixed || GENERATORS[round.level.tipo](round.level, round.index);
-    round.answered = false;
-    round.attempts = 0;
-
-    promptEl.textContent = round.question.prompt;
-    visualEl.innerHTML = round.question.visual || '';
-    visualEl.classList.toggle('hidden', !round.question.visual);
-    if (round.question.visualAria) {
-      visualEl.setAttribute('role', 'img');
-      visualEl.setAttribute('aria-label', round.question.visualAria);
-    } else {
-      visualEl.removeAttribute('role');
-      visualEl.removeAttribute('aria-label');
-    }
-    legendEl.textContent = round.question.legend || '';
-    legendEl.classList.toggle('hidden', !round.question.legend);
-
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('hidden');
-    explanationEl.textContent = '';
-    btnNext.classList.add('hidden');
-
-    optionsEl.innerHTML = '';
-    optionsEl.classList.toggle('options-row', !!round.question.inline);
-    round.question.options.forEach(function (op) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'option-btn';
-      btn.innerHTML = op.html;
-      if (op.aria) btn.setAttribute('aria-label', op.aria);
-      btn.addEventListener('click', function () { answer(op, btn); });
-      optionsEl.appendChild(btn);
-    });
-
-    progressFill.style.width = (reinforcement.active()
-      ? ((reinforcement.position() + 1) / reinforcement.total())
-      : (round.index / DATA.perRound)) * 100 + '%';
-    progressText.textContent = '';
-    paintStars();
-  }
-
-  function render() { paintQuestion(null); }
 
   /* Visible text of an option (its html may wrap spans). */
   var plainText = App.utils.plainText;
