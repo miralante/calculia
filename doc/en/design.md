@@ -176,7 +176,7 @@ standard: the failure in §6 is visible in two seconds.
 ### 5.2 Measure the computed style
 
 ```bash
-node scripts/one-off/probe-acento-actividad.js
+node scripts/probe-acento-actividad.js
 ```
 
 Compares the **computed** `background` and `color` of each activity's
@@ -286,7 +286,7 @@ all three themes with nothing else changed.
 Verification:
 
 ```bash
-node scripts/one-off/probe-temas-contraste.js
+node scripts/probe-temas-contraste.js
 ```
 
 It walks the screens in all three themes and lists every text below the

@@ -12,8 +12,7 @@
    under the ORIGINAL key with `redirected: true`, and a redirected
    response may not be handed to a top-level navigation — Chrome kills
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
-   on every activity link. Reproduced with
-   scripts/one-off/probe-redirect-isolated.js against production.
+   on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
 var VERSION = 'calculia-v382';
 

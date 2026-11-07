@@ -178,7 +178,7 @@ de oro: el fallo de §6 se ve en dos segundos.
 ### 5.2 Medir el estilo computado
 
 ```bash
-node scripts/one-off/probe-acento-actividad.js
+node scripts/probe-acento-actividad.js
 ```
 
 Compara el `background` y el `color` **calculados** del botón principal de
@@ -289,7 +289,7 @@ temas sin tocar nada más.
 Comprobación:
 
 ```bash
-node scripts/one-off/probe-temas-contraste.js
+node scripts/probe-temas-contraste.js
 ```
 
 Recorre las pantallas en los tres temas y lista cada texto por debajo

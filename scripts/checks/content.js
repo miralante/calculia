@@ -209,8 +209,7 @@ module.exports = function (ctx) {
       activity link. Safari happens to tolerate it, so this only ever
       showed up on Chrome (desktop and mobile alike).
 
-      Reproduced against production with
-      scripts/one-off/probe-redirect-isolated.js: with the service worker
+      Reproduced against production with a one-off probe (removed; see git history): with the service worker
       enabled every ".../index.html" navigation failed and every trailing
       slash URL returned 200; with the service worker blocked all of them
       returned 200. Fixed by linking the canonical directory URL.

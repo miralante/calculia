@@ -872,8 +872,7 @@ async function exerciseActivityApp(page) {
    clicking and seeing what the page does, not from knowing it. What it does
    check is the thing that was broken — that the start screen leaves a way in
    and that the round really produces questions. The Socratic hint of these
-   three is checked by scripts/one-off/check-pistas.js, which plays badly on
-   purpose; here a wrong answer is not guaranteed to happen. */
+   three is not checked here: a wrong answer is not guaranteed to happen. */
 const SIMPLE_STARTS = {
   '/tools/patterns/': { options: '#options .option-btn', accepted: 'correct' },
   '/tools/odd-one-out/': { options: '#group .option-btn', accepted: 'correct' },

@@ -6,7 +6,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || 'playwright');
 
-const ROOT = path.resolve(__dirname, '..', '..');
+const ROOT = path.resolve(__dirname, '..');
+fs.mkdirSync(path.join(ROOT, 'test-results'), { recursive: true });
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml' };
 
 function serve() {
@@ -135,7 +136,7 @@ const auditFn = () => {
         }
       }
       await page.screenshot({
-        path: path.join(__dirname, 'capturas', `tema-${theme || 'light'}-${flow.tool}-${flow.name}.png`),
+        path: path.join(ROOT, 'test-results', `tema-${theme || 'light'}-${flow.tool}-${flow.name}.png`),
       });
     }
   }

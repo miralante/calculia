@@ -44,5 +44,3 @@ id_ed25519.pub
 # already excludes them via .assetsignore, git was not)
 /test-results/
 
-# Screenshots written by the one-off probe scripts (generated, not source)
-/scripts/one-off/capturas/

@@ -3,8 +3,7 @@
 /* ---- The drawing ----
    Every rule is drawn from the same numbers the answer is compared
    against, so the colour here is the only thing that could make the
-   picture disagree with the question. Scripts/one-off/
-   probe-escala-contraste.js measures each pair below in the three
+   picture disagree with the question. scripts/probe-escala-contraste.js measures each pair below in the three
    themes: a mark at 1.2:1 against the ruler is a mark nobody sees,
    and no structural check reports that. */
 .scale-svg {

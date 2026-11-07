@@ -97,8 +97,7 @@ console.log(
    This gate fails if a page links to a ".html" URL, or if sw.js can store a
    followed redirect (cache.addAll, or a cache.put without deRedirect).
 
-   Fix links with: node ../scripts/one-off/fix-html-links.js --apply
-   Prove the gate with: node ../scripts/one-off/test-check-sw-redirects.js
+   Check the gate with: node scripts/check-sw-redirects.js calculia
    ------------------------------------------------------------------- */
 (function () {
   const suiteTool = require('path').join(__dirname, '..', '..', 'scripts', 'check-sw-redirects.js');
@@ -114,7 +113,7 @@ console.log(
     console.log(String(out).trim());
   } catch (e) {
     console.error(String(e.stdout || e.message).trim());
-    console.error('  Fix links with: node ../scripts/one-off/fix-html-links.js --apply');
+    console.error('  Replace each link it lists with the directory URL (no index.html).');
     process.exitCode = 1;
   }
 })();

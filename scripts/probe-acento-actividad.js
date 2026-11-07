@@ -1,7 +1,7 @@
 /* One-off probe: does each activity's primary button actually show its
    accent colour, and is the label readable on it?
    Run:
-     PLAYWRIGHT_MODULE_PATH=<npm root -g> node scripts/one-off/probe-acento-actividad.js
+     PLAYWRIGHT_MODULE_PATH=<npm root -g> node scripts/probe-acento-actividad.js
    Reports, per tool, the computed background/color of its main .btn and
    the ratio between them, plus whether --mod-* resolves. */
 const http = require('node:http');
@@ -9,7 +9,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || 'playwright');
 
-const ROOT = path.resolve(__dirname, '..', '..');
+const ROOT = path.resolve(__dirname, '..');
+fs.mkdirSync(path.join(ROOT, 'test-results'), { recursive: true });
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -132,7 +133,7 @@ const TOOLS = [
       undefinedMods: Object.entries(res.mods).filter(([, v]) => v === '(UNDEFINED)').map(([k]) => k),
     });
 
-    await page.screenshot({ path: path.join(__dirname, `probe-${tool}.png`), fullPage: false });
+    await page.screenshot({ path: path.join(ROOT, 'test-results', `probe-${tool}.png`), fullPage: false });
   }
 
   await browser.close();

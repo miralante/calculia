@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* ============================================================
-   probe-escala-contraste.js — one-off
+   probe-escala-contraste.js
    Comprueba los pares de color que usa tools/scale/ en los tres
    temas, leyendo los tokens reales de assets/css/tokens.css en vez
    de suponerlos. Un token escrito en un SVG no se ve si el par que
@@ -13,14 +13,14 @@
    que se pide a una línea de 2px sobre una superficie es 3:1
    (WCAG 1.4.11, no texto), y a un número impreso 4.5:1 (texto).
 
-   Uso: node scripts/one-off/probe-escala-contraste.js
+   Uso: node scripts/probe-escala-contraste.js
    ============================================================ */
 'use strict';
 
 var fs = require('fs');
 var path = require('path');
 
-var ROOT = path.join(__dirname, '..', '..');
+var ROOT = path.join(__dirname, '..');
 var TOKENS = path.join(ROOT, 'assets', 'css', 'tokens.css');
 
 /* Los pares que de verdad aparecen en los dibujos de la actividad,
