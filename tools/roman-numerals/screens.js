@@ -227,11 +227,7 @@
        subtract colouring for the I that subtracted. A run of
        identical letters (XX, III) keeps the colour of that
        letter. */
-    function coloredChunkValue(chunk) {
-      var primaryLetter = chunk.letters[chunk.letters.length - 1];
-      var cls = 'letter-' + primaryLetter.toLowerCase() + (chunk.pair ? ' letter-subtract' : '');
-      return '<span class="' + cls + '">' + chunk.value + '</span>';
-    }
+    var coloredChunkValue = M.coloredChunkValue;
 
     /* Returns the arithmetic formula of the Roman numeral with each
        number in the colour of the letter that contributes it, in

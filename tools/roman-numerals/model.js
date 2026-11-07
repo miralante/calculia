@@ -194,9 +194,17 @@
     return t('pistaGeneral');
   }
 
+  /* The value of a chunk in a breakdown, coloured by its primary letter (the subtract
+     colouring for a pair, as in screens.js and decomposition.js). */
+  function coloredChunkValue(chunk) {
+    var primaryLetter = chunk.letters[chunk.letters.length - 1];
+    var cls = 'letter-' + primaryLetter.toLowerCase() + (chunk.pair ? ' letter-subtract' : '');
+    return '<span class="' + cls + '">' + chunk.value + '</span>';
+  }
 
   App.romanNumeralsModel = {
     t: t,
+    coloredChunkValue: coloredChunkValue,
     CAROUSEL_ORDER: CAROUSEL_ORDER,
     wrapRomanLetters: wrapRomanLetters,
     wrapTrailingRoman: wrapTrailingRoman,

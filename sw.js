@@ -15,7 +15,7 @@
    on every activity link. Reproduced with
    scripts/one-off/probe-redirect-isolated.js against production.
    ============================================================ */
-var VERSION = 'calculia-v381';
+var VERSION = 'calculia-v382';
 
 var FILES = [
   './',
@@ -83,12 +83,16 @@ var FILES = [
   './assets/img/icono.svg',
   './tools/algebra/',
   './tools/algebra/app.js',
+  './tools/algebra/model.js',
+  './tools/algebra/questions.js',
   './tools/algebra/data.js',
   './tools/algebra/strings.es.js',
   './tools/algebra/strings.en.js',
   './tools/algebra/styles.css',
   './tools/charts/',
   './tools/charts/app.js',
+  './tools/charts/model.js',
+  './tools/charts/questions.js',
   './tools/charts/data.js',
   './tools/charts/strings.es.js',
   './tools/charts/strings.en.js',
@@ -101,6 +105,7 @@ var FILES = [
   './tools/calendar/styles.css',
   './tools/clock/',
   './tools/clock/app.js',
+  './tools/clock/faces.js',
   './tools/clock/data.js',
   './tools/clock/strings.es.js',
   './tools/clock/strings.en.js',
@@ -137,6 +142,9 @@ var FILES = [
   './tools/trigonometry/styles.css',
   './tools/scale/',
   './tools/scale/app.js',
+  './tools/scale/model.js',
+  './tools/scale/drawing.js',
+  './tools/scale/questions.js',
   './tools/scale/data.js',
   './tools/scale/strings.es.js',
   './tools/scale/strings.en.js',
@@ -353,6 +361,8 @@ var FILES = [
   './tools/puzzle/styles.css',
   './tools/divisibility/',
   './tools/divisibility/app.js',
+  './tools/divisibility/model.js',
+  './tools/divisibility/questions.js',
   './tools/divisibility/data.js',
   './tools/divisibility/strings.es.js',
   './tools/divisibility/strings.en.js',
@@ -372,6 +382,8 @@ var FILES = [
   './tools/ordinals/styles.css',
   './tools/quantities/',
   './tools/quantities/app.js',
+  './tools/quantities/words.js',
+  './tools/quantities/questions.js',
   './tools/quantities/data.js',
   './tools/quantities/strings.es.js',
   './tools/quantities/strings.en.js',
@@ -420,6 +432,7 @@ var FILES = [
   './tools/riddles/styles.css',
   './tools/roman-numerals/',
   './tools/roman-numerals/app.js',
+  './tools/roman-numerals/decomposition.js',
   './tools/roman-numerals/model.js',
   './tools/roman-numerals/screens.js',
   './tools/roman-numerals/data.js',
@@ -446,6 +459,8 @@ var FILES = [
   './tools/temperature/styles.css',
   './tools/wallet/',
   './tools/wallet/app.js',
+  './tools/wallet/model.js',
+  './tools/wallet/activities.js',
   './tools/wallet/data.js',
   './tools/wallet/strings.es.js',
   './tools/wallet/strings.en.js',
