@@ -16,6 +16,7 @@
       elapsed: { name: '¿Cuánto tiempo pasa?', detail: 'Mira dos relojes y di cuánto tiempo hay entre ellos.' },
       convert: { name: 'Cambia de unidad', detail: 'Pasa horas a minutos, días a horas y más.' },
       durations: { name: '¿Cuánto tarda?', detail: 'Elige cuánto dura cada cosa de la vida diaria.' },
+      timer: { name: 'Temporizador', detail: 'Mide 1 segundo, 1 minuto, 5 minutos… y avisa al acabar.' },
       compare: { name: '¿Cuál dura más?', detail: 'Compara tiempos escritos con unidades distintas.' },
       dates: { name: 'Leer fechas', detail: 'Lee 10/01/2025: día, mes y año, y practica.' }
     }

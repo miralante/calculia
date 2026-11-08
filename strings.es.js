@@ -76,6 +76,7 @@
     "time-units": { "name": "Unidades de tiempo", "detail": "Del siglo al segundo: explicación y ejemplos." },
     "time-convert": { "name": "Cambia de unidad", "detail": "Pasa horas a minutos, días a horas y más." },
     "time-durations": { "name": "¿Cuánto tarda?", "detail": "Elige cuánto dura cada cosa de la vida diaria." },
+    "timer": { "name": "Temporizador", "detail": "Mide 1 segundo, 1 minuto, 5 minutos… y avisa al acabar." },
     "time-compare": { "name": "¿Cuál dura más?", "detail": "Compara tiempos con unidades distintas." },
     "stories": { "name": "Historias", "detail": "Ordena lo que pasó primero." },
     "oddoneout": { "name": "¿Qué no encaja?", "detail": "Encuentra el que sobra." },

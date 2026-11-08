@@ -1,0 +1,66 @@
+/* ============================================================
+   Calculia — Temporizador: estilos propios.
+   The cards, buttons and progress bar come from components.css.
+   This file adds the choices, the big count and the alarm card.
+   ============================================================ */
+
+/* The seven choices: one column on a phone, more when there is room. */
+.timer-choices {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio);
+}
+@media (min-width: 480px) {
+  .timer-choices { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 768px) {
+  .timer-choices { grid-template-columns: repeat(3, 1fr); }
+}
+
+.timer-choice {
+  min-height: var(--boton-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-size: var(--texto-base);
+  font-weight: 700;
+}
+.timer-choice .picto { font-size: 1.6rem; }
+.timer-choice-name { text-align: left; }
+
+/* The count from 00:00. Digits keep their width while they change. */
+.timer-card { padding: var(--espacio-grande); }
+.timer-goal {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-pequeno);
+  margin: 0;
+}
+.timer-time {
+  margin: 0;
+  font-size: clamp(3rem, 16vw, 6rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--mod-razonamiento);
+  line-height: 1.1;
+}
+.timer-bar { width: 100%; }
+
+/* The alarm card: the words and the icon say it, not only the sound. */
+.timer-alarm {
+  border: 3px solid var(--color-animo);
+  background: var(--color-animo-suave);
+  padding: var(--espacio-grande);
+}
+.timer-alarm:focus { outline: 3px solid var(--color-foco); outline-offset: 4px; }
+.timer-alarm-icon { font-size: 4rem; line-height: 1; }
+.timer-alarm-title { margin: 0; color: var(--color-texto); }
+.timer-alarm-text { margin: 0; font-size: var(--texto-grande); font-weight: 700; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .timer-alarm-icon { animation: timer-ring 0.6s ease-in-out infinite alternate; }
+}
+@keyframes timer-ring {
+  from { transform: rotate(-12deg); }
+  to   { transform: rotate(12deg); }
+}

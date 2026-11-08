@@ -110,7 +110,9 @@ module.exports = function (ctx) {
      assets/js/utils.js. An activity that still defines its own `function
      draw(` or `function spreadRepeats(` is duplicating that helper and
      going around the contract. */
-  var NO_SHUFFLE = ['temperature', 'los-numeros', 'quantities', 'order-numbers', 'numbers-group', 'common-group', 'time-group'];
+  /* timer: it has no questions or options; the person picks a duration and
+     the count goes up from zero, so there is nothing to shuffle. */
+  var NO_SHUFFLE = ['temperature', 'los-numeros', 'quantities', 'order-numbers', 'numbers-group', 'common-group', 'time-group', 'timer'];
   slugs.forEach(function (slug) {
     if (NO_SHUFFLE.indexOf(slug) !== -1) return;
     ctx.checks += 1;

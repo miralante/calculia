@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-title="title">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temporizador | Calculia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v1089d2b6">
+  <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v42206f15">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v2a2b6135">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="tool-header">
+      <a href="../time-group/" class="back-link" data-i18n="core.back">← Volver</a>
+      <h1 data-i18n="title">⏲️ Temporizador</h1>
+    </header>
+
+    <!-- Choose the time. Each button starts the count. -->
+    <section id="screenPick" class="stack">
+      <div class="row center-row">
+        <p class="instruction" data-i18n="instruction">Elige cuánto tiempo quieres medir.</p>
+      </div>
+      <div class="timer-choices" id="choices"></div>
+    </section>
+
+    <!-- The count, from 00:00 up to the chosen time. -->
+    <section id="screenRun" class="hidden stack">
+      <div class="card centered stack timer-card">
+        <p class="timer-goal" id="goal"></p>
+        <p class="timer-time" id="elapsed" role="timer">00:00</p>
+        <div class="progress-bar timer-bar" id="timerBar" role="progressbar" data-i18n-aria="elapsedLabel" aria-label="Tiempo pasado" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progress-fill" id="timerFill"></div>
+        </div>
+      </div>
+
+      <div class="row sheet-actions">
+        <button type="button" class="btn btn-secondary" id="btnPause" data-i18n="pause">Pausar</button>
+        <button type="button" class="btn btn-secondary" id="btnStop" data-i18n="stop">Parar</button>
+      </div>
+
+      <!-- Shown when the time is up. Tabindex -1 lets the script move the
+           focus here, so a screen reader announces it. -->
+      <div class="card centered stack timer-alarm hidden" id="alarm" role="alert" tabindex="-1">
+        <div class="timer-alarm-icon" aria-hidden="true">⏰</div>
+        <h2 class="timer-alarm-title" data-i18n="alarmTitle">¡Se acabó el tiempo!</h2>
+        <p class="timer-alarm-text" id="alarmText"></p>
+        <button type="button" class="btn btn-secondary" id="btnSilence" data-i18n="silence">Parar el aviso</button>
+        <button type="button" class="btn" id="btnAgain" data-i18n="again">Medir otro tiempo</button>
+      </div>
+    </section>
+
+    <footer data-pie-app data-pie-base="../../" data-pie-class="pie-app"></footer>
+  </div>
+
+  <script src="../../assets/js/utils.js?v=calculia-vf1af2131"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-v9fe34f5a"></script>
+  <script src="strings.es.js"></script>
+  <script src="strings.en.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="../../assets/js/sw-register.js?v=calculia-vd8558f03"></script>
+</body>
+</html>
