@@ -11,6 +11,10 @@
 var DATA = {
   perRound: 6,
 
+  /* The explanation slides and the real-life examples: one picture each. */
+  intro: [{ picto: '⏱️' }, { picto: '🪥' }],
+  real: [{ picto: '🔢' }, { picto: '🎬' }],
+
   tasks: [
     { id: 'brush', correct: [2, 'minute'], wrong: [[2, 'second'], [2, 'hour']] },
     { id: 'count', correct: [10, 'second'], wrong: [[10, 'hour'], [10, 'day']] },

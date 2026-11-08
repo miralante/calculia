@@ -306,36 +306,46 @@ classes are `class="btn btn-secondary"` (the rule is in
 shareable as a custom class, so each activity's `index.html` lists
 the affected button by id.
 
-## Test sheet (Formas, 2026-10-14)
+## One question per slide (all activities)
 
-`tools/shapes/` is the first activity in the suite where the test
-stage shows **all questions at once** instead of one at a time. The
-shape is a stack of cards (one per question, in shuffled order) plus
-two buttons at the bottom: **Comprobar** verifies every answer in
-place (right answers lock with ✅; a missed question shows its
-socratic hint, never the correct answer, and stays open for another
-try, SPEC §3.8), and **Otra ronda** re-shuffles and starts again
-without going through a `screenEnd`. Stars and round counters are
-scored on the first **Comprobar** only; retries do not add stars.
+Every test in Calculia shows **one question per slide** (the test mode
+`'options'` of `assets/js/activity-flow-options.js`). The explanation,
+the real-life examples and the test are the same three stages in all
+of them; the test is a slide per question with its own check, and the
+round ends on the closing screen.
 
-The driver for this change: `fromNet` ("Si doblas este dibujo, ¿qué
-cuerpo sale?") and `solidParts` with `net: 'pyramid'` ("¿Cuántas
-caras tiene este pirámide abierto?") were too hard for the target
-user — both ask the kid to mentally fold an open net, and the
-pyramid is the worst offender because its 4 triangles and 1 square
-are easy to miscount. Pulling them left a 41-question round that
-doesn't fit a one-at-a-time flow. The remaining questions are 46:
-9 `shapeName` + 6 `sides` + 1 `corners` + 6 `perimeter` + 1 `area` +
-2 `triangleKind` (by sides, by angles) + 3 `shapeAreaCalc` (square,
-rectangle, triangle) + 3 `solidVolume` + 3 `shapeSymmetry` + 3
-`shapeSimilar` + 7 `solidName` + 2 `solidParts` (cube and prism only). The
-`fromNet` generator and its strings (`gen.fromNet`, `gen.netHint`,
-`gen.netPiecesAria`) are kept in place in case a future activity
-wants the fold-the-net mechanic back. See the comment block at
-`tools/shapes/data.js:111` for the rationale on each dropped
-question.
+This replaces the whole-round test sheet that `tools/shapes/` used from
+2026-10-14. Since then, `tools/date-format`, `tools/lines`,
+`tools/primes`, `tools/time-convert`, `tools/shapes`,
+`tools/time-compare` and `tools/time-durations` have moved to
+`'options'` as well. No activity uses `test: 'sheet'` now.
 
-Implementation invariants:
+The sheet mode is still in the code (`assets/js/activity-flow-sheet.js`,
+and `assets/js/sheet-test.js` for the custom sheets) in case a future
+activity needs a whole-round sheet. The notes below describe how that
+mode works; they do not describe any activity that ships today.
+
+The Formas round changed when its sheet was dropped: `fromNet` ("Si
+doblas este dibujo, ¿qué cuerpo sale?") and `solidParts` with
+`net: 'pyramid'` ("¿Cuántas caras tiene este pirámide abierto?") were
+too hard for the target user, since both ask the kid to fold an open
+net in their head. The `fromNet` generator and its strings
+(`gen.fromNet`, `gen.netHint`, `gen.netPiecesAria`) are kept in place.
+See the comment block at `tools/shapes/data.js:111` for the rationale
+on each dropped question.
+
+Notes on the sheet mode (for a future activity that uses it):
+
+- `checkAnswers` refuses to verify when at least one question is
+  unanswered. The sheet scrolls to the first unanswered card, shakes it
+  and returns without updating progress. The **Comprobar** button
+  verifies every answer in place (right answers lock with ✅; a missed
+  question shows its socratic hint, never the correct answer, and stays
+  open for another try, SPEC §3.8); **Otra ronda** starts again without
+  going through a `screenEnd`. Stars and round counters are scored on
+  the first **Comprobar** only; retries do not add stars.
+
+Implementation invariants (sheet mode):
 
 - `startRound` pre-generates **all** questions for the level via
   `GENERATORS` and shuffles them once. The order of the options
@@ -344,11 +354,6 @@ Implementation invariants:
   (per round) and option order (per question, fixed at
   generation time). Same key for `App.utils.drawRoundReset()` at the
   start of each round.
-- `checkAnswers` refuses to verify when at least one question is
-  unanswered: it scrolls to the first unanswered card, shakes it
-  (`.test-sheet-card.shake`, `test-sheet-shake` keyframes in
-  `tools/shapes/styles.css`), and returns without updating
-  `progress.stars` or `progress.completedRounds`.
 - `progress.stars` increments by `roundCorrect` (the number of
   correct answers, not the number of answered questions) once
   `checkAnswers` succeeds. `progress.completedRounds` increments
@@ -389,9 +394,9 @@ calls it once, near the other addEventListener calls:
 App.utils.bindEndBackToStart();
 ```
 
-The helper does nothing when the button is missing. That is the
-Formas flow: its test sheet never reaches the end screen at all (it
-has "Otra ronda" inline instead). The other 29 activities always have
+The helper does nothing when the button is missing. A sheet-mode
+activity never reaches the end screen (it has "Otra ronda" inline
+instead); the activities that use the one-question-per-slide test have
 the button in the DOM.
 
 ## Public-facing wording: "usuario/a tipo" euphemism

@@ -22,6 +22,7 @@
   var goalEl = $('#goal');
   var fillEl = $('#timerFill');
   var barEl = $('#timerBar');
+  var btnStart = $('#btnStart');
   var btnPause = $('#btnPause');
   var btnStop = $('#btnStop');
   var alarmEl = $('#alarm');
@@ -115,8 +116,9 @@
     }
   }
 
-  function start(choice) {
-    unlockAudio();
+  /* A choice is picked: the count is ready, at 00:00, and waits for the person
+     to press Empezar. Nothing counts until then. */
+  function prepare(choice) {
     stopRinging();
     stopTicking();
     targetMs = choice.seconds * 1000;
@@ -124,17 +126,27 @@
     goalEl.textContent = t('goal').replace('{t}', format(targetMs));
     barEl.setAttribute('aria-valuemax', '100');
     alarmEl.classList.add('hidden');
-    btnPause.classList.remove('hidden');
+    btnStart.classList.remove('hidden');
+    btnPause.classList.add('hidden');
     btnStop.classList.remove('hidden');
     btnPause.textContent = t('pause');
     show(screenRun);
     render();
+  }
+
+  /* The person presses Empezar: the count starts. The tap also unlocks the sound. */
+  function begin() {
+    unlockAudio();
+    btnStart.classList.add('hidden');
+    btnPause.classList.remove('hidden');
+    btnPause.textContent = t('pause');
     startTicking();
   }
 
   /* The time is up: stop counting and ring. */
   function finish() {
     stopTicking();
+    btnStart.classList.add('hidden');
     btnPause.classList.add('hidden');
     btnStop.classList.add('hidden');
     alarmTextEl.textContent = t('alarmText').replace('{t}', format(targetMs));
@@ -200,11 +212,12 @@
     btn.className = 'btn timer-choice';
     btn.innerHTML = '<span class="picto" aria-hidden="true">' + choice.picto + '</span>' +
       '<span class="timer-choice-name">' + t('choice.' + choice.id) + '</span>';
-    btn.addEventListener('click', function () { start(choice); });
+    btn.addEventListener('click', function () { prepare(choice); });
     choicesEl.appendChild(btn);
   });
 
   /* ---- Events ---- */
+  btnStart.addEventListener('click', begin);
   btnPause.addEventListener('click', togglePause);
   btnStop.addEventListener('click', backToPick);
   btnSilence.addEventListener('click', stopRinging);

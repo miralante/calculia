@@ -12,7 +12,7 @@
     group: {
       units: { name: 'Unidades de tiempo', detail: 'Del siglo al segundo: explicación y ejemplos de la vida real.' },
       clock: { name: 'El reloj', detail: '¿Qué hora es?' },
-      moments: { name: 'Momentos del día', detail: 'Elige el reloj que corresponde a cada momento del día.' },
+      moments: { name: 'Momentos del día', detail: 'Di si un momento del día es por la mañana, por la tarde o por la noche.' },
       elapsed: { name: '¿Cuánto tiempo pasa?', detail: 'Mira dos relojes y di cuánto tiempo hay entre ellos.' },
       convert: { name: 'Cambia de unidad', detail: 'Pasa horas a minutos, días a horas y más.' },
       durations: { name: '¿Cuánto tarda?', detail: 'Elige cuánto dura cada cosa de la vida diaria.' },

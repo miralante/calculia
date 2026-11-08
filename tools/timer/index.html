@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Temporizador | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
-  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-v33a007d2">
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-vd99f158f">
   <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
-  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-vab159983">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v8e0526e6">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -25,7 +25,8 @@
       <div class="timer-choices" id="choices"></div>
     </section>
 
-    <!-- The count, from 00:00 up to the chosen time. -->
+    <!-- The count, from 00:00 up to the chosen time. It waits at 00:00 until
+         the person presses Empezar. -->
     <section id="screenRun" class="hidden stack">
       <div class="card centered stack timer-card">
         <p class="timer-goal" id="goal"></p>
@@ -36,7 +37,8 @@
       </div>
 
       <div class="row sheet-actions">
-        <button type="button" class="btn btn-secondary" id="btnPause" data-i18n="pause">Pausar</button>
+        <button type="button" class="btn" id="btnStart" data-i18n="start">Empezar</button>
+        <button type="button" class="btn btn-secondary hidden" id="btnPause" data-i18n="pause">Pausar</button>
         <button type="button" class="btn btn-secondary" id="btnStop" data-i18n="stop">Parar</button>
       </div>
 

@@ -10,6 +10,7 @@
   'use strict';
 
   App.i18n.register({
+    btnMenu: 'Volver al inicio',
     title: '🛤️ Rectas',
     instructionIntro: 'Mira las rectas.',
 

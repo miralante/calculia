@@ -9,7 +9,7 @@
 
   App.i18n.register({
     title: '⏲️ Temporizador',
-    instruction: 'Elige cuánto tiempo quieres medir. La cuenta sube desde cero.',
+    instruction: 'Elige cuánto tiempo quieres medir. Pulsa Empezar cuando quieras; la cuenta sube desde cero.',
     choice: {
       second: '1 segundo',
       minute: '1 minuto',
@@ -21,6 +21,7 @@
     },
     goal: 'Tiempo total: {t}',
     elapsedLabel: 'Tiempo pasado',
+    start: 'Empezar',
     pause: 'Pausar',
     resume: 'Seguir',
     stop: 'Parar',

@@ -11,6 +11,12 @@
   --color-texto-suave: #4A4A68;
   --color-borde: #D8D2C8;
 
+  /* The two hands of a clock, the same in every activity: the hour hand
+     (short and thick) and the minute hand (long and thin). The colour is
+     never the only cue; the shape is too. */
+  --color-aguja-hora: var(--color-foco);
+  --color-aguja-minutos: var(--color-animo);
+
   /* Module colors */
   --mod-coordinacion: #1B6CA8;   /* blue */
   --mod-coordinacion-suave: #E3EEF6;

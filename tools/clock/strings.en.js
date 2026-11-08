@@ -28,8 +28,6 @@
     quarterTo: 'quarter to {h}',
     correctExplanation: "✅ Correct! It's ",
     incorrectExplanationA: "❌ That is not the time. It's ",
-    readHint: '🤔 «{elegida}» is not the time: start with the short hand, which is the hour. The long hand is the minutes.',
-    associateHint: '🤔 «{elegida}» does not fit that time of day: think about that time of day.',
     setHint: '🤔 «{elegida}» is not the time asked for: adjust the time with the buttons.',
     convertHint: '🤔 «{elegida}» does not match the clock face: compare the clock face with the numbers.',
     convertAnalogToDigital: 'What time does this clock show?',
@@ -42,6 +40,15 @@
     setConfirm: 'Check',
     elapsedFrom: 'Before',
     elapsedTo: 'After',
+    elapsedNow: 'Now',
+    elapsedStep: 'Let half an hour pass →',
+    elapsedSteps: 'Steps of time',
+    elapsedPassed: 'Time passed so far: {t}',
+    elapsedArrived: 'We have arrived. How much time has passed?',
+    elapsedHint: "🤔 «{elegida}» is not the time that has passed: count how many half hours you let pass.",
+    explainElapsed: 'Time passed: {gap}.',
+    correctLead: "✅ Correct! ",
+    incorrectLead: "❌ That is not the answer. ",
     gap: {
       '30': 'half an hour',
       '60': '1 hour',
@@ -56,11 +63,6 @@
         description: 'Look at the two clocks and say how much time there is between them.',
         question: 'How much time passes between the two clocks?'
       },
-      read: {
-        name: 'Read the clock',
-        description: 'Look at the clock and pick the right time.',
-        question: 'What time is it?'
-      },
       set: {
         name: 'Set the clock',
         description: 'Read the time and move the hands with the buttons.',
@@ -70,24 +72,11 @@
         name: 'Analog ↔ Digital',
         description: 'Match the analog clock with its digital twin.',
         question: 'Match the clock with its digital time.'
-      },
-      situations: {
-        name: 'Moments of the day',
-        description: 'Pick the clock that matches each moment of the day.',
-        question: 'What time is this?'
       }
     },
     reinforceTitle: 'Reinforcement',
     reinforceIntro: "Let's repeat the {n} questions you missed until you get them all right.",
     levelDescription: { 1: "O'clock", 2: 'Half past', 3: 'Quarter past, quarter to' },
-    moment: {
-      desayuno: { name: 'breakfast', question: 'What time is breakfast?' },
-      colegio: { name: 'going to school', question: 'What time do you go to school?' },
-      comida: { name: 'lunch', question: 'What time is lunch?' },
-      merienda: { name: 'snack time', question: 'What time is snack time?' },
-      cena: { name: 'dinner', question: 'What time is dinner?' },
-      dormir: { name: 'bedtime', question: 'What time do you go to bed?' }
-    },
     transfer: 'This will help you read the time on the kitchen clock, at school or on your own watch, without having to keep asking.',
   }, 'en');
 })();

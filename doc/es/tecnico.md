@@ -233,6 +233,12 @@ se eliminan. Las copias de opción y de respuesta que el informe sigue marcando
 el aspecto del flujo en páginas que no usan el motor: es una decisión por página
 (migrarlas al motor o mantener la variante), no algo que el script cambie.
 
+El carrusel de explicación (la tarjeta ← → de las diapositivas y de los ejemplos)
+está definido una sola vez, en `components.css` (`.carousel-*`, `.intro-buttons`).
+Su cableado es `App.utils.bindCarousel` y `App.utils.wrapIndex` en `utils.js`.
+La comprobación 18 (`scripts/checks/design.js`) rechaza una copia de esas reglas
+en el `styles.css` de una actividad. Ver [diseno.md](diseno.md) §3.3.
+
 #### 2.2.3 Flujo de tres etapas (`assets/js/activity-flow.js`)
 
 Las actividades con explicación en diapositivas, vida real y test
@@ -244,11 +250,11 @@ y gestiona estrellas, progreso guardado y pantalla final. Los estilos
 genéricos están en `assets/css/activity-flow.css` y los dibujos
 compartidos de una familia en su propio fichero (p. ej.
 `assets/css/common-factors.css`). Así un cambio de diseño del flujo se
-hace en un único sitio. Hay dos modos de test: `test: 'options'` (una
-pregunta cada vez, con pantalla final; `common-multiple` y
-`common-divisor`) y `test: 'sheet'` (toda la ronda en una hoja con
-«Comprobar» y «Otra ronda», sin pantalla final; `lines`, `primes` y, con
-varias hojas, un menú y niveles por hoja, `shapes`).
+hace en un único sitio. Todas las pruebas usan `test: 'options'`: una
+pregunta cada vez, con pantalla final. El modo `test: 'sheet'` (toda la
+ronda en una hoja, con «Comprobar» y «Otra ronda», sin pantalla final)
+sigue en el motor por si una actividad futura lo necesita; hoy ninguna lo
+usa.
 
 En el modo `options`, `socratic: true` da la retroalimentación socrática
 de `factorial` (primer fallo, pista; segundo, explicación; las demás
@@ -256,11 +262,10 @@ opciones se bloquean hasta «Entendido»), `review: 'rule'` pone «Repasar
 la regla» bajo la pregunta, `introCard` añade una tarjeta sobre las
 diapositivas y `endNotes` añade textos a la pantalla final.
 
-Las cuatro actividades de orden (`order-*`) usan el modo `sheet` a través
+Las cuatro actividades de orden (`order-*`) usan el modo `options` a través
 de `App.numberSort.setup`, que delega en el motor: el nivel se muestra como
-etiqueta (`levelName`), la frase de transferencia aparece al completar la
-ronda (`transferKey`) y un acierto muestra su explicación
-(`showExplanation`). `operation-concepts` cumple la regla de la pantalla
+etiqueta (`levelName`), la frase de transferencia aparece en la pantalla
+final (`transferKey`), y el nivel sube con las rondas hechas. `operation-concepts` cumple la regla de la pantalla
 final: un único botón, «Volver al inicio»; «Otra ronda» vive dentro del test.
 
 #### 2.2.3.1 Opciones del modo 'options': sin etapa de vida real, varios pasos
@@ -322,11 +327,10 @@ El motor tiene tres etapas, cada una opcional en las formas que se indican:
 2. **Vida real** (opcional): `real` es una lista de ejemplos `{ visual }`, con
    `realVisualHtml` o `visualHtml` y el texto de `realText` o `real.<n>`.
    Se omite con `skipReal: true`.
-3. **Test**, en uno de dos modos:
-   - `options` (por defecto): una pregunta cada vez, una estrella por cada
-     acierto, y una pantalla final.
-   - `sheet` (`test: 'sheet'`): la ronda entera en una hoja, con «Comprobar» y
-     «Otra ronda», y sin pantalla final.
+3. **Test**: una pregunta cada vez (`options`, el modo por defecto y el único
+   que usan las actividades), una estrella por cada acierto, y una pantalla
+   final. El modo `sheet` (`test: 'sheet'`: la ronda entera en una hoja, con
+   «Comprobar» y «Otra ronda», sin pantalla final) sigue en el motor sin uso.
 
 Las claves de configuración que lee el motor:
 
@@ -338,12 +342,16 @@ Las claves de configuración que lee el motor:
 | `introCopy`, `introVisualAria`, `realText` | Textos y etiquetas que dependen de la diapositiva |
 | `introHeading`, `introCard` | Línea sobre las diapositivas, y una tarjeta encima de ellas |
 | `buildRound(def, level)`, `makeQuestion(tipo, índice, def)` | La ronda y sus preguntas |
-| `test` | `'sheet'` para el modo hoja; por defecto `options` |
+| `test` | `'options'` (por defecto, una pregunta cada vez); `'sheet'` para el modo hoja, sin uso hoy |
+| `levelName`, `transferKey` | Etiqueta del nivel en el test, y frase de la pantalla final (las actividades de orden) |
 | `socratic` | Primer fallo: pista. Segundo fallo: explicación. Las demás opciones se bloquean hasta «Entendido» |
 | `review` | `'back'` (por defecto), `'rule'` (repasar la regla bajo la pregunta) o `'none'` |
 | `reinforce` | Las preguntas falladas se repiten en una mini-ronda hasta acertarlas todas (`App.reinforce`) |
 | `activities`, `menuPlacement` | Un menú de actividades, primero (por defecto) o después de los ejemplos; cada actividad puede tener sus propias diapositivas y ejemplos |
 | `skipReal` | Las diapositivas llevan directamente al test (botón «Empezar a practicar») |
+| `reminder` | `{ title(), html(), next() }`: una tarjeta con la regla, leída otra vez entre los ejemplos de la vida real y el test. El botón de después inicia el test (`startTest` del modo) |
+| `explanationVisual` (en una pregunta) | HTML que se pinta bajo el texto de la explicación (la retroalimentación socrática y la respuesta acertada). El texto sigue en `explanation`; esto es para un dibujo o una fórmula |
+| `steps` (en una entrada del menú) | La entrada es una cadena: sus pasos se suceden, una ronda cada uno, sin volver al menú. La pantalla final ofrece «Siguiente paso →» hasta el último, y un aviso dice «Paso n de m». Cada paso es un objeto como una entrada del menú, con su propio `buildRound` y `makeQuestion` |
 | `steps` (en una pregunta) | Una pregunta de varios pasos, respondidos uno a uno («Paso 1 de 3»); puntúa una vez, en su último paso, y solo si no se falló ningún paso |
 | `testVisuals`, `testVisualClass` | Un dibujo en cada pregunta del test |
 | `endSummaryKey`, `endNotes`, `endEmoji` | Texto del resumen, textos extra y emoji de la pantalla final |
@@ -356,16 +364,24 @@ Qué variante de la familia A encaja con cada actividad:
 
 - **Flujo completo con vida real**: `common-multiple`, `common-divisor`, `factorial`
   (socrático), `linear-functions`, `scale`, `operation-concepts`.
-- **Hoja**: `lines`, `primes`, `shapes` (varias hojas, con menú).
+- **Una pregunta por diapositiva, con vida real**: `lines`, `primes`, `time-units` y `time-convert` (con vida real), `shapes` (varias hojas, con menú y niveles; cada una con sus diapositivas y ejemplos), `time-compare` y `time-durations` (dos diapositivas y dos ejemplos cada una), y `moments` (tres diapositivas, una por parte del día, y seis momentos de la vida diaria). `date-format` no tiene vida real (`skipReal`); su diapositiva de los meses es una rejilla de doce casillas, como en `time-units`.
 - **Menú de actividades**: las cuatro `order-*` (mediante `App.numberSort`, que
   delega en el motor) y `operation-concepts`.
+- **Opciones, con recordatorio**: `parity` (diapositivas de los números, vida real, la regla otra vez, luego una pregunta cada vez).
+- **Opciones, con menú de pasos encadenados**: `ordinals` (tres grupos de pasos, con el recordatorio y las escenas de la vida real; las flechas del edificio son un listener delegado en la página) y `roman-numerals` (la misma forma, socrática, con la descomposición como explicación).
+- **Opciones, con menú de niveles y pasos encadenados** (menú primero): `mental-math`. Tres entradas planas (anchors, restar, cabeza) cuyos niveles suben con las rondas y que no tienen diapositivas propias, así que empiezan al momento; y «Contar en grupos» en tres entradas (aprender y usar, cadenas de pasos; todos, una ronda), cada una con sus diapositivas. Una entrada del menú sin `intro` empieza su ronda al momento.
+- **Opciones, con menú de tablas y pantalla de práctica**: `math-tables` (las diez tablas de una operación son las entradas del menú; cada una abre su propia pantalla de práctica con `open(ctx)`, donde la persona elige el canal, escrita o con audio, y el orden, en orden o al azar; antes del test se ven las diez operaciones una a una, contadas con puntos). La división pide un número escrito (`typedAnswers`); el canal con audio lee la operación (`audio`).
+- **Galería** (`test: 'gallery'`): `los-numeros`, diez diapositivas y sin test: los tipos de número, cada uno con su dibujo y sus ejemplos de la vida real, y la última diapositiva termina la actividad.
+- **Opciones, una ronda mixta tras las diapositivas**: `trigonometry` (dos diapositivas, una con las escaleras y otra con las rampas; tres ejemplos de la vida real; siete tipos de pregunta en una ronda, mezclados).
+- **Opciones, con menú de actividades**: `fractions-measures` (fracciones y decimales, cada una con sus diapositivas, ejemplos y niveles; el juego de la coma es una tercera entrada que abre sus propias pantallas con `open(ctx)`).
 - **Enseñar → test, sin vida real**: `multiples`, `prime-composite`,
   `divisibility-test` (esta última usa además `steps`).
 
 Reglas prácticas: quitar la vida real cuando ningún ejemplo real añade un caso
 nuevo; usar `steps` cuando una pregunta encadena comprobaciones y cada una hace
-falta para la siguiente; usar la hoja cuando la persona tiene que comparar u
-ordenar todo a la vez.
+falta para la siguiente; si una actividad futura necesitara que la persona
+compare u ordene todo a la vez, usar el modo `sheet`; hoy todas usan una
+pregunta por diapositiva.
 
 ##### 2.2.4.3 Familia B: juego
 
@@ -393,17 +409,17 @@ menú → ronda, sin diapositivas):
 - **Cierre**: la pantalla final con un único botón, como en la familia A.
 - **No permitido**: temporizadores, vidas, puntuación negativa, «fin del juego».
 
-Dos actividades necesitan más que este contrato, y quedan fuera hasta que el
-motor tenga las piezas: `head-math` y `math-tables` tienen niveles que elige la
-persona y una pantalla de aprendizaje con demostración. Ambas son flujos guiados
-por menú, no rondas de elementos.
+Una actividad necesita más que este contrato, y queda fuera hasta que el
+motor tenga las piezas: `head-math` tiene niveles que elige la persona. Es un
+flujo guiado por menú, no una ronda de elementos. (`math-tables` ya corre en el
+modo de opciones, con la respuesta escrita y el audio del motor.)
 
 ##### 2.2.4.4 Elegir el esqueleto y añadir una actividad
 
 1. ¿La actividad enseña una regla antes de preguntar? Sí: familia A. No: familia B.
 2. ¿Un ejemplo de vida real añade un caso? Sí: mantener `real`. No: `skipReal: true`.
 3. ¿Una pregunta encadena varias comprobaciones? Usar `steps`.
-4. ¿La persona debe ver la ronda entera a la vez? Usar el modo `sheet`.
+4. ¿La persona debe ver la ronda entera a la vez? Solo entonces, el modo `sheet`; hoy ninguna actividad lo usa.
 5. Crear los seis ficheros canónicos en `tools/<slug>/`, más `model.js` cuando la
    lógica es grande (2.2.2.1). Registrar la tarjeta en `index.html`, su fila de
    progreso en `settings/` y sus ficheros en `sw.js` (`ARCHIVOS`), y subir
@@ -801,10 +817,11 @@ justificación canónica).
 | `tts.js` | `App.tts.speak` | solo páginas que leen en voz alta (la mayoría) |
 | `storage.js` | `App.storage.{get, set, remove, progressWith}` | solo páginas que leen o escriben `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | solo el `app.js` de la actividad |
+| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | el modo `test: 'gallery'` del flujo de tres etapas: solo diapositivas, la pantalla final y una estrella por página |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | actividades que llevan su propio bucle de ronda (no `App.activityFlow`) |
 | `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | el modo `test: 'gallery'` del flujo de tres etapas: solo diapositivas, la pantalla final y una estrella por página |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | las actividades que muestran una fila de puntos o un Sí / No barajado (divisibility-test, multiples, prime-composite) |
-| `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | las cinco actividades de tiempo, date-format y el modo hoja del flujo de actividad (toda la ronda en una hoja, comprobada de una vez) |
+| `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | el modo hoja del flujo de actividad (`activity-flow-sheet.js`), que hoy no usa ninguna actividad |
 | `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}`, `App.classicPainter(host)` → `{startRound, paintQuestion, render}` | las actividades clásicas de una pregunta (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): el objeto de estado de la ronda, la respuesta, la pista, el siguiente paso, el menú y el inicio y pintado de una pregunta compartidos (de momento geometry, operations y percent) |
 
 El orden de carga es `utils.js → i18n.js → tts.js → storage.js →

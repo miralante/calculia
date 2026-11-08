@@ -7,6 +7,7 @@
   'use strict';
 
   App.i18n.register({
+    answerIs: 'The answer is {answer}.',
     title: '🧠 Subtraction and Mental Math',
     instructionMenu: 'Choose an activity.',
     btnMenu: 'Back to start',

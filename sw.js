@@ -14,7 +14,7 @@
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
-var VERSION = 'calculia-v392';
+var VERSION = 'calculia-v416';
 
 var FILES = [
   './',
@@ -74,6 +74,7 @@ var FILES = [
   './assets/js/sheet-test.js',
   './assets/img/operaciones.svg',
   './assets/js/achievements.js',
+  './assets/js/stars-engine.js',
   './assets/js/dinero.js',
   './assets/js/sw-register.js',
   /* External script that used to be inline on about/ and team/: the CSP is
@@ -102,6 +103,13 @@ var FILES = [
   './tools/calendar/strings.es.js',
   './tools/calendar/strings.en.js',
   './tools/calendar/styles.css',
+  './tools/moments/',
+  './tools/moments/app.js',
+  './tools/moments/data.js',
+  './tools/moments/strings.es.js',
+  './tools/moments/strings.en.js',
+  './tools/moments/styles.css',
+  './tools/moments/',
   './tools/clock/',
   './tools/clock/app.js',
   './tools/clock/faces.js',
@@ -128,7 +136,6 @@ var FILES = [
   './tools/lines/styles.css',
   './tools/shapes/',
   './tools/shapes/app.js',
-  './tools/shapes/drawings.js',
   './tools/shapes/art.js',
   './tools/shapes/model.js',
   './tools/shapes/data.js',

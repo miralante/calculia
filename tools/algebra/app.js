@@ -64,7 +64,11 @@
      Screens and flow
      ============================================================ */
 
-  var show = App.screenSwitch([screenMenu, screenGame, screenEnd]);
+  function show(screen) {
+    [screenMenu, screenGame, screenEnd].forEach(function (p) {
+      p.classList.toggle('hidden', p !== screen);
+    });
+  }
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
   /* The level rises one step per completed round, capped at the last

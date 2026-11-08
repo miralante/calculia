@@ -1,9 +1,8 @@
 /* ============================================================
    Calculia — Unidades de tiempo: estilos propios.
-   Cards, buttons and progress come from assets/css/components.css.
-   The explanation carousel and the test sheet are styled here, in the
-   same way as roman-numerals and common-divisor, because
-   assets/css/number-sort.css is not loaded by this activity.
+   The stages, the cards, the arrows and the test sheet come from
+   assets/css/activity-flow.css and components.css. This file adds the
+   month, part and day grids and the answers of this activity only.
    ============================================================ */
 
 /* Explanation and real-life examples: one card per unit, with a picto, the name and one sentence. */
@@ -57,6 +56,14 @@
 
 /* The days of each month: the number of days under the month name. */
 .month-grid .month-tile { min-height: 60px; }
+/* One month on its own (February's special case): a single larger tile. */
+.month-grid.month-grid-one {
+  grid-template-columns: minmax(0, 12rem);
+  justify-content: center;
+}
+.month-grid.month-grid-one .month-tile { min-height: 96px; }
+.month-grid.month-grid-one .month-num { font-size: 1.6rem; }
+.month-grid.month-grid-one .month-name { font-size: 1.1rem; }
 .month-grid .month-num {
   font-size: 1.1rem;
   color: var(--color-texto);
@@ -123,3 +130,98 @@
 
 
 
+.options.options-row .option-btn { font-size: 1.3rem; font-weight: 800 }
+
+/* The sphere (a clock face) with the part of the hour coloured in. */
+.dial {
+  display: block;
+  width: 120px;
+  max-width: 40vw;
+  height: auto;
+  overflow: visible;
+}
+.dial-rest { fill: var(--color-fondo); }
+.dial-fill { fill: var(--mod-razonamiento); }
+.dial-line { stroke: var(--mod-razonamiento); stroke-width: 1.5; }
+.dial-edge { fill: none; stroke: var(--mod-razonamiento); stroke-width: 3; }
+.dial-arrow { fill: none; stroke: var(--color-fondo); stroke-width: 4; stroke-linecap: round; }
+.dial-arrowhead { fill: var(--color-fondo); }
+
+/* The continuous line with its numbers, drawn under the picture of a card.
+   Shaded boxes (.time-band-b) mark every second band: months 1-6 of a
+   semester, or the 0-12 half of the day. */
+.time-line {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  background: var(--color-fondo);
+}
+.time-cell {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+  border-left: 1px solid var(--mod-razonamiento);
+}
+.time-cell:first-child { border-left: 0; }
+.time-cell.time-band-b { background: var(--mod-razonamiento-suave); }
+.time-num {
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The scale of hours and minutes: a bar from 0 to the total, with a tick
+   and a number at each mark. The padding keeps the first and last number
+   inside the card at 320px. */
+.time-scale {
+  width: 100%;
+  padding: 0 0.9rem;
+  box-sizing: border-box;
+}
+.time-track {
+  position: relative;
+  height: 22px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  background: var(--color-fondo);
+}
+.time-track .time-band-b {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--mod-razonamiento-suave);
+}
+.time-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--mod-razonamiento);
+}
+.time-marks {
+  position: relative;
+  height: 1.7em;
+  margin-top: 4px;
+}
+.time-mark {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  font-weight: 800;
+  line-height: 1.7;
+  color: var(--color-texto);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

@@ -71,7 +71,8 @@ is rebalanced, this is the document to read first.
 | Patterns | `patterns/` | Detecting and continuing visual and numerical patterns. | patrón, secuencia, continuar, regla. |
 | Odd one out | `odd-one-out/` | Identifying which element does not belong in a set, and explaining why. | sobra, conjunto, común, distinto. |
 | Puzzle | `puzzle/` | Spatial reasoning: rearranging pieces to rebuild a picture or sequence. | pieza, imagen, reconstruir, espacio. |
-| Clock | `clock/` | Reading the time on analogue and digital clocks, reasoning about durations. | hora, minuto, reloj, analógico, digital, duración. |
+| Clock | `clock/` | Reading the time on analogue and digital clocks, setting the hands to a written time, and watching time pass half an hour at a time. | hora, minuto, reloj, analógico, digital, duración. |
+| Moments of the day | `moments/` | Matching each everyday moment with its part of the day: morning, afternoon or night. | mañana, tarde, noche, momento del día. |
 | Stories | `stories/` | Short story problems: extracting the relevant data, choosing the right operation. | cuento, problema, dato, operación, sumar, restar. |
 
 ---

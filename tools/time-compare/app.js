@@ -1,37 +1,14 @@
 /* ============================================================
    Calculia — ¿Cuál dura más?
-   Data in data.js. Shared modules in assets/js/.
-   Screens: explanation → test sheet. The whole round is on one
-   screen, as in Máximo común divisor.
+   Three stages: 1. the explanation (slides with a drawing), 2. real life (one
+   example at a time), 3. the test, one question per slide. The stages and
+   the test are built by assets/js/activity-flow.js; this file has the
+   questions. The data is in data.js and the texts in strings.<locale>.js.
    ============================================================ */
 (function () {
   'use strict';
 
-  var TOOL_ID = 'time-compare';
-  var $ = App.utils.$;
-
-  var screenIntro = $('#screenIntro');
-  var screenGame = $('#screenGame');
-  var testSheetEl = $('#testSheet');
-  var btnCheck = $('#btnCheck');
-  var btnNewRound = $('#btnNewRound');
-  var progressFill = $('#progressFill');
-  var progressText = $('#progressText');
-  var starsEl = $('#stars');
-
-  /* Persistent progress */
-  var progress = App.storage.progressWith(TOOL_ID, { stars: 0 });
-
-  /* Right answers of the round, counted at the first check. */
-  var roundCorrect = 0;
-
-  var glue = App.activityGlue({
-    toolId: TOOL_ID,
-    progress: function () { return progress; },
-    starsEl: function () { return starsEl; },
-    show: function (el) { show(el); }
-  });
-  var save = glue.save, paintStars = glue.paintStars;
+  var t = App.i18n.t;
 
   function seconds(duration) {
     return duration[0] * DATA.seconds[duration[1]];
@@ -50,23 +27,17 @@
     });
   });
 
-  var show = App.screenSwitch([screenIntro, screenGame]);
-
   /* "2 minutos", "1 año": the unit name agrees with the number. */
   function durationLabel(duration) {
     var n = duration[0];
     var key = 'units.' + duration[1] + (n === 1 ? '.one' : '.many');
-    return n + ' ' + App.i18n.t(key);
+    return n + ' ' + t(key);
   }
 
-  /* ---- Test sheet ----
-     The whole round is on one screen. Every question is generated when the
-     round starts, and the options inside each one are shuffled too. "Comprobar"
-     checks them all at once; "Otra ronda" deals a new round. */
-
-  /* Three durations, each in its own unit. Half the questions ask for the
-     longest one and half for the shortest, so the person must compare, not
-     just read the biggest number. */
+  /* ---- Test ----
+     One question per slide. Three durations, each in its own unit. Half the
+     questions ask for the longest one and half for the shortest, so the
+     person must compare, not just read the biggest number. */
   function question() {
     var items = App.utils.shuffle(DATA.durations).slice(0, 3);
     var longest = App.utils.shuffle([true, false])[0];
@@ -76,8 +47,8 @@
     });
 
     return {
-      prompt: App.i18n.t(longest ? 'q.longest' : 'q.shortest'),
-      hint: App.i18n.t('gen.hint'),
+      prompt: t(longest ? 'q.longest' : 'q.shortest'),
+      hint: t('gen.hint'),
       options: App.utils.shuffle(items.map(function (d) {
         var label = durationLabel(d);
         return {
@@ -90,38 +61,21 @@
     };
   }
 
-  function startRound() {
-    App.utils.drawRoundReset();
-    var questions = [];
-    for (var i = 0; i < DATA.perRound; i += 1) {
-      questions.push(question());
-    }
-    sheetTest.set(App.utils.shuffle(questions));
-    roundCorrect = 0;
-    show(screenGame);
-    sheetTest.render();
-  }
-
-  /* The test sheet: the whole round on one screen, checked at once. */
-  var sheetTest = App.sheetTest.create({
-    sheetEl: testSheetEl,
-    checkBtn: btnCheck,
-    newRoundBtn: btnNewRound,
-    progressFill: progressFill,
-    progressText: progressText,
-    onScored: function (rightFirstTry) {
-      roundCorrect = rightFirstTry;
-      progress.stars += roundCorrect;
-      save();
-      paintStars();
-    }
+  App.activityFlow.setup({
+    toolId: 'time-compare',
+    test: 'options',
+    intro: DATA.intro.map(function (step) { return { visual: step }; }),
+    real: DATA.real.map(function (example) { return { visual: example }; }),
+    introHeading: function () { return t('instructionIntro'); },
+    visualHtml: function (spec) {
+      return '<span class="carousel-figure" aria-hidden="true">' + spec.picto + '</span>';
+    },
+    /* A round is one entry per question; each question is generated when it is shown. */
+    buildRound: function () {
+      var list = [];
+      for (var i = 0; i < DATA.perRound; i += 1) list.push(i);
+      return App.utils.shuffle(list);
+    },
+    makeQuestion: function () { return question(); }
   });
-
-  /* ---- Events ---- */
-
-  $('#introContinue').addEventListener('click', startRound);
-  $('#btnCheck').addEventListener('click', sheetTest.check);
-  $('#btnNewRound').addEventListener('click', startRound);
-
-  paintStars();
 })();

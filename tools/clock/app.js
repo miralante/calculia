@@ -1,11 +1,12 @@
 /* ============================================================
    Calculia — The Clock (time).
    Four mechanics, chosen at the start screen:
-     - read       See the analog clock → pick the right time text.
      - set        Read the time text  → set the analog clock hands.
      - convert    Pair an analog clock with its digital twin
                   (and the reverse direction within the same round).
-     - situations See a moment of the day → pick the analog clock.
+     - elapsed    Two clocks: the first one walks on, half an hour per press,
+                  until it reaches the second; then pick how much time passed.
+   Moments of the day are a separate activity (tools/moments).
 
    Data in data.js (DATA.modes, DATA.levels, DATA.moments).
    Shared modules in assets/js/. All UI text in strings.<locale>.js.
@@ -72,9 +73,7 @@
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
-    screenEnd: function () { return screenEnd; },
-    roundCorrect: function () { return roundCorrect; },
-    show: function (el) { screenGame.classList.add('hidden'); el.classList.remove('hidden'); }
+    show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars;
 
@@ -96,20 +95,6 @@
   }
 
   /* ---- Question builders (one per mechanic) ---- */
-  function makeReadQuestion() {
-    var h = randomHour();
-    var m = randomMinute();
-    var used = [{ h: h, m: m }];
-    var options = [{ text: timeText(h, m), isCorrect: true }];
-    while (options.length < 3) {
-      var d = differentCombination(used);
-      used.push(d);
-      var text = timeText(d.h, d.m);
-      if (options.some(function (o) { return o.text === text; })) continue;
-      options.push({ text: text, isCorrect: false });
-    }
-    return { type: 'read', hour: h, minute: m, options: options };
-  }
 
   function makeSetQuestion() {
     var h = randomHour();
@@ -130,8 +115,8 @@
     return { type: 'convert', hour: h, minute: m, options: options };
   }
 
-  /* How long between two clocks. Both clocks stay on screen, so the gap
-     can be worked out by looking at the two rather than held in mind. */
+  /* How long between two clocks: the first clock walks on until it reaches
+     the second (see renderElapsed). */
   function makeElapsedQuestion() {
     var gap = DATA.gaps[Math.floor(Math.random() * DATA.gaps.length)];
     var startM = randomMinute();
@@ -154,19 +139,6 @@
     };
   }
 
-  function makeSituationQuestion() {
-    var moment = DATA.moments[Math.floor(Math.random() * DATA.moments.length)];
-    var h = hour12(moment.hora);
-    var m = randomMinute();
-    var used = [{ h: h, m: m }];
-    var options = [{ h: h, m: m, isCorrect: true }];
-    while (options.length < 3) {
-      var d = differentCombination(used);
-      used.push(d);
-      options.push({ h: d.h, m: d.m, isCorrect: false });
-    }
-    return { type: 'situations', moment: moment, options: options };
-  }
 
   /* ---- Start screens (mode → level → game) ---- */
   function paintModes() {
@@ -225,10 +197,8 @@
   function startRound(n) {
     level = n;
     var builderByMode = {
-      read: makeReadQuestion,
       set: makeSetQuestion,
       convert: makeConvertQuestion,
-      situations: makeSituationQuestion,
       elapsed: makeElapsedQuestion
     };
     questions = [];
@@ -274,9 +244,7 @@
 
   /* ---- Render dispatcher ---- */
   function render() {
-    /* currentQ is set while a reinforcement mini-round runs; the normal
-       round paints questions[roundIndex]. */
-    var p = currentQ || questions[roundIndex];
+    var p = questions[roundIndex];
     answered = false;
     attempts = 0;
     feedbackEl.textContent = '';
@@ -296,28 +264,14 @@
     if (listenBtn) listenBtn.classList.add('hidden');
 
     if (!p) return;
-    if (p.type === 'read')            renderRead(p);
     else if (p.type === 'set')        renderSet(p);
     else if (p.type === 'convert')    renderConvert(p);
-    else if (p.type === 'situations') renderSituation(p);
     else if (p.type === 'elapsed')    renderElapsed(p);
 
     paintProgress();
     paintStars();
   }
 
-  function renderRead(p) {
-    questionZoneEl.innerHTML = clockSvg(p.hour, p.minute);
-    questionTextEl.textContent = App.i18n.t('whatTime');
-    App.utils.shuffle(p.options).forEach(function (op) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'option-btn';
-      btn.textContent = op.text;
-      btn.addEventListener('click', function () { answer(btn, op.isCorrect, p); });
-      optionsEl.appendChild(btn);
-    });
-  }
 
   /* "Set the clock" — two accessible steppers (no drag). The clock
      face updates live as the user moves the values. Initial draft is
@@ -428,15 +382,44 @@
     }
   }
 
-  function renderElapsed(p) {
-    questionZoneEl.innerHTML = '<div class="elapsed-pair">' +
-      '<span class="elapsed-one"><span class="elapsed-label" data-when="from">' +
-      App.i18n.t('elapsedFrom') + '</span>' + clockSvg(p.hour, p.minute) + '</span>' +
-      '<span class="elapsed-arrow" aria-hidden="true">→</span>' +
-      '<span class="elapsed-one"><span class="elapsed-label" data-when="to">' +
-      App.i18n.t('elapsedTo') + '</span>' + clockSvg(p.endHour, p.endMinute) + '</span>' +
-      '</div>';
-    questionTextEl.textContent = App.i18n.t('mode.elapsed.question');
+  /* "How long in between", as a walk. The first clock starts at its time and
+     the person lets half an hour pass with each press, one step at a time,
+     until it reaches the second clock. Each step is written down, and the
+     total so far is shown. Only when the walk arrives do the answers appear. */
+  var walk = null;  // { total (minutes from 0:00), passed (minutes), gap, stepMinutes }
+
+  /* A clock time in digits from a count of minutes, the hour on the 12 face. */
+  function walkDigital(total) {
+    return timeDigital(hour12(Math.floor(total / 60)), total % 60);
+  }
+
+  function paintWalk() {
+    var h = hour12(Math.floor(walk.total / 60));
+    var m = walk.total % 60;
+    $('#elapsedNowFace').innerHTML = clockSvg(h, m);
+    $('#elapsedNowText').textContent = timeDigital(h, m);
+    $('#elapsedTotal').textContent = walk.passed > 0
+      ? App.i18n.t('elapsedPassed').replace('{t}', App.i18n.t('gap.' + walk.passed))
+      : '';
+  }
+
+  function elapsedStep(p) {
+    var before = walk.total;
+    walk.total += walk.stepMinutes;
+    walk.passed += walk.stepMinutes;
+    var entry = document.createElement('li');
+    entry.textContent = walkDigital(before) + ' → ' + walkDigital(walk.total) + ': ' +
+      App.i18n.t('gap.' + walk.stepMinutes);
+    $('#elapsedSteps').appendChild(entry);
+    paintWalk();
+    if (walk.passed >= walk.gap) {
+      $('#btnElapsedStep').classList.add('hidden');
+      questionTextEl.textContent = App.i18n.t('elapsedArrived');
+      showGapOptions(p);
+    }
+  }
+
+  function showGapOptions(p) {
     App.utils.shuffle(p.options).forEach(function (op) {
       var btn = document.createElement('button');
       btn.type = 'button';
@@ -447,29 +430,32 @@
     });
   }
 
-  function renderSituation(p) {
-    questionZoneEl.innerHTML = '<div class="moment-picto" aria-hidden="true">' +
-      p.moment.picto + '</div>';
-    questionTextEl.textContent = App.i18n.t('moment.' + p.moment.id + '.question');
-    optionsEl.className = 'stack options-clock';
-    App.utils.shuffle(p.options).forEach(function (op) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'option-btn option-clock';
-      btn.innerHTML = clockSvg(op.h, op.m);
-      btn.setAttribute('aria-label', App.i18n.t('clockAria')
-        .replace('{texto}', timeText(op.h, op.m)));
-      btn.addEventListener('click', function () { answer(btn, op.isCorrect, p); });
-      optionsEl.appendChild(btn);
-    });
+  function renderElapsed(p) {
+    walk = { total: p.hour * 60 + p.minute, passed: 0, gap: p.gap, stepMinutes: DATA.elapsedStepMinutes };
+    questionZoneEl.innerHTML =
+      '<div class="elapsed-walk">' +
+        '<div class="elapsed-now">' +
+          '<span class="elapsed-label">' + App.i18n.t('elapsedNow') + '</span>' +
+          '<span id="elapsedNowFace"></span>' +
+          '<span class="elapsed-time" id="elapsedNowText"></span>' +
+        '</div>' +
+        '<div class="elapsed-target">' +
+          '<span class="elapsed-label" data-when="to">' + App.i18n.t('elapsedTo') + '</span>' +
+          clockSvg(p.endHour, p.endMinute) +
+          '<span class="elapsed-time">' + timeDigital(p.endHour, p.endMinute) + '</span>' +
+        '</div>' +
+        '<p class="elapsed-total" id="elapsedTotal" aria-live="polite"></p>' +
+        '<ol class="elapsed-steps" id="elapsedSteps" aria-label="' + App.i18n.t('elapsedSteps') + '"></ol>' +
+        '<button type="button" class="btn" id="btnElapsedStep">' + App.i18n.t('elapsedStep') + '</button>' +
+      '</div>';
+    questionTextEl.textContent = App.i18n.t('mode.elapsed.question');
+    paintWalk();
+    $('#btnElapsedStep').addEventListener('click', function () { elapsedStep(p); });
   }
+
 
   /* ---- Answer evaluation (shared by all four mechanics) ---- */
   function correctAnswerText(p) {
-    if (p.type === 'read') {
-      var c0 = p.options.filter(function (o) { return o.isCorrect; })[0];
-      return c0 ? c0.text : '';
-    }
     if (p.type === 'set') return timeText(p.hour, p.minute);
     if (p.type === 'convert') {
       var c1 = p.options.filter(function (o) { return o.isCorrect; })[0];
@@ -477,17 +463,24 @@
         ? timeDigital(c1.h, c1.m)
         : timeText(c1.h, c1.m);
     }
-    if (p.type === 'situations') {
-      var c2 = p.options.filter(function (o) { return o.isCorrect; })[0];
-      return timeText(c2.h, c2.m);
-    }
     return '';
+  }
+
+  /* The sentence that explains a right answer of the elapsed walk. */
+  function explanationBody(p) {
+    return App.i18n.t('explainElapsed').replace('{gap}', App.i18n.t('gap.' + p.gap));
   }
 
   function showExplanation(isCorrect, p) {
     if (isCorrect && reinforcement.active()) {
       explanationEl.textContent = '';
       explanationWrap.classList.add('hidden');
+      return;
+    }
+    if (p.type === 'elapsed') {
+      var lead = isCorrect ? App.i18n.t('correctLead') : App.i18n.t('incorrectLead');
+      explanationEl.textContent = lead + explanationBody(p);
+      explanationWrap.classList.remove('hidden');
       return;
     }
     var prefix = isCorrect ? App.i18n.t('correctExplanation')
@@ -501,9 +494,8 @@
      mistake is the correct time explained (showExplanation). */
   function showHint(p, btn) {
     var key;
-    if (p.type === 'read') key = 'readHint';
-    else if (p.type === 'situations') key = 'associateHint';
-    else if (p.type === 'set') key = 'setHint';
+    if (p.type === 'set') key = 'setHint';
+    else if (p.type === 'elapsed') key = 'elapsedHint';
     else key = 'convertHint';
     /* Only a picked option names «{elegida}»; a clock set by hand has no label. */
     var picked = btn && btn.classList.contains('option-btn') ? btn.textContent : '';
@@ -562,7 +554,17 @@
   }
 
   function endRound() {
-    glue.endRound();
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
+    save();
+    screenGame.classList.add('hidden');
+    screenEnd.classList.remove('hidden');
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{stars}', progress.stars);
+    }
+    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
   /* ---- Events ---- */

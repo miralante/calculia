@@ -51,7 +51,8 @@ grouped by the skill they work on, not by screen folder.
 | **The balance** | Work out what the bag weighs so both pans come out level, see that a letter is a number you do not know yet, read whether a real graph goes up or down, and write and build pieces: the big one is x on each side, the strip is x long and the little one is a 1. |
 | **Data and charts** | Read a pictogram, a bar chart and a table; share out equally; judge whether something is certain, possible or impossible; see in a cloud of dots whether two things rise together; and draw a ball without putting it back. |
 | **The Calendar** | Days of the week, months of the year and the four seasons, read off a visible calendar. |
-| **Clock** | Read the time on analogue and digital clocks, and reason about durations. |
+| **Clock** | Read the time on analogue and digital clocks, set the hands to a written time, and watch time pass half an hour at a time until the final hour. |
+| **Moments of the day** | Say whether a moment of the day is in the morning, in the afternoon or at night. |
 | **Stories** | Put the pictures of an everyday routine into the order things happened. |
 
 ---

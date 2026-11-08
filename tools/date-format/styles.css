@@ -1,9 +1,7 @@
 /* ============================================================
    Calculia — Leer fechas: estilos propios.
-   Cards, buttons and progress come from assets/css/components.css.
-   The explanation carousel and the test sheet are styled here, in the
-   same way as time-units and time-convert, because assets/css/number-sort.css
-   is not loaded by this activity.
+   The stages, the cards, the arrows and the test sheet come from
+   assets/css/activity-flow.css and components.css. This file adds the answers of this activity only.
    ============================================================ */
 
 /* Explanation: one card per step, with a picto, the name and one sentence. */
@@ -37,3 +35,41 @@
 
 
 
+/* The twelve months: three tiles a row, the number over the name (as in
+   Unidades de tiempo). */
+.month-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+}
+.month-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 4px 2px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  background: var(--mod-razonamiento-suave);
+  text-align: center;
+}
+.month-num {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--mod-razonamiento);
+  font-variant-numeric: tabular-nums;
+}
+.month-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-texto);
+  white-space: nowrap;
+}

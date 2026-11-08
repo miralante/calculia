@@ -11,6 +11,7 @@
   'use strict';
 
   App.i18n.register({
+    btnMenu: 'Volver al inicio',
     title: '🔍 Primos y compuestos',
     instructionIntro: 'Mira los números.',
 

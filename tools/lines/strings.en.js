@@ -10,6 +10,7 @@
   'use strict';
 
   App.i18n.register({
+    btnMenu: 'Back to start',
     title: '🛤️ Lines',
     instructionIntro: 'Look at the lines.',
 

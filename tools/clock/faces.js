@@ -58,9 +58,9 @@
     var minuteAngle = minute * 6;
     return '<svg viewBox="0 0 100 100" width="120" height="120" role="img" aria-hidden="true">' +
       dialSvg() +
-      '<line x1="50" y1="50" x2="50" y2="30" stroke="var(--color-texto)" stroke-width="5" ' +
+      '<line x1="50" y1="50" x2="50" y2="30" stroke="var(--color-aguja-hora)" stroke-width="6" ' +
       'stroke-linecap="round" transform="rotate(' + hourAngle + ' 50 50)"/>' +
-      '<line x1="50" y1="50" x2="50" y2="24" stroke="var(--color-texto)" stroke-width="3.5" ' +
+      '<line x1="50" y1="50" x2="50" y2="24" stroke="var(--color-aguja-minutos)" stroke-width="3.5" ' +
       'stroke-linecap="round" transform="rotate(' + minuteAngle + ' 50 50)"/>' +
       '<circle cx="50" cy="50" r="3" fill="var(--color-texto)"/>' +
       '</svg>';
@@ -74,9 +74,9 @@
     var minuteAngle = minute * 6;
     return '<svg viewBox="0 0 100 100" width="150" height="150" role="img" aria-hidden="true">' +
       dialSvg() +
-      '<line x1="50" y1="50" x2="50" y2="30" stroke="var(--color-foco)" stroke-width="6" ' +
+      '<line x1="50" y1="50" x2="50" y2="30" stroke="var(--color-aguja-hora)" stroke-width="6" ' +
       'stroke-linecap="round" transform="rotate(' + hourAngle + ' 50 50)"/>' +
-      '<line x1="50" y1="50" x2="50" y2="24" stroke="var(--color-animo)" stroke-width="3.5" ' +
+      '<line x1="50" y1="50" x2="50" y2="24" stroke="var(--color-aguja-minutos)" stroke-width="3.5" ' +
       'stroke-linecap="round" transform="rotate(' + minuteAngle + ' 50 50)"/>' +
       '<circle cx="50" cy="50" r="3" fill="var(--color-texto)"/>' +
       '</svg>';

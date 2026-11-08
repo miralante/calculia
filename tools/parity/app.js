@@ -1,123 +1,48 @@
 /* ============================================================
-   Calculia — Pares e impares: app.
-
-   Fases, en el orden de la anatomía de Calculia (SPEC §3.6 y
-   §3.8): primero se explica (qué es par y qué es impar, con los
-   números del 0 al 10), luego se muestra en la vida real, y por
-   último un único test, "Empezar a practicar". El test tiene tres
-   partes, en orden: puntos, números del 0 al 99 y números grandes
-   por su última cifra. Cada respuesta correcta publica su
-   explicación; cada fallo publica una pista que no revela la
-   respuesta.
-
-   La regla es la misma en todas las partes: par si se puede repartir
-   en parejas sin que sobre nada; impar si sobra uno.
-
-   Bandera del módulo: mod-razonamiento (el "razonamiento" del
-   agrupamiento). El punto sobrante usa color-foco-suave como
-   halo: el punto suelto se lee como el singular.
+   Calculia — Pares e impares
+   Three stages, in the flow of the test: 1. the explanation (the numbers 0 to
+   10 as balls in pairs, and the review), 2. the real-life examples, 3. the
+   reminder of the rule, and the test, one question at a time, with a closing
+   screen. The stages are built by assets/js/activity-flow.js; this file has the
+   drawings (balls and real-life pictures) and the questions. The data is in
+   data.js and the texts in strings.<locale>.js.
    ============================================================ */
 (function () {
   'use strict';
 
-  var TOOL_ID = 'parity';
-  var $ = App.utils.$;
-
-  /* Persistent state */
-  var progress = App.storage.progressWith(TOOL_ID, { stars: 0 });
-
-  var glue = App.activityGlue({
-    toolId: TOOL_ID,
-    progress: function () { return progress; },
-    starsEl: function () { return starsEl; },
-    show: function (el) { show(el); }
-  });
-  var save = glue.save, paintStars = glue.paintStars;
-  function show(el) { if (el) el.classList.remove('hidden'); }
-  function hide(el) { if (el) el.classList.add('hidden'); }
-  function t(key) { return App.i18n.t(key); }
-
+  var t = App.i18n.t;
   var fill = App.utils.fill;
   var rint = App.utils.rint;
+
   function isEven(n) { return n % 2 === 0; }
   function wordFor(n) { return t(isEven(n) ? 'wordEven' : 'wordOdd'); }
   function format(n) { return n.toLocaleString(App.i18n.locale() === 'en' ? 'en-US' : 'es-ES'); }
 
-  /* ----------- Elements ----------- */
-  var screens = {
-    intro: $('#screenParityIntro'),
-    real: $('#screenParityReal'),
-    reminder: $('#screenParityReminder'),
-    game: $('#screenParity'),
-    finish: $('#screenParityFinish')
-  };
-  var starsEl = $('#stars');
-
-
-  /* Moves between the stages of the activity. Focus goes to the
-     stage heading so a screen reader announces the new stage. */
-  function goTo(name) {
-    Object.keys(screens).forEach(function (key) { hide(screens[key]); });
-    show(screens[name]);
-    window.scrollTo(0, 0);
-    var heading = screens[name].querySelector('h2');
-    if (heading) {
-      heading.setAttribute('tabindex', '-1');
-      heading.focus();
-    }
+  /* ---- Balls ----
+     n balls numbered 1..n, as HTML. Each pair is a column: the ball with the lower number sits on
+     top, the one above it below, so "1 con 2" reads as one pair. Both balls of a pair share its
+     colour, and each pair has a colour of its own. The leftover ball (odd n) stands alone in the
+     leftover colour. The pairing shape IS the answer. */
+  function ballHtml(number, color, leftover) {
+    return '<span class="' + (leftover ? 'parity-ball parity-leftover' : 'parity-ball parity-pair') +
+      '" style="background-color:' + color + '">' + number + '</span>';
   }
 
-  /* ----------- Explanation stage: dots, slides and real examples ----------- */
-
-  /* One ball: a circle with its number inside. */
-  /* One ball: a circle with its number inside, in the colour of its pair
-     (or the leftover colour when it stands alone). */
-  function ball(number, color, leftover) {
-    var el = document.createElement('span');
-    el.className = leftover ? 'parity-ball parity-leftover' : 'parity-ball parity-pair';
-    el.style.backgroundColor = color;
-    el.textContent = String(number);
-    return el;
-  }
-
-  /* Paints n balls numbered 1..n. Each pair is a column: the ball
-     with the lower number sits on top, the one above it below, so
-     "1 con 2" reads as one pair. Both balls of a pair share its colour,
-     and each pair has a colour of its own, so the pairs can be told
-     apart. The leftover ball (odd n) stands alone in the leftover colour.
-     The pairing shape IS the answer.
-     Sets an aria-label on the container that says it aloud. */
-  function paintDots(cont, n) {
-    cont.innerHTML = '';
+  function dotsHtml(n) {
     var pairs = Math.floor(n / 2);
+    var html = '';
     for (var i = 0; i < pairs; i += 1) {
       var color = DATA.pairColors[i % DATA.pairColors.length];
-      var pair = document.createElement('div');
-      pair.className = 'parity-ball-pair';
-      pair.appendChild(ball(2 * i + 1, color, false));
-      pair.appendChild(ball(2 * i + 2, color, false));
-      cont.appendChild(pair);
+      html += '<div class="parity-ball-pair">' + ballHtml(2 * i + 1, color, false) + ballHtml(2 * i + 2, color, false) + '</div>';
     }
-    if (n % 2) {
-      var single = document.createElement('div');
-      single.className = 'parity-ball-pair';
-      single.appendChild(ball(n, DATA.leftoverColor, true));
-      cont.appendChild(single);
-    }
-    var label = pairs + ' ' + t('pairsWord');
-    if (n % 2) label += ', ' + t('oneLeftWord');
-    cont.setAttribute('aria-label', label);
+    if (n % 2) html += '<div class="parity-ball-pair">' + ballHtml(n, DATA.leftoverColor, true) + '</div>';
+    var label = pairs + ' ' + t('pairsWord') + (n % 2 ? ', ' + t('oneLeftWord') : '');
+    return '<div class="parity-dots" role="img" aria-label="' + label + '">' + html + '</div>';
   }
 
-  /* The explanation stage is a set of slides, one number at a time:
-     0 to 10. Each slide shows that number as balls in pairs (one
-     above the other), and a caption that says whether it is even or
-     odd and why. Arrows (and a click on the balls) move through the
-     slides; the order wraps around. */
+  /* ---- Explanation slides: 0 to 10, and the review ---- */
   var SEQ_MAX = 10;
-  /* One more slide after the numbers: the review. */
   var SEQ_LAST = SEQ_MAX + 1;
-  var seqIdx = 0;
 
   function seqCaptionFor(n) {
     var p = wordFor(n);
@@ -127,69 +52,25 @@
     return fill(t('seqOdd'), { n: n, p: p });
   }
 
-  /* The review slide, after the last number: the two lists side by side, and the rule in one line. */
-  function paintReview(display) {
+  /* The review: the two lists side by side, and the rule in one line. */
+  function reviewHtml() {
     var evens = [], odds = [];
     for (var k = 0; k <= SEQ_MAX; k += 1) (isEven(k) ? evens : odds).push(String(k));
-    var box = document.createElement('div');
-    box.className = 'parity-review';
-    var lines = [
-      [t('reviewRule'), 'parity-review-rule'],
-      [fill(t('reviewEven'), { list: evens.join(', ') }), 'parity-review-line parity-review-even'],
-      [fill(t('reviewOdd'), { list: odds.join(', ') }), 'parity-review-line parity-review-odd']
-    ];
-    lines.forEach(function (line) {
-      var p = document.createElement('p');
-      p.className = line[1];
-      p.textContent = line[0];
-      box.appendChild(p);
-    });
-    display.appendChild(box);
+    return '<div class="parity-review">' +
+      '<p class="parity-review-rule">' + t('reviewRule') + '</p>' +
+      '<p class="parity-review-line">' + fill(t('reviewEven'), { list: evens.join(', ') }) + '</p>' +
+      '<p class="parity-review-line">' + fill(t('reviewOdd'), { list: odds.join(', ') }) + '</p>' +
+      '</div>';
   }
 
-  function paintSlide() {
-    var display = $('#seqDisplay');
-    display.innerHTML = '';
-    display.classList.add('parity-carousel-balls');
-    if (seqIdx === SEQ_LAST) {
-      paintReview(display);
-      display.setAttribute('aria-label', t('reviewCaption'));
-      $('#seqCaption').textContent = t('reviewCaption');
-      return;
-    }
-    if (seqIdx === 0) {
-      /* No balls: the slide shows the words "0 = par" in the space
-         where the balls would be, so it is never empty. */
-      var zero = document.createElement('span');
-      zero.className = 'parity-zero-text';
-      zero.textContent = t('zeroLabel');
-      display.appendChild(zero);
-    } else {
-      paintDots(display, seqIdx);
-    }
-    display.setAttribute('aria-label', seqIdx + ': ' + seqCaptionFor(seqIdx));
-    $('#seqCaption').textContent = seqCaptionFor(seqIdx);
+  function slideVisual(n) {
+    if (n === SEQ_LAST) return reviewHtml();
+    /* 0 has no balls: the words «0 = par» stand in their place. */
+    if (n === 0) return '<span class="parity-zero-text">' + t('zeroLabel') + '</span>';
+    return dotsHtml(n);
   }
 
-  function seqStep(delta) {
-    seqIdx = (seqIdx + delta + (SEQ_LAST + 1)) % (SEQ_LAST + 1);
-    paintSlide();
-  }
-
-  function renderIntroSequence() {
-    paintSlide();
-    $('#seqPrev').addEventListener('click', function () { seqStep(-1); });
-    $('#seqNext').addEventListener('click', function () { seqStep(1); });
-    var display = $('#seqDisplay');
-    display.addEventListener('click', function () { seqStep(1); });
-    display.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        seqStep(1);
-      }
-    });
-  }
-
+  /* ---- Real-life examples ---- */
   /* Turns an SVG string into a node. */
   function svgFrom(markup) {
     var wrap = document.createElement('div');
@@ -333,51 +214,9 @@
     return cloverDrawing();
   }
 
-  /* The real-life stage is a set of slides, one example at a time, in
-     the order of DATA.examples. The drawing sits in the display, the
-     title and the sentence under it. Arrows (and a click on the
-     drawing) move through the slides; the order wraps around. */
-  var realIdx = 0;
-
-  function paintRealSlide() {
-    var display = $('#realDisplay');
-    display.innerHTML = '';
-    var visual = drawingFor(DATA.examples[realIdx]);
-    visual.setAttribute('aria-hidden', 'true');
-    display.appendChild(visual);
-    display.setAttribute('aria-label', t('real.' + realIdx + '.title'));
-    $('#realExampleTitle').textContent = t('real.' + realIdx + '.title');
-    $('#realExampleText').textContent = t('real.' + realIdx + '.text');
-  }
-
-  function realStep(delta) {
-    var count = DATA.examples.length;
-    realIdx = (realIdx + delta + count) % count;
-    paintRealSlide();
-  }
-
-  function renderRealSequence() {
-    paintRealSlide();
-    $('#realPrev').addEventListener('click', function () { realStep(-1); });
-    $('#realArrowNext').addEventListener('click', function () { realStep(1); });
-    var display = $('#realDisplay');
-    display.addEventListener('click', function () { realStep(1); });
-    display.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        realStep(1);
-      }
-    });
-  }
-
-  /* ----------- Test: three parts, in order ----------- */
-  var items = [];
-  var idx = 0;
-
-  /* Builds the test from DATA.blocks, in order: the dots first, then
-     the numbers, then the big numbers. Inside each part the values
-     never repeat, so no question is asked twice. Even and odd numbers
-     come in any order within a part. */
+  /* ---- Test ---- */
+  /* Each block asks its own kind of number; the blocks come in the order of DATA.blocks and the
+     values do not repeat inside a block. */
   function makeRound() {
     var out = [];
     DATA.blocks.forEach(function (block) {
@@ -392,34 +231,6 @@
     return out;
   }
 
-  function startRound() {
-    items = makeRound();
-    idx = 0;
-    $('#parityRuleBox').open = false;
-    goTo('game');
-    renderItem();
-  }
-
-  /* ----------- Question text, visual and explanation ----------- */
-
-  function promptFor(item) {
-    return fill(t('parityPrompt'), { a: format(item.a) });
-  }
-
-  /* Only the dots part draws a picture. The number parts show the
-     number in the prompt and nothing else. */
-  function paintVisual(item) {
-    var cont = $('#parityDots');
-    cont.innerHTML = '';
-    if (item.block.kind === 'dots') {
-      show(cont);
-      paintDots(cont, item.a);
-    } else {
-      hide(cont);
-      cont.removeAttribute('aria-label');
-    }
-  }
-
   function explanationFor(item) {
     var n = item.a;
     if (item.block.kind === 'dots') return fill(t('explainParity'), { a: n });
@@ -429,102 +240,62 @@
     return fill(t(isEven(n) ? 'explainPairsEven' : 'explainPairsOdd'), { a: format(n), d: n % 10 });
   }
 
-  function renderItem() {
-    var item = items[idx];
-    var pct = items.length === 0 ? 0 : (idx / items.length) * 100;
-    $('#parityProgressFill').style.width = pct + '%';
-    $('#parityProgressText').textContent = (idx + 1) + ' / ' + items.length;
-    /* The "open here" help appears only on questions that show a number
-       without balls; a balls question already shows its answer. */
-    var help = $('#parityRuleBox');
-    help.open = false;
-    if (item.block.kind === 'dots') hide(help); else show(help);
-    $('#parityBlock').textContent = t('blocks.' + item.block.id + '.label');
-    $('#parityPrompt').textContent = promptFor(item);
-    /* The rule box follows the part the current question belongs to. */
-    $('#parityRule').textContent = t('blocks.' + item.block.id + '.rule');
-    paintVisual(item);
-
-    var options = $('#parityOptions');
-    options.innerHTML = '';
-    var buttons = [
-      { value: true,  label: t('evenLabel') },
-      { value: false, label: t('oddLabel') }
-    ];
-    App.utils.shuffle(buttons).forEach(function (choice) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn option-btn';
-      btn.textContent = choice.label;
-      btn.addEventListener('click', function () { answer(item, choice.value, btn); });
-      options.appendChild(btn);
-    });
-    $('#parityFeedback').textContent = '';
-    $('#parityFeedback').className = 'feedback';
-    $('#parityExplanationWrap').classList.add('hidden');
-    $('#parityExplanation').textContent = '';
-    hide($('#parityNext'));
+  function question(item) {
+    return {
+      prompt: fill(t('parityPrompt'), { a: format(item.a) }),
+      legend: t('blocks.' + item.block.id + '.label'),
+      hint: t('blocks.' + item.block.id + '.rule'),
+      visual: item.block.kind === 'dots' ? dotsHtml(item.a) : '',
+      visualAria: item.block.kind === 'dots' ? String(item.a) : '',
+      explanation: explanationFor(item),
+      options: App.utils.shuffle([
+        { value: true, label: t('evenLabel') },
+        { value: false, label: t('oddLabel') }
+      ]).map(function (choice) {
+        return {
+          html: '<span class="answer-text">' + choice.label + '</span>',
+          aria: choice.label,
+          correct: isEven(item.a) === choice.value
+        };
+      })
+    };
   }
 
-  function answer(item, value, button) {
-    var correct = isEven(item.a) === value;
-    if (!correct) {
-      button.disabled = true;
-      App.feedback.encourage($('#parityFeedback'));
-      $('#parityFeedback').textContent += ' ' + App.feedback.hintText(
-        t('blocks.' + item.block.id + '.hint'), button.textContent);
-      App.feedback.lockUntilAck($('#parityOptions').querySelectorAll('button'), $('#parityFeedback'));
-      return;
-    }
-    progress.stars += 1;
-    save();
-    App.feedback.success($('#parityFeedback'));
-    $('#parityOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
-    $('#parityExplanation').textContent = explanationFor(item);
-    $('#parityExplanationWrap').classList.remove('hidden');
-    show($('#parityNext'));
-    $('#parityNext').focus();
+  /* ---- Reminder: the rule, read once more before the test ---- */
+  function reminderHtml() {
+    return '<p class="reference-text">' + t('reminderPairs') + '</p>' +
+      '<p class="parity-last-title">' + t('reminderLastDigit') + '</p>' +
+      '<p class="parity-last-line"><span class="parity-chip parity-chip-even">0 · 2 · 4 · 6 · 8</span> → <strong>' + t('evenLabel') + '</strong></p>' +
+      '<p class="parity-last-line"><span class="parity-chip parity-chip-odd">1 · 3 · 5 · 7 · 9</span> → <strong>' + t('oddLabel') + '</strong></p>' +
+      '<p class="reference-text">' + t('reminderExample') + '</p>';
   }
 
-  function next() {
-    idx += 1;
-    if (idx < items.length) {
-      renderItem();
-      return;
-    }
-    finishRound();
-  }
-
-  function finishRound() {
-    $('#parityFinalSummary').textContent = fill(t('parityFinalSummary'), {
-      count: items.length,
-      stars: progress.stars
-    });
-    goTo('finish');
-    App.feedback.celebrate(t('core.roundComplete'));
-    paintStars();
-  }
-
-  /* ----------- Wiring ----------- */
-  $('#parityIntroNext').addEventListener('click', function () { goTo('real'); });
-  $('#parityRealNext').addEventListener('click', function () { goTo('reminder'); });
-  $('#parityReminderNext').addEventListener('click', startRound);
-  $('#parityNext').addEventListener('click', next);
-
-  /* ----------- Boot ----------- */
-  function init() {
-    App.i18n.apply();
-    paintStars();
-    renderIntroSequence();
-    renderRealSequence();
-    goTo('intro');
-  }
-
-  document.addEventListener('DOMContentLoaded', init);
-  /* End screen: the only button is "Volver al inicio", which goes back
-     to the Calculia landing. The end screen is a closing card, not a
-     second menu: picking another activity is a tap away on the home
-     page, so it does not need its own button here. */
-  App.utils.bindEndBackToStart();
-
+  App.activityFlow.setup({
+    toolId: 'parity',
+    test: 'options',
+    review: 'rule',
+    testVisuals: true,
+    introHeading: function () { return t('instruction'); },
+    introCard: function () { return { title: t('introTitle'), text: t('introText') }; },
+    intro: Array.apply(null, Array(SEQ_LAST + 1)).map(function (_, n) { return { visual: n }; }),
+    visualHtml: slideVisual,
+    introCopy: function (n) {
+      if (n === SEQ_LAST) return { title: t('reviewCaption'), text: '' };
+      return { title: String(n), text: seqCaptionFor(n) };
+    },
+    real: DATA.examples.map(function (id, i) { return { visual: { id: id, i: i } }; }),
+    realText: function (i) { return t('real.' + i + '.text'); },
+    realVisualHtml: function (spec) {
+      return drawingFor(spec.id).outerHTML +
+        '<p class="parity-real-title">' + t('real.' + spec.i + '.title') + '</p>';
+    },
+    reminder: {
+      title: function () { return t('reminderTitle'); },
+      html: reminderHtml,
+      next: function () { return t('reminderNext'); }
+    },
+    buildRound: makeRound,
+    makeQuestion: function (item) { return question(item); },
+    endNotes: [{ key: 'parityTransfer', cls: 'transfer' }]
+  });
 })();

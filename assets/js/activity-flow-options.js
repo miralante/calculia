@@ -81,6 +81,7 @@
     }
     html.push(
       '  <p class="round-header hidden" id="chainBanner" aria-live="polite"></p>',
+      '  <p class="difficulty hidden" id="difficulty"></p>',
       '  <div class="progress-bar">',
       '    <div class="progress-fill" id="progressFill"></div>',
       '    <span class="progress-text" id="progressText">0 / 0</span>',
@@ -123,6 +124,7 @@
       '  <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>',
       '  <p id="endSummary"></p>'
     );
+    if (config.transferKey) html.push('  <p class="transfer hidden" id="endTransfer" data-i18n="' + config.transferKey + '"></p>');
     (config.endNotes || []).forEach(function (note) {
       html.push('  <p class="' + note.cls + '" data-i18n="' + note.key + '"></p>');
     });
@@ -180,6 +182,13 @@
     var def = ctx.current || config;
     var level = ctx.current ? App.activityFlow.levelOf(ctx, ctx.current) : null;
     paintChainBanner(ctx);
+    /* The level badge (levelName) and the closing sentence (transferKey) of an activity with levels. */
+    if (config.levelName) {
+      var badge = $('#difficulty');
+      badge.textContent = level ? config.levelName(level) : '';
+      badge.classList.toggle('hidden', !level);
+    }
+    if (config.transferKey) $('#endTransfer').classList.add('hidden');
     App.utils.drawRoundReset();
     s.round = config.buildRound(def, level).map(function (type, i) { return config.makeQuestion(type, i, def); });
     s.qIndex = 0;
@@ -463,6 +472,7 @@
       nWord: App.i18n.starsWord(ctx.config.endSummaryKey ? s.solved : s.roundRight),
       activity: ctx.current ? ctx.current.name() : ''
     });
+    if (ctx.config.transferKey) $('#endTransfer').classList.remove('hidden');
     ctx.show('#screenEnd');
     if (App.feedback && App.feedback.celebrate) App.feedback.celebrate(t('core.roundComplete'));
   }

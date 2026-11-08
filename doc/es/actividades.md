@@ -53,7 +53,8 @@ de pantalla.
 | **La balanza** | Averiguar cuánto pesa la bolsa para que los dos platos queden iguales, ver que una letra es un número que aún no se sabe, leer si una gráfica de verdad sube o baja, y escribir y montar piezas: la grande mide x de lado, la tira mide x de largo y la pequeña es un 1. |
 | **Datos y gráficos** | Leer un pictograma, un gráfico de barras y una tabla; repartir a partes iguales; decidir si algo es seguro, puede ser o imposible; ver en una nube de puntos si dos cosas suben juntas; y sacar una bola sin devolverla. |
 | **El Calendario** | Los días de la semana, los meses del año y las cuatro estaciones, leídos sobre un calendario a la vista. |
-| **Reloj** | Leer la hora en relojes analógicos y digitales, y razonar sobre duraciones. |
+| **Reloj** | Leer la hora en relojes analógicos y digitales, poner las agujas en una hora escrita, y ver cómo pasa el tiempo media hora a media hora hasta la hora final. |
+| **Momentos del día** | Decir si un momento del día es por la mañana, por la tarde o por la noche. |
 | **Cuentos** | Ordenar los dibujos de una rutina cotidiana según lo que pasó antes y lo que pasó después. |
 
 ---

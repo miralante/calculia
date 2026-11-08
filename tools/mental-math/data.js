@@ -9,9 +9,8 @@
    App.i18n.t('actividad.<id>.detalle'), App.i18n.t('actividad.<id>.instruction'),
    App.i18n.t('nivel.<id>').
 
-   La actividad 'groups' tiene su propio recorrido (intro → famosos →
-   recordatorio → niveles) y se monta con GROUPS_DATA / GROUPS, no con
-   generadores de opciones. Los anclajes/restar/cabeza son lo de
+   La actividad 'Contar en grupos' (GROUPS_DATA) no está en DATA.activities: app.js la monta
+   como una entrada del menú con sus pasos encadenados. Los anclajes/restar/cabeza son lo de
    siempre; cada actividad es independiente.
    ============================================================ */
 var DATA = {
@@ -79,15 +78,6 @@ var DATA = {
         { id: 'k8', tipo: 'multiplyLarge', factor: 10 },
         { id: 'k9', tipo: 'multiplyLarge', factor: 100 }
       ]
-    },
-
-    /* "Contar en grupos" — antes vivía en Cantidades. Sin levels:
-       cada paso (Aprender / Usar / Todos) elige su propia mecánica,
-       así que data.js describe el grupo y el recorrido, no niveles
-       tipo generador. */
-    groups: {
-      picto: '🧱',
-      walkthrough: true
     }
   }
 };
@@ -239,20 +229,3 @@ var GROUPS_DATA = {
   ]
 };
 
-/* Las estrellas por defecto del recorrido de grupos. Vive en
-   GROUPS_PROGRESS para no mezclarse con las estrellas globales del
-   Cálculo Mental (que lleva anchors/restar/cabeza). Las estrellas
-   que ya existían en Cantidades para esta práctica siguen viviendo
-   bajo la clave 'quantities' del localStorage hasta que alguien
-   resetee — la nueva actividad empieza desde cero aquí. */
-var GROUPS_PROGRESS = {
-  defaults: { stars: 0, groupsCompleted: {} },
-  load: function () {
-    var raw = App.storage.get('mental-math-groups');
-    if (!raw) raw = {};
-    if (typeof raw.stars !== 'number') raw.stars = 0;
-    if (!raw.groupsCompleted) raw.groupsCompleted = {};
-    return raw;
-  },
-  save: function (p) { App.storage.set('mental-math-groups', p); }
-};

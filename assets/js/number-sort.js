@@ -368,7 +368,7 @@
        buildRound(level) -> questions (the activity shuffles them)
      } */
 
-  /* ---- The activity: the three stages and the test sheet come from the shared
+  /* ---- The activity: the three stages and the test come from the shared
      engine (assets/js/activity-flow.js). This file only says what is specific to
      numbers: the levels, the concept slides, the examples and the questions. ----
      config = {
@@ -377,11 +377,11 @@
        concepts: [{ title, text, visual }], examples: [{ emoji | column, caption }],
        buildRound(level) -> questions of the round, already shuffled
      }
-     The sheet has one level per round: the level rises with the rounds done. */
+     The test is one question per slide. The level rises with the rounds done. */
   function setup(config) {
     App.activityFlow.setup({
       toolId: config.toolId,
-      test: 'sheet',
+      test: 'options',
       intro: config.concepts.map(function (concept) { return { visual: concept }; }),
       real: config.examples.map(function (example) { return { visual: example }; }),
       introHeading: function () { return t('instructionIntro'); },
@@ -395,15 +395,18 @@
         var inner = example.column ? columnHtml(example.column) : example.emoji;
         return '<div class="real-object" aria-hidden="true">' + inner + '</div>';
       },
+      /* One entry with the levels: the engine counts the rounds of the activity and finds the level. */
       activities: [{
         id: config.toolId,
-        levels: config.levels,
-        buildRound: function (level) { return config.buildRound(level); }
+        picto: '',
+        name: function () { return ''; },
+        detail: function () { return ''; },
+        levels: config.levels
       }],
+      buildRound: function (def, level) { return config.buildRound(level); },
       makeQuestion: function (question) { return question; },
       levelName: function (level) { return t(level.name); },
       transferKey: 'transfer',
-      showExplanation: true,
       /* The stars of the older slug of this activity carry over, and its rounds
          per level become the rounds of the activity, which is how the level is found. */
       prepareProgress: function (progress) {

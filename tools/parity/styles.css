@@ -52,34 +52,6 @@
   .parity-options .option-btn { min-width: 0; width: 100%; }
 }
 
-/* pantalla 1: diapositivas del 0 al 10, un número por vez. Las bolas
-   de cada número van en parejas verticales, en grande, y el pie dice
-   si el número es par o impar y por qué. */
-.parity-carousel-card { border-color: var(--mod-razonamiento-suave); align-items: center; }
-.parity-carousel-display {
-  display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center;
-  gap: 12px; width: 100%; min-height: 110px; padding: var(--espacio);
-  border-radius: var(--radio); background: var(--mod-razonamiento-suave);
-  cursor: pointer;
-}
-.parity-carousel-display:focus-visible { outline: 3px solid var(--color-foco); outline-offset: 2px; }
-.parity-carousel-balls .parity-ball { width: 44px; height: 44px; font-size: 18px; }
-.parity-carousel-balls .parity-ball-pair { gap: 8px; }
-/* Slide 0: the text "0 = par" in the space of the balls. */
-.parity-carousel-balls .parity-zero-text {
-  font-size: var(--texto-grande); font-weight: 800; color: var(--mod-razonamiento);
-  align-self: center;
-}
-.parity-carousel-caption {
-  margin: 0; min-height: 1.2em; text-align: center;
-  font-size: var(--texto-grande); color: var(--color-texto);
-}
-.parity-carousel-controls { display: flex; justify-content: center; gap: var(--espacio); width: 100%; }
-.parity-carousel-controls .btn { min-width: 64px; }
-
-/* pantalla 2: un ejemplo por diapositiva, dibujo arriba, título y texto
-   debajo. El dibujo muestra el número que dice el texto. */
-.parity-real-display { flex-direction: column; align-items: center; }
 .parity-real-visual { display: flex; justify-content: center; align-items: center; min-height: 64px; }
 .parity-real-row { gap: 8px; }
 .parity-real-column { flex-direction: column; gap: 8px; }
@@ -128,3 +100,11 @@
 .parity-review { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; max-width: 100%; }
 .parity-review-rule { margin: 0; font-size: var(--texto-grande); font-weight: 700; line-height: 1.35; }
 .parity-review-line { margin: 0; font-size: var(--texto-grande); font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* 0 has no balls: its label stands in their place, in the same space. */
+.parity-zero-text {
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  color: var(--mod-razonamiento);
+  align-self: center;
+}

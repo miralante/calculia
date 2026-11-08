@@ -16,7 +16,7 @@ var DATA = {
     { id: 'day', picto: '🔟' },
     { id: 'month', picto: '🌙' },
     { id: 'year', picto: '🗓️' },
-    { id: 'months', picto: '📋' },
+    { id: 'months', picto: '📋', grid: 'months' },
     { id: 'example', picto: '✅' }
   ],
 

@@ -13,6 +13,10 @@ var DATA = {
 
   seconds: { second: 1, minute: 60, hour: 3600, day: 86400, week: 604800, year: 31536000 },
 
+  /* The explanation slides and the real-life examples: one picture each. */
+  intro: [{ picto: '🏁' }, { picto: '📏' }],
+  real: [{ picto: '🎬' }, { picto: '📅' }],
+
   durations: [
     [30, 'second'], [90, 'second'], [2, 'minute'], [5, 'minute'], [20, 'minute'],
     [1, 'hour'], [3, 'hour'], [12, 'hour'], [1, 'day'], [2, 'day'],

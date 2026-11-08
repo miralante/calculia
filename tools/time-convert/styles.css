@@ -1,9 +1,8 @@
 /* ============================================================
    Calculia — Cambia de unidad: estilos propios.
-   Cards, buttons and progress come from assets/css/components.css.
-   The explanation carousel and the test sheet are styled here, in the
-   same way as time-units, roman-numerals and common-divisor, because
-   assets/css/number-sort.css is not loaded by this activity.
+   Cards, buttons, the explanation carousel and the test sheet come from
+   assets/css/components.css and activity-flow.css. Only the number inside
+   each option is styled here.
    ============================================================ */
 
 /* Explanation: one card per step, with a picto, the name and one sentence. */

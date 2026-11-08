@@ -208,12 +208,64 @@
 .swatch-hour {
   width: 22px;
   height: 8px;
-  background: var(--color-foco);
+  background: var(--color-aguja-hora);
 }
 .swatch-minute {
   width: 34px;
   height: 5px;
-  background: var(--color-animo);
+  background: var(--color-aguja-minutos);
+}
+/* ---- The walk of 'How long in between': the first clock moves on, half an hour
+   per press, and the second clock is shown as the place to reach. ---- */
+.elapsed-walk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.elapsed-now svg {
+  width: min(200px, 60vw);
+  height: auto;
+}
+.elapsed-now,
+.elapsed-target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.elapsed-target svg {
+  width: min(96px, 30vw);
+  height: auto;
+}
+.elapsed-time {
+  font-size: 1.2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.elapsed-total {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+  min-height: 1.6em;
+}
+.elapsed-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+.elapsed-steps li {
+  padding: 4px 10px;
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio);
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
 }
 .learn-rules {
   gap: 8px;

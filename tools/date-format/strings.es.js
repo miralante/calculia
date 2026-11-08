@@ -8,18 +8,17 @@
   'use strict';
 
   App.i18n.register({
+    ui: { realLabel: 'Ejemplos de la vida real' },
+    btnMenu: 'Volver al inicio',
     title: '📅 Leer fechas',
     instructionIntro: 'Lee la explicación.',
-    introContinue: 'Empezar a practicar →',
-    prev: '←',
-    nextArrow: '→',
 
     explain: {
       read: { name: 'Así se escribe una fecha', text: 'Una fecha tiene tres partes, en este orden: día, mes y año. Las barras las separan: 10/01/2025.' },
       day: { name: 'Primero: el día', text: 'El primer número es el día. En 10/01/2025 el día es 10.' },
       month: { name: 'Después: el mes', text: 'El segundo número es el mes. En 10/01/2025 el mes es 01, enero.' },
       year: { name: 'Por último: el año', text: 'El último número es el año. En 10/01/2025 el año es 2025.' },
-      months: { name: 'Los meses', text: '01 enero, 02 febrero, 03 marzo, 04 abril, 05 mayo, 06 junio, 07 julio, 08 agosto, 09 septiembre, 10 octubre, 11 noviembre, 12 diciembre.' },
+      months: { name: 'Los meses', text: 'Enero es el primero y diciembre es el último.' },
       example: { name: 'Ejemplo', text: '10/01/2025 se lee: 10 de enero de 2025.' }
     },
 
@@ -36,8 +35,6 @@
       written: 'La fecha es {long}. ¿Cómo se escribe con barras?'
     },
 
-    check: 'Comprobar',
-    newRound: 'Otra ronda →',
     gen: {
       hint: '🤔 Recuerda el orden: día, mes y año. Las barras separan cada parte.'
     }

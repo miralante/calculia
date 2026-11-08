@@ -105,7 +105,7 @@
 
   App.activityFlow.setup({
     toolId: 'lines',
-    test: 'sheet',
+    test: 'options',
     slideProgress: false,
     intro: DATA.concepts.map(function (concept) { return { visual: concept }; }),
     real: DATA.real.map(function (item) { return { visual: item }; }),

@@ -106,7 +106,7 @@
     }
 
     function carouselStep(delta) {
-      carouselIdx = (carouselIdx + delta + DATA.carousel.length) % DATA.carousel.length;
+      carouselIdx = App.utils.wrapIndex(carouselIdx, delta, DATA.carousel.length);
       paintCarousel();
     }
 
@@ -422,15 +422,7 @@
     }
 
     function bind() {
-      $('#carouselDisplay').addEventListener('click', function () { carouselStep(1); });
-      $('#carouselDisplay').addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          carouselStep(1);
-        }
-      });
-      $('#carouselPrev').addEventListener('click', function () { carouselStep(-1); });
-      $('#carouselNext').addEventListener('click', function () { carouselStep(1); });
+      App.utils.bindCarousel({ prev: $('#carouselPrev'), next: $('#carouselNext'), card: $('#carouselDisplay') }, carouselStep);
       $('#introNext').addEventListener('click', function () { switchTo(famousScreen); });
 
       $('#famousPrev2').addEventListener('click', function () { famousStep(-1); });

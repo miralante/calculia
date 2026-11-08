@@ -7,6 +7,7 @@
   'use strict';
 
   App.i18n.register({
+    answerIs: 'La respuesta es {answer}.',
     title: '🧠 Restar y Cálculo Mental',
     instructionMenu: 'Elige una actividad.',
     btnMenu: 'Volver al inicio',

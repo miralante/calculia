@@ -1,68 +1,15 @@
 /* ============================================================
    Calculia — Leer fechas
-   Data in data.js. Shared modules in assets/js/.
-   Screens: explanation (carousel) → test sheet. The whole round is on
-   one screen, as in Cambia de unidad.
+   Two stages, in the flow of the test sheet: 1. the explanation (one card per
+   step), 2. the test sheet, where the whole round is on one screen. The stages
+   and the sheet are built by assets/js/activity-flow.js; this file has the
+   dates and the questions. The data is in data.js and the texts in
+   strings.<locale>.js.
    ============================================================ */
 (function () {
   'use strict';
 
-  var TOOL_ID = 'date-format';
-  var $ = App.utils.$;
-
-  var screenIntro = $('#screenIntro');
-  var screenGame = $('#screenGame');
-  var testSheetEl = $('#testSheet');
-  var btnCheck = $('#btnCheck');
-  var btnNewRound = $('#btnNewRound');
-  var progressFill = $('#progressFill');
-  var progressText = $('#progressText');
-  var starsEl = $('#stars');
-
-  /* Persistent progress */
-  var progress = App.storage.progressWith(TOOL_ID, { stars: 0 });
-
-  var glue = App.activityGlue({
-    toolId: TOOL_ID,
-    progress: function () { return progress; },
-    starsEl: function () { return starsEl; },
-    show: function (el) { show(el); }
-  });
-  var save = glue.save, paintStars = glue.paintStars;
-
-  var show = App.screenSwitch([screenIntro, screenGame]);
-
-  /* ---- Explanation carousel ----
-     One card per step: a picto, the name and one sentence. Clicking the
-     card (or pressing Enter) moves forward. */
-  function paintExplain(step) {
-    var el = $('#carouselDisplay');
-    el.textContent = '';
-    var picto = document.createElement('span');
-    picto.className = 'carousel-figure';
-    picto.setAttribute('aria-hidden', 'true');
-    picto.textContent = step.picto;
-    var name = document.createElement('span');
-    name.className = 'carousel-name';
-    name.textContent = App.i18n.t('explain.' + step.id + '.name');
-    var text = document.createElement('p');
-    text.className = 'gallery-note';
-    text.textContent = App.i18n.t('explain.' + step.id + '.text');
-    el.appendChild(picto);
-    el.appendChild(name);
-    el.appendChild(text);
-  }
-
-  var explIdx = 0;
-  function explStep(delta) {
-    explIdx = (explIdx + delta + DATA.explain.length) % DATA.explain.length;
-    paintExplain(DATA.explain[explIdx]);
-  }
-
-  /* ---- Test sheet ----
-     The whole round is on one screen. Every question is generated when the
-     round starts, and the options inside each one are shuffled too. "Comprobar"
-     checks them all at once; "Otra ronda" deals a new round. */
+  var t = App.i18n.t;
 
   function pad(n) { return n < 10 ? '0' + n : String(n); }
   var rint = App.utils.rint;
@@ -160,48 +107,38 @@
     };
   }
 
-  function startRound() {
-    App.utils.drawRoundReset();
-    var questions = [];
-    for (var i = 0; i < DATA.perRound; i += 1) {
-      questions.push(question(App.utils.drawRound(TOOL_ID, DATA.kinds)));
+  /* The twelve months as a grid of tiles: the number of the month over its name,
+     the same drawing as Unidades de tiempo. */
+  function monthGridHtml() {
+    var tiles = '';
+    for (var m = 1; m <= 12; m += 1) {
+      tiles += '<li class="month-tile"><span class="month-num">' + pad(m) +
+        '</span><span class="month-name">' + monthName(m) + '</span></li>';
     }
-    sheetTest.set(App.utils.shuffle(questions));
-    show(screenGame);
-    sheetTest.render();
+    return '<ol class="month-grid">' + tiles + '</ol>';
   }
 
-  /* The test sheet: the whole round on one screen, checked at once. */
-  var sheetTest = App.sheetTest.create({
-    sheetEl: testSheetEl,
-    checkBtn: btnCheck,
-    newRoundBtn: btnNewRound,
-    progressFill: progressFill,
-    progressText: progressText,
-    onScored: function (rightFirstTry) {
-      progress.stars += rightFirstTry;
-      save();
-      paintStars();
-    }
+  App.activityFlow.setup({
+    toolId: 'date-format',
+    test: 'options',
+    skipReal: true,
+    real: [],
+    intro: DATA.explain.map(function (step) { return { visual: step }; }),
+    introHeading: function () { return t('instructionIntro'); },
+    introCopy: function (i) {
+      var step = DATA.explain[i];
+      return { title: t('explain.' + step.id + '.name'), text: t('explain.' + step.id + '.text') };
+    },
+    visualHtml: function (step) {
+      if (step.grid === 'months') return monthGridHtml();
+      return '<span class="carousel-figure" aria-hidden="true">' + step.picto + '</span>';
+    },
+    /* A round is a shuffled list of question kinds; every kind is one question. */
+    buildRound: function () {
+      var list = [];
+      for (var i = 0; i < DATA.perRound; i += 1) list.push(App.utils.drawRound('date-format', DATA.kinds));
+      return App.utils.shuffle(list);
+    },
+    makeQuestion: function (kind) { return question(kind); }
   });
-
-  /* ---- Events ---- */
-
-  $('#carouselPrev').addEventListener('click', function () { explStep(-1); });
-  $('#carouselNext').addEventListener('click', function () { explStep(1); });
-  var carouselDisplay = $('#carouselDisplay');
-  carouselDisplay.addEventListener('click', function () { explStep(1); });
-  carouselDisplay.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      explStep(1);
-    }
-  });
-
-  paintExplain(DATA.explain[explIdx]);
-  $('#introContinue').addEventListener('click', startRound);
-  $('#btnCheck').addEventListener('click', sheetTest.check);
-  $('#btnNewRound').addEventListener('click', startRound);
-
-  paintStars();
 })();

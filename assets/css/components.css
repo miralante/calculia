@@ -181,6 +181,13 @@ img, svg, canvas, input, select, textarea, button { max-width: 100%; }
   color: var(--color-estrella);
 }
 
+/* Next goal under the stars counter (stars-engine.js). */
+.stars-goal {
+  display: block;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
 /* ---- Feedback zone (aria-live) ---- */
 .feedback {
   min-height: 64px;

@@ -10,13 +10,23 @@
   App.i18n.register({
     title: '⏱️ How long does it take?',
     instructionIntro: 'Read the explanation.',
-    introContinue: 'Start practising →',
-    intro: {
-      title: 'How long does it take?',
-      text: 'Some things last seconds, others minutes, hours or days. Think about real life and choose the length that makes sense.'
+    btnMenu: 'Back to start',
+
+    ui: {
+      realLabel: 'Real-life examples'
     },
-    check: 'Check',
-    newRound: 'Another round →',
+
+    /* Explanation in slides with a drawing. */
+    intro: {
+      1: { title: 'How long does it take?', text: 'Some things last seconds, others minutes, hours or days.' },
+      2: { title: 'Think about real life', text: 'Choose the length that makes sense. Brushing your teeth takes minutes, not days.' }
+    },
+
+    /* Real-life examples. */
+    real: {
+      1: 'Counting to ten takes a few seconds.',
+      2: 'A film lasts about 2 hours.'
+    },
 
     task: {
       brush: 'How long does it take to brush your teeth?',

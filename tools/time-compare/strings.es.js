@@ -10,13 +10,23 @@
   App.i18n.register({
     title: '🏁 ¿Cuál dura más?',
     instructionIntro: 'Lee la explicación.',
-    introContinue: 'Empezar a practicar →',
-    intro: {
-      title: '¿Cuál dura más?',
-      text: 'Para comparar, pasa todo a la misma unidad. Por ejemplo: 2 horas son 120 minutos. Eso es más que 90 minutos.'
+    btnMenu: 'Volver al inicio',
+
+    ui: {
+      realLabel: 'Ejemplos de la vida real'
     },
-    check: 'Comprobar',
-    newRound: 'Otra ronda →',
+
+    /* Explicación en slides con dibujo. */
+    intro: {
+      1: { title: '¿Cuál dura más?', text: 'Para comparar, pasa todo a la misma unidad. Por ejemplo: 2 horas son 120 minutos. Eso es más que 90 minutos.' },
+      2: { title: 'Mira las unidades', text: 'Hay segundos, minutos, horas, días, semanas y años. Un día son 24 horas. Es más que 12 horas.' }
+    },
+
+    /* Ejemplos de la vida real. */
+    real: {
+      1: 'Una película dura unas 2 horas. Una canción dura unos 3 minutos.',
+      2: 'Un fin de semana dura unos 2 días. Una semana tiene 7 días.'
+    },
 
     q: {
       longest: '¿Cuál dura más?',

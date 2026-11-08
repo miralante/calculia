@@ -10,13 +10,23 @@
   App.i18n.register({
     title: '🏁 Which lasts longer?',
     instructionIntro: 'Read the explanation.',
-    introContinue: 'Start practising →',
-    intro: {
-      title: 'Which lasts longer?',
-      text: 'To compare, change everything to the same unit. For example: 2 hours are 120 minutes. That is more than 90 minutes.'
+    btnMenu: 'Back to start',
+
+    ui: {
+      realLabel: 'Real-life examples'
     },
-    check: 'Check',
-    newRound: 'Another round →',
+
+    /* Explanation in slides with a drawing. */
+    intro: {
+      1: { title: 'Which lasts longer?', text: 'To compare, change everything to the same unit. For example: 2 hours are 120 minutes. That is more than 90 minutes.' },
+      2: { title: 'Look at the units', text: 'There are seconds, minutes, hours, days, weeks and years. A day is 24 hours. That is more than 12 hours.' }
+    },
+
+    /* Real-life examples. */
+    real: {
+      1: 'A film lasts about 2 hours. A song lasts about 3 minutes.',
+      2: 'A weekend lasts about 2 days. A week has 7 days.'
+    },
 
     q: {
       longest: 'Which lasts longer?',

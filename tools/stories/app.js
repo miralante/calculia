@@ -45,9 +45,7 @@
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
-    screenEnd: function () { return screenEnd; },
-    roundCorrect: function () { return roundCorrect; },
-    show: function (el) { screenGame.classList.add('hidden'); el.classList.remove('hidden'); }
+    show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars;
 
@@ -140,11 +138,8 @@
       attempts += 1;
       var respuestaTrasPista = attempts > 1;
       showHint(btn);
-      /* Reveal the explanation only after the hint is acknowledged.
-         The tapped panel is not disabled for good: lockUntilAck locks it
-         with the rest and frees it on "Entendido". Otherwise a panel that
-         was tapped too early could be the only one left for its own slot,
-         and the story could never be finished. */
+      /* Reveal the explanation only after the hint is acknowledged. */
+      btn.disabled = true;
       btn.classList.add('encourage');
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(App.utils.$$('.vineta', availableEl), explanationWrap, function () { if (respuestaTrasPista) showExplanation(); });
@@ -188,7 +183,17 @@
   }
 
   function endRound() {
-    glue.endRound({ celebrateKey: 'finalTitulo' });
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
+    save();
+    screenGame.classList.add('hidden');
+    screenEnd.classList.remove('hidden');
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{stars}', progress.stars);
+    }
+    App.feedback.celebrate(App.i18n.t('finalTitulo'));
   }
 
   /* Events */

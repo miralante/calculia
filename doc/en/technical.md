@@ -223,6 +223,12 @@ shared one. The two option and feedback copies still listed by the report
 flow look on pages that do not use the flow engine: that is a per-page decision
 (migrate them to the engine, or keep the variant), not something the script changes.
 
+The explanation carousel (the ← → card of the slides and the examples) is defined
+once, in `components.css` (`.carousel-*`, `.intro-buttons`). Its wiring is
+`App.utils.bindCarousel` and `App.utils.wrapIndex` in `utils.js`. Check 18
+(`scripts/checks/design.js`) rejects a copy of those rules in an activity's
+`styles.css`. See [design.md](design.md) §3.3.
+
 #### 2.2.3 Three-stage flow (`assets/js/activity-flow.js`)
 
 Activities with explanation slides, real life and a test
@@ -234,11 +240,10 @@ which still calls `App.utils.shuffle`) and the question generator
 end screen. The generic styles are in `assets/css/activity-flow.css`,
 and the drawings shared by a family in their own file (for example
 `assets/css/common-factors.css`). A design change to the flow is then
-made in one place. There are two test modes: `test: 'options'` (one
-question at a time, with a closing screen; `common-multiple` and
-`common-divisor`) and `test: 'sheet'` (the whole round on one sheet with
-«Check» and «Another round», no closing screen; `lines`, `primes` and,
-with several sheets, a menu and levels per sheet, `shapes`).
+made in one place. Every test uses `test: 'options'`: one question at a
+time, with a closing screen. The `test: 'sheet'` mode (the whole round on
+one sheet, with «Check» and «Another round», no closing screen) stays in
+the engine in case a future activity needs it; no activity uses it now.
 
 In the `options` mode, `socratic: true` gives the socratic feedback of
 `factorial` (first miss, a hint; second miss, the explanation; the other
@@ -246,11 +251,10 @@ options lock until «Understood»), `review: 'rule'` puts «Review the rule»
 under the question, `introCard` adds a card above the slides, and
 `endNotes` adds texts to the closing screen.
 
-The four order activities (`order-*`) use the `sheet` mode through
+The four order activities (`order-*`) use the `options` mode through
 `App.numberSort.setup`, which delegates to the engine: the level is shown as
-a badge (`levelName`), the transfer sentence appears when the round is
-complete (`transferKey`), and a right answer shows its explanation
-(`showExplanation`). `operation-concepts` follows the closing-screen rule:
+a badge (`levelName`), the transfer sentence appears on the closing screen
+(`transferKey`), and the level rises with the rounds done. `operation-concepts` follows the closing-screen rule:
 one button, «Back to start»; «New round» lives inside the test.
 
 #### 2.2.3.1 Options of the 'options' mode: no real-life stage, several steps
@@ -309,11 +313,11 @@ The engine has three stages, each optional in the ways listed:
 2. **Real life** (optional): `real` is a list of examples `{ visual }`,
    with `realVisualHtml` or `visualHtml` and the text from `realText` or
    `real.<n>`. Skipped with `skipReal: true`.
-3. **Test**, in one of two modes:
-   - `options` (default): one question at a time, a star for each right
-     answer, and a closing screen.
-   - `sheet` (`test: 'sheet'`): the whole round on one sheet, with «Check» and
-     «Another round» and no closing screen.
+3. **Test**: one question at a time (`options`, the default and the only mode
+   the activities use), a star for each right answer, and a closing screen.
+   The `sheet` mode (`test: 'sheet'`: the whole round on one sheet, with
+   «Check» and «Another round» and no closing screen) stays in the engine,
+   unused.
 
 The configuration keys the engine reads:
 
@@ -325,12 +329,16 @@ The configuration keys the engine reads:
 | `introCopy`, `introVisualAria`, `realText` | Texts and labels that depend on the slide |
 | `introHeading`, `introCard` | Line above the slides, and a card above them |
 | `buildRound(def, level)`, `makeQuestion(type, index, def)` | The round and its questions |
-| `test` | `'sheet'` for the sheet mode; default `options` |
+| `test` | `'options'` (default, one question at a time); `'sheet'` for the sheet mode, unused now |
+| `levelName`, `transferKey` | Level label in the test, and the sentence on the closing screen (the order activities) |
 | `socratic` | First miss: hint. Second miss: explanation. Other options lock until «Understood» |
 | `review` | `'back'` (default), `'rule'` (review the rule under the question) or `'none'` |
 | `reinforce` | Missed questions are replayed in a mini-round until all are right (`App.reinforce`) |
 | `activities`, `menuPlacement` | A menu of activities, first (default) or after the examples; each activity can have its own slides and examples |
 | `skipReal` | The slides lead straight to the test (button «Start practising») |
+| `reminder` | `{ title(), html(), next() }`: a card with the rule, read once more between the real-life examples and the test. The button under it starts the test (the mode's `startTest`) |
+| `explanationVisual` (in a question) | HTML painted under the explanation text (the socratic feedback and the right answer). The text stays in `explanation`; this is for a picture or a formula |
+| `steps` (in a menu entry) | The entry is a chain: its steps follow each other, one round each, without going back to the menu. The closing screen offers «Siguiente paso →» until the last one, and a banner says «Paso n de m». Each step is a menu-entry-like object with its own `buildRound` and `makeQuestion` |
 | `steps` (in a question) | A question made of several steps, answered one at a time (`Step 1 of 3`); it scores once, at its last step, and only if no step was missed |
 | `testVisuals`, `testVisualClass` | A picture in each test question |
 | `endSummaryKey`, `endNotes`, `endEmoji` | Summary text, extra texts and emoji of the closing screen |
@@ -343,15 +351,22 @@ Which family-A variant fits which activity:
 
 - **Full flow with real life**: `common-multiple`, `common-divisor`, `factorial`
   (socratic), `linear-functions`, `scale`, `operation-concepts`.
-- **Sheet**: `lines`, `primes`, `shapes` (several sheets, with a menu).
+- **One question per slide, with real life**: `lines`, `primes`, `time-units` and `time-convert`, `shapes` (several sheets, with a menu and levels; each with its own slides and examples), `time-compare` and `time-durations` (two slides and two examples each), and `moments` (three slides, one per part of the day, and six everyday moments). `date-format` has no real life (`skipReal`); its months slide is a grid of twelve tiles, as in `time-units`.
 - **Menu of activities**: the four `order-*` (through `App.numberSort`, which
   delegates to the engine) and `operation-concepts`.
+- **Options, with a reminder**: `parity` (slides of the numbers, real life, the rule again, then one question at a time).
+- **Options, with a menu of chained steps**: `ordinals` (three groups of steps, with the reminder and the real-life scenes; the building's arrows are a delegated listener in the page) and `roman-numerals` (the same shape, socratic, with the decomposition as the explanation).
+- **Options, with a menu of tables and a practice screen**: `math-tables` (the ten tables of one operation are the menu entries; each opens its own practice screen through `open(ctx)`, where the person picks the channel, written or with audio, and the order, in order or at random; before the test the ten operations are shown one by one, counted with dots). Divide asks for a typed number (`typedAnswers`); the audio channel reads the operation (`audio`).
+- **Gallery** (`test: 'gallery'`): `los-numeros`, ten slides and no test: the types of number, each with its picture and its real-life examples, and the last slide ends the activity.
+- **Options, one mixed round after the slides**: `trigonometry` (two slides, one with the ladders and one with the ramps; three real-life examples; seven question types in one round, shuffled).
+- **Options, with a menu of activities**: `fractions-measures` (fractions and decimals, each with its own slides, examples and levels; the comma game is a third entry that opens its own screen through `open(ctx)`).
+- **Options, with a menu of levels and chained steps** (menu first): `mental-math`. Three flat entries (anchors, restar, cabeza) whose levels rise with the rounds and that have no slides of their own, so they start at once; and «Count in groups» in three entries (learn and use, chains of steps; all, one round), each with its own slides. A menu entry without `intro` starts its round at once.
 - **Teach → test, no real life**: `multiples`, `prime-composite`,
   `divisibility-test` (the last one also uses `steps`).
 
 Rules of thumb: leave out real life when no real example adds a new case; use
 `steps` when a question is a chain of checks, each one needed for the next;
-use the sheet when the person must compare or order everything at once.
+use the sheet only if a future activity must have the person compare or order everything at once; every current activity uses one question per slide.
 
 ##### 2.2.4.3 Family B: play (games)
 
@@ -379,17 +394,17 @@ without slides):
 - **Close**: the closing screen with one button, as in family A.
 - **Not allowed**: timers, lives, negative score, «game over».
 
-Two activities need more than this contract, and stay outside it until the
-engine has the pieces: `head-math` and `math-tables` have levels that the
-person picks, and a learn screen with a demonstration. Both are menu-led
-flows, not rounds of items.
+One activity needs more than this contract, and stays outside it until the
+engine has the pieces: `head-math` has levels that the person picks. It is a
+menu-led flow, not a round of items. (`math-tables` now runs on the options
+mode, with the typed answer and the audio of the engine.)
 
 ##### 2.2.4.4 Choosing a skeleton and adding an activity
 
 1. Does the activity teach a rule before it asks? Yes: family A. No: family B.
 2. Does a real-life example add a case? Yes: keep `real`. No: `skipReal: true`.
 3. Does a question chain several checks? Use `steps`.
-4. Must the person see the whole round at once? Use the `sheet` mode.
+4. Must the person see the whole round at once? Only then, the `sheet` mode; no activity uses it now.
 5. Create the six canonical files in `tools/<slug>/`, plus `model.js` when the
    logic is large (2.2.2.1). Register the card in `index.html`, its progress
    row in `settings/`, and its files in `sw.js` (`ARCHIVOS`), then bump
@@ -771,10 +786,11 @@ in §2.1 above are the canonical rationale).
 | `tts.js` | `App.tts.speak` | only pages that read aloud (most do) |
 | `storage.js` | `App.storage.{get, set, remove, progressWith}` | only pages that read or write `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | only the activity's `app.js` |
+| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | the `test: 'gallery'` mode of the three-stage flow: slides only, the closing screen, one star per page |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | activities that keep their own round loop (not `App.activityFlow`) |
 | `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | the `test: 'gallery'` mode of the three-stage flow: slides only, the closing screen, one star per page |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | the activities that show a row of dots or a shuffled Yes / No (divisibility-test, multiples, prime-composite) |
-| `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | the five time activities, date-format and the sheet mode of the activity flow (the whole round on one sheet, checked at once) |
+| `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | the sheet mode of the activity flow (`activity-flow-sheet.js`), which no activity uses now |
 | `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}`, `App.classicPainter(host)` → `{startRound, paintQuestion, render}` | the classic one-question activities (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): the round state object and the shared answer, hint, next step, menu, and the start and painting of a question (geometry, operations and percent so far) |
 
 The load order is `utils.js → i18n.js → tts.js → storage.js →

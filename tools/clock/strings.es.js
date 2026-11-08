@@ -28,8 +28,6 @@
     quarterTo: '{h} menos cuarto',
     correctExplanation: '✅ ¡Correcto! Son las ',
     incorrectExplanationA: '❌ No es esa hora. Son las ',
-    readHint: '🤔 «{elegida}» no es la hora: empieza por la aguja corta, que marca la hora. La larga, los minutos.',
-    associateHint: '🤔 «{elegida}» no encaja con ese momento del día: piensa en ese momento del día.',
     setHint: '🤔 «{elegida}» no es la hora que pide: ajusta la hora con los botones.',
     convertHint: '🤔 «{elegida}» no coincide con el reloj: compara la esfera con los números.',
     convertAnalogToDigital: '¿Qué hora marca este reloj?',
@@ -42,6 +40,15 @@
     setConfirm: 'Comprobar',
     elapsedFrom: 'Antes',
     elapsedTo: 'Después',
+    elapsedNow: 'Ahora',
+    elapsedStep: 'Pasa media hora →',
+    elapsedSteps: 'Pasos del tiempo',
+    elapsedPassed: 'Ya han pasado: {t}',
+    elapsedArrived: 'Ya hemos llegado. ¿Cuánto tiempo ha pasado?',
+    elapsedHint: '🤔 «{elegida}» no es el tiempo que ha pasado: cuenta cuántas medias horas has dejado pasar.',
+    explainElapsed: 'Han pasado {gap}.',
+    correctLead: '✅ ¡Correcto! ',
+    incorrectLead: '❌ Esa no es la respuesta. ',
     gap: {
       '30': 'media hora',
       '60': '1 hora',
@@ -56,11 +63,6 @@
         description: 'Mira los dos relojes y di cuánto tiempo hay entre uno y otro.',
         question: '¿Cuánto tiempo pasa entre los dos relojes?'
       },
-      read: {
-        name: 'Leer el reloj',
-        description: 'Mira el reloj y elige la hora correcta.',
-        question: '¿Qué hora es?'
-      },
       set: {
         name: 'Poner el reloj',
         description: 'Lee la hora y mueve las agujas con los botones.',
@@ -70,24 +72,11 @@
         name: 'Analógico ↔ Digital',
         description: 'Empareja el reloj de agujas con los números digitales.',
         question: 'Empareja el reloj con su hora digital.'
-      },
-      situations: {
-        name: 'Momentos del día',
-        description: 'Elige el reloj que corresponde a cada momento del día.',
-        question: '¿A qué hora pasa esto?'
       }
     },
     reinforceTitle: 'Refuerzo',
     reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
     levelDescription: { 1: 'Horas en punto', 2: 'Y media', 3: 'Y cuarto, menos cuarto' },
-    moment: {
-      desayuno: { name: 'el desayuno', question: '¿A qué hora es el desayuno?' },
-      colegio: { name: 'ir al colegio', question: '¿A qué hora vas al colegio?' },
-      comida: { name: 'la comida', question: '¿A qué hora es la comida?' },
-      merienda: { name: 'la merienda', question: '¿A qué hora es la merienda?' },
-      cena: { name: 'la cena', question: '¿A qué hora es la cena?' },
-      dormir: { name: 'dormir', question: '¿A qué hora te vas a dormir?' }
-    },
     transfer: 'Esto te servirá para leer la hora en el reloj de la cocina, en el del cole o en tu propia muñeca, sin tener que preguntar a cada momento.',
   }, 'es');
 })();

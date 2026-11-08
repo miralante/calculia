@@ -164,15 +164,9 @@ function isImmutable(relPath, patterns) {
   return patterns.some(p => globToRegExp(p).test(asUrl));
 }
 
-/* The token hashes the file with CRLF read as LF. Git stores text as LF and the site is
-   served from those bytes, but a Windows checkout (core.autocrlf) can write CRLF: the same
-   file must get the same token on both, or check.js fails on a clean checkout. Binary files
-   (any NUL byte) are hashed as they are. */
 function tokenFor(root, relPath) {
   const abs = path.join(root, relPath);
-  let bytes = fs.readFileSync(abs);
-  if (!bytes.includes(0)) bytes = Buffer.from(bytes.toString('utf8').replace(/\r\n/g, '\n'), 'utf8');
-  const hash = crypto.createHash('sha256').update(bytes).digest('hex');
+  const hash = crypto.createHash('sha256').update(fs.readFileSync(abs)).digest('hex');
   return hash.slice(0, 8);
 }
 

@@ -288,8 +288,10 @@
         /* The position in the slides, and whatever the mode keeps for itself. */
         state: { intro: 0, real: 0 },
         mode_state: {},
-        /* The activity picked from the menu (null until one is picked, or when there is no menu). */
-        current: null,
+        /* The activity picked from the menu (null until one is picked, or when there is no menu).
+           An activity with one entry and levels (the order activities) is that entry from the start,
+           so its level and its rounds are counted. */
+        current: (config.activities && config.activities.length === 1) ? config.activities[0] : null,
         slideBars: config.slideProgress !== false,
         screens: mode.screens(config).concat(config.reminder ? ['#screenReminder'] : []).concat(config.extraScreens || []),
         save: function () { App.storage.set(TOOL_ID, progress); },

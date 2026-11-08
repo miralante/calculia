@@ -11,6 +11,7 @@
   'use strict';
 
   App.i18n.register({
+    btnMenu: 'Back to start',
     title: '🔍 Primes and composites',
     instructionIntro: 'Look at the numbers.',
 

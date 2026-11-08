@@ -21,6 +21,7 @@
     },
     goal: 'Total time: {t}',
     elapsedLabel: 'Time passed',
+    start: 'Start',
     pause: 'Pause',
     resume: 'Resume',
     stop: 'Stop',

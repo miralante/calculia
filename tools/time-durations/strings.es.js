@@ -10,13 +10,23 @@
   App.i18n.register({
     title: '⏱️ ¿Cuánto tarda?',
     instructionIntro: 'Lee la explicación.',
-    introContinue: 'Empezar a practicar →',
-    intro: {
-      title: '¿Cuánto tarda?',
-      text: 'Hay cosas que duran segundos, otras minutos, otras horas y otras días. Piensa en la vida real y elige la duración que tiene sentido.'
+    btnMenu: 'Volver al inicio',
+
+    ui: {
+      realLabel: 'Ejemplos de la vida real'
     },
-    check: 'Comprobar',
-    newRound: 'Otra ronda →',
+
+    /* Explicación en slides con dibujo. */
+    intro: {
+      1: { title: '¿Cuánto tarda?', text: 'Hay cosas que duran segundos, otras minutos, otras horas y otras días.' },
+      2: { title: 'Piensa en la vida real', text: 'Elige la duración que tiene sentido. Lavarse los dientes tarda minutos, no días.' }
+    },
+
+    /* Ejemplos de la vida real. */
+    real: {
+      1: 'Contar hasta diez tarda unos segundos.',
+      2: 'Una película dura unas 2 horas.'
+    },
 
     task: {
       brush: '¿Cuánto tarda en lavarse los dientes?',

@@ -27,7 +27,7 @@
   var rint = App.utils.rint;
 
 
-  function fillKey(key, values) {
+  function fill(key, values) {
     var text = App.i18n.t(key);
     Object.keys(values).forEach(function (name) {
       text = text.split('{' + name + '}').join(values[name]);
@@ -194,7 +194,7 @@
 
   function renderVisual(container, item, showTotal) {
     container.innerHTML = '';
-    container.setAttribute('aria-label', fillKey('visual' + keySuffix(item), itemValues(item)));
+    container.setAttribute('aria-label', fill('visual' + keySuffix(item), itemValues(item)));
     if (mode === 'divide') renderDivideVisual(container, item);
     else if (mode === 'decompose') renderDecomposeVisual(container, item, showTotal);
     else if (stepsInRows(item)) renderStepsRowVisual(container, item, showTotal);
@@ -282,7 +282,7 @@
       button.disabled = true;
       App.feedback.encourage(feedback);
       feedback.textContent += ' ' + App.feedback.hintText(
-        fillKey('hint' + keySuffix(item), itemValues(item)), button ? button.textContent : '');
+        fill('hint' + keySuffix(item), itemValues(item)), button ? button.textContent : '');
       App.feedback.lockUntilAck($('#options').querySelectorAll('button'), feedback);
       return;
     }
@@ -291,7 +291,7 @@
     $('#stars').textContent = '';
     App.feedback.success(feedback);
     renderVisual($('#quizVisual'), item, true);
-    $('#explanation').textContent = fillKey('explain' + keySuffix(item), itemValues(item));
+    $('#explanation').textContent = fill('explain' + keySuffix(item), itemValues(item));
     show($('#explanation'));
     $('#options').querySelectorAll('button').forEach(function (option) { option.disabled = true; });
     show($('#nextFact'));

@@ -173,7 +173,7 @@
        assumed — the famous set currently has no IV/IX entries, but
        if one is added later the rule is already in place. */
     function carouselStep(delta) {
-      carouselIdx = (carouselIdx + delta + CAROUSEL_ORDER.length) % CAROUSEL_ORDER.length;
+      carouselIdx = App.utils.wrapIndex(carouselIdx, delta, CAROUSEL_ORDER.length);
       paintCarousel();
     }
 
@@ -447,7 +447,9 @@
       });
       btn.setAttribute('aria-pressed', 'true');
       btn.classList.add('hablando');
-      if (false && App.tts && App.tts.speak) App.tts.speak(text, function () {
+      /* Exception to the TTS-off default: the number is always spoken so
+         the user learns how the Roman numeral is pronounced. */
+      if (App.tts && App.tts.speak) App.tts.speak(text, function () {
         btn.removeAttribute('aria-pressed');
         btn.classList.remove('hablando');
       });
@@ -548,15 +550,7 @@
 
     /* Wires the buttons of screens 1-3. */
     function bind() {
-      carouselDisplay.addEventListener('click', function () { carouselStep(1); });
-      carouselDisplay.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          carouselStep(1);
-        }
-      });
-      carouselPrev.addEventListener('click', function () { carouselStep(-1); });
-      carouselNext.addEventListener('click', function () { carouselStep(1); });
+      App.utils.bindCarousel({ prev: carouselPrev, next: carouselNext, card: carouselDisplay }, carouselStep);
       famousPrev2.addEventListener('click', function () { famousStep(-1); });
       famousNext2.addEventListener('click', function () { famousStep(1); });
       if (btnListenFamous) {

@@ -307,3 +307,6 @@
 @media (max-width: 360px) {
   .quiz-shown { font-size: 44px; letter-spacing: 2px; }
 }
+
+/* The word of a chosen option (the rule words of mental maths). */
+.option-word { font-weight: 700; }

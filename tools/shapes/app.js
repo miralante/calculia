@@ -296,7 +296,7 @@
      questions; the round shuffles them, and each one is generated when it starts. */
   App.activityFlow.setup({
     toolId: 'shapes',
-    test: 'sheet',
+    test: 'options',
     slideProgress: false,
     intro: INTRO,
     real: DATA.gallery.map(function (item) { return { visual: item }; }),
@@ -307,6 +307,8 @@
     visualHtml: visualHtml,
     realVisualHtml: realVisualHtml,
     activities: SHEETS,
+    /* The questions of the chosen level: each one is one slide of the test. */
+    buildRound: function (def, level) { return App.utils.shuffle(level.questions.slice()); },
     makeQuestion: makeQuestion
   });
 })();

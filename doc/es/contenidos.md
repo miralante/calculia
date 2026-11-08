@@ -72,7 +72,8 @@ primero.
 | Patrones | `patterns/` | Detectar y continuar patrones visuales y numéricos. | patrón, secuencia, continuar, regla. |
 | Qué sobra | `odd-one-out/` | Identificar qué elemento no pertenece a un conjunto, y explicar por qué. | sobra, conjunto, común, distinto. |
 | Puzzle | `puzzle/` | Razonamiento espacial: reorganizar piezas para reconstruir una imagen o secuencia. | pieza, imagen, reconstruir, espacio. |
-| Reloj | `clock/` | Leer la hora en relojes analógicos y digitales, razonar sobre duraciones. | hora, minuto, reloj, analógico, digital, duración. |
+| Reloj | `clock/` | Leer la hora en relojes analógicos y digitales, poner las agujas en una hora escrita, y ver cómo pasa el tiempo media hora a media hora. | hora, minuto, reloj, analógico, digital, duración. |
+| Momentos del día | `moments/` | Asociar cada momento de la vida diaria con su parte del día: mañana, tarde o noche. | mañana, tarde, noche, momento del día. |
 | Cuentos | `stories/` | Problemas breves: extraer los datos relevantes, elegir la operación adecuada. | cuento, problema, dato, operación, sumar, restar. |
 
 ---
@@ -171,9 +172,10 @@ primero.
   y su pie, y una nota aplica sobre ese objeto los conceptos que le
   corresponden: a una figura, sus lados, vértices, perímetro y área; a un
   cuerpo, su volumen. La nota no vuelve a definirlos, los cuenta.
-- Un solo test de 46 preguntas mezcla los nombres de todas las formas, lados
-  y vértices del triángulo al pentágono, perímetros, área, áreas por fórmula,
-  tipos de triángulo, volumen, simetría, semejanza, cuerpos y desarrollos.
+- El test pregunta una cosa cada vez, en su propia diapositiva. Mezcla los
+  nombres de las formas, lados y vértices del triángulo al pentágono,
+  perímetros, áreas, áreas por fórmula, tipos de triángulo, volumen,
+  simetría, semejanza, cuerpos y desarrollos.
 - **Los conceptos se presentan y se reconocen; el área por fórmula se
   calcula.** `shapes/` pregunta por ellos en su forma de reconocer —qué parte
   de la figura es su área, por dónde se dobla, cuál es la misma forma más

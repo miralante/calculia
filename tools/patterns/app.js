@@ -81,9 +81,7 @@
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
-    screenEnd: function () { return screenEnd; },
-    roundCorrect: function () { return roundCorrect; },
-    show: function (el) { screenGame.classList.add('hidden'); el.classList.remove('hidden'); }
+    show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars;
 
@@ -257,8 +255,18 @@
   }
 
   function endRound() {
-    glue.endRound();
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
+    save();
+    screenGame.classList.add('hidden');
+    screenEnd.classList.remove('hidden');
+    var summaryEl = $('#endSummary');
+    if (summaryEl) {
+      summaryEl.textContent = App.i18n.t('endSummary')
+        .replace('{n}', roundCorrect)
+        .replace('{stars}', progress.stars);
+    }
     $('#explanation').textContent = '';
+    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
   /* Events */
@@ -268,7 +276,7 @@
      un botón que arranca en el nivel que toque por el progreso, como en
      el Reloj. */
   $('#btnStart').addEventListener('click', function () { startRound(levelFromProgress()); });
-  btnNext.addEventListener('click', goNext);
+  
 
 
   paintStars();

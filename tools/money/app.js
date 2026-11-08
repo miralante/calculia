@@ -249,7 +249,11 @@
      Screens and flow
      ============================================================ */
 
-  var show = App.screenSwitch([screenMenu, screenGame, screenEnd]);
+  function show(screen) {
+    [screenMenu, screenGame, screenEnd].forEach(function (p) {
+      p.classList.toggle('hidden', p !== screen);
+    });
+  }
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
   /* ---- Levels of an activity (now automatic via levelFromProgress) ---- */
