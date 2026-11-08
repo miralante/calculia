@@ -12,11 +12,17 @@
      toolId:      the storage key (TOOL_ID),
      progress():  the activity's progress object,
      starsEl():   the element that shows the star count,
-     activity():  the current activity definition (needs .levels and .id),
+     activity():  the current activity definition (needs .levels and .id);
+                  only read when the summary names {activity}
      roundCorrect(): correct answers in the round that just ended,
      screenEnd(): the end-of-round screen element,
      show(el):    shows one screen and hides the others
    }
+
+   endRound(options) takes what differs between activities, all optional:
+     summaryKey:   the summary string (default 'endSummary'),
+     celebrateKey: the title of the celebration (default 'core.roundComplete'),
+     values:       more {placeholders} for the summary, { name: value }.
    ============================================================ */
 (function () {
   'use strict';
@@ -47,7 +53,8 @@
     }
 
     // Closes a round: counts it, saves, shows the end screen with its summary.
-    function endRound() {
+    function endRound(options) {
+      var opts = options || {};
       var progress = host.progress();
       progress.completedRounds = (progress.completedRounds || 0) + 1;
       save();
@@ -65,7 +72,7 @@
         }
         summaryEl.textContent = text;
       }
-      App.feedback.celebrate(App.i18n.t('core.roundComplete'));
+      App.feedback.celebrate(App.i18n.t(opts.celebrateKey || 'core.roundComplete'));
     }
 
     return {
