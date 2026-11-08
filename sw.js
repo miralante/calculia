@@ -14,7 +14,7 @@
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
-var VERSION = 'calculia-v416';
+var VERSION = 'calculia-v417';
 
 var FILES = [
   './',
@@ -456,6 +456,9 @@ var FILES = [
   './tools/roman-numerals/strings.es.js',
   './tools/roman-numerals/strings.en.js',
   './tools/roman-numerals/styles.css',
+  './tools/roman-numerals/screens-carousel.js',
+  './tools/roman-numerals/screens-famous.js',
+  './tools/roman-numerals/screens-reminder.js',
   './tools/stories/',
   './tools/stories/app.js',
   './tools/stories/data.js',
