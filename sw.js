@@ -14,7 +14,7 @@
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
-var VERSION = 'calculia-v390';
+var VERSION = 'calculia-v391';
 
 var FILES = [
   './',
@@ -117,6 +117,9 @@ var FILES = [
   './tools/fractions-measures/strings.es.js',
   './tools/fractions-measures/strings.en.js',
   './tools/fractions-measures/styles.css',
+  './tools/fractions-measures/generators.js',
+  './tools/fractions-measures/helpers.js',
+  './tools/fractions-measures/intro.js',
   './tools/lines/',
   './tools/lines/app.js',
   './tools/lines/data.js',
