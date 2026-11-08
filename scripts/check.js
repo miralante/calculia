@@ -123,14 +123,14 @@ function listJs(dir) {
   return result;
 }
 
-/* The sections live in scripts/checks/: structure, strings, catalog, content and assets.
+/* The sections live in scripts/checks/: structure, strings, catalog, content, assets and design.
    Each one adds to ctx.checks and ctx.failures; the report below prints the totals. */
 var ctx = {
   fs: fs, path: path, vm: vm, ROOT: ROOT, failures: failures, largeFileWarnings: largeFileWarnings,
   checks: 0, rel: rel, listJs: listJs, landingFiles: landingFiles, landingFilesByExt: landingFilesByExt,
   LANDING_FILES: LANDING_FILES, execFileSync: execFileSync, execFile: execFile, shared: {}, parseJobs: null
 };
-['structure', 'strings', 'catalog', 'content', 'assets'].forEach(function (name) {
+['structure', 'strings', 'catalog', 'content', 'assets', 'design'].forEach(function (name) {
   require('./checks/' + name + '.js')(ctx);
 });
 
