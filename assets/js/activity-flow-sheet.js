@@ -102,9 +102,36 @@
       return (menu ? App.activityFlow.menuHtml + '\n' : '') + sheetHtml(ctx.config);
     },
 
+    /* Without real-life examples (skipReal) the slides lead straight to the sheet, and the
+       button under them says so. */
+    init: function (ctx) {
+      if (ctx.config.skipReal) {
+        var start = $('#introContinue');
+        start.textContent = t('ui.startTest');
+        start.className = 'btn';
+      }
+    },
+
+    /* Returns true when the click was taken here. */
+    introContinue: function (ctx) {
+      if (!ctx.config.skipReal) return false;
+      ctx.afterReal();
+      return true;
+    },
+
     /* A pick of the menu starts that sheet. */
     pick: function (ctx, sheetDef) {
       startSheet(ctx, sheetDef, levelOf(ctx, sheetDef));
+    },
+
+    /* The test starts here: the menu of sheets, or the first one. */
+    startTest: function (ctx) {
+      if (App.activityFlow.hasMenu(ctx.config)) {
+        ctx.openMenu();
+      } else {
+        var sheets = sheetsOf(ctx.config);
+        startSheet(ctx, sheets[0], levelOf(ctx, sheets[0]));
+      }
     },
 
     bind: function (ctx) {
@@ -130,13 +157,6 @@
           ctx.progress.roundsByActivity[id] = (ctx.progress.roundsByActivity[id] || 0) + 1;
           ctx.save();
           ctx.paintStars();
-        }
-      });
-      $('#realContinue').addEventListener('click', function () {
-        if (menu) {
-          ctx.openMenu();
-        } else {
-          startSheet(ctx, sheets[0], levelOf(ctx, sheets[0]));
         }
       });
       $('#btnCheck').addEventListener('click', function () { s.sheet.check(); });

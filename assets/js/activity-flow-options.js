@@ -27,10 +27,20 @@
                      before its button (optional)
      endEmoji        { text, cls } for the closing screen (optional; default
                      🎉 with cls emoji-large)
+     typedAnswers    true: a question may ask for a typed number instead of
+                     options (needs socratic): question.input = { answer }
+     audio           true: a question may be read aloud (question.speak), with a
+                     «Escuchar otra vez» button to hear it again
+     introContinueKey i18n key of the button after the slides when skipReal
+                     (optional; default ui.startTest)
    A question is { prompt, hint, options, explanation } and may carry visual
-   (the HTML of a picture, shown when socratic or testVisuals), visualAria,
-   legend (a line under the picture). options is [{ html, aria, correct }].
+   (the HTML of a picture, shown when socratic or testVisuals; no picture hides
+   its box), visualAria, legend (a line under the picture). options is
+   [{ html, aria, correct }]. Instead of options: input { answer } (typedAnswers),
+   and speak (the text read aloud, audio). explanationVisual is the picture of
+   the explanation after a right answer (socratic).
    buildRound(def, level) receives the menu entry and its level (if any).
+   The mode can also be 'gallery' (activity-flow-gallery.js): slides only, no test.
 
    Texts: ui.right, ui.roundDone, btnMenu, core.roundComplete, ui.review
    (review 'back'), ui.reviewRule and ui.backToPractice (review 'rule'),
@@ -70,6 +80,7 @@
       html.push('  <button type="button" class="btn btn-secondary" id="testBack" data-i18n="ui.review">← Repasar la explicación</button>');
     }
     html.push(
+      '  <p class="round-header hidden" id="chainBanner" aria-live="polite"></p>',
       '  <div class="progress-bar">',
       '    <div class="progress-fill" id="progressFill"></div>',
       '    <span class="progress-text" id="progressText">0 / 0</span>',
@@ -79,14 +90,23 @@
     );
     if (visual) html.push('    <div class="' + (config.testVisualClass || 'fac-visual') + '" id="testVisual"></div>');
     html.push('    <p class="legend hidden" id="testLegend"></p>');
+    if (config.audio) html.push('    <button type="button" class="btn btn-secondary hidden" id="testReplay" data-i18n="ui.replay"></button>');
     html.push('    <p class="step-label hidden" id="stepLabel" aria-live="polite"></p>');
-    html.push(
-      '    <div class="options-row" id="testOptions"></div>',
-      '    <p class="feedback" id="feedback" aria-live="polite"></p>'
-    );
+    html.push('    <div class="options-row" id="testOptions"></div>');
+    if (config.typedAnswers) {
+      html.push(
+        '    <div class="input-row hidden" id="testInputRow">',
+        '      <label class="visually-hidden" for="testInput" data-i18n="ui.typeLabel"></label>',
+        '      <input type="number" id="testInput" min="0" inputmode="numeric" autocomplete="off">',
+        '      <button type="button" class="btn" id="testCheck" data-i18n="ui.check"></button>',
+        '    </div>'
+      );
+    }
+    html.push('    <p class="feedback" id="feedback" aria-live="polite"></p>');
     if (config.socratic) {
       html.push('    <div class="explanation hidden" id="explanationWrap">',
         '      <p id="explanation" aria-live="polite"></p>',
+      '      <div class="explanation-visual" id="explanationVisual"></div>',
         '    </div>');
     }
     html.push('  </article>');
@@ -107,6 +127,7 @@
       html.push('  <p class="' + note.cls + '" data-i18n="' + note.key + '"></p>');
     });
     html.push(
+      '  <button type="button" class="btn hidden" id="endNextStep" data-i18n="ui.nextStep">Siguiente paso →</button>',
       '  <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>',
       '</section>'
     );
@@ -127,11 +148,38 @@
 
   /* The round is built for the activity picked from the menu (or for the activity
      itself), at the level its progress has reached. */
+  /* A menu entry can be a chain of steps (the sub-levels of one group): the round goes from one step to
+     the next without the menu, and the banner says where the person is. */
+  function paintChainBanner(ctx) {
+    var c = ctx.mode_state.chain;
+    var banner = $('#chainBanner');
+    if (!c) {
+      banner.classList.add('hidden');
+      banner.textContent = '';
+      return;
+    }
+    banner.textContent = fill(t('ui.chainStep'), { n: c.index + 1, total: c.steps.length, name: ctx.current.name() });
+    banner.classList.remove('hidden');
+  }
+
+  function hasNextStep(ctx) {
+    var c = ctx.mode_state.chain;
+    return !!c && c.index < c.steps.length - 1;
+  }
+
+  function nextStep(ctx) {
+    var c = ctx.mode_state.chain;
+    c.index += 1;
+    ctx.current = c.steps[c.index];
+    startRound(ctx);
+  }
+
   function startRound(ctx) {
     var s = ctx.mode_state;
     var config = ctx.config;
     var def = ctx.current || config;
     var level = ctx.current ? App.activityFlow.levelOf(ctx, ctx.current) : null;
+    paintChainBanner(ctx);
     App.utils.drawRoundReset();
     s.round = config.buildRound(def, level).map(function (type, i) { return config.makeQuestion(type, i, def); });
     s.qIndex = 0;
@@ -190,9 +238,15 @@
     var total = s.inReinforce ? s.replay.length : s.round.length;
     $('#progressFill').style.width = ((position / total) * 100) + '%';
     $('#progressText').textContent = (position + 1) + ' / ' + total;
+    if (config.audio) {
+      /* A spoken question is heard as it comes up, and can be heard again. */
+      $('#testReplay').classList.toggle('hidden', !s.question.speak);
+      speak(s.question.speak);
+    }
     if (socratic || config.testVisuals) {
       var visualEl = $('#testVisual');
       visualEl.innerHTML = s.question.visual || '';
+      visualEl.classList.toggle('hidden', !s.question.visual);
       if (s.question.visualAria) {
         visualEl.setAttribute('role', 'img');
         visualEl.setAttribute('aria-label', s.question.visualAria);
@@ -204,12 +258,28 @@
     renderStep(ctx);
   }
 
+  /* Reads a text aloud, when the device can (App.tts). */
+  function speak(text) {
+    if (text && App.tts) App.tts.speak(text);
+  }
+
+  /* The typed answer box: shown for a question that asks for a number, cleared for the next one. */
+  function paintTyped(on) {
+    var input = $('#testInput');
+    $('#testInputRow').classList.toggle('hidden', !on);
+    input.value = '';
+    input.disabled = false;
+    $('#testCheck').disabled = false;
+    if (on) input.focus();
+  }
+
   /* The step on screen: its prompt, its options and the step label (a question of one step has none). */
   function renderStep(ctx) {
     var s = ctx.mode_state;
     var socratic = ctx.config.socratic === true;
     var view = viewOf(s);
     var steps = s.question.steps;
+    var typed = !!ctx.config.typedAnswers && !!view.input;
     s.answered = false;
     s.attempts = 0;
     $('#testPrompt').textContent = view.prompt;
@@ -221,13 +291,16 @@
     label.classList.toggle('hidden', !steps || steps.length < 2);
     if (socratic) {
       $('#explanation').textContent = '';
+      $('#explanationVisual').innerHTML = '';
       $('#explanationWrap').classList.add('hidden');
     }
     $('#feedback').textContent = '';
     $('#feedback').className = 'feedback';
     var box = $('#testOptions');
     box.innerHTML = '';
-    view.options.forEach(function (option) {
+    box.classList.toggle('hidden', typed);
+    if (ctx.config.typedAnswers) paintTyped(typed);
+    if (!typed) view.options.forEach(function (option) {
       var button = document.createElement('button');
       button.type = 'button';
       button.className = 'btn option-btn';
@@ -278,15 +351,40 @@
      the second shows the explanation; a right answer shows the explanation at
      once. Every right answer is a star; only the first try counts for the round. */
   function answerSocratic(ctx, option, button) {
+    judgeSocratic(ctx, option.correct, option.aria || '', button, optionButtons(), null);
+  }
+
+  /* The typed number: checked like a choice. An empty box asks for a number first. */
+  function checkTyped(ctx) {
+    var s = ctx.mode_state;
+    if (s.answered) return;
+    var input = $('#testInput');
+    var raw = input.value.trim();
+    var value = parseInt(raw, 10);
+    if (raw === '' || isNaN(value) || value < 0) {
+      $('#feedback').textContent = t('ui.typeFirst');
+      $('#feedback').className = 'feedback';
+      return;
+    }
+    judgeSocratic(ctx, value === viewOf(s).input.answer, String(value), null, [input, $('#testCheck')], function () {
+      input.value = '';
+      input.focus();
+    });
+  }
+
+  /* The judgement of one try, for a choice and for a typed number alike. A right try is a star and
+     shows the explanation at once. A wrong one shows the hint, then the explanation, and locks the
+     controls until «Entendido» (which runs onAck). marker is the button picked, or null when typed. */
+  function judgeSocratic(ctx, correct, chosen, marker, lockables, onAck) {
     var s = ctx.mode_state;
     if (s.answered) return;
     var feedback = $('#feedback');
     var explanation = $('#explanation');
     var wrap = $('#explanationWrap');
-    if (option.correct) {
+    if (correct) {
       s.answered = true;
-      button.classList.add('correct');
-      optionButtons().forEach(function (b) { b.disabled = true; });
+      if (marker) marker.classList.add('correct');
+      lockables.forEach(function (el) { el.disabled = true; });
       App.feedback.success(feedback);
       ctx.progress.stars += 1;
       s.solved += 1;
@@ -294,6 +392,7 @@
       ctx.save();
       ctx.paintStars();
       explanation.textContent = t('ui.rightPrefix') + s.question.explanation;
+      $('#explanationVisual').innerHTML = s.question.explanationVisual || '';
       wrap.classList.remove('hidden');
       $('#btnNext').classList.remove('hidden');
       $('#btnNext').focus();
@@ -301,15 +400,18 @@
     }
     s.attempts += 1;
     if (ctx.config.reinforce && !s.inReinforce) App.reinforce.add('q' + s.qIndex, s.question);
-    button.classList.add('encourage');
-    button.disabled = true;
+    if (marker) {
+      marker.classList.add('encourage');
+      marker.disabled = true;
+    }
     App.feedback.encourage(feedback);
     explanation.textContent = s.attempts === 1
-      ? t('ui.hintPrefix') + App.feedback.hintText(s.question.hint, option.aria || '')
+      ? t('ui.hintPrefix') + App.feedback.hintText(s.question.hint, chosen)
       : t('ui.wrongPrefix') + s.question.explanation;
+    $('#explanationVisual').innerHTML = s.question.explanationVisual || '';
     wrap.classList.remove('hidden');
-    /* Locks the other options until «Entendido», so the hint is read before the next try. */
-    App.feedback.lockUntilAck(optionButtons(), wrap);
+    /* Locks the controls until «Entendido», so the hint is read before the next try. */
+    App.feedback.lockUntilAck(lockables, wrap, onAck);
   }
 
   function nextQuestion(ctx) {
@@ -350,6 +452,10 @@
       progress.roundsByActivity[ctx.current.id] = (progress.roundsByActivity[ctx.current.id] || 0) + 1;
     }
     ctx.save();
+    /* With a next step in the chain, the closing screen leads to it; otherwise back to the start. */
+    var more = hasNextStep(ctx);
+    $('#endNextStep').classList.toggle('hidden', !more);
+    $('#endBackToStart').classList.toggle('hidden', more);
     /* A round's own summary counts every right answer, the replays included; the default counts the first tries. */
     $('#endSummary').textContent = fill(t(ctx.config.endSummaryKey || 'ui.roundDone'), {
       n: ctx.config.endSummaryKey ? s.solved : s.roundRight, total: s.round.length, stars: progress.stars,
@@ -371,11 +477,13 @@
     },
 
     /* Wires the test stage. The stages before it are wired by the core. */
+    /* The test starts here: the menu of activities, or the first round. */
+    startTest: function (ctx) {
+      if (hasMenu(ctx.config) && !menuFirst(ctx.config)) ctx.openMenu(); else startRound(ctx);
+    },
+
     bind: function (ctx) {
       var config = ctx.config;
-      $('#realContinue').addEventListener('click', function () {
-        if (hasMenu(config) && !menuFirst(config)) ctx.openMenu(); else startRound(ctx);
-      });
       if (menuFirst(config)) {
         $('#testBack').addEventListener('click', function () { ctx.openMenu(); });
         $('#newRound').addEventListener('click', function () { startRound(ctx); });
@@ -389,7 +497,17 @@
       } else if (config.review !== 'none') {
         $('#testBack').addEventListener('click', function () { reviewIntro(ctx); });
       }
+      if (config.typedAnswers) {
+        $('#testCheck').addEventListener('click', function () { checkTyped(ctx); });
+        $('#testInput').addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); checkTyped(ctx); }
+        });
+      }
+      if (config.audio) {
+        $('#testReplay').addEventListener('click', function () { speak(ctx.mode_state.question.speak); });
+      }
       $('#btnNext').addEventListener('click', function () { nextQuestion(ctx); });
+      $('#endNextStep').addEventListener('click', function () { nextStep(ctx); });
       $('#endBackToStart').addEventListener('click', function () {
         location.href = config.backHref || '../../';
       });
@@ -400,7 +518,7 @@
       /* Without real-life examples the slides lead straight to the test. */
       if (ctx.config.skipReal) {
         var start = $('#introContinue');
-        start.textContent = t('ui.startTest');
+        start.textContent = t(ctx.config.introContinueKey || 'ui.startTest');
         start.className = 'btn';
       }
     },
@@ -418,8 +536,12 @@
     /* A pick of the menu. With the menu first it shows the slides of that activity;
        after the examples it starts the test at once. */
     pick: function (ctx, def) {
-      ctx.current = def;
-      if (!menuFirst(ctx.config)) {
+      /* An entry with its own flow (open) takes over the menu: the activity starts its own screens. */
+      if (def.open) { def.open(ctx); return; }
+      ctx.mode_state.chain = def.steps ? { steps: def.steps, index: 0 } : null;
+      ctx.current = def.steps ? def.steps[0] : def;
+      /* No slides of its own (no intro): the round starts at once, as after the examples. */
+      if (!menuFirst(ctx.config) || !def.intro) {
         startRound(ctx);
         return;
       }
@@ -436,6 +558,13 @@
        goes back to the same question, and not to the next stage. */
     introContinue: function (ctx) {
       var s = ctx.mode_state;
+      /* An activity can send the slides somewhere else (a screen of its own) once they are read. */
+      if (s.afterIntro) {
+        var go = s.afterIntro;
+        s.afterIntro = null;
+        go();
+        return true;
+      }
       if (ctx.config.skipReal) { startRound(ctx); return true; }
       if (!(isRule(ctx.config) && s.reviewing)) return false;
       s.reviewing = false;

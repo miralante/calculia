@@ -20,7 +20,7 @@
 
    The activity passes its configuration to setup(config):
      toolId          storage key and tool id
-     test            'options' (default) or 'sheet'
+     test            'options' (default), 'sheet', or 'gallery' (slides only, no test)
      intro           explanation slides, each { visual: spec }
      real            real-life examples, each { visual: spec }
      visualHtml      function(spec) -> HTML of one explanation drawing
@@ -36,7 +36,7 @@
                      to the key real.<n>)
      introHeading    function() -> the line above the slides (optional;
                      without it there is no line)
-     introCard       function() -> { title, text }: a card above the slides
+     introCard       function() -> { title, text, html? }: a card above the slides (html: optional markup under the text)
                      (optional)
      slideProgress   false hides the progress bars of the slides
                      (optional; default true)
@@ -148,7 +148,7 @@
     '<section id="screenIntro" class="stack">',
     '  <div class="row center-row" id="introHeadingRow"><p class="instruction" id="introHeading"></p></div>',
     '  <h2 class="activity-title hidden" id="introActivityTitle"></h2>',
-    '  <div class="card reference-card stack intro-card" id="introCard"><h2 class="reference-title" id="introCardTitle"></h2><p class="reference-text" id="introCardText"></p></div>',
+    '  <div class="card reference-card stack intro-card" id="introCard"><h2 class="reference-title" id="introCardTitle"></h2><p class="reference-text" id="introCardText"></p><div class="intro-card-html" id="introCardHtml"></div></div>',
     '  <div class="progress-bar" id="introProgress" role="progressbar" aria-valuemin="0"><div class="progress-fill" id="introProgressFill"></div></div>',
     '  <article class="card stack gallery-card">',
     '    <div class="ops-visual" id="introVisual"></div>',
@@ -177,6 +177,18 @@
     '    </div>',
     '  </article>',
     '  <button type="button" class="btn" id="realContinue" data-i18n="ui.startTest">Empezar a practicar →</button>',
+    '</section>'
+  ].join('\n');
+
+  /* The reminder (optional: config.reminder): the rule, read once more between the real-life examples
+     and the test. Its title, body and button text come from the activity. */
+  var REMINDER = [
+    '<section id="screenReminder" class="hidden stack">',
+    '  <div class="card reference-card stack">',
+    '    <h2 class="reference-title" id="reminderTitle"></h2>',
+    '    <div class="reminder-body" id="reminderBody"></div>',
+    '  </div>',
+    '  <button type="button" class="btn" id="reminderNext"></button>',
     '</section>'
   ].join('\n');
 
@@ -233,6 +245,8 @@
     var label = config.introVisualAria ? config.introVisualAria(i) : null;
     $('#introVisual').setAttribute('aria-label', label || t('ui.visualAria'));
     if (ctx.slideBars) paintBar(ctx, '#introProgress', '#introProgressFill', i, src.intro.length);
+    /* A mode can add to the slide (the gallery shows its last button only on the last slide). */
+    if (ctx.mode.paintIntro) ctx.mode.paintIntro(ctx);
   }
 
   function paintReal(ctx) {
@@ -256,7 +270,7 @@
     levelOf: levelOf,
 
     setup: function (config) {
-      var mode = config.test === 'sheet' ? modes.sheet : modes.options;
+      var mode = modes[config.test === 'sheet' || config.test === 'gallery' ? config.test : 'options'];
       var TOOL_ID = config.toolId;
 
       var progress = App.storage.get(TOOL_ID);
@@ -277,7 +291,7 @@
         /* The activity picked from the menu (null until one is picked, or when there is no menu). */
         current: null,
         slideBars: config.slideProgress !== false,
-        screens: mode.screens(config),
+        screens: mode.screens(config).concat(config.reminder ? ['#screenReminder'] : []).concat(config.extraScreens || []),
         save: function () { App.storage.set(TOOL_ID, progress); },
         paintStars: function () { $('#stars').textContent = '⭐ ' + progress.stars; },
         show: function (screen) {
@@ -291,6 +305,17 @@
           ctx.state.real = 0;
           paintReal(ctx);
           ctx.show('#screenReal');
+        },
+        /* After the real-life examples: the reminder when the activity has one, else the test. */
+        goReminder: function () {
+          var r = config.reminder;
+          $('#reminderTitle').textContent = r.title();
+          $('#reminderBody').innerHTML = r.html();
+          $('#reminderNext').textContent = r.next();
+          ctx.show('#screenReminder');
+        },
+        afterReal: function () {
+          if (config.reminder) ctx.goReminder(); else ctx.mode.startTest(ctx);
         }
       };
 
@@ -300,13 +325,15 @@
 
   function init(ctx) {
     var config = ctx.config;
-    $('#activity').innerHTML = STAGES + '\n' + ctx.mode.markup(ctx);
+    $('#activity').innerHTML = STAGES + '\n' + (config.reminder ? REMINDER + '\n' : '') + ctx.mode.markup(ctx) +
+      (config.extraMarkup ? '\n' + config.extraMarkup : '');
     if (config.introHeading) $('#introHeading').textContent = config.introHeading();
     else removeNode('#introHeadingRow');
     if (config.introCard) {
       var card = config.introCard();
       $('#introCardTitle').textContent = card.title;
       $('#introCardText').textContent = card.text;
+      $('#introCardHtml').innerHTML = card.html || '';
       $('#introCard').classList.remove('hidden');
     } else {
       removeNode('#introCard');
@@ -328,6 +355,10 @@
       ctx.state.intro = (ctx.state.intro + 1) % source(ctx).intro.length;
       paintIntro(ctx);
     });
+    $('#realContinue').addEventListener('click', function () { ctx.afterReal(); });
+    if (ctx.config.reminder) {
+      $('#reminderNext').addEventListener('click', function () { ctx.mode.startTest(ctx); });
+    }
     $('#introContinue').addEventListener('click', function () {
       /* A mode can take the button for itself (the rule reopened from the test). */
       if (ctx.mode.introContinue && ctx.mode.introContinue(ctx)) return;

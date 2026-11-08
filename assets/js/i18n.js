@@ -65,7 +65,14 @@
         rightPrefix: '',
         roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.',
         reinforceTitle: 'Refuerzo',
-        reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.'
+        reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
+        chainStep: 'Paso {n} de {total}: {name}',
+        nextStep: 'Siguiente paso →',
+        replay: '🔊 Escuchar otra vez',
+        typeLabel: 'Escribe el resultado',
+        typeFirst: 'Escribe un número antes de comprobar.',
+        finish: 'Terminar →',
+        galleryEnd: 'Has repasado todo. Ahora tienes {stars} estrellas.',
       }
     },
     en: {
@@ -111,7 +118,14 @@
         rightPrefix: '',
         roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} stars.',
         reinforceTitle: 'Practice',
-        reinforceIntro: 'Let us repeat the {n} questions you got wrong until you get them all right.'
+        reinforceIntro: 'Let us repeat the {n} questions you got wrong until you get them all right.',
+        chainStep: 'Step {n} of {total}: {name}',
+        nextStep: 'Next step →',
+        replay: '🔊 Listen again',
+        typeLabel: 'Type the answer',
+        typeFirst: 'Type a number before checking.',
+        finish: 'Finish →',
+        galleryEnd: "You have gone through everything. Now you have {stars} stars.",
       }
     }
   };

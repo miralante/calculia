@@ -335,6 +335,9 @@ The configuration keys the engine reads:
 | `testVisuals`, `testVisualClass` | A picture in each test question |
 | `endSummaryKey`, `endNotes`, `endEmoji` | Summary text, extra texts and emoji of the closing screen |
 | `prepareProgress`, `slideProgress`, `backHref`, `menuBackKey` | Progress conversion, progress bars, back link, menu label |
+| `typedAnswers`, `audio`, `introContinueKey` | Options of the test: a typed number instead of choices (`question.input = { answer }`), a question read aloud with a button to hear it again (`question.speak`), and the key of the button after the slides when there are no real-life examples (`skipReal`) |
+| `test: 'gallery'` | Slides only, with no test: the last slide carries the button that ends the activity, and the closing screen gives one star per page. A mode can paint a slide further (`paintIntro`), and an activity can send the slides to its own screen once they are read (`mode_state.afterIntro`, read by the options mode) |
+| `extraMarkup`, `extraScreens`, entry `open(ctx)` | An activity’s own screens: markup appended to the page, screens the engine hides and shows, and a menu entry that starts its own flow |
 
 Which family-A variant fits which activity:
 
@@ -769,6 +772,7 @@ in §2.1 above are the canonical rationale).
 | `storage.js` | `App.storage.{get, set, remove, progressWith}` | only pages that read or write `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | only the activity's `app.js` |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | activities that keep their own round loop (not `App.activityFlow`) |
+| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | the `test: 'gallery'` mode of the three-stage flow: slides only, the closing screen, one star per page |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | the activities that show a row of dots or a shuffled Yes / No (divisibility-test, multiples, prime-composite) |
 | `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | the five time activities, date-format and the sheet mode of the activity flow (the whole round on one sheet, checked at once) |
 | `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}`, `App.classicPainter(host)` → `{startRound, paintQuestion, render}` | the classic one-question activities (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): the round state object and the shared answer, hint, next step, menu, and the start and painting of a question (geometry, operations and percent so far) |

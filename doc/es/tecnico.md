@@ -348,6 +348,9 @@ Las claves de configuración que lee el motor:
 | `testVisuals`, `testVisualClass` | Un dibujo en cada pregunta del test |
 | `endSummaryKey`, `endNotes`, `endEmoji` | Texto del resumen, textos extra y emoji de la pantalla final |
 | `prepareProgress`, `slideProgress`, `backHref`, `menuBackKey` | Conversión del progreso, barras de progreso, enlace de volver, etiqueta del menú |
+| `typedAnswers`, `audio`, `introContinueKey` | Opciones del test: un número escrito en vez de opciones (`question.input = { answer }`), una pregunta leída en voz alta con un botón para oírla otra vez (`question.speak`), y la clave del botón tras las diapositivas cuando no hay ejemplos de la vida real (`skipReal`) |
+| `test: 'gallery'` | Solo diapositivas, sin test: la última diapositiva lleva el botón que termina la actividad, y la pantalla final da una estrella por página. Un modo puede pintar más una diapositiva (`paintIntro`), y una actividad puede mandar las diapositivas a su propia pantalla al leerlas (`mode_state.afterIntro`, que lee el modo de opciones) |
+| `extraMarkup`, `extraScreens`, `open(ctx)` de la entrada | Pantallas propias de una actividad: marcado añadido a la página, pantallas que el motor oculta y muestra, y una entrada del menú que inicia su propio flujo |
 
 Qué variante de la familia A encaja con cada actividad:
 
@@ -799,6 +802,7 @@ justificación canónica).
 | `storage.js` | `App.storage.{get, set, remove, progressWith}` | solo páginas que leen o escriben `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | solo el `app.js` de la actividad |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | actividades que llevan su propio bucle de ronda (no `App.activityFlow`) |
+| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | el modo `test: 'gallery'` del flujo de tres etapas: solo diapositivas, la pantalla final y una estrella por página |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | las actividades que muestran una fila de puntos o un Sí / No barajado (divisibility-test, multiples, prime-composite) |
 | `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | las cinco actividades de tiempo, date-format y el modo hoja del flujo de actividad (toda la ronda en una hoja, comprobada de una vez) |
 | `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}`, `App.classicPainter(host)` → `{startRound, paintQuestion, render}` | las actividades clásicas de una pregunta (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): el objeto de estado de la ronda, la respuesta, la pista, el siguiente paso, el menú y el inicio y pintado de una pregunta compartidos (de momento geometry, operations y percent) |
