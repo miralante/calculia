@@ -268,7 +268,7 @@
      un botón que arranca en el nivel que toque por el progreso, como en
      el Reloj. */
   $('#btnStart').addEventListener('click', function () { startRound(levelFromProgress()); });
-  
+  btnNext.addEventListener('click', goNext);
 
 
   paintStars();

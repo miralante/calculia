@@ -219,6 +219,7 @@
   /* Events */
   var elRepeatBtn = $('#repeatBtn');
   if (elRepeatBtn) elRepeatBtn.addEventListener('click', startRound);
+  btnNext.addEventListener('click', goNext);
 
   /* Start the game on load */
   startRound();
