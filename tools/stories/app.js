@@ -138,8 +138,11 @@
       attempts += 1;
       var respuestaTrasPista = attempts > 1;
       showHint(btn);
-      /* Reveal the explanation only after the hint is acknowledged. */
-      btn.disabled = true;
+      /* Reveal the explanation only after the hint is acknowledged.
+         The tapped panel is not disabled for good: lockUntilAck locks it
+         with the rest and frees it on "Entendido". Otherwise a panel that
+         was tapped too early could be the only one left for its own slot,
+         and the story could never be finished. */
       btn.classList.add('encourage');
       App.feedback.encourage(feedbackEl);
       App.feedback.lockUntilAck(App.utils.$$('.vineta', availableEl), explanationWrap, function () { if (respuestaTrasPista) showExplanation(); });
@@ -191,7 +194,9 @@
     if (summaryEl) {
       summaryEl.textContent = App.i18n.t('endSummary')
         .replace('{n}', roundCorrect)
-        .replace('{stars}', progress.stars);
+        .replace('{nWord}', App.i18n.starsWord(roundCorrect))
+        .replace('{stars}', progress.stars)
+        .replace('{starsWord}', App.i18n.starsWord(progress.stars));
     }
     App.feedback.celebrate(App.i18n.t('finalTitulo'));
   }

@@ -172,7 +172,9 @@
     if (summaryEl) {
       summaryEl.textContent = App.i18n.t('endSummary')
         .replace('{n}', roundCorrect)
-        .replace('{stars}', progress.stars);
+        .replace('{nWord}', App.i18n.starsWord(roundCorrect))
+        .replace('{stars}', progress.stars)
+        .replace('{starsWord}', App.i18n.starsWord(progress.stars));
     }
     $('#contexto').textContent = '';
     $('#explanation').textContent = '';
@@ -181,6 +183,7 @@
 
   /* Events */
   btnNext.addEventListener('click', next);
+  $('#btnStart').addEventListener('click', function () { startRound(levelFromProgress()); });
   
 
 

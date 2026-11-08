@@ -59,9 +59,12 @@
   }
 
   var glue = App.activityGlue({
+    toolId: CONFIG.toolId,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
-    show: function (el) { show(el); }
+    screenEnd: function () { return screenEnd; },
+    roundCorrect: function () { return roundCorrect; },
+    show: function (el) { screenGame.classList.add('hidden'); el.classList.remove('hidden'); }
   });
   var paintStars = glue.paintStars;
 
@@ -202,23 +205,14 @@
   }
 
   function endRound() {
-    progress.completedRounds += 1;
-    save();
     paintProgress();
-    screenGame.classList.add('hidden');
-    screenEnd.classList.remove('hidden');
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
-        .replace('{stars}', progress.stars);
-    }
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
+    glue.endRound();
   }
 
   /* Events */
   var elRepeatBtn = $('#repeatBtn');
   if (elRepeatBtn) elRepeatBtn.addEventListener('click', startRound);
+  btnNext.addEventListener('click', goNext);
 
   /* Start the game on load */
   startRound();

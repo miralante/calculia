@@ -244,7 +244,9 @@
 
   /* ---- Render dispatcher ---- */
   function render() {
-    var p = questions[roundIndex];
+    /* currentQ is set while a reinforcement mini-round runs; the normal
+       round paints questions[roundIndex]. */
+    var p = currentQ || questions[roundIndex];
     answered = false;
     attempts = 0;
     feedbackEl.textContent = '';
@@ -562,7 +564,9 @@
     if (summaryEl) {
       summaryEl.textContent = App.i18n.t('endSummary')
         .replace('{n}', roundCorrect)
-        .replace('{stars}', progress.stars);
+        .replace('{nWord}', App.i18n.starsWord(roundCorrect))
+        .replace('{stars}', progress.stars)
+        .replace('{starsWord}', App.i18n.starsWord(progress.stars));
     }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }

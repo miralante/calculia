@@ -263,7 +263,9 @@
     if (summaryEl) {
       summaryEl.textContent = App.i18n.t('endSummary')
         .replace('{n}', roundCorrect)
-        .replace('{stars}', progress.stars);
+        .replace('{nWord}', App.i18n.starsWord(roundCorrect))
+        .replace('{stars}', progress.stars)
+        .replace('{starsWord}', App.i18n.starsWord(progress.stars));
     }
     $('#explanation').textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
@@ -276,6 +278,7 @@
      un botón que arranca en el nivel que toque por el progreso, como en
      el Reloj. */
   $('#btnStart').addEventListener('click', function () { startRound(levelFromProgress()); });
+  btnNext.addEventListener('click', goNext);
   
 
 

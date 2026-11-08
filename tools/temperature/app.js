@@ -369,7 +369,7 @@
     show(screenEnd);
     var summaryEl = $('#endSummary');
     if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('gen.endSummary').replace('{stars}', progress.stars);
+      summaryEl.textContent = App.i18n.t('gen.endSummary').replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
     }
     $('#contexto').textContent = '';
     $('#explanation').textContent = '';
