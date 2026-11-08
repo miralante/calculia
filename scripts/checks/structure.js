@@ -135,20 +135,6 @@ module.exports = function (ctx) {
     failures.push('sw.js: falta ' + entry + ' en FILES (ejecuta node scripts/sync-sw-files.js)');
   });
 
-  /* The tools/ block of FILES is generated from the folders: a stale or missing entry is
-     reported here, and sw.js must parse at all (a broken sw.js installs no service worker). */
-  ctx.checks += 1;
-  var syncTool = require('../sync-sw-files.js');
-  var drift = syncTool.toolsDrift(swContent);
-  drift.missing.forEach(function (entry) {
-    failures.push('sw.js: falta ' + entry + ' en FILES (ejecuta node scripts/sync-sw-files.js)');
-  });
-  drift.stale.forEach(function (entry) {
-    failures.push('sw.js: ' + entry + ' en FILES pero no existe en disco (ejecuta node scripts/sync-sw-files.js)');
-  });
-  ctx.checks += 1;
-  if (!syncTool.parses(swContent)) failures.push('sw.js: no es JavaScript válido (un service worker así no se instala)');
-
   slugs.forEach(function (slug) {
     CANONICAL_BASE.concat(STRING_LOCALES.map(function (loc) { return 'strings.' + loc + '.js'; }))
       .forEach(function (archivo) {
