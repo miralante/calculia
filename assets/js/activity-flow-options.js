@@ -330,7 +330,8 @@
     if (option.correct) {
       s.answered = true;
       button.classList.add('correct');
-      feedback.textContent = t('ui.right') + ' ' + viewOf(s).explanation;
+      var rightExplanation = viewOf(s).explanation;
+      feedback.textContent = t('ui.right') + (rightExplanation ? ' ' + rightExplanation : '');
       feedback.className = 'feedback success';
       /* A question scores once, at its last step, and only if no step was missed. */
       if (isLastStep(s)) {
@@ -400,7 +401,7 @@
       if (s.attempts === 0) s.roundRight += 1;
       ctx.save();
       ctx.paintStars();
-      explanation.textContent = t('ui.rightPrefix') + s.question.explanation;
+      explanation.textContent = t('ui.rightPrefix') + (s.question.explanation || '');
       $('#explanationVisual').innerHTML = s.question.explanationVisual || '';
       wrap.classList.remove('hidden');
       $('#btnNext').classList.remove('hidden');
