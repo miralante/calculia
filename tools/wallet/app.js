@@ -38,8 +38,12 @@
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
-    show: function (el) { show(el); }
+    screenEnd: function () { return $('#screenEnd'); },
+    roundCorrect: function () { return lastCorrect; },
+    show: function (el) { show(el.id); }
   });
+  /* Correct answers in the round that just ended, for the summary. */
+  var lastCorrect = 0;
   var save = glue.save, paintStars = glue.paintStars;
   /* ============================================================
      Generic money quiz runner
@@ -187,18 +191,10 @@
 
   function endRound(correct) {
     var cfg = currentConfig();
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    save();
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t(cfg.summary)
-        .replace('{n}', correct)
-        .replace('{t}', localeData().perRound);
-    }
+    lastCorrect = correct;
     $('#contexto').textContent = '';
     $('#explanation').textContent = '';
-    show('screenEnd');
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
+    glue.endRound({ summaryKey: cfg.summary, values: { t: localeData().perRound } });
   }
 
   /* ============================================================
