@@ -57,6 +57,9 @@
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
+    activity: function () { return activity; },
+    screenEnd: function () { return screenEnd; },
+    roundCorrect: function () { return round.roundCorrect; },
     show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars;
@@ -342,19 +345,8 @@
      every question. The generic line is only the fallback, for a question
      that forgot to bring its own. */
   function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
     progress.rounds[activity.id] = roundsDone(activity.id) + 1;
-    save();
-    show(screenEnd);
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', round.roundCorrect)
-        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
-        .replace('{stars}', progress.stars);
-    }
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
-
+    glue.endRound();
   }
 
   /* The comma exercise lives in comma.js; the page gives it what it needs. */
