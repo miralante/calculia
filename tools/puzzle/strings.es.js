@@ -9,7 +9,7 @@
   App.i18n.register({
     title: '🧩 Puzzle',
     instruction: 'Mira el modelo. Toca una pieza y después toca su sitio en el tablero.',
-    levelsTitle: 'Elige una actividad',
+    startButton: 'Empezar a practicar →',
     modelLabel: 'Modelo',
     boardLabel: 'Tu tablero',
     piecesLabel: 'Piezas',

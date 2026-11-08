@@ -173,6 +173,7 @@
 
   /* Events */
   btnNext.addEventListener('click', next);
+  $('#btnStart').addEventListener('click', function () { startRound(levelFromProgress()); });
   
 
 

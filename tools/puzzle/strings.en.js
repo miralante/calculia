@@ -9,7 +9,7 @@
   App.i18n.register({
     title: '🧩 Puzzle',
     instruction: 'Look at the model. Tap a piece and then tap where it goes on the board.',
-    levelsTitle: 'Choose an activity',
+    startButton: 'Start practising →',
     modelLabel: 'Model',
     boardLabel: 'Your board',
     piecesLabel: 'Pieces',
