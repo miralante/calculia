@@ -274,7 +274,9 @@
 
   /* ---- Render dispatcher ---- */
   function render() {
-    var p = questions[roundIndex];
+    /* currentQ is set while a reinforcement mini-round runs; the normal
+       round paints questions[roundIndex]. */
+    var p = currentQ || questions[roundIndex];
     answered = false;
     attempts = 0;
     feedbackEl.textContent = '';
