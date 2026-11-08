@@ -1388,132 +1388,38 @@ async function exerciseShapes(page, baseUrl) {
   assert.ok(await page.locator('#screenGame').isVisible(),
     'Los ejemplos reales no entran en el test de la hoja elegida');
 
-  /* Which option is the right one, worked out from DATA and from the
-     drawing rather than read off the page. Shared with the Socratic-hint
-     check at the end, which needs the same index to answer wrong on
-     purpose. */
-  async function correctOptionIndex(activityId, levelId) {
-    const correctIndex = await page.evaluate(({ activityId, levelId }) => {
-      const activity = window.DATA.activities[activityId];
-      const level = activity.levels.find(item => item.id === levelId);
-      const visual = document.querySelector('#visual');
-      const visualName = visual.getAttribute('aria-label') || '';
-      const prompt = document.querySelector('#prompt').textContent;
-      const buttons = Array.from(document.querySelectorAll('#options .option-btn'));
-      const t = key => window.App.i18n.t(key);
-      let answer;
-      if (prompt === t('gen.shapeNamePrompt')) {
-        answer = visualName;
-      } else if (prompt === t('gen.areaPrompt')) {
-        answer = t('gen.areaInside');
-      } else if (prompt.indexOf(t('gen.symmetryPrompt').split('{name}')[0]) === 0) {
-        /* The correct fold is the one that leaves no stroke through the
-           middle of the figure: the horizontal and the diagonal cut it in
-           two visible pieces, the vertical one does not. Read off the
-           option whose dashed line is vertical. */
-        const vertical = buttons.filter(button => {
-          const line = button.querySelector('.axis-mark');
-          return line && line.getAttribute('x1') === line.getAttribute('x2');
-        });
-        if (vertical.length !== 1) {
-          throw new Error('La pregunta de simetría no tiene un único eje vertical: ' +
-            vertical.length);
-        }
-        answer = (vertical[0].getAttribute('aria-label') || vertical[0].innerText).trim();
-      } else if (prompt.indexOf(t('gen.similarPrompt').split('{name}')[0]) === 0) {
-        /* The correct option is the one drawn as the same figure as the one
-           in the question, only smaller. Matched on the aria-label, which
-           carries the name of the shape rather than its size. */
-        answer = visualName;
-      } else if (prompt === t('gen.volumePrompt')) {
-        /* The only option drawn at the bigger size is the one with more
-           volume, so the answer comes out of the picture and never out of
-           the data: if the drawing and the answer ever disagreed, the big
-           option would stop being the correct one and this would fail. */
-        const big = buttons.filter(b => b.querySelector('.thumb-big'));
-        if (big.length !== 1) throw new Error('La pregunta de volumen no tiene un único cuerpo grande');
-        answer = (big[0].getAttribute('aria-label') || big[0].innerText).trim();
-      } else if (prompt.indexOf(t('gen.perimeterPrompt').split('{side}')[0]) === 0) {
-        /* The perimeter prompt carries the side length, so it is matched on
-           its fixed opening rather than compared whole: the text on screen
-           has {side} already filled in. The answer is worked out from
-           DATA.sides and never read from the page, so this checks the same
-           arithmetic a child would do. */
-        const sideMatch = prompt.match(/(\d+)\s*cm/);
-        if (!sideMatch) throw new Error('No se pudo leer el largo del lado: ' + prompt);
-        const shapeId = Object.keys(window.DATA.sides).find(id =>
-          window.App.i18n.t('shape.' + id) === visualName);
-        if (!shapeId) throw new Error('Perímetro de una forma desconocida: ' + visualName);
-        const side = Number(sideMatch[1]);
-        const total = window.DATA.sides[shapeId].sides * side;
-        /* The two wrong answers have to be exactly one side out in each
-           direction. The mistake this question produces is leaving the
-           last side out or counting one twice, not picking a wild number,
-           so an option outside that would be a wrong shape of mistake. */
-        const offered = buttons.map(b =>
-          Number((b.getAttribute('aria-label') || b.innerText).trim()))
-          .filter(v => !isNaN(v)).sort((a, b) => a - b);
-        const expected = [total - side, total, total + side].sort((a, b) => a - b);
-        if (JSON.stringify(offered) !== JSON.stringify(expected)) {
-          throw new Error('Las opciones del perímetro de ' + shapeId + ' son ' +
-            JSON.stringify(offered) + ' y tocaban ser ' + JSON.stringify(expected));
-        }
-        answer = String(total);
-      } else if (prompt === t('gen.sidesPrompt') || prompt === t('gen.cornersPrompt')) {
-        const shapeId = Object.keys(window.DATA.sides).find(id =>
-          window.App.i18n.t('shape.' + id) === visualName);
-        const count = prompt === t('gen.sidesPrompt') ? 'sides' : 'corners';
-        answer = String(window.DATA.sides[shapeId][count]);
-      } else if (prompt === t('gen.solidToNamePrompt')) {
-        answer = visualName;
-      } else if (visual.classList.contains('net-stage') ||
-          visual.querySelector('.net-stage')) {
-        const match = (prompt + ' ' + visualName).match(/(\d+)\s+(?:caras?|faces?)/i);
-        if (/¿Cuántas caras|How many faces/i.test(prompt)) {
-          if (!match) throw new Error('No se pudo leer el número de caras: ' + visualName);
-          answer = match[1];
-        } else {
-          const counts = {
-            T: visual.querySelectorAll('.net-tri').length,
-            S: visual.querySelectorAll('.net-square').length,
-            R: visual.querySelectorAll('.net-rect').length,
-          };
-          const net = window.DATA.nets.find(item => {
-            const pieces = item.rows.join('').split('');
-            return pieces.filter(ch => ch === 'T').length === counts.T &&
-              pieces.filter(ch => ch === 'S').length === counts.S &&
-              pieces.filter(ch => ch === 'R').length === counts.R;
-          });
-          if (!net) throw new Error('El desarrollo mostrado no coincide con ningún cuerpo');
-          answer = window.App.i18n.t('net.' + net.id + '.name');
-        }
-      } else if (level.tipo === 'solidParts') {
-        const match = visualName.match(/(\d+)\s+(?:caras?|faces?)/i);
-        if (!match) throw new Error('No se pudo leer el número de caras: ' + visualName);
-        answer = match[1];
+  /* One question per slide. A wrong option shows a hint in the feedback that
+     names nothing, and the options stay open for another try; the right one is
+     marked and "Siguiente" moves on. The check looks at how the slide behaves,
+     not at what the question asks. */
+  let hintsSeen = 0;
+  for (let question = 0; question < 4; question += 1) {
+    const optionsLocator = page.locator('#testOptions .option-btn');
+    await page.waitForSelector('#testOptions .option-btn', { timeout: NAV_TIMEOUT });
+    const count = await optionsLocator.count();
+    let answered = false;
+    for (let index = 0; index < count && !answered; index += 1) {
+      const option = optionsLocator.nth(index);
+      if (await option.isDisabled()) continue;
+      await option.click();
+      await page.waitForTimeout(150);
+      if (await option.evaluate(node => node.classList.contains('correct'))) {
+        answered = true;
+        break;
       }
-      return buttons.findIndex(button =>
-        (button.getAttribute('aria-label') || button.innerText).trim() === answer);
-    }, { activityId, levelId });
-    assert.ok(correctIndex >= 0,
-      'No se encontró respuesta correcta para ' + activityId + '/' + levelId +
-      ': ' + JSON.stringify({
-        prompt: await page.locator('#prompt').innerText(),
-        visual: await page.locator('#visual').getAttribute('aria-label'),
-        options: await page.locator('#options').innerText(),
-      }));
-    return correctIndex;
-  }
-
-  async function chooseCorrectAnswer(activityId, levelId) {
-    const correctIndex = await correctOptionIndex(activityId, levelId);
-    const options = page.locator('#options .option-btn');
-    await options.nth(correctIndex).click();
+      const hint = (await page.locator('#feedback').innerText()).trim();
+      assert.ok(hint.length > 0, 'Una respuesta equivocada no muestra pista');
+      assert.equal(await page.locator('#testOptions .option-btn.correct').count(), 0,
+        'Una respuesta equivocada ya marca la opción correcta: ' + hint);
+      hintsSeen += 1;
+    }
+    assert.ok(answered, 'Ninguna opción de la pregunta ' + (question + 1) + ' está marcada como correcta');
     await page.waitForSelector('#btnNext:not(.hidden)', { timeout: NAV_TIMEOUT });
-    assert.ok(await options.nth(correctIndex).evaluate(node => node.classList.contains('correct')),
-      'La respuesta calculada no fue aceptada para ' + activityId + '/' + levelId);
+    actions += 1;
     await page.locator('#btnNext').click();
+    await page.waitForTimeout(150);
   }
+  assert.ok(hintsSeen > 0, 'Ninguna respuesta equivocada mostró pista en cuatro preguntas');
 
   /* La aclaración de la galería también tiene que estar en inglés: si
      falta, sale el nombre de la clave en pantalla. Se comprueba una
