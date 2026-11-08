@@ -109,7 +109,6 @@ var FILES = [
   './tools/moments/strings.es.js',
   './tools/moments/strings.en.js',
   './tools/moments/styles.css',
-  './tools/moments/',
   './tools/clock/',
   './tools/clock/app.js',
   './tools/clock/faces.js',
