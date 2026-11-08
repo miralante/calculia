@@ -78,11 +78,7 @@
      Screens and flow
      ============================================================ */
 
-  function show(screen) {
-    [screenLearn, screenReal, screenGame, screenEnd].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
-  }
+  var show = App.screenSwitch([screenLearn, screenReal, screenGame, screenEnd]);
 
   /* Small pictures of everyday places where the rise and run matter. The
      rails and rungs make the ladder recognizable; the house and paired

@@ -63,7 +63,7 @@ module.exports = function (ctx) {
   /* Modules an activity may split its code into, next to app.js: model.js (what does not touch the page)
      and comma.js (an exercise with its own state, given what it needs by a host object). The checks that
      read what an activity does read them all, because a split moves the code, not the behaviour. */
-  var EXTRA_MODULES = ['model.js', 'comma.js', 'screens.js', 'counter.js', 'art.js', 'figures.js', 'questions.js', 'groups.js', 'typing.js', 'drawing.js', 'faces.js', 'activities.js', 'decomposition.js', 'words.js'];
+  var EXTRA_MODULES = ['model.js', 'comma.js', 'screens.js', 'counter.js', 'art.js', 'figures.js', 'questions.js', 'groups.js', 'typing.js', 'drawing.js', 'faces.js', 'activities.js', 'decomposition.js', 'words.js', 'drawings.js'];
 
   function slugCode(dir) {
     var text = fs.readFileSync(path.join(dir, 'app.js'), 'utf8');

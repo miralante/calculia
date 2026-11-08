@@ -37,7 +37,7 @@
   function show(element) { element.classList.remove('hidden'); }
   function hide(element) { element.classList.add('hidden'); }
 
-  function fill(key, values) {
+  function fillKey(key, values) {
     var text = App.i18n.t(key);
     Object.keys(values).forEach(function (name) {
       text = text.split('{' + name + '}').join(values[name]);
@@ -249,7 +249,7 @@
      quiz asks the user to count, so the dots carry no numbers there. */
   function renderVisual(container, item, showTotal, numbered) {
     container.innerHTML = '';
-    container.setAttribute('aria-label', fill('visual' + keySuffix(), itemValues(item)));
+    container.setAttribute('aria-label', fillKey('visual' + keySuffix(), itemValues(item)));
     if (mode === 'multiply') renderMultiplyVisual(container, item, numbered);
     else if (mode === 'subtract') renderSubtractVisual(container, item, numbered);
     else if (mode === 'divide') renderDivideVisual(container, item, numbered);
@@ -324,7 +324,7 @@
     $('#demoEquation').textContent = equationText(item, true);
     renderVisual($('#learnVisual'), item, true, true);
     var demoBar = $('#demoProgress');
-    demoBar.setAttribute('aria-label', fill('demoCounter', { i: index + 1, n: DATA.factsPerTable }));
+    demoBar.setAttribute('aria-label', fillKey('demoCounter', { i: index + 1, n: DATA.factsPerTable }));
     demoBar.setAttribute('aria-valuemax', String(DATA.factsPerTable));
     demoBar.setAttribute('aria-valuenow', String(index + 1));
     $('#demoProgressFill').style.width = ((index + 1) / DATA.factsPerTable * 100) + '%';
@@ -436,7 +436,7 @@
       if (button) button.disabled = true;
       App.feedback.encourage(feedback);
       feedback.textContent += ' ' + App.feedback.hintText(
-        fill(isAudio() ? 'hintAudio' : ('hint' + keySuffix()), itemValues(item)),
+        fillKey(isAudio() ? 'hintAudio' : ('hint' + keySuffix()), itemValues(item)),
         button ? button.textContent : String(value));
       if (usesInput()) {
         App.feedback.lockUntilAck([$('#divideInput'), $('#checkDivide')], feedback);
@@ -458,9 +458,9 @@
        the other three the explain* key alone covers it. The audio module
        has no dots to point at, so it explains with the equation itself. */
     var explanation = isAudio()
-      ? fill(itemRemainder(item) > 0 ? 'explainSpokenRest' : 'explainSpoken',
+      ? fillKey(itemRemainder(item) > 0 ? 'explainSpokenRest' : 'explainSpoken',
           Object.assign({ op: spokenOperation() }, itemValues(item)))
-      : fill('explain' + keySuffix(), itemValues(item));
+      : fillKey('explain' + keySuffix(), itemValues(item));
     $('#explanation').textContent = explanation;
     show($('#explanation'));
     if (usesInput()) {
@@ -555,7 +555,7 @@
       var button = document.createElement('button');
       button.type = 'button';
       button.className = 'btn table-btn';
-      button.textContent = fill('tableButton', { n: value });
+      button.textContent = fillKey('tableButton', { n: value });
       button.addEventListener('click', function () {
         table = value;
         showOnly('#screenLearn');

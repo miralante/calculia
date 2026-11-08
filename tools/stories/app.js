@@ -45,7 +45,9 @@
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
-    show: function (el) { show(el); }
+    screenEnd: function () { return screenEnd; },
+    roundCorrect: function () { return roundCorrect; },
+    show: function (el) { screenGame.classList.add('hidden'); el.classList.remove('hidden'); }
   });
   var save = glue.save, paintStars = glue.paintStars;
 
@@ -183,17 +185,7 @@
   }
 
   function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    save();
-    screenGame.classList.add('hidden');
-    screenEnd.classList.remove('hidden');
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
-        .replace('{stars}', progress.stars);
-    }
-    App.feedback.celebrate(App.i18n.t('finalTitulo'));
+    glue.endRound({ celebrateKey: 'finalTitulo' });
   }
 
   /* Events */

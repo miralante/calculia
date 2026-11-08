@@ -83,6 +83,7 @@
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
+    screenEnd: function () { return screenEnd; },
     show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars;
@@ -138,11 +139,7 @@
     thermoSuggestion.classList.remove('hidden');
   }
 
-  function show(screen) {
-    [screenGame, screenEnd].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
-  }
+  var show = App.screenSwitch([screenGame, screenEnd]);
 
   /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
   function levelFromProgress() {
@@ -364,16 +361,9 @@
      ============================================================ */
 
   function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    save();
-    show(screenEnd);
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('gen.endSummary').replace('{stars}', progress.stars);
-    }
+    glue.endRound({ summaryKey: 'gen.endSummary' });
     $('#contexto').textContent = '';
     $('#explanation').textContent = '';
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
   /* ============================================================

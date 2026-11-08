@@ -30,11 +30,7 @@
   });
   var save = glue.save, paintStars = glue.paintStars;
 
-  function show(screen) {
-    [screenIntro, screenGame].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
-  }
+  var show = App.screenSwitch([screenIntro, screenGame]);
 
   /* ---- Explanation carousel ----
      One card per step: a picto, the name and one sentence. Clicking the

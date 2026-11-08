@@ -41,11 +41,7 @@
     }
   });
 
-  function show(screen) {
-    [screenIntro, screenGame].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
-  }
+  var show = App.screenSwitch([screenIntro, screenGame]);
 
   /* ---- Test sheet ----
      The whole round is on one screen. Every question is generated when the

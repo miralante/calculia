@@ -41,11 +41,7 @@
     if (!(pair.answer > 0)) throw new Error('time-units: bad pair ' + pair.id);
   });
 
-  function show(screen) {
-    [screenIntro, screenExamples, screenGame].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
-  }
+  var show = App.screenSwitch([screenIntro, screenExamples, screenGame]);
 
   /* ---- Carousels ----
      Both carousels draw one card: a picto, the unit name and one

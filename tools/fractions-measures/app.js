@@ -170,11 +170,7 @@
      Screens and flow
      ============================================================ */
 
-  function show(screen) {
-    [screenMenu, screenIntro, screenReal, screenGame, screenComma, screenEnd].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
-  }
+  var show = App.screenSwitch([screenMenu, screenIntro, screenReal, screenGame, screenComma, screenEnd]);
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
   /* The level rises one step per completed round of THIS activity, capped

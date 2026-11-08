@@ -43,11 +43,7 @@
     }
   });
 
-  function show(screen) {
-    [screenIntro, screenGame].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
-  }
+  var show = App.screenSwitch([screenIntro, screenGame]);
 
   /* "2 minutos", "1 año": the unit name agrees with the number. */
   function durationLabel(duration) {
