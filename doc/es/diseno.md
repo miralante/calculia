@@ -131,6 +131,43 @@ este (copiado de `roman-numerals` y `shapes`):
 El `:not(...)` está para no repintar los botones que ya son secundarios o
 de audio.
 
+### 3.3 El carrusel de explicación: una sola definición
+
+La tarjeta que explica una idea cada vez, con ← y → debajo, es la misma en
+todas las actividades. Sus clases (`.carousel-card`, `.carousel-display`,
+`.carousel-figure`, `.carousel-name`, `.carousel-caption`, `.gallery-note`,
+`.carousel-controls`, `.intro-buttons`) viven en `components.css` y en ningún
+otro sitio, y las flechas se centran ahí. El cableado (los botones ← y →, y
+Enter o Espacio sobre la tarjeta) es `App.utils.bindCarousel`, y el índice que
+da la vuelta es `App.utils.wrapIndex`, los dos en `assets/js/utils.js`.
+
+Lo que es propio de una tarjeta (una cuadrícula de meses, un símbolo, una fila
+de bolas) lleva su propia clase en el `styles.css` de la actividad, como hace
+`.symbol-display` en Números romanos. Copiar una regla compartida no está
+permitido: la comprobación 18 de `scripts/check.js` (`scripts/checks/design.js`)
+falla si el `styles.css` de una actividad define alguna de esas clases, o si su
+`app.js` define su propio `onCardKey`.
+
+Por qué: mientras cada actividad tuvo su copia, las flechas de Unidades de
+tiempo quedaban en el borde izquierdo y las demás centradas. Cada copia era CSS
+válido, así que ninguna comprobación lo vio.
+
+### 3.4 La hoja de prueba: una sola definición
+
+La hoja de la prueba (una tarjeta por pregunta, todas a la vista, comprobadas a
+la vez con «Comprobar») se comparte igual: `.test-sheet`, `.test-sheet-card`, su
+enunciado, su dibujo y su retroalimentación, las opciones elegida, acertada y
+fallada, `.sheet-actions` y la sacudida de una tarjeta fallada viven en
+`components.css`. Las opciones de una pregunta que van en fila (`inline`) son
+`.options.options-row`, en el mismo archivo.
+
+Cada actividad añade solo lo que le es propio: un dibujo más pequeño
+(`.test-sheet-card .visual` en las actividades de orden) o la tipografía de sus
+respuestas (`.options.options-row .option-btn` en las actividades de tiempo). La
+comprobación 18 rechaza una segunda copia de las clases de la hoja o de los
+fotogramas de la sacudida en el `styles.css` de una actividad, y en
+`activity-flow.css` o `number-sort.css`.
+
 ---
 
 ## 4. Las pautas de diseño, en lista

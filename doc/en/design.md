@@ -130,6 +130,41 @@ from `roman-numerals` and `shapes`):
 
 The `:not(...)` is there so secondary and audio buttons are not repainted.
 
+### 3.3 The explanation carousel: one definition
+
+The card that explains one idea at a time, with ← and → under it, is the same
+in every activity. Its classes (`.carousel-card`, `.carousel-display`,
+`.carousel-figure`, `.carousel-name`, `.carousel-caption`, `.gallery-note`,
+`.carousel-controls`, `.intro-buttons`) live in `components.css` and nowhere
+else, and the arrows are centred there. The wiring (← and → buttons, and Enter
+or Space on the card) is `App.utils.bindCarousel`, and the wrap-around index is
+`App.utils.wrapIndex`, both in `assets/js/utils.js`.
+
+What is specific to one card (a month grid, a symbol, a row of balls) gets its
+own class in the activity's `styles.css`, as `.symbol-display` does in Roman
+Numerals. A copy of a shared rule is not allowed: check 18 of
+`scripts/check.js` (`scripts/checks/design.js`) fails when an activity's
+`styles.css` defines one of those classes, or when an `app.js` defines its
+own `onCardKey`.
+
+Why: while each activity had its own copy, the arrows of Unidades de tiempo sat
+at the left edge and the others were centred. Every copy was valid CSS, so no
+check noticed.
+
+### 3.4 The test sheet: one definition
+
+The sheet of the test (one card per question, all visible, checked at once with
+«Check») is shared the same way: `.test-sheet`, `.test-sheet-card`, its prompt,
+visual and feedback, the selected, right and wrong options, `.sheet-actions` and
+the shake of a missed card live in `components.css`. The options of a question
+that sit in a row (`inline`) are `.options.options-row`, in the same file.
+
+An activity adds only what is specific to it: a smaller picture
+(`.test-sheet-card .visual` in the order activities) or the typography of its
+answers (`.options.options-row .option-btn` in the time activities). Check 18
+rejects a second copy of the sheet's classes or of the shake keyframes in an
+activity's `styles.css`, and in `activity-flow.css` or `number-sort.css`.
+
 ---
 
 ## 4. The design guidelines, as a list
