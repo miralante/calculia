@@ -14,7 +14,7 @@
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
-var VERSION = 'calculia-v391';
+var VERSION = 'calculia-v392';
 
 var FILES = [
   './',
@@ -170,6 +170,7 @@ var FILES = [
   './tools/math-tables/strings.es.js',
   './tools/math-tables/strings.en.js',
   './tools/math-tables/styles.css',
+  './tools/math-tables/visuals.js',
   './tools/head-math/',
   './tools/head-math/app.js',
   './tools/head-math/data.js',
