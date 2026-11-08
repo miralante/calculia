@@ -250,19 +250,9 @@
 
   /* ---- Events ---- */
 
-  function onCardKey(el, step) {
-    el.addEventListener('click', function () { step(1); });
-    el.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        step(1);
-      }
-    });
-  }
-
   $('#carouselPrev').addEventListener('click', function () { explStep(-1); });
   $('#carouselNext').addEventListener('click', function () { explStep(1); });
-  onCardKey($('#carouselDisplay'), explStep);
+  App.utils.bindCarousel({ card: $('#carouselDisplay') }, explStep);
   $('#introNext').addEventListener('click', function () {
     exampleIdx = 0;
     paintExample(DATA.units[exampleIdx]);
@@ -271,7 +261,7 @@
 
   $('#examplePrev').addEventListener('click', function () { exampleStep(-1); });
   $('#exampleNext').addEventListener('click', function () { exampleStep(1); });
-  onCardKey($('#exampleDisplay'), exampleStep);
+  App.utils.bindCarousel({ card: $('#exampleDisplay') }, exampleStep);
   $('#examplesNext').addEventListener('click', startRound);
 
   $('#btnCheck').addEventListener('click', sheetTest.check);
