@@ -23,6 +23,14 @@
 
   var $ = App.utils.$;
 
+  /* A screen switch: shows the screen it is given and hides the others of the list.
+     The activities call it as App.screenSwitch([screens])(screen). */
+  App.screenSwitch = function (screens) {
+    return function (screen) {
+      screens.forEach(function (p) { p.classList.toggle('hidden', p !== screen); });
+    };
+  };
+
   App.activityGlue = function (host) {
     function save() {
       App.storage.set(host.toolId, host.progress());
