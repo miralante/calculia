@@ -16,9 +16,7 @@
     return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  function monthName(m) {
-    return t('month.m' + (m < 10 ? '0' + m : String(m)));
-  }
+  var monthName = App.time.monthNameByNumber;
 
   function pictoHtml(unit) {
     return '<span class="carousel-figure" aria-hidden="true">' + unit.picto + '</span>';

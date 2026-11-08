@@ -22,7 +22,7 @@
   /* 10/01/2025: day, month and year, with slashes. */
   function slashDate(d) { return pad(d.day) + '/' + pad(d.month) + '/' + d.year; }
 
-  function monthName(n) { return App.i18n.t('month.m' + pad(n)); }
+  var monthName = App.time.monthNameByNumber;
 
   function longDate(d) {
     return App.i18n.t('longDate')

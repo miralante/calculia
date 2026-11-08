@@ -28,11 +28,7 @@
   });
 
   /* "2 minutos", "1 año": the unit name agrees with the number. */
-  function durationLabel(duration) {
-    var n = duration[0];
-    var key = 'units.' + duration[1] + (n === 1 ? '.one' : '.many');
-    return n + ' ' + t(key);
-  }
+  var durationLabel = App.time.durationLabel;
 
   /* ---- Test ----
      One question per slide. Three durations, each in its own unit. Half the
