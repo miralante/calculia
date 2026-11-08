@@ -368,6 +368,25 @@ Rules of thumb: leave out real life when no real example adds a new case; use
 `steps` when a question is a chain of checks, each one needed for the next;
 use the sheet only if a future activity must have the person compare or order everything at once; every current activity uses one question per slide.
 
+##### 2.2.4.2b Five activities with their own engine
+
+Fractions and measures, Tables, Trigonometry, Mental maths and The numbers
+**do not use `App.activityFlow`**: each keeps the engine it was built with in
+`origin/main`, with its own set of modules. Its `index.html` loads exactly those
+scripts, and its texts and styles are the ones of that engine.
+
+| Activity | Engine | Page modules |
+|---|---|---|
+| Fractions and measures (`fractions-measures`) | `App.classicQuiz` and `App.activityGlue` | `model.js`, `generators.js`, `helpers.js`, `intro.js`, `comma.js` |
+| Tables (`math-tables`) | Its own page loop, with the pictures in `App.MathTablesVisuals` | `visuals.js` |
+| Trigonometry (`trigonometry`) | `App.classicQuiz` and `App.activityGlue` | `questions.js`, `figures.js` |
+| Mental maths (`mental-math`) | `App.classicQuiz` and `App.activityGlue` | `model.js`, `groups.js` |
+| The numbers (`los-numeros`) | `App.activityGlue` | — |
+
+Moving these five to the three-stage flow (`activity-flow`) has been dropped:
+it is not part of `main`. If one of them is migrated later, it must be done in
+a separate change, with its texts, styles and this table.
+
 ##### 2.2.4.3 Family B: play (games)
 
 Activities of this family give the person a mechanic and a round, not an

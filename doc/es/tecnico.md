@@ -383,6 +383,25 @@ falta para la siguiente; si una actividad futura necesitara que la persona
 compare u ordene todo a la vez, usar el modo `sheet`; hoy todas usan una
 pregunta por diapositiva.
 
+##### 2.2.4.2b Cinco actividades con motor propio
+
+Fracciones y medidas, Tablas, Trigonometría, Cálculo mental y Los números
+**no usan `App.activityFlow`**: cada una conserva el motor con el que se
+construyó en `origin/main` y su propio conjunto de módulos. Su `index.html`
+carga exactamente esos scripts, y sus textos y estilos son los de ese motor.
+
+| Actividad | Motor | Módulos propios de la página |
+|---|---|---|
+| Fracciones y medidas (`fractions-measures`) | `App.classicQuiz` y `App.activityGlue` | `model.js`, `generators.js`, `helpers.js`, `intro.js`, `comma.js` |
+| Tablas (`math-tables`) | Bucle propio de la página, con los dibujos en `App.MathTablesVisuals` | `visuals.js` |
+| Trigonometría (`trigonometry`) | `App.classicQuiz` y `App.activityGlue` | `questions.js`, `figures.js` |
+| Cálculo mental (`mental-math`) | `App.classicQuiz` y `App.activityGlue` | `model.js`, `groups.js` |
+| Los números (`los-numeros`) | `App.activityGlue` | — |
+
+La migración de estas cinco al flujo de tres etapas (`activity-flow`) se ha
+descartado: no forma parte de `main`. Si una de ellas se migra en el futuro,
+debe hacerse en un cambio aparte, con sus textos, estilos y esta tabla.
+
 ##### 2.2.4.3 Familia B: juego
 
 Las actividades de esta familia dan una mecánica y una ronda, no primero una
