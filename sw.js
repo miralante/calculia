@@ -14,7 +14,7 @@
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
-var VERSION = 'calculia-v418';
+var VERSION = 'calculia-v419';
 
 var FILES = [
   './',
@@ -488,6 +488,8 @@ var FILES = [
   './assets/js/classic-quiz.js',
   // shared shell files added by scripts/sync-sw-files.js
   './assets/js/activity-flow-gallery.js',
+  // shared shell files added by scripts/sync-sw-files.js
+  './assets/js/time.js',
 ];
 
 /* Cloudflare answers EVERY "/x.html" URL with a 307 to its extensionless form
