@@ -12,7 +12,7 @@
     notaMonederoLink: 'The Wallet',
     notaMonedero: '💶 To pay with real coins, go to {link}.',
     btnMenu: 'Back to start',
-    endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
+    endSummary: 'You solved {n} questions of {activity}. You now have {stars} {starsWord}.',
     explicacionCorrecta: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',

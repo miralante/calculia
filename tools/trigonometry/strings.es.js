@@ -47,7 +47,7 @@
       steep: 'Empinada'
     },
     btnMenu: 'Ver el ejemplo',
-    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} {starsWord}.',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',
     incorrectExplanationA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',

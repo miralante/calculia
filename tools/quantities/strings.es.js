@@ -63,7 +63,7 @@
 
     check: 'Comprobar',
     roundComplete: '¡Ronda terminada!',
-    roundSummary: 'Has resuelto {count} ejercicios. Ahora tienes {stars} estrellas.',
+    roundSummary: 'Has resuelto {count} ejercicios. Ahora tienes {stars} {starsWord}.',
     progress: '{current} de {stars}',
     correctFormat: 'Se escribe: {n}',
 

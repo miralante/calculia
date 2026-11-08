@@ -459,6 +459,8 @@
     /* A round's own summary counts every right answer, the replays included; the default counts the first tries. */
     $('#endSummary').textContent = fill(t(ctx.config.endSummaryKey || 'ui.roundDone'), {
       n: ctx.config.endSummaryKey ? s.solved : s.roundRight, total: s.round.length, stars: progress.stars,
+      starsWord: App.i18n.starsWord(progress.stars),
+      nWord: App.i18n.starsWord(ctx.config.endSummaryKey ? s.solved : s.roundRight),
       activity: ctx.current ? ctx.current.name() : ''
     });
     ctx.show('#screenEnd');

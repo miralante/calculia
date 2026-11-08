@@ -37,7 +37,7 @@
       hint: 'Press + or − to change the temperature. Watch the water transform.',
       temperatureSuggestionUp: '💡 Suggestion: go up to {temp} °C.',
       temperatureSuggestionDown: '💡 Suggestion: go down to {temp} °C.',
-      endSummary: 'Mission complete. You now have {stars} stars.',
+      endSummary: 'Mission complete. You now have {stars} {starsWord}.',
       ttsTemp:   '{temp} degrees',
       ttsIce:    'The water is frozen. Ice.',
       ttsLiquid: 'The water is liquid.',

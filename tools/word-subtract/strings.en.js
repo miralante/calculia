@@ -12,7 +12,7 @@
     hint: '🤔 Is something taken away, or are we asked how many are missing? Then subtract.',
     next: 'Next →',
     endTitle: 'You have finished',
-    endSummary: 'You got {n} of {total} right the first time. You now have {stars} stars.',
+    endSummary: 'You got {n} of {total} right the first time. You now have {stars} {starsWord}.',
     btnMenu: 'Back to the start',
 
     problems: {

@@ -17,7 +17,7 @@
     finalTitulo: '¡Ronda completada!',
     endTitle: '¡Ronda completada!',
     btnMenu: 'Volver al inicio',
-    endSummary: 'Has ordenado {n} historias. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has ordenado {n} historias. Ahora tienes {stars} {starsWord}.',
     pista: '🤔 «{elegida}» no es la viñeta que va primero. Mira las viñetas: ¿cuál es el principio de la historia?',
     /* ---- Pista socrática ----
        `pista` se queda como respaldo de showHint(): era la misma para

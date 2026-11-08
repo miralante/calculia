@@ -11,7 +11,7 @@
     instruction: 'Lee la adivinanza. Después elige la respuesta.',
     question: '¿Qué es?',
     btnMenu: 'Volver al inicio',
-    endSummary: 'Has ganado {n} estrellas. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has ganado {n} {nWord}. Ahora tienes {stars} {starsWord}.',
     explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ ',
     explicacionIncorrectaB: ' no es correcto. La respuesta correcta es: ',

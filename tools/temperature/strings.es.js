@@ -37,7 +37,7 @@
       hint: 'Pulsa + o − para cambiar la temperatura. Mira cómo se transforma el agua.',
       temperatureSuggestionUp: '💡 Sugerencia: sube hasta {temp} °C.',
       temperatureSuggestionDown: '💡 Sugerencia: baja hasta {temp} °C.',
-      endSummary: 'Has completado el reto. Ahora tienes {stars} estrellas.',
+      endSummary: 'Has completado el reto. Ahora tienes {stars} {starsWord}.',
       ttsTemp:   '{temp} grados',
       ttsIce:    'El agua está congelada. Hielo.',
       ttsLiquid: 'El agua está líquida.',

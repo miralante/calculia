@@ -30,7 +30,7 @@
     checkFirst: 'Type a number before checking.',
     inputLabel: 'Type the answer',
     restLine: 'left over',
-    roundSummary: 'You solved {count} operations. Now you have {stars} stars.',
+    roundSummary: 'You solved {count} operations. Now you have {stars} {starsWord}.',
     "transfer": "This will help you with everyday sums: at the shop, sharing things out, counting change or at school."
   }, 'en');
 })();

@@ -12,7 +12,7 @@
     modesTitle: 'Choose an activity',
     whatTime: 'What time is it?',
     clockAria: 'Clock: {texto}',
-    endSummary: 'You won {n} stars. Now you have {stars} stars.',
+    endSummary: 'You won {n} {nWord}. Now you have {stars} {starsWord}.',
     btnMenu: 'Back to start',
     learnTitle: 'How to read the clock',
     learnIntro: 'The clock has two hands. Each hand tells you one thing.',

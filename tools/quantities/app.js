@@ -496,7 +496,7 @@
   function closeRound() {
     $('#finishText').textContent = t('roundSummary')
       .replace('{count}', round.length)
-      .replace('{stars}', progress.stars);
+      .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
     $('#contexto').textContent = t('contexto');
     $('#explanation').textContent = t('explicacion');
     App.feedback.celebrate(t('roundComplete'));
@@ -534,7 +534,7 @@
   function paintReinforceProgress() {
     $('#progressText').textContent = t('progress')
       .replace('{current}', reinforcement.position() + 1)
-      .replace('{stars}', reinforcement.total());
+      .replace('{stars}', reinforcement.total()).replace('{starsWord}', App.i18n.starsWord(reinforcement.total()));
   }
 
   /* ----------- Screen switching -----------

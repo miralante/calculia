@@ -61,8 +61,8 @@
       var summaryEl = $('#endSummary');
       if (summaryEl) {
         var text = App.i18n.t(opts.summaryKey || 'endSummary');
-        if (text.indexOf('{n}') !== -1) text = text.replace('{n}', host.roundCorrect());
-        text = text.replace('{stars}', progress.stars);
+        if (text.indexOf('{n}') !== -1) text = text.replace('{n}', host.roundCorrect()).replace('{nWord}', App.i18n.starsWord(host.roundCorrect()));
+        text = text.replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
         Object.keys(opts.values || {}).forEach(function (name) {
           text = text.replace('{' + name + '}', opts.values[name]);
         });

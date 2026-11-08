@@ -22,7 +22,7 @@
       pack: 'Package {n}',
       shelf: 'Shelf {n}',
       box: 'Box {n}',
-      roundDone: 'You finished the round: {n} of {total} right the first time. You now have {stars} stars.',
+      roundDone: 'You finished the round: {n} of {total} right the first time. You now have {stars} {starsWord}.',
       otherOps: '← Other operations',
       realTitle: 'It is used in real life:',
       introTitle: 'This is how it works',

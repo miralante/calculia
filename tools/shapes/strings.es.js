@@ -71,7 +71,7 @@
        para que se verifique todo. "Otra ronda" re-baraja y vuelve a
        empezar sin pasar por la pantalla de fin. */
     btnMenu: 'Volver al inicio',
-    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} {starsWord}.',
     shape: {
       circle: 'círculo',
       square: 'cuadrado',

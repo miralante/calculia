@@ -12,7 +12,7 @@
     hint: '🤔 ¿Se juntan o se añaden cosas? Entonces se suma.',
     next: 'Siguiente →',
     endTitle: 'Has terminado',
-    endSummary: 'Has acertado {n} de {total} a la primera. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has acertado {n} de {total} a la primera. Ahora tienes {stars} {starsWord}.',
     btnMenu: 'Volver al inicio',
 
     problems: {

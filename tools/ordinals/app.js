@@ -510,7 +510,7 @@
     $('#finalSummary').textContent = t('finalSummary')
       .replace('{n}', correctCount)
       .replace('{total}', items.length)
-      .replace('{stars}', progress.stars);
+      .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
     switchTo(endScreen);
     App.feedback.celebrate(t('core.roundComplete'));
   }

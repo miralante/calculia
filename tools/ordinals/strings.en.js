@@ -243,7 +243,7 @@
     hintOrdinalToDigit: '«{elegida}» is not the number: look at the number written next to the word.',
     hintDigitToOrdinal: '«{elegida}» is not the word for that place: think which place that number takes in the queue.',
 
-    finalSummary: 'You got {n} of {total} right. Now you have {stars} stars.',
+    finalSummary: 'You got {n} of {total} right. Now you have {stars} {starsWord}.',
     transfer: 'Ordinals are used for podiums, rankings, queues, floors, turns, dates and lists. Knowing which place each one takes helps in daily life.'
   }, 'en');
 })();

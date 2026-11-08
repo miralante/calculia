@@ -102,7 +102,7 @@
     "correctExplanation": "✅ ¡Correcto! Los números romanos se leen letra a letra: cada letra suma (o resta, si va delante de una mayor).",
     "wrongExplanationPrefix": "❌ No es ese. Fíjate en los colores: ",
     "hintHint": "🤔 Pista: ",
-    "finalSummary": "Has ganado {n} estrellas. Ahora tienes {stars} estrellas.",
+    "finalSummary": "Has ganado {n} {nWord}. Ahora tienes {stars} {starsWord}.",
     /* Cabecera y fin del refuerzo de fallos: al terminar la ronda
        normal, los items fallados se vuelven a presentar en una
        mini-ronda hasta acertarlos todos. Las estrellas ya sumadas

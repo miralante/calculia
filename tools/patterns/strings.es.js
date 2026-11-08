@@ -14,7 +14,7 @@
     whatNext: '¿Qué sigue?',
     queSigueAudio: '¿Qué sigue?',
     btnMenu: 'Volver al inicio',
-    endSummary: 'Has ganado {n} estrellas. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has ganado {n} {nWord}. Ahora tienes {stars} {starsWord}.',
     explicacionCorrecta: '✅ ¡Correcto! Después de la serie viene: ',
     explicacionIncorrectaA: '❌ Eso no sigue el patrón. Lo que sigue es: ',
     pista: '🤔 «{elegida}» no es la respuesta. Mira la serie con calma.',

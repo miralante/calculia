@@ -11,7 +11,7 @@
     instruction: 'Read the riddle. Then choose the answer.',
     question: 'What is it?',
     btnMenu: 'Back to start',
-    endSummary: 'You won {n} stars. You now have {stars} stars.',
+    endSummary: 'You won {n} {nWord}. You now have {stars} {starsWord}.',
     explicacionCorrecta: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ ',
     explicacionIncorrectaB: ' is not right. The correct answer is: ',

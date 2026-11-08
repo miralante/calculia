@@ -14,7 +14,7 @@
     whatNext: 'What comes next?',
     queSigueAudio: 'What comes next?',
     btnMenu: 'Back to start',
-    endSummary: 'You won {n} stars. You now have {stars} stars.',
+    endSummary: 'You won {n} {nWord}. You now have {stars} {starsWord}.',
     explicacionCorrecta: '✅ Correct! Next in the series comes: ',
     explicacionIncorrectaA: "❌ That doesn't follow the pattern. What comes next is: ",
     pista: '🤔 «{elegida}» is not the answer. Look at the sequence calmly.',

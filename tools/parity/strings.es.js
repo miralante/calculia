@@ -121,7 +121,7 @@
     explainLast: 'La última cifra de {a} es {d}. Así que {a} es {p}.',
 
     /* ---------- Cierre ---------- */
-    parityFinalSummary: 'Has terminado {count} preguntas. Ya tienes {stars} estrellas.',
+    parityFinalSummary: 'Has terminado {count} preguntas. Ya tienes {stars} {starsWord}.',
     parityTransfer: 'Saber qué números son pares y cuáles impares sirve para repartir en dos equipos, alternar turnos o cortar listas por la mitad.'
   }, 'es');
 })();

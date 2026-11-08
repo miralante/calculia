@@ -47,7 +47,7 @@
       steep: 'Steep'
     },
     btnMenu: 'See the example',
-    endSummary: 'You answered {n} questions of {activity}. Now you have {stars} stars.',
+    endSummary: 'You answered {n} questions of {activity}. Now you have {stars} {starsWord}.',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',

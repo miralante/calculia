@@ -15,7 +15,7 @@
     title: '🤔 Problems',
     instructionMenu: 'Choose an activity.',
     btnMenu: 'Back to start',
-    endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
+    endSummary: 'You solved {n} questions of {activity}. You now have {stars} {starsWord}.',
     correctExplanation: '✅ Correct! The answer is: ',
     incorrectExplanationA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',

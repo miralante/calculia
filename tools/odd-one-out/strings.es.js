@@ -13,7 +13,7 @@
     question: '¿Cuál no encaja?',
     dibujoAria: 'Dibujo',
     btnMenu: 'Volver al inicio',
-    endSummary: 'Has ganado {n} estrellas. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has ganado {n} {nWord}. Ahora tienes {stars} {starsWord}.',
     rondaCompletadaTitulo: '¡Ronda completada!',
     explicacionCorrecta: '✅ ¡Correcto! Ese es el que no encaja con los demás.',
     explicacionIncorrectaA: '❌ Ese sí encaja con los demás. El que no encaja es: ',

@@ -12,7 +12,7 @@
     modesTitle: 'Elige una actividad',
     whatTime: '¿Qué hora es?',
     clockAria: 'Reloj: {texto}',
-    endSummary: 'Has ganado {n} estrellas. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has ganado {n} {nWord}. Ahora tienes {stars} {starsWord}.',
     btnMenu: 'Volver al inicio',
     learnTitle: 'Cómo se lee el reloj',
     learnIntro: 'El reloj tiene dos agujas. Cada aguja dice una cosa.',

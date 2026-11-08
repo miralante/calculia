@@ -8,7 +8,7 @@
     chooseOperation: 'Choose what you want to practise.',
     chooseLevel: 'Choose a step.',
     stepLevel: 'Add and subtract {n}',
-    roundSummary: 'You solved {count} operations. Now you have {stars} stars.',
+    roundSummary: 'You solved {count} operations. Now you have {stars} {starsWord}.',
     "transfer": "This will help you with everyday sums: at the shop, sharing things out, counting change or at school."
   }, 'en');
 })();

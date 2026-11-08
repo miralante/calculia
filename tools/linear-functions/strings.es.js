@@ -75,7 +75,7 @@
       afin: 'Afín: empieza en otro número'
     },
 
-    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} {starsWord}.',
     btnMenu: 'Volver al inicio',
     transfer: 'Te servirá para saber cuánto pagas en un taxi o cuánto tendrás ahorrado cada semana.',
 

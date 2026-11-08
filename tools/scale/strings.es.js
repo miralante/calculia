@@ -69,7 +69,7 @@
       plano: { name: 'La escala de un plano', detail: 'Del dibujo a la vida real.' },
       test: { name: '¡Vamos a practicar!', detail: 'Una ronda con preguntas de todo.' }
     },
-    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} {starsWord}.',
     btnMenu: 'Volver al inicio',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
 

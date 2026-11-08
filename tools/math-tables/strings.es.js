@@ -30,7 +30,7 @@
     checkFirst: 'Escribe un número antes de comprobar.',
     inputLabel: 'Escribe el resultado',
     restLine: 'sobran',
-    roundSummary: 'Has resuelto {count} operaciones. Ahora tienes {stars} estrellas.',
+    roundSummary: 'Has resuelto {count} operaciones. Ahora tienes {stars} {starsWord}.',
     "transfer": "Esto te servirá para las cuentas del día a día: en la compra, al repartir, al contar el cambio o en el cole."
   }, 'es');
 })();

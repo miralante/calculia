@@ -12,7 +12,7 @@
     hint: '🤔 ¿Se reparte en partes iguales o se cuentan grupos? Entonces se divide.',
     next: 'Siguiente →',
     endTitle: 'Has terminado',
-    endSummary: 'Has acertado {n} de {total} a la primera. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has acertado {n} de {total} a la primera. Ahora tienes {stars} {starsWord}.',
     btnMenu: 'Volver al inicio',
 
     problems: {

@@ -17,7 +17,7 @@
     finalTitulo: 'Round complete!',
     endTitle: 'Round complete!',
     btnMenu: 'Back to start',
-    endSummary: 'You sorted {n} stories. You now have {stars} stars.',
+    endSummary: 'You sorted {n} stories. You now have {stars} {starsWord}.',
     pista: '🤔 «{elegida}» is not the panel that comes first. Look at the panels: what is the beginning of the story?',
     /* ---- The Socratic hint ----
        `pista` stays as showHint()'s fallback: it was the same sentence

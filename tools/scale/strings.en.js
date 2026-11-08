@@ -69,7 +69,7 @@
       plano: { name: 'The scale of a plan', detail: 'From the drawing to real life.' },
       test: { name: "Let's practice!", detail: 'A round with questions from everything.' }
     },
-    endSummary: 'You answered {n} questions in {activity}. You now have {stars} stars.',
+    endSummary: 'You answered {n} questions in {activity}. You now have {stars} {starsWord}.',
     btnMenu: 'Back to the start',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
 

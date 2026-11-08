@@ -13,7 +13,7 @@
     question: 'Which one does not belong?',
     dibujoAria: 'Picture',
     btnMenu: 'Back to start',
-    endSummary: 'You won {n} stars. You now have {stars} stars.',
+    endSummary: 'You won {n} {nWord}. You now have {stars} {starsWord}.',
     rondaCompletadaTitulo: 'Round complete!',
     explicacionCorrecta: '✅ Correct! That is the one that does not go with the others.',
     explicacionIncorrectaA: '❌ That one does go with the others. The odd one out is: ',

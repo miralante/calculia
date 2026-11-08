@@ -99,7 +99,7 @@
     "correctExplanation": "✅ Correct! Roman numerals are read letter by letter: each letter adds (or subtracts, if it sits before a larger one).",
     "wrongExplanationPrefix": "❌ That's not it. Look at the colors: ",
     "hintHint": "🤔 Hint: ",
-    "finalSummary": "You earned {n} stars. Now you have {stars} stars.",
+    "finalSummary": "You earned {n} {nWord}. Now you have {stars} {starsWord}.",
     /* Header and ending of the failed-question reinforcement: after
        the normal round ends, the items the user got wrong are
        replayed in a mini-round until every one is answered right.

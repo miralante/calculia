@@ -12,7 +12,7 @@
     notaTablas: '🔢 Para contar, sumar y multiplicar, ve a {link}.',
     notaTablasLink: 'Tablas',
     btnMenu: 'Volver al inicio',
-    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} {starsWord}.',
     explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
@@ -72,7 +72,7 @@
       },
       tempSuccess: '✅ ¡Objetivo conseguido!',
       tempNext: 'Siguiente reto →',
-      endSummary: 'Has practicado los números positivos y negativos. Ahora tienes {stars} estrellas.'
+      endSummary: 'Has practicado los números positivos y negativos. Ahora tienes {stars} {starsWord}.'
     },
     /* Exposition + real-life screens for the 3 sub-activities that don't
        have their own custom lesson (positivos-y-negativos uses the

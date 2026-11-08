@@ -74,7 +74,7 @@
       afin: 'Affine: it starts at another number'
     },
 
-    endSummary: 'You have answered {n} questions of {activity}. Now you have {stars} stars.',
+    endSummary: 'You have answered {n} questions of {activity}. Now you have {stars} {starsWord}.',
     btnMenu: 'Back to the start',
     transfer: 'It will help you work out how much a taxi costs or how much you will have saved each week.',
 

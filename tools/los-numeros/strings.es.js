@@ -30,7 +30,7 @@
     /* ---- Cierre ---- */
     finish: 'Terminar →',
     endTitle: '¡Has terminado!',
-    endSummary: 'Has repasado los cuatro tipos de números. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has repasado los cuatro tipos de números. Ahora tienes {stars} {starsWord}.',
     btnMenu: 'Volver al inicio',
     transfer: 'Esto te servirá para saber qué tipo de número tienes delante: en una cuenta, en un precio, en una receta o en un termómetro.'
   }, 'es');

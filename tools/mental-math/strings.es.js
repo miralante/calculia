@@ -10,7 +10,7 @@
     title: '🧠 Restar y Cálculo Mental',
     instructionMenu: 'Elige una actividad.',
     btnMenu: 'Volver al inicio',
-    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} {starsWord}.',
     explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',
     explicacionIncorrectaA: '❌ Mira: la respuesta correcta es ',
     hint: '🤔 «{elegida}» no es la respuesta. Piensa con calma y mira otra vez la pregunta.',
@@ -147,7 +147,7 @@
     qDigitValue: '¿Cuánto vale el {digit} de las {plural}?',
 
     groupsCorrect: '✅ Así se cuenta.',
-    groupsFinal: 'Has acertado {n} de {total}. Ahora tienes {stars} estrellas.',
+    groupsFinal: 'Has acertado {n} de {total}. Ahora tienes {stars} {starsWord}.',
     groupsHintPrefix: '💡 ',
     groupsWrongPrefix: 'La respuesta es: ',
 

@@ -485,7 +485,8 @@
     show(endScreen);
     $('#finalSummary').textContent = t('finalSummary')
       .replace('{n}', correctCount)
-      .replace('{stars}', progress.stars);
+      .replace('{nWord}', App.i18n.starsWord(correctCount))
+      .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
     App.feedback.celebrate(t('core.roundComplete'));
   }
 

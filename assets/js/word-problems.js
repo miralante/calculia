@@ -103,7 +103,10 @@
       function finish() {
         progress.completedRounds += 1;
         save();
-        endSummary.textContent = fill(t('endSummary'), { n: correctFirstTry, total: problems.length, stars: progress.stars });
+        endSummary.textContent = fill(t('endSummary'), {
+          n: correctFirstTry, total: problems.length, stars: progress.stars,
+          starsWord: App.i18n.starsWord(progress.stars), nWord: App.i18n.starsWord(correctFirstTry)
+        });
         showScreen('screenEnd');
       }
 

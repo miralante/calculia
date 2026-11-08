@@ -623,7 +623,7 @@
       $('#groupsFinalSummary').textContent = groupsT('groupsFinal')
         .replace('{n}', gCorrect)
         .replace('{total}', items.length)
-        .replace('{stars}', groupsProgress.stars);
+        .replace('{stars}', groupsProgress.stars).replace('{starsWord}', App.i18n.starsWord(groupsProgress.stars));
       groupsSwitchTo(gEndScreen);
       App.feedback.celebrate(App.i18n.t('core.roundComplete'));
     }

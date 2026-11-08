@@ -112,7 +112,7 @@
     explainLast: 'The last digit of {a} is {d}. So {a} is {p}.',
 
     /* ---------- Closing ---------- */
-    parityFinalSummary: 'You finished {count} questions. You have {stars} stars now.',
+    parityFinalSummary: 'You finished {count} questions. You have {stars} {starsWord} now.',
     parityTransfer: 'Knowing which numbers are even and which are odd helps split into two teams, alternate turns, or cut a list in half.'
   }, 'en');
 })();

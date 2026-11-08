@@ -10,7 +10,7 @@
     title: '🧠 Subtraction and Mental Math',
     instructionMenu: 'Choose an activity.',
     btnMenu: 'Back to start',
-    endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
+    endSummary: 'You solved {n} questions of {activity}. You now have {stars} {starsWord}.',
     explicacionCorrecta: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
@@ -145,7 +145,7 @@
     qDigitValue: 'What is the {digit} in the {plural} worth?',
 
     groupsCorrect: '✅ That is how you count it.',
-    groupsFinal: 'You got {n} of {total} right. Now you have {stars} stars.',
+    groupsFinal: 'You got {n} of {total} right. Now you have {stars} {starsWord}.',
     groupsHintPrefix: '💡 ',
     groupsWrongPrefix: 'The answer is: ',
 

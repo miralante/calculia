@@ -15,7 +15,7 @@
     piecesLabel: 'Pieces',
     pieceAria: 'Piece',
     hint: '«{elegida}» does not fit that gap: compare the picture with the model and notice its position.',
-    endSummary: 'You completed {n} puzzles. You now have {stars} stars.',
+    endSummary: 'You completed {n} puzzles. You now have {stars} {starsWord}.',
     btnMenu: 'Back to start',
     contexto: 'When you tidy a room, build a piece of furniture or set the table, you look at the whole picture and decide where each thing goes.',
     transfer: 'This helps you pay attention to the whole picture when you sort or assemble things.'

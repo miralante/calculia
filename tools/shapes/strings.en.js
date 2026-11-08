@@ -72,7 +72,7 @@
        "New round" re-shuffles and starts again without going through
        the end screen. */
     btnMenu: 'Back to start',
-    endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
+    endSummary: 'You solved {n} questions of {activity}. You now have {stars} {starsWord}.',
     shape: {
       circle: 'circle',
       square: 'square',

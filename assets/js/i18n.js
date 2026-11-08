@@ -35,6 +35,8 @@
         listenText: 'Escuchar el texto',
         loading: 'Cargando…',
         roundComplete: '¡Ronda completada!',
+        starOne: 'estrella',
+        starOther: 'estrellas',
         rest: '¡Llevas un buen rato! Puedes descansar si quieres.',
         dataProtection: 'Calculia no recolecta datos',
         aboutApp: 'Sobre la app',
@@ -63,7 +65,7 @@
         visualAria: 'Dibujo que acompaña a la explicación.',
         right: '✅ ¡Muy bien!',
         rightPrefix: '',
-        roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} estrellas.',
+        roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Ahora tienes {stars} {starsWord}.',
         reinforceTitle: 'Refuerzo',
         reinforceIntro: 'Vamos a repetir las {n} preguntas que has fallado hasta acertarlas todas.',
         chainStep: 'Paso {n} de {total}: {name}',
@@ -88,6 +90,8 @@
         listenText: 'Listen to the text',
         loading: 'Loading…',
         roundComplete: 'Round complete!',
+        starOne: 'star',
+        starOther: 'stars',
         rest: 'You have been playing a while! You can rest if you want.',
         dataProtection: 'Calculia does not collect data',
         aboutApp: 'About the app',
@@ -116,7 +120,7 @@
         visualAria: 'A drawing that goes with the explanation.',
         right: '✅ Well done!',
         rightPrefix: '',
-        roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} stars.',
+        roundDone: 'You have finished the round: {n} of {total} right the first time. You now have {stars} {starsWord}.',
         reinforceTitle: 'Practice',
         reinforceIntro: 'Let us repeat the {n} questions you got wrong until you get them all right.',
         chainStep: 'Step {n} of {total}: {name}',
@@ -241,6 +245,13 @@
     }
     if (!Array.isArray(value) || !value.length) return '';
     return value[Math.floor(Math.random() * value.length)];
+  }
+
+  /* The noun that follows a star count: "1 estrella", "2 estrellas".
+     The count decides it; templates write {starsWord} (or {nWord}) where
+     the noun goes, so no string needs to know the number. */
+  function starsWord(count) {
+    return t(Number(count) === 1 ? 'core.starOne' : 'core.starOther');
   }
 
   /**
@@ -399,6 +410,7 @@
     pick: pick,
     data: data,
     dataByLocale: dataByLocale,
-    apply: apply
+    apply: apply,
+    starsWord: starsWord
   };
 })();

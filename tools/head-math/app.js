@@ -308,7 +308,7 @@
     show($('#screenFinish'));
     $('#finishText').textContent = App.i18n.t('roundSummary')
       .replace('{count}', round.length)
-      .replace('{stars}', progress.stars);
+      .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 

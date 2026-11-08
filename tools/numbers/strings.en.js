@@ -12,7 +12,7 @@
     notaTablasLink: 'Math Tables',
     notaTablas: '🔢 To count, add and multiply, go to {link}.',
     btnMenu: 'Back to start',
-    endSummary: 'You solved {n} questions of {activity}. You now have {stars} stars.',
+    endSummary: 'You solved {n} questions of {activity}. You now have {stars} {starsWord}.',
     explicacionCorrecta: '✅ Correct! The answer is: ',
     explicacionIncorrectaA: '❌ Look: the correct answer is ',
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
@@ -73,7 +73,7 @@
       },
       tempSuccess: '✅ Goal reached!',
       tempNext: 'Next challenge →',
-      endSummary: 'You practised positive and negative numbers. You now have {stars} stars.'
+      endSummary: 'You practised positive and negative numbers. You now have {stars} {starsWord}.'
     },
     /* Exposition + real-life screens for the 3 sub-activities that don't
        have their own custom lesson (positivos-y-negativos uses the

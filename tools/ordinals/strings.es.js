@@ -246,7 +246,7 @@
     hintOrdinalToDigit: '«{elegida}» no es el número: mira qué número va escrito junto a la palabra.',
     hintDigitToOrdinal: '«{elegida}» no es la palabra de ese puesto: piensa qué puesto ocupa ese número en la fila.',
 
-    finalSummary: 'Has acertado {n} de {total}. Ahora tienes {stars} estrellas.',
+    finalSummary: 'Has acertado {n} de {total}. Ahora tienes {stars} {starsWord}.',
     transfer: 'Los ordinales se usan en los podios, en las clasificaciones, en las colas, en los pisos, en las fechas y en las listas. Saber el puesto de cada uno ayuda en el día a día.'
   }, 'es');
 })();

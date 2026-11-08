@@ -30,7 +30,7 @@
     /* ---- End ---- */
     finish: 'Finish →',
     endTitle: 'You are done!',
-    endSummary: 'You have looked at the four kinds of numbers. You now have {stars} stars.',
+    endSummary: 'You have looked at the four kinds of numbers. You now have {stars} {starsWord}.',
     btnMenu: 'Back to start',
     transfer: 'This will help you know what kind of number you have in front of you: in a bill, in a price, in a recipe or in a thermometer.'
   }, 'en');

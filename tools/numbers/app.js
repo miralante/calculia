@@ -357,11 +357,11 @@
       summaryEl.textContent = App.i18n.t('endSummary')
         .replace('{n}', round.roundCorrect)
         .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
-        .replace('{stars}', progress.stars);
+        .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
     }
     } else if (activity.id === 'positivos-y-negativos') {
       summaryEl.textContent = App.i18n.t('signed.endSummary')
-        .replace('{stars}', progress.stars);
+        .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
     } else if (round.level.tipo === 'ascensorLibre' || round.level.tipo === 'ascensorMeta') {
       /* Free-exploration elevator: no question count, only a star
          tally. Different from the counter summary to keep each
@@ -371,7 +371,7 @@
       summaryEl.textContent = App.i18n.t('endSummary')
         .replace('{n}', round.roundCorrect)
         .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
-        .replace('{stars}', progress.stars);
+        .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
     }
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }

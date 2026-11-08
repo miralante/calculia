@@ -60,7 +60,7 @@
 
     check: 'Check',
     roundComplete: 'Round finished!',
-    roundSummary: 'You solved {count} exercises. Now you have {stars} stars.',
+    roundSummary: 'You solved {count} exercises. Now you have {stars} {starsWord}.',
     progress: '{current} of {stars}',
     correctFormat: 'It is written: {n}',
 

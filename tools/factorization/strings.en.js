@@ -12,7 +12,7 @@
     hint: '🤔 Divide by 2, 3, 5… until only prime numbers are left.',
     next: 'Next →',
     endTitle: 'You have finished',
-    endSummary: 'You got {n} of {total} right the first time. You now have {stars} stars.',
+    endSummary: 'You got {n} of {total} right the first time. You now have {stars} {starsWord}.',
     btnMenu: 'Back to the start',
 
     problems: {

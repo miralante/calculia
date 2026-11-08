@@ -12,7 +12,7 @@
     hint: '🤔 Are things shared into equal parts, or are groups counted? Then divide.',
     next: 'Next →',
     endTitle: 'You have finished',
-    endSummary: 'You got {n} of {total} right the first time. You now have {stars} stars.',
+    endSummary: 'You got {n} of {total} right the first time. You now have {stars} {starsWord}.',
     btnMenu: 'Back to the start',
 
     problems: {

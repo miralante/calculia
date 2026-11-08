@@ -15,7 +15,7 @@
     piecesLabel: 'Piezas',
     pieceAria: 'Pieza',
     hint: '«{elegida}» no encaja en ese hueco: compara el dibujo con el modelo y fíjate en su posición.',
-    endSummary: 'Has completado {n} puzles. Ahora tienes {stars} estrellas.',
+    endSummary: 'Has completado {n} puzles. Ahora tienes {stars} {starsWord}.',
     btnMenu: 'Volver al inicio',
     contexto: 'Cuando ordenas una habitación, montas un mueble o preparas la mesa, miras la imagen completa y decides dónde va cada cosa.',
     transfer: 'Esto te ayuda a fijarte en la imagen completa cuando ordenas o montas.'
