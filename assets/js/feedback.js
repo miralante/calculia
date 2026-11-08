@@ -269,7 +269,13 @@
       seen.clear();
     }
 
-    return { start: start, add: add, consume: consume, clear: clear };
+    /* The progress bar of a mini-round: the item on screen out of the
+       items of the mini-round. `session` is an App.reinforce.session. */
+    function paintBar(fill, session) {
+      fill.style.width = (((session.position() + 1) / session.total()) * 100) + '%';
+    }
+
+    return { start: start, add: add, consume: consume, clear: clear, paintBar: paintBar };
   }
 
   window.App.reinforce = makeReinforce();

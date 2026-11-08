@@ -233,7 +233,7 @@
      on each correct item (see answer); roundCorrect is not incremented
      here (it is the normal round counter). */
   function paintReinforceProgress() {
-    progressFill.style.width = (((reinforcement.position() + 1) / reinforcement.total()) * 100) + '%';
+    App.reinforce.paintBar(progressFill, reinforcement);
     progressText.textContent = '';
   }
 

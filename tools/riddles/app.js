@@ -90,7 +90,7 @@
      counter); stars ARE added when each reinforce item is answered
      correctly (see answer). */
   function paintReinforceProgress() {
-    progressFill.style.width = (((reinforcement.position() + 1) / reinforcement.total()) * 100) + '%';
+    App.reinforce.paintBar(progressFill, reinforcement);
     progressText.textContent = '';
   }
 

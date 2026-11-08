@@ -194,7 +194,7 @@
       btn.addEventListener('click', function () { answer(op, btn); });
       optionsEl.appendChild(btn);
     });
-    progressFill.style.width = (((reinforcement.position() + 1) / reinforcement.total()) * 100) + '%';
+    App.reinforce.paintBar(progressFill, reinforcement);
     progressText.textContent = '';
     paintStars();
   }
