@@ -250,10 +250,34 @@
     if (el) el.addEventListener('click', function () { location.href = '../../'; });
   }
 
+  /* The explanation carousel of the hand-built pages: the ← and → buttons move back and forward,
+     and a click (or Enter or Space) on the card moves forward. `step(delta)` moves the index and
+     paints the card. Each activity keeps its own paint; this is the wiring every one of them had. */
+  function bindCarousel(parts, step) {
+    if (parts.prev) parts.prev.addEventListener('click', function () { step(-1); });
+    if (parts.next) parts.next.addEventListener('click', function () { step(1); });
+    if (parts.card) {
+      parts.card.addEventListener('click', function () { step(1); });
+      parts.card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          step(1);
+        }
+      });
+    }
+  }
+
+  /* The index after moving `delta` cards in a carousel of `length` cards: it wraps around at both ends. */
+  function wrapIndex(index, delta, length) {
+    return (index + delta + length) % length;
+  }
+
   window.App.utils = {
     shuffle: shuffle,
     drawRound: drawRound,
     bindEndBackToStart: bindEndBackToStart,
+    bindCarousel: bindCarousel,
+    wrapIndex: wrapIndex,
     drawRoundReset: drawRoundReset,
     spreadRepeats: spreadRepeats,
     $: $,
