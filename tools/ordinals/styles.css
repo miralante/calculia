@@ -52,7 +52,7 @@
   gap: var(--espacio);
 }
 
-.carousel-card { border-color: var(--mod-razonamiento-suave); }
+
 
 /* ----- Tarjeta de medallas (presentación del concepto) -----
    El podio es la metáfora que ya se conoce sin tener que aprenderla:
@@ -150,25 +150,9 @@
 }
 
 /* ----- Carrusel (después de las medallas) ----- */
-.carousel-display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  min-height: 120px;
-  padding: var(--espacio);
-  border: 2px dashed var(--mod-razonamiento-suave);
-  border-radius: var(--radio);
-  background: var(--color-superficie);
-  width: 100%;
-  max-width: 480px;
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.15s ease;
-}
-.carousel-display:active { transform: scale(0.97); }
-.carousel-display:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 2px; }
+
+
+
 
 /* Figura y nombre: la cifra grande (≥20px en negrita) cuenta como
    texto grande a efectos de contraste AAA. */
@@ -186,19 +170,13 @@
   gap: 8px;
 }
 .carousel-medal { font-size: 44px; line-height: 1; }
-.carousel-figure { font-size: 44px; font-weight: 800; line-height: 1.1; }
-.carousel-name { font-size: var(--texto-grande); font-weight: 800; }
 
-.carousel-caption {
-  font-size: var(--texto-pequeno);
-  color: var(--color-texto);
-  text-align: center;
-  margin: 0;
-  min-height: 1.2em;
-}
 
-.carousel-controls { align-items: center; width: 100% }
-.carousel-controls .btn { align-self: center; padding: 4px 14px }
+
+
+
+
+
 
 /* ----- Pantalla 2: escenario (edificio o cola) ----- */
 .famosos-card { border-color: var(--mod-razonamiento-suave); }
@@ -730,7 +708,7 @@
    Responsive — 320 / 375 / 768 / desktop
    ============================================================ */
 @media (max-width: 480px) {
-  .carousel-figure, .carousel-medal { font-size: 32px; }
+  .carousel-medal { font-size: 32px; }
   .carousel-figure-row { gap: 6px; }
   .famoso-figure { font-size: 32px; }
   .quiz-shown { font-size: 48px; min-height: 72px; }
@@ -754,4 +732,3 @@
 }
 /* Centra el botón de "Recuerda →" (Pantalla 2). Antes convivía
    con un botón de "← Anterior" que ya no existe. */
-.intro-buttons { justify-content: center; gap: var(--espacio); }

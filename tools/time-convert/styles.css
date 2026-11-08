@@ -7,43 +7,15 @@
    ============================================================ */
 
 /* Explanation: one card per step, with a picto, the name and one sentence. */
-.carousel-card { border-color: var(--mod-razonamiento-suave); align-items: center; }
-.carousel-display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  min-height: 160px;
-  width: 100%;
-  max-width: 480px;
-  padding: var(--espacio);
-  border: 2px dashed var(--mod-razonamiento-suave);
-  border-radius: var(--radio);
-  background: var(--color-superficie);
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.15s ease;
-}
-.carousel-display:active { transform: scale(0.97); }
-.carousel-display:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 2px; }
-.carousel-figure { font-size: 56px; line-height: 1.1; }
-.carousel-name {
-  font-size: clamp(1.6rem, 5vw, 2.75rem);
-  font-weight: 800;
-  line-height: 1.1;
-  text-align: center;
-  color: var(--mod-razonamiento);
-}
-.gallery-note {
-  margin: 0;
-  max-width: 480px;
-  font-size: var(--texto-grande);
-  line-height: 1.4;
-  text-align: center;
-}
-.carousel-controls { width: 100% }
-.intro-buttons { justify-content: center; }
+
+
+
+
+
+
+
+
+
 
 /* The number inside each option. */
 .answer-num {
@@ -51,20 +23,14 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.test-sheet-card .prompt { text-align: center }
+
 .options.options-row .option-btn { display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   font-size: 1.3rem;
   font-weight: 800 }
-.test-sheet-card .feedback { min-height: 0 }
-@keyframes test-sheet-shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .test-sheet-card.shake { animation: none; }
-}
+
+
+

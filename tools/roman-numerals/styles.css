@@ -155,55 +155,21 @@
 /* ============================================================
    Pantalla 1: introducción
    ============================================================ */
-.intro-buttons {
-  justify-content: space-between;
-  gap: var(--espacio);
-}
 
-.carousel-card {
-  border-color: var(--mod-razonamiento-suave);
-  align-items: center;
-}
 
-.carousel-display {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 56px;
-  font-size: 40px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  padding: 4px var(--espacio);
-  border: 2px dashed var(--mod-razonamiento-suave);
-  border-radius: var(--radio);
-  background: var(--color-superficie);
-  width: 100%;
-  max-width: 480px;
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.15s ease;
-}
 
-.carousel-display:active { transform: scale(0.97); }
 
-.carousel-display:focus-visible {
-  outline: 3px solid var(--mod-razonamiento);
-  outline-offset: 2px;
-}
 
-.carousel-caption {
-  font-size: var(--texto-pequeno);
-  color: var(--color-texto);
-  text-align: center;
-  margin: 0;
-  min-height: 1.2em;
-}
 
-.carousel-controls { align-items: center;
-  width: 100% }
 
-.carousel-controls .btn { align-self: center;
-  padding: 4px 14px }
+
+
+
+
+
+
+
+
 
 
 .famosos-card {
@@ -496,7 +462,7 @@
 
 /* Pantalla final */
 @media (max-width: 640px) {
-  .carousel-display, .famoso-ejemplo { font-size: 56px; }
+  .famoso-ejemplo { font-size: 56px; }
   .symbol-pill { min-width: 120px; }
   .quiz-shown { font-size: 64px; }
   .roman-join { font-size: 36px; }

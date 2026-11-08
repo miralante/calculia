@@ -32,7 +32,7 @@
 .real-label { fill: var(--color-texto); font-size: 12px; font-weight: 700; text-anchor: middle; }
 .real-guide { fill: none; stroke: var(--color-borde); stroke-width: 3; stroke-dasharray: 6 5; }
 .real-angle-mark { fill: none; stroke: var(--mod-razonamiento, var(--color-texto)); stroke-width: 4; stroke-linecap: round; }
-.intro-buttons { justify-content: center; gap: var(--espacio); }
+
 
 /* ---- The stage ----
    Both drawings (the triangle and the ladder) sit on the same centred

@@ -102,9 +102,7 @@
 }
 
 /* ---- Intro and real-life carousels (before the first round) ---- */
-.reference-card,
-.carousel-card,
-.real-card {
+.reference-card, .real-card {
   align-items: center;
   border-color: var(--mod-razonamiento-suave);
 }
@@ -131,13 +129,8 @@
   justify-content: center;
   gap: 24px;
 }
-.carousel-caption {
-  margin: 0;
-  text-align: center;
-  font-size: var(--texto-grande);
-  font-weight: 700;
-}
-.intro-buttons { justify-content: center; }
+
+
 .real-object { font-size: 96px; line-height: 1.1; }
 
 /* A fraction OF an amount: equal piles, one of them taken. */

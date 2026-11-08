@@ -294,11 +294,7 @@
   text-align: center;
 }
 
-.intro-buttons {
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--espacio);
-}
+
 
 .emoji-large {
   font-size: 3.5rem;
