@@ -1,0 +1,11 @@
+/* ============================================================
+   Calculia — Momentos del día: estilos propios.
+   The cards, the explanation, the real-life examples and the test come from
+   assets/css/components.css and activity-flow.css. Only the part of the day
+   inside each option is styled here.
+   ============================================================ */
+
+.answer-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
