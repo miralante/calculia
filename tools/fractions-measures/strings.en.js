@@ -8,7 +8,6 @@
 
   App.i18n.register({
     title: '🍕 Fractions',
-    ui: { hintPrefix: '', rightPrefix: '✅ Correct! The answer is: ', wrongPrefix: '❌ Look: the correct answer is ' },
     instructionMenu: 'Choose an activity.',
     btnBackToMenu: '← Other activities',
     btnMenu: 'Back to start',

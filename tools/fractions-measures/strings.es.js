@@ -8,7 +8,6 @@
 
   App.i18n.register({
     title: '🍕 Fracciones',
-    ui: { hintPrefix: '', rightPrefix: '✅ ¡Correcto! La respuesta es: ', wrongPrefix: '❌ Mira: la respuesta correcta es ' },
     instructionMenu: 'Elige una actividad.',
     btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',

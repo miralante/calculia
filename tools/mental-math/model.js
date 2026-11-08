@@ -416,6 +416,19 @@
     { count: 2, group: 'ten' }
   ];
 
+  function groupsLevelStars(level) {
+    if (level.sublevels) {
+      return level.sublevels.reduce(function (max, sn) {
+        return Math.max(max, sn.stars || 1);
+      }, 1);
+    }
+    return level.stars || 1;
+  }
+
+  function groupsLevelIcon(level) {
+    return { learn: '📚', apply: '🧩', test: '🎲' }[level.id] || '⭐';
+  }
+
   function groupsEntryKey(entry) {
     return entry.mode + '|' + entry.groupId + '|' + entry.count + '|' + entry.digit;
   }
@@ -456,6 +469,12 @@
     return '<span class="num-color">' + html + '</span>';
   }
 
+  function groupsPlainShown(roundData) {
+    var entry = roundData.entry;
+    if (entry.mode === 'digitValue') return groupsFormat(entry.n);
+    return roundData.shown;
+  }
+
   function groupsPickHint(entry) {
     if (entry.mode === 'digitValue') {
       return groupsT('hintDigitValue');
@@ -493,10 +512,13 @@
     groupsFormat: groupsFormat,
     RULE_EXAMPLES: RULE_EXAMPLES,
     DOZEN_EXAMPLES: DOZEN_EXAMPLES,
+    groupsLevelStars: groupsLevelStars,
+    groupsLevelIcon: groupsLevelIcon,
     groupsEntryKey: groupsEntryKey,
     groupsTakeTwo: groupsTakeTwo,
     GROUPS_DIGIT_CLASSES: GROUPS_DIGIT_CLASSES,
     groupsColoredDigits: groupsColoredDigits,
+    groupsPlainShown: groupsPlainShown,
     groupsPickHint: groupsPickHint
   };
 })();
