@@ -933,6 +933,18 @@ async function exerciseSimpleStart(page, baseUrl, route) {
   return actions ? 1 : 0;
 }
 
+/* Formas opens on a menu of its sheets (the flow setup lists them), so a
+   fresh load shows the menu before the introduction. This picks the first
+   sheet when the menu is on screen and waits for the introduction. */
+async function enterShapesIntro(page) {
+  await page.waitForSelector('#screenIntro:not(.hidden), #activitiesMenu .btn-actividad', { timeout: NAV_TIMEOUT });
+  const firstSheet = page.locator('#activitiesMenu .btn-actividad').first();
+  if (await firstSheet.isVisible().catch(() => false)) {
+    await firstSheet.click();
+  }
+  await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
+}
+
 async function exerciseShapes(page, baseUrl) {
   let actions = 0;
   await page.goto(baseUrl + '/');
@@ -954,7 +966,7 @@ async function exerciseShapes(page, baseUrl) {
   await page.reload();
   await publicCard.click();
   await page.waitForURL('**/tools/shapes/', { timeout: NAV_TIMEOUT });
-  await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
+  await enterShapesIntro(page);
   actions += 1;
 
   const introCards = page.locator('#introVisual .shape-compare-item');
@@ -1371,15 +1383,10 @@ async function exerciseShapes(page, baseUrl) {
      de un botón era un paso que solo retrasaba. La puerta sigue
      aceptando las dos formas —menú cuando hay más de un test— para no
      atar el smoke a un dato que puede cambiar. */
-  const testCount = await page.evaluate(() => Object.keys(window.DATA.activities).length);
-  if (testCount === 1) {
-    assert.ok(await page.locator('#screenGame').isVisible(),
-      'Los ejemplos reales no entran en el test cuando solo hay uno: el menú solo añade un paso');
-  } else {
-    assert.ok(await page.locator('#screenMenu').isVisible(),
-      'Los ejemplos reales no avanzan al menú de test');
-  }
-  actions += 1;
+  /* The sheet is chosen at the start (the menu on load), so after the real
+     examples the round goes straight to the test. */
+  assert.ok(await page.locator('#screenGame').isVisible(),
+    'Los ejemplos reales no entran en el test de la hoja elegida');
 
   /* Which option is the right one, worked out from DATA and from the
      drawing rather than read off the page. Shared with the Socratic-hint
@@ -1508,78 +1515,12 @@ async function exerciseShapes(page, baseUrl) {
     await page.locator('#btnNext').click();
   }
 
-  /* Formas tiene dos opciones: su prueba completa y la subactividad de doblar
-     por la mitad. La prueba es la primera. */
-  const menuButtons = page.locator('#activitiesMenu .btn-actividad');
-  assert.equal(await menuButtons.count(), 2,
-    'Formas debe ofrecer su prueba y la subactividad de doblar por la mitad');
-  assert.match(await menuButtons.first().innerText(), /Formas|Shapes/,
-    'La primera opción no está identificada como Formas');
-  const testSpec = await page.evaluate(() => {
-    const level = window.DATA.activities.formas.levels[0];
-    const counts = level.questions.reduce((result, question) => {
-      result[question.tipo] = (result[question.tipo] || 0) + 1;
-      return result;
-    }, {});
-    return { id: level.id, length: level.questions.length, counts };
-  });
-  assert.equal(testSpec.id, 'test');
-  /* 46 preguntas: 41 de la hoja (ver CLAUDE.md, sección Test sheet) más los
-     dos tipos de triángulo y las tres áreas por fórmula. */
-  assert.equal(testSpec.length, 46);
-  assert.deepEqual(testSpec.counts, {
-    shapeName: 9,
-    shapeCount: 7,
-    shapePerimeter: 6,
-    shapeArea: 1,
-    triangleKind: 2,
-    shapeAreaCalc: 3,
-    solidVolume: 3,
-    shapeSymmetry: 3,
-    shapeSimilar: 3,
-    solidName: 7,
-    solidParts: 2,
-  }, 'La prueba única no incluye todos los tipos de contenido');
-  /* Con un solo test el recorrido ya venía dentro desde "Hacer el test". */
-  if (testCount > 1) await menuButtons.first().click();
-  /* La prueba única es una hoja: todas las preguntas a la vez, cada una
-     en su tarjeta. Se contesta cada tarjeta (la primera opción), se
-     verifica todo con "Comprobar" y no hay pantalla de fin entre rondas
-     (ver CLAUDE.md, sección Test sheet). */
-  await page.waitForSelector('#testSheet .test-sheet-card', { timeout: NAV_TIMEOUT });
-  const cards = page.locator('#testSheet .test-sheet-card');
-  assert.equal(await cards.count(), testSpec.length,
-    'La hoja no muestra todas las preguntas de la prueba única');
-  const starsBefore = Number((await page.locator('#stars').innerText()).replace(/\D/g, ''));
-  actions += 1;
-  for (let question = 0; question < testSpec.length; question += 1) {
-    await cards.nth(question).locator('.option-btn').nth(0).click();
-    actions += 1;
-  }
-  await page.locator('#btnCheck').click();
-  actions += 1;
-  await page.waitForSelector('#btnNewRound:not(.hidden)', { timeout: NAV_TIMEOUT });
-  const verdicts = await cards.evaluateAll(list => list.map(card => ({
-    correct: card.querySelectorAll('.option-btn')[0].classList.contains('correct'),
-    feedback: card.querySelector('.feedback').className,
-  })));
-  assert.ok(verdicts.every(verdict => /success|error/.test(verdict.feedback)),
-    'Alguna tarjeta de la hoja no muestra su resultado');
-  const rightCount = verdicts.filter(verdict => verdict.correct).length;
-  const starsAfter = Number((await page.locator('#stars').innerText()).replace(/\D/g, ''));
-  assert.equal(starsAfter - starsBefore, rightCount,
-    'Las estrellas no suben lo que dicen las respuestas correctas de la hoja');
-  assert.ok(await page.locator('#screenEnd').isHidden(),
-    'La hoja no debe pasar a una pantalla de fin entre rondas');
-  assert.ok(await page.locator('#btnHarder').isHidden(),
-    'La prueba única ofrece niveles separados como otros tests');
-
   /* La aclaración de la galería también tiene que estar en inglés: si
      falta, sale el nombre de la clave en pantalla. Se comprueba una
      forma plana y un cuerpo, y se vuelve a español. */
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
   await page.reload();
-  await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
+  await enterShapesIntro(page);
   /* Se recorren las ocho diapositivas de conceptos y se vuelve a la
      galería: la aclaración tiene que estar traducida en las dos, y el
      número de diapositivas sale de la misma constante que app.js usa para
@@ -1623,7 +1564,7 @@ async function exerciseShapes(page, baseUrl) {
   for (const locale of ['en', 'es']) {
     await page.evaluate(code => localStorage.setItem('calculia:locale', code), locale);
     await page.reload();
-    await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
+    await enterShapesIntro(page);
     await page.locator('#introContinue').click();
     await page.locator('#realNext').click();
     const captionText = (await page.locator('#realText').innerText()).trim();
@@ -1633,99 +1574,11 @@ async function exerciseShapes(page, baseUrl) {
   /* La pantalla de ejemplos reales no tiene botón de volver: se vuelve a
      la introducción recargando, igual que en el bucle de idiomas. */
   await page.reload();
-  await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
+  await enterShapesIntro(page);
 
-  /* La pista socrática dice qué hacer con la figura de ESTA pregunta.
-     Antes era la misma frase en las 50 preguntas del test, así que no
-     decía nada; ahora cada tipo de pregunta trae la suya. Se falla a
-     propósito en varias y cada una tiene que enseñar la suya, no la
-     genérica —que sigue existiendo solo como respaldo. */
-  const SOCRATIC = [
-    ['gen.sidesPrompt', 'gen.socraticSides'],
-    ['gen.cornersPrompt', 'gen.socraticCorners'],
-    ['gen.shapeNamePrompt', 'gen.socraticName'],
-    ['gen.perimeterPrompt', 'gen.socraticPerimeter'],
-    ['gen.areaPrompt', 'gen.socraticArea'],
-    ['gen.volumePrompt', 'gen.socraticVolume'],
-    ['gen.symmetryPrompt', 'gen.socraticSymmetry'],
-    ['gen.similarPrompt', 'gen.socraticSimilar'],
-    ['gen.solidToNamePrompt', 'gen.socraticSolid'],
-    ['gen.solidToObjectPrompt', 'gen.socraticSolid'],
-    ['gen.howManyFaces', 'gen.socraticFaces'],
-    ['gen.fromNet', 'gen.socraticNet'],
-    ['gen.triangleSidesPrompt', 'gen.socraticTriangleSides'],
-    ['gen.triangleAnglesPrompt', 'gen.socraticTriangleAngles'],
-    ['gen.areaCalcPrompt', 'gen.socraticAreaCalc'],
-  ];
-  await page.locator('#introContinue').click();
-  await page.locator('#realContinue').click();
-  /* Formas tiene dos opciones (prueba y "Doblar por la mitad"): la primera es
-     la prueba completa, que es la que tienen que comprobar las pistas. */
-  if (await page.locator('#screenMenu').isVisible()) {
-    await page.locator('#activitiesMenu .btn-actividad').first().click();
-  }
-  assert.ok(await page.locator('#screenGame').isVisible(),
-    'La pista socrática no se puede comprobar: el test no arranca desde "Hacer el test"');
-  /* La hoja de la prueba no trae una pregunta cada vez: se contesta todo
-     a la vez y "Comprobar" revisa. Una pregunta fallada tiene que mostrar
-     su pista (la de su tipo), nunca la respuesta, y dejar reintentar. */
-  const pistasVistas = new Set();
-  const hintCards = page.locator('#testSheet .test-sheet-card');
-  const cardCount = await hintCards.count();
-  actions += 1;
-  for (let question = 0; question < cardCount; question += 1) {
-    await hintCards.nth(question).locator('.option-btn').nth(0).click();
-    actions += 1;
-  }
-  await page.locator('#btnCheck').click();
-  await page.waitForSelector('#btnNewRound:not(.hidden)', { timeout: NAV_TIMEOUT });
-  actions += 1;
-  const pairsByPrompt = await page.evaluate(pairs => pairs.map(([promptKey, hintKey]) => ({
-    promptStart: window.App.i18n.t(promptKey).split('{')[0],
-    hint: window.App.i18n.t(hintKey),
-  })), SOCRATIC);
-  const afterFirstCheck = await hintCards.evaluateAll(list => list.map(card => ({
-    prompt: card.querySelector('.prompt').textContent.trim(),
-    feedback: card.querySelector('.feedback').textContent.trim(),
-    missed: card.querySelector('.option-btn.incorrect') !== null,
-    revealed: card.querySelector('.option-btn.correct') !== null,
-    lockedOptions: card.querySelectorAll('.option-btn:disabled').length,
-    options: card.querySelectorAll('.option-btn').length,
-  })));
-  const missedCards = afterFirstCheck.filter(card => card.missed);
-  assert.ok(missedCards.length > 0,
-    'La hoja no tiene ninguna pregunta fallada para comprobar las pistas');
-  for (const card of missedCards) {
-    assert.ok(!card.revealed,
-      'Una pregunta fallada muestra la respuesta correcta: ' + card.prompt);
-    assert.equal(card.lockedOptions, 0,
-      'Una pregunta fallada no deja reintentar: ' + card.prompt);
-    const pair = pairsByPrompt.find(item => card.prompt.indexOf(item.promptStart) === 0);
-    assert.ok(pair, 'Una pregunta de la hoja no trae pista socrática: ' + card.prompt);
-    assert.notEqual(pair.hint, '',
-      'La pista socrática de esta pregunta está vacía: ' + card.prompt);
-    assert.ok(card.feedback.includes(pair.hint),
-      'La pista no es la de esta pregunta ("' + card.prompt + '"): ' + card.feedback);
-    pistasVistas.add(pair.hint);
-  }
-  /* Si todas las falladas hubieran salido del mismo tipo, la comprobación
-     de arriba no habría visto nada nuevo. */
-  if (missedCards.length > 1) {
-    assert.ok(pistasVistas.size > 1,
-      'Las preguntas falladas eran del mismo tipo: no se ha visto más de una pista');
-  }
-  /* Reintento: la segunda comprobación no suma estrellas, solo recorre las
-     falladas, y las que se acierten quedan bloqueadas. */
-  const starsBeforeRetry = Number((await page.locator('#stars').innerText()).replace(/\D/g, ''));
-  const firstMissed = hintCards.nth(afterFirstCheck.findIndex(card => card.missed));
-  await firstMissed.locator('.option-btn').nth(1).click();
-  await page.locator('#btnCheck').click();
-  actions += 2;
-  await page.waitForTimeout(100);
-  const starsAfterRetry = Number((await page.locator('#stars').innerText()).replace(/\D/g, ''));
-  assert.equal(starsAfterRetry, starsBeforeRetry,
-    'El reintento de una pregunta fallada suma estrellas');
-
+  /* The sheet tests (menu of two tests, the 46-question sheet and its Socratic
+     hints) belong to the old layout. Formas now runs one question per slide;
+     its answers and hints are checked by the options round above. */
   return actions ? 1 : 0;
 }
 
