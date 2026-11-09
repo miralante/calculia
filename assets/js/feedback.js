@@ -383,6 +383,30 @@
 
   App.reinforce.session = makeReinforceSession;
 
+  /* The star just earned: "Ya tienes X estrellas · A por las Y estrellas" goes
+     into the success message on screen, not into the header. storage.js fires
+     'calculia:progress' on every save ({ before, after } of the activity), and
+     the star is already in `after` by then. stars-engine.js builds the line. */
+  function starLineIntoSuccess(e) {
+    var d = e && e.detail;
+    if (!d || !d.before || !d.after || !window.MiralanteStars) return;
+    var gained = (Number(d.after.stars) || 0) - (Number(d.before.stars) || 0);
+    if (gained <= 0) return;
+    var zone = document.getElementById('feedback');
+    if (!zone || !zone.classList.contains('success')) zone = document.querySelector('.feedback.success');
+    if (!zone) return;
+    var old = zone.querySelector('.stars-goal');
+    if (old) old.remove();
+    var span = document.createElement('span');
+    span.className = 'stars-goal';
+    span.textContent = window.MiralanteStars.line(App.storage.totalStars(), {
+      reached: App.i18n.t('core.starsReached'),
+      goal: App.i18n.t('core.starsGoal')
+    });
+    zone.appendChild(span);
+  }
+  document.addEventListener('calculia:progress', starLineIntoSuccess);
+
   window.App.feedback = {
     success: success,
     encourage: encourage,
