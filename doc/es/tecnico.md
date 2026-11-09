@@ -627,7 +627,6 @@ Cada app expone las mismas cinco carpetas:
     styles.css
     strings.es.js
     strings.en.js
-  team/                   # Ruta oculta: quiénes la hacen
     index.html
     styles.css
     strings.es.js
@@ -710,8 +709,6 @@ la **plantilla**; las desviaciones se indican donde apliquen.
          data-i18n="footerDataProtection">Protección de datos</a>
       <a class="btn btn-secundario" href="../about/"
          data-i18n="footerAbout">Sobre este proyecto</a>
-      <a class="btn btn-secundario" href="../team/"
-         data-i18n="footerTeamGuide">Quiénes la hacen</a>
       <a class="btn btn-secundario" href="../config/"
          data-i18n="footerSettings">Ajustes</a>
     </footer>
@@ -785,7 +782,6 @@ la paridad de claves entre locales.
     /* …más claves… */
     footerActivities: 'Ir a la aplicación',
     footerAbout: 'Sobre este proyecto',
-    footerTeamGuide: 'Quiénes la hacen',
     footerSettings: 'Ajustes'
   }, 'es');
 })();

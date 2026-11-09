@@ -190,7 +190,7 @@
       if (extraClass) pie.className = (pie.className ? pie.className + ' ' : '') + extraClass;
       var html = '';
       if (includeAbout) {
-        html += '<a href="' + base + 'about/" class="legal-link" data-i18n="core.aboutApp"></a>';
+        html += '<a href="https://apptonomia.uk/about/" class="legal-link" data-i18n="core.aboutApp"></a>';
       }
       if (includeConfig) {
         html += '<a href="' + base + 'config/" class="legal-link" data-i18n="core.config"></a>';

@@ -50,7 +50,7 @@ const CONFIG = {
   calculia: {
     prefix: 'calculia-v',
     stylesheets: ['assets/css/base.css'],
-    entryPoints: ['index.html', '404.html', 'about/index.html', 'team/index.html',
+    entryPoints: ['index.html', '404.html', 'about/index.html',
       'config/index.html', 'legal/index.html', 'dev/index.html'],
   },
   ludia: {
@@ -62,7 +62,7 @@ const CONFIG = {
     prefix: 'memofun-v',
     stylesheets: ['assets/css/base.css'],
     entryPoints: ['index.html', '404.html', 'offline.html', 'about/index.html',
-      'team/index.html', 'config/index.html', 'legal/index.html', 'dev/index.html'],
+      'config/index.html', 'legal/index.html', 'dev/index.html'],
   },
   okeymoney: {
     prefix: 'okeymoney-v',
@@ -73,19 +73,19 @@ const CONFIG = {
   routime: {
     prefix: 'routime-v',
     stylesheets: ['assets/css/base.css'],
-    entryPoints: ['index.html', '404.html', 'about/index.html', 'team/index.html',
+    entryPoints: ['index.html', '404.html', 'about/index.html',
       'config/index.html', 'legal/index.html'],
   },
   sinonimia: {
     prefix: 'sinonimia-v',
     stylesheets: ['css/styles.css'],
     entryPoints: ['index.html', '404.html', 'offline.html', 'about/index.html',
-      'team/index.html', 'config/index.html', 'legal/index.html', 'legal/privacidad.html'],
+      'config/index.html', 'legal/index.html', 'legal/privacidad.html'],
   },
   teclatlon: {
     prefix: 'teclatlon-v',
     stylesheets: ['assets/css/base.css'],
-    entryPoints: ['index.html', '404.html', 'about/index.html', 'team/index.html',
+    entryPoints: ['index.html', '404.html', 'about/index.html',
       'config/index.html', 'legal/index.html'],
   },
 };

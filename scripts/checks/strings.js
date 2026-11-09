@@ -88,14 +88,13 @@ module.exports = function (ctx) {
   compareEsEn(ROOT, 'raíz/');
   compareEsEn(path.join(ROOT, 'config'), 'config/');
   compareEsEn(path.join(ROOT, 'legal'), 'legal/');
-  /* Hidden routes with their own strings.<locale>.js pair (about/, team/):
+  /* Hidden routes with their own strings.<locale>.js pair (about/):
      each is a standalone guide aimed at families/therapists/agents, not
      linked from the main menu, and must keep the same es/en key parity
      as everything else the user can reach. The function definition sits
      next to extractDictFromStrings above; calling it for a missing
      directory is a no-op (it bails on the first fs.existsSync check). */
   if (fs.existsSync(path.join(ROOT, 'about'))) compareEsEn(path.join(ROOT, 'about'), 'about/');
-  if (fs.existsSync(path.join(ROOT, 'team'))) compareEsEn(path.join(ROOT, 'team'), 'team/');
 
   /* --- 8. Usage vs registration ---
      Point 4 only checks that strings.es.js and strings.en.js agree with
