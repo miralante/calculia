@@ -3,32 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculia — Presentación del proyecto</title>
-  <!-- Hidden route: not linked from the main menu and should not be indexed.
-       Aimed at anyone who wants to know what Calculia is: families,
-       professionals, journalists, funders or new contributors. -->
+  <title>Calculia — Sobre la app</title>
+  <!-- Linked from the app footer as "Sobre la app". Describes what the app is and how it is used.
+       Structure follows the suite standard (Apptonomia about template). -->
   <meta name="robots" content="noindex, nofollow">
-  <meta name="description" content="Calculia: una aplicación de cálculo y razonamiento lógico para que las personas con discapacidad intelectual practiquen por sí mismas.">
+  <meta name="description" content="Calculia: una aplicación de cálculo y razonamiento lógico para que cada persona practique por sí misma.">
   <meta name="theme-color" content="#FAF7F2">
   <link rel="icon" href="../assets/img/icono.svg?v=calculia-v8587a7e0" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/tokens.css?v=calculia-vd99f158f">
   <link rel="stylesheet" href="../assets/css/base.css?v=calculia-v89f2211a">
-  <link rel="stylesheet" href="../assets/css/components.css?v=calculia-v8e0526e6">
+  <link rel="stylesheet" href="../assets/css/components.css?v=calculia-vfa8e65da">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-vcdcf216d">
 </head>
 <body>
   <div class="container about">
-    <header class="cabecera-about">
+    <header class="header-about">
       <div class="suite-controls">
         <div id="locale-picker"></div>
       </div>
-      <p class="aviso-ruta" data-i18n="routeNotice">Esta página no se enlaza desde la aplicación. Solo se llega
-        escribiendo la dirección.</p>
       <img src="../assets/img/icono.svg?v=calculia-v8587a7e0" alt="" width="80" height="80" class="logo-about">
       <h1>Calculia</h1>
-      <p class="lema" data-i18n="tagline">Una aplicación para la autonomía.</p>
-      <p class="entradilla"><span data-i18n="lead1">Calculia es una </span><strong data-i18n="leadStrong">aplicación web de cálculo y razonamiento lógico</strong><span data-i18n="lead2"> pensada para que las personas con discapacidad intelectual practiquen por sí mismas
+      <p class="tagline" data-i18n="tagline">Una aplicación para la autonomía.</p>
+      <p class="lead"><span data-i18n="lead1">Calculia es una </span><strong data-i18n="leadStrong">aplicación web de cálculo y razonamiento lógico</strong><span data-i18n="lead2"> pensada para que cada persona practique por sí misma
         habilidades matemáticas y lógicas, sin presión y con respeto a su privacidad.</span></p>
 
       <nav class="indice" aria-label="Índice de la presentación">
@@ -48,7 +45,7 @@
         <h2 data-i18n="originTitle">El origen</h2>
         <p><span data-i18n="originP1a">Calculia nace de una pregunta que se repite al final de cada sesión de
           terapia ocupacional: </span><em data-i18n="originP1em">¿qué pasa entre una sesión y la siguiente?</em></p>
-        <p data-i18n="originP2">La persona con discapacidad intelectual practica con su terapeuta en consulta, pero
+        <p data-i18n="originP2">La persona practica con su terapeuta en consulta, pero
           después está sola en casa, en el colegio o en su tiempo libre. Queríamos una
           herramienta que respetase esa autonomía, que diese seguridad a las familias y que
           sirviese a la terapeuta como complemento entre sesiones, no como sustituto.</p>
@@ -196,6 +193,38 @@
           itinerario: cada persona hace su propio camino.</span></p>
       </section>
 
+      <section id="como-se-usa" class="card">
+        <h2 data-i18n="howTitle">Cómo se usa</h2>
+        <ol class="pasos">
+          <li>
+            <h3 data-i18n="step1Title">Elige una actividad</h3>
+            <p data-i18n="step1Text">Busca el tema que quieres practicar.</p>
+          </li>
+          <li>
+            <h3 data-i18n="step2Title">Resuelve con calma</h3>
+            <p data-i18n="step2Text">No hay cronómetro. Piensa tu respuesta el tiempo que necesites.</p>
+          </li>
+          <li>
+            <h3 data-i18n="step3Title">Pide una pista si la necesitas</h3>
+            <p data-i18n="step3Text">La pista te ayuda a pensar, pero no te da la respuesta.</p>
+          </li>
+          <li>
+            <h3 data-i18n="step4Title">Gana estrellas</h3>
+            <p data-i18n="step4Text">Tus estrellas se guardan en este dispositivo.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section id="para-quien" class="card">
+        <h2 data-i18n="forTitle">Para quién es</h2>
+        <p data-i18n="forP">Para cualquier persona que quiera practicar cálculo y razonamiento a su ritmo.</p>
+        <ul class="lista">
+          <li data-i18n="forStudents">Estudiantes que repasan contenidos del colegio.</li>
+          <li data-i18n="forFamilies">Familias que acompañan el estudio en casa.</li>
+          <li data-i18n="forAdults">Personas adultas que quieren repasar operaciones y lógica.</li>
+        </ul>
+      </section>
+
       <section id="hermanos" class="card">
         <h2 data-i18n="siblingsTitle">Proyectos hermanos</h2>
         <p data-i18n="siblingsIntro">Calculia es uno más de un pequeño grupo de proyectos hermanos: mismo equipo,
@@ -205,7 +234,7 @@
           <a class="sibling" href="https://routime.miralante.workers.dev" target="_blank" rel="noopener noreferrer">
             <span class="picto" aria-hidden="true">🌿</span>
             <span class="sibling-texto">
-              <span class="name" data-i18n="siblingRoutimeName">Routime</span>
+              <span class="nombre" data-i18n="siblingRoutimeName">Routime</span>
               <span class="detalle" data-i18n="siblingRoutimeText">Rutinas y autonomía del día a día.</span>
             </span>
             <span class="flecha-externa" aria-hidden="true">↗</span>
@@ -214,7 +243,7 @@
           <a class="sibling" href="https://memofun.miralante.workers.dev" target="_blank" rel="noopener noreferrer">
             <span class="picto" aria-hidden="true">🧠</span>
             <span class="sibling-texto">
-              <span class="name" data-i18n="siblingMemofunName">Memofun</span>
+              <span class="nombre" data-i18n="siblingMemofunName">Memofun</span>
               <span class="detalle" data-i18n="siblingMemofunText">Memoria y atención.</span>
             </span>
             <span class="flecha-externa" aria-hidden="true">↗</span>
@@ -223,7 +252,7 @@
           <a class="sibling" href="https://okeymoney.miralante.workers.dev" target="_blank" rel="noopener noreferrer">
             <span class="picto" aria-hidden="true">💶</span>
             <span class="sibling-texto">
-              <span class="name" data-i18n="siblingOkeymoneyName">Okeymoney</span>
+              <span class="nombre" data-i18n="siblingOkeymoneyName">Okeymoney</span>
               <span class="detalle" data-i18n="siblingOkeymoneyText">Finanzas personales y autonomía cotidiana.</span>
             </span>
             <span class="flecha-externa" aria-hidden="true">↗</span>
@@ -232,7 +261,7 @@
           <a class="sibling" href="https://sinonimia.miralante.workers.dev" target="_blank" rel="noopener noreferrer">
             <span class="picto" aria-hidden="true">📖</span>
             <span class="sibling-texto">
-              <span class="name" data-i18n="siblingSinonimiaName">Sinonimia</span>
+              <span class="nombre" data-i18n="siblingSinonimiaName">Sinonimia</span>
               <span class="detalle" data-i18n="siblingSinonimiaText">Diccionario en lectura fácil.</span>
             </span>
             <span class="flecha-externa" aria-hidden="true">↗</span>
@@ -241,7 +270,7 @@
           <a class="sibling" href="https://teclatlon.miralante.workers.dev" target="_blank" rel="noopener noreferrer">
             <span class="picto" aria-hidden="true">⌨️</span>
             <span class="sibling-texto">
-              <span class="name" data-i18n="siblingTeclatlonName">Teclatlon</span>
+              <span class="nombre" data-i18n="siblingTeclatlonName">Teclatlon</span>
               <span class="detalle" data-i18n="siblingTeclatlonText">Mecanografía con el teclado físico.</span>
             </span>
             <span class="flecha-externa" aria-hidden="true">↗</span>
@@ -254,8 +283,7 @@
         <h2 data-i18n="authorshipTitle">Quiénes la hacen</h2>
         <p><span data-i18n="authorshipP1a">Calculia es una iniciativa de </span><strong>The Naked Frame</strong><span data-i18n="authorshipP1b">, un estudio
           independiente que trabaja en proyectos abiertos con impacto social y educativo.</span></p>
-        <p data-i18n="authorshipP2">La aplicación se construye con la participación de personas con discapacidad
-          intelectual, familias, terapeutas ocupacionales y profesorado, que prueban cada
+        <p data-i18n="authorshipP2">La aplicación se construye con la participación de personas que la usan, familias, terapeutas ocupacionales y profesorado, que prueban cada
           cambio y revisan el contenido antes de que llegue a producción.</p>
         <p data-i18n="authorshipP3">El código, el texto y las decisiones se publican en abierto para que cualquier
           persona o equipo pueda auditarlos, aprender de ellos y adaptarlos a otros
@@ -299,10 +327,10 @@
     </footer>
   </div>
 
-  <script src="../assets/js/utils.js?v=calculia-ved7d886e"></script>
+  <script src="../assets/js/utils.js?v=calculia-ve50c6d2f"></script>
   <script src="../assets/js/i18n.js?v=calculia-v3abda4f1"></script>
-  <script src="strings.es.js"></script>
-  <script src="strings.en.js"></script>
+  <script src="strings.es.js?v=calculia-vdfaaa061"></script>
+  <script src="strings.en.js?v=calculia-vbf7046e2"></script>
   <script src="../assets/js/sw-register.js?v=calculia-v4a242865"></script>
 <!-- Controles compartidos con la pantalla principal: el desplegable de idioma
      y el ⚙️ de la cabecera, con su cajón de accesibilidad. Mismo ?v= que la

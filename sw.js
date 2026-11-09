@@ -14,7 +14,7 @@
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
-var VERSION = 'calculia-v423';
+var VERSION = 'calculia-v433';
 
 var FILES = [
   './',
@@ -24,10 +24,6 @@ var FILES = [
   './about/styles.css',
   './about/strings.es.js',
   './about/strings.en.js',
-  './team/',
-  './team/styles.css',
-  './team/strings.es.js',
-  './team/strings.en.js',
   './styles.css',
   './app.js',
   './strings.es.js',
@@ -37,11 +33,6 @@ var FILES = [
   './config/styles.css',
   './config/strings.es.js',
   './config/strings.en.js',
-  './about-app/',
-  './about-app/app.js',
-  './about-app/styles.css',
-  './about-app/strings.es.js',
-  './about-app/strings.en.js',
   './legal/',
   './legal/styles.css',
   './legal/strings.es.js',
@@ -73,6 +64,7 @@ var FILES = [
   './assets/js/answer-options.js',
   './assets/js/sheet-test.js',
   './assets/img/operaciones.svg',
+  './assets/js/achievements-engine.js',
   './assets/js/achievements.js',
   './assets/js/stars-engine.js',
   './assets/js/dinero.js',

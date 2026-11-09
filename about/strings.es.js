@@ -7,12 +7,11 @@
   'use strict';
 
   App.i18n.register({
-    "pageTitle": 'Presentación del proyecto',
-    "routeNotice": 'Esta página no se enlaza desde la aplicación. Solo se llega escribiendo la dirección.',
+    "pageTitle": 'Sobre la app',
     "tagline": 'Una aplicación para la autonomía.',
     "lead1": 'Calculia es una ',
     "leadStrong": 'aplicación web de cálculo y razonamiento lógico',
-    "lead2": ' pensada para que las personas con discapacidad intelectual practiquen por sí mismas habilidades matemáticas y lógicas, sin presión y con respeto a su privacidad.',
+    "lead2": ' pensada para que cada persona practique por sí misma habilidades matemáticas y lógicas, sin presión y con respeto a su privacidad.',
     "navOrigin": 'El origen',
     "navPrinciples": 'Los principios',
     "navTech": 'Cómo está hecha',
@@ -23,7 +22,7 @@
     "originTitle": 'El origen',
     "originP1a": 'Calculia nace de una pregunta que se repite al final de cada sesión de terapia ocupacional: ',
     "originP1em": '¿qué pasa entre una sesión y la siguiente?',
-    "originP2": 'La persona con discapacidad intelectual practica con su terapeuta en consulta, pero después está sola en casa, en el colegio o en su tiempo libre. Queríamos una herramienta que respetase esa autonomía, que diese seguridad a las familias y que sirviese a la terapeuta como complemento entre sesiones, no como sustituto.',
+    "originP2": 'La persona practica con su terapeuta en consulta, pero después está sola en casa, en el colegio o en su tiempo libre. Queríamos una herramienta que respetase esa autonomía, que diese seguridad a las familias y que sirviese a la terapeuta como complemento entre sesiones, no como sustituto.',
     "originP3": 'Esta aplicación es el resultado: 14 actividades autónomas, todas en Lectura Fácil, todas accesibles, todas pensadas para que la persona usuaria pueda usarlas a su propio ritmo.',
     "principlesTitle": 'Los principios que no negociamos',
     "principlesIntro": 'Estas ideas están escritas primero en el código y después en los textos. Si una decisión las rompe, esa decisión está mal.',
@@ -108,7 +107,7 @@
     "authorshipTitle": 'Quiénes la hacen',
     "authorshipP1a": 'Calculia es una iniciativa de ',
     "authorshipP1b": ', un estudio independiente que trabaja en proyectos abiertos con impacto social y educativo.',
-    "authorshipP2": 'La aplicación se construye con la participación de personas con discapacidad intelectual, familias, terapeutas ocupacionales y profesorado, que prueban cada cambio y revisan el contenido antes de que llegue a producción.',
+    "authorshipP2": 'La aplicación se construye con la participación de personas que la usan, familias, terapeutas ocupacionales y profesorado, que prueban cada cambio y revisan el contenido antes de que llegue a producción.',
     "authorshipP3": 'El código, el texto y las decisiones se publican en abierto para que cualquier persona o equipo pueda auditarlos, aprender de ellos y adaptarlos a otros contextos.',
     "collaborateTitle": 'Cómo ayudar',
     "collaborateIntro": 'Calculia es un proyecto abierto. Hay formas de colaborar que no requieren programar:',
@@ -125,6 +124,21 @@
     "collaborateOutro1": 'Toda la documentación necesaria para empezar está en los archivos',
     "collaborateOutro3": 'y',
     "collaborateOutro4": 'del repositorio.',
-    "footerActivities": 'Ir a las actividades'
+    "footerActivities": 'Ir a las actividades',
+
+    "howTitle": 'Cómo se usa',
+    "step1Title": 'Elige una actividad',
+    "step1Text": 'Busca el tema que quieres practicar.',
+    "step2Title": 'Resuelve con calma',
+    "step2Text": 'No hay cronómetro. Piensa tu respuesta el tiempo que necesites.',
+    "step3Title": 'Pide una pista si la necesitas',
+    "step3Text": 'La pista te ayuda a pensar, pero no te da la respuesta.',
+    "step4Title": 'Gana estrellas',
+    "step4Text": 'Tus estrellas se guardan en este dispositivo.',
+    "forTitle": 'Para quién es',
+    "forP": 'Para cualquier persona que quiera practicar cálculo y razonamiento a su ritmo.',
+    "forStudents": 'Estudiantes que repasan contenidos del colegio.',
+    "forFamilies": 'Familias que acompañan el estudio en casa.',
+    "forAdults": 'Personas adultas que quieren repasar operaciones y lógica.'
   }, 'es');
 })();

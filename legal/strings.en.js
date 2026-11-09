@@ -14,6 +14,7 @@
     "navResponsible": 'Who processes your data',
     "navData": 'What we save',
     "navRights": 'Your rights',
+    "navMinors": 'All ages',
     "navContact": 'Changes and contact',
 
     "responsibleTitle": 'Who processes your data',
@@ -39,9 +40,13 @@
     "rightsP3": 'You can also delete this data by clearing this site\'s browsing data from your browser\'s settings.',
     "rightsLinkSettings": 'Go to Settings',
 
+    "minorsTitle": 'All ages and abilities',
+    "minorsP1": 'Calculia is designed so that anyone can use it on their own, regardless of age or abilities.',
+    "minorsP2": 'Because the application does not collect personal data on any server, no guardian consent is needed to process data: there is no processing to authorise. We do recommend the usual supervision a family or professional gives to how any device is used.',
+
     "contactTitle": 'Changes and contact',
     "contactP1": 'This page may be updated if the app changes.',
-    "contactP2": 'Last updated: August 1, 2026.',
+    "contactP2": 'Last updated: November 9, 2026.',
 
     "footerActivities": 'Go to the activities'
   }, 'en');

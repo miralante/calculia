@@ -7,12 +7,11 @@
   'use strict';
 
   App.i18n.register({
-    "pageTitle": 'Project presentation',
-    "routeNotice": 'This page is not linked from the app. The only way here is typing the address.',
+    "pageTitle": 'About the app',
     "tagline": 'An app for autonomy.',
     "lead1": 'Calculia is a ',
     "leadStrong": 'math and logical reasoning web app',
-    "lead2": ' built so people with intellectual disabilities can practice math and logical thinking on their own, without pressure and with respect for their privacy.',
+    "lead2": ' built so anyone can practice math and logical thinking on their own, without pressure and with respect for their privacy.',
     "navOrigin": 'The origin',
     "navPrinciples": 'The principles',
     "navTech": 'How it is built',
@@ -23,7 +22,7 @@
     "originTitle": 'The origin',
     "originP1a": 'Calculia comes from a question that comes up at the end of every occupational therapy session: ',
     "originP1em": 'what happens between one session and the next?',
-    "originP2": 'A person with an intellectual disability practices with their therapist in a clinic, but afterwards they are on their own at home, at school, or in their free time. We wanted a tool that respected that autonomy, gave families peace of mind, and served the therapist as a complement between sessions, not a replacement.',
+    "originP2": 'A person practices with their therapist in a clinic, but afterwards they are on their own at home, at school, or in their free time. We wanted a tool that respected that autonomy, gave families peace of mind, and served the therapist as a complement between sessions, not a replacement.',
     "originP3": 'This app is the result: 14 self-guided activities, all in Plain Language, all accessible, all designed so the person using them can go at their own pace.',
     "principlesTitle": 'The principles we won’t compromise on',
     "principlesIntro": 'These ideas are written into the code first and the text second. If a decision breaks them, that decision is wrong.',
@@ -108,7 +107,7 @@
     "authorshipTitle": 'Who makes it',
     "authorshipP1a": 'Calculia is an initiative by ',
     "authorshipP1b": ', an independent studio working on open projects with social and educational impact.',
-    "authorshipP2": 'The app is built with the involvement of people with intellectual disabilities, families, occupational therapists and teachers, who test every change and review the content before it reaches production.',
+    "authorshipP2": 'The app is built with the involvement of people who use it, families, occupational therapists and teachers, who test every change and review the content before it reaches production.',
     "authorshipP3": 'The code, the text and the decisions are published openly so anyone or any team can audit them, learn from them, and adapt them to other contexts.',
     "collaborateTitle": 'How to help',
     "collaborateIntro": 'Calculia is an open project. There are ways to help that do not require coding:',
@@ -125,6 +124,21 @@
     "collaborateOutro1": 'All the documentation needed to get started is in the',
     "collaborateOutro3": 'and',
     "collaborateOutro4": 'files of the repository.',
-    "footerActivities": 'Go to the activities'
+    "footerActivities": 'Go to the activities',
+
+    "howTitle": 'How to use it',
+    "step1Title": 'Choose an activity',
+    "step1Text": 'Find the topic you want to practise.',
+    "step2Title": 'Take your time',
+    "step2Text": 'There is no timer. Think about your answer for as long as you need.',
+    "step3Title": 'Ask for a hint if you need one',
+    "step3Text": 'The hint helps you think, but it does not give you the answer.',
+    "step4Title": 'Earn stars',
+    "step4Text": 'Your stars are saved on this device.',
+    "forTitle": 'Who it is for',
+    "forP": 'For anyone who wants to practise maths and reasoning at their own pace.',
+    "forStudents": 'Students who review what they learn at school.',
+    "forFamilies": 'Families who support the study at home.',
+    "forAdults": 'Adults who want to review operations and logic.'
   }, 'en');
 })();

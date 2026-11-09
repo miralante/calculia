@@ -171,7 +171,7 @@
     * text. Marker attributes mirror the routime convention:
     *   data-pie-base            base path for relative links
     *   data-pie-include-about   unless 'false', starts with a "Sobre la
-    *                            app" link (about-app/: achievements),
+    *                            app" link (about/: achievements),
     *                            always placed before Configuración
     *   data-pie-include-config  if 'true', adds a Configuración link
     *   data-pie-class           extra class added to the <footer> element
@@ -190,7 +190,7 @@
       if (extraClass) pie.className = (pie.className ? pie.className + ' ' : '') + extraClass;
       var html = '';
       if (includeAbout) {
-        html += '<a href="' + base + 'about-app/" class="legal-link" data-i18n="core.aboutApp"></a>';
+        html += '<a href="' + base + 'about/" class="legal-link" data-i18n="core.aboutApp"></a>';
       }
       if (includeConfig) {
         html += '<a href="' + base + 'config/" class="legal-link" data-i18n="core.config"></a>';

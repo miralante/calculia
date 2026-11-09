@@ -14,6 +14,7 @@
     "navResponsible": 'Quién trata tus datos',
     "navData": 'Qué guardamos',
     "navRights": 'Tus derechos',
+    "navMinors": 'Todas las edades',
     "navContact": 'Cambios y contacto',
 
     "responsibleTitle": 'Quién trata tus datos',
@@ -39,9 +40,13 @@
     "rightsP3": 'También puedes borrar estos datos borrando los datos de navegación de tu navegador para este sitio, desde su configuración.',
     "rightsLinkSettings": 'Ir a Ajustes',
 
+    "minorsTitle": 'Todas las edades y capacidades',
+    "minorsP1": 'Calculia está pensada para que la use de forma autónoma cualquier persona, sin importar su edad ni sus capacidades.',
+    "minorsP2": 'Como la aplicación no recoge datos personales en ningún servidor, no es necesario el consentimiento de nadie para tratar datos: no hay ningún tratamiento que autorizar. Sí recomendamos la supervisión habitual que una familia o un profesional haga sobre el uso de cualquier dispositivo.',
+
     "contactTitle": 'Cambios y contacto',
     "contactP1": 'Esta página puede actualizarse si cambia la aplicación.',
-    "contactP2": 'Última actualización: 1 de agosto de 2026.',
+    "contactP2": 'Última actualización: 9 de noviembre de 2026.',
 
     "footerActivities": 'Ir a las actividades'
   }, 'es');

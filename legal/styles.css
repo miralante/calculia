@@ -1,59 +1,101 @@
 /* ==========================================================================
-   Protección de datos — Estilos específicos
-   Reutiliza los tokens del núcleo, con un layout simple: solo secciones de texto.
+   Suite legal/ stylesheet — plantilla canónica (Apptonomia). Protección de datos.
+
+   Derivada de la hoja About (doc/templates/about/styles.css): misma estructura,
+   mismas variables --about-* (se llaman así por compatibilidad), con el ámbito
+   .legal y las clases header-legal / logo-legal. Idéntica en las apps que
+   tienen Protección de datos (legal/styles.css). Cambia aquí y copia a las apps.
    ========================================================================== */
 
-.legal { max-width: 880px; }
+.legal {
+  --about-bg: var(--color-bg, var(--color-fondo, #FAF7F2));
+  --about-surface: var(--color-surface, var(--color-superficie, #FFFFFF));
+  --about-text: var(--color-text, var(--color-texto, #1A1A2E));
+  --about-text-soft: var(--color-text-soft, var(--color-texto-suave, #4A4A68));
+  --about-border: var(--color-border, var(--color-borde, #D8D2C8));
+  --about-focus: var(--color-focus, var(--color-foco, #1B6CA8));
+  --about-accent: var(--accent, var(--acento, #2E7D32));
+  --about-radius: var(--radius, var(--radio, 16px));
+  --about-space: var(--space, var(--espacio, 16px));
+  --about-small: var(--text-small, var(--texto-pequeno, 1rem));
+  --about-base: var(--text-base, var(--texto-base, 1.2rem));
+  --about-large: var(--text-large, var(--texto-grande, 1.6rem));
+  --about-title: var(--text-title, var(--texto-titulo, 2.4rem));
+  max-width: 880px;
+}
 
-.cabecera-legal { padding: 24px 0 var(--espacio); text-align: center; }
-.cabecera-legal h1 {
-  font-size: var(--texto-titulo);
+/* Cabecera tipo manifiesto ------------------------------------------------- */
+.legal .header-legal { padding: 24px 0 var(--about-space); text-align: center; }
+.legal .header-legal h1 {
+  font-size: var(--about-title);
   margin: 12px 0 0;
   letter-spacing: -0.02em;
 }
-.cabecera-legal .lema {
-  font-size: var(--texto-grande);
+.legal .header-legal .tagline {
+  font-size: var(--about-large);
   font-weight: 700;
-  color: var(--color-texto-suave);
+  color: var(--about-text-soft);
   margin: 8px 0 0;
 }
-.cabecera-legal .entradilla {
-  font-size: var(--texto-base);
+.legal .header-legal .lead {
+  font-size: var(--about-base);
   max-width: 640px;
-  margin: var(--espacio) auto 0;
-  color: var(--color-texto);
+  margin: var(--about-space) auto 0;
+  color: var(--about-text);
 }
-.logo-legal { margin-top: 8px; }
+.legal .eyebrow {
+  font-size: var(--about-small);
+  font-weight: 700;
+  color: var(--about-text-soft);
+  margin: 0;
+}
+.legal .logo-legal { margin-top: 8px; font-size: 64px; line-height: 1; }
+.legal img.logo-legal { width: 80px; height: 80px; }
 
-/* Índice de la página ----------------------------------------------- */
-.legal .indice { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: var(--espacio); }
+.legal .aviso-ruta {
+  display: inline-block; padding: 8px 16px;
+  background: var(--about-surface); color: var(--about-text);
+  border: 2px solid var(--about-focus); border-radius: var(--about-radius);
+  font-size: var(--about-small); font-weight: 700;
+  margin-bottom: var(--about-space);
+}
+
+/* Índice de la página ------------------------------------------------------ */
+.legal .indice { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: var(--about-space); }
 .legal .indice a {
-  padding: 10px 16px; border-radius: var(--radio);
-  background: var(--color-superficie); border: 2px solid var(--color-borde);
-  color: var(--color-texto); text-decoration: none;
-  font-size: var(--texto-pequeno); font-weight: 700;
+  padding: 10px 16px; border-radius: var(--about-radius);
+  background: var(--about-surface); border: 2px solid var(--about-border);
+  color: var(--about-text); text-decoration: none;
+  font-size: var(--about-small); font-weight: 700;
 }
-.legal .indice a:hover, .legal .indice a:focus { border-color: var(--color-foco); }
+.legal .indice a:hover, .legal .indice a:focus { border-color: var(--about-focus); }
 
-/* Secciones como cards --------------------------------------------------- */
-.legal section { padding: var(--espacio); }
+/* Secciones como cards ----------------------------------------------------- */
+.legal section { padding: var(--about-space); margin-bottom: 24px; }
 .legal section h2 { margin-bottom: 12px; }
-.legal section ul { padding-left: 24px; }
+.legal section ul, .legal section ol { padding-left: 24px; }
 .legal section li { margin-bottom: 8px; }
+.legal section em { color: var(--about-text-soft); }
 .legal section code {
-  background: var(--color-fondo); padding: 2px 6px; border-radius: 6px;
-  font-size: 0.95em; border: 1px solid var(--color-borde);
+  background: var(--about-bg); padding: 2px 6px; border-radius: 6px;
+  font-size: 0.95em; border: 1px solid var(--about-border);
 }
 
-/* Footer -------------------------------------------------------------- */
-.pie-legal {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--espacio);
-  padding: var(--espacio) 0 40px;
+/* Listas propias de la app (Cómo se usa, Para quién es, Temas) ------------- */
+.legal .pasos { margin: 0; padding-left: 24px; display: grid; gap: 12px; }
+.legal .pasos h3 { font-size: inherit; margin: 0 0 4px; }
+.legal .pasos p { margin: 0; }
+.legal .lista { margin: 0; padding-left: 24px; display: grid; gap: 8px; }
+
+/* Footer -------------------------------------------------------------------- */
+.legal .pie-about {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--about-space);
+  padding: var(--about-space) 0 40px;
 }
 
-/* Móvil --------------------------------------------------------------- */
+/* Móvil --------------------------------------------------------------------- */
 @media (max-width: 640px) {
-  .cabecera-legal h1 { font-size: 2em; }
-  .cabecera-legal .lema { font-size: 1.2em; }
-  .legal section { padding: var(--espacio); }
+  .legal .header-legal h1 { font-size: 2em; }
+  .legal .header-legal .tagline { font-size: 1.2em; }
+  .legal section { padding: var(--about-space); }
 }
