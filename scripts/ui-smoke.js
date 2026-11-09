@@ -1508,9 +1508,9 @@ async function exerciseNumbers(page, baseUrl) {
      integró en Números (commit "feat(numbers): integrate positive and
      negative practice"), así que ya no existe tools/posneg/: ese
      catálogo solo debe seguir siendo una clave localStorage heredada,
-     nunca una tarjeta. Comprobado sobre dev/, que es donde vive el
+     nunca una tarjeta. Comprobado sobre la portada, que ya muestra el
      catálogo completo. */
-  await page.goto(baseUrl + '/dev/');
+  await page.goto(baseUrl + '/');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
   assert.equal(await page.locator('a[href$="posneg"]').count(), 0,
@@ -1518,9 +1518,9 @@ async function exerciseNumbers(page, baseUrl) {
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
   await page.reload();
 
-  const catalogCard = page.locator('a[href="../tools/numbers-group/"]');
+  const catalogCard = page.locator('a[href="tools/numbers-group/"]');
   assert.ok(await catalogCard.isVisible().catch(() => false),
-    'Números no aparece en el catálogo de dev/');
+    'Números no aparece en la portada');
   assert.ok((await catalogCard.innerText()).includes('Los números'),
     'La tarjeta de Los números del catálogo no aparece en español');
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));

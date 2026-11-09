@@ -7,29 +7,13 @@ module.exports = function (ctx) {
   var LANDING_FILES = ctx.LANDING_FILES, execFileSync = ctx.execFileSync, execFile = ctx.execFile;
   var slugs = ctx.shared.slugs, toolsDir = ctx.shared.toolsDir, slugCode = ctx.shared.slugCode, EXTRA_MODULES = ctx.shared.EXTRA_MODULES, CANONICAL_BASE = ctx.shared.CANONICAL_BASE, STRING_LOCALES = ctx.shared.STRING_LOCALES, swContent = ctx.shared.swContent;
 
-  /* --- 5. Public/private catalog split ---
-     The public landing carries TEN entries (Los Números, Quantities,
-     Ordinal Numbers, Fractions, Parity, Roman Numerals, Shapes,
-     Trigonometry, Scale, Math Tables);
-     the hidden dev/ page carries every other activity, plus the public
-     ones listed in BOTH_SLUGS. Together they cover the full tools/,
-     config/, and sw.js activity set. Public activities are the
-     longest-lived "front door" — they stay discoverable for any
-     visitor even when the rest of the catalogue is moved behind dev/.
-     The order in PUBLIC_SLUGS is the visible order in index.html.
-
-     BOTH_SLUGS are the activities that are public AND still listed in
-     dev/. Until now the two lists were a partition — every slug was in
-     exactly one of them — so adding a public activity necessarily
-     removed its dev/ card. A front-door activity that keeps working
-     through the full catalogue should not lose its place in it, so the
-     split is no longer a partition and BOTH_SLUGS names the overlap.
-     A slug left in dev/ by accident still fails below, which is the
-     property that made the partition worth having.
+  /* --- 5. Catálogo único ---
+     La portada (index.html) muestra todas las actividades de tools/. Ya no
+     hay partición pública/oculta: el catálogo entero está en la portada, y
+     dev/ no debe existir.
   */
   ctx.checks += 1;
   var siteHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  var devHtml = fs.readFileSync(path.join(ROOT, 'dev', 'index.html'), 'utf8');
   /* The public landing sits at the site root and links "tools/<slug>/";
      the hidden dev/ page is one level down and links "../tools/<slug>/".
      The trailing slash is mandatory, not cosmetic: the ".../index.html"
@@ -46,7 +30,6 @@ module.exports = function (ctx) {
     return new Set(result);
   }
   var publicSlugs = parseSlugsFromPage(siteHtml);
-  var devSlugs = parseSlugsFromPage(devHtml);
   function assertExactCatalog(label, actual, expected) {
     expected.forEach(function (slug) {
       if (!actual.has(slug)) failures.push('catálogo: ' + label + ' no contiene el slug "' + slug + '"');
@@ -55,17 +38,11 @@ module.exports = function (ctx) {
       if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
     });
   }
-  var PUBLIC_SLUGS = ['numbers-group', 'operation-concepts', 'factorial', 'common-group', 'order-numbers', 'quantities', 'ordinals', 'fractions-measures', 'time-group', 'percent', 'parity', 'primes', 'roman-numerals', 'lines', 'shapes', 'scale', 'math-tables', 'word-add', 'word-subtract', 'word-multiply', 'word-divide'];
-  /* Public AND in dev/. Every name here must also be in PUBLIC_SLUGS,
-     otherwise dev/ would carry an activity the landing hides, which is
-     the inverse mistake and just as wrong. */
-  var BOTH_SLUGS = ['numbers-group', 'operation-concepts', 'common-group', 'order-numbers', 'quantities', 'ordinals', 'fractions-measures', 'time-group', 'percent', 'parity', 'primes', 'lines', 'shapes', 'scale', 'math-tables', 'word-add', 'word-subtract', 'word-multiply', 'word-divide'];
-  var expectedPublicSlugs = new Set(PUBLIC_SLUGS);
-  var expectedDevSlugs = new Set(slugs.filter(function (slug) {
-    return PUBLIC_SLUGS.indexOf(slug) === -1 || BOTH_SLUGS.indexOf(slug) !== -1;
-  }));
-  assertExactCatalog('site público', publicSlugs, expectedPublicSlugs);
-  assertExactCatalog('dev oculto', devSlugs, expectedDevSlugs);
+  var expectedSlugs = new Set(slugs);
+  assertExactCatalog('portada', publicSlugs, expectedSlugs);
+  if (fs.existsSync(path.join(ROOT, 'dev'))) {
+    failures.push('dev/ no debe existir: la portada muestra todo el catálogo');
+  }
 
   function parseSlugsFromSw() {
     var matches = swContent.match(/'\.\/tools\/([^/]+)\//g) || [];
