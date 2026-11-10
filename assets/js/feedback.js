@@ -22,7 +22,7 @@
 
   function sharedSoundEnabled(kind) {
     try {
-      var saved = JSON.parse(localStorage.getItem('miralante:sounds') || 'null');
+      var saved = JSON.parse(localStorage.getItem('apptonomia:sounds') || 'null');
       if (saved && typeof saved[kind] === 'boolean') return saved[kind];
     } catch (e) { /* ignore */ }
     return null;

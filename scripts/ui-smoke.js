@@ -286,7 +286,7 @@ async function exerciseSoundSettings(browser, baseUrl) {
     assert.strictEqual(await error.isChecked(), false, 'El sonido de error debe estar desactivado por defecto');
     await success.uncheck();
     await error.check();
-    assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem('miralante:sounds'))),
+    assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem('apptonomia:sounds'))),
       { success: false, error: true }, 'Los sonidos deben guardarse en la configuración común');
     const audio = await page.evaluate(async () => {
       let playSuccess, playError;
