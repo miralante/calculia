@@ -1,5 +1,5 @@
 'use strict';
-/* Shared asset-version token tool for the Miralante suite.
+/* Shared asset-version token tool for the Apptonomia suite.
  *
  * WHY
  * ---

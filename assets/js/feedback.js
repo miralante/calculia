@@ -303,7 +303,7 @@
      the star is already in `after` by then. stars-engine.js builds the line. */
   function starLineIntoSuccess(e) {
     var d = e && e.detail;
-    if (!d || !d.before || !d.after || !window.MiralanteStars) return;
+    if (!d || !d.before || !d.after || !window.ApptonomiaStars) return;
     var gained = (Number(d.after.stars) || 0) - (Number(d.before.stars) || 0);
     if (gained <= 0) return;
     var zone = document.getElementById('feedback');
@@ -313,7 +313,7 @@
     if (old) old.remove();
     var span = document.createElement('span');
     span.className = 'stars-goal';
-    span.textContent = window.MiralanteStars.line(App.storage.totalStars(), {
+    span.textContent = window.ApptonomiaStars.line(App.storage.totalStars(), {
       reached: App.i18n.t('core.starsReached'),
       goal: App.i18n.t('core.starsGoal')
     });
@@ -332,7 +332,7 @@
   function restDone() {}
 
   /* suite:answer-round:begin
-     Miralante answer round. ONE definition for every suite app.
+     Apptonomia answer round. ONE definition for every suite app.
      Canonical source: apptonomia/scripts/suite/answer-round.js. The block between
      the begin/end markers is copied byte-for-byte into assets/js/feedback.js of
      each app by apptonomia/scripts/sync-answer-round.js. Never edit a copy by hand.
@@ -452,7 +452,7 @@
   /* suite:answer-round:end */
 
   /* suite:reward-screen:begin
-     Miralante closing screen of an activity. ONE definition for every suite app.
+     Apptonomia closing screen of an activity. ONE definition for every suite app.
      Canonical source: apptonomia/scripts/suite/reward-screen.js. The block between
      the begin/end markers is copied byte for byte into assets/js/feedback.js of each
      app by apptonomia/scripts/sync-answer-round.js. Never edit a copy by hand.
@@ -483,7 +483,7 @@
   /* suite:reward-screen:end */
 
   /* suite:celebrate:begin
-     Miralante closing celebration. ONE definition for every suite app.
+     Apptonomia closing celebration. ONE definition for every suite app.
      Canonical source: apptonomia/scripts/suite/celebrate.js. The block between the
      begin/end markers is copied byte for byte into assets/js/feedback.js of each app
      (and into the new-app template) by apptonomia/scripts/sync-answer-round.js.
