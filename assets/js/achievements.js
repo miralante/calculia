@@ -1,37 +1,37 @@
 /* ==========================================================================
-   Calculia — Achievements ("logros")
-   Exposes window.App.achievements.list / .unlocked() / .achieve(id) /
-   .sync() / .render(container).
-   Load AFTER storage.js (and feedback.js on activity pages).
+   Calculia — achievements catalogue ("logros").
 
-   Storage (both keys are listed in storage.js NON_TOOL_KEYS, so they
-   never count as an activity; /config/ "reset the whole app" deletes
-   them explicitly):
-     'calculia:achievements' → { <id>: <timestamp of first unlock> }
-     'calculia:streak'       → { lastDay: 'YYYY-MM-DD', days: <n> }
+   The policy is the suite's (apptonomia/doc/es/spec.md §2.6): milestones
+   computed from saved progress, no streaks, no timers, no losses. Shown once
+   as a neutral notice when the round that earns them is finished. Never on the
+   "About the app" page. The mechanism lives in ./achievements-engine.js
+   (identical in every app); this file holds Calculia's rules and texts.
+
+   Storage: 'calculia:achievements' → { <id>: <timestamp of first unlock> }
+   (listed in storage.js NON_TOOL_KEYS, so it never counts as an activity;
+   /config/ "reset the whole app" deletes it).
+
+   Public API (window.App.achievements):
+     list                   the catalogue
+     unlocked()             { id: timestamp }
+     sync()                 check every rule against the saved progress now;
+                            saves the new ones silently; returns their ids
 
    How achievements unlock:
-     - Derived from saved progress (stars, rounds, Roman levels): sync()
-       re-reads every activity and unlocks what is already earned. It runs
-       on every page that loads this file, so people who played before
-       achievements existed get them the first time they open the app.
-     - Live events: storage.js fires 'calculia:progress' on each activity
-       save ({ toolId, before, after }) and feedback.js fires
-       'calculia:mistake' on each wrong answer. The day streak and the
-       perfect round need those events; they cannot be rebuilt from the
-       saved progress, so they only count from now on.
+     - sync() runs on every page that loads this file, so people who played
+       before achievements existed get them the first time they open the app,
+       with no announcement.
+     - When a round finishes ('calculia:progress' with a finished round), the
+       new ones are announced once in #achievement-notice. A round finished
+       with no mistake counts as a perfect round; the mistake count comes from
+       'calculia:mistake' events fired by feedback.js.
 
-   Texts come from App.i18n (achievement<Name>, achievement<Name>Desc,
-   achievementLocked, achievementUnlockedAt) and are registered by the
-   page that shows the badges (about-app/).
+   Texts are registered here because every activity page loads this file.
    ========================================================================== */
 (function () {
   'use strict';
 
   window.App = window.App || {};
-
-  var UNLOCKED_KEY = 'achievements';
-  var STREAK_KEY = 'streak';
 
   /* Mirrors the level ids of tools/roman-numerals/data.js (DATA.levels:
      the five base sub-levels plus the mixed test). Keep in sync if the
@@ -39,29 +39,33 @@
   var ROMAN_TOOL = 'roman-numerals';
   var ROMAN_LEVELS = ['level1', 'level2', 'level3', 'level4', 'level5', 'test'];
 
-  var LIST = [
-    { id: 'firstStar',    icon: '⭐', key: 'achievementFirstStar' },
-    { id: 'tenStars',     icon: '🌟', key: 'achievementTenStars' },
-    { id: 'streak3',      icon: '🔥', key: 'achievementStreak3' },
-    { id: 'allLevels',    icon: '🏛️', key: 'achievementAllLevels' },
-    { id: 'tenRounds',    icon: '🧮', key: 'achievementTenRounds' },
-    { id: 'perfectRound', icon: '💯', key: 'achievementPerfectRound' }
-  ];
+  App.i18n.register({
+    achievementNew: 'Nuevo logro: {name}',
+    achievementFirstStar: 'Primera estrella',
+    achievementFirstStarDesc: 'Consigue tu primera estrella.',
+    achievementTenStars: 'Diez estrellas',
+    achievementTenStarsDesc: 'Consigue diez estrellas en total.',
+    achievementAllLevels: 'Todos los niveles',
+    achievementAllLevelsDesc: 'Termina todos los niveles de Números Romanos.',
+    achievementTenRounds: 'Diez rondas',
+    achievementTenRoundsDesc: 'Termina diez rondas.',
+    achievementPerfectRound: 'Ronda perfecta',
+    achievementPerfectRoundDesc: 'Termina una ronda sin ningún fallo.'
+  }, 'es');
 
-  /** Unlocked achievements as { id: timestamp }. */
-  function unlocked() {
-    var data = App.storage.get(UNLOCKED_KEY);
-    return (data && typeof data === 'object') ? data : {};
-  }
-
-  /** Unlocks `id` once. Idempotent: the first unlock date is kept. */
-  function achieve(id) {
-    var data = unlocked();
-    if (data[id]) return false;
-    data[id] = Date.now();
-    App.storage.set(UNLOCKED_KEY, data);
-    return true;
-  }
+  App.i18n.register({
+    achievementNew: 'New achievement: {name}',
+    achievementFirstStar: 'First star',
+    achievementFirstStarDesc: 'Get your first star.',
+    achievementTenStars: 'Ten stars',
+    achievementTenStarsDesc: 'Get ten stars in total.',
+    achievementAllLevels: 'All levels',
+    achievementAllLevelsDesc: 'Finish all the levels of Roman Numerals.',
+    achievementTenRounds: 'Ten rounds',
+    achievementTenRoundsDesc: 'Finish ten rounds.',
+    achievementPerfectRound: 'Perfect round',
+    achievementPerfectRoundDesc: 'Finish a round without a single mistake.'
+  }, 'en');
 
   /* Rounds finished in one activity's saved progress. Most activities
      count them in completedRounds; Roman Numerals counts them per level
@@ -81,37 +85,57 @@
     return (data && typeof data.stars === 'number') ? data.stars : 0;
   }
 
-  /** Unlocks everything that the saved progress already proves. */
-  function sync() {
-    var stars = App.storage.totalStars();
+  var CATALOG = [
+    { id: 'firstStar', icon: '⭐', nameKey: 'achievementFirstStar', descKey: 'achievementFirstStarDesc',
+      test: function (p) { return p.stars >= 1; } },
+    { id: 'tenStars', icon: '🌟', nameKey: 'achievementTenStars', descKey: 'achievementTenStarsDesc',
+      test: function (p) { return p.stars >= 10; } },
+    { id: 'tenRounds', icon: '🧮', nameKey: 'achievementTenRounds', descKey: 'achievementTenRoundsDesc',
+      test: function (p) { return p.rounds >= 10; } },
+    { id: 'allLevels', icon: '🏛️', nameKey: 'achievementAllLevels', descKey: 'achievementAllLevelsDesc',
+      test: function (p) { return ROMAN_LEVELS.every(function (id) { return p.roman[id]; }); } },
+    { id: 'perfectRound', icon: '💯', nameKey: 'achievementPerfectRound', descKey: 'achievementPerfectRoundDesc',
+      test: function (p) { return p.perfect === true; } }
+  ];
+
+  var board = window.MiralanteAchievements.create({
+    storageKey: 'calculia:achievements',
+    catalog: CATALOG,
+    t: function (key) { return App.i18n.t(key); }
+  });
+
+  /** Snapshot of the saved progress. `extra.perfect` is set only by the
+      round-finished event, because a perfect round cannot be rebuilt later. */
+  function snapshot(extra) {
     var rounds = 0;
     App.storage.toolIds().forEach(function (id) {
       rounds += roundsOf(App.storage.get(id));
     });
-    if (stars >= 1) achieve('firstStar');
-    if (stars >= 10) achieve('tenStars');
-    if (rounds >= 10) achieve('tenRounds');
-    var roman = App.storage.get(ROMAN_TOOL).completed || {};
-    if (ROMAN_LEVELS.every(function (id) { return roman[id]; })) achieve('allLevels');
+    return {
+      stars: App.storage.totalStars(),
+      rounds: rounds,
+      roman: App.storage.get(ROMAN_TOOL).completed || {},
+      perfect: !!(extra && extra.perfect)
+    };
   }
 
-  /* ---------- Day streak ---------- */
-  function dayString(d) {
-    return d.getFullYear() + '-' +
-      String(d.getMonth() + 1).padStart(2, '0') + '-' +
-      String(d.getDate()).padStart(2, '0');
+  function sync(extra) {
+    return board.evaluate(snapshot(extra));
   }
 
-  /* Called when a star is earned: counts consecutive days with play. */
-  function markPracticeDay() {
-    var today = dayString(new Date());
-    var streak = App.storage.get(STREAK_KEY);
-    if (streak.lastDay === today) return;
-    var y = new Date();
-    y.setDate(y.getDate() - 1);
-    var days = (streak.lastDay === dayString(y) && typeof streak.days === 'number') ? streak.days + 1 : 1;
-    App.storage.set(STREAK_KEY, { lastDay: today, days: days });
-    if (days >= 3) achieve('streak3');
+  /** Neutral notice shown once when a round finishes. The element is created
+      on first use so every activity page works without markup of its own. */
+  function announce(ids) {
+    if (!ids || !ids.length) return;
+    var el = document.getElementById('achievement-notice');
+    if (!el) {
+      el = document.createElement('p');
+      el.id = 'achievement-notice';
+      el.className = 'achievement-notice';
+      el.setAttribute('aria-live', 'polite');
+      document.body.appendChild(el);
+    }
+    board.notify(el, ids);
   }
 
   /* ---------- Live events (activity pages) ---------- */
@@ -127,56 +151,23 @@
     var detail = e.detail || {};
     var gained = starsOf(detail.after) - starsOf(detail.before);
     var finished = roundsOf(detail.after) - roundsOf(detail.before);
-    if (gained > 0) {
-      roundStars += gained;
-      markPracticeDay();
-    }
+    if (gained > 0) roundStars += gained;
     if (finished > 0) {
-      if (roundStars > 0 && roundMistakes === 0) achieve('perfectRound');
+      var perfect = roundStars > 0 && roundMistakes === 0;
       roundStars = 0;
       roundMistakes = 0;
+      announce(sync({ perfect: perfect }));
+    } else {
+      sync();
     }
-    sync();
   });
 
-  /* ---------- Badge grid (about-app/) ---------- */
-  function span(className, text) {
-    var el = document.createElement('span');
-    el.className = className;
-    el.textContent = text;
-    return el;
-  }
-
-  /** Draws one badge per achievement inside `container`. */
-  function render(container) {
-    if (!container) return;
-    var t = App.i18n.t;
-    var done = unlocked();
-    container.innerHTML = '';
-    LIST.forEach(function (a) {
-      var isUnlocked = !!done[a.id];
-      var item = document.createElement('li');
-      item.className = 'achievement-badge ' + (isUnlocked ? 'unlocked' : 'locked');
-      var icon = span('achievement-badge-icon', a.icon);
-      icon.setAttribute('aria-hidden', 'true');
-      item.appendChild(icon);
-      item.appendChild(span('achievement-badge-name', t(a.key)));
-      item.appendChild(span('achievement-badge-desc', t(a.key + 'Desc')));
-      item.appendChild(span('achievement-badge-status', isUnlocked
-        ? t('achievementUnlockedAt').replace('{date}', new Date(done[a.id]).toLocaleDateString(App.i18n.lang()))
-        : t('achievementLocked')));
-      container.appendChild(item);
-    });
-  }
-
   window.App.achievements = {
-    list: LIST,
-    unlocked: unlocked,
-    achieve: achieve,
-    sync: sync,
-    render: render
+    list: CATALOG,
+    unlocked: board.unlocked,
+    sync: sync
   };
 
-  /* Retroactive credit from progress saved before this page loaded. */
-  try { sync(); } catch (e) { /* never block the page over a badge */ }
+  /* Retroactive credit from progress saved before this page loaded: silent. */
+  try { sync(); } catch (err) { /* never block the page over a badge */ }
 })();

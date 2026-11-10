@@ -441,6 +441,15 @@ button.locked {
   margin: 12px 0 0;
 }
 
+/* Neutral notice for a new achievement, shown once when a round finishes. */
+.achievement-notice {
+  margin: var(--espacio) auto 0;
+  max-width: 560px;
+  font-weight: 700;
+  text-align: center;
+}
+.achievement-notice:empty { display: none; }
+
 .achievement-badge {
   display: flex;
   flex-direction: column;

@@ -270,6 +270,29 @@ Esta tabla es la fuente de verdad para "anatomía socrática
 completa". Si una actividad deja de cumplirla, esta tabla se
 actualiza en el mismo PR que introduce o corrige la regresión.
 
+### 3.8 Recompensas
+
+Calculia aplica la política común de recompensas de la suite
+(`apptonomia/doc/es/spec.md` §2.6) con estas particularidades:
+
+- **Estrellas**: una por ronda terminada. El texto de progreso lo calcula
+  el motor común de estrellas.
+- **Logros** (hitos del progreso guardado, sin rachas ni tiempo):
+  *Primera estrella* (1 estrella), *Diez estrellas* (10), *Diez rondas*
+  (10 rondas terminadas), *Todos los niveles* (todos los niveles de
+  Números Romanos) y *Ronda perfecta* (una ronda terminada sin ningún
+  fallo; solo cuenta desde que se registra la ronda, porque no se puede
+  reconstruir después).
+- **Cuándo se anuncian**: al terminar una ronda, en un aviso neutro
+  (`#achievement-notice`). Los logros que ya estaban en el progreso
+  guardado se registran en silencio al abrir cualquier página.
+- **Retirado**: el logro de racha de días (*Racha de 3 días*). Una racha
+  crea presión por el día, y la suite no la usa. Los datos antiguos de
+  racha (`calculia:streak`) se borran con el restablecimiento de
+  /config/.
+- **Guardado**: `calculia:achievements`, solo con la fecha de la primera
+  vez. No aparecen en "Sobre la app".
+
 ## 4. Regla de obligado cumplimiento: cero menciones en el producto
 
 **Ningún texto que vea quien usa la app puede mencionar, directa ni

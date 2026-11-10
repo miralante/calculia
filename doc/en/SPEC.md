@@ -267,6 +267,27 @@ This table is the source of truth for "complete Socratic anatomy".
 If an activity stops meeting it, the table is updated in the same
 PR that introduces or fixes the regression.
 
+### 3.8 Rewards
+
+Calculia applies the suite's common reward policy
+(`apptonomia/doc/en/spec.md` §2.6) with these particularities:
+
+- **Stars**: one per finished round. The progress text is computed by
+  the shared stars engine.
+- **Achievements** (milestones of the saved progress, with no streaks and
+  no timers): *First star* (1 star), *Ten stars* (10), *Ten rounds* (10
+  finished rounds), *All levels* (every level of Roman Numerals) and
+  *Perfect round* (a round finished with no mistake; it only counts from
+  the moment the round is recorded, because it cannot be rebuilt later).
+- **When they are announced**: when a round finishes, in a neutral notice
+  (`#achievement-notice`). Achievements already in the saved progress are
+  recorded silently when any page opens.
+- **Removed**: the day-streak achievement (*3-day streak*). A streak
+  creates pressure about the day, and the suite does not use it. Old streak
+  data (`calculia:streak`) is cleared by the reset in /config/.
+- **Storage**: `calculia:achievements`, with only the date of the first
+  time. They are not shown on "About the app".
+
 ## 4. Mandatory rule: zero mentions in the user-facing product
 
 **No text the end user sees may mention, directly or indirectly,
