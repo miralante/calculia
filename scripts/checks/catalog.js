@@ -8,10 +8,23 @@ module.exports = function (ctx) {
   var slugs = ctx.shared.slugs, toolsDir = ctx.shared.toolsDir, slugCode = ctx.shared.slugCode, EXTRA_MODULES = ctx.shared.EXTRA_MODULES, CANONICAL_BASE = ctx.shared.CANONICAL_BASE, STRING_LOCALES = ctx.shared.STRING_LOCALES, swContent = ctx.shared.swContent;
 
   /* --- 5. Catálogo único ---
-     La portada (index.html) muestra todas las actividades de tools/. Ya no
-     hay partición pública/oculta: el catálogo entero está en la portada, y
-     dev/ no debe existir.
+     La portada (index.html) enlaza todas las actividades de tools/ salvo las
+     que ya cuelgan de un hub de grupo (numbers-group, common-group,
+     time-group): esas se llegan desde su hub, y repetirlas en la portada
+     está prohibido. Ya no hay partición pública/oculta, y dev/ no debe
+     existir.
   */
+  var GROUP_HUBS = ['numbers-group', 'common-group', 'time-group'];
+  var groupChildren = new Set();
+  GROUP_HUBS.forEach(function (hub) {
+    var dataJs = fs.readFileSync(path.join(toolsDir, hub, 'data.js'), 'utf8');
+    var reSlug = /slug:\s*'([^']+)'/g;
+    var m;
+    while ((m = reSlug.exec(dataJs)) !== null) groupChildren.add(m[1]);
+  });
+  groupChildren.forEach(function (slug) {
+    if (slugs.indexOf(slug) === -1) failures.push('catálogo: hub de grupo lista slug inexistente "' + slug + '"');
+  });
   ctx.checks += 1;
   var siteHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   /* The public landing sits at the site root and links "tools/<slug>/";
@@ -38,7 +51,7 @@ module.exports = function (ctx) {
       if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
     });
   }
-  var expectedSlugs = new Set(slugs);
+  var expectedSlugs = new Set(slugs.filter(function (slug) { return !groupChildren.has(slug); }));
   assertExactCatalog('portada', publicSlugs, expectedSlugs);
   if (fs.existsSync(path.join(ROOT, 'dev'))) {
     failures.push('dev/ no debe existir: la portada muestra todo el catálogo');
