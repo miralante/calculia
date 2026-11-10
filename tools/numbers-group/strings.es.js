@@ -12,7 +12,9 @@
     group: {
       types: { name: 'Tipos de números', detail: 'Naturales, enteros, decimales y fracciones.' },
       temperature: { name: 'Temperatura del agua', detail: 'Sube y baja los grados. Mira qué pasa con el agua.' },
-      numbers: { name: 'Los números', detail: 'Lee y compara. Aprende los positivos y negativos.' }
+      numbers: { name: 'Los números', detail: 'Lee y compara. Aprende los positivos y negativos.' },
+      ordinals: { name: 'Números ordinales', detail: 'Primero, segundo, tercero…' },
+      factorial: { name: 'Números factoriales', detail: 'Qué significa el signo «!» y para qué sirve.' }
     }
   }, 'es');
 })();

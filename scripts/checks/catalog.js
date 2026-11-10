@@ -14,7 +14,7 @@ module.exports = function (ctx) {
      está prohibido. Ya no hay partición pública/oculta, y dev/ no debe
      existir.
   */
-  var GROUP_HUBS = ['numbers-group', 'common-group', 'time-group'];
+  var GROUP_HUBS = ['numbers-group', 'common-group', 'time-group', 'order-numbers'];
   var groupChildren = new Set();
   GROUP_HUBS.forEach(function (hub) {
     var dataJs = fs.readFileSync(path.join(toolsDir, hub, 'data.js'), 'utf8');
