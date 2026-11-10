@@ -33,6 +33,10 @@
                      «Escuchar otra vez» button to hear it again
      introContinueKey i18n key of the button after the slides when skipReal
                      (optional; default ui.startTest)
+     ownTest         function(ctx): the activity's own practice, shown in place of
+                     the rounds of questions (buildRound and makeQuestion are not
+                     used). It gets the context: ctx.show, ctx.paintIntro, ctx.progress
+                     (optional)
    A question is { prompt, hint, options, explanation } and may carry visual
    (the HTML of a picture, shown when socratic or testVisuals; no picture hides
    its box), visualAria, legend (a line under the picture). options is
@@ -177,6 +181,8 @@
   }
 
   function startRound(ctx) {
+    /* An activity with its own practice (config.ownTest) shows that instead of the rounds. */
+    if (ctx.config.ownTest) { ctx.config.ownTest(ctx); return; }
     var s = ctx.mode_state;
     var config = ctx.config;
     var def = ctx.current || config;

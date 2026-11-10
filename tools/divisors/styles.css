@@ -1,0 +1,36 @@
+/* ==========================================================================
+   Calculia — Divisores: styles
+   The drawing is a row of small dots in groups (the same styles as the
+   multiples slides). The divisions are text rows, and the practice is a game
+   of cards, one per division, shown after a tap.
+   ========================================================================== */
+
+.tool-header h1 { color: var(--mod-razonamiento); }
+
+/* The drawing: groups of dots, with the product written under them. */
+.ops-group-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.ops-group-box { display: flex; justify-content: center; padding: 6px 12px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
+.ops-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.ops-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 42px;
+  font-size: 36px;
+  line-height: 1;
+}
+.ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+
+/* The divisions as text, one per line. */
+.div-ladder { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.div-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; }
+.div-label { font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+
+/* The practice game: the numbers to pick, and the cards of a table up to 10. */
+.div-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 10px; width: 100%; }
+.div-pick { min-height: 64px; font-size: var(--texto-grande); font-weight: 800; }
+.div-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; }
+.div-card { min-height: 64px; font-size: var(--texto-grande); font-weight: 700; font-variant-numeric: tabular-nums; }
+.div-card.shown { color: var(--mod-razonamiento); }

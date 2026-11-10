@@ -31,7 +31,7 @@
       'los-numeros': 'Tipos de Números', 'numbers-group': 'Números','lines': 'Rectas', 'shapes': 'Formas','trigonometry': 'Trigonometría', 'geometry': 'Geometría', 'numbers': 'Los Números', 'fractions-measures': 'Fracciones', 'measures': 'Medidas', 'scale': 'Escala', 'linear-functions': 'Funciones',
       'mental-math': 'Restar y Cálculo Mental', 'percent': 'Porcentajes', 'money': 'Dinero',
       'divisibility': 'Grupos exactos', 'operations': 'Cuentas rápidas', 'quantities': 'Leer y Escribir Números', 'operation-concepts': 'Operaciones', 'order-numbers': 'Ordenar números', 'order-positives': 'Ordenar positivos', 'order-negatives': 'Ordenar negativos', 'order-fractions': 'Ordenar fracciones', 'order-decimals': 'Ordenar decimales', 'ordinals': 'Números ordinales', 'parity': 'Pares e impares', 'primes': 'Primos y compuestos', 'factorial': 'Números factoriales','common-group': 'Divisores y múltiplos','common-divisor': 'Máximo común divisor', 'common-multiple': 'Mínimo común múltiplo', 'math-tables': 'Las Tablas', 'head-math': 'Cálculo de cabeza',
-      'factorization': 'Factorización', 'multiples': 'Múltiplos', 'prime-composite': 'Primo o compuesto', 'divisibility-test': 'Divisibilidad',
+      'factorization': 'Factorización', 'multiples': 'Múltiplos', 'divisors': 'Divisores', 'prime-composite': 'Primo o compuesto', 'divisibility-test': 'Divisibilidad',
       'word-add': 'Problemas de sumar', 'word-subtract': 'Problemas de restar', 'word-multiply': 'Problemas de multiplicar', 'word-divide': 'Problemas de dividir',
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',
       'problems': 'Problemas', 'temperature': 'Temperatura del agua',

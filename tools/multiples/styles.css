@@ -95,4 +95,11 @@
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
 .tool-header .activity-icon { width: 48px; height: 48px; flex: none; }
 
+/* The practice game: the numbers to pick, and the cards of a table up to 10. */
+.mul-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 10px; width: 100%; }
+.mul-pick { min-height: 64px; font-size: var(--texto-grande); font-weight: 800; }
+.mul-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; }
+.mul-card { min-height: 64px; font-size: var(--texto-grande); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mul-card.shown { color: var(--mod-razonamiento); }
+
 /* Test answers */

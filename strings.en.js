@@ -26,6 +26,7 @@
     "word-divide": { "name": "Dividing problems", "detail": "Share into equal parts." },
     "factorization": { "name": "Factorization", "detail": "Break a number into prime factors." },
     "multiples": { "name": "Multiples", "detail": "Numbers you get by multiplying." },
+    "divisors": { "name": "Divisors", "detail": "Numbers that divide another one exactly." },
     "prime-composite": { "name": "Prime or composite", "detail": "When a number is prime and when it is composite." },
     "divisibility-test": { "name": "Divisibility", "detail": "When a number divides exactly." },
 

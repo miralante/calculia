@@ -26,6 +26,7 @@
     "word-divide": { "name": "Problemas de dividir", "detail": "Repartir en partes iguales." },
     "factorization": { "name": "Factorización", "detail": "Descomponer un número en factores primos." },
     "multiples": { "name": "Múltiplos", "detail": "Números que salen al multiplicar." },
+    "divisors": { "name": "Divisores", "detail": "Números que dividen a otro exacto." },
     "prime-composite": { "name": "Primo o compuesto", "detail": "Cuándo un número es primo y cuándo es compuesto." },
     "divisibility-test": { "name": "Divisibilidad", "detail": "Cuándo un número se divide exacto." },
 

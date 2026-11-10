@@ -74,11 +74,13 @@
       },
       div: {
         name: 'Divide', symbolName: 'Divide', detail: 'Share into equal parts, or count how many groups fit.',
+        names: { dividend: 'dividend', divisor: 'divisor', quotient: 'quotient', rest: 'remainder', leftOver: 'left over' },
         intro: {
-          1: { title: 'Dividing is sharing into equal parts', text: '6 pizza slices for 2 friends: each friend gets 3.' },
-          2: { title: 'Dividing also counts how many groups fit', text: '8 balls in packs of 2: 4 packs.' },
-          3: { title: 'Some can be left over', text: '7 balls in packs of 3: 2 full packs and 1 is left over. This is division with a remainder.' },
-          4: { title: 'Dividing is the opposite of multiplying', text: 'Multiply: 4 × 2 = 8. Divide: 8 ÷ 2 = 4. If you know one, you know the other.' }
+          1: { title: 'Each part of a division has a name', text: '7 is the dividend: what is shared. 3 is the divisor. 2 is the quotient: the result. 1 is the remainder: what is left over.' },
+          2: { title: 'Dividing is sharing into equal parts', text: '6 pizza slices for 2 friends: each friend gets 3.' },
+          3: { title: 'Dividing also counts how many groups fit', text: '8 balls in packs of 2: 4 packs.' },
+          4: { title: 'Some can be left over', text: '7 balls in packs of 3: 2 full packs and 1 is left over. This is division with a remainder.' },
+          5: { title: 'Dividing is the opposite of multiplying', text: 'Multiply: 4 × 2 = 8. Divide: 8 ÷ 2 = 4. If you know one, you know the other.' }
         },
         real: {
           1: 'You share 8 dollars among 4 friends: each friend gets 2 dollars.',

@@ -50,6 +50,12 @@
   color: var(--color-texto);
   text-shadow: 0 0 3px var(--color-superficie), 0 0 3px var(--color-superficie);
 }
+/* The parts of a division under their numbers (the names slide): 7 ÷ 3 = 2, sobra 1. */
+.div-names { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 12px; }
+.div-part { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.div-num { font-size: 40px; font-weight: 800; line-height: 1; color: var(--color-texto); font-variant-numeric: tabular-nums; }
+.div-name { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
+
 /* What is left over after the full groups (division with remainder). */
 .ops-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; border-radius: 50%; }
 .ops-left-row { padding-top: 4px; border-top: 2px dotted var(--color-texto-suave); }

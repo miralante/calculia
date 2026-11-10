@@ -198,6 +198,19 @@
     return html;
   }
 
+  /* The parts of a division under their numbers, in one line: 7 (dividend) ÷ 3 (divisor) = 2 (quotient),
+     sobra 1 (rest). The rest appears only when the division is not exact. */
+  function namesHtml(total, size) {
+    var name = function (key) { return t('ops.div.names.' + key); };
+    var part = function (num, key) {
+      return '<div class="div-part"><span class="div-num">' + num + '</span><span class="div-name">' + name(key) + '</span></div>';
+    };
+    var html = '<div class="div-names">' + part(total, 'dividend') + sign('÷') + part(size, 'divisor') +
+      sign('=') + part(Math.floor(total / size), 'quotient');
+    if (total % size) html += sign(name('leftOver')) + part(total % size, 'rest');
+    return html + '</div>';
+  }
+
   /* A drawing from its visual spec: intro slides and real-life examples. */
   function drawingHtml(spec) {
     /* A money drawing (`coin`) is drawn with the currency sign of the locale, not an emoji. */
@@ -228,6 +241,7 @@
       return packHtml(spec.total, spec.size, spec.icon, caption);
     }
     if (spec.kind === 'rest') return restHtml(spec.total, spec.size, spec.icon);
+    if (spec.kind === 'names') return namesHtml(spec.total, spec.size);
     return '';
   }
 
