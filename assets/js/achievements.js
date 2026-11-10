@@ -98,7 +98,7 @@
       test: function (p) { return p.perfect === true; } }
   ];
 
-  var board = window.MiralanteAchievements.create({
+  var board = window.ApptonomiaAchievements.create({
     storageKey: 'calculia:achievements',
     catalog: CATALOG,
     t: function (key) { return App.i18n.t(key); }
