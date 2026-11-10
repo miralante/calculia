@@ -14,6 +14,7 @@
       temperature: { name: 'Temperatura del agua', detail: 'Sube y baja los grados. Mira qué pasa con el agua.' },
       numbers: { name: 'Los números', detail: 'Lee y compara. Aprende los positivos y negativos.' },
       quantities: { name: 'Leer y Escribir Números', detail: 'Lee y escribe números grandes.' },
+      order: { name: 'Ordenar números', detail: 'Positivos, negativos, decimales y fracciones.' },
       ordinals: { name: 'Números ordinales', detail: 'Primero, segundo, tercero…' },
       factorial: { name: 'Números factoriales', detail: 'Qué significa el signo «!» y para qué sirve.' }
     }
