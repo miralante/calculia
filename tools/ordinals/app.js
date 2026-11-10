@@ -466,7 +466,7 @@
     if (value === roundData.correctValue) {
       resolved = true;
       btn.classList.add('correct');
-      App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
+      App.feedback.markCorrect(btn, App.utils.$$('#options .option-btn'));
       App.feedback.success($('#feedback'));
       progress.stars += 1;
       correctCount += 1;

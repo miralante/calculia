@@ -82,7 +82,7 @@
           return;
         }
         p.answered = true;
-        optionsEl.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+        App.feedback.markCorrect(button, optionsEl.querySelectorAll('button'));
         button.classList.add('correct');
         if (!p.missed) {
           correctFirstTry += 1;

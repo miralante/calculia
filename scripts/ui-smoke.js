@@ -918,7 +918,7 @@ async function exerciseSimpleStart(page, baseUrl, route) {
       /* Historias coloca una viñeta cada vez y sigue con la siguiente,
          así que acertar una no termina la pregunta. */
       if (classes.includes(SIMPLE_STARTS[path].accepted)) { accepted += 1; continue; }
-      const ack = page.locator('#explanationWrap .btn-understood');
+      const ack = page.locator('#explanationWrap .btn-entendido');
       if (await ack.count() && await ack.first().isVisible().catch(() => false)) {
         await ack.first().click({ force: true });
       }

@@ -57,7 +57,7 @@
         R.roundCorrect += 1;
         host.save();
         host.paintStars();
-        App.utils.$$('#options .option-btn').forEach(function (b) { b.disabled = true; });
+        App.feedback.markCorrect(btn, App.utils.$$('#options .option-btn'));
         host.btnNext.classList.remove('hidden');
         host.btnNext.focus();
       } else {

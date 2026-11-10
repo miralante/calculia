@@ -70,7 +70,7 @@
         if (text.indexOf('{activity}') !== -1) {
           text = text.replace('{activity}', App.i18n.t('activity.' + host.activity().id + '.name'));
         }
-        summaryEl.textContent = text;
+        App.feedback.paintReward(summaryEl, progress.stars, text);
       }
       App.feedback.celebrate(App.i18n.t(opts.celebrateKey || 'core.roundComplete'));
     }

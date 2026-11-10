@@ -343,7 +343,7 @@
           ctx.paintStars();
         }
       }
-      $('#testOptions').querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+      App.feedback.markCorrect(button, $('#testOptions').querySelectorAll('button'));
       if (s.question.steps) $('#btnNext').textContent = isLastStep(s) ? t('ui.next') : t('ui.nextStep');
       $('#btnNext').classList.remove('hidden');
       return;
@@ -394,7 +394,8 @@
     if (correct) {
       s.answered = true;
       if (marker) marker.classList.add('correct');
-      lockables.forEach(function (el) { el.disabled = true; });
+      if (marker && Array.prototype.indexOf.call(lockables, marker) !== -1) App.feedback.markCorrect(marker, lockables);
+      else lockables.forEach(function (el) { el.disabled = true; });
       App.feedback.success(feedback);
       ctx.progress.stars += 1;
       s.solved += 1;

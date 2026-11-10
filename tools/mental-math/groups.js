@@ -573,7 +573,7 @@
       if (isCorrect) {
         gResolved = true;
         btn.classList.add('correct');
-        App.utils.$$('#groupsOptions .option-btn').forEach(function (b) { b.disabled = true; });
+        App.feedback.markCorrect(btn, App.utils.$$('#groupsOptions .option-btn'));
         App.feedback.success($('#groupsFeedback'));
         groupsProgress.stars += 1;
         gCorrect += 1;

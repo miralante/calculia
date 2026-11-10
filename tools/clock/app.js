@@ -510,9 +510,9 @@
     if (isCorrect) {
       showExplanation(isCorrect, p);
       answered = true;
+      App.feedback.markCorrect(btn, App.utils.$$('#options .option-btn, #options .btn-step'));
+      App.utils.$$('#btnConfirmSet').forEach(function (b) { b.disabled = true; });
       btn.classList.add('correct');
-      App.utils.$$('#options .option-btn, #options .btn-step, #btnConfirmSet')
-        .forEach(function (b) { b.disabled = true; });
       App.feedback.success(feedbackEl);
       progress.stars += 1;
       roundCorrect += 1;

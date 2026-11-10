@@ -161,7 +161,7 @@
       showExplanation(isCorrect, group);
       resolved = true;
       btn.classList.add('correct');
-      App.utils.$$('#group .option-btn').forEach(function (b) { b.disabled = true; });
+      App.feedback.markCorrect(btn, App.utils.$$('#group .option-btn'));
       App.feedback.success(feedbackEl);
       progress.stars += 1;
       roundCorrect += 1;
