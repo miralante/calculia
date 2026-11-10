@@ -76,7 +76,7 @@ Cada nivel completado = 1 estrella. Hasta 3 estrellas por actividad.
 
 ## 8. Cambiar idioma
 
-Abre el menú de idioma desde la cabecera (icono del globo 🌐).
+Abre el ⚙️ de la cabecera: el idioma está en la primera fila del cajón.
 Disponibles: **Español (predeterminado)** e **Inglés**. Consulta
 [`I18N.md`](I18N.md) para la receta para añadir un nuevo idioma.
 
