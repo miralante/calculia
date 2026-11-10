@@ -158,7 +158,7 @@
       roundMistakes = 0;
       announce(sync({ perfect: perfect }));
     } else {
-      sync();
+      announce(sync());
     }
   });
 
@@ -169,5 +169,5 @@
   };
 
   /* Retroactive credit from progress saved before this page loaded: silent. */
-  try { sync(); } catch (err) { /* never block the page over a badge */ }
+  try { announce(sync()); } catch (err) { /* never block the page over a badge */ }
 })();
