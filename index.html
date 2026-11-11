@@ -159,7 +159,7 @@
 
   <link rel="stylesheet" href="assets/css/tokens.css?v=calculia-vd99f158f">
   <link rel="stylesheet" href="assets/css/base.css?v=calculia-v89f2211a">
-  <link rel="stylesheet" href="assets/css/components.css?v=calculia-v27dee46e"><link rel="stylesheet" href="assets/css/locale-picker.css?v=calculia-vcdcf216d">  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/css/components.css?v=calculia-v43240411"><link rel="stylesheet" href="assets/css/locale-picker.css?v=calculia-vcdcf216d">  <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
@@ -172,7 +172,7 @@
           <p class="suite-attribution"><span data-i18n="suiteBy">Una app de</span> <a href="https://apptonomia.uk/">Apptonomia</a>.</p>
         </div>
       </div>
-      <div class="suite-controls"><div id="locale-picker"></div></div>
+      <div class="suite-controls" data-suite-header data-suite-brand="off"></div>
       <div class="suite-details">
         <div class="fila centered-fila">
           <p class="saludo" id="saludo" data-i18n="saludo">Hola. ¿Qué quieres practicar hoy?</p>
@@ -430,11 +430,11 @@
 
     </main>
 
-    <footer data-pie-app data-pie-base="./" data-pie-class="pie-app"></footer>
+    <footer data-suite-footer data-suite-base="./" data-suite-settings></footer>
   </div>
 
-  <script src="assets/js/utils.js?v=calculia-v431a4138"></script>
-  <script src="assets/js/i18n.js?v=calculia-v3abda4f1"></script>
+  <script src="assets/js/utils.js?v=calculia-va7e749b4"></script>
+  <script src="assets/js/i18n.js?v=calculia-va5451c30"></script>
   <script src="assets/js/tts.js?v=calculia-va9046a0d"></script>
   <script src="assets/js/storage.js?v=calculia-v8a6191e2"></script>
   <script src="assets/js/achievements-engine.js?v=calculia-v53655f03"></script>
@@ -456,5 +456,6 @@
   <script src="assets/js/locale-picker-config.js?v=calculia-v3be3c240"></script>
   <script src="assets/js/locale-picker.js?v=calculia-v8851c7df" defer></script>
   <script src="assets/js/sw-register.js?v=calculia-v4a242865"></script>
+  <script src="./assets/js/suite-chrome.js?v=calculia-v4bcf8c03"></script>
 </body>
 </html>

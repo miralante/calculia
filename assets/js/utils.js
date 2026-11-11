@@ -161,48 +161,6 @@
     });
   }
 
-  /* ---------------------------------------------------------------
-    * Shared footer injector.
-    *
-    * Replaces the 15+ hand-maintained <footer class="pie-app">
-    * copies in tools/<slug>/index.html + the root index.html with a
-    * single canonical source. Reads <footer data-pie-app> markers
-    * and fills them in at load time using App.i18n.t() for the
-    * text. Marker attributes mirror the routime convention:
-    *   data-pie-base            base path for relative links
-    *   data-pie-include-about   unless 'false', starts with a "Sobre la
-    *                            app" link (about/: achievements),
-    *                            always placed before Configuración
-    *   data-pie-include-config  if 'true', adds a Configuración link
-    *   data-pie-class           extra class added to the <footer> element
-    * Idempotent: a footer that already has children is skipped.
-    * --------------------------------------------------------------- */
-  function injectFooter() {
-    if (!window.App || !window.App.i18n) return;
-    var pies = document.querySelectorAll('footer[data-pie-app]');
-    for (var i = 0; i < pies.length; i++) {
-      var pie = pies[i];
-      if (pie.childNodes && pie.childNodes.length > 0) continue;
-      var base = pie.getAttribute('data-pie-base') || '../../';
-      var includeAbout = pie.getAttribute('data-pie-include-about') !== 'false';
-      var includeConfig = pie.getAttribute('data-pie-include-config') === 'true';
-      var extraClass = pie.getAttribute('data-pie-class');
-      if (extraClass) pie.className = (pie.className ? pie.className + ' ' : '') + extraClass;
-      var html = '';
-      if (includeAbout) {
-        html += '<a href="https://apptonomia.uk/about/" class="legal-link" data-i18n="core.aboutApp"></a>';
-      }
-      if (includeConfig) {
-        html += '<a href="' + base + 'config/" class="legal-link" data-i18n="core.config"></a>';
-      }
-      html += '<a href="' + base + 'legal/" class="legal-link" data-i18n="core.dataProtection"></a>';
-      pie.innerHTML = html;
-      if (typeof window.App.i18n.apply === 'function') {
-        window.App.i18n.apply(pie);
-      }
-    }
-  }
-
   /* Replaces each {name} in a text with the value given for it. */
   function fill(text, values) {
     var out = text;
@@ -284,7 +242,6 @@
     $$: $$,
     today: today,
     reducedMotion: reducedMotion,
-    injectFooter: injectFooter,
     fill: fill,
     rint: rint,
     pick: pick,

@@ -126,10 +126,9 @@ module.exports = function (ctx) {
   });
 
   /* --- 13. Shared footer marker: every tools/<slug>/index.html and
-      the root index.html must declare the canonical <footer data-pie-app>
-      marker (no hand-written children). The injector in
-      assets/js/utils.js -> App.utils.inyectarPie() fills it in at
-      load time. --- */
+      the root index.html must declare the canonical shared footer
+      <footer data-suite-footer> (no hand-written children). The shared
+      component assets/js/suite-chrome.js fills it in at load time. --- */
   ctx.checks += 1;
   var CANONICAL_PIE_PATHS = ['index.html'].concat(
     slugs.map(function (s) { return path.join('tools', s, 'index.html'); })
@@ -138,8 +137,8 @@ module.exports = function (ctx) {
     var absPath = path.join(ROOT, relPath);
     if (!fs.existsSync(absPath)) return;
     var html = fs.readFileSync(absPath, 'utf8');
-    if (!/<footer\s+data-pie-app[^>]*><\/footer>/.test(html)) {
-      failures.push(relPath + ': falta el marcador <footer data-pie-app> canónico.');
+    if (!/<footer\s+data-suite-footer[^>]*><\/footer>/.test(html)) {
+      failures.push(relPath + ': falta el marcador <footer data-suite-footer> canónico.');
       return;
     }
     if (/<footer\s+class="pie-app/.test(html)) {
