@@ -61,7 +61,6 @@ module.exports = function (ctx) {
   var userTargets = []
     .concat(landingFilesByExt('.html'))
     .concat(landingFilesByExt('.js'))
-    .concat(listDir(path.join(ROOT, 'site')))
     .concat(listDir(path.join(ROOT, 'dev')))
     .concat(listDir(path.join(ROOT, 'config')))
     .concat(listDir(path.join(ROOT, 'legal')));

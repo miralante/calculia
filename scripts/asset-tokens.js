@@ -68,7 +68,7 @@ const CONFIG = {
     prefix: 'okeymoney-v',
     stylesheets: ['assets/css/base.css'],
     entryPoints: ['index.html', '404.html', 'offline.html', 'about/index.html',
-      'config/index.html', 'legal/index.html', 'site/index.html'],
+      'config/index.html', 'legal/index.html'],
   },
   routime: {
     prefix: 'routime-v',

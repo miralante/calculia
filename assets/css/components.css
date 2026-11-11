@@ -407,27 +407,6 @@ button.locked {
   .options.options-row .option-btn { min-width: 0; width: 100%; }
 }
 
-/* ---- Legal footer link (present on every page) ---- */
-.pie-app {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px 8px;
-  padding: var(--espacio) 0 8px;
-  margin-top: var(--espacio);
-}
-
-.legal-link {
-  color: var(--color-texto-suave);
-  font-size: var(--texto-pequeno);
-  padding: 8px 12px;
-  text-decoration: underline;
-}
-
-.legal-link:hover, .legal-link:focus {
-  color: var(--color-texto);
-}
-
 /* ---- Achievements panel (about-app/, see assets/js/achievements.js) ----
    A locked badge keeps full text contrast: only the icon goes grey and
    the border turns dashed, and the status line says it in words, so

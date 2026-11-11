@@ -8,7 +8,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || 'playwright')
 
 const ROOT = path.resolve(__dirname, '..');
 const APP = path.basename(ROOT);
-const BASE_PATH = APP === 'routime' ? '/site/' : '/';
+const BASE_PATH = '/';
 const NAV_TIMEOUT = 15000;
 const SETTLE_MS = 120;
 const MAX_CONTROLS_PER_ROUTE = 180;
@@ -566,13 +566,13 @@ async function exerciseNativeSettings(browser, baseUrl) {
       await page.locator('#selectorSonidos [data-valor="off"]').click();
       assert.strictEqual(await page.evaluate(() =>
         JSON.parse(localStorage.getItem('routime:prefs')).sonidos), false);
-      await page.goto(baseUrl + '/site/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+      await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
       await page.evaluate(() => window.App.feedback.success());
       assert.strictEqual(await page.evaluate(() => window.__nativeSettingsTones), 0,
         'Desactivar sonidos debe silenciar el sonido real de Routime');
       await page.goto(baseUrl + '/config/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
       await page.locator('#selectorSonidos [data-valor="on"]').click();
-      await page.goto(baseUrl + '/site/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+      await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
       await page.evaluate(() => window.App.feedback.success());
       assert.ok(await page.evaluate(() => window.__nativeSettingsTones) > 0,
         'Activar sonidos debe habilitar el sonido real de Routime');

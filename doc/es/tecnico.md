@@ -68,7 +68,6 @@ calculia/
 ├── styles.css             #   CSS de la landing, junto a index.html
 ├── app.js                 #   lógica de la landing, junto a index.html
 ├── strings.<locale>.js    #   textos de la landing, es/en, junto a index.html
-├── site/index.html        # Solo stub de compatibilidad: redirige a /
 ├── dev/index.html         # Catálogo oculto = las otras 25 actividades
 ├── assets/                # Nivel 1: NÚCLEO COMPARTIDO
 │   ├── css/tokens.css     #   variables de diseño (colores, tipografía, táctil)

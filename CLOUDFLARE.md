@@ -71,10 +71,9 @@ rather than on Cloudflare's default JSON error.
 
 The public landing **is** the site root: `https://calculia.apptonomia.uk/`
 serves `index.html` directly, with no redirect, so the URL in the address
-bar and the `<link rel="canonical">` in the page agree. `site/index.html`
-is kept only as a back-compat stub (a `<meta http-equiv="refresh">` to
-`/`) for old bookmarks and for deployments where `_redirects` is not
-applied.
+bar and the `<link rel="canonical">` in the page agree. Old bookmarks of
+the former `/site/` path get the two 301 rules in `_redirects`; no `site/` file
+is kept.
 
 No `functions/` and no Cloudflare service-account keys. `_redirects`
 carries only the two back-compat 301s above, and `package.json` only

@@ -62,7 +62,6 @@ calculia/
 ├── styles.css             #   landing stylesheet, next to index.html
 ├── app.js                 #   landing logic, next to index.html
 ├── strings.<locale>.js    #   landing texts, es/en, next to index.html
-├── site/index.html        # Back-compat stub only: redirects to /
 ├── dev/index.html         # Hidden catalogue = the rest of the activities
 ├── assets/                # Level 1: SHARED CORE
 │   ├── css/tokens.css     #   design variables (colors, typography, touch)

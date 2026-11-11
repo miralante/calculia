@@ -93,9 +93,8 @@ function rel(p) {
 /* The public landing lives at the site root: index.html plus app.js,
    styles.css and the strings.<locale>.js pair next to it, the same shape
    apptonomia uses, so https://calculia.apptonomia.uk/ serves the app
-   directly instead of redirecting to /site/. `site/` now only holds a
-   back-compat redirect stub, so every check that used to scan a `site/`
-   directory targets these root files instead. */
+   directly. There is no `site/` folder any more: every check that used
+   to scan one targets these root files instead. */
 var LANDING_FILES = ['index.html', 'app.js', 'styles.css', 'strings.es.js', 'strings.en.js'];
 function landingFiles() {
   return LANDING_FILES
