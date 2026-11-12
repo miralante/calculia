@@ -9,7 +9,7 @@
   App.i18n.register({
     suiteBy: 'An app by',
     "title": "Calculia",
-    "saludo": "Hi. What do you want to practice today?",
+    "saludo": "Hi. What do you want to do today?",
     "yourStars": "Your stars",
     "idioma": "Choose language",
     "modMates": "🧮 Math",
