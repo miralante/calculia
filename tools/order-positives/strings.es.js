@@ -29,8 +29,8 @@
       explainCompare: '{a} es {rel} {b}.',
       hintCompare: '🤔 Mira cuál de los dos está más a la derecha en la recta de números. Con negativos, el que está más cerca del cero es el mayor.',
       rowAria: 'Fila de números: {row}. Falta el número del hueco.',
-      hintSmallest: 'Mira cuántas cifras tiene cada número. El que tiene menos cifras suele ser el más pequeño. Si empatan, compara la primera cifra.',
-      hintLargest: 'Mira cuántas cifras tiene cada número. El que tiene más cifras suele ser el más grande. Si empatan, compara la primera cifra.',
+      hintSmallest: 'Mira cuántas cifras tiene cada número. El que tiene menos cifras suele ser el más pequeño. Si empatan, compara la siguiente cifra.',
+      hintLargest: 'Mira cuántas cifras tiene cada número. El que tiene más cifras suele ser el más grande. Si empatan, compara la siguiente cifra.',
       hintOrder: 'Busca primero el número más pequeño de la lista. ¿Qué fila lo pone al principio?',
       hintBetween: 'Busca el número que es más grande que {a} y más pequeño que {b}.',
       hintMissing: 'Mira el número de la izquierda y el de la derecha del hueco. ¿Cuál cabe entre los dos?',
@@ -51,7 +51,7 @@
     concept: {
       1: { title: 'Más cifras, más grande', text: 'Un número con más cifras es más grande. 9 es más pequeño que 10, y 10 es más pequeño que 100.' },
       2: { title: 'Mira la primera cifra', text: 'Si tienen las mismas cifras, mira la primera. 213 es más pequeño que 301, porque 2 es más pequeño que 3.' },
-      3: { title: 'Si empatan, sigue', text: 'Si la primera cifra es igual, mira la segunda. 245 es más pequeño que 263.' },
+      3: { title: 'Si empatan, sigue', text: '245 y 263 empiezan igual: 2. Mira la segunda cifra: el 4 es más pequeño que el 6. Por eso 245 es más pequeño que 263.' },
       4: { title: 'El signo <', text: 'El signo < es como un pico que siempre apunta al número más pequeño. En 2 < 5, el pico apunta al 2.' },
       5: { title: 'De menor a mayor', text: 'Ordenar es poner primero el más pequeño y al final el más grande. En la recta, lo que está a la izquierda es más pequeño.' }
     },

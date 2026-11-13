@@ -38,7 +38,6 @@
     var elevatorShaft = $('#elevatorShaft');
     var elevatorNumber = $('#elevatorNumber');
     var elevatorStateLabel = $('#elevatorStateLabel');
-    var elevatorAudio = $('#elevatorAudio');
     var elevatorReset = $('#elevatorReset');
     var elevatorExit = $('#elevatorExit');
     var elevatorHint = $('#elevatorHint');
@@ -81,7 +80,7 @@
       counterNumber.innerHTML = paintCounterNumber(counterValue);
       counterWritten.textContent = counterShowWords ? numberToWords(counterValue) : '';
       counterWritten.classList.toggle('hidden', !counterShowWords);
-      /* Disable "-" buttons at 0; the "——" buttons share the .data-step
+      /* Disable "-" buttons at 0; the "−" buttons share the .data-step
          attribute that starts with "-". */
       App.utils.$$('#counterUI .btn-counter[data-step]').forEach(function (b) {
         var step = parseInt(b.getAttribute('data-step'), 10);
@@ -156,7 +155,7 @@
         return;
       }
       var v = pickElevatorSuggestion();
-      var sign = v < 0 ? '——' : '+';
+      var sign = v < 0 ? '−' : '+';
       var key = v < 0 ? 'gen.elevatorSuggestionDown'
         : 'gen.elevatorSuggestionUp';
       elevatorSuggestion.textContent = App.i18n.t(key)
@@ -168,11 +167,11 @@
       var n = elevatorValue;
       /* Big floor number. The sign is part of the text so screen
          readers say "menos cinco" naturally. */
-      elevatorNumber.textContent = (n < 0 ? '——' : '') + Math.abs(n);
+      elevatorNumber.textContent = (n < 0 ? '−' : '') + Math.abs(n);
       elevatorNumber.setAttribute(
         'aria-label',
         App.i18n.t('gen.elevatorReadoutAria')
-          .replace('{piso}', (n < 0 ? '——' : '') + Math.abs(n))
+          .replace('{piso}', (n < 0 ? '−' : '') + Math.abs(n))
       );
       /* State label: above / on / below ground. Same vocabulary as
          the activity instruction so the user sees the same words in
@@ -181,7 +180,7 @@
         : n < 0 ? 'gen.elevatorStateBelow'
         : 'gen.elevatorStateGround';
       elevatorStateLabel.textContent = App.i18n.t(labelKey);
-      /* Disable "+" / "——" at the true edges of the building (±3) so the
+      /* Disable "+" / "−" at the true edges of the building (±3) so the
          elevator cannot be sent past the top or bottom floor. With a
          ±3 range and single-floor steps this is a rare, honest edge
          case — not a stand-in for a range the buttons don't fit. */
@@ -202,11 +201,11 @@
         var contenido = '';
         if (f === 0) {
           clases += ' ground-floor';
-          contenido += '<span class="floor-icon">—x——</span>';
+          contenido += '<span class="floor-icon">🛗</span>';
         }
         if (f === elevatorValue) {
           clases += ' current-floor';
-          contenido += '<span class="floor-icon">—x——</span>';
+          contenido += '<span class="floor-icon">🛗</span>';
         }
         contenido = '<span class="floor-label">' + (f > 0 ? '+' + f : (f < 0 ? '−' + Math.abs(f) : '0')) + '</span>' + contenido;
         html += '<div class="' + clases + '">' + contenido + '</div>';
@@ -299,16 +298,6 @@
       paintElevator();
     }
   
-    function elevatorSay() {
-      var n = elevatorValue;
-      var main = App.i18n.t('gen.elevatorTtsFloor')
-        .replace('{piso}', (n < 0 ? '——' : '') + Math.abs(n));
-      var labelKey = n > 0 ? 'gen.elevatorTtsAbove'
-        : n < 0 ? 'gen.elevatorTtsBelow'
-        : 'gen.elevatorTtsGround';
-      if (false && App.tts && App.tts.speak) App.tts.speak(main + '. ' + App.i18n.t(labelKey));
-    }
-  
     function exitElevator() {
       progress.stars += 1;
       save();
@@ -391,11 +380,9 @@
       paintElevatorSuggestion();
       paintElevator();
     });
-    elevatorAudio.addEventListener('click', elevatorSay);
     elevatorExit.addEventListener('click', function () { exitElevator(); });
     /* Localized labels for the elevator icon buttons (kept out of the
        HTML to avoid duplicating strings per locale). */
-    elevatorAudio.setAttribute('aria-label', App.i18n.t('gen.elevatorBtnAudio'));
     elevatorReset.textContent = App.i18n.t('gen.elevatorBtnReset');
     elevatorExit.textContent = App.i18n.t('gen.elevatorBtnExit');
     return { renderCounter: renderCounter, renderElevator: renderElevator };

@@ -85,6 +85,42 @@
        fresh. */
     var lecturaAnswered = false;
 
+    /* Two rows, one under the other: what was typed and the correct
+       number. Each digit that differs is marked, so the mistake can be
+       seen at a glance. No words, nothing repeated from the question. */
+    function renderAnswerCompare(typed, correct) {
+      explanationEl.textContent = "";
+      explanationEl.appendChild(compareRow(App.i18n.t("gen.compareYou"), typed, correct));
+      explanationEl.appendChild(compareRow(App.i18n.t("gen.compareRight"), correct, typed));
+    }
+
+    function compareRow(label, text, other) {
+      var row = document.createElement("span");
+      row.className = "answer-compare-row";
+      var name = document.createElement("span");
+      name.className = "answer-compare-label";
+      name.textContent = label;
+      var value = document.createElement("span");
+      value.className = "answer-compare-value";
+      if (!text) {
+        value.textContent = App.i18n.t("gen.compareEmpty");
+        value.classList.add("answer-diff");
+      } else {
+        var len = Math.max(text.length, other.length);
+        for (var i = 0; i < len; i++) {
+          var ch = text.charAt(i);
+          var cell = document.createElement("span");
+          /* A missing digit is shown as a gap so its place is visible. */
+          cell.textContent = ch || "_";
+          if (ch !== other.charAt(i)) cell.className = "answer-diff";
+          value.appendChild(cell);
+        }
+      }
+      row.appendChild(name);
+      row.appendChild(value);
+      return row;
+    }
+
     /* Wrong typed answer (lecturaInput and escribirInput). A hint does
        not help with a number, so the solution is shown instead: the
        digits and how they are read in words. The input and the answer
@@ -95,16 +131,7 @@
       /* Show what was typed next to the solution, so the person can
          compare the two numbers. With nothing typed, the plain message. */
       var typed = (input.value || "").trim();
-      if (typed) {
-        explanationEl.textContent = App.i18n.t("typedSolutionMine")
-          .replace("{typed}", function () { return typed; })
-          .replace("{n}", current().question.correct)
-          .replace("{words}", current().question.words);
-      } else {
-        explanationEl.textContent = App.i18n.t("typedSolution")
-          .replace("{n}", current().question.correct)
-          .replace("{words}", current().question.words);
-      }
+      renderAnswerCompare(typed, current().question.correct);
       explanationWrap.classList.remove("hidden");
       App.feedback.lockUntilAck([input].concat(buttons), explanationWrap, function () {
         explanationWrap.classList.add("hidden");

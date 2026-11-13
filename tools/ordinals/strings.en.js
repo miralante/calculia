@@ -193,7 +193,8 @@
     placePrefix: 'Position {n}',
 
     /* ---------- The queue ---------- */
-    queueHint: 'Count from the flag 🏁.',
+    queueGoal: 'Goal',
+    queueHint: 'Count from the goal.',
     queueAria: 'Queue of {n}. The arrow points at place {pos}.',
 
     /* ---------- The building and the queue (screen 2) ---------- */
@@ -238,8 +239,8 @@
 
     /* Socratic hints: they say where to look, never what the answer
        was. */
-    hintPosition: '«{elegida}» is not the place: count from the flag. The first one is right next to it.',
-    hintMember: '«{elegida}» is not that place: count from the flag up to that place.',
+    hintPosition: '«{elegida}» is not the place: count from the goal. The first one is right next to it.',
+    hintMember: '«{elegida}» is not that place: count from the goal up to that place.',
     hintOrdinalToDigit: '«{elegida}» is not the number: look at the number written next to the word.',
     hintDigitToOrdinal: '«{elegida}» is not the word for that place: think which place that number takes in the queue.',
 

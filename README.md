@@ -167,16 +167,15 @@ By role and profile, the most relevant docs are:
 Calculia grows by adding **activities** under `tools/<slug>/`. Each
 activity ships the six canonical files (`index.html`, `app.js`,
 `data.js`, `strings.es.js`, `strings.en.js`, `styles.css`); every
-change must respect the catalog lock: the public landing lists Roman
-Numerals and Shapes (in that order), the hidden `dev/`
-catalog lists the other activities, and the two together cover the slugs in
-`tools/`, `config/`, and `sw.js`.
+change must respect the catalog lock: the landing lists every activity except
+the children of a group hub (those are reached from their hub), and together
+with the hubs they cover the slugs in `tools/`, `config/`, and `sw.js`.
 
 To add a new activity:
 
 1. Create `tools/<slug>/` with the six canonical files (use an
    existing activity as a template).
-2. Register the activity: add its card to `dev/index.html` (+ both
+2. Register the activity: add its card to `index.html` (+ both
    `strings.<locale>.js` keys), its progress row to
    `config/index.html` (+ both `config/strings.<locale>.js` keys),
    and its six files to `sw.js`'s `ARCHIVOS`. The public `index.html`
@@ -203,11 +202,7 @@ No
 pm install` needed — the script only uses Node's standard library.
 It checks JS syntax across `tools/`, the site root and `assets/js/`,
 canonical file anatomy per activity folder, `sw.js` ↔ disk parity,
-es/en key parity, and the catalog lock: the public landing carries Roman
-Numerals and Shapes (defined as `PUBLIC_SLUGS` in
-`scripts/check.js`); hidden `dev/index.html` lists the other activities,
-and together they cover all `tools/` slugs in addition to `config/` and
-`sw.js`.
+es/en key parity, and the catalog lock: the landing lists every activity except group children (checked against `tools/` in `scripts/checks/catalog.js`); group children are listed in their hub instead, and together with the landing they cover all `tools/` slugs, `config/` and `sw.js`.
 The same script runs on every push and PR via
 [`.github/workflows/validate.yml`](.github/workflows/validate.yml).
 

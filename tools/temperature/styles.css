@@ -19,13 +19,119 @@
 
 /* ---- Thermometer / mission UI ---- */
 
-/* The goal line stays small and out of the way; it doesn't change
-   as the user manipulates the temperature. */
-.thermo-goal {
+/* The order: the instruction to carry out, big and first on screen. */
+.thermo-order-card { padding: 16px; }
+.thermo-order-count {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  color: var(--color-texto-suave);
+  text-align: center;
+}
+.thermo-order {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: clamp(26px, 6vw, 40px);
+  font-weight: 800;
+  color: var(--mod-razonamiento);
+  text-align: center;
+}
+.thermo-order-arrow { font-size: 1.2em; line-height: 1; }
+
+/* Number line: the current temperature (▲) and the target (🎯) move
+   along it with every press; zero is drawn in the middle. */
+.thermo-track-wrap { width: 100%; max-width: 560px; margin: 0 auto; padding-bottom: 26px; }
+.thermo-track {
+  position: relative;
+  height: 40px;
+  margin: 0 12px;
+  border-radius: var(--radio);
+  background: linear-gradient(90deg, #BBDEFB 0%, #F5F5F5 50%, #FFCCBC 100%);
+  border: 2px solid var(--color-borde);
+}
+.thermo-mark {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 22px;
+  line-height: 1;
+  transition: left 0.25s ease;
+}
+.thermo-mark-now { color: var(--color-texto); font-size: 28px; top: 0; transform: translate(-50%, -20%); }
+/* Reference points on the track (0 and 100). The label sits under the
+   track; a thin tick runs up through it. Neither is at the ends, and the
+   ends carry no numbers. */
+.thermo-track-ref {
+  position: absolute;
+  top: 100%;
+  margin-top: 6px;
+  transform: translateX(-50%);
+  font-size: var(--texto-pequeno);
+  font-weight: 800;
+  color: var(--color-texto);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.thermo-track-ref::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  height: 46px;
+  border-left: 3px solid var(--color-texto);
+  opacity: 0.6;
+  transform: translateX(-50%);
+}
+
+/* Target and live line under the thermometer. */
+.thermo-target {
+  margin: 0;
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  color: var(--color-texto);
+  text-align: center;
+}
+.thermo-live {
+  margin: 0;
+  min-height: 1.5em;
   font-size: var(--texto-base);
   font-weight: 700;
   color: var(--color-texto-suave);
+  text-align: center;
+}
+
+/* Result: the equation is the highlight, the note explains the water. */
+.thermo-result {
+  border: 4px solid var(--mod-razonamiento);
+  background: var(--color-superficie);
+  padding: 24px 16px;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+}
+.thermo-result-title {
   margin: 0;
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  color: var(--color-texto);
+  text-align: center;
+}
+.thermo-result-eq {
+  margin: 0;
+  font-size: clamp(40px, 9vw, 64px);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--mod-razonamiento);
+  text-align: center;
+  letter-spacing: 1px;
+}
+.thermo-result-note {
+  margin: 0;
+  font-size: var(--texto-base);
+  color: var(--color-texto);
   text-align: center;
 }
 
@@ -134,25 +240,7 @@
   color: var(--color-texto-suave);
 }
 
-/* Random exploration suggestion. Sits between the thermometer
-   card and the controls; the same pattern is used by the elevator
-   tool so the two activities feel like siblings. Hidden via
-   .hidden when the suggestion equals the starting temperature
-   (nothing to suggest) or when the mission is a 'balance' (the
-   goal line already gives the target, adding a random idea would
-   be confusing). */
-.thermo-suggestion {
-  font-size: var(--texto-base);
-  font-weight: 700;
-  color: var(--mod-razonamiento);
-  text-align: center;
-  margin: 0 auto;
-  max-width: 560px;
-  padding: 8px 12px;
-  border: 2px dashed var(--mod-razonamiento-suave);
-  border-radius: var(--radio);
-  background: var(--color-superficie);
-}
+.thermo-exit { margin-top: 8px; }
 
 /* End-of-round. Same look as other tools. */
 .emoji-large { font-size: 96px; }

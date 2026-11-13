@@ -25,6 +25,14 @@
       coma: { name: 'Poner la coma decimal', detail: 'Coloca la coma entre la parte entera y los decimales.', instruction: 'Toca un hueco para poner la coma. Cuenta las cifras desde la derecha: la coma va dejando tantas cifras decimales como diga el número.' }
     },
     level: {                
+      f1: 'Mitades y cuartos', f2: 'Tercios y sextos', f3: '¿Cuál es más grande?', f4: 'Valen lo mismo', f5: 'Sumar fracciones', f6: 'Restar fracciones', d1: 'De la tarta al número', d2: 'Del número a la tarta', d3: 'La mitad y los cuartos' ,       f7: 'Sumar trozos distintos',
+      f8: 'Restar trozos distintos',
+      f9: 'La parte de una cantidad',
+      d4: 'Sumar decimales',
+      d5: 'Restar decimales',
+      d6: 'Fracción más decimal',
+      d7: 'Fracción menos decimal',
+      d8: '¿Qué es más?',
 },
     part: {
       '2': 'la mitad',
@@ -38,6 +46,10 @@
       pencils: 'lápices'
     },
     gen: {
+      fractionsPrompt: '¿Qué parte está pintada?',
+      fractionVisualAria: 'Figura con {den} partes. {num} están pintadas.',
+      fractionAria: '{num} de {den} partes',
+      compareFractionPrompt: '¿Dónde está pintada la parte más grande?',
       mixFracAdd: '¿Cuánto sale al sumar? Los trozos no son del mismo tamaño.',
       mixFracSub: '¿Cuánto queda al restar? Los trozos no son del mismo tamaño.',
       mixFracHint: 'Parte los trozos grandes para que todos sean de {den}.',

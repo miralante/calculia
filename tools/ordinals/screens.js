@@ -186,12 +186,12 @@
       return rows.join('');
     }
 
-    /* Cola: una fila de personas con la bandera al frente. Igual que
+    /* Cola: una fila de personas con la meta al frente. Igual que
        en el juego, pero con personas en vez de animales y con la
-       cifra ordinal al lado de cada persona. La bandera es lo que fija
+       cifra ordinal al lado de cada persona. La meta es lo que fija
        por dónde empieza la cuenta, igual que en buildQueue(). */
     function renderQueue(total) {
-      var cells = ['<span class="queue-flag" aria-hidden="true">🚩</span>'];
+      var cells = ['<span class="queue-start queue-goal" aria-hidden="true">' + App.i18n.t('queueGoal') + '</span>'];
       for (var i = 1; i <= total; i++) {
         var o = ordinalByN(i);
         cells.push(
@@ -394,9 +394,9 @@
        luego se mezcla en el juego.
 
        La antigua regla 2 ("la cuenta empieza en el primero, no hay
-       lugar cero") se apoyaba en una miniatura de fila con bandera;
+       lugar cero") se apoyaba en una miniatura de fila con meta;
        era redundante con esta primera regla y se ha quitado: el
-       conteo desde la bandera ya se entiende en el juego. */
+       conteo desde la meta ya se entiende en el juego. */
     var RULE_ONE = [1, 2, 3, 4];
 
     /* "1.º · primero · Posición 1": cifra ordinal (abbrev), palabra y

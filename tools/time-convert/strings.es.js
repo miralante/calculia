@@ -26,6 +26,11 @@
       recipe: 'Una receta espera un cuarto de hora. Son 15 minutos.'
     },
     q: {
+      'day-hour': '¿Cuántas horas hay en {n} días?',
+      'week-day': '¿Cuántos días hay en {n} semanas?',
+      'year-month': '¿Cuántos meses hay en {n} años?',
+      'decade-year': '¿Cuántos años hay en {n} décadas?',
+      'century-year': '¿Cuántos años hay en {n} siglos?',
       'hour-half': '¿Cuántas medias horas hay en {n} horas?',
       'hour-quarter': '¿Cuántos cuartos de hora hay en {n} horas?',
       'half-quarter': '¿Cuántos cuartos de hora hay en {n} medias horas?',

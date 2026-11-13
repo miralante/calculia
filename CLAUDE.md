@@ -57,17 +57,12 @@ HTML/CSS/JS served as static files.
   ```
   It checks JS syntax, activity folder structure, es/en key parity
   (`tools/`, the site root, `config/`, `legal/`), `sw.js` ↔ disk parity, and
-  catalog lock: the public landing (`index.html`) shows eleven cards —
-  Los Números, Order Numbers, Quantities, Ordinal Numbers, Fractions, Parity, Roman
-  Numerals, Shapes, Trigonometry, Scale and Math Tables. Ten of
-  them are listed in `dev/index.html` as well (all except Roman Numerals;
-  the `BOTH_SLUGS` list). The hidden `dev/` page lists every other
-  activity, and the combined set plus `config/` and `sw.js` must cover
-  every slug in `tools/`. `scripts/check.js` mirrors both pages in its
-  `PUBLIC_SLUGS` (visible order of `index.html`) and `BOTH_SLUGS` lists:
-  when a card moves, update the page and those two lists together. Read
-  the script before changing the file layout — it encodes the invariants
-  that layout relies on.
+  catalog lock: the landing (`index.html`) is the single catalogue. It links every
+  activity in `tools/` except the ones that hang from a group hub (`numbers-group`,
+  `common-group`, `time-group`, `order-numbers`), which are reached from their hub.
+  There is no `dev/` page; `scripts/checks/catalog.js` fails if `dev/` exists. Read
+  that script before changing the file layout: it encodes the invariants the layout
+  relies on.
 
 ## Service worker cache (read this before touching any cached file)
 

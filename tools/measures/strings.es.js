@@ -74,6 +74,12 @@
       escalera: { name: 'La escalera', detail: 'Cada escalón, por 10.', instruction: 'Las unidades están en una escalera. El escalón de arriba es el más grande. Cada vez que bajas un escalón, se multiplica por 10. Entre un escalón y el siguiente está escrito ese 10: cúéntalos.' }
     },
     level: {
+      es3: 'Cambiar de unidad',
+      me1: 'Longitud: metros',
+      me2: 'Peso: kilos',
+      me3: 'Capacidad: litros',
+      es1: '¿Cuántos escalones?',
+      es2: '¿Por cuánto se multiplica?',
     },
     gen: {
       timesTen: '×10',

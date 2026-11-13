@@ -68,7 +68,6 @@ calculia/
 ├── styles.css             #   CSS de la landing, junto a index.html
 ├── app.js                 #   lógica de la landing, junto a index.html
 ├── strings.<locale>.js    #   textos de la landing, es/en, junto a index.html
-├── dev/index.html         # Catálogo oculto = las otras 25 actividades
 ├── assets/                # Nivel 1: NÚCLEO COMPARTIDO
 │   ├── css/tokens.css     #   variables de diseño (colores, tipografía, táctil)
 │   ├── css/base.css       #   reset, fuentes autoalojadas, foco visible
@@ -96,7 +95,7 @@ calculia/
 └── _headers                # Cabeceras de caché y seguridad de Cloudflare Pages
 ```
 
-Misma arquitectura de tres niveles que Apptonomia, acotada a 30 actividades. `index.html` pública enlaza a las seis actividades de portada (Cantidades, Números ordinales, Números Romanos, Formas, Trigonometría, Escala); `dev/index.html`, oculta, enlaza a las restantes, Números entre ellas, más las que aparecen en `BOTH_SLUGS` (Cantidades, Números ordinales, Escala y Trigonometría, que son a la vez portada y siguen en el catálogo completo). Los números positivos y negativos forman parte de Números; no hay una herramienta independiente. La lista de slugs públicos vive en `scripts/check.js` (`PUBLIC_SLUGS` y `BOTH_SLUGS`), y el orden en `PUBLIC_SLUGS` es el orden visible en `index.html`.
+Misma arquitectura de tres niveles que Apptonomia, acotada a 30 actividades. La portada `index.html` enlaza todas las actividades salvo los hijos de los hubs de grupo (Números, Comunes, Tiempo, Números ordinales), a los que se llega desde su hub. No hay página `dev/`: `scripts/checks/catalog.js` falla si aparece. La lista de slugs vive en `scripts/check.js`.
 
 ### 2.1 `assets/` — núcleo compartido, conservado entero
 

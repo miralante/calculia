@@ -12,6 +12,10 @@
     btnMenu: 'Back to the start',
 
     ui: {
+      division: '{T} ÷ {d} = {q}',
+      remainder: '{r} left over',
+      yes: 'Yes',
+      no: 'No',
       visualAria: 'Drawing or multiplications that show the multiples.',
       product: '{k} × {d} = {m}',
       times: '{d} × {k} = {m}',

@@ -8,6 +8,16 @@
   'use strict';
 
   App.i18n.register({
+    slideNaturalesTitle: 'Natural',
+    slideNaturalesReal: '🧮 3 apples · 5 fingers · 10 years',
+    slideEnterosTitle: 'Integers',
+    slideEnterosReal: '🌡️ −5 °C · basement −1 · 3 floors',
+    slideFraccionesTitle: 'Fractions',
+    slideFraccionesReal: '🍕 1/2 pizza · 1/4 hour',
+    slideDecimalesTitle: 'Decimals',
+    slideDecimalesReal: '💰 $1.99 · 1.5 m · 3.14',
+    slideVsEnterosTitle: 'Natural and Integers',
+    slideVsDecimalesTitle: 'Natural and Decimals',
     title: 'Number Types',
     titleH1: '🔢 Number Types',
 

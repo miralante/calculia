@@ -51,7 +51,7 @@ const CONFIG = {
     prefix: 'calculia-v',
     stylesheets: ['assets/css/base.css'],
     entryPoints: ['index.html', '404.html', 'about/index.html',
-      'config/index.html', 'legal/index.html', 'dev/index.html'],
+      'config/index.html', 'legal/index.html'],
   },
   ludia: {
     prefix: 'ludia-v',

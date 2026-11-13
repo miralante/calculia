@@ -29,8 +29,8 @@
       explainCompare: '{a} is {rel} {b}.',
       hintCompare: '🤔 Look at which of the two is further right on the number line. With negatives, the one closer to zero is the greater.',
       rowAria: 'Row of numbers: {row}. The gap needs a number.',
-      hintSmallest: 'Count the digits of each number. The one with fewer digits is usually the smallest. If they tie, compare the first digit.',
-      hintLargest: 'Count the digits of each number. The one with more digits is usually the largest. If they tie, compare the first digit.',
+      hintSmallest: 'Count the digits of each number. The one with fewer digits is usually the smallest. If they tie, compare the next digit.',
+      hintLargest: 'Count the digits of each number. The one with more digits is usually the largest. If they tie, compare the next digit.',
       hintOrder: 'Find the smallest number in the list first. Which row puts it at the start?',
       hintBetween: 'Look for the number that is bigger than {a} and smaller than {b}.',
       hintMissing: 'Look at the number on the left and the one on the right of the gap. Which one fits between them?',
@@ -51,7 +51,7 @@
     concept: {
       1: { title: 'More digits, bigger', text: 'A number with more digits is bigger. 9 is less than 10, and 10 is less than 100.' },
       2: { title: 'Look at the first digit', text: 'If they have the same number of digits, look at the first one. 213 is less than 301, because 2 is less than 3.' },
-      3: { title: 'If they tie, go on', text: 'If the first digit is the same, look at the second one. 245 is less than 263.' },
+      3: { title: 'If they tie, go on', text: '245 and 263 start the same: 2. Look at the second digit: 4 is less than 6. So 245 is less than 263.' },
       4: { title: 'The < sign', text: 'The < sign is like a beak that always points to the smaller number. In 2 < 5, the beak points to 2.' },
       5: { title: 'From smallest to largest', text: 'To order is to put the smallest first and the largest last. On a line, the one on the left is smaller.' }
     },

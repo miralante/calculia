@@ -26,6 +26,11 @@
       recipe: 'A recipe waits a quarter of an hour. That is 15 minutes.'
     },
     q: {
+      'day-hour': 'How many hours are there in {n} days?',
+      'week-day': 'How many days are there in {n} weeks?',
+      'year-month': 'How many months are there in {n} years?',
+      'decade-year': 'How many years are there in {n} decades?',
+      'century-year': 'How many years are there in {n} centuries?',
       'hour-half': 'How many half hours are there in {n} hours?',
       'hour-quarter': 'How many quarters of an hour are there in {n} hours?',
       'half-quarter': 'How many quarters of an hour are there in {n} half hours?',

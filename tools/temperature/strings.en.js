@@ -18,6 +18,9 @@
     },
 
     level: {
+      cerca: 'Near zero',
+      cruzar: 'Crossing zero',
+      estados: 'Ice and steam'
     },
 
     gen: {
@@ -25,23 +28,37 @@
       stateIce: 'ice',
       stateLiquid: 'liquid water',
       stateSteam: 'steam',
-      btnReset:   '↺ Back to 0 °C',
-      btnAudio:   'Hear the temperature',
+      btnReset:   '↺ Start again',
       btnExit:    '✅ Exit',
-      goalFreeze:  'Goal: freeze the water (≤ 0 °C).',
-      goalSteam:   'Goal: boil the water (≥ 100 °C).',
-      goalBalance: 'Goal: reach 20 °C (± 2).',
-      successIce:     '🧊 It froze! The water is solid.',
-      successSteam:   '♨️ It boiled! The water became steam.',
-      successBalance: '🌡️ Exactly 20 °C! Room temperature.',
-      hint: 'Press + or − to change the temperature. Watch the water transform.',
-      temperatureSuggestionUp: '💡 Suggestion: go up to {temp} °C.',
-      temperatureSuggestionDown: '💡 Suggestion: go down to {temp} °C.',
-      endSummary: 'Mission complete. You now have {stars} {starsWord}.',
-      ttsTemp:   '{temp} degrees',
-      ttsIce:    'The water is frozen. Ice.',
-      ttsLiquid: 'The water is liquid.',
-      ttsSteam:  'The water is boiling. Steam.'
+      hint: 'Use −1 and +1 (or the arrow keys) until you reach the target. The ▲ marker is your temperature; the 🎯, the target.',
+
+      /* Order on screen: "Order 2 of 6" and "Go up 4 degrees". */
+      orderCount: 'Order {i} of {total}',
+      orderUp:    'Go up {n} {degrees}',
+      orderDown:  'Go down {n} {degrees}',
+      degreeOne:  'degree',
+      degreeMany: 'degrees',
+
+      /* Live line while moving: how far off the target, and which way. */
+      liveUp:      'You need {n} more {degrees}: go up.',
+      liveDown:    'You need {n} more {degrees}: go down.',
+      liveOverUp:   'You went {n} {degrees} too far. Now go up.',
+      liveOverDown: 'You went {n} {degrees} too far. Now go down.',
+      targetText: 'Target: {target} °C',
+
+      /* Result, highlighted when the target is reached. */
+      resultTitle:     '✅ Target reached!',
+      resultEq:        '{from} {op} {n} = {to}',
+      resultCrossUp:   'You crossed 0 going up.',
+      resultCrossDown: 'You crossed 0 going down.',
+      resultNoCross:   'You did not cross 0.',
+      resultStateIce:    'The water is frozen: ice.',
+      resultStateLiquid: 'The water is liquid.',
+      resultStateSteam:  'The water is steam.',
+      nextOrder:   '👉 Next order →',
+      finishRound: '🏁 Finish the round',
+
+      endSummary: 'You completed {n} orders. You now have {stars} {starsWord}.'
     }
   }, 'en');
 })();

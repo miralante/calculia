@@ -20,68 +20,62 @@
       <span class="stars" id="stars">⭐ 0</span>
     </header>
 
-
-    
-
     <section id="screenGame" class="hidden stack">
-      <!-- The quiz card / progress bar / options belong to the
-           classic quiz flow; they stay in the DOM but are hidden
-           when a temperature mission is active (free-exploration
-           mode, no question to ask). The thermometer UI replaces
-           them visually. -->
-      <div class="progress-bar hidden" id="progressBar">
-        <div class="progress-fill" id="progressFill"></div>
-        <span class="progress-text" id="progressText">0 / 6</span>
-        <span class="difficulty" id="difficulty"></span>
-      </div>
+      <!-- The thermometer game. One order at a time: the order is the
+           instruction to carry out, the live line says how far the
+           target is, and the result is highlighted as an equation
+           when the target is reached. -->
+      <div id="thermoUI" class="stack">
+        <div class="card centered stack thermo-order-card">
+          <p class="thermo-order-count" id="thermoCount"></p>
+          <p class="thermo-order" id="thermoOrder" aria-live="polite">
+            <span class="thermo-order-arrow" aria-hidden="true"></span>
+            <span class="thermo-order-text"></span>
+          </p>
+        </div>
 
-      <div class="card centered stack hidden" id="quizCard">
-        <p class="prompt" id="prompt"></p>
-        <div class="visual" id="visual"></div>
-        <p class="legend hidden" id="legend"></p>
-      </div>
-
-      <div class="stack options hidden" id="options"></div>
-
-      <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="row explanation hidden" id="explanationWrap">
-        <p id="explanation" aria-live="polite"></p>
-      </div>
-      <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
-
-      <!-- Thermometer + water visual + controls. Visible whenever
-           a temperature mission level is active (tipo
-           'misionEstado' or 'misionExacta'). The big number IS the
-           current temperature; the emoji below it shows the
-           physical state (ice / liquid / steam). -->
-      <div id="thermoUI" class="hidden stack">
-        <div class="card centered thermo-card">
-          <p class="thermo-goal" id="thermoGoal"></p>
+        <div class="card centered stack thermo-card" id="thermoCard">
           <div class="thermo-visual">
             <div id="thermoState" class="thermo-state" aria-hidden="true">💧</div>
             <div id="thermoNumber" class="thermo-number" aria-live="polite"></div>
             <p class="thermo-state-label" id="thermoStateLabel"></p>
           </div>
+
+          <!-- Number line from the lowest to the highest temperature of
+               the level. The marker for the current temperature and the
+               target move on every press; zero is drawn in the middle. -->
+          <div class="thermo-track-wrap" aria-hidden="true">
+            <div class="thermo-track" id="thermoTrack">
+              <span class="thermo-track-ref" id="thermoZeroMark">0</span>
+              <span class="thermo-track-ref" id="thermoHundredMark">100</span>
+              <span class="thermo-mark thermo-mark-target" id="thermoTargetMark">🎯</span>
+              <span class="thermo-mark thermo-mark-now" id="thermoNowMark">▲</span>
+            </div>
+          </div>
+          <p class="thermo-target" id="thermoTargetText"></p>
+          <p class="thermo-live" id="thermoLive" aria-live="polite"></p>
         </div>
-        <!-- Random exploration suggestion. Refreshed every time
-             render() runs (entry, reset, "play again"). Not a goal:
-             it's just a starting idea so the user doesn't have to
-             pick a temperature themselves. Hidden when the chosen
-             value is the same as the starting temperature (no
-             point showing "stay where you are"). -->
-        <p class="thermo-suggestion hidden" id="thermoSuggestion" aria-live="polite"></p>
-        <div class="thermo-controls">
+
+        <!-- Shown when the target is reached: the result as an equation
+             in large type, then what happened to the water. -->
+        <div class="card centered stack thermo-result hidden" id="thermoResult" role="status">
+          <p class="thermo-result-title" id="thermoResultTitle"></p>
+          <p class="thermo-result-eq" id="thermoResultEq"></p>
+          <p class="thermo-result-note" id="thermoResultNote"></p>
+          <button type="button" class="btn" id="thermoNext"></button>
+        </div>
+
+        <div class="thermo-controls" id="thermoControls">
           <div class="thermo-row">
             <button type="button" class="btn-thermo" data-step="-10">−10</button>
             <button type="button" class="btn-thermo" data-step="-1">−1</button>
-            <button type="button" class="btn-thermo btn-thermo-icon" id="thermoAudio" aria-label="Hear the temperature">🔊</button>
-            <button type="button" class="btn-thermo btn-thermo-secondary" id="thermoReset">↺ 0</button>
+            <button type="button" class="btn-thermo btn-thermo-secondary" id="thermoReset">↺</button>
             <button type="button" class="btn-thermo" data-step="1">+1</button>
             <button type="button" class="btn-thermo" data-step="10">+10</button>
-            <button type="button" class="btn-thermo" id="thermoExit">✅ Salir</button>
           </div>
+          <button type="button" class="btn-thermo btn-thermo-exit" id="thermoExit">✅ Salir</button>
         </div>
-        <p class="instruction thermo-hint" id="thermoHint" data-i18n="gen.hint"></p>
+        <p class="instruction thermo-hint" id="thermoHint"></p>
       </div>
     </section>
 

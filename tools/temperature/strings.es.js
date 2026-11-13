@@ -18,6 +18,9 @@
     },
 
     level: {
+      cerca: 'Cerca del 0',
+      cruzar: 'Cruzar el 0',
+      estados: 'Hielo y vapor'
     },
 
     gen: {
@@ -25,23 +28,37 @@
       stateIce: 'hielo',
       stateLiquid: 'agua líquida',
       stateSteam: 'vapor',
-      btnReset:   '↺ Volver a 0 °C',
-      btnAudio:   'Escuchar la temperatura',
+      btnReset:   '↺ Empezar de nuevo',
       btnExit:    '✅ Salir',
-      goalFreeze:  'Objetivo: congelar el agua (≤ 0 °C).',
-      goalSteam:   'Objetivo: hervir el agua (≥ 100 °C).',
-      goalBalance: 'Objetivo: llegar a 20 °C (± 2).',
-      successIce:     '🧊 ¡Se ha congelado! El agua está en estado sólido.',
-      successSteam:   '♨️ ¡Ha hervido! El agua se ha vuelto vapor.',
-      successBalance: '🌡️ ¡20 °C exactos! Temperatura ambiente.',
-      hint: 'Pulsa + o − para cambiar la temperatura. Mira cómo se transforma el agua.',
-      temperatureSuggestionUp: '💡 Sugerencia: sube hasta {temp} °C.',
-      temperatureSuggestionDown: '💡 Sugerencia: baja hasta {temp} °C.',
-      endSummary: 'Has completado el reto. Ahora tienes {stars} {starsWord}.',
-      ttsTemp:   '{temp} grados',
-      ttsIce:    'El agua está congelada. Hielo.',
-      ttsLiquid: 'El agua está líquida.',
-      ttsSteam:  'El agua hierve. Vapor.'
+      hint: 'Usa −1 y +1 (o las flechas del teclado) hasta llegar al objetivo. El marcador ▲ es tu temperatura; el 🎯, el objetivo.',
+
+      /* Order on screen: "Orden 2 de 6" and "Sube 4 grados". */
+      orderCount: 'Orden {i} de {total}',
+      orderUp:    'Sube {n} {degrees}',
+      orderDown:  'Baja {n} {degrees}',
+      degreeOne:  'grado',
+      degreeMany: 'grados',
+
+      /* Live line while moving: how far off the target, and which way. */
+      liveUp:      'Te faltan {n} {degrees}: sube.',
+      liveDown:    'Te faltan {n} {degrees}: baja.',
+      liveOverUp:   'Te has pasado {n} {degrees}. Ahora sube.',
+      liveOverDown: 'Te has pasado {n} {degrees}. Ahora baja.',
+      targetText: 'Objetivo: {target} °C',
+
+      /* Result, highlighted when the target is reached. */
+      resultTitle:     '✅ ¡Objetivo conseguido!',
+      resultEq:        '{from} {op} {n} = {to}',
+      resultCrossUp:   'Has cruzado el 0 hacia arriba.',
+      resultCrossDown: 'Has cruzado el 0 hacia abajo.',
+      resultNoCross:   'No has cruzado el 0.',
+      resultStateIce:    'El agua está congelada: hielo.',
+      resultStateLiquid: 'El agua está líquida.',
+      resultStateSteam:  'El agua está en forma de vapor.',
+      nextOrder:   '👉 Siguiente orden →',
+      finishRound: '🏁 Terminar la ronda',
+
+      endSummary: 'Has completado {n} órdenes. Ahora tienes {stars} {starsWord}.'
     }
   }, 'es');
 })();

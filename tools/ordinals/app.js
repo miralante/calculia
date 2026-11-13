@@ -37,7 +37,7 @@
    - El paso 1 del recordatorio avisa de que no existe un "lugar
      cero". Es la misma idea, dicha de otra forma, y evita el
      desvío más caro de esta actividad: que alguien cuente la
-     bandera como el sitio número cero.
+     meta como el sitio número cero.
    ============================================================ */
 (function () {
   'use strict';
@@ -164,8 +164,8 @@
   var attempts = 0;
   var chainBanner = '';
 
-  /* La fila del round: n animales, la bandera al frente y un lugar
-     señalado. La bandera es lo que fija por dónde empieza la cuenta;
+  /* La fila del round: n animales, la meta al frente y un lugar
+     señalado. La meta es lo que fija por dónde empieza la cuenta;
      sin ella, "primero"dependería de adivinar por qué extremo se
      mira, y ese es justo el error que se quiere evitar. */
   function buildQueue(itemsCount, target, showPointer) {
@@ -179,7 +179,7 @@
         '</div>'
       : '';
     var queue = '<div class="queue-row" aria-hidden="true">' +
-      '<span class="queue-start">🏁</span>' +
+      '<span class="queue-start queue-goal">' + t('queueGoal') + '</span>' +
       row.map(function (m) { return '<span class="queue-member">' + m + '</span>'; }).join('') +
       '</div>';
     return { row: row, html: pointerRow + queue };
@@ -405,7 +405,7 @@
     shownEl.innerHTML = roundData.shown;
     /* La fila es aria-hidden dentro del marcado y el enunciado lleva
        su propia etiqueta: un lector de pantalla no puede leer la
-       flecha ⬇️ ni sacar nada de 🏁. */
+       flecha ⬇️ ni sacar nada de la meta. */
     shownEl.setAttribute('aria-label', roundData.aria);
     $('#context').textContent = roundData.context;
     $('#context').classList.toggle('hidden', !roundData.context);

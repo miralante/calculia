@@ -195,7 +195,8 @@
     placePrefix: 'Posición {n}',
 
     /* ---------- La fila ---------- */
-    queueHint: 'Cuenta desde la bandera 🏁.',
+    queueGoal: 'Meta',
+    queueHint: 'Cuenta desde la meta.',
     queueAria: 'Fila de {n}. La flecha señala el lugar {pos}.',
 
     /* ---------- El edificio y la cola ---------- */
@@ -241,8 +242,8 @@
 
     /* Pistas socráticas: dicen dónde mirar, nunca cuál era la
        respuesta. */
-    hintPosition: '«{elegida}» no es el puesto: cuenta desde la bandera. El primero va justo al lado de ella.',
-    hintMember: '«{elegida}» no es ese puesto: cuenta desde la bandera hasta ese puesto.',
+    hintPosition: '«{elegida}» no es el puesto: cuenta desde la meta. El primero va justo al lado de ella.',
+    hintMember: '«{elegida}» no es ese puesto: cuenta desde la meta hasta ese puesto.',
     hintOrdinalToDigit: '«{elegida}» no es el número: mira qué número va escrito junto a la palabra.',
     hintDigitToOrdinal: '«{elegida}» no es la palabra de ese puesto: piensa qué puesto ocupa ese número en la fila.',
 

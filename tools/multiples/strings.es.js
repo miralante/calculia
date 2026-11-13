@@ -12,6 +12,10 @@
     btnMenu: 'Volver al inicio',
 
     ui: {
+      division: '{T} ÷ {d} = {q}',
+      remainder: 'sobra {r}',
+      yes: 'Sí',
+      no: 'No',
       visualAria: 'Dibujo o multiplicaciones que muestran los múltiplos.',
       product: '{k} × {d} = {m}',
       times: '{d} × {k} = {m}',

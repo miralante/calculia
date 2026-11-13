@@ -627,3 +627,30 @@
   .lectura-input { min-width: 0; width: 100%; }
   .lectura-btn-generate { min-width: 0; width: 100%; }
 }
+
+/* Reading and writing numbers: the answer compared with the correct one.
+   Two rows; the digits that differ are marked. */
+.answer-compare-row {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.answer-compare-label {
+  min-width: 8em;
+  text-align: right;
+  font-weight: 700;
+}
+.answer-compare-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+}
+.answer-diff {
+  color: #8a1c1c;
+  background: #fde2e0;
+  border-radius: 4px;
+  text-decoration: underline;
+}

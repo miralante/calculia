@@ -51,7 +51,7 @@
   var counterUI = $('#counterUI');
   /* Free-exploration elevator level (see data.js: 'ascensorLibre' /
      'ascensorMeta'). Same mechanic as the water-temperature tool:
-     ——10/——1/+1/+10 buttons, the visual reacts on every step. */
+     −10/−1/+1/+10 buttons, the visual reacts on every step. */
   var elevatorUI = $('#elevatorUI');
   /* Interactive "leer números" level (see data.js: 'lecturaInput').
      The flow is: a "Generate" button reveals a number in words;
@@ -390,7 +390,7 @@
   /* ============================================================
 
      Free-exploration elevator (no quiz)
-     Sibling of the water-temperature tool: ——10/——1/+1/+10 buttons,
+     Sibling of the water-temperature tool: −10/−1/+1/+10 buttons,
      the visual reacts on every step. The big number reads with a
      sign; the shaft shows the elevator emoji on the current floor,
      with the ground floor (0) always highlighted as the boundary
@@ -424,7 +424,7 @@
      elevator emoji on the current floor — and the ground floor
      always tinted with the project reasoning colour. Floors are
      listed top-to-bottom (max first) so floor +10 sits at the top
-     and floor ——10 at the bottom, matching the building
+     and floor −10 at the bottom, matching the building
      convention. */
   /* For 'meta' missions, when the user lands on the target floor
      (within DATA.elevador.tolerancia), show the celebration once.

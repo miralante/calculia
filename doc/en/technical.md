@@ -62,7 +62,6 @@ calculia/
 ├── styles.css             #   landing stylesheet, next to index.html
 ├── app.js                 #   landing logic, next to index.html
 ├── strings.<locale>.js    #   landing texts, es/en, next to index.html
-├── dev/index.html         # Hidden catalogue = the rest of the activities
 ├── assets/                # Level 1: SHARED CORE
 │   ├── css/tokens.css     #   design variables (colors, typography, touch)
 │   ├── css/base.css       #   reset, self-hosted fonts, visible focus
@@ -90,7 +89,7 @@ calculia/
 └── _headers                # Cloudflare Pages cache and security headers
 ```
 
-Same three-level architecture as Apptonomia, scoped to 30 activities. The public `index.html` links to the six front-door activities (Quantities, Ordinal Numbers, Roman Numerals, Shapes, Trigonometry, Scale); the hidden `dev/index.html` links to the other activities, Numbers among them, plus the ones named in `BOTH_SLUGS` (Quantities, Ordinal Numbers, Scale and Trigonometry, which are both front doors and still listed in the full catalogue). Positive and negative numbers are part of Numbers, not a separate tool. The list of public slugs lives in `scripts/check.js` (`PUBLIC_SLUGS` and `BOTH_SLUGS`), and the order in `PUBLIC_SLUGS` is the visible order in `index.html`.
+Same three-level architecture as Apptonomia, scoped to 30 activities. The landing `index.html` links every activity except the children of group hubs (Numbers, Common, Time, Order Numbers), which are reached from their hub. There is no `dev/` page: `scripts/checks/catalog.js` fails if one appears. The slug list lives in `scripts/check.js`.
 
 ### 2.1 `assets/` — shared core, kept whole
 

@@ -28,8 +28,7 @@ module.exports = function (ctx) {
   ctx.checks += 1;
   var siteHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   /* The public landing sits at the site root and links "tools/<slug>/";
-     the hidden dev/ page is one level down and links "../tools/<slug>/".
-     The trailing slash is mandatory, not cosmetic: the ".../index.html"
+          The trailing slash is mandatory, not cosmetic: the ".../index.html"
      form is answered by Cloudflare with a 307 to the directory, and the
      service worker cannot hand that redirected response to a navigation
      (net::ERR_FAILED). The alternation keeps an index.html link from

@@ -8,7 +8,7 @@
    .btn, .option-btn y .explanation vienen de components.css.
 
    La fila (`queue-row`) reproduce el criterio que ya usa Los Números:
-   la columna de la bandera, la de la flecha y la de cada animal
+   la columna de la meta, la de la flecha y la de cada animal
    comparten anchura, para que la flecha caiga exactamente encima
    del sitio que señala. Si el ancho se dividiera entre "n"
    generosamente, la flecha se desplazaría y apuntaría a otro.
@@ -338,7 +338,7 @@
 .building-person { font-size: 1.6rem; line-height: 1; margin-left: 6px; }
 
 /* ----- La cola -----
-   Una fila horizontal con la bandera al frente y las personas
+   Una fila horizontal con la meta al frente y las personas
    detrás. Misma idea que la fila del juego, pero con personas en
    vez de animales y con la cifra ordinal al lado de cada persona.
 
@@ -355,11 +355,20 @@
   align-items: flex-end;
 }
 
-.queue-flag {
-  font-size: 1.8rem;
-  line-height: 1.1;
-  flex: 0 0 auto;
-  padding: 0 4px;
+/* The goal (meta) at the front of the queue: a written label, not a
+   flag. It is a chip wide enough for the word, so the media rules that
+   narrow .queue-start on small screens do not cut it. */
+.queue-start.queue-goal {
+  width: auto;
+  min-width: 44px;
+  padding: 4px 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #fff;
+  background: var(--mod-razonamiento);
+  white-space: nowrap;
+  align-self: center;
 }
 
 .queue-person-cell {
@@ -589,8 +598,8 @@
 
 /* Antes del rediseño, debajo de los ejemplos de la regla 1 vivía una
    segunda regla ("la cuenta empieza en el primero, no hay lugar cero")
-   apoyada en una miniatura de fila con bandera. Era redundante con
-   la primera y se quitó: el conteo desde la bandera se entiende
+   apoyada en una miniatura de fila con meta. Era redundante con
+   la primera y se quitó: el conteo desde la meta se entiende
    mejor en el juego, donde la fila es real. La miniatura y su CSS
    (clases .strip*) ya no se emiten. */
 
@@ -616,9 +625,9 @@
 .big-word { font-size: var(--texto-titulo); line-height: 1.1; }
 .big-digit { font-size: 88px; line-height: 1; }
 
-/* La fila: bandera, animales y (en su sitio) la flecha. La columna
-   de la bandera es un hueco de la misma anchura que las demás, sólo
-   que con la bandera dentro, para que todo quede alineado. */
+/* La fila: meta, animales y (en su sitio) la flecha. La columna
+   de la meta es un hueco de la misma anchura que las demás, sólo
+   que con la meta dentro, para que todo quede alineado. */
 .queue-row {
   display: flex;
   align-items: center;
@@ -718,7 +727,7 @@
   .ex-figure { font-size: var(--texto-base); }
   .ord-chip { min-width: 0; flex: 1 1 130px; }
   .big-emoji { font-size: 64px; }
-  /* La fila se estrecha un poco para que cinco animales + bandera
+  /* La fila se estrecha un poco para que cinco animales + meta
      sigan cabiendo en 375px sin desbordar. */
   .queue-member, .queue-start, .queue-pointer, .queue-start-spacer { width: 40px; font-size: 1.7rem; }
 }

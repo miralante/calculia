@@ -74,6 +74,12 @@
       escalera: { name: 'The ladder', detail: 'Each step, times 10.', instruction: 'The units sit on a ladder. The top rung is the biggest one. Every time you go down a rung, it is multiplied by 10. That 10 is written between each rung and the next: count them.' }
     },
     level: {
+      es3: 'Change the unit',
+      me1: 'Length: metres',
+      me2: 'Weight: kilos',
+      me3: 'Capacity: litres',
+      es1: 'How many rungs?',
+      es2: 'Times what?',
     },
     gen: {
       timesTen: '×10',

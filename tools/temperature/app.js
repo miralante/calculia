@@ -1,83 +1,53 @@
 /* ============================================================
-   Calculia — Water Temperature (explore negative numbers through
-   a thermometer that can freeze or boil the water).
+   Calculia — Water Temperature (orders on a thermometer)
+
+   A round is a short sequence of orders such as "go up 4 degrees"
+   or "go down 3 degrees". Each order starts where the previous one
+   ended, so the target is never a fixed number: it is computed from
+   the current temperature and shown live. While the person moves the
+   thermometer, the screen says how many degrees are missing or how
+   far they overshot. When the target is reached, the result is
+   highlighted as an equation (for example 2 − 4 = −2) with a note on
+   what happened to the water, so the sign rules are seen, not just
+   read.
 
    Data and levels in data.js. Shared modules in assets/js/.
-
-   This activity is NOT a quiz: every level is a free-exploration
-   "mission" where the person manipulates the temperature with +/−
-   buttons and tries to reach a goal (a state, or an exact value).
-   The visual reacts to every change (water freezes / stays
-   liquid / boils), and on goal-reach the matching celebration
-   message plays. No wrong-answer feedback — there are no wrong
-   answers, only states.
-
-   Mechanics mirror the numbers counter (free exploration with
-   buttons, +1 star on exit) so the cumulative progress across
-   activities stays consistent and the storage shape is the same.
    ============================================================ */
 (function () {
   'use strict';
 
+  /* Same storage key as before, so stars already earned are kept. */
   var TOOL_ID = 'temperature';
   var $ = App.utils.$;
 
-  var screenLevels = $('#screenLevels');
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
   var starsEl = $('#stars');
-  var dificultadEl = $('#difficulty');
-  var noteExtra = $('#noteExtra');
-  var transferEl = $('#transfer');
-
-  /* Quiz-mode parts (kept in DOM for layout consistency with other
-     tools, but always hidden — every level in this tool is a
-     mission, not a question). */
-  var progressBar = $('#progressBar');
-  var quizCard = $('#quizCard');
-  var promptEl = $('#prompt');
-  var visualEl = $('#visual');
-  var legendEl = $('#legend');
-  var optionsEl = $('#options');
-  var feedbackEl = $('#feedback');
-  var explanationWrap = $('#explanationWrap');
-  var explanationEl = $('#explanation');
-  var btnNext = $('#btnNext');
-  var progressFill = $('#progressFill');
-  var progressText = $('#progressText');
-
-  /* Thermometer / mission-mode refs. */
   var thermoUI = $('#thermoUI');
-  var thermoGoal = $('#thermoGoal');
-  var thermoState = $('#thermoState');
+  var thermoCount = $('#thermoCount');
+  var thermoOrder = $('#thermoOrder');
+  var thermoCard = $('#thermoCard');
   var thermoNumber = $('#thermoNumber');
+  var thermoState = $('#thermoState');
   var thermoStateLabel = $('#thermoStateLabel');
-  var thermoAudio = $('#thermoAudio');
+  var thermoTrack = $('#thermoTrack');
+  var thermoZeroMark = $('#thermoZeroMark');
+  var thermoNowMark = $('#thermoNowMark');
+  var thermoTargetMark = $('#thermoTargetMark');
+  var thermoHundredMark = $('#thermoHundredMark');
+  var thermoTargetText = $('#thermoTargetText');
+  var thermoLive = $('#thermoLive');
+  var thermoControls = $('#thermoControls');
+  var thermoResult = $('#thermoResult');
+  var thermoResultTitle = $('#thermoResultTitle');
+  var thermoResultEq = $('#thermoResultEq');
+  var thermoResultNote = $('#thermoResultNote');
+  var thermoNext = $('#thermoNext');
   var thermoReset = $('#thermoReset');
   var thermoExit = $('#thermoExit');
   var thermoHint = $('#thermoHint');
-  /* Random exploration suggestion. Painted by paintThermoSuggestion
-     on every render (entry, reset, "play again"). Not a goal: it's
-     just a starting idea so the user doesn't have to pick a
-     temperature themselves. */
-  var thermoSuggestion = $('#thermoSuggestion');
 
-  /* Persistent progress. Same shape as every other tool: an object
-     with a `stars` counter. */
   var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0 });
-
-  /* Round state. */
-  var activity = null;
-  var level = null;
-
-  /* Per-mission state. Held in closures so re-entering the level
-     (Exit → Play again) starts fresh. */
-  var thermoValue = DATA.inicioC;
-  var thermoLastState = null;
-  /* Set to the celebration key once a mission is completed, so we
-     don't replay the same celebration on every subsequent
-     step in the same mission. Reset on exit/re-enter. */
-  var thermoCelebrated = false;
 
   var glue = App.activityGlue({
     toolId: TOOL_ID,
@@ -87,56 +57,17 @@
   });
   var save = glue.save, paintStars = glue.paintStars;
 
+  /* Round state. */
+  var level = null;      /* { id, lo, hi, amin, amax, start } */
+  var now = 0;           /* current temperature */
+  var order = null;      /* { from, dir: 'up'|'down', amount, target } */
+  var orderIndex = 0;    /* 1-based number of the order on screen */
+  var roundCorrect = 0;  /* orders completed in this round */
+  var resultShown = false;
+
   /* ============================================================
-     Screen flow
+     Helpers
      ============================================================ */
-
-  /* Pick a random integer in [min, max] inclusive, avoiding
-     `avoid` (the level's starting temperature). Shared helper so
-     the temperature tool and the elevator tool use the same logic. */
-  var pickRandomInt = App.utils.pickRandomInt;
-
-
-  /* Pick a random temperature to suggest for the current level.
-     Avoids the starting temperature and biases toward values
-     that produce a clear state change (anything < 0 or > 100 is
-     a strong suggestion because it changes the water visibly;
-     0 is skipped because it's the same as ground-floor "nothing
-     happens" and would confuse with the goal line). The chosen
-     value is stored in `thermoSuggestionValue` so paintThermoGoal
-     can reuse it without a second random call. */
-  var thermoSuggestionValue = 0;
-  function pickThermoSuggestion() {
-    var start = (level && typeof level.inicioC === 'number') ? level.inicioC : DATA.inicioC;
-    var v = pickRandomInt(DATA.minC, DATA.maxC, start);
-    /* Skip 0: it overlaps with the goal line wording and doesn't
-       change the water visually, so it adds noise rather than
-       useful direction. */
-    while (v === 0) v = pickRandomInt(DATA.minC, DATA.maxC, start);
-    thermoSuggestionValue = v;
-    return v;
-  }
-
-  /* Paint the suggestion line. For 'misionEstado' (freeze/heat)
-     missions the goal line above already names the state, so the
-     suggestion adds a SPECIFIC number to aim for; showing it
-     reinforces both. For 'misionExacta' (balance) the goal is
-     already an exact value (20 °C ± 2), so showing ANOTHER
-     random value would conflict with the goal — hide it. */
-  function paintThermoSuggestion() {
-    if (level.tipo === 'misionExacta') {
-      thermoSuggestion.textContent = '';
-      thermoSuggestion.classList.add('hidden');
-      return;
-    }
-    var v = pickThermoSuggestion();
-    var sign = v < 0 ? '−' : '+';
-    var key = v < 0 ? 'gen.temperatureSuggestionDown'
-      : 'gen.temperatureSuggestionUp';
-    thermoSuggestion.textContent = App.i18n.t(key)
-      .replace('{temp}', sign + Math.abs(v));
-    thermoSuggestion.classList.remove('hidden');
-  }
 
   function show(screen) {
     [screenGame, screenEnd].forEach(function (p) {
@@ -144,219 +75,226 @@
     });
   }
 
-  /* Determina el nivel según el progress: cada ronda completada, sube un nivel. */
-  function levelFromProgress() {
-    var rounds = progress.completedRounds || 0;
-    var idxN = Math.min(rounds, activity.levels.length - 1);
-    return activity.levels[idxN];
+  /* Number with the typographic minus sign, so the screen shows
+     "−4" and not "-4". */
+  function fmt(n) {
+    return (n < 0 ? '−' : '') + Math.abs(n);
   }
 
-  function openActivity(id) {
-    activity = DATA.activities[id];
-    activity.id = id;
-    startRound(levelFromProgress());
+  function degrees(n) {
+    return App.i18n.t(Math.abs(n) === 1 ? 'gen.degreeOne' : 'gen.degreeMany');
   }
 
-  function startRound(nv) {
-    level = nv;
-    show(screenGame);
-    render();
-  }
+  var randInt = App.utils.rint;
 
-  /* The whole `render()` is just a switch into mission mode. No
-     quiz state is generated; the mission UI drives the loop. */
-  function render() {
-    /* Hide quiz-mode parts: this tool never asks a question. */
-    progressBar.classList.add('hidden');
-    quizCard.classList.add('hidden');
-    optionsEl.classList.add('hidden');
-    btnNext.classList.add('hidden');
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'feedback';
-    explanationWrap.classList.add('hidden');
-    explanationEl.textContent = '';
-    /* Reset per-mission state and start the thermometer. The starting
-     temperature can be overridden per level (DATA.levels[i].inicioC)
-     so missions that need a non-neutral start (e.g. "balance"
-     starts at 90 °C to make the target feel earned) can specify
-     their own. */
-    thermoValue = (level && typeof level.inicioC === 'number') ? level.inicioC : DATA.inicioC;
-    thermoLastState = null;
-    thermoCelebrated = false;
-    thermoUI.classList.remove('hidden');
-    paintThermoGoal();
-    paintThermoSuggestion();
-    paintThermo();
-    paintStars();
-  }
-
-  /* ============================================================
-     Thermometer state
-     ============================================================ */
-
-  /* Return the state key ('ice' / 'liquid' / 'steam') for a given
-     temperature. Looks up DATA.states; the entry whose min/max
-     range contains n wins. */
+  /* Physical state for a temperature. Ice at 0 °C or below, steam at
+     100 °C or above, liquid in between. */
   function stateFor(n) {
-    var states = DATA.states;
     if (n <= 0) return 'ice';
     if (n >= 100) return 'steam';
     return 'liquid';
   }
 
-  /* i18n keys for the goal message and the success message, per
-     'tipo'. Keeping the mapping local to renderThermo makes it
-     easy to add new missions without touching the core logic. */
-  var GOAL_KEY = {
-    misionEstado: function (nv) {
-      return nv.meta === 'ice' ? 'gen.goalFreeze'
-        : nv.meta === 'steam' ? 'gen.goalSteam'
-        : null;
-    },
-    misionExacta: function (nv) {
-      return 'gen.goalBalance';
-    }
-  };
-  var SUCCESS_KEY = {
-    misionEstado: function (nv) {
-      return nv.meta === 'ice' ? 'gen.successIce'
-        : nv.meta === 'steam' ? 'gen.successSteam'
-        : null;
-    },
-    /* 'balance' celebrates when the user lands in the ±tolerance
-       band, not at startRound — see celebrateIfGoalReached(). */
-    misionExacta: function (nv) { return 'gen.successBalance'; }
-  };
-
-  /* Show the goal line. Set once per mission (it doesn't change as
-     the temperature moves). */
-  function paintThermoGoal() {
-    var key = GOAL_KEY[level.tipo](level);
-    thermoGoal.textContent = key ? App.i18n.t(key) : '';
+  /* Level chosen by how many rounds the person has completed. The
+     last level repeats once they reach it. */
+  function levelFromProgress() {
+    var levels = DATA.levels;
+    var idx = Math.min(progress.completedRounds || 0, levels.length - 1);
+    return levels[idx];
   }
 
-  /* Main render: number, state emoji, state label, accessibility
-     text, button enable/disable. Called on every value change. */
-  function paintThermo() {
-    /* The big number: signed integer with the °C unit glued on.
-       The sign is part of the text so screen readers say
-       "menos cinco grados Celsius" naturally. */
-    var n = thermoValue;
-    thermoNumber.textContent = (n < 0 ? '−' : '') + Math.abs(n) + ' °C';
-    thermoNumber.setAttribute(
-      'aria-label',
-      App.i18n.t('gen.tempReadoutAria').replace('{temp}', String(n))
-    );
-
-    /* Physical state visual + label. The card's background tint
-       follows the state so the page feels alive. */
-    var state = stateFor(n);
-    var entry = DATA.states[state];
-    thermoState.textContent = entry.emoji;
-    /* Drop the previous tint class before adding the new one so
-       successive states don't accumulate classes. */
-    thermoState.className = 'thermo-state state-' + entry.color;
-    /* The big card keeps the same tint as the state (CSS scoped). */
-    var card = thermoNumber.parentElement.parentElement;
-    card.classList.remove('state-ice', 'state-liquid', 'state-steam');
-    card.classList.add('state-' + entry.color);
-    /* i18n state label (es: "hielo" / "agua líquida" / "vapor"). */
-    var labelKey = state === 'ice' ? 'gen.stateIce'
-      : state === 'steam' ? 'gen.stateSteam'
-      : 'gen.stateLiquid';
-    thermoStateLabel.textContent = App.i18n.t(labelKey);
-
-    /* Disable "+" / "−" buttons when the next step would exceed
-     DATA.minC / DATA.maxC. The buttons share the .data-step
-     attribute that starts with "-" or "+", so a single loop
-     covers all four step buttons. */
-    App.utils.$$('#thermoUI .btn-thermo[data-step]').forEach(function (b) {
-      var step = parseInt(b.getAttribute('data-step'), 10);
-      var wouldBe = thermoValue + step;
-      b.disabled = (wouldBe < DATA.minC) || (wouldBe > DATA.maxC);
-    });
-
-    /* Fire feedback whenever the state transitions. Announce the
-       new state out loud (screen reader + audio button matches)
-       so the user gets an immediate cue beyond just the visual. */
-    if (state !== thermoLastState) {
-      thermoLastState = state;
-      var ttsKey = state === 'ice' ? 'gen.ttsIce'
-        : state === 'steam' ? 'gen.ttsSteam'
-        : 'gen.ttsLiquid';
-      if (false && App.tts && App.tts.speak) App.tts.speak(App.i18n.t(ttsKey));
-    }
-
-    celebrateIfGoalReached();
-  }
-
-  /* If the current state matches the mission goal, show the
-     celebration once. For 'misionEstado' the goal is a state
-     (ice / steam); for 'misionExacta' it's the ±tolerance band
-     around the target value. */
-  function celebrateIfGoalReached() {
-    if (thermoCelebrated) return;
-    if (level.tipo === 'misionEstado') {
-      if (stateFor(thermoValue) === level.meta) {
-        feedbackEl.textContent = App.i18n.t(SUCCESS_KEY.misionEstado(level));
-        /* Set 'feedback' first so the bare class literal the CSS
-           coverage check scans for matches a real selector. The
-           'success' modifier is added with classList.add afterwards.
-           We deliberately do NOT call App.feedback.success() here:
-           it would overwrite the celebration text with a random
-           "⭐ Fantastic!" pick from core.success, which is the
-           generic reward pattern for quiz tools — wrong here, where
-           the message has to identify the physical state the user
-           just reached. The CSS class is enough to trigger the
-           success tint. */
-        feedbackEl.className = 'feedback';
-        feedbackEl.classList.add('success');
-        thermoCelebrated = true;
-      }
-    } else if (level.tipo === 'misionExacta') {
-      var diff = Math.abs(thermoValue - level.meta);
-      if (diff <= DATA.tolerancia) {
-        feedbackEl.textContent = App.i18n.t(SUCCESS_KEY.misionExacta(level));
-        feedbackEl.className = 'feedback';
-        feedbackEl.classList.add('success');
-        /* See the comment in the 'misionEstado' branch above for why
-           App.feedback.success() is intentionally not called here. */
-        thermoCelebrated = true;
-      }
-    }
+  /* Position of a temperature on the track, 0–100 %, over the whole
+     thermometer (−50 °C to 250 °C). */
+  function pct(n) {
+    return ((n - DATA.minC) / (DATA.maxC - DATA.minC)) * 100;
   }
 
   /* ============================================================
-     Button handlers
+     Orders
      ============================================================ */
 
-  function thermoAddStep(step) {
-    var next = thermoValue + step;
+  /* Build the next order from the current temperature. The direction
+     is random unless one way has no room left; the size is random
+     within the level's range and never leaves the level's range. */
+  function makeOrder() {
+    var canUp = now + level.amin <= level.hi;
+    var canDown = now - level.amin >= level.lo;
+    var dir;
+    if (canUp && canDown) dir = Math.random() < 0.5 ? 'up' : 'down';
+    else dir = canUp ? 'up' : 'down';
+
+    var room = dir === 'up' ? level.hi - now : now - level.lo;
+    var amount = randInt(level.amin, Math.min(level.amax, room));
+    var target = dir === 'up' ? now + amount : now - amount;
+    return { from: now, dir: dir, amount: amount, target: target };
+  }
+
+  function startRound(lv) {
+    level = lv;
+    now = lv.start;
+    orderIndex = 0;
+    roundCorrect = 0;
+    show(screenGame);
+    nextOrder();
+  }
+
+  function nextOrder() {
+    orderIndex += 1;
+    order = makeOrder();
+    resultShown = false;
+    thermoResult.classList.add('hidden');
+    thermoControls.classList.remove('hidden');
+    paintAll();
+    thermoHint.textContent = App.i18n.t('gen.hint');
+  }
+
+  /* ============================================================
+     Painting
+     ============================================================ */
+
+  function paintAll() {
+    paintOrder();
+    paintNow();
+    paintTrack();
+    paintLive();
+    paintButtons();
+  }
+
+  /* The order itself, big and at the top: the instruction the person
+     must carry out, with its arrow. */
+  function paintOrder() {
+    thermoCount.textContent = App.i18n.t('gen.orderCount')
+      .replace('{i}', String(orderIndex))
+      .replace('{total}', String(DATA.perRound));
+    var key = order.dir === 'up' ? 'gen.orderUp' : 'gen.orderDown';
+    thermoOrder.querySelector('.thermo-order-text').textContent = App.i18n.t(key)
+      .replace('{n}', String(order.amount))
+      .replace('{degrees}', degrees(order.amount));
+    thermoOrder.querySelector('.thermo-order-arrow').textContent = order.dir === 'up' ? '↑' : '↓';
+  }
+
+  /* Number, state emoji, state label and card tint for the current
+     temperature. */
+  function paintNow() {
+    thermoNumber.textContent = fmt(now) + ' °C';
+    thermoNumber.setAttribute('aria-label',
+      App.i18n.t('gen.tempReadoutAria').replace('{temp}', String(now)));
+
+    var state = stateFor(now);
+    var entry = DATA.states[state];
+    thermoState.textContent = entry.emoji;
+    thermoCard.classList.remove('state-ice', 'state-liquid', 'state-steam');
+    thermoCard.classList.add('state-' + entry.color);
+    thermoStateLabel.textContent = App.i18n.t('gen.state' + state.charAt(0).toUpperCase() + state.slice(1));
+  }
+
+  /* The number line: where the thermometer is now, where the target
+     is, and where zero is. Moves with every press. */
+  function paintTrack() {
+    thermoNowMark.style.left = pct(now) + '%';
+    thermoTargetMark.style.left = pct(order.target) + '%';
+    /* The two reference points are always drawn, inside the track and
+       never at its ends, which carry no numbers. */
+    thermoZeroMark.style.left = pct(0) + '%';
+    thermoHundredMark.style.left = pct(100) + '%';
+    thermoTargetText.textContent = App.i18n.t('gen.targetText').replace('{target}', fmt(order.target));
+  }
+
+  /* The live line under the thermometer: how far the target is and
+     which way to go. Overshooting is said plainly, not punished. */
+  function paintLive() {
+    if (resultShown) {
+      thermoLive.textContent = '';
+      return;
+    }
+    var need = order.target - now;          /* >0: still to climb, <0: still to fall */
+    var n = Math.abs(need);
+    /* Overshoot: the thermometer is past the target in the direction
+       of the order, so the way back is the opposite one. */
+    var over = (order.dir === 'up') !== (need > 0);
+    var key = over
+      ? (need > 0 ? 'gen.liveOverUp' : 'gen.liveOverDown')
+      : (need > 0 ? 'gen.liveUp' : 'gen.liveDown');
+    thermoLive.textContent = App.i18n.t(key)
+      .replace('{n}', String(n))
+      .replace('{degrees}', degrees(n));
+  }
+
+  /* A step button is disabled when it would leave the level's range.
+     After the result is shown, controls are hidden instead. */
+  function paintButtons() {
+    App.utils.$$('#thermoControls .btn-thermo[data-step]').forEach(function (b) {
+      var next = now + parseInt(b.getAttribute('data-step'), 10);
+      b.disabled = next < DATA.minC || next > DATA.maxC;
+    });
+  }
+
+  /* ============================================================
+     Moving and reaching the target
+     ============================================================ */
+
+  function step(delta) {
+    if (resultShown) return;
+    var next = now + delta;
     if (next < DATA.minC || next > DATA.maxC) return;
-    thermoValue = next;
-    paintThermo();
+    now = next;
+    paintNow();
+    paintTrack();
+    paintLive();
+    paintButtons();
+    if (now === order.target) reached();
   }
 
-  /* Reads the current temperature aloud with the right wording
-     for the locale. Kept simple: "{n} grados" + (if ice/steam) the
-     matching state line. */
-  function thermoSay() {
-    var n = thermoValue;
-    var main = App.i18n.t('gen.ttsTemp').replace('{temp}', String(n));
-    var state = stateFor(n);
-    var stateLine = App.i18n.t(
-      state === 'ice' ? 'gen.ttsIce'
-      : state === 'steam' ? 'gen.ttsSteam'
-      : 'gen.ttsLiquid'
-    );
-    if (false && App.tts && App.tts.speak) App.tts.speak(main + '. ' + stateLine);
-  }
-
-  function exitThermo() {
+  /* The target was reached: one star, the result highlighted as an
+     equation, and a note on what the water did. */
+  function reached() {
+    resultShown = true;
+    roundCorrect += 1;
     progress.stars += 1;
     save();
     paintStars();
-    endRound();
+
+    var from = order.from;
+    var to = order.target;
+    var op = order.dir === 'up' ? '+' : '−';
+
+    thermoResultTitle.textContent = App.i18n.t('gen.resultTitle');
+    thermoResultEq.textContent = App.i18n.t('gen.resultEq')
+      .replace('{from}', fmt(from))
+      .replace('{op}', op)
+      .replace('{n}', String(order.amount))
+      .replace('{to}', fmt(to));
+
+    var crossed = (from > 0 && to < 0) || (from < 0 && to > 0);
+    var crossKey = crossed
+      ? (to < from ? 'gen.resultCrossDown' : 'gen.resultCrossUp')
+      : 'gen.resultNoCross';
+    var stateKey = 'gen.resultState' + (stateFor(to) === 'ice' ? 'Ice'
+      : stateFor(to) === 'steam' ? 'Steam' : 'Liquid');
+    thermoResultNote.textContent = App.i18n.t(crossKey) + ' ' + App.i18n.t(stateKey);
+
+    thermoControls.classList.add('hidden');
+    thermoResult.classList.remove('hidden');
+    thermoLive.textContent = '';
+    paintAll();
+    thermoNext.textContent = App.i18n.t(orderIndex >= DATA.perRound
+      ? 'gen.finishRound' : 'gen.nextOrder');
+    thermoNext.focus();
+  }
+
+  function advance() {
+    if (!resultShown) return;
+    if (orderIndex >= DATA.perRound) endRound();
+    else nextOrder();
+  }
+
+  function resetOrder() {
+    if (resultShown) return;
+    now = order.from;
+    paintNow();
+    paintTrack();
+    paintLive();
+    paintButtons();
   }
 
   /* ============================================================
@@ -369,52 +307,52 @@
     show(screenEnd);
     var summaryEl = $('#endSummary');
     if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('gen.endSummary').replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
+      summaryEl.textContent = App.i18n.t('gen.endSummary')
+        .replace('{n}', String(roundCorrect))
+        .replace('{stars}', String(progress.stars))
+        .replace('{starsWord}', App.i18n.starsWord(progress.stars));
     }
     $('#contexto').textContent = '';
     $('#explanation').textContent = '';
     App.feedback.celebrate(App.i18n.t('core.roundComplete'));
   }
 
+  /* Leaving early keeps the stars already earned and ends the round. */
+  function exitRound() {
+    endRound();
+  }
+
   /* ============================================================
      Wire-up (runs once at load)
      ============================================================ */
 
-  /* Step buttons. data-step carries the integer so a single loop
-     covers −10, −1, +1 and +10. */
-  App.utils.$$('#thermoUI .btn-thermo[data-step]').forEach(function (b) {
+  App.utils.$$('#thermoControls .btn-thermo[data-step]').forEach(function (b) {
     b.addEventListener('click', function () {
-      thermoAddStep(parseInt(b.getAttribute('data-step'), 10));
+      step(parseInt(b.getAttribute('data-step'), 10));
     });
   });
-  thermoReset.addEventListener('click', function () {
-    /* Same per-level override as render() — the reset button takes
-       the user back to the mission's actual starting point, not
-       always 0 °C. */
-    thermoValue = (level && typeof level.inicioC === 'number') ? level.inicioC : DATA.inicioC;
-    thermoLastState = null;
-    thermoCelebrated = false;
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'feedback';
-    paintThermoSuggestion();
-    paintThermo();
-  });
-  thermoAudio.addEventListener('click', thermoSay);
-  thermoExit.addEventListener('click', exitThermo);
+  thermoReset.addEventListener('click', resetOrder);
+  thermoNext.addEventListener('click', advance);
+  thermoExit.addEventListener('click', exitRound);
 
-  /* Localized labels for the icon buttons (kept out of the HTML to
-     avoid duplicating strings per locale). */
-  thermoAudio.setAttribute('aria-label', App.i18n.t('gen.btnAudio'));
+  /* Keyboard: arrows or + / − move the thermometer. Enter on the
+     result button is handled by the button itself. */
+  document.addEventListener('keydown', function (ev) {
+    if (screenGame.classList.contains('hidden') || resultShown) return;
+    if (ev.target && /^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
+    if (ev.key === 'ArrowUp' || ev.key === '+') step(1);
+    else if (ev.key === 'ArrowDown' || ev.key === '-' || ev.key === '−') step(-1);
+    else return;
+    ev.preventDefault();
+  });
+
+  /* Static labels (the buttons keep their symbols in the HTML). */
   thermoReset.textContent = App.i18n.t('gen.btnReset');
   thermoExit.textContent = App.i18n.t('gen.btnExit');
 
-  /* Initial paint. */
+  /* Start. */
   paintStars();
-  openActivity('water-temperature');
-  /* End screen: the only button is "Volver al inicio", which goes back
-     to the Calculia landing. The end screen is a closing card, not a
-     second menu: picking another activity is a tap away on the home
-     page, so it does not need its own button here. */
+  startRound(levelFromProgress());
   App.utils.bindEndBackToStart();
 
 })();

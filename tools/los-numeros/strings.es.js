@@ -8,6 +8,16 @@
   'use strict';
 
   App.i18n.register({
+    slideNaturalesTitle: 'Naturales',
+    slideNaturalesReal: '🧮 3 manzanas · 5 dedos · 10 años',
+    slideEnterosTitle: 'Enteros',
+    slideEnterosReal: '🌡️ −5 °C · sótano −1 · 3 plantas',
+    slideFraccionesTitle: 'Fracciones',
+    slideFraccionesReal: '🍕 1/2 pizza · 1/4 de hora',
+    slideDecimalesTitle: 'Decimales',
+    slideDecimalesReal: '💰 1,99 € · 1,5 m · 3,14',
+    slideVsEnterosTitle: 'Naturales y Enteros',
+    slideVsDecimalesTitle: 'Naturales y Decimales',
     title: 'Tipos de Números',
     titleH1: '🔢 Tipos de Números',
 

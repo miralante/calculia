@@ -5,7 +5,7 @@
    ------------------------
    Los ordinales YA EXISTÍAN en este proyecto como sub-actividad de
    Los Números (`ordinales`, niveles `o1`-`o3`). Esta actividad toma
-   esa idea —una fila con bandera y animales, la bandera marca por
+   esa idea —una fila con meta y animales, la meta marca por
    dónde empieza la cuenta— y le aplica la metodología de
    Números Romanos: pantallas de presentación, ejemplos de la vida
    real, recordatorio con las reglas y pasos encadenados que cambian
@@ -15,7 +15,7 @@
      - la fila de animales (sin género ni tono de piel que elegir, y
        en español el ordinal concuerda con "lugar", así que no hay
        que seguir además el género gramatical),
-     - la bandera 🏁 al frente, que es lo que hace que "primero" no
+     - la meta al frente, que es lo que hace que "primero" no
        dependa de adivinar por qué extremo se cuenta,
      - las opciones equivocadas VECINAS (target±1, target±2), porque
        el error real aquí no es un número cualquiera equivocado: es

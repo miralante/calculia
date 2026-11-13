@@ -171,16 +171,15 @@ Según tu rol y perfil, te interesa una u otra documentación:
 Calculia crece añadiendo **actividades** bajo `tools/<slug>/`. Cada
 actividad trae los seis archivos canónicos (`index.html`, `app.js`,
 `data.js`, `strings.es.js`, `strings.en.js`, `styles.css`); cualquier
-cambio tiene que respetar el catálogo: la portada pública muestra
-Números Romanos y Formas (en ese orden), `dev/` muestra las
-demás actividades, y ambas rutas juntas cubren los slugs de `tools/`,
-`config/` y `sw.js`.
+cambio tiene que respetar el catálogo: la portada muestra todas las
+actividades salvo los hijos de un hub (a los que se llega desde su hub), y
+junto con los hubs cubren los slugs de `tools/`, `config/` y `sw.js`.
 
 Para añadir una actividad nueva:
 
 1. Crea `tools/<slug>/` con los seis archivos canónicos (usa una
    actividad existente como plantilla).
-2. Registra la actividad: añade su tarjeta a `dev/index.html` (+ las
+2. Registra la actividad: añade su tarjeta a `index.html` (+ las
    claves en ambos `strings.<locale>.js`), su fila de progreso a
    `config/index.html` (+ las claves en ambos
    `config/strings.<locale>.js`), y sus seis archivos a `ARCHIVOS` de
@@ -208,10 +207,8 @@ pm install` — el script solo usa la librería estándar de
 Node. Comprueba sintaxis JS en `tools/`, la ra�z del sitio y `assets/js/`, la
 anatomía canónica de cada carpeta de actividad, paridad entre `sw.js`
 y el contenido en disco, paridad de claves es/en, y la regla de paridad
-del catálogo: Números Romanos y Formas son las
-actividades públicas (definidas como `PUBLIC_SLUGS` en `scripts/check.js`);
-`dev/index.html` muestra las demás y, entre ambas páginas, están todos los
-slugs de `tools/`,
+del catálogo: Números Romanos y Formas son la portada muestra todas las actividades salvo los hijos de un hub (comprobado en `scripts/checks/catalog.js`);
+la portada muestra todas las actividades (los hijos de un hub, en su hub), y entre ambas están todos los slugs de `tools/`,
 además de las filas de `config/index.html` y `ARCHIVOS` de `sw.js`. El
 mismo script corre en cada push y PR vía
 [`.github/workflows/validate.yml`](.github/workflows/validate.yml).

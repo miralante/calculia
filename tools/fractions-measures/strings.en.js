@@ -25,6 +25,14 @@
       coma: { name: 'Put the decimal point', detail: 'Place the decimal point between the whole part and the decimals.', instruction: 'Tap a gap to put the point. Count the digits from the right: the point goes after the whole part.' }
     },
     level: {                
+      f1: 'Halves and quarters', f2: 'Thirds and sixths', f3: 'Which is bigger?', f4: 'Worth the same', f5: 'Add fractions', f6: 'Subtract fractions', d1: 'From pie to number', d2: 'From number to pie', d3: 'Halves and quarters' ,       f7: 'Adding different slices',
+      f8: 'Taking away different slices',
+      f9: 'A part of an amount',
+      d4: 'Adding decimals',
+      d5: 'Taking away decimals',
+      d6: 'Fraction plus decimal',
+      d7: 'Fraction minus decimal',
+      d8: 'Which is more?',
 },
     part: {
       '2': 'half',
@@ -38,6 +46,10 @@
       pencils: 'pencils'
     },
     gen: {
+      fractionsPrompt: 'Which part is painted?',
+      fractionVisualAria: 'Figure with {den} parts. {num} are painted.',
+      fractionAria: '{num} of {den} parts',
+      compareFractionPrompt: 'Where is the bigger part painted?',
       mixFracAdd: 'How much do they come to? The slices are not the same size.',
       mixFracSub: 'How much is left? The slices are not the same size.',
       mixFracHint: 'Cut the big slices so they are all {den}ths.',

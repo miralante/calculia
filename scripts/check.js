@@ -12,11 +12,9 @@
       tool file is listed in FILES.
    4. es/en key parity between strings.es.js and strings.en.js
       (tools/, the site root, config/, legal/).
-   5. Public/private catalog split: the root index.html links only
-      Roman Numerals, Shapes and Scale; dev/index.html links to the
-      other activities plus the ones named in BOTH_SLUGS; together
-      they cover all activity slugs in tools/, config/, and sw.js
-      FILES.
+   5. Single catalogue: the root index.html links every activity except the
+      children of group hubs; dev/ must not exist; together with the hubs
+      they cover all activity slugs in tools/, config/, and sw.js FILES.
    6. Mandatory rule: zero mentions of disability, occupational therapy
       or minors in user-facing files (see doc/<locale>/SPEC.md §4).
  6.1 Zero school-year / syllabus labels in anything served to the
