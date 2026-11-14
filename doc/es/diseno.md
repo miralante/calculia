@@ -195,6 +195,16 @@ Estas son las que se comprueban. La fuente normativa es
 10. **Máximo 4–6 opciones** por pantalla.
 11. **Nadie lee código**: el texto de la interfaz vive en
     `strings.<locale>.js`, nunca en el HTML ni en `app.js`.
+12. **La persona actúa, no solo elige.** Una actividad con práctica pide
+    una acción directa sobre el contenido (colocar, ordenar, mover o
+    tocar en el dibujo), no solo marcar una opción de una lista fija.
+    Referencias: *Cantidades · Puntos* (arrastrar los puntos a los
+    huecos del número) y *Ordenar números* (ordenar tres o cuatro
+    números que el sistema saca al azar). Los números cambian en cada
+    ronda, cada intento se comprueba con ✓ o ✗ (forma y texto, no solo
+    color), y la ronda acaba con una estrella y una explicación, nunca
+    con una nota. Los ejemplos de vida real siguen a la explicación,
+    para que la práctica tenga un uso cotidiano.
 
 ---
 

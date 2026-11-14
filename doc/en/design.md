@@ -191,6 +191,16 @@ These are the ones that get verified. The normative source is
 10. **At most 4–6 options** per screen.
 11. **Nobody reads code**: UI text lives in `strings.<locale>.js`, never
     in the HTML or in `app.js`.
+12. **The person acts, not only chooses.** An activity with practice asks
+    for a direct action on the content (place, order, move or tap on the
+    drawing), not only for picking an option from a fixed list.
+    References: *Quantities · Points* (drag the points into the gaps of
+    the number) and *Order numbers* (order three or four numbers that the
+    system draws at random). The numbers change in every round, every
+    attempt is checked with ✓ or ✗ (shape and text, not only colour), and
+    the round ends with a star and an explanation, never with a grade. The
+    real-life examples follow the explanation, so the practice has an
+    everyday use.
 
 ---
 

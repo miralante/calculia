@@ -31,19 +31,19 @@ var DATA = {
   /* The values are in 120ths of a whole: 1/2 is 60, 1/4 is 30, 1/8 is 15. */
   concepts: [
     { title: 'concept.1.title', text: 'concept.1.text',
-      visual: { kind: 'chips', labels: ['1/2', '1/4', '1/8'], values: [60, 30, 15] } },
+      visual: { kind: 'pies', fractions: [[1, 8], [1, 4], [1, 2]], labels: ['1/8', '1/4', '1/2'] } },
     { title: 'concept.2.title', text: 'concept.2.text',
-      visual: { kind: 'chips', labels: ['2/3', '2/5'], values: [80, 48] } },
+      visual: { kind: 'pies', fractions: [[2, 5], [2, 3]], labels: ['2/5', '2/3'] } },
     { title: 'concept.3.title', text: 'concept.3.text',
-      visual: { kind: 'chips', labels: ['1/4', '3/4'], values: [30, 90] } },
+      visual: { kind: 'pies', fractions: [[1, 4], [3, 4]], labels: ['1/4', '3/4'] } },
     { title: 'concept.4.title', text: 'concept.4.text',
-      visual: { kind: 'chips', labels: ['1/2', '2/4'], values: [60, 60] } }
+      visual: { kind: 'pies', fractions: [[1, 2], [2, 4]], labels: ['1/2', '2/4'], signs: ['eq'] } }
   ],
 
   examples: [
-    { emoji: '🍕', caption: 'real.pizza' },
-    { emoji: '🎂', caption: 'real.cake' },
-    { emoji: '⏱️', caption: 'real.hour' },
-    { emoji: '🍾', caption: 'real.bottle' }
+    { emoji: '🍕', caption: 'real.pizza', visual: { kind: 'pies', fractions: [[1, 3], [1, 2]], labels: ['1/3', '1/2'] } },
+    { emoji: '🎂', caption: 'real.cake', visual: { kind: 'pies', fractions: [[1, 2], [3, 4]], labels: ['1/2', '3/4'] } },
+    { emoji: '⏱️', caption: 'real.hour', visual: { kind: 'pies', fractions: [[1, 4], [1, 2]], labels: ['1/4', '1/2'] } },
+    { emoji: '🍾', caption: 'real.bottle', visual: { kind: 'pies', fractions: [[1, 2], [5, 6]], labels: ['1/2', '5/6'] } }
   ]
 };

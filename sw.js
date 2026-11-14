@@ -14,7 +14,7 @@
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
-var VERSION = 'calculia-v458';
+var VERSION = 'calculia-v468';
 
 var FILES = [
   './',
@@ -57,6 +57,7 @@ var FILES = [
   './assets/js/feedback.js',
   './assets/js/activity-glue.js',
   './assets/js/number-sort.js',
+  './assets/js/number-sort-game.js',
   './assets/js/word-problems.js',
   './assets/js/activity-flow.js',
   './assets/js/activity-flow-options.js',

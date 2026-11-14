@@ -136,6 +136,20 @@
 .ns-tick-label { fill: var(--color-texto-suave); font-size: 13px; font-weight: 600; }
 .ns-mark { fill: var(--mod-razonamiento); stroke: var(--color-superficie); stroke-width: 2; }
 .ns-mark-label { fill: var(--mod-razonamiento); font-size: 15px; font-weight: 800; }
+/* Negative numbers on a signed number line (spec.signed). Red, but a
+   deep one in light mode and a lighter one in dark mode, so the text
+   keeps its contrast on both. The minus sign stays on the number. */
+.ns-tick-label.ns-neg, .ns-mark-label.ns-neg { fill: #B3261E; }
+.ns-mark.ns-neg { fill: #B3261E; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ns-tick-label.ns-neg,
+  :root:not([data-theme="light"]) .ns-mark-label.ns-neg { fill: #F28B82; }
+  :root:not([data-theme="light"]) .ns-mark.ns-neg { fill: #F28B82; }
+}
+:root[data-theme="dark"] .ns-tick-label.ns-neg,
+:root[data-theme="dark"] .ns-mark-label.ns-neg { fill: #F28B82; }
+:root[data-theme="dark"] .ns-mark.ns-neg { fill: #F28B82; }
+
 
 /* ---- Test sheet: one card per question, checked all at once ---- */
 
@@ -184,3 +198,127 @@
 }
 
 
+
+/* Fractions as circles (visual kind "pies"): the shaded slices are the
+   numerator, the slices are the denominator. */
+.ns-pie-cell { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.ns-pie { width: 96px; height: 96px; display: block; }
+.ns-pie-base { fill: var(--color-superficie); stroke: var(--color-borde); stroke-width: 2; }
+.ns-pie-on { fill: var(--mod-razonamiento); stroke: var(--color-superficie); stroke-width: 1.5; }
+.ns-pie-off { fill: var(--color-superficie); stroke: var(--color-borde); stroke-width: 1.5; }
+
+/* A real-life example that also shows its comparison (fractions as circles). */
+.real-visual { display: flex; justify-content: center; }
+.real-object { font-size: 3.5rem; }
+
+/* ---- The ordering practice: the slots in a row and the tray of tiles ----
+   Each slot and tile is a button of at least 48px. The state is shown by the
+   border and by the mark (✓ right, ✗ wrong), never by colour alone. */
+.order-card { align-items: center; width: 100%; }
+.order-ends {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 560px;
+  color: var(--color-texto-suave);
+  font-weight: 700;
+}
+.order-slots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+.order-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  min-height: 88px;
+  padding: 8px 10px;
+  border: 3px dashed var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.order-slot-no {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  color: var(--color-texto-suave);
+  font-size: 0.85rem;
+}
+.order-slot-empty { color: var(--color-texto-suave); }
+.order-slot.is-target { border-style: solid; border-color: var(--mod-razonamiento); }
+.order-slot.is-selected {
+  border-style: solid;
+  border-color: var(--mod-razonamiento);
+  outline: 3px solid var(--mod-razonamiento);
+  outline-offset: 2px;
+}
+.order-slot.is-right {
+  border-style: solid;
+  border-color: var(--color-acierto);
+  background: var(--color-acierto-suave);
+}
+.order-slot.is-wrong {
+  border-style: solid;
+  border-color: var(--color-animo);
+  background: var(--color-animo-suave);
+}
+.order-slot[aria-disabled="true"] { cursor: default; }
+.order-mark {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 1rem;
+}
+.order-tray {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 56px;
+}
+.order-tile {
+  min-width: 72px;
+  min-height: 56px;
+  padding: 6px 14px;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.order-tile.is-selected {
+  border-color: var(--mod-razonamiento);
+  outline: 3px solid var(--mod-razonamiento);
+  outline-offset: 2px;
+}
+@media (max-width: 380px) {
+  .order-slots { gap: 8px; }
+  .order-slot { min-width: 64px; min-height: 80px; padding: 8px 6px; font-size: 1.3rem; }
+  .order-tile { min-width: 64px; font-size: 1.25rem; }
+}
+
+/* Drag and drop of the ordering practice. The tile that follows the pointer
+   is not hit by the pointer, so the slot under it can be found. */
+.order-tile, .order-slot { touch-action: none; cursor: grab; }
+.order-ghost {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1000;
+  padding: 8px 14px;
+  border: 3px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: 1.3rem;
+  font-weight: 800;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+.order-slot.is-drop { outline: 3px dashed var(--mod-razonamiento); outline-offset: 3px; }

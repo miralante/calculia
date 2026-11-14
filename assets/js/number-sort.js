@@ -325,20 +325,29 @@
     var parts = ['<line x1="' + x0 + '" y1="' + y + '" x2="' + x1 + '" y2="' + y + '" class="ns-axis"/>'];
     for (var v = spec.from; v <= spec.to + 1e-9; v += spec.step) {
       parts.push('<line x1="' + x(v) + '" y1="' + (y - 6) + '" x2="' + x(v) + '" y2="' + (y + 6) + '" class="ns-tick"/>');
-      parts.push('<text x="' + x(v) + '" y="' + (y + 24) + '" class="ns-tick-label" text-anchor="middle">' + fmtPlain(v, spec.dec) + '</text>');
+      /* spec.signed: numbers below zero are drawn in red (the sign is
+         still written, so colour is not the only cue). */
+      var neg = spec.signed && v < 0 ? ' ns-neg' : '';
+      parts.push('<text x="' + x(v) + '" y="' + (y + 24) + '" class="ns-tick-label' + neg + '" text-anchor="middle">' + fmtPlain(v, spec.dec) + '</text>');
     }
     (spec.marks || []).forEach(function (m) {
-      parts.push('<circle cx="' + x(m) + '" cy="' + y + '" r="6" class="ns-mark"/>');
-      parts.push('<text x="' + x(m) + '" y="' + (y - 14) + '" class="ns-mark-label" text-anchor="middle">' + fmtPlain(m, spec.dec) + '</text>');
+      var negMark = spec.signed && m < 0 ? ' ns-neg' : '';
+      parts.push('<circle cx="' + x(m) + '" cy="' + y + '" r="6" class="ns-mark' + negMark + '"/>');
+      parts.push('<text x="' + x(m) + '" y="' + (y - 14) + '" class="ns-mark-label' + negMark + '" text-anchor="middle">' + fmtPlain(m, spec.dec) + '</text>');
     });
     return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="ns-line" aria-hidden="true">' + parts.join('') + '</svg>';
   }
 
+  /* A row of chips in the order given. The sign between two chips is "<"
+     unless spec.signs says "eq" for that gap (signs[k] is the sign between
+     chip k and chip k+1). */
   function chipsHtml(spec) {
     return '<div class="ns-row">' + spec.values.map(function (v, k) {
       var text = spec.labels ? spec.labels[k] : fmtPlain(v, spec.dec);
       var chip = '<span class="ns-chip">' + text + '</span>';
-      return k === 0 ? chip : '<span class="ns-sep" aria-hidden="true">&lt;</span>' + chip;
+      if (k === 0) return chip;
+      var sign = spec.signs && spec.signs[k - 1] === 'eq' ? SIGN_HTML.eq : SIGN_HTML.less;
+      return '<span class="ns-sep" aria-hidden="true">' + sign + '</span>' + chip;
     }).join('') + '</div>';
   }
 
@@ -356,9 +365,40 @@
     }).join('') + '</div>';
   }
 
+  /* A fraction drawn as a circle cut into `den` equal slices, of which
+     `num` are shaded. The first slice starts at twelve o'clock and the
+     slices go clockwise, so 1/2 is the right half and 3/4 is three quarters. */
+  function pieSvg(num, den) {
+    var r = 40, cx = 50, cy = 50, parts = ['<circle cx="50" cy="50" r="40" class="ns-pie-base"/>'];
+    for (var i = 0; i < den; i++) {
+      var a0 = -Math.PI / 2 + 2 * Math.PI * i / den;
+      var a1 = -Math.PI / 2 + 2 * Math.PI * (i + 1) / den;
+      var x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0);
+      var x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+      var cls = i < num ? 'ns-pie-on' : 'ns-pie-off';
+      parts.push('<path d="M' + cx + ' ' + cy + ' L' + x0.toFixed(2) + ' ' + y0.toFixed(2) +
+        ' A' + r + ' ' + r + ' 0 0 1 ' + x1.toFixed(2) + ' ' + y1.toFixed(2) + ' Z" class="' + cls + '"/>');
+    }
+    return '<svg viewBox="0 0 100 100" class="ns-pie" aria-hidden="true">' + parts.join('') + '</svg>';
+  }
+
+  /* A row of fractions, each one a circle with its label underneath, in the
+     order given. Signs between them work as for chips (spec.signs). */
+  function piesHtml(spec) {
+    return '<div class="ns-row ns-pies">' + spec.fractions.map(function (f, k) {
+      var cell = '<span class="ns-pie-cell">' + pieSvg(f[0], f[1]) +
+        '<span class="ns-chip">' + spec.labels[k] + '</span></span>';
+      if (k === 0) return cell;
+      var sign = spec.signs && spec.signs[k - 1] === 'eq' ? SIGN_HTML.eq : SIGN_HTML.less;
+      return '<span class="ns-sep" aria-hidden="true">' + sign + '</span>' + cell;
+    }).join('') + '</div>';
+  }
+
   function visualHtml(spec) {
     if (!spec) return '';
-    return spec.kind === 'line' ? lineSvg(spec) : chipsHtml(spec);
+    if (spec.kind === 'line') return lineSvg(spec);
+    if (spec.kind === 'pies') return piesHtml(spec);
+    return chipsHtml(spec);
   }
 
   /* ---- Setup: the three stages of one activity ------------------------ */
@@ -393,7 +433,10 @@
       visualHtml: function (concept) { return visualHtml(concept.visual); },
       realVisualHtml: function (example) {
         var inner = example.column ? columnHtml(example.column) : example.emoji;
-        return '<div class="real-object" aria-hidden="true">' + inner + '</div>';
+        /* An example can also carry a visual (for example fractions drawn as
+           circles), so the picture shows the comparison the sentence talks about. */
+        var picture = example.visual ? '<div class="real-visual">' + visualHtml(example.visual) + '</div>' : '';
+        return '<div class="real-object" aria-hidden="true">' + inner + '</div>' + picture;
       },
       /* One entry with the levels: the engine counts the rounds of the activity and finds the level. */
       activities: [{
@@ -403,6 +446,11 @@
         detail: function () { return ''; },
         levels: config.levels
       }],
+      /* The practice is the game of the numbers drawn at random (number-sort-game.js),
+         not a test of fixed options: the person puts the numbers of the round in order. */
+      extraMarkup: App.numberSortGame.MARKUP,
+      extraScreens: ['#screenOrder'],
+      ownTest: App.numberSortGame.start,
       buildRound: function (def, level) { return config.buildRound(level); },
       makeQuestion: function (question) { return question; },
       levelName: function (level) { return t(level.name); },
@@ -429,6 +477,8 @@
     KINDS: KINDS,
     makeQuestion: makeQuestion,
     makeRound: makeRound,
+    drawDistinct: drawDistinct,
+    show: show,
     visualHtml: visualHtml,
     columnHtml: columnHtml,
     setup: setup
