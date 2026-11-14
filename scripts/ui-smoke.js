@@ -1531,9 +1531,9 @@ async function exerciseNumbers(page, baseUrl) {
   await page.reload();
   await catalogCard.click();
   await page.waitForURL('**/tools/numbers-group/', { timeout: NAV_TIMEOUT });
-  await page.locator('#activitiesMenu a.btn-actividad[href="../numbers/"]').click();
-  await page.waitForURL('**/tools/numbers/', { timeout: NAV_TIMEOUT });
-  await page.waitForSelector('#screenMenu:not(.hidden)', { timeout: NAV_TIMEOUT });
+  await page.locator('#activitiesMenu a.btn-actividad[href="../numbers/?sub=positivos-y-negativos"]').click();
+  await page.waitForURL('**/tools/numbers/?sub=positivos-y-negativos', { timeout: NAV_TIMEOUT });
+  await page.waitForSelector('#signedIntroScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
   actions += 1;
 
   const migrated = await page.evaluate(() => ({
@@ -1549,12 +1549,8 @@ async function exerciseNumbers(page, baseUrl) {
   assert.equal(migrated.legacy, null,
     'El progreso anterior quedó duplicado tras migrarlo');
 
-  const signedActivity = page.locator('#activitiesMenu .btn-actividad')
-    .filter({ hasText: 'Positivos y negativos' });
-  assert.equal(await signedActivity.count(), 1,
-    'Números no incluye la actividad de positivos y negativos');
-  await signedActivity.click();
-  await page.waitForSelector('#signedIntroScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
+  /* Positivos y negativos se abre directamente desde la portada de Números
+     (sin el menú de Los Números): ya estamos en su explicación. */
   assert.equal(await page.locator('#signedNumberline .signed-numberline-tick').count(), 7,
     'La explicación no muestra una recta numérica visual');
   actions += 1;
@@ -1642,10 +1638,8 @@ async function exerciseNumbers(page, baseUrl) {
     'Completar el ascensor alteró el progreso de las demás actividades de Números');
 
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
-  await page.reload();
-  await page.waitForSelector('#screenMenu:not(.hidden)', { timeout: NAV_TIMEOUT });
-  await page.locator('#activitiesMenu .btn-actividad')
-    .filter({ hasText: 'Positives and negatives' }).click();
+  await page.goto(baseUrl + '/tools/numbers-group/');
+  await page.locator('#activitiesMenu a.btn-actividad[href="../numbers/?sub=positivos-y-negativos"]').click();
   await page.waitForSelector('#signedIntroScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
   assert.ok((await page.locator('#signedIntroScreen').innerText()).includes('Positive and negative numbers'),
     'La explicación de números con signo no está traducida al inglés');

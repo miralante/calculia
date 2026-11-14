@@ -1,0 +1,17 @@
+/* ==========================================================================
+   Calculia — brand. The only file that sets this app's accent colours.
+   Light values are the accepted suite palette (blue, navy). Dark values
+   are lighter blues with at least 7:1 contrast on the dark surfaces. The
+   high-contrast mode uses these same accents (the shared language picker
+   no longer sets its own blue).
+   ========================================================================== */
+
+:root {
+  --accent: #1F4E79;
+  --accent-soft: #E6EEF6;
+}
+
+[data-theme="dark"] {
+  --accent: #8DB8E8;
+  --accent-soft: #1E2F45;
+}

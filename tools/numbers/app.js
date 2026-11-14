@@ -505,4 +505,10 @@
      page, so it does not need its own button here. */
   App.utils.bindEndBackToStart();
 
+  /* Opened from the Números hub with ?sub=<id> (tools/numbers-group/data.js):
+     go straight to that sub-activity, skipping the menu. Without a valid
+     id the menu is shown as before. */
+  var initialSub = new URLSearchParams(window.location.search).get('sub');
+  if (initialSub && DATA.activities[initialSub]) openActivity(initialSub);
+
 })();

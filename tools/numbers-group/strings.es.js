@@ -12,7 +12,10 @@
     group: {
       types: { name: 'Tipos de números', detail: 'Naturales, enteros, decimales y fracciones.' },
       temperature: { name: 'Temperatura del agua', detail: 'Sube y baja los grados. Mira qué pasa con el agua.' },
-      numbers: { name: 'Los números', detail: 'Lee y compara. Aprende los positivos y negativos.' },
+      positivos: { name: 'Positivos y negativos', detail: 'Comprende los signos y practica con el termómetro y el ascensor.' },
+      unidades: { name: 'Unidades y decenas', detail: '¿Qué número es?' },
+      placevalue: { name: 'Cambiar de posición', detail: '10 pequeños se cambian por 1 grande.' },
+      comparar: { name: 'Mayor, menor o igual', detail: 'Los signos <, > y =.' },
       ordinals: { name: 'Números ordinales', detail: 'Primero, segundo, tercero…' }
     }
   }, 'es');
