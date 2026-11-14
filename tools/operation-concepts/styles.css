@@ -118,3 +118,33 @@
 
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
 .tool-header .activity-icon { width: 48px; height: 48px; flex: none; }
+
+/* Factorials and powers: numbers in framed boxes, the growth cards, and the empty places to count. */
+.fac-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+.fac-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 4px 10px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.fac-result { background: var(--mod-razonamiento-suave); }
+.fac-growth { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.fac-card { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 72px; padding: 8px 10px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
+.fac-name { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
+.fac-value { font-size: var(--texto-grande); font-weight: 800; font-variant-numeric: tabular-nums; }
+.fac-big { margin: 0; font-size: var(--texto-enorme, 2rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+.fac-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.fac-chips .fac-chip { min-width: 0; font-size: var(--texto-pequeno); font-weight: 700; }
+.fac-note { margin: 0; text-align: center; color: var(--color-texto-suave); }
+.fac-slots { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.fac-slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.fac-slot-count { font-size: var(--texto-grande); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+.fac-box { display: inline-block; width: 52px; height: 52px; border: 2px dashed var(--color-texto-suave); border-radius: var(--radio); }
+.fac-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }

@@ -56,7 +56,6 @@
     "order-decimals": { "name": "Order decimals", "detail": "Put the decimals from smallest to biggest." },
     "parity": { "name": "Even and odd", "detail": "Look at the dots: one left alone or all paired up?" },
     "primes": { "name": "Primes and composites", "detail": "Is it only divided by 1 and by itself?" },
-    "factorial": { "name": "Factorial Numbers","detail": "What the sign \"!\" means, and what it is for." },
     "common-group": { "name": "Divisors and multiples", "detail": "Greatest common divisor and least common multiple." },
     "common-divisor": { "name": "Greatest common divisor", "detail": "The biggest number that divides two." },
     "common-multiple": { "name": "Least common multiple", "detail": "The smallest number that is a multiple of two." },

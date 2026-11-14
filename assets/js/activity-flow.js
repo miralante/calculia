@@ -2,7 +2,7 @@
    Calculia — Three-stage activity flow: the shared core.
 
    The flow of Operaciones, Mínimo común múltiplo, Máximo común divisor,
-   Rectas, Primos y compuestos, Formas, Números factoriales and the order
+   Rectas, Primos y compuestos, Formas and the order
    activities. Every such activity has three stages:
      1. explanation: slides with a drawing, one idea each, with ← →;
      2. real life: one everyday example at a time, with ← →;

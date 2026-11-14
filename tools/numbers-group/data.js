@@ -10,7 +10,6 @@ var DATA = {
     { slug: 'los-numeros', picto: '🔢', name: 'group.types.name', detail: 'group.types.detail' },
     { slug: 'temperature', picto: '🌡️', name: 'group.temperature.name', detail: 'group.temperature.detail' },
     { slug: 'numbers', picto: '🧮', name: 'group.numbers.name', detail: 'group.numbers.detail' },
-    { slug: 'ordinals', picto: '🥇', name: 'group.ordinals.name', detail: 'group.ordinals.detail' },
-    { slug: 'factorial', picto: '❗', name: 'group.factorial.name', detail: 'group.factorial.detail' }
+    { slug: 'ordinals', picto: '🥇', name: 'group.ordinals.name', detail: 'group.ordinals.detail' }
   ]
 };

@@ -13,8 +13,7 @@
       types: { name: 'Number types', detail: 'Natural numbers, integers, decimals and fractions.' },
       temperature: { name: 'Water Temperature', detail: 'Raise and lower the degrees. See what happens to the water.' },
       numbers: { name: 'Numbers', detail: 'Read and compare. Learn about positive and negative numbers.' },
-      ordinals: { name: 'Ordinal Numbers', detail: 'First, second, third…' },
-      factorial: { name: 'Factorial Numbers', detail: 'What the sign "!" means, and what it is for.' }
+      ordinals: { name: 'Ordinal Numbers', detail: 'First, second, third…' }
     }
   }, 'en');
 })();

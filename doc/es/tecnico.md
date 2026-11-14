@@ -255,7 +255,7 @@ sigue en el motor por si una actividad futura lo necesita; hoy ninguna lo
 usa.
 
 En el modo `options`, `socratic: true` da la retroalimentación socrática
-de `factorial` (primer fallo, pista; segundo, explicación; las demás
+de `scale` (primer fallo, pista; segundo, explicación; las demás
 opciones se bloquean hasta «Entendido»), `review: 'rule'` pone «Repasar
 la regla» bajo la pregunta, `introCard` añade una tarjeta sobre las
 diapositivas y `endNotes` añade textos a la pantalla final.
@@ -360,7 +360,7 @@ Las claves de configuración que lee el motor:
 
 Qué variante de la familia A encaja con cada actividad:
 
-- **Flujo completo con vida real**: `common-multiple`, `common-divisor`, `factorial`
+- **Flujo completo con vida real**: `common-multiple`, `common-divisor`, `operation-concepts`
   (socrático), `linear-functions`, `scale`, `operation-concepts`.
 - **Una pregunta por diapositiva, con vida real**: `lines`, `primes`, `time-units` y `time-convert` (con vida real), `shapes` (varias hojas, con menú y niveles; cada una con sus diapositivas y ejemplos), `time-compare` y `time-durations` (dos diapositivas y dos ejemplos cada una), y `moments` (tres diapositivas, una por parte del día, y seis momentos de la vida diaria). `date-format` no tiene vida real (`skipReal`); su diapositiva de los meses es una rejilla de doce casillas, como en `time-units`.
 - **Menú de actividades**: las cuatro `order-*` (mediante `App.numberSort`, que

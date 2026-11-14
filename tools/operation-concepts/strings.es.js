@@ -29,7 +29,8 @@
       realLabel: 'Ejemplos de la vida real',
       visualAria: 'Dibujo con puntos o figuras que cuentan la operación.',
       groupsOf: '{g} grupos de {e}',
-      remainder: 'resto {r}'
+      remainder: 'resto {r}',
+      noRest: 'Todas las divisiones salen exactas: no sobra nada.'
     },
 
     /* Operaciones: nombre, idea en una frase, explicación en slides,
@@ -88,6 +89,31 @@
           1: 'Repartes 8 euros entre 4 amigos: a cada amigo le tocan 2 euros.',
           2: 'Tienes 6 libros y pones 2 en cada estante: necesitas 3 estantes.',
           3: 'Tienes 8 galletas y las metes en cajas de 3: llenas 2 cajas y sobran 2.'
+        }
+      },
+      fac: {
+        name: 'Factorial', detail: 'Qué significa el signo «!» y para qué sirve.',
+        intro: {
+          1: { title: '¿Qué es un factorial?', text: '4! se lee «4 factorial». Es multiplicar 4 × 3 × 2 × 1. El resultado es 24.' },
+          2: { title: 'Crece muy deprisa', text: '1! = 1, 2! = 2, 3! = 6, 4! = 24, 5! = 120. Cada paso multiplica por un número más. Por acuerdo, 0! = 1.' },
+          3: { title: 'Sirve para la divisibilidad', text: '5! = 120. Entre 1, 2, 3, 4 y 5 se divide exacto: no sobra nada. Por eso los factoriales ayudan a entender la divisibilidad.' }
+        },
+        real: {
+          1: '3 amigos se ponen en fila para una foto. Hay 6 formas distintas de ponerse.',
+          2: 'Tienes 4 libros para un estante. Los puedes colocar de 24 formas distintas.',
+          3: '5 amigos se sientan en un banco. Hay 120 formas distintas de sentarse.'
+        }
+      },
+      pow: {
+        name: 'Potencias', detail: 'Multiplicar muchas veces el mismo número.',
+        intro: {
+          1: { title: 'Potencia es multiplicar lo mismo', text: '2³ se lee «2 elevado a 3». El 2 se multiplica 3 veces: 2 × 2 × 2 = 8.' },
+          2: { title: 'El número pequeño cuenta las veces', text: '3² = 3 × 3 = 9. El 2 pequeño dice cuántas veces se escribe el 3.' }
+        },
+        real: {
+          1: 'Un cuadrado de 3 por 3 tiene 3² = 9 casillas.',
+          2: 'Un cubo de 2 cubitos por lado tiene 2³ = 8 cubitos.',
+          3: 'Con 10 filas de 10 cromos son 10² = 100 cromos.'
         }
       }
     },
@@ -182,6 +208,36 @@
         prompt: 'Repartes {T} en grupos de {e}. ¿Qué división sale?',
         hint: '🤔 Piensa en grupos de {e}: ¿cuántos grupos salen?',
         explain: '{T} ÷ {e} = {g}: caben {g} grupos de {e}.'
+      },
+      factValue: {
+        prompt: '¿Cuánto vale {n}!?',
+        hint: 'Multiplica, no sumes. Sigue bajando hasta el 1.',
+        explain: '{chain} = {T}.'
+      },
+      factMeaning: {
+        prompt: '¿Qué significa {n}!?',
+        hint: 'El signo ! quiere decir: multiplica desde ese número hasta el 1.',
+        explain: '{n}! = {chain}.'
+      },
+      factSlots: {
+        prompt: '¿De cuántas formas se pueden poner {n} amigos en fila?',
+        hint: 'Para el primer sitio hay {n} opciones. Para el segundo, una menos. Así hasta el último.',
+        explain: '{chain} = {T} formas.'
+      },
+      factDivides: {
+        prompt: '¿Entre cuál de estos números se divide exacto {n}!?',
+        hint: 'Divide {T} entre cada número. El que no deja nada sobrando es la respuesta.',
+        explain: '{T} ÷ {k} = {g}, sin nada sobrando.'
+      },
+      powValue: {
+        prompt: '¿Cuánto vale {b} elevado a {e}?',
+        hint: 'Multiplica el {b} tantas veces como diga {e}.',
+        explain: '{chain} = {T}.'
+      },
+      powMeaning: {
+        prompt: '¿Qué significa {b} elevado a {e}?',
+        hint: 'El número pequeño dice cuántas veces se multiplica el grande.',
+        explain: '{b} elevado a {e} es {chain}, que vale {T}.'
       }
     },
 

@@ -244,7 +244,7 @@ one sheet, with «Check» and «Another round», no closing screen) stays in
 the engine in case a future activity needs it; no activity uses it now.
 
 In the `options` mode, `socratic: true` gives the socratic feedback of
-`factorial` (first miss, a hint; second miss, the explanation; the other
+`scale` (first miss, a hint; second miss, the explanation; the other
 options lock until «Understood»), `review: 'rule'` puts «Review the rule»
 under the question, `introCard` adds a card above the slides, and
 `endNotes` adds texts to the closing screen.
@@ -347,7 +347,7 @@ The configuration keys the engine reads:
 
 Which family-A variant fits which activity:
 
-- **Full flow with real life**: `common-multiple`, `common-divisor`, `factorial`
+- **Full flow with real life**: `common-multiple`, `common-divisor`, `operation-concepts`
   (socratic), `linear-functions`, `scale`, `operation-concepts`.
 - **One question per slide, with real life**: `lines`, `primes`, `time-units` and `time-convert`, `shapes` (several sheets, with a menu and levels; each with its own slides and examples), `time-compare` and `time-durations` (two slides and two examples each), and `moments` (three slides, one per part of the day, and six everyday moments). `date-format` has no real life (`skipReal`); its months slide is a grid of twelve tiles, as in `time-units`.
 - **Menu of activities**: the four `order-*` (through `App.numberSort`, which

@@ -29,7 +29,8 @@
       realLabel: 'Real-life examples',
       visualAria: 'A drawing with dots or shapes that shows the operation.',
       groupsOf: '{g} groups of {e}',
-      remainder: 'remainder {r}'
+      remainder: 'remainder {r}',
+      noRest: 'All the divisions come out exact: nothing is left over.'
     },
 
     ops: {
@@ -86,6 +87,31 @@
           1: 'You share 8 dollars among 4 friends: each friend gets 2 dollars.',
           2: 'You have 6 books and put 2 on each shelf: you need 3 shelves.',
           3: 'You have 8 biscuits and put them in boxes of 3: 2 boxes are full and 2 are left over.'
+        }
+      },
+      fac: {
+        name: 'Factorial', detail: 'What the sign "!" means, and what it is for.',
+        intro: {
+          1: { title: 'What is a factorial?', text: '4! is read «4 factorial». It means 4 × 3 × 2 × 1. The result is 24.' },
+          2: { title: 'It grows very fast', text: '1! = 1, 2! = 2, 3! = 6, 4! = 24, 5! = 120. Each step multiplies by one more number. By agreement, 0! = 1.' },
+          3: { title: 'It helps with divisibility', text: '5! = 120. 120 divides exactly by 1, 2, 3, 4 and 5: nothing is left over. That is why factorials help us understand divisibility.' }
+        },
+        real: {
+          1: '3 friends line up for a photo. There are 6 different ways to stand.',
+          2: 'You have 4 books for a shelf. You can place them in 24 different ways.',
+          3: '5 friends sit on a bench. There are 120 different ways to sit.'
+        }
+      },
+      pow: {
+        name: 'Powers', detail: 'Multiply the same number many times.',
+        intro: {
+          1: { title: 'A power is multiplying the same thing', text: '2³ is read «2 to the power of 3». The 2 is multiplied 3 times: 2 × 2 × 2 = 8.' },
+          2: { title: 'The small number counts the times', text: '3² = 3 × 3 = 9. The small 2 says how many times the 3 is written.' }
+        },
+        real: {
+          1: 'A square of 3 by 3 has 3² = 9 squares.',
+          2: 'A cube with 2 small cubes on each side has 2³ = 8 small cubes.',
+          3: 'With 10 rows of 10 stickers, there are 10² = 100 stickers.'
         }
       }
     },
@@ -177,6 +203,36 @@
         prompt: 'You share {T} into groups of {e}. Which division is it?',
         hint: '🤔 Think about groups of {e}: how many groups are there?',
         explain: '{T} ÷ {e} = {g}: {g} groups of {e} fit.'
+      },
+      factValue: {
+        prompt: 'What is {n}!?',
+        hint: 'Multiply, do not add. Keep going down to 1.',
+        explain: '{chain} = {T}.'
+      },
+      factMeaning: {
+        prompt: 'What does {n}! mean?',
+        hint: 'The sign ! means: multiply from that number down to 1.',
+        explain: '{n}! = {chain}.'
+      },
+      factSlots: {
+        prompt: 'In how many ways can {n} friends line up?',
+        hint: 'For the first place there are {n} choices. For the second, one less. And so on to the last one.',
+        explain: '{chain} = {T} ways.'
+      },
+      factDivides: {
+        prompt: 'Which of these numbers divides {n}! exactly?',
+        hint: 'Divide {T} by each number. The one that leaves nothing over is the answer.',
+        explain: '{T} ÷ {k} = {g}, with nothing left over.'
+      },
+      powValue: {
+        prompt: 'What is {b} to the power of {e}?',
+        hint: 'Multiply the {b} as many times as {e} says.',
+        explain: '{chain} = {T}.'
+      },
+      powMeaning: {
+        prompt: 'What does {b} to the power of {e} mean?',
+        hint: 'The small number says how many times the big one is multiplied.',
+        explain: '{b} to the power of {e} is {chain}, which is {T}.'
       }
     },
 

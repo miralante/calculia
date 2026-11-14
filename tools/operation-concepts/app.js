@@ -211,8 +211,73 @@
     return html + '</div>';
   }
 
+  /* ---- Factorials and powers: numbers in small boxes, with × and = between them ---- */
+  /* n! = n × (n−1) × … × 1, and the list of its factors from n down to `low`. */
+  function factorialOf(n) {
+    var value = 1;
+    for (var k = 2; k <= n; k += 1) value *= k;
+    return value;
+  }
+  function factorsDown(n, low) {
+    var list = [];
+    for (var k = n; k >= low; k -= 1) list.push(k);
+    return list;
+  }
+  /* `base` written `exp` times, for the power a^n. */
+  function repeatOf(base, exp) {
+    var list = [];
+    for (var k = 0; k < exp; k += 1) list.push(base);
+    return list;
+  }
+  /* A row of factors, then = and the result. */
+  function chipLine(parts, result) {
+    var html = '';
+    parts.forEach(function (p, i) {
+      if (i) html += sign('×');
+      html += '<span class="fac-chip">' + p + '</span>';
+    });
+    return '<div class="fac-line">' + html + sign('=') + '<span class="fac-chip fac-result">' + result + '</span></div>';
+  }
+  /* n! as 4 × 3 × 2 × 1 = 24. */
+  function chainHtml(n) { return chipLine(factorsDown(n, 1), factorialOf(n)); }
+  /* a^n as 2 × 2 × 2 = 8. */
+  function powerHtml(base, exp) { return chipLine(repeatOf(base, exp), Math.pow(base, exp)); }
+  /* The first few factorials, one card each: the value grows fast. */
+  function growthHtml(max) {
+    var html = '<div class="fac-growth">';
+    for (var n = 1; n <= max; n += 1) {
+      html += '<div class="fac-card"><span class="fac-name">' + n + '!</span><span class="fac-value">' + factorialOf(n) + '</span></div>';
+    }
+    return html + '</div>';
+  }
+  /* n! as a big number, and below it each small number that divides it with nothing left over. */
+  function chipsHtml(n) {
+    var value = factorialOf(n);
+    var html = '<p class="fac-big">' + n + '! = ' + value + '</p><div class="fac-chips">';
+    for (var k = 1; k <= n; k += 1) {
+      html += '<span class="fac-chip">' + value + ' ÷ ' + k + ' = ' + (value / k) + '</span>';
+    }
+    return html + '</div><p class="fac-note">' + t('ui.noRest') + '</p>';
+  }
+  /* n places in a row, one box each. `counts` writes how many choices that place has (n, n−1 … 1). `result` writes the product under them. */
+  function slotsHtml(n, counts, result) {
+    var html = '<div class="fac-slots">';
+    for (var i = 0; i < n; i += 1) {
+      html += '<div class="fac-slot">' + (counts ? '<span class="fac-slot-count">' + (n - i) + '</span>' : '') +
+        '<span class="fac-box"></span></div>';
+    }
+    html += '</div>';
+    if (result) html += '<p class="fac-expr">' + factorsDown(n, 1).join(' × ') + ' = ' + factorialOf(n) + '</p>';
+    return html;
+  }
+
   /* A drawing from its visual spec: intro slides and real-life examples. */
   function drawingHtml(spec) {
+    if (spec.kind === 'chain') return chainHtml(spec.n);
+    if (spec.kind === 'power') return powerHtml(spec.base, spec.exp);
+    if (spec.kind === 'growth') return growthHtml(spec.max);
+    if (spec.kind === 'chips') return chipsHtml(spec.n);
+    if (spec.kind === 'slots') return slotsHtml(spec.n, spec.counts, spec.result);
     /* A money drawing (`coin`) is drawn with the currency sign of the locale, not an emoji. */
     var icon = spec.coin ? '<span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span>' : (spec.slice ? SLICE : spec.icon);
     if (spec.kind === 'join') return joinHtml(spec.a, spec.b, icon, true, spec.iconB, spec.alt);
@@ -281,8 +346,83 @@
     });
   }
 
+  /* Drops the duplicates and the right answer from a list of wrong numbers, so no option repeats. */
+  function others(correct, list) {
+    var out = [];
+    list.forEach(function (x) { if (x !== correct && x >= 0 && out.indexOf(x) === -1) out.push(x); });
+    return out;
+  }
+
+  /* The factorial and power questions: a small calculation with its own drawing. */
+  function makeMath(type) {
+    var key = 'q.' + type + '.';
+    if (type === 'factValue') {
+      var n = rint(2, 5), value = factorialOf(n), chain = factorsDown(n, 1).join(' × ');
+      return {
+        prompt: fill(t(key + 'prompt'), { n: n }),
+        visual: '<p class="fac-expr">' + chain + ' = ?</p>',
+        hint: t(key + 'hint'),
+        /* The wrong answers are the usual mix-ups: adding instead of multiplying, or leaving out the n. */
+        options: numericOptions(value, others(value, [n * (n + 1) / 2, factorialOf(n - 1), n * n])),
+        explanation: fill(t(key + 'explain'), { chain: chain, T: value })
+      };
+    }
+    if (type === 'factMeaning') {
+      var m = rint(3, 5), mChain = factorsDown(m, 1).join(' × ');
+      return {
+        prompt: fill(t(key + 'prompt'), { n: m }),
+        visual: '',
+        hint: t(key + 'hint'),
+        options: textOptions(mChain, [factorsDown(m, 1).join(' + '), factorsDown(m, 2).join(' × ')]),
+        explanation: fill(t(key + 'explain'), { n: m, chain: mChain, T: factorialOf(m) })
+      };
+    }
+    if (type === 'factSlots') {
+      var s = rint(3, 5), total = factorialOf(s);
+      return {
+        prompt: fill(t(key + 'prompt'), { n: s }),
+        visual: slotsHtml(s, false, false),
+        hint: fill(t(key + 'hint'), { n: s }),
+        options: numericOptions(total, others(total, [factorialOf(s - 1), s * s, s * (s - 1)])),
+        explanation: fill(t(key + 'explain'), { chain: factorsDown(s, 1).join(' × '), T: total })
+      };
+    }
+    if (type === 'factDivides') {
+      /* The answer divides n! with nothing left over. The wrong ones are numbers just above n that do not. */
+      var d = rint(3, 5), whole = factorialOf(d), fits = rint(2, d), misses = [];
+      for (var c = d + 1; misses.length < 2 && c <= d + 8; c += 1) if (whole % c) misses.push(c);
+      return {
+        prompt: fill(t(key + 'prompt'), { n: d }),
+        visual: '<p class="fac-expr">' + d + '! = ' + whole + '</p>',
+        hint: fill(t(key + 'hint'), { T: whole }),
+        options: numericOptions(fits, misses),
+        explanation: fill(t(key + 'explain'), { T: whole, k: fits, g: whole / fits })
+      };
+    }
+    if (type === 'powValue') {
+      var pb = rint(2, 5), pe = rint(2, 3), pv = Math.pow(pb, pe), pChain = repeatOf(pb, pe).join(' × ');
+      return {
+        prompt: fill(t(key + 'prompt'), { b: pb, e: pe }),
+        visual: '<p class="fac-expr">' + pChain + ' = ?</p>',
+        hint: fill(t(key + 'hint'), { b: pb, e: pe }),
+        options: numericOptions(pv, others(pv, [pb * pe, pb + pe, pv + 1])),
+        explanation: fill(t(key + 'explain'), { chain: pChain, T: pv })
+      };
+    }
+    /* powMeaning: which multiplication is the power. The wrong ones add instead, or change the small number. */
+    var mb = rint(2, 5), me = rint(2, 3), mText = repeatOf(mb, me).join(' × ');
+    return {
+      prompt: fill(t(key + 'prompt'), { b: mb, e: me }),
+      visual: '',
+      hint: t(key + 'hint'),
+      options: textOptions(mText, [repeatOf(mb, me).join(' + '), mb + ' × ' + (me + 1)]),
+      explanation: fill(t(key + 'explain'), { b: mb, e: me, chain: mText, T: Math.pow(mb, me) })
+    };
+  }
+
   /* A question of the round: def is the operation being practised (its entry of ACTIVITIES). */
   function makeQuestion(type, index, def) {
+    if (type.indexOf('fact') === 0 || type.indexOf('pow') === 0) return makeMath(type);
     var q = t('q.' + type + '.prompt');
     var hint = t('q.' + type + '.hint');
     var icon = pickIcon(), pair = pickTwoIcons();
@@ -412,7 +552,7 @@
     }
     var item = pickQueue.shift();
     var answer = opEntry(item.op);
-    var options = App.utils.shuffle(DATA.ops.map(function (entry) {
+    var options = App.utils.shuffle(DATA.ops.filter(function (entry) { return entry.pick !== false; }).map(function (entry) {
       return {
         html: '<span class="op-sym">' + entry.symbol + '</span><span>' + t('answerName.' + entry.id) + '</span>',
         aria: t('answerName.' + entry.id),

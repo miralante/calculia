@@ -56,7 +56,6 @@
     "order-decimals": { "name": "Ordenar decimales", "detail": "Pon los decimales de menor a mayor." },
     "parity": { "name": "Pares e impares", "detail": "Mira los puntos: ¿sobra uno o van todos en parejas?" },
     "primes": { "name": "Primos y compuestos", "detail": "¿Se divide solo entre 1 y entre él mismo?" },
-    "factorial": { "name": "Números factoriales","detail": "Qué significa el signo «!» y para qué sirve." },
     "common-group": { "name": "Divisores y múltiplos", "detail": "Máximo común divisor y mínimo común múltiplo." },
     "common-divisor": { "name": "Máximo común divisor", "detail": "El mayor número que divide a dos." },
     "common-multiple": { "name": "Mínimo común múltiplo", "detail": "El menor número que es múltiplo de dos." },
