@@ -11,7 +11,12 @@
     btnMenu: 'Volver al inicio',
     title: '🔁 Cambia de unidad',
     instructionIntro: 'Lee la explicación.',
-    ui: { realLabel: 'Ejemplos de la vida real' },
+    ui: {
+      realLabel: 'Ejemplos de la vida real',
+      hintPrefix: '',
+      wrongPrefix: '❌ Mira: ',
+      rightPrefix: '✅ ¡Correcto! ',
+    },
     explain: {
       hours: { name: 'Horas, medias horas y cuartos', text: 'Una hora son 2 medias horas. Una hora son 4 cuartos de hora.' },
       minutes: { name: 'Minutos y segundos', text: 'Una hora son 60 minutos. Un minuto son 60 segundos.' },
@@ -45,7 +50,9 @@
       'second-minute-back': '¿Cuántos minutos son {n} segundos?'
     },
     gen: {
-      hint: '🤔 Piensa en cuántas pequeñas caben en una grande. Para pasar a una pequeña, multiplica. Para pasar a una grande, divide.'
+      hint: '🤔 Piensa en cuántas pequeñas caben en una grande. Para pasar a una pequeña, multiplica. Para pasar a una grande, divide.',
+      explainMultiply: '{shown} × {factor} = {answer}. Para pasar a una unidad pequeña, multiplica.',
+      explainDivide: '{shown} ÷ {factor} = {answer}. Para pasar a una unidad grande, divide.'
     }
   }, 'es');
 })();

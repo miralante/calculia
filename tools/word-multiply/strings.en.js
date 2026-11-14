@@ -7,9 +7,12 @@
 
   App.i18n.register({
     title: '✖️ Multiplying problems',
-    instruction: 'Read the problem and choose the answer.',
+    instruction: 'Read the problem and type the answer with the keys.',
     explain: '{a} × {b} = {r}: {r} in total.',
     hint: '🤔 Are there equal groups that repeat? Then multiply.',
+    typeAnswer: 'First type the answer with the keys.',
+    checkAnswer: 'Check the answer',
+    eraseDigit: 'Erase the last digit',
     next: 'Next →',
     endTitle: 'You have finished',
     endSummary: 'You got {n} of {total} right the first time. You now have {stars} {starsWord}.',

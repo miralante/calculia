@@ -5,7 +5,7 @@
    of cards, one per division, shown after a tap.
    ========================================================================== */
 
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 /* The drawing: groups of dots, with the product written under them. */
 .ops-group-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }

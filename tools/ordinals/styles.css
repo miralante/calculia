@@ -19,7 +19,7 @@
    que repetir color no puede llevar a error (WCAG 1.4.1). El turquesa
    de la cabecera no es color de ningún ordinal, para que marca y
    paleta no se pisen. */
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 .ord-c1 { color: var(--mod-coordinacion); }
 .ord-c2 { color: var(--mod-secuencia); }

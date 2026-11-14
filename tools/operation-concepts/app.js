@@ -346,13 +346,6 @@
     });
   }
 
-  /* Drops the duplicates and the right answer from a list of wrong numbers, so no option repeats. */
-  function others(correct, list) {
-    var out = [];
-    list.forEach(function (x) { if (x !== correct && x >= 0 && out.indexOf(x) === -1) out.push(x); });
-    return out;
-  }
-
   /* The factorial and power questions: a small calculation with its own drawing. */
   function makeMath(type) {
     var key = 'q.' + type + '.';
@@ -363,7 +356,7 @@
         visual: '<p class="fac-expr">' + chain + ' = ?</p>',
         hint: t(key + 'hint'),
         /* The wrong answers are the usual mix-ups: adding instead of multiplying, or leaving out the n. */
-        options: numericOptions(value, others(value, [n * (n + 1) / 2, factorialOf(n - 1), n * n])),
+        input: { answer: value },
         explanation: fill(t(key + 'explain'), { chain: chain, T: value })
       };
     }
@@ -383,7 +376,7 @@
         prompt: fill(t(key + 'prompt'), { n: s }),
         visual: slotsHtml(s, false, false),
         hint: fill(t(key + 'hint'), { n: s }),
-        options: numericOptions(total, others(total, [factorialOf(s - 1), s * s, s * (s - 1)])),
+        input: { answer: total },
         explanation: fill(t(key + 'explain'), { chain: factorsDown(s, 1).join(' × '), T: total })
       };
     }
@@ -405,7 +398,7 @@
         prompt: fill(t(key + 'prompt'), { b: pb, e: pe }),
         visual: '<p class="fac-expr">' + pChain + ' = ?</p>',
         hint: fill(t(key + 'hint'), { b: pb, e: pe }),
-        options: numericOptions(pv, others(pv, [pb * pe, pb + pe, pv + 1])),
+        input: { answer: pv },
         explanation: fill(t(key + 'explain'), { chain: pChain, T: pv })
       };
     }
@@ -431,7 +424,7 @@
       var ma = rint(2, 8), mb = rint(1, 6), MT = ma + mb;
       return {
         prompt: fill(q, { a: ma, b: mb }), visual: joinHtml(ma, mb, pair[0], false, pair[1]), hint: hint,
-        options: numericOptions(MT, [MT + 1, MT - 1, MT + 2]),
+        input: { answer: MT },
         explanation: fill(t('q.more.explain'), { a: ma, b: mb, T: MT })
       };
     }
@@ -439,7 +432,7 @@
       var a = rint(1, 8), b = rint(1, 6), T = a + b;
       return {
         prompt: q, visual: joinHtml(a, b, pair[0], false, pair[1]), hint: hint,
-        options: numericOptions(T, [T + 1, T - 1, T + 2]),
+        input: { answer: T },
         explanation: fill(t('q.join.explain'), { a: a, b: b, T: T })
       };
     }
@@ -447,7 +440,7 @@
       var n = rint(4, 12), take = rint(1, n - 1), r = n - take;
       return {
         prompt: fill(q, { n: n, t: take }), visual: takeHtml(n, take, icon), hint: hint,
-        options: numericOptions(r, [n, r + 1, r - 1, take]),
+        input: { answer: r },
         explanation: fill(t('q.take.explain'), { n: n, t: take, r: r })
       };
     }
@@ -455,7 +448,7 @@
       var need = rint(3, 10), have = rint(1, need - 1), m = need - have;
       return {
         prompt: fill(q, { n: need, h: have }), visual: gapHtml(need, have, icon), hint: hint,
-        options: numericOptions(m, [need, have, m + 1, m - 1]),
+        input: { answer: m },
         explanation: fill(t('q.gap.explain'), { m: m, n: need, h: have })
       };
     }
@@ -463,7 +456,7 @@
       var gt = rint(2, 5), et = rint(2, 6), Tt = gt * et;
       return {
         prompt: fill(q, { g: gt, e: et }), visual: groupsHtml(gt, et, icon, gt + ' × ' + et + ' = ?'), hint: hint,
-        options: numericOptions(Tt, [gt + et, Tt + et, Tt - 1, Tt + 1]),
+        input: { answer: Tt },
         explanation: fill(t('q.times.explain'), { g: gt, e: et, T: Tt })
       };
     }
@@ -482,7 +475,7 @@
       return {
         /* The same deal drawing as the explanation: the slices can be dealt one by one, with the buttons to help. */
         prompt: fill(q, { T: total, g: people }), visual: dealHtml(total, people), hint: hint,
-        options: numericOptions(each, [each + 1, each - 1, people]),
+        input: { answer: each },
         explanation: fill(t('q.share.explain'), { each: each, T: total, g: people })
       };
     }
@@ -490,7 +483,7 @@
       var size = rint(2, 5), full = rint(2, 4), left = rint(1, size - 1);
       return {
         prompt: fill(q, { T: full * size + left, e: size }), visual: restHtml(full * size + left, size, icon), hint: hint,
-        options: numericOptions(full, [full + 1, full - 1, left]),
+        input: { answer: full },
         explanation: fill(t(left === 1 ? 'q.rest.explainOne' : 'q.rest.explain'), { q: full, r: left })
       };
     }
@@ -499,7 +492,7 @@
       var lsize = rint(3, 5), lfull = rint(2, 4), lleft = rint(1, lsize - 1);
       return {
         prompt: fill(q, { T: lfull * lsize + lleft, e: lsize }), visual: restHtml(lfull * lsize + lleft, lsize, icon), hint: hint,
-        options: numericOptions(lleft, [lsize, lfull, lleft + 1, lleft - 1]),
+        input: { answer: lleft },
         explanation: fill(t(lleft === 1 ? 'q.leftover.explainOne' : 'q.leftover.explain'), { q: lfull, r: lleft })
       };
     }
@@ -608,6 +601,9 @@
   App.activityFlow.setup({
     toolId: 'operation-concepts',
     test: 'options',
+    /* Typed numbers are checked with a hint, then the explanation. The choice questions stay as options. */
+    socratic: true,
+    typedAnswers: true,
     activities: ACTIVITIES,
     menuBackKey: 'ui.otherOps',
     testVisuals: true,

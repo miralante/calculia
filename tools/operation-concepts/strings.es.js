@@ -13,6 +13,9 @@
 
     ui: {
       menuInstruction: 'Elige una operación.',
+      hintPrefix: '',
+      wrongPrefix: '❌ Mira: ',
+      rightPrefix: '✅ ¡Correcto! ',
       menuTitle: 'Sumar, restar, multiplicar y dividir',
       menuText: 'Aquí se entiende qué significa cada una, sin hacer cuentas largas.',
       coin: '€',

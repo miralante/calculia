@@ -17,6 +17,9 @@
       share: 'There are {g} equal groups. In each group there are {x} and {y}.',
       tiles: 'A floor of {a} × {b} cm, covered with tiles of {g} × {g} cm.',
       divisorsOf: 'Numbers that fit exactly into {n}:',
+      hintPrefix: '',
+      wrongPrefix: '❌ Look: ',
+      rightPrefix: '✅ Correct! ',
     },
 
     /* The explanation: one idea per slide. The drawing is in data.js. */
@@ -46,8 +49,8 @@
         hint: '🤔 Try how many baskets you get with both amounts at the same time.'
       },
       common: {
-        prompt: 'Which of these numbers fits exactly into {a} and into {b}?',
-        hint: '🤔 Check whether each number fits exactly into {a}, and also into {b}.',
+        prompt: 'What is the biggest number that fits exactly into {a} and into {b}?',
+        hint: '🤔 Look for the biggest number that fits exactly into both.',
         explain: '{g} fits exactly into {a} and into {b}. It is the biggest one that does.'
       }
     }

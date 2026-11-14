@@ -1,4 +1,4 @@
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 /* Dots visual */
 .visual-card { display: flex; flex-direction: column; gap: var(--espacio); align-items: flex-start; padding: var(--espacio); border: 3px solid var(--mod-razonamiento-suave); border-radius: var(--radio); background: var(--color-superficie); }

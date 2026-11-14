@@ -7,9 +7,12 @@
 
   App.i18n.register({
     title: '➖ Problemas de restar',
-    instruction: 'Lee el problema y elige la respuesta.',
+    instruction: 'Lee el problema y escribe la respuesta con los botones.',
     explain: '{a} − {b} = {r}: quedan {r}.',
     hint: '🤔 ¿Se quita algo o se pregunta cuánto falta? Entonces se resta.',
+    typeAnswer: 'Escribe primero la respuesta con los botones.',
+    checkAnswer: 'Comprobar la respuesta',
+    eraseDigit: 'Borrar la última cifra',
     next: 'Siguiente →',
     endTitle: 'Has terminado',
     endSummary: 'Has acertado {n} de {total} a la primera. Ahora tienes {stars} {starsWord}.',

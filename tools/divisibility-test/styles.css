@@ -4,7 +4,7 @@
    division slides of Operaciones (.ops-*). Leftover items read apart.
    ========================================================================== */
 
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 .op-sym { font-size: 40px; font-weight: 800; line-height: 1; }
 .ops-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
@@ -90,6 +90,6 @@
 }
 
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
-.tool-header .activity-icon { width: 48px; height: 48px; flex: none; }
+.suite-chrome-activity .activity-icon { width: 48px; height: 48px; flex: none; }
 
 /* Test answers */

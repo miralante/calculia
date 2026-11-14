@@ -12,6 +12,9 @@
 
     ui: {
       menuInstruction: 'Choose an operation.',
+      hintPrefix: '',
+      wrongPrefix: '❌ Look: ',
+      rightPrefix: '✅ Correct! ',
       menuTitle: 'Add, subtract, multiply and divide',
       menuText: 'Here you understand what each one means, without long sums.',
       coin: '$',

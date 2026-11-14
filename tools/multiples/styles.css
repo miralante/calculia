@@ -5,7 +5,7 @@
    multiple, with its product written beside it.
    ========================================================================== */
 
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 /* The first multiples: one row per step, the product beside each group. */
 .mul-ladder { display: flex; flex-direction: column; align-items: center; gap: 8px; }
@@ -93,7 +93,7 @@
 }
 
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
-.tool-header .activity-icon { width: 48px; height: 48px; flex: none; }
+.suite-chrome-activity .activity-icon { width: 48px; height: 48px; flex: none; }
 
 /* The practice game: the numbers to pick, and the cards of a table up to 10. */
 .mul-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 10px; width: 100%; }

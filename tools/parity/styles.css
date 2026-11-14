@@ -16,7 +16,7 @@
    orphan dot reads as the singular thing in the picture.
    Switching to dark mode or high contrast keeps the signal. */
 
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 .parity-card { border-color: var(--mod-razonamiento-suave); }
 .parity-dots {

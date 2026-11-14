@@ -3,7 +3,7 @@
    .card and .btn patterns; only the state-aware card tint and the
    button row are tool-specific. */
 
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 .btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 .center-row { justify-content: center; }

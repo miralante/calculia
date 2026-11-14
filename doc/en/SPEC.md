@@ -412,7 +412,11 @@ remains dynamic and accessible to assistive technologies.
 8. Complete keyboard navigation.
 9. ARIA on icon buttons and feedback zones.
 10. Maximum 4–6 options per screen.
-11. Quiz-type questions: maximum 3 options, always with an explanation.
+11. Quiz-type questions: maximum 3 options, always with an explanation. When
+    the answer is a number, the person types it on a keypad (or the device
+    keyboard) instead of picking one of three: the answer is built, not
+    recognised (adding, subtracting, multiplying and dividing problems, and
+    the tables).
 12. Socratic pacing on mistakes: a hint before the answer, encouragement
     never punishment (`App.feedback.encourage()` /
     `App.feedback.lockUntilAck()`), unlimited retries. While the hint is

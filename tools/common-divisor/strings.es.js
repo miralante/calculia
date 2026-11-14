@@ -18,6 +18,9 @@
       share: 'Caben {g} grupos iguales. En cada grupo hay {x} y {y}.',
       tiles: 'Suelo de {a} × {b} cm, cubierto con baldosas de {g} × {g} cm.',
       divisorsOf: 'Números que caben exacto en {n}:',
+      hintPrefix: '',
+      wrongPrefix: '❌ Mira: ',
+      rightPrefix: '✅ ¡Correcto! ',
     },
 
     /* La explicación: una idea por diapositiva. El dibujo está en data.js. */
@@ -47,8 +50,8 @@
         hint: '🤔 Prueba cuántas cestas salen con las dos cantidades a la vez.'
       },
       common: {
-        prompt: '¿Cuál de estos números cabe exacto en {a} y en {b}?',
-        hint: '🤔 Mira si cada número cabe exacto en {a} y también en {b}.',
+        prompt: '¿Cuál es el mayor número que cabe exacto en {a} y en {b}?',
+        hint: '🤔 Busca el número más grande que cabe exacto en los dos.',
         explain: '{g} cabe exacto en {a} y en {b}. Es el mayor que lo consigue.'
       }
     }

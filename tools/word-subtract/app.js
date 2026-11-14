@@ -9,6 +9,7 @@
 
   App.wordProblems.setup({
     toolId: 'word-subtract',
+    answer: 'keypad',
     buildRound: function () {
       return App.utils.shuffle(DATA.problems.slice());
     }

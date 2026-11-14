@@ -11,7 +11,12 @@
     btnMenu: 'Back to start',
     title: '🔁 Change the unit',
     instructionIntro: 'Read the explanation.',
-    ui: { realLabel: 'Real-life examples' },
+    ui: {
+      realLabel: 'Real-life examples',
+      hintPrefix: '',
+      wrongPrefix: '❌ Look: ',
+      rightPrefix: '✅ Correct! ',
+    },
     explain: {
       hours: { name: 'Hours, half hours and quarters', text: 'One hour is 2 half hours. One hour is 4 quarters of an hour.' },
       minutes: { name: 'Minutes and seconds', text: 'One hour is 60 minutes. One minute is 60 seconds.' },
@@ -45,7 +50,9 @@
       'second-minute-back': 'How many minutes are {n} seconds?'
     },
     gen: {
-      hint: '🤔 Think how many small units fit in a big one. To change into a small unit, multiply. To change into a big unit, divide.'
+      hint: '🤔 Think how many small units fit in a big one. To change into a small unit, multiply. To change into a big unit, divide.',
+      explainMultiply: '{shown} × {factor} = {answer}. To change into a small unit, multiply.',
+      explainDivide: '{shown} ÷ {factor} = {answer}. To change into a big unit, divide.'
     }
   }, 'en');
 })();

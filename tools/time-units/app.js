@@ -168,26 +168,15 @@
     return unit.line ? drawing + timelineHtml(unit.line) : drawing;
   }
 
-  /* ---- Test sheet ----
-     The wrong answers are the other numbers of the list, so the person has
-     to know which unit is which, not just pick a number that looks right. */
+  /* ---- Test ----
+     The person types the number of the unit asked about, so they have to know
+     the unit, not just pick a number that looks right. */
   function question(pair) {
-    var others = DATA.pairs.map(function (p) { return p.answer; })
-      .filter(function (n) { return n !== pair.answer; })
-      .filter(function (n, i, all) { return all.indexOf(n) === i; });
-    var wrong = App.utils.shuffle(others).slice(0, 2);
-
     return {
       prompt: t('q.' + pair.id),
       hint: t('gen.hint'),
-      options: App.utils.shuffle([pair.answer].concat(wrong).map(function (n) {
-        return {
-          html: '<span class="answer-num">' + n + '</span>',
-          aria: String(n),
-          correct: n === pair.answer
-        };
-      })),
-      inline: true
+      input: { answer: pair.answer },
+      explanation: App.utils.fill(t('gen.explain'), { answer: pair.answer })
     };
   }
 
@@ -202,6 +191,9 @@
   App.activityFlow.setup({
     toolId: 'time-units',
     test: 'options',
+    /* The answer is a typed number: the wrong tries get a hint, then the explanation. */
+    socratic: true,
+    typedAnswers: true,
     intro: DATA.units.map(function (unit) { return { visual: unit }; }),
     real: realList.map(function (unit) { return { visual: unit }; }),
     introHeading: function () { return t('instructionIntro'); },

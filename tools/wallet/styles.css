@@ -3,7 +3,7 @@
    Money is drawn with CSS (no images): round coins in the real euro
    colours and rectangular banknotes. */
 
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 .btn:not(.btn-secondary):not(.btn-audio) {
   background: var(--mod-razonamiento);

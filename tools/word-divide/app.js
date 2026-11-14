@@ -9,6 +9,7 @@
 
   App.wordProblems.setup({
     toolId: 'word-divide',
+    answer: 'keypad',
     buildRound: function () {
       return App.utils.shuffle(DATA.problems.slice());
     }

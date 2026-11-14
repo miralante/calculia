@@ -19,22 +19,13 @@
     var m = App.utils.shuffle(conv.ns)[0];
     var shown = conv.back ? m * conv.factor : m;
     var answer = conv.back ? m : m * conv.factor;
-    var pool = [shown, answer + 1, answer - 1, answer * 10]
-      .filter(function (v) { return v > 0 && v !== answer; })
-      .filter(function (v, i, all) { return all.indexOf(v) === i; });
-    var wrong = App.utils.shuffle(pool).slice(0, 2);
+    var values = { shown: shown, factor: conv.factor, answer: answer };
 
     return {
       prompt: t('q.' + conv.id).replace('{n}', shown),
       hint: t('gen.hint'),
-      options: App.utils.shuffle([answer].concat(wrong).map(function (v) {
-        return {
-          html: '<span class="answer-num">' + v + '</span>',
-          aria: String(v),
-          correct: v === answer
-        };
-      })),
-      inline: true
+      input: { answer: answer },
+      explanation: App.utils.fill(t(conv.back ? 'gen.explainDivide' : 'gen.explainMultiply'), values)
     };
   }
 
@@ -49,6 +40,9 @@
   App.activityFlow.setup({
     toolId: 'time-convert',
     test: 'options',
+    /* The answer is a typed number: the wrong tries get a hint, then the explanation. */
+    socratic: true,
+    typedAnswers: true,
     intro: DATA.explain.map(function (step) { return { visual: step }; }),
     real: DATA.real.map(function (example) { return { visual: example }; }),
     realText: function (i) { return t('example.' + DATA.real[i].id); },

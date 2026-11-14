@@ -15,6 +15,9 @@
       visualAria: 'Drawing of numbers or objects that shows the jumps when counting.',
       realLabel: 'Real-life examples',
       multiplesOf: 'Counting up by {n}:',
+      hintPrefix: '',
+      wrongPrefix: '❌ Look: ',
+      rightPrefix: '✅ Correct! ',
       packs: '{c} packs of {s} = {m}',
     },
 
@@ -45,8 +48,8 @@
         hint: '🤔 Count up by {a} and by {b}. Which is the first one that matches?'
       },
       common: {
-        prompt: 'Which of these numbers comes up when you count up by {a} and also by {b}?',
-        hint: '🤔 Check whether the number comes up when you count up by {a}, and also when you count up by {b}.',
+        prompt: 'What is the smallest number that comes up when you count up by {a} and also by {b}?',
+        hint: '🤔 Look for the first number that comes up in both counts.',
         explain: '{m} comes up when you count up by {a} and by {b}. It is the first one that matches.'
       }
     }

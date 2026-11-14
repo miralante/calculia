@@ -63,10 +63,6 @@
   }
 
   /* ---- Test: the questions ------------------------------------------------ */
-  /* Numbers as answers: the right one and up to two others, all different and not
-     below zero, in a shuffled order. */
-  var numericOptions = App.utils.numericOptions;
-
   function pair() {
     var p = pick(DATA.pairs);
     return { a: p[0], b: p[1], m: lcm(p[0], p[1]) };
@@ -87,7 +83,7 @@
     return {
       prompt: fill(t('q.lcm.prompt'), values),
       hint: fill(t('q.lcm.hint'), values),
-      options: numericOptions(p.m, [p.a * p.b, p.m + 1, p.m * 2]),
+      input: { answer: p.m },
       explanation: explanation(p)
     };
   }
@@ -99,7 +95,7 @@
     return {
       prompt: fill(t('q.story.prompt'), values),
       hint: fill(t('q.story.hint'), values),
-      options: numericOptions(p.m, [p.a * p.b, p.m + 1, p.m * 2]),
+      input: { answer: p.m },
       explanation: explanation(p)
     };
   }
@@ -109,13 +105,10 @@
   function makeCommon() {
     var p = pair();
     var values = { a: p.a, b: p.b, m: p.m };
-    var wrongs = [p.m + p.a, p.m + p.b, p.m + 1].filter(function (x) {
-      return !(x % p.a === 0 && x % p.b === 0);
-    });
     return {
       prompt: fill(t('q.common.prompt'), values),
       hint: fill(t('q.common.hint'), values),
-      options: numericOptions(p.m, wrongs),
+      input: { answer: p.m },
       explanation: fill(t('q.common.explain'), values)
     };
   }
@@ -128,6 +121,9 @@
 
   App.activityFlow.setup({
     toolId: 'common-multiple',
+    /* The answer is a typed number: the wrong tries get a hint, then the explanation. */
+    socratic: true,
+    typedAnswers: true,
     intro: DATA.intro,
     real: DATA.real,
     visualHtml: visualHtml,

@@ -7,7 +7,7 @@
    Contract "actividad aislada": no styles are imported from other
    tools/, so every class used here is defined here. Only .btn,
    .option-btn and .explanation come from components.css. */
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 /* ============================================================
    Menú de prácticas

@@ -4,7 +4,7 @@
    The numbers 1 … 20 are chips: a primes has a thick border, the 1 a dashed one.
    ========================================================================== */
 
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 /* The numbers 1 … max, in a wrapping grid of chips. */
 .pc-numbers { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
@@ -106,6 +106,6 @@
 }
 
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
-.tool-header .activity-icon { width: 48px; height: 48px; flex: none; }
+.suite-chrome-activity .activity-icon { width: 48px; height: 48px; flex: none; }
 
 /* Test answers */

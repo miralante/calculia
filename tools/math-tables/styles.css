@@ -1,4 +1,4 @@
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 /* Operation menu (4 cards: sumar / multiplicar arriba, restar /
    dividir abajo). 2 columnas fijas en desktop, adapts en móvil. */

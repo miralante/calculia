@@ -65,10 +65,6 @@
   }
 
   /* ---- Test: the questions ------------------------------------------------ */
-  /* Numbers as answers: the right one and up to two others, all different and not
-     below zero, in a shuffled order. */
-  var numericOptions = App.utils.numericOptions;
-
   /* Two numbers from the pairs: the answer is their greatest common divisor. */
   function pair() {
     var g = pick(DATA.gcds);
@@ -90,7 +86,7 @@
     return {
       prompt: fill(t('q.gcd.prompt'), values),
       hint: fill(t('q.gcd.hint'), values),
-      options: numericOptions(p.g, [p.g * 2, p.g + 1, p.g - 1]),
+      input: { answer: p.g },
       explanation: explanation(p)
     };
   }
@@ -102,7 +98,7 @@
     return {
       prompt: fill(t('q.story.prompt'), values),
       hint: t('q.story.hint'),
-      options: numericOptions(p.g, [p.g * 2, p.g + 1, p.g - 1]),
+      input: { answer: p.g },
       explanation: explanation(p)
     };
   }
@@ -112,13 +108,10 @@
   function makeCommon() {
     var p = pair();
     var values = { a: p.a, b: p.b, g: p.g };
-    var wrongs = [p.a + 1, p.b + 1, p.a + p.b, p.g + 1].filter(function (x) {
-      return !(p.a % x === 0 && p.b % x === 0);
-    });
     return {
       prompt: fill(t('q.common.prompt'), values),
       hint: fill(t('q.common.hint'), values),
-      options: numericOptions(p.g, wrongs),
+      input: { answer: p.g },
       explanation: fill(t('q.common.explain'), values)
     };
   }
@@ -131,6 +124,9 @@
 
   App.activityFlow.setup({
     toolId: 'common-divisor',
+    /* The answer is a typed number: the wrong tries get a hint, then the explanation. */
+    socratic: true,
+    typedAnswers: true,
     intro: DATA.intro,
     real: DATA.real,
     visualHtml: visualHtml,

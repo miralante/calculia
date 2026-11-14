@@ -9,6 +9,7 @@
 
   App.wordProblems.setup({
     toolId: 'word-add',
+    answer: 'keypad',
     buildRound: function () {
       return App.utils.shuffle(DATA.problems.slice());
     }

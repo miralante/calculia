@@ -16,6 +16,9 @@
       visualAria: 'Dibujo con números u objetos que muestra los saltos al contar.',
       realLabel: 'Ejemplos de la vida real',
       multiplesOf: 'Al contar de {n} en {n}:',
+      hintPrefix: '',
+      wrongPrefix: '❌ Mira: ',
+      rightPrefix: '✅ ¡Correcto! ',
       packs: '{c} paquetes de {s} = {m}',
     },
 
@@ -46,8 +49,8 @@
         hint: '🤔 Cuenta de {a} en {a} y de {b} en {b}. ¿Cuál es el primero que coincide?'
       },
       common: {
-        prompt: '¿Cuál de estos números sale al contar de {a} en {a} y también de {b} en {b}?',
-        hint: '🤔 Mira si el número sale al contar de {a} en {a}, y también de {b} en {b}.',
+        prompt: '¿Cuál es el menor número que sale al contar de {a} en {a} y también de {b} en {b}?',
+        hint: '🤔 Busca el primer número que sale en las dos cuentas.',
         explain: '{m} sale al contar de {a} en {a} y de {b} en {b}. Es el primero que coincide.'
       }
     }

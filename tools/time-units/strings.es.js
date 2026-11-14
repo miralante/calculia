@@ -14,6 +14,9 @@
 
     ui: {
       realLabel: 'Ejemplos de la vida real',
+      hintPrefix: '',
+      wrongPrefix: '❌ Mira: ',
+      rightPrefix: '✅ ¡Correcto! ',
       reviewRule: 'Repasar la regla',
       backToPractice: 'Volver a la práctica →',
       roundDone: 'Has terminado la ronda: {n} de {total} a la primera. Tienes {stars} ⭐.'
@@ -103,7 +106,8 @@
     },
 
     gen: {
-      hint: '🤔 Repasa la explicación. Piensa qué unidad es más pequeña que la de la pregunta.'
+      hint: '🤔 Repasa la explicación. Piensa qué unidad es más pequeña que la de la pregunta.',
+      explain: 'La respuesta es {answer}.'
     }
   }, 'es');
 })();

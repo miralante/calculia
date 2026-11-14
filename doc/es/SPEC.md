@@ -423,7 +423,11 @@ siendo dinámico y accesible para tecnologías de asistencia.
 8. Navegación completa por teclado.
 9. ARIA en botones de icono y zonas de feedback.
 10. Máximo 4–6 opciones por pantalla.
-11. Preguntas tipo quiz: máximo 3 opciones, siempre con explicación.
+11. Preguntas tipo quiz: máximo 3 opciones, siempre con explicación. Cuando
+    la respuesta es un número, la persona la escribe con un teclado (o con
+    el teclado del equipo) en vez de elegirla entre tres: la respuesta se
+    construye, no se reconoce (problemas de sumar, restar, multiplicar,
+    dividir y las tablas).
 12. Ritmo socrático ante errores: pista antes que la respuesta, ánimo
     nunca castigo (`App.feedback.encourage()` /
     `App.feedback.lockUntilAck()`), reintentos ilimitados. Mientras se

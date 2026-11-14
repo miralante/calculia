@@ -14,6 +14,9 @@
 
     ui: {
       realLabel: 'Real-life examples',
+      hintPrefix: '',
+      wrongPrefix: '❌ Look: ',
+      rightPrefix: '✅ Correct! ',
       reviewRule: 'Review the rule',
       backToPractice: 'Back to practice →',
       roundDone: 'Round finished: {n} of {total} right the first time. You have {stars} ⭐.'
@@ -103,7 +106,8 @@
     },
 
     gen: {
-      hint: '🤔 Look at the explanation again. Think which unit is smaller than the one in the question.'
+      hint: '🤔 Look at the explanation again. Think which unit is smaller than the one in the question.',
+      explain: 'The answer is {answer}.'
     }
   }, 'en');
 })();

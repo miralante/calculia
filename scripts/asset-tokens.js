@@ -192,7 +192,7 @@ function processFile(pageRel, apply, cfg) {
   const drift = [];
 
   const updated = original.replace(
-    /(\b(?:href|src)=")([^"]+)(")/g,
+    /(\b(?:href|src|data-suite-logo)=")([^"]+)(")/g,
     (whole, open, value, close) => {
       if (/^[a-z][a-z0-9+.-]*:/i.test(value) || value.startsWith('//') || value.startsWith('#')) return whole;
       const rel = resolveRef(pageRel, value);

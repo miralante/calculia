@@ -10,12 +10,11 @@
                        per group, with the leftover dot (if any) in
                        its own colour so the visual reads as the
                        answer is "the number of full groups".
-   The first three operations use a 3-option shuffle (the same
-   shape as before); divide uses a free-text input because the
-   answer is a single number that the user must compute mentally,
-   and the leftover is shown only as feedback. A "Learn" screen
-   for every table shows every row with its dots, then the quiz
-   round tests the chosen table.
+   Every operation is answered by typing the result in the number
+   input: the child builds the answer instead of picking one of
+   three. For division the leftover is shown only as feedback. A
+   "Learn" screen for every table shows every row with its dots,
+   then the quiz round tests the chosen table.
    ============================================================ */
 (function () {
   'use strict';
@@ -82,10 +81,6 @@
       rest: itemRemainder(item)
     };
   }
-
-  /* divide is "compute the quotient, the rest is feedback". Other
-     three are "compute the result directly". */
-  function usesInput() { return mode === 'divide'; }
 
   /* ---- Audio module ----
      The written module shows the equation and the dots. The audio module
@@ -206,24 +201,6 @@
 
   /* ---- Quiz screen ---- */
 
-  /* Three-option shuffle for the four operations EXCEPT divide (which
-     uses a free-text input). The stepSize for the candidate generation
-     follows the operation: multiply and divide use the table number
-     as the "right unit of mistake"; add/subtract use 1. */
-  function answerOptions(item) {
-    var correct = itemResult(item);
-    var step;
-    if (mode === 'multiply') step = item.a;
-    else if (mode === 'divide') step = Math.max(1, item.b);
-    else step = 1;
-    var candidates = [correct - step, correct + step, correct - 1, correct + 1, correct - 2, correct + 2];
-    var options = [correct];
-    candidates.forEach(function (value) {
-      if (options.length < 3 && value >= 0 && options.indexOf(value) === -1) options.push(value);
-    });
-    return App.utils.shuffle(options);
-  }
-
   function renderQuiz() {
     var item = round[index];
     attempts = 0;
@@ -248,31 +225,10 @@
     hide($('#nextFact'));
     $('#restLine').classList.add('hidden');
 
-    if (usesInput()) {
-      renderInputAnswer(item);
-    } else {
-      renderButtonOptions(item);
-    }
+    renderInputAnswer(item);
   }
 
-  /* Three-option shuffle — the path used by add/multiply/subtract. */
-  function renderButtonOptions(item) {
-    hide($('#inputOption'));
-    var options = $('#options');
-    options.innerHTML = '';
-    options.classList.remove('hidden');
-    var choices = answerOptions(item).map(function (v) { return { value: v, label: String(v) }; });
-    choices.forEach(function (choice) {
-      var button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'btn option-btn';
-      button.textContent = choice.label;
-      button.addEventListener('click', function () { checkAnswer(item, choice.value, button); });
-      options.appendChild(button);
-    });
-  }
-
-  /* Free-text input — only used by division. The input clears and
+  /* Free-text input for every operation. The input clears and
      re-focuses on every new question, because most users will leave
      the previous answer in place if we don't reset it. Enter in the
      input clicks "check" for keyboard-only users. */
@@ -303,11 +259,7 @@
       feedback.textContent += ' ' + App.feedback.hintText(
         fillKey(isAudio() ? 'hintAudio' : ('hint' + keySuffix()), itemValues(item)),
         button ? button.textContent : String(value));
-      if (usesInput()) {
-        App.feedback.lockUntilAck([$('#divideInput'), $('#checkDivide')], feedback);
-      } else {
-        App.feedback.lockUntilAck($('#options').querySelectorAll('button'), feedback);
-      }
+      App.feedback.lockUntilAck([$('#divideInput'), $('#checkDivide')], feedback);
       return;
     }
     progress.stars += 1;
@@ -328,23 +280,19 @@
       : fillKey('explain' + keySuffix(), itemValues(item));
     $('#explanation').textContent = explanation;
     show($('#explanation'));
-    if (usesInput()) {
-      $('#divideInput').disabled = true;
-      $('#checkDivide').disabled = true;
-      /* Show the remainder on its own line so the user sees both the
-         success feedback and the spare dot visually explained. */
-      var rest = itemRemainder(item);
-      if (rest > 0) {
-        $('#restLine').textContent = '';
-        var restEl = $('#restLine');
-        restEl.appendChild(document.createTextNode(App.i18n.t('restLine') + ' '));
-        var num = document.createElement('strong');
-        num.textContent = String(rest);
-        restEl.appendChild(num);
-        restEl.classList.remove('hidden');
-      }
-    } else {
-      $('#options').querySelectorAll('button').forEach(function (option) { option.disabled = true; });
+    $('#divideInput').disabled = true;
+    $('#checkDivide').disabled = true;
+    /* Show the remainder on its own line so the user sees both the
+       success feedback and the spare dot visually explained. */
+    var rest = itemRemainder(item);
+    if (rest > 0) {
+      $('#restLine').textContent = '';
+      var restEl = $('#restLine');
+      restEl.appendChild(document.createTextNode(App.i18n.t('restLine') + ' '));
+      var num = document.createElement('strong');
+      num.textContent = String(rest);
+      restEl.appendChild(num);
+      restEl.classList.remove('hidden');
     }
     show($('#nextFact'));
     $('#nextFact').focus();

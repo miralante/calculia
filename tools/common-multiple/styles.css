@@ -5,7 +5,7 @@
    is specific to this activity.
    ========================================================================== */
 
-.tool-header h1 { color: var(--mod-razonamiento); }
+.suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
-.tool-header .activity-icon { width: 48px; height: 48px; flex: none; }
+.suite-chrome-activity .activity-icon { width: 48px; height: 48px; flex: none; }
