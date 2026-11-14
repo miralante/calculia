@@ -52,6 +52,19 @@
       return levels[Math.min(host.progress().completedRounds || 0, levels.length - 1)];
     }
 
+    // "Ya tienes X estrellas · A por las Y estrellas" (stars-engine.js), shown
+    // once at the end of the round, under the reward. Never after each answer.
+    function appendStarsGoal(zone, total) {
+      if (!zone || !window.ApptonomiaStars) return;
+      var span = document.createElement('span');
+      span.className = 'stars-goal';
+      span.textContent = window.ApptonomiaStars.line(total, {
+        reached: App.i18n.t('core.starsReached'),
+        goal: App.i18n.t('core.starsGoal')
+      });
+      zone.appendChild(span);
+    }
+
     // Closes a round: counts it, saves, shows the end screen with its summary.
     function endRound(options) {
       var opts = options || {};
@@ -71,6 +84,7 @@
           text = text.replace('{activity}', App.i18n.t('activity.' + host.activity().id + '.name'));
         }
         App.feedback.paintReward(summaryEl, progress.stars, text);
+        appendStarsGoal(summaryEl, progress.stars);
       }
       App.feedback.celebrate(App.i18n.t(opts.celebrateKey || 'core.roundComplete'));
     }
