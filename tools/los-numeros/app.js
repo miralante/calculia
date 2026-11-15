@@ -30,6 +30,8 @@
   var slideVisual = $('#slideVisual');
   var slideReal = $('#slideReal');
   var slideEyebrow = $('#slideEyebrow');
+  var slideTraits = $('#slideTraits');
+  var slideTraitsEyebrow = $('#slideTraitsEyebrow');
   var slidePrev = $('#slidePrev');
   var slideNext = $('#slideNext');
   var slideBar = $('#slideProgress');
@@ -61,12 +63,15 @@
      tema (claro / oscuro / contraste) siga funcionando. */
 
   function lineTicks(min, max, labels, color) {
-    /* Dibuja el eje horizontal y, para cada label, un tick + texto
-       + círculo en la posición correspondiente. labels es un
-       array de { n, isMain, color, label } donde isMain agranda
-       el tick. */
-    var x0 = 60, x1 = 540;
-    var W = 600, H = 130, midY = 70;
+    /* Dibuja el eje horizontal con punta de flecha en los dos
+       extremos y, para cada label, un tick + número + punto en su
+       posición. labels es un array de { n, isMain, color, label }
+       donde isMain agranda el tick. Los negativos van en rojo y
+       llevan el signo «−» escrito, para que el dato no dependa solo
+       del color (WCAG 1.4.1). El viewBox escala el dibujo con el
+       ancho de la card, así que sigue siendo responsive. */
+    var x0 = 50, x1 = 510;
+    var W = 560, H = 160, midY = 72;
     var step = (x1 - x0) / (max - min);
     function pos(n) { return x0 + (n - min) * step; }
 
@@ -74,19 +79,30 @@
     var sep = App.i18n.locale() === 'en' ? '.' : ',';
     labels.forEach(function (e) {
       var x = pos(e.n);
-      var c = e.color || color;
-      var tickH = e.isMain ? 22 : 14;
+      var neg = e.n < 0;
+      var c = neg ? 'var(--numero-negativo)' : (e.color || color);
+      var tickH = e.isMain ? 26 : 18;
       var label = String(e.n);
-      if (e.label !== undefined) label = e.label;
-      else if (e.n !== Math.floor(e.n)) label = label.replace('.', sep);
-      ticks += '<line x1="' + x + '" y1="' + (midY - tickH / 2) + '" x2="' + x + '" y2="' + (midY + tickH / 2) + '" stroke="' + c + '" stroke-width="3"/>';
-      ticks += '<text x="' + x + '" y="' + (midY + 38) + '" text-anchor="middle" font-size="20" fill="var(--color-texto)">' + label + '</text>';
-      ticks += '<circle cx="' + x + '" cy="' + midY + '" r="6" fill="' + c + '"/>';
+      if (e.label !== undefined) {
+        label = e.label;
+      } else {
+        if (e.n !== Math.floor(e.n)) label = label.replace('.', sep);
+        label = label.replace('-', '−');
+      }
+      var textFill = neg ? 'var(--numero-negativo)' : 'var(--color-texto)';
+      ticks += '<line x1="' + x + '" y1="' + (midY - tickH / 2) + '" x2="' + x + '" y2="' + (midY + tickH / 2) + '" stroke="' + c + '" stroke-width="4" stroke-linecap="round"/>';
+      ticks += '<text x="' + x + '" y="' + (midY + 52) + '" text-anchor="middle" font-size="30" font-weight="700" fill="' + textFill + '">' + label + '</text>';
+      ticks += '<circle cx="' + x + '" cy="' + midY + '" r="9" fill="' + c + '" stroke="var(--color-fondo)" stroke-width="3"/>';
     });
+
+    var axis =
+      '<line x1="' + (x0 - 12) + '" y1="' + midY + '" x2="' + (x1 + 12) + '" y2="' + midY + '" stroke="var(--color-texto)" stroke-width="4" stroke-linecap="round"/>' +
+      '<polygon points="' + (x1 + 12) + ',' + (midY - 9) + ' ' + (x1 + 26) + ',' + midY + ' ' + (x1 + 12) + ',' + (midY + 9) + '" fill="var(--color-texto)"/>' +
+      '<polygon points="' + (x0 - 12) + ',' + (midY - 9) + ' ' + (x0 - 26) + ',' + midY + ' ' + (x0 - 12) + ',' + (midY + 9) + '" fill="var(--color-texto)"/>';
 
     return '' +
       '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg">' +
-        '<line x1="' + x0 + '" y1="' + midY + '" x2="' + x1 + '" y2="' + midY + '" stroke="var(--color-texto)" stroke-width="2"/>' +
+        axis +
         ticks +
       '</svg>';
   }
@@ -197,6 +213,20 @@
     return '';
   }
 
+  /* Rellena una <ul> con una cadena de ejemplos o rasgos separados
+     por « · ». Cada trozo va en su propio <li>. */
+  function fillList(ul, raw) {
+    ul.innerHTML = '';
+    var parts = String(raw || '').split(/\s*·\s*/).filter(function (p) { return p.length > 0; });
+    parts.forEach(function (p) {
+      var li = document.createElement('li');
+      /* textContent evita cualquier escape problemático del
+         primer emoji de la cadena. */
+      li.textContent = p;
+      ul.appendChild(li);
+    });
+  }
+
   /* ---- Pintado del slide actual ---- */
   /* La misma card (slideTitle, slideEyebrow, slideVisual, slideReal)
      se rellena según el kind del slide:
@@ -235,19 +265,22 @@
       }
     }
 
-    /* Lista de vida real solo en kind: 'real'. La cadena viene como
-       una sola línea con « · » entre ejemplos; aquí se rompe. */
+    /* Características solo en el expo de un tipo (visual 'type…'),
+       debajo del dibujo. Las comparaciones y las cards de vida real
+       no las muestran. */
+    var traitsOn = s.kind === 'expo' && s.visual.indexOf('type') === 0;
+    slideTraitsEyebrow.classList.toggle('hidden', !traitsOn);
+    slideTraits.classList.toggle('hidden', !traitsOn);
+    slideTraits.innerHTML = '';
+    if (traitsOn) {
+      slideTraitsEyebrow.textContent = App.i18n.t('traitsEyebrow') || '';
+      fillList(slideTraits, App.i18n.t('slide' + s.id + 'Traits'));
+    }
+
+    /* Lista de vida real solo en kind: 'real'. */
     slideReal.innerHTML = '';
     if (s.kind === 'real') {
-      var raw = App.i18n.t('slide' + s.id + 'Real') || '';
-      var parts = raw.split(/\s*·\s*/).filter(function (p) { return p.length > 0; });
-      parts.forEach(function (p) {
-        var li = document.createElement('li');
-        /* textContent evita cualquier escape problemático del
-           primer emoji de la cadena. */
-        li.textContent = p;
-        slideReal.appendChild(li);
-      });
+      fillList(slideReal, App.i18n.t('slide' + s.id + 'Real'));
       slideReal.classList.remove('hidden');
     } else {
       slideReal.classList.add('hidden');

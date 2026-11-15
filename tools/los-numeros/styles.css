@@ -1,5 +1,16 @@
 /* Los Números — tool-specific styles. Shared styles live in assets/css/. */
 
+/* Color de los números negativos en la recta. Rojo oscuro sobre
+   fondo claro, rojo claro sobre fondo oscuro; ambos con contraste
+   alto. Las reglas siguen el mismo orden que tokens.css (claro,
+   sistema oscuro, data-theme dark y contrast). */
+:root { --numero-negativo: #A61B12; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --numero-negativo: #FF8A80; }
+}
+:root[data-theme="dark"] { --numero-negativo: #FF8A80; }
+:root[data-theme="contrast"] { --numero-negativo: #FF6B6B; }
+
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 .btn:not(.btn-secondary):not(.btn-audio) {

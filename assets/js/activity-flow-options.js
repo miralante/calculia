@@ -545,6 +545,8 @@
       } else {
         ctx.paintIntro();
         ctx.show('#screenIntro');
+        /* practiceFromStart: the activity's own game is already beside the explanation, not after the button. */
+        if (ctx.config.practiceFromStart && ctx.config.ownTest) ctx.config.ownTest(ctx);
       }
     },
 

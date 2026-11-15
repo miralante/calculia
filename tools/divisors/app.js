@@ -138,6 +138,7 @@
     extraScreens: ['#screenPractice'],
     pairedPractice: true,
     practiceOnRight: true,
+    practiceFromStart: true,
     ownTest: startPractice
   });
 })();

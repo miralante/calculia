@@ -16,6 +16,14 @@
     slideFraccionesReal: '🍕 1/2 pizza · 1/4 hour',
     slideDecimalesTitle: 'Decimals',
     slideDecimalesReal: '💰 $1.99 · 1.5 m · 3.14',
+
+    /* Characteristics of each type: shown on the exposition card,
+       under the drawing. Each trait is separated by « · ». */
+    slideNaturalesTraits: 'They are 0, 1, 2, 3… · Never negative · No decimals',
+    slideEnterosTraits: 'They can be negative: −3, −2, −1 · Zero is between the negative and the positive numbers · No decimals',
+    slideFraccionesTraits: 'They are a part of something divided into equal parts · Written with two numbers: 3/4 · The bottom number says how many parts it is divided into',
+    slideDecimalesTraits: 'They have a decimal point (.) · What comes after the point is less than 1 · Example: 2.5 = two and a half',
+    traitsEyebrow: 'Its characteristics:',
     slideVsEnterosTitle: 'Natural and Integers',
     slideVsDecimalesTitle: 'Natural and Decimals',
     title: 'Number Types',
