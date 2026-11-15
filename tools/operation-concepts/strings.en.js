@@ -85,8 +85,8 @@
       sub: {
         name: 'Subtract', symbolName: 'Subtract', detail: 'Take things away, or see how many are missing.',
         intro: {
-          1: { title: 'Subtracting is taking away', text: 'You had 5 biscuits and you eat 2. You have 3 left.' },
-          2: { title: 'Subtracting also shows how many are missing', text: 'You need 5 dollars and you have 3. You are missing 2 dollars.' }
+          1: { title: 'Subtracting is taking away', text: 'You had 5 dollars and you spend 2. You have 3 dollars left.' },
+          2: { title: 'Subtracting also shows how many are missing', text: 'You want to buy something that costs 5 dollars and you have 3 dollars. You are missing 2 dollars.' }
         },
         real: {
           1: 'You had 6 juice boxes and you drink 2: you have 4 left.',

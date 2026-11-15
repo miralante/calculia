@@ -819,11 +819,11 @@
     var boxes = box.querySelectorAll('.ops-deal-group');
     var dealt = box.querySelectorAll('.ops-deal-group .ops-deal-piece').length;
     boxes[dealt % boxes.length].appendChild(piece);
-    box.querySelector('[data-deal="reset"]').hidden = false;
-    /* Nothing left to deal: «Repartir» goes away, the result shows and only «Empezar de nuevo» remains. */
+    /* Nothing left to deal: «Repartir» goes away, the result shows and «Empezar de nuevo» appears. It stays hidden until then. */
     if (!box.querySelector('.ops-deal-pool .ops-deal-piece')) {
       box.querySelector('[data-deal="one"]').hidden = true;
       box.querySelector('.ops-deal-result').hidden = false;
+      box.querySelector('[data-deal="reset"]').hidden = false;
     }
   }
 
@@ -867,10 +867,10 @@
       ball.setAttribute('data-group', String(((number - 1) % PACK_COLOURS) + 1));
       empty.appendChild(ball);
     }
-    /* The reset keeps its place from the start (visibility, not hidden), so the buttons do not move while dealing. */
-    box.querySelector('[data-pack="reset"]').style.visibility = 'visible';
-    /* No full group is left: the balls that remain are the rest. They are outlined, and the result shows. */
+    /* No full group is left: the balls that remain are the rest. They are outlined, the result shows and «Empezar de nuevo»
+       appears. The reset keeps its place from the start (visibility, not hidden), so the buttons do not move. */
     if (left - size < size) {
+      box.querySelector('[data-pack="reset"]').style.visibility = 'visible';
       pool.querySelectorAll('.ops-deal-ball').forEach(function (ball) { ball.classList.add('ops-left'); });
       /* A single ball left over blinks and carries its «resto» label, so the leftover is not missed. */
       if (left - size === 1) {
@@ -918,7 +918,6 @@
     if (!slot || slot.classList.contains('is-ok')) return;
     var selected = box.querySelector('.ops-name-chip.is-selected');
     if (!selected) { msg.textContent = t('ui.namesPick'); return; }
-    box.querySelector('[data-names="reset"]').style.visibility = 'visible';
     if (selected.getAttribute('data-name') === slot.getAttribute('data-slot')) {
       slot.textContent = selected.textContent;
       slot.classList.add('is-ok');
@@ -927,6 +926,7 @@
       msg.textContent = t('ui.namesRight');
       if (!box.querySelector('.ops-name-slot:not(.is-ok)')) {
         box.querySelector('.ops-names-done').hidden = false;
+        box.querySelector('[data-names="reset"]').style.visibility = 'visible';
         msg.textContent = t('ui.namesDone');
       }
     } else {
@@ -991,7 +991,6 @@
       if (!empty) return;
       /* Only the hole fills: the items above stay where they are. */
       empty.outerHTML = fillItemHtml(mode, 'add', 'hole');
-      fbox.querySelector('[data-fill="reset"]').style.visibility = 'visible';
       var left = fbox.querySelectorAll('.ops-fill-empty').length;
       if (left > 0) {
         fbox.querySelector('.ops-fill-left').textContent = fill(t(mode === 'sub' ? 'ui.fillLeftSub' : 'ui.fillLeftAdd'), { m: left });
@@ -999,6 +998,7 @@
         fbox.querySelector('.ops-fill-left').hidden = true;
         fillBtn.hidden = true;
         fbox.querySelector('.ops-deal-result').hidden = false;
+        fbox.querySelector('[data-fill="reset"]').style.visibility = 'visible';
       }
       return;
     }

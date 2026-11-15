@@ -87,8 +87,8 @@
       sub: {
         name: 'Restar', symbolName: 'Restar', detail: 'Quitar cosas, o ver cuánto falta.',
         intro: {
-          1: { title: 'Restar es quitar', text: 'Tenías 5 galletas y te comes 2. Te quedan 3.' },
-          2: { title: 'Restar también es ver cuánto falta', text: 'Necesitas 5 euros y tienes 3. Te faltan 2 euros.' }
+          1: { title: 'Restar es quitar', text: 'Tenías 5 euros y te gastas 2. Te quedan 3 euros.' },
+          2: { title: 'Restar también es ver cuánto falta', text: 'Quieres comprar algo que cuesta 5 euros y tienes 3 euros. Te faltan 2 euros.' }
         },
         real: {
           1: 'Tenías 6 zumos y te bebes 2: te quedan 4.',
