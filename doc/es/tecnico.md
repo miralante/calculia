@@ -264,7 +264,7 @@ Las cuatro actividades de orden (`order-*`) usan el modo `options` a través
 de `App.numberSort.setup`, que delega en el motor: el nivel se muestra como
 etiqueta (`levelName`), la frase de transferencia aparece en la pantalla
 final (`transferKey`), y el nivel sube con las rondas hechas. `operation-concepts` cumple la regla de la pantalla
-final: un único botón, «Volver al inicio»; «Otra ronda» vive dentro del test.
+final: sin botón de salida (la salida es el «← Volver» de la cabecera); «Otra ronda» vive dentro del test.
 
 #### 2.2.3.1 Opciones del modo 'options': sin etapa de vida real, varios pasos
 
@@ -309,7 +309,7 @@ todavía no tiene motor compartido, la sección lo dice.
 | Progreso | `App.storage` bajo la clave de la actividad: `stars`, `completedRounds` y `roundsByActivity` para los menús | Esqueleto (ayudas en `App.activityGlue`) |
 | Ronda | `buildRound` devuelve los tipos de pregunta de la ronda, barajados. `makeQuestion(tipo)` devuelve `{ prompt, hint, options, explanation }`, con opciones `[{ html, aria, correct }]` (contrato en 2.2.1) | Actividad |
 | Retroalimentación | Acierto: una estrella y la explicación. Fallo: la pista, y la opción se apaga. Nunca se castiga. `App.feedback` para el tono y los bloqueos | Esqueleto |
-| Pantalla final | Un único botón principal, «Volver al inicio», a la portada. El resumen usa `ui.roundDone` o `endSummaryKey`. | Esqueleto (regla de pantalla final en `CLAUDE.md`) |
+| Pantalla final | Sin botón de salida: el «← Volver» de la cabecera sale de la actividad. El resumen usa `ui.roundDone` o `endSummaryKey`. | Esqueleto (regla de pantalla final en `CLAUDE.md`) |
 | Ayudas compartidas | `App.utils` (`fill`, `rint`, `pick`, `shuffle`, `numericOptions`, …). Las copias locales están prohibidas para los nombres de `scripts/check.js` | Núcleo |
 
 El contrato en todas las familias: sin temporizadores, sin vidas, sin
@@ -822,7 +822,7 @@ justificación canónica).
 
 | Módulo | Superficie | Requerido por |
 |---|---|---|
-| `utils.js` | `App.utils.shuffle / $ / $$ / reducedMotion / wakeLock / bindEndBackToStart` | cada página |
+| `utils.js` | `App.utils.shuffle / $ / $$ / reducedMotion / wakeLock` | cada página |
 | `i18n.js` | `App.i18n.{locale, setLocale, lang, register, t, pick, apply, SUPPORTED, DEFAULT_LOCALE, LABEL, FLAG}` | cada página |
 | `tts.js` | `App.tts.speak` | solo páginas que leen en voz alta (la mayoría) |
 | `storage.js` | `App.storage.{get, set, remove, progressWith}` | solo páginas que leen o escriben `localStorage` (`index.html`, `config/`) |

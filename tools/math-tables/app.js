@@ -432,6 +432,5 @@
      to the Calculia landing. The end screen is a closing card, not a
      second menu: picking another activity is a tap away on the home
      page, so it does not need its own button here. */
-  App.utils.bindEndBackToStart();
 
 })();

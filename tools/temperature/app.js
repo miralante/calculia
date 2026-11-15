@@ -353,6 +353,5 @@
   /* Start. */
   paintStars();
   startRound(levelFromProgress());
-  App.utils.bindEndBackToStart();
 
 })();

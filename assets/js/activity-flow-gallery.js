@@ -56,7 +56,6 @@
         '  <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>',
         '  <p id="endSummary"></p>'
       ].concat(notes, [
-        '  <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>',
         '</section>'
       ]).join('\n');
     },
@@ -70,10 +69,7 @@
       button.classList.toggle('hidden', !last);
     },
 
-    bind: function (ctx) {
-      $('#endBackToStart').addEventListener('click', function () {
-        location.href = ctx.config.backHref || '../../';
-      });
+    bind: function () {
     },
 
     /* The slides are the whole activity: their button finishes it. */

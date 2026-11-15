@@ -253,7 +253,7 @@ The four order activities (`order-*`) use the `options` mode through
 `App.numberSort.setup`, which delegates to the engine: the level is shown as
 a badge (`levelName`), the transfer sentence appears on the closing screen
 (`transferKey`), and the level rises with the rounds done. `operation-concepts` follows the closing-screen rule:
-one button, «Back to start»; «New round» lives inside the test.
+no exit button; «New round» lives inside the test, and the exit is the header «← Back».
 
 #### 2.2.3.1 Options of the 'options' mode: no real-life stage, several steps
 
@@ -295,7 +295,7 @@ not yet shared by an engine, the section says so.
 | Progress | `App.storage` under the activity's key: `stars`, `completedRounds`, and `roundsByActivity` for menus | Skeleton (helpers in `App.activityGlue`) |
 | Round | `buildRound` returns the question types of a round, shuffled. `makeQuestion(type)` returns `{ prompt, hint, options, explanation }`, with options `[{ html, aria, correct }]` (contract in 2.2.1) | Activity |
 | Feedback | Right answer: a star and the explanation. Wrong answer: the hint, and the option stays off. Nothing is punished. `App.feedback` for the tone and the locks | Skeleton |
-| Closing screen | One primary button, «Back to start», to the landing. The summary uses `ui.roundDone` or `endSummaryKey`. | Skeleton (see the closing-screen rule in `CLAUDE.md`) |
+| Closing screen | No exit button: the header «← Back» leaves the activity. The summary uses `ui.roundDone` or `endSummaryKey`. | Skeleton (see the closing-screen rule in `CLAUDE.md`) |
 | Shared helpers | `App.utils` (`fill`, `rint`, `pick`, `shuffle`, `numericOptions`, …). Local copies are forbidden for the names listed in `scripts/check.js` | Core |
 
 The contract in every family: no timers, no lives, no negative score, and
@@ -408,7 +408,7 @@ without slides):
 - **Check**: `check(item, action)` returns `{ correct, hint, explanation }`.
   Right: a star and a short praise. Wrong: the hint, and a retry.
 - **Reinforce**: `reinforce: true` replays the misses until all are right.
-- **Close**: the closing screen with one button, as in family A.
+- **Close**: the closing screen with no exit button, as in family A.
 - **Not allowed**: timers, lives, negative score, «game over».
 
 One activity needs more than this contract, and stays outside it until the
@@ -794,7 +794,7 @@ in §2.1 above are the canonical rationale).
 
 | Module | Surface | Required by |
 |---|---|---|
-| `utils.js` | `App.utils.shuffle / $ / $$ / reducedMotion / wakeLock / bindEndBackToStart` | every page |
+| `utils.js` | `App.utils.shuffle / $ / $$ / reducedMotion / wakeLock` | every page |
 | `i18n.js` | `App.i18n.{locale, setLocale, lang, register, t, pick, apply, SUPPORTED, DEFAULT_LOCALE, LABEL, FLAG}` | every page |
 | `tts.js` | `App.tts.speak` | only pages that read aloud (most do) |
 | `storage.js` | `App.storage.{get, set, remove, progressWith}` | only pages that read or write `localStorage` (`index.html`, `config/`) |

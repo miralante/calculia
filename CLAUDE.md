@@ -359,40 +359,24 @@ Implementation invariants (sheet mode):
   so DOM access uses `querySelectorAll('.test-sheet-card')`
   rather than `.children`. Don't reintroduce the property name.
 
-## End screen: only "Volver al inicio" (2026-10-14)
+## End screen: no home button (2026-11-15)
 
-Across all 30 activities of the suite, the round-complete screen
-(`<section id="screenEnd">` in most, `screenFinish` in
-`math-tables` / `quantities` / `head-math`, `screenParityFinish`
-in `parity`) carries exactly **one** button: a primary
-`#endBackToStart` whose label comes from the per-activity
-`btnMenu` string ("Volver al inicio"). The click navigates to
-`../../` (the Calculia landing). No "Jugar otra vez", no "Otra
-actividad", no "Volver al menú" — picking another activity is
-one tap on the landing page, and the end screen is a closing
-card, not a second menu.
+The round-complete screen (`<section id="screenEnd">` in most,
+`screenFinish` in `math-tables` / `quantities` / `head-math`,
+`screenParityFinish` in `parity`) carries **no** button to leave the
+activity. The header's "← Volver" (`.back-link`) is the only exit: it
+returns to the screen the child came from, and to the landing when there
+is none (see `suite-chrome.js` in the suite's shared blocks).
 
-The reason: in user testing the four-button end screen pulled
-the child's eye away from the next step (the landing, where
-the activity choice lives) and onto a "stay inside this
-activity" choice that did not need to exist. One button, top
-of the card, big. The end-screen section must not add a second
-`<button>` to compete with it; if the activity really needs a
-replay path, the right place is a small "Otra ronda" inside
-the test, not a "Jugar otra vez" on the close.
+The end screen shows the summary and, when the round leads to another
+step, the `#endNextStep` button ("Siguiente paso"). Nothing else competes
+with the next step or with the header back link.
 
-The wire is shared: `App.utils.bindEndBackToStart()` in
-`assets/js/utils.js` binds the button, and each activity's `app.js`
-calls it once, near the other addEventListener calls:
-
-```js
-App.utils.bindEndBackToStart();
-```
-
-The helper does nothing when the button is missing. A sheet-mode
-activity never reaches the end screen (it has "Otra ronda" inline
-instead); the activities that use the one-question-per-slide test have
-the button in the DOM.
+This replaces the earlier rule (2026-10-14) of one primary
+"Volver al inicio" button: the header link now covers that exit, so the
+end-screen copy is removed. `App.utils.bindEndBackToStart()` and the
+`#endBackToStart` button are gone from every activity; do not reintroduce
+them.
 
 ## Public-facing wording: "usuario/a tipo" euphemism
 

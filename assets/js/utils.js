@@ -201,13 +201,6 @@
     });
   }
 
-  /* The end screen's only button, "Volver al inicio": goes back to the Calculia
-     landing. Does nothing on pages without the button. */
-  function bindEndBackToStart() {
-    var el = $('#endBackToStart');
-    if (el) el.addEventListener('click', function () { location.href = '../../'; });
-  }
-
   /* The explanation carousel of the hand-built pages: the ← and → buttons move back and forward,
      and a click (or Enter or Space) on the card moves forward. `step(delta)` moves the index and
      paints the card. Each activity keeps its own paint; this is the wiring every one of them had. */
@@ -233,7 +226,6 @@
   window.App.utils = {
     shuffle: shuffle,
     drawRound: drawRound,
-    bindEndBackToStart: bindEndBackToStart,
     bindCarousel: bindCarousel,
     wrapIndex: wrapIndex,
     drawRoundReset: drawRoundReset,

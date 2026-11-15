@@ -134,7 +134,6 @@
     });
     html.push(
       '  <button type="button" class="btn hidden" id="endNextStep" data-i18n="ui.nextStep">Siguiente paso →</button>',
-      '  <button type="button" class="btn" id="endBackToStart" data-i18n="btnMenu">Volver al inicio</button>',
       '</section>'
     );
     return html.join('\n');
@@ -469,10 +468,9 @@
       progress.roundsByActivity[ctx.current.id] = (progress.roundsByActivity[ctx.current.id] || 0) + 1;
     }
     ctx.save();
-    /* With a next step in the chain, the closing screen leads to it; otherwise back to the start. */
+    /* With a next step in the chain, the closing screen leads to it. */
     var more = hasNextStep(ctx);
     $('#endNextStep').classList.toggle('hidden', !more);
-    $('#endBackToStart').classList.toggle('hidden', more);
     /* A round's own summary counts every right answer, the replays included; the default counts the first tries. */
     $('#endSummary').textContent = fill(t(ctx.config.endSummaryKey || 'ui.roundDone'), {
       n: ctx.config.endSummaryKey ? s.solved : s.roundRight, total: s.round.length, stars: progress.stars,
@@ -528,9 +526,6 @@
       }
       $('#btnNext').addEventListener('click', function () { nextQuestion(ctx); });
       $('#endNextStep').addEventListener('click', function () { nextStep(ctx); });
-      $('#endBackToStart').addEventListener('click', function () {
-        location.href = config.backHref || '../../';
-      });
     },
 
     init: function (ctx) {

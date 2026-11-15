@@ -243,7 +243,6 @@
         current += 1;
         render();
       });
-      $('#endBackToStart').addEventListener('click', function () { location.href = '../../'; });
 
       App.i18n.apply();
       paintStars();
