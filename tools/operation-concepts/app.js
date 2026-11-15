@@ -291,7 +291,7 @@
       : '<span class="ops-item ops-apple" aria-hidden="true">' + icon + '</span>';
   }
   /* The fill game: `need` places, `have` of them filled. Above: the group already there, a plus, and the items to
-     bring in. Below: the places. «Añadir» moves one item from above into the next empty place, so it is seen filling it. */
+     bring in. Below: the places. «Añadir» fills the next empty place with one of the items above; the items above stay. */
   function fillFrameInner(need, have, mode) {
     var sub = mode === 'sub';
     var group = function (count, kind) {
@@ -911,14 +911,12 @@
         fbox.innerHTML = fillFrameInner(need, have, mode);
         return;
       }
-      var from = fbox.querySelector('.ops-fill-from');
       var empty = fbox.querySelector('.ops-fill-empty');
-      var incoming = from.querySelector('.ops-apple, .ops-coin');
-      if (!empty || !incoming) return;
-      incoming.remove();
+      if (!empty) return;
+      /* Only the hole fills: the items above stay where they are. */
       empty.outerHTML = fillItemHtml(mode, 'add', 'hole');
       fbox.querySelector('[data-fill="reset"]').style.visibility = 'visible';
-      var left = from.querySelectorAll('.ops-apple, .ops-coin').length;
+      var left = fbox.querySelectorAll('.ops-fill-empty').length;
       if (left > 0) {
         fbox.querySelector('.ops-fill-left').textContent = fill(t(mode === 'sub' ? 'ui.fillLeftSub' : 'ui.fillLeftAdd'), { m: left });
       } else {
