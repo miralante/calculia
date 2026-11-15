@@ -1,111 +1,154 @@
 /* ==========================================================================
    Calculia — Primo o compuesto: styles
-   The arrays of dots reuse the drawing styles of Operaciones (.ops-*).
-   The numbers 1 … 20 are chips: a primes has a thick border, the 1 a dashed one.
+   The dots are drawn as spans (rows and columns) and the circle of dots as
+   SVG. A right tap in the grid is a thick border with a tick, a wrong one a
+   dashed border with a cross, so colour is never the only signal (WCAG 1.4.1).
    ========================================================================== */
 
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
-/* The numbers 1 … max, in a wrapping grid of chips. */
-.pc-numbers { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-.pc-num {
-  display: inline-flex;
+/* ---- Captions of the slides and of the test ---- */
+.gallery-card,
+.real-card {
   align-items: center;
+  border-color: var(--mod-razonamiento-suave);
+}
+.concept-title {
+  min-height: 2em;
+  max-width: 560px;
+  color: var(--mod-razonamiento);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+.concept-text {
+  min-height: 3em;
+  max-width: 560px;
+  color: var(--color-texto-suave);
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* ---- Dots: rows of dots, the leftover apart ---- */
+.pc-figure { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.pc-array { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pc-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.pc-dot {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--mod-razonamiento);
+}
+/* The dots that do not fit in the rows: an empty ring, drawn apart. */
+.pc-left {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
-  border: 1px solid var(--color-texto-suave);
+  gap: 6px;
+  padding: 6px 10px;
+  border: 2px dashed var(--color-texto-suave);
   border-radius: var(--radio);
-  font-size: var(--texto-grande);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
 }
-/* A prime: a thick border, so the shape tells it apart without colour. */
-.pc-prime { border: 4px solid var(--mod-razonamiento); background: var(--mod-razonamiento-suave); }
-/* The 1: neither prime nor composite, so a dashed border. */
-.pc-one { border: 2px dashed var(--color-texto-suave); }
+.pc-dot-left { background: transparent; border: 2px solid var(--color-texto-suave); }
 
-.op-sym { font-size: 40px; font-weight: 800; line-height: 1; }
-.ops-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
-.ops-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
-.ops-group-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-/* Two arrangements of the same total side by side; they wrap to one column on a narrow screen. */
-.ops-compare { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; }
-.ops-compare-side { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-/* The number on an item, in a small pill over its lower edge. */
-.ops-num { position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); padding: 0 4px; border-radius: 999px; background: var(--color-superficie); color: var(--color-texto); font-size: var(--texto-pequeno); font-weight: 900; line-height: 1.3; }
-/* An empty group to be filled in: a dashed frame with room for the items. */
-.ops-empty-box { min-width: 150px; min-height: 52px; border-style: dashed; }
-
-/* A total, a down arrow and the groups it is divided into, one above the other at any width. */
-.ops-divide { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-/* One group that repeats: a frame around its items, so the group reads as one unit. */
-.ops-group-box { display: flex; justify-content: center; padding: 6px 12px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
-.ops-item {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 42px;
-  min-height: 42px;
-  font-size: 36px;
-  line-height: 1;
-}
-/* A second group of the same object, tinted a little, so the groups read apart (real-life examples). */
-.ops-alt { filter: hue-rotate(-25deg); }
-/* An empty place: a dashed outline, so it reads as «falta». */
-.ops-empty { border: 2px dashed var(--color-texto-suave); border-radius: var(--radio); background: transparent; }
-/* A crossed-out item (taken away): dimmed, with a heavy cross on top. */
-.ops-cross { opacity: 0.4; }
-.ops-cross::after {
-  content: '✕';
-  position: absolute;
-  inset: 0;
+/* ---- The circle of dots (no rows yet) and the rows the learner makes ---- */
+.pc-ring { width: 180px; height: 180px; }
+.pc-svg-dot { fill: var(--mod-razonamiento); }
+.pc-test-visual .pc-ring { width: 170px; height: 170px; }
+.pc-test { display: flex; justify-content: center; }
+.pc-stage {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
-  font-weight: 900;
-  color: var(--color-texto);
-  text-shadow: 0 0 3px var(--color-superficie), 0 0 3px var(--color-superficie);
+  min-height: 170px;
+  width: 100%;
 }
-/* What is left over after the full groups (division with remainder). */
-.ops-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; border-radius: 50%; }
-.ops-left-row { padding-top: 4px; border-top: 2px dotted var(--color-texto-suave); }
-.ops-sign { font-size: var(--texto-grande); font-weight: 800; color: var(--color-texto-suave); }
-.ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
-.ops-story { margin: 0; font-size: var(--texto-grande); text-align: center; line-height: 1.4; }
-
-/* One slice of a pizza: the inline SVG from app.js, at a size that reads on a phone. */
-.ops-slice { display: inline-block; width: 40px; height: 40px; }
-
-/* The deal drawing: a pool of pieces, the groups to fill, and the buttons under them. */
-.ops-deal { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.ops-deal-pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; min-height: 44px; }
-.ops-deal-groups { justify-content: center; gap: 12px; }
-.ops-deal-group { min-width: 96px; min-height: 64px; flex-wrap: wrap; align-content: flex-start; gap: 4px; }
-.ops-deal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-.ops-deal-piece { display: inline-flex; }
-.ops-deal-result { margin-top: 4px; }
-.ops-deal-result[hidden] { display: none; }
-
-/* A coin for money drawings: the currency sign of the locale (€ or $) on a round gold coin. */
-.ops-coin {
-  display: inline-flex;
+.pc-rows {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 2px solid #b8860b;
-  background: radial-gradient(circle at 35% 35%, #ffe38a, #d4a017);
-  color: #5c4300;
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1;
+  gap: 12px;
+  width: 100%;
+}
+.pc-question,
+.pc-msg { margin: 0; text-align: center; }
+.pc-question { font-weight: 700; }
+.pc-msg { min-height: 2.6em; font-size: 1.1rem; font-weight: 700; }
+.pc-picks { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.pc-rows-btn { min-width: 48px; min-height: 48px; }
+.pc-rows-btn.is-selected {
+  background: var(--mod-razonamiento);
+  color: var(--texto-sobre-acento);
+  border-color: var(--mod-razonamiento);
 }
 
-/* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
-.suite-chrome-activity .activity-icon { width: 48px; height: 48px; flex: none; }
+/* ---- The grid of numbers 1 … 20: the learner taps the ones of one kind ---- */
+.pc-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.pc-count { margin: 0; font-weight: 700; }
+.pc-cells {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 480px;
+}
+.pc-cell {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border: 2px solid var(--color-texto-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: 1.2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.pc-cell:focus-visible { outline: 3px solid var(--color-foco); outline-offset: 2px; }
+.pc-cell.is-ok {
+  border: 4px solid var(--color-acierto);
+  background: var(--color-acierto-suave);
+}
+.pc-cell.is-ok::after,
+.pc-cell.is-no::after {
+  position: absolute;
+  top: -10px;
+  right: -8px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+.pc-cell.is-ok::after { content: '✓'; }
+.pc-cell.is-no { border: 2px dashed var(--color-animo); }
+.pc-cell.is-no::after { content: '✕'; }
 
-/* Test answers */
+/* ---- Several arrangements side by side (2 × 2, 2 × 3, …) ---- */
+.pc-compare { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; }
+.pc-compare-side { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.pc-expr {
+  margin: 0;
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  color: var(--mod-razonamiento);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* ---- The answers of the test ---- */
+.answer-name { display: block; }
+.answer-num {
+  display: block;
+  font-size: 2.2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}

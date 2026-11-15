@@ -1,24 +1,30 @@
 /* ============================================================
    Calculia — Primo o compuesto — datos
-   Explanation: one slide per idea. Each slide has a drawing (`visual`):
-   `array` (dots in rows, written as a product), `arrays` (several of
-   them side by side) or `sieve` (the numbers 1 … max, primes with a
-   thick border). The texts are in strings.<locale>.js (intro.<n>.title
-   and intro.<n>.text).
-   Test: each round mixes the `questions` types, `perRound` questions.
+   The explanation goes composites first, then primes. Each slide in
+   `concepts` has a drawing (`kind`):
+     rows    a number of dots the user arranges in rows (n)
+     arrays  several arrangements side by side (list of [rows, cols])
+     grid    the numbers 1 … max; the user taps the ones of `mode`
+             ('composite' or 'prime')
+     one     the 1, a single dot
+   The texts are in strings.<locale>.js (concept.<id>.title and .text).
+   The taps are handled in app.js.
+
+   The test: each round mixes the `questions` types, `perRound` questions.
    `primes` and `composites` are the numbers the test asks about.
    ============================================================ */
 var DATA = {
   perRound: 6,
   questions: ['yesno', 'pick', 'divisors'],
 
-  intro: [
-    { visual: { kind: 'array', rows: 1, cols: 7 } },
-    { visual: { kind: 'array', rows: 2, cols: 3 } },
-    { visual: { kind: 'sieve', max: 20 } },
-    { visual: { kind: 'array', rows: 1, cols: 1 } },
-    { visual: { kind: 'arrays', list: [[2, 2], [2, 3], [2, 4], [3, 3]] } },
-    { visual: { kind: 'array', rows: 3, cols: 5 } }
+  concepts: [
+    { id: 'composite', kind: 'rows', n: 6 },
+    { id: 'compositeMult', kind: 'arrays', list: [[2, 2], [2, 3], [2, 4], [3, 3]] },
+    { id: 'compositeOther', kind: 'rows', n: 15 },
+    { id: 'compositeGrid', kind: 'grid', mode: 'composite', max: 20 },
+    { id: 'prime', kind: 'rows', n: 7 },
+    { id: 'one', kind: 'one' },
+    { id: 'primeGrid', kind: 'grid', mode: 'prime', max: 20 }
   ],
 
   primes: [2, 3, 5, 7, 11, 13, 17, 19, 23, 29],

@@ -1,45 +1,43 @@
 /* ============================================================
    Calculia — Primos y compuestos — datos
-   Formato:
-   - DATA.concepts y DATA.real: las diapositivas de concepto y los
-     ejemplos de la vida real, en orden. Cada uno corresponde a una
-     clave de `concept.*` o `real.*` en strings.<locale>.js.
-   - DATA.numbers: números que se preguntan si son primos, compuestos
-     o ninguna de las dos cosas (el 1).
-   - DATA.pickSets: cuatro números, uno primo y tres compuestos. El
-     primo nunca va solo en el dibujo: app.js comprueba al arrancar
-     que cada conjunto tiene exactamente un primo.
-   - DATA.factorNumbers: compuestos cuya descomposición en primos se
-     pregunta. Los primos no entran: su descomposición es el propio
-     número.
-   Los textos NO están aquí: viven en strings.<locale>.js.
+   The explanation goes composites first, then primes. Each slide in
+   `concepts` has a drawing (`kind`):
+     rows    a number of dots the user arranges in rows (n)
+     arrays  several arrangements side by side (list of [rows, cols])
+     tree    the factor tree of 12
+     grid    the numbers 1 … max; the user taps the ones of `mode`
+             ('composite' or 'prime')
+     one     the 1, a single dot
+   The texts are in strings.<locale>.js (concept.<id>.title and .text).
+   The taps are handled in app.js.
+
+   `real` are the everyday examples. `classifyNumbers` are the numbers
+   the test asks about (prime, composite or neither); `pickSets` have one
+   prime and three composites; `factorNumbers` are composites whose
+   prime factors are asked for.
    ============================================================ */
 var DATA = {
   perRound: 6,
 
-  /* Las diapositivas de conceptos, en orden. Las que llevan `numbers`
-     dibujan esos números en cuadrícula; los primos llevan anillo. */
   concepts: [
-    { id: 'divide' },
-    { id: 'prime' },
-    { id: 'upto10', numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-    { id: 'composite' },
-    { id: 'notPrime', numbers: [4, 6, 8, 9, 10] },
-    { id: 'one' },
-    { id: 'factors' }
+    { id: 'composite', kind: 'rows', n: 6 },
+    { id: 'compositeMult', kind: 'arrays', list: [[2, 2], [2, 3], [2, 4], [3, 3]] },
+    { id: 'factorTree', kind: 'tree' },
+    { id: 'compositeGrid', kind: 'grid', mode: 'composite', max: 20 },
+    { id: 'prime', kind: 'rows', n: 7 },
+    { id: 'one', kind: 'one' },
+    { id: 'primeGrid', kind: 'grid', mode: 'prime', max: 20 }
   ],
 
-  /* Ejemplos de la vida real. `object` es el dibujo y `count` cuántos se ven:
-     7 caramelos, 12 baldosas, y un reloj (un solo dibujo grande). */
+  /* Ejemplos de la vida real. `object` es el dibujo y `count` cuántos se ven. */
   real: [
     { id: 'candies', object: '🍬', count: 7 },
     { id: 'tiles', object: '🧱', count: 12 },
     { id: 'clock', object: '⏰', count: 1 }
   ],
 
-  numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-    19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 32, 33, 35, 36, 39, 42,
-    45, 48, 49, 50, 51, 60],
+  classifyNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
 
   pickSets: [
     { prime: 2, others: [9, 15, 21] },
