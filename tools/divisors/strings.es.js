@@ -26,7 +26,7 @@
       4: { title: 'Ejemplo: divide el 8 entre 1, 2, 3…', text: 'Si la división sale exacta, es divisor. Si sobra, no lo es.' }
     },
 
-    /* La práctica: un juego a la izquierda de la explicación. */
+    /* La práctica: un juego a la derecha de la explicación. */
     practice: {
       start: 'Número de partida',
       pick: 'Elige otro número del 1 al 9.',

@@ -8,8 +8,8 @@
 var DATA = {
   activities: [
     { slug: 'multiples', picto: '🔢', name: 'group.multiples.name', detail: 'group.multiples.detail' },
-    { slug: 'divisibility-test', picto: '✅', name: 'group.divisibility.name', detail: 'group.divisibility.detail' },
     { slug: 'divisors', picto: '➗', name: 'group.divisors.name', detail: 'group.divisors.detail' },
+    { slug: 'divisibility-test', picto: '✅', name: 'group.divisibility.name', detail: 'group.divisibility.detail' },
     { slug: 'prime-composite', picto: '🔎', name: 'group.primes.name', detail: 'group.primes.detail' },
     { slug: 'factorization', picto: '🌳', name: 'group.factor.name', detail: 'group.factor.detail' },
     { slug: 'common-divisor', picto: '🔗', name: 'group.divisor.name', detail: 'group.divisor.detail' },

@@ -371,9 +371,12 @@
       var pair = document.createElement('div');
       pair.className = 'flow-pair';
       $('#activity').insertBefore(pair, $('#screenIntro'));
-      /* pairedPractice: the game goes first, so it sits on the left and the explanation on the right. */
-      if (config.pairedPractice && $('#screenPractice')) pair.appendChild($('#screenPractice'));
+      /* pairedPractice: the game sits beside the explanation. By default the game goes first (on the left);
+         practiceOnRight puts the explanation on the left and the game on its right. */
+      var practice = config.pairedPractice ? $('#screenPractice') : null;
+      if (practice && !config.practiceOnRight) pair.appendChild(practice);
       pair.appendChild($('#screenIntro'));
+      if (practice && config.practiceOnRight) pair.appendChild(practice);
       if (config.introFrameHtml) {
         var introFrame = document.createElement('div');
         introFrame.id = 'introFrame';

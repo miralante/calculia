@@ -23,13 +23,13 @@
 
     /* La explicación: una idea por diapositiva. El dibujo está en data.js. */
     intro: {
-      1: { title: 'El múltiplo sale al multiplicar', text: 'El múltiplo de un número sale al multiplicarlo por otro. 3 × 4 = 12. Por eso 12 es múltiplo de 3 y también de 4.' },
+      1: { title: 'El múltiplo sale al multiplicar', text: 'Elige un número y multiplícalo por otro: así obtienes un múltiplo. 3 × 4 = 12. Por eso 12 es múltiplo de 3 y también de 4.' },
       2: { title: 'Multiplica el 5 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado es un múltiplo de 5.' },
       3: { title: 'Ejemplo: multiplica el 2 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado es un múltiplo de 2.' },
       4: { title: 'Ejemplo: multiplica el 3 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado es un múltiplo de 3.' }
     },
 
-    /* La práctica: un juego a la izquierda de la explicación. */
+    /* La práctica: un juego a la derecha de la explicación. */
     practice: {
       start: 'Número de partida',
       pick: 'Elige otro número del 1 al 9.',

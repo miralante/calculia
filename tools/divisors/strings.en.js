@@ -26,7 +26,7 @@
       4: { title: 'Example: divide 8 by 1, 2, 3…', text: 'If the division comes out exact, it is a divisor. If something is left over, it is not.' }
     },
 
-    /* The practice: a game on the left of the explanation. */
+    /* The practice: a game on the right of the explanation. */
     practice: {
       start: 'Starting number',
       pick: 'Choose another number from 1 to 9.',

@@ -1,7 +1,7 @@
 /* ============================================================
    Calculia — Divisores
-   Two stages side by side: the game on the left and the explanation on
-   the right (config.pairedPractice). The game draws a starting number from
+   Two stages side by side: the explanation on the left and the game on
+   the right (config.pairedPractice with config.practiceOnRight). The game draws a starting number from
    1 to 9; the user picks another number from 1 to 9; the product is shown,
    and why both numbers are divisors of it. The stages and the screens are
    built by assets/js/activity-flow.js (mode 'options', skipReal); this file
@@ -49,7 +49,7 @@
     return divideHtml(spec.each, spec.count);
   }
 
-  /* ---- Practice: a game, on the left of the explanation -------------------
+  /* ---- Practice: a game, on the right of the explanation -------------------
      A starting number is drawn at random from DATA.numbers (1 to 9). The user
      picks another number from the same list; the product is shown, and why
      both numbers divide it exactly. The first answer for each starting number
@@ -137,6 +137,7 @@
     extraMarkup: PRACTICE_HTML,
     extraScreens: ['#screenPractice'],
     pairedPractice: true,
+    practiceOnRight: true,
     ownTest: startPractice
   });
 })();
