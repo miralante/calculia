@@ -161,6 +161,22 @@
 .ops-deal-ball { width: 64px; height: 64px; margin-bottom: 0; justify-content: center; align-items: center; border-radius: 50%; background: var(--mod-razonamiento); color: var(--texto-sobre-acento); font-size: var(--texto-grande); font-weight: 800; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15); }
 .ops-deal-ball b { font-weight: 800; }
 .ops-deal-piece .ops-slice { width: 64px; height: 64px; }
+/* The grouping game: each group's balls take one colour (data-group 1…4). The number stays on the ball, so the colour
+   is never the only way to read the group. White text on each colour keeps at least 4.5:1 contrast. */
+.ops-pack .ops-deal-ball[data-group="1"] { background: #b42318; color: #fff; }
+.ops-pack .ops-deal-ball[data-group="2"] { background: #1d4ed8; color: #fff; }
+.ops-pack .ops-deal-ball[data-group="3"] { background: #047857; color: #fff; }
+.ops-pack .ops-deal-ball[data-group="4"] { background: #7c4a03; color: #fff; }
+/* The single ball left over after the last group blinks, and its «resto» label sits beside it. */
+.ops-blink { animation: ops-blink 0.8s ease-in-out 3; }
+.ops-rest-tag { color: var(--color-texto); }
+@keyframes ops-blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(1.12); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ops-blink { animation: none; }
+}
 
 /* A numbered drawing: room under each row for the number on its lower edge. */
 .ops-numbered .ops-row { padding-bottom: 10px; }
@@ -219,3 +235,7 @@
 .fac-slot-count { font-size: var(--texto-grande); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
 .fac-box { display: inline-block; width: 52px; height: 52px; border: 2px dashed var(--color-texto-suave); border-radius: var(--radio); }
 .fac-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+/* The calculator's answer under the grouping drawing: the whole part is marked, the rest reads as the decimal part. */
+.ops-calc { margin-top: 4px; }
+.ops-int { color: var(--mod-razonamiento); font-weight: 900; }
+.ops-calc-parts { margin: 0; }

@@ -91,6 +91,8 @@
   }
   /* The balls of a numbered division drawing: one colour per package, in order. */
   var PACKAGE_BALLS = ['🔴', '🔵', '🟢', '🟡'];
+  /* The grouping game's balls: one of these colours per group (data-group 1…4, then the colours repeat). */
+  var PACK_COLOURS = 4;
   /* `groups` framed boxes of `each` items: each box is one group that repeats. */
   function groupsHtml(groups, each, icon, sumText, alt, numbered) {
     var html = '<div class="ops-group-stack">';
@@ -760,7 +762,11 @@
     var dealt = box.querySelectorAll('.ops-deal-group .ops-deal-piece').length;
     boxes[dealt % boxes.length].appendChild(piece);
     box.querySelector('[data-deal="reset"]').hidden = false;
-    if (!box.querySelector('.ops-deal-pool .ops-deal-piece')) box.querySelector('.ops-deal-result').hidden = false;
+    /* Nothing left to deal: «Repartir» goes away, the result shows and only «Empezar de nuevo» remains. */
+    if (!box.querySelector('.ops-deal-pool .ops-deal-piece')) {
+      box.querySelector('[data-deal="one"]').hidden = true;
+      box.querySelector('.ops-deal-result').hidden = false;
+    }
   }
 
   /* A tap on a piece in the pool also deals it. «Repartir» is the main way. */
@@ -792,17 +798,28 @@
     var size = parseInt(box.getAttribute('data-size'), 10);
     var pool = box.querySelector('.ops-pack-pool');
     var left = pool.querySelectorAll('.ops-deal-ball').length;
-    var empty = null;
-    box.querySelectorAll('.ops-deal-group').forEach(function (group) {
-      if (!empty && !group.querySelector('.ops-deal-ball')) empty = group;
+    var empty = null, number = 0;
+    box.querySelectorAll('.ops-deal-group').forEach(function (group, index) {
+      if (!empty && !group.querySelector('.ops-deal-ball')) { empty = group; number = index + 1; }
     });
     if (!empty || left < size) return;
-    for (var k = 0; k < size; k += 1) empty.appendChild(pool.querySelector('.ops-deal-ball'));
+    /* Each group takes its own colour, so the balls of one group read apart from the next group's. */
+    for (var k = 0; k < size; k += 1) {
+      var ball = pool.querySelector('.ops-deal-ball');
+      ball.setAttribute('data-group', String(((number - 1) % PACK_COLOURS) + 1));
+      empty.appendChild(ball);
+    }
     /* The reset keeps its place from the start (visibility, not hidden), so the buttons do not move while dealing. */
     box.querySelector('[data-pack="reset"]').style.visibility = 'visible';
     /* No full group is left: the balls that remain are the rest. They are outlined, and the result shows. */
     if (left - size < size) {
       pool.querySelectorAll('.ops-deal-ball').forEach(function (ball) { ball.classList.add('ops-left'); });
+      /* A single ball left over blinks and carries its «resto» label, so the leftover is not missed. */
+      if (left - size === 1) {
+        var lone = pool.querySelector('.ops-deal-ball');
+        lone.classList.add('ops-blink');
+        lone.insertAdjacentHTML('afterend', '<span class="ops-tag ops-rest-tag">' + fill(t('ui.remainder'), { r: 1 }) + '</span>');
+      }
       box.querySelector('[data-pack="one"]').hidden = true;
       box.querySelector('.ops-deal-result').hidden = false;
     }
