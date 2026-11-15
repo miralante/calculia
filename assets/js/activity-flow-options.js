@@ -86,7 +86,7 @@
     html.push(
       '  <p class="round-header hidden" id="chainBanner" aria-live="polite"></p>',
       '  <p class="difficulty hidden" id="difficulty"></p>',
-      '  <div class="progress-bar">',
+      '  <div class="progress-bar" data-suite-progress>',
       '    <div class="progress-fill" id="progressFill"></div>',
       '    <span class="progress-text" id="progressText">0 / 0</span>',
       '  </div>',

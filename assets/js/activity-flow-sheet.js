@@ -44,7 +44,7 @@
   function sheetHtml(config) {
     var html = [
       '<section id="screenGame" class="hidden stack">',
-      '  <div class="progress-bar">',
+      '  <div class="progress-bar" data-suite-progress>',
       '    <div class="progress-fill" id="progressFill"></div>',
       '    <span class="progress-text" id="progressText">0 / 0</span>' +
         (config.levelName ? '<span class="difficulty" id="difficulty"></span>' : ''),
