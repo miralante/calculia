@@ -1,95 +1,75 @@
 /* ==========================================================================
    Calculia — Divisibilidad: styles
-   The drawings are rows of small icons, the same drawing styles as the
-   division slides of Operaciones (.ops-*). Leftover items read apart.
+   The practice frames on the right of each explanation: balls shared in
+   groups, numbers to tap, digits to add. Texts and buttons come from app.js.
    ========================================================================== */
 
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
-.op-sym { font-size: 40px; font-weight: 800; line-height: 1; }
-.ops-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
-.ops-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
-.ops-group-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-/* Two arrangements of the same total side by side; they wrap to one column on a narrow screen. */
-.ops-compare { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; }
-.ops-compare-side { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-/* The number on an item, in a small pill over its lower edge. */
-.ops-num { position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); padding: 0 4px; border-radius: 999px; background: var(--color-superficie); color: var(--color-texto); font-size: var(--texto-pequeno); font-weight: 900; line-height: 1.3; }
-/* An empty group to be filled in: a dashed frame with room for the items. */
-.ops-empty-box { min-width: 150px; min-height: 52px; border-style: dashed; }
+/* The explanation has no drawing of its own: the frame on the right does the showing. */
+#introVisual:empty { display: none; }
 
-/* A total, a down arrow and the groups it is divided into, one above the other at any width. */
-.ops-divide { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-/* One group that repeats: a frame around its items, so the group reads as one unit. */
-.ops-group-box { display: flex; justify-content: center; padding: 6px 12px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
-.ops-item {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 42px;
-  min-height: 42px;
-  font-size: 36px;
-  line-height: 1;
-}
-/* A second group of the same object, tinted a little, so the groups read apart (real-life examples). */
-.ops-alt { filter: hue-rotate(-25deg); }
-/* An empty place: a dashed outline, so it reads as «falta». */
-.ops-empty { border: 2px dashed var(--color-texto-suave); border-radius: var(--radio); background: transparent; }
-/* A crossed-out item (taken away): dimmed, with a heavy cross on top. */
-.ops-cross { opacity: 0.4; }
-.ops-cross::after {
-  content: '✕';
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-  font-weight: 900;
-  color: var(--color-texto);
-  text-shadow: 0 0 3px var(--color-superficie), 0 0 3px var(--color-superficie);
-}
-/* What is left over after the full groups (division with remainder). */
-.ops-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; border-radius: 50%; }
-.ops-left-row { padding-top: 4px; border-top: 2px dotted var(--color-texto-suave); }
-/* A pack only partly filled (the decimal part): a dashed frame, and a dashed circle for each empty place. */
-.ops-part-box { border-style: dashed; }
-.ops-missing { display: inline-block; width: 32px; height: 32px; margin: 5px; border: 2px dashed var(--color-texto-suave); border-radius: 50%; }
-.ops-sign { font-size: var(--texto-grande); font-weight: 800; color: var(--color-texto-suave); }
-.ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+/* A hidden element stays hidden even where a class sets its display. */
+.intro-frame [hidden] { display: none !important; }
+
 .ops-story { margin: 0; font-size: var(--texto-grande); text-align: center; line-height: 1.4; }
+.ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; line-height: 1.4; }
 
-/* One slice of a pizza: the inline SVG from app.js, at a size that reads on a phone. */
-.ops-slice { display: inline-block; width: 40px; height: 40px; }
+/* One frame: the instruction, the buttons, the drawing, and the result below it. */
+.ops-div { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-div-choices,
+.ops-div-actions,
+.ops-div-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 
-/* The deal drawing: a pool of pieces, the groups to fill, and the buttons under them. */
-.ops-deal { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.ops-deal-pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; min-height: 44px; }
-.ops-deal-groups { justify-content: center; gap: 12px; }
-.ops-deal-group { min-width: 96px; min-height: 64px; flex-wrap: wrap; align-content: flex-start; gap: 4px; }
-.ops-deal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-.ops-deal-piece { display: inline-flex; }
-.ops-deal-result { margin-top: 4px; }
-.ops-deal-result[hidden] { display: none; }
-
-/* A coin for money drawings: the currency sign of the locale (€ or $) on a round gold coin. */
-.ops-coin {
+/* One ball. The numbers are shown as dots (🔴), so the groups read at a glance. */
+.ops-item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 2px solid #b8860b;
-  background: radial-gradient(circle at 35% 35%, #ffe38a, #d4a017);
-  color: #5c4300;
-  font-size: 22px;
-  font-weight: 800;
+  min-width: 36px;
+  min-height: 36px;
+  font-size: 30px;
   line-height: 1;
 }
+/* The balls left over after the full groups: a dashed outline, so they read apart. */
+.ops-div-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; border-radius: 50%; }
 
-/* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
-.suite-chrome-activity .activity-icon { width: 48px; height: 48px; flex: none; }
+/* The groups made so far: one framed box for each group of d balls. */
+.ops-div-groups { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.ops-div-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+}
+/* The balls not in a group yet. Their row keeps a height, so the frame does not jump. */
+.ops-div-pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; min-height: 44px; }
 
-/* Test answers */
+/* The tap frame: the numbers as buttons, marked ✓ or ✕ after the tap. */
+.ops-div-chip { min-width: 72px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
+.ops-div-chip.is-yes { background: var(--mod-razonamiento); color: var(--color-superficie); }
+.ops-div-chip.is-no { opacity: 0.6; }
+.ops-div-chip:disabled { cursor: default; }
+
+/* The digits frame: each digit in a card, then the sum and its groups. */
+.ops-digits { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-digit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  font-size: 32px;
+  font-weight: 800;
+}
+.ops-digits-group { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
+/* The result line of a frame, and the choice of the divisor (the one in use is pressed). */
+.ops-div-result { margin-top: 4px; }
+.ops-div-choice[aria-pressed="true"] { background: var(--mod-razonamiento); color: var(--color-superficie); }
+.ops-tap { gap: 14px; }

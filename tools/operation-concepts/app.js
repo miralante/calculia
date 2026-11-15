@@ -171,9 +171,44 @@
     return '<div class="ops-deal" data-total="' + total + '" data-groups="' + groups + '" data-ball="' + (ball ? '1' : '0') +
       '" data-result="' + result + '">' + dealInner(total, groups, result, ball) + '</div>';
   }
+  /* Up to three digits after the decimal point of r ÷ d: 1 ÷ 2 gives 5, 1 ÷ 3 gives 333… (the dots mean the digits go on). */
+  function digitsOf(r, d) {
+    var out = '';
+    var rest = r;
+    for (var i = 0; i < 3 && rest; i += 1) {
+      rest *= 10;
+      out += Math.floor(rest / d);
+      rest %= d;
+    }
+    return rest ? out + '…' : out;
+  }
+  /* What a calculator shows for total ÷ size, with the locale's decimal sign: 7 ÷ 3 gives 2,333… */
+  function valueText(total, size) {
+    var r = total % size;
+    return r ? Math.floor(total / size) + t('ui.decimalSep') + digitsOf(r, size) : String(total / size);
+  }
+  /* The same answer for the drawing, with its whole part marked. */
+  function calcValueHtml(total, size) {
+    var r = total % size;
+    return '<b class="ops-int">' + Math.floor(total / size) + '</b>' + (r ? t('ui.decimalSep') + digitsOf(r, size) : '');
+  }
+  /* The calculator's line under the grouping drawing, shown once the groups are made: the whole part, and the decimal
+     part as a part of one pack. Hidden until then. */
+  function calcLineHtml(total, size) {
+    var r = total % size;
+    return '<p class="ops-expr ops-calc" hidden>' + fill(t('ui.calcValue'), { T: total, e: size, v: calcValueHtml(total, size) }) + '</p>' +
+      '<p class="ops-story ops-calc-parts" hidden>' + fill(t('ui.calcWhole'), { q: Math.floor(total / size) }) +
+      (r ? ' ' + fill(t('ui.calcDecimal'), { dec: '0' + t('ui.decimalSep') + digitsOf(r, size), r: r, e: size }) : '') + '</p>';
+  }
+  /* The relation between the two operations, once the groups are made: the same balls as a multiplication. */
+  function relationLineHtml(total, size) {
+    return '<p class="ops-expr ops-calc" hidden>' +
+      fill(t('ui.relationLine'), { g: Math.floor(total / size), e: size, T: total }) + '</p>';
+  }
   /* The grouping drawing: `total` numbered balls and one empty box per group of `size`. The instruction names the
-     task. Each press of «Agrupar» moves the next `size` balls into the next empty box. */
-  function frameGroupsInner(total, size, result) {
+     task. Each press of «Agrupar» moves the next `size` balls into the next empty box. `calc`: false, true (the
+     calculator's answer) or 'relation' (the multiplication that goes back). */
+  function frameGroupsInner(total, size, result, calc) {
     var groups = Math.floor(total / size);
     var pieces = '';
     for (var i = 0; i < total; i += 1) {
@@ -188,18 +223,23 @@
       '<div class="ops-pack-pool">' + pieces + '</div>' +
       '<div class="ops-row ops-deal-groups">' + boxes + '</div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + result + '</p>' +
+      (calc === 'relation' ? relationLineHtml(total, size) : (calc ? calcLineHtml(total, size) : '')) +
       '<div class="ops-deal-actions">' +
       '<button type="button" class="btn btn-secondary" data-pack="one">' + t('ui.packOne') + '</button>' +
       '<button type="button" class="btn btn-secondary" data-pack="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
       '</div>';
   }
-  function frameGroupsHtml(total, size) {
+  /* `calc`: under the result, once the groups are made, the calculator's answer (true) or the multiplication (`relation`). */
+  function frameGroupsHtml(total, size, calc) {
     var rest = total % size;
     var result = fill(t(rest ? 'ui.packResultLeft' : 'ui.packResult'),
       { T: total, e: size, g: Math.floor(total / size), r: rest });
-    return '<div class="ops-pack" data-total="' + total + '" data-size="' + size + '" data-result="' + result + '">' +
-      frameGroupsInner(total, size, result) + '</div>';
+    var attr = calc === 'relation' ? 'r' : (calc ? '1' : '0');
+    return '<div class="ops-pack" data-total="' + total + '" data-size="' + size + '" data-calc="' + attr +
+      '" data-result="' + result + '">' + frameGroupsInner(total, size, result, calc) + '</div>';
   }
+  /* The data-calc of a grouping drawing, read back: 'r' the relation, '1' the calculator, '0' none. */
+  function calcOf(attr) { return attr === 'r' ? 'relation' : attr === '1'; }
   /* The names game beside the first slide: the four names to put in their place under the numbers.
      Tap a name, then the place it goes. A wrong place shakes and the name stays free. */
   function namesFrameInner(total, size) {
@@ -346,7 +386,7 @@
     var f = slide && slide.frame;
     if (!f) return null;
     if (f.kind === 'deal') return dealHtml(f.total, f.groups, f.balls);
-    if (f.kind === 'pack') return frameGroupsHtml(f.total, f.size);
+    if (f.kind === 'pack') return frameGroupsHtml(f.total, f.size, f.calc || false);
     if (f.kind === 'names') return namesFrameHtml(f.total, f.size);
     if (f.kind === 'join') return joinFrameHtml(f.a, f.b);
     if (f.kind === 'take') return takeFrameHtml(f.n, f.take);
@@ -612,6 +652,24 @@
     var hint = t('q.' + type + '.hint');
     var icon = pickIcon(), pair = pickTwoIcons();
     if (type === 'pick') return makePick(def);
+    /* integer and decimal: the packs with a leftover; the calculator's answer names the whole part, or the decimal part. */
+    if (type === 'integer' || type === 'decimal') {
+      var isz = rint(2, 5), ifull = rint(2, 4), ileft = rint(1, isz - 1), iT = ifull * isz + ileft;
+      var idv = { T: iT, e: isz, q: ifull, r: ileft, v: valueText(iT, isz), dec: '0' + t('ui.decimalSep') + digitsOf(ileft, isz) };
+      var ivisual = restHtml(iT, isz, icon);
+      if (type === 'integer') {
+        return {
+          prompt: fill(q, idv), visual: ivisual, hint: hint,
+          input: { answer: ifull },
+          explanation: fill(t('q.integer.explain'), idv)
+        };
+      }
+      return {
+        prompt: fill(q, idv), visual: ivisual, hint: hint,
+        options: textOptions(idv.dec, [String(ileft), String(ifull)]),
+        explanation: fill(t('q.decimal.explain'), idv)
+      };
+    }
     if (type === 'more') {
       var ma = rint(2, 8), mb = rint(1, 6), MT = ma + mb;
       return {
@@ -822,6 +880,7 @@
       }
       box.querySelector('[data-pack="one"]').hidden = true;
       box.querySelector('.ops-deal-result').hidden = false;
+      box.querySelectorAll('.ops-calc, .ops-calc-parts').forEach(function (el) { el.hidden = false; });
     }
   }
   document.addEventListener('click', function (e) {
@@ -831,7 +890,7 @@
     var box = button.closest('.ops-pack');
     if (button.getAttribute('data-pack') === 'reset') {
       box.innerHTML = frameGroupsInner(parseInt(box.getAttribute('data-total'), 10),
-        parseInt(box.getAttribute('data-size'), 10), box.getAttribute('data-result'));
+        parseInt(box.getAttribute('data-size'), 10), box.getAttribute('data-result'), calcOf(box.getAttribute('data-calc')));
       return;
     }
     frameGroupsOne(box);

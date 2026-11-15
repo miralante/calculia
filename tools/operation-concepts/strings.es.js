@@ -26,6 +26,11 @@
       packGroup: 'Grupo {n}',
       packResult: '{T} ÷ {e} = {g}',
       packResultLeft: '{T} ÷ {e} = {g}, sobra {r}',
+      calcValue: '{T} ÷ {e} = {v}',
+      relationLine: '{g} × {e} = {T}',
+      calcWhole: 'Antes de la coma: {q} paquetes llenos.',
+      calcDecimal: 'Después de la coma: {dec}, es decir, {r} de {e} partes de un paquete.',
+      decimalSep: ',',
       fillInstructionAdd: 'Añade manzanas hasta tener {n}.',
       fillInstructionSub: 'Pon monedas hasta tener {n}.',
       fillLeftAdd: 'Faltan {m} por añadir.',
@@ -113,7 +118,10 @@
           2: { title: 'Dividir es repartir en partes iguales', text: 'Reparte 6 bolas entre 2 amigos: a cada uno le tocan 3.' },
           3: { title: 'Dividir también es agrupar y contar cuántos grupos salen', text: '6 bolas en paquetes de 2: salen 3 paquetes.' },
           4: { title: 'Puede sobrar', text: '7 bolas en paquetes de 3: salen 2 paquetes llenos y sobra 1. Es la división con resto.' },
-          5: { title: 'Dividir es lo contrario de multiplicar', text: 'Multiplicas: 4 × 2 = 8. Divides: 8 ÷ 2 = 4. Si sabes una, sabes la otra.' }
+          5: { title: 'Dividir es lo contrario de multiplicar', text: 'Multiplicas: 4 × 2 = 8. Divides: 8 ÷ 2 = 4. Si sabes una, sabes la otra.' },
+          6: { title: 'La parte entera: los paquetes llenos', text: '7 bolas en paquetes de 3: se llenan 2 paquetes. Esos 2 son la parte entera.' },
+          7: { title: 'La calculadora: lo de antes de la coma', text: 'La calculadora dice 2,333… Lo que está antes de la coma es la parte entera: 2 paquetes llenos.' },
+          8: { title: 'Después de la coma: la parte decimal', text: '13 ÷ 5 = 2,6. El 2 son paquetes llenos. El 0,6 es lo que sobra: 3 de 5 partes de un paquete.' }
         },
         real: {
           1: 'Repartes 8 euros entre 4 amigos: a cada amigo le tocan 2 euros.',
@@ -177,6 +185,16 @@
     /* Preguntas de la prueba: enunciado, pista (sin dar la respuesta) y
        explicación al acertar. {n}, {g}, {e}, {T}… se rellenan en app.js. */
     q: {
+      integer: {
+        prompt: 'Metes {T} bolas en paquetes de {e}. La calculadora dice {v}. ¿Cuántos paquetes llenos salen?',
+        hint: '🤔 Mira el número que está antes de la coma. Lo que no llena un paquete no cuenta.',
+        explain: 'Antes de la coma está {q}: salen {q} paquetes llenos. Lo que va después de la coma es lo que sobra.'
+      },
+      decimal: {
+        prompt: 'Metes {T} bolas en paquetes de {e}. La calculadora dice {v}. ¿Cuál es la parte decimal?',
+        hint: '🤔 La parte decimal va después de la coma. ¿Qué parte de un paquete sobra?',
+        explain: 'La parte decimal es {dec}. Es {r} de {e} partes de un paquete.'
+      },
       join: {
         prompt: 'Juntas los dos grupos. ¿Cuántos hay en total?',
         hint: '🤔 Cuenta todos los dibujos, uno a uno, sin contar dos veces.',

@@ -1,8 +1,8 @@
 /* ============================================================
    Calculia — Divisibility: texts (EN)
-   Language file, loaded from index.html.
-   Short sentences, one idea per sentence. The numbers that change in
-   the questions are in braces: {n}, {d}, {q}…
+   Locale-specific file. Loaded from index.html.
+   Short sentences, one idea per sentence (UNE 153101). The numbers that
+   change in the questions go between braces: {n}, {d}, {q}…
    ============================================================ */
 (function () {
   'use strict';
@@ -15,15 +15,24 @@
       nextStep: 'Next step',
       stepOf: 'Step {i} of {n}',
       visualAria: 'Drawing of dots shared into groups.',
-      division: '{T} ÷ {d} = {q}',
-      remainder: '{r} left over',
       yes: 'Yes',
       no: 'No',
-      calc: '{T} ÷ {d} = {v}',
-      decimalSep: '.'
+      divInstruction: 'Share {T} balls into groups of {d}.',
+      divChoice: '÷ {d}',
+      divOne: 'Make a group of {d}',
+      divReset: 'Start again',
+      divWhole: '{T} ÷ {d} = {q}. Nothing is left over: it divides exactly.',
+      divRest: '{T} ÷ {d} = {q} with {r} left over: it does not divide exactly.',
+      tapInstruction: 'Tap the numbers that divide exactly by {d}.',
+      tapYes: '{n} ÷ {d} = {q}: nothing is left over.',
+      tapNo: '{n} ÷ {d} = {q} with {r} left over.',
+      digitsInstruction: 'Add the digits of {n}.',
+      digitsSum: 'Add the digits',
+      digitsResult: '{parts} = {s}',
+      digitsAsk: 'Now check whether {s} divides by 3.'
     },
 
-    /* The explanation: one idea per slide. The drawing is in data.js. */
+    /* The explanation: one idea per slide. The practice is on the right (data.js and app.js). */
     intro: {
       1: { title: 'Divisible: nothing is left over', text: '12 divided by 3: you get 4 groups and nothing is left over. So 12 is divisible by 3.' },
       2: { title: 'Not divisible: something is left over', text: '13 divided by 3: you get 4 groups and 1 is left over. That 1 is the remainder. So 13 is not divisible by 3.' },
@@ -32,10 +41,7 @@
       5: { title: 'Divisible by 10: ends in 0', text: '30 ends in 0, so it divides exactly by 10. If it ends in another digit, it does not.' },
       6: { title: 'Divisible by 3: add the digits', text: 'Add the digits of 12: 1 + 2 = 3. 3 divides exactly by 3. So 12 is divisible by 3.' },
       7: { title: 'If the sum is not divisible by 3, neither is the number', text: 'Add the digits of 14: 1 + 4 = 5. Since 5 is not divisible by 3, 14 is not divisible by 3.' },
-      8: { title: 'The whole part: the full packs', text: '7 balls in packs of 3: 2 packs are full. Those 2 are the whole part.' },
-      9: { title: 'What is left over is the remainder', text: '13 balls in packs of 5: 2 packs are full. 3 balls are left over. That 3 is the remainder: it does not fill a pack.' },
-      10: { title: 'The calculator: what is before the point', text: 'The calculator shows 2.333… The part before the decimal point is the whole part: 2 full packs.' },
-      11: { title: 'After the point: the decimal part', text: '13 ÷ 5 = 2.6. The 2 are full packs. The 0.6 is what is left over: 3 of 5 parts of a pack.' }
+      8: { title: 'What is left over is the remainder', text: '13 balls in packs of 5: 2 packs are full. 3 balls are left over. That 3 is the remainder: it does not fill a pack.' }
     },
 
     /* The test: the question, a hint (without the answer) and the explanation when right. */
@@ -72,16 +78,6 @@
         finalHint: '🤔 Think about what you found in the steps before.',
         finalYes: 'So {n} divides exactly by {d}.',
         finalNo: 'So {n} does not divide exactly by {d}.'
-      },
-      integer: {
-        prompt: 'You put {n} balls into packs of {d}. The calculator shows {v}. How many full packs are there?',
-        hint: '🤔 Look at the number before the decimal point. What does not fill a pack does not count.',
-        explain: 'Before the decimal point is {q}, so {q} packs are full. What comes after the point is what is left over.'
-      },
-      decimal: {
-        prompt: 'You put {n} balls into packs of {d}. The calculator shows {v}. What is the decimal part?',
-        hint: '🤔 The decimal part comes after the point. What part of a pack is left over?',
-        explain: 'The decimal part is {dec}. It is {r} of {d} parts of a pack.'
       }
     }
   }, 'en');

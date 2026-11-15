@@ -25,6 +25,11 @@
       packGroup: 'Group {n}',
       packResult: '{T} ÷ {e} = {g}',
       packResultLeft: '{T} ÷ {e} = {g}, left over {r}',
+      calcValue: '{T} ÷ {e} = {v}',
+      relationLine: '{g} × {e} = {T}',
+      calcWhole: 'Before the decimal point: {q} full packs.',
+      calcDecimal: 'After the decimal point: {dec}, that is {r} of {e} parts of a pack.',
+      decimalSep: '.',
       fillInstructionAdd: 'Add apples until there are {n}.',
       fillInstructionSub: 'Put coins in until there are {n}.',
       fillLeftAdd: '{m} more to add.',
@@ -111,7 +116,10 @@
           2: { title: 'Dividing is sharing into equal parts', text: 'Share 6 balls between 2 friends: each friend gets 3.' },
           3: { title: 'Dividing also means grouping and counting how many groups come out', text: '6 balls in packs of 2: 3 packs.' },
           4: { title: 'Some can be left over', text: '7 balls in packs of 3: 2 full packs and 1 is left over. This is division with a remainder.' },
-          5: { title: 'Dividing is the opposite of multiplying', text: 'Multiply: 4 × 2 = 8. Divide: 8 ÷ 2 = 4. If you know one, you know the other.' }
+          5: { title: 'Dividing is the opposite of multiplying', text: 'Multiply: 4 × 2 = 8. Divide: 8 ÷ 2 = 4. If you know one, you know the other.' },
+          6: { title: 'The whole part: the full packs', text: '7 balls in packs of 3: 2 packs are full. Those 2 are the whole part.' },
+          7: { title: 'The calculator: what is before the point', text: 'The calculator shows 2.333… The part before the decimal point is the whole part: 2 full packs.' },
+          8: { title: 'After the point: the decimal part', text: '13 ÷ 5 = 2.6. The 2 are full packs. The 0.6 is what is left over: 3 of 5 parts of a pack.' }
         },
         real: {
           1: 'You share 8 dollars among 4 friends: each friend gets 2 dollars.',
@@ -172,6 +180,16 @@
     },
 
     q: {
+      integer: {
+        prompt: 'You put {T} balls into packs of {e}. The calculator shows {v}. How many full packs are there?',
+        hint: '🤔 Look at the number before the decimal point. What does not fill a pack does not count.',
+        explain: 'Before the decimal point is {q}, so {q} packs are full. What comes after the point is what is left over.'
+      },
+      decimal: {
+        prompt: 'You put {T} balls into packs of {e}. The calculator shows {v}. What is the decimal part?',
+        hint: '🤔 The decimal part comes after the point. What part of a pack is left over?',
+        explain: 'The decimal part is {dec}. It is {r} of {e} parts of a pack.'
+      },
       join: {
         prompt: 'You put the two groups together. How many are there in total?',
         hint: '🤔 Count all the drawings one by one, without counting any twice.',

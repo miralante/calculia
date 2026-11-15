@@ -1,13 +1,13 @@
 /* ============================================================
    Calculia — Divisibilidad
-   Two stages, the flow of Operaciones: 1. explanation (slides with a
-   drawing: when a number divides exactly and when it does not, the rules
-   for 2, 5, 10 and 3, then the whole part and the decimal part of a
-   division that does not come out exact), 2. test (one question at a
-   time). There is no real-life stage: the test is the practice. The stages
-   and the screens are built by assets/js/activity-flow.js (mode 'options',
-   skipReal); a question of a rule has several steps (`steps`), scored once.
-   Texts are in strings.<locale>.js, the slides and the test settings in data.js.
+   Two stages, the flow of Operaciones: 1. explanation (slides: the text on
+   the left, and on the right a frame the child works with: share balls in
+   groups, tap the numbers that divide exactly, add the digits), 2. test (one
+   question at a time). There is no real-life stage: the test is the practice.
+   The stages and the screens are built by assets/js/activity-flow.js (mode
+   'options', skipReal); a question of a rule has several steps (`steps`),
+   scored once. Texts are in strings.<locale>.js, the slides and the test
+   settings in data.js.
    ============================================================ */
 (function () {
   'use strict';
@@ -22,70 +22,142 @@
   function digitSum(n) {
     return String(n).split('').reduce(function (sum, digit) { return sum + Number(digit); }, 0);
   }
-  /* The digits after the decimal separator of r ÷ d, three at most: 1 ÷ 2 gives 5,
-     1 ÷ 3 gives 333… (the dots mean the digits go on). r is never 0 here. */
-  function digitsOf(r, d) {
-    var out = '';
-    var rest = r;
-    for (var i = 0; i < 3 && rest; i += 1) {
-      rest *= 10;
-      out += Math.floor(rest / d);
-      rest %= d;
-    }
-    return rest ? out + '…' : out;
-  }
-  /* What a calculator shows for n ÷ d, with the locale's separator: 7 ÷ 3 gives 2,333… */
-  function valueText(n, d) {
-    var r = n % d;
-    return r ? Math.floor(n / d) + t('ui.decimalSep') + digitsOf(r, d) : String(n / d);
-  }
-  /* The decimal part on its own: what is left over, as a part of one pack. 1 ÷ 3 gives 0,333… */
-  function decimalPart(r, d) { return '0' + t('ui.decimalSep') + digitsOf(r, d); }
-  /* A number that does not divide exactly by d, with at least two full packs. */
-  function notExact(d) {
-    var n;
-    do { n = rint(2 * d + 1, 49); } while (n % d === 0);
-    return n;
-  }
 
-  /* ---- Drawing ----------------------------------------------------------
-     `total` items shared in rows of `size`: each full row is a framed group,
-     and what is left over sits apart, so «sobra» reads at a glance. */
+  /* ---- Frames: the practice beside each explanation ----------------------- */
   function items(count, cls) { return App.answerOptions.dotRow(count, cls, DOT); }
-  function divisionText(total, size) {
-    var text = fill(t('ui.division'), { T: total, d: size, q: Math.floor(total / size) });
-    if (total % size) text += ', ' + fill(t('ui.remainder'), { r: total % size });
-    return text;
-  }
-  function packHtml(total, size) {
-    var full = Math.floor(total / size);
-    var rest = total % size;
-    var html = '<div class="ops-group-stack">';
-    for (var g = 0; g < full; g += 1) html += '<div class="ops-group-box"><div class="ops-row">' + items(size, 'ops-item') + '</div></div>';
-    if (rest) html += '<div class="ops-row ops-left-row">' + items(rest, 'ops-item ops-left') + '</div>';
+
+  /* The groups frame, drawn from its state: `groups` groups of `d` balls are made, and the
+     balls left over wait below. The buttons sit above the drawing, so they do not move as
+     the groups grow. Once every full group is made, the leftover is shown and the result. */
+  function groupsBody(n, d, groups, opts) {
+    var q = Math.floor(n / d);
+    var r = n % d;
+    var done = groups >= q;
+    var html = '<p class="ops-story">' + fill(t('ui.divInstruction'), { T: n, d: d }) + '</p>';
+    if (opts.choices) {
+      html += '<div class="ops-div-choices">' + DATA.divisors.map(function (v) {
+        return '<button type="button" class="btn btn-secondary ops-div-choice" data-divisor="' + v + '" aria-pressed="' +
+          (v === d) + '">' + fill(t('ui.divChoice'), { d: v }) + '</button>';
+      }).join('') + '</div>';
+    }
+    html += '<div class="ops-div-actions">' +
+      '<button type="button" class="btn btn-secondary" data-div="step" style="visibility:' + (done ? 'hidden' : 'visible') + '">' +
+      fill(t('ui.divOne'), { d: d }) + '</button>' +
+      '<button type="button" class="btn btn-secondary" data-div="reset" style="visibility:' + (groups ? 'visible' : 'hidden') + '">' +
+      t('ui.divReset') + '</button>' +
+      '</div>';
+    html += '<div class="ops-div-groups">';
+    for (var g = 0; g < groups; g += 1) html += '<div class="ops-div-box">' + items(d, 'ops-item') + '</div>';
     html += '</div>';
-    return html + '<p class="ops-expr">' + divisionText(total, size) + '</p>';
-  }
-  /* The same packs as packHtml, but the leftover fills only part of a pack: the empty
-     places are dashed, so the decimal part reads as a part of one pack. The caption is
-     the calculator's answer, with its comma. */
-  function missing(count) {
-    var html = '';
-    for (var i = 0; i < count; i += 1) html += '<span class="ops-missing" aria-hidden="true"></span>';
+    var left = n - groups * d;
+    html += '<div class="ops-div-pool">' + items(left, done ? 'ops-item ops-div-left' : 'ops-item') + '</div>';
+    if (done && r === 0) {
+      html += '<p class="ops-expr ops-div-result">' + fill(t('ui.divWhole'), { T: n, d: d, q: q }) + '</p>';
+    } else if (done) {
+      html += '<p class="ops-expr ops-div-result">' + fill(t('ui.divRest'), { T: n, d: d, q: q, r: r }) + '</p>';
+    }
     return html;
   }
-  function decimalHtml(total, size) {
-    var full = Math.floor(total / size);
-    var rest = total % size;
-    var html = '<div class="ops-group-stack">';
-    for (var g = 0; g < full; g += 1) html += '<div class="ops-group-box"><div class="ops-row">' + items(size, 'ops-item') + '</div></div>';
-    if (rest) html += '<div class="ops-group-box ops-part-box"><div class="ops-row">' + items(rest, 'ops-item') + missing(size - rest) + '</div></div>';
-    html += '</div>';
-    return html + '<p class="ops-expr">' + fill(t('ui.calc'), { T: total, d: size, v: valueText(total, size) }) + '</p>';
+  function groupsFrameHtml(f) {
+    return '<div class="ops-div" data-n="' + f.n + '" data-d="' + f.d + '" data-choices="1">' +
+      groupsBody(f.n, f.d, 0, { choices: true }) + '</div>';
   }
-  function visualHtml(spec) {
-    return spec.calc ? decimalHtml(spec.total, spec.size) : packHtml(spec.total, spec.size);
+
+  /* The tap frame: the numbers as buttons. A tap shows the division for that number. */
+  function tapFrameHtml(f) {
+    var chips = f.numbers.map(function (v) {
+      return '<button type="button" class="btn btn-secondary ops-div-chip" data-tap="' + v + '" data-d="' + f.d + '">' + v + '</button>';
+    }).join('');
+    return '<div class="ops-div ops-tap">' +
+      '<p class="ops-story">' + fill(t('ui.tapInstruction'), { d: f.d }) + '</p>' +
+      '<div class="ops-div-chips">' + chips + '</div>' +
+      '<p class="ops-expr ops-div-result" hidden></p>' +
+      '</div>';
   }
+
+  /* The digits frame: the digits of n, their sum on a button, then the sum shared in groups of 3. */
+  function digitsFrameHtml(f) {
+    var digits = String(f.n).split('');
+    var s = digitSum(f.n);
+    var cards = digits.map(function (c) { return '<span class="ops-digit">' + c + '</span>'; }).join('');
+    return '<div class="ops-digits">' +
+      '<p class="ops-story">' + fill(t('ui.digitsInstruction'), { n: f.n }) + '</p>' +
+      '<div class="ops-div-chips">' + cards + '</div>' +
+      '<div class="ops-div-actions" data-digits-actions>' +
+      '<button type="button" class="btn btn-secondary" data-digits="sum">' + t('ui.digitsSum') + '</button>' +
+      '</div>' +
+      '<p class="ops-expr ops-div-result" hidden>' + fill(t('ui.digitsResult'), { parts: digits.join(' + '), s: s }) + '</p>' +
+      '<div class="ops-digits-group" hidden>' +
+      '<p class="ops-story">' + fill(t('ui.digitsAsk'), { s: s }) + '</p>' +
+      '<div class="ops-div" data-n="' + s + '" data-d="3" data-choices="0">' +
+      groupsBody(s, 3, 0, { choices: false }) + '</div>' +
+      '</div>' +
+      '</div>';
+  }
+
+  /* The frame beside an explanation slide (activity-flow puts it on the right). */
+  function introFrameHtml(slide) {
+    var f = slide && slide.frame;
+    if (!f) return '';
+    if (f.kind === 'tap') return tapFrameHtml(f);
+    if (f.kind === 'digits') return digitsFrameHtml(f);
+    return groupsFrameHtml(f);
+  }
+
+  /* The frames' buttons. A group or a choice redraws the frame from its own data attributes. */
+  function frameOpts(w) {
+    return { choices: w.getAttribute('data-choices') === '1' };
+  }
+  function tapChip(chip) {
+    if (chip.disabled) return;
+    var n = Number(chip.getAttribute('data-tap'));
+    var d = Number(chip.getAttribute('data-d'));
+    var q = Math.floor(n / d);
+    var r = n % d;
+    chip.disabled = true;
+    chip.classList.add(r ? 'is-no' : 'is-yes');
+    chip.textContent = n + (r ? ' ✕' : ' ✓');
+    var out = chip.closest('.ops-tap').querySelector('.ops-div-result');
+    out.textContent = fill(t(r ? 'ui.tapNo' : 'ui.tapYes'), { n: n, d: d, q: q, r: r });
+    out.hidden = false;
+  }
+  function groupsStep(button) {
+    var w = button.closest('.ops-div');
+    var n = Number(w.getAttribute('data-n'));
+    var d = Number(w.getAttribute('data-d'));
+    var groups = w.querySelectorAll('.ops-div-box').length;
+    if (button.getAttribute('data-div') === 'reset') {
+      w.innerHTML = groupsBody(n, d, 0, frameOpts(w));
+    } else if (groups < Math.floor(n / d)) {
+      w.innerHTML = groupsBody(n, d, groups + 1, frameOpts(w));
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    var target = e.target.closest ? e.target : null;
+    if (!target) return;
+    var chip = target.closest('[data-tap]');
+    if (chip) { tapChip(chip); return; }
+    var choice = target.closest('[data-divisor]');
+    if (choice) {
+      var cw = choice.closest('.ops-div');
+      var cn = Number(cw.getAttribute('data-n'));
+      var cd = Number(choice.getAttribute('data-divisor'));
+      cw.setAttribute('data-d', String(cd));
+      cw.innerHTML = groupsBody(cn, cd, 0, frameOpts(cw));
+      return;
+    }
+    var sum = target.closest('[data-digits]');
+    if (sum) {
+      var dbox = sum.closest('.ops-digits');
+      dbox.querySelector('[data-digits-actions]').hidden = true;
+      dbox.querySelector('.ops-div-result').hidden = false;
+      dbox.querySelector('.ops-digits-group').hidden = false;
+      return;
+    }
+    var step = target.closest('[data-div]');
+    if (step) groupsStep(step);
+  });
 
   /* ---- Test: the questions ------------------------------------------------ */
   /* Answers as text: the right one and up to two others, all different, in a shuffled order. */
@@ -179,43 +251,11 @@
     return steps;
   }
 
-  /* The whole part: how many full packs come out when the calculator shows a decimal.
-     The wrong answers are the usual slips: one pack more, or the number of items. */
-  function makeInteger() {
-    var d = pick(DATA.divisors);
-    var n = notExact(d);
-    var q = Math.floor(n / d);
-    var values = { n: n, d: d, q: q, v: valueText(n, d) };
-    return {
-      prompt: fill(t('q.integer.prompt'), values),
-      hint: t('q.integer.hint'),
-      options: numericTextOptions(q, [q + 1, n]),
-      explanation: fill(t('q.integer.explain'), values)
-    };
-  }
-
-  /* The decimal part: what is left over, as a part of one pack. The wrong answers are the
-     leftover count (one ball, not one part of a pack) and the whole part. */
-  function makeDecimal() {
-    var d = pick(DATA.divisors);
-    var n = notExact(d);
-    var r = n % d;
-    var values = { n: n, d: d, q: Math.floor(n / d), r: r, v: valueText(n, d), dec: decimalPart(r, d) };
-    return {
-      prompt: fill(t('q.decimal.prompt'), values),
-      hint: t('q.decimal.hint'),
-      options: textOptions(values.dec, [String(r), String(values.q)]),
-      explanation: fill(t('q.decimal.explain'), values)
-    };
-  }
-
-  /* A question is a list of steps: one step for most types, three for a rule. */
+  /* A question is a list of steps: one step for most types, several for a rule. */
   function makeQuestion(type) {
     if (type.indexOf('rule') === 0) return { steps: makeRule(+type.slice(4)) };
     if (type === 'pick') return { steps: [makePick()] };
-    if (type === 'yesno') return { steps: [makeYesNo()] };
-    if (type === 'integer') return { steps: [makeInteger()] };
-    return { steps: [makeDecimal()] };
+    return { steps: [makeYesNo()] };
   }
 
   App.activityFlow.setup({
@@ -224,7 +264,7 @@
     intro: DATA.intro,
     real: [],
     skipReal: true,
-    visualHtml: visualHtml,
+    introFrameHtml: introFrameHtml,
     buildRound: function () {
       var list = [];
       for (var i = 0; i < DATA.perRound; i += 1) list.push(DATA.questions[i % DATA.questions.length]);

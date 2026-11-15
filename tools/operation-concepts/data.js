@@ -61,7 +61,10 @@ var DATA = {
         { frame: { kind: 'deal', total: 6, groups: 2, balls: true } },
         { frame: { kind: 'pack', total: 6, size: 2 } },
         { frame: { kind: 'pack', total: 7, size: 3 } },
-        { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true, product: true, numbered: true } }
+        { frame: { kind: 'pack', total: 8, size: 2, calc: 'relation' } },
+        { frame: { kind: 'pack', total: 7, size: 3, calc: true } },
+        { frame: { kind: 'pack', total: 7, size: 3, calc: true } },
+        { frame: { kind: 'pack', total: 13, size: 5, calc: true } }
       ],
       real: [
         { visual: { kind: 'divide', total: 8, groups: 4, coin: true, caption: true, alt: true } },
@@ -109,7 +112,7 @@ var DATA = {
     add: ['pick', 'join', 'more', 'swap'],
     sub: ['pick', 'take', 'gap'],
     mul: ['pick', 'times', 'repeat', 'swapTimes'],
-    div: ['pick', 'share', 'rest', 'leftover', 'relation'],
+    div: ['pick', 'share', 'rest', 'leftover', 'relation', 'integer', 'decimal'],
     fac: ['factValue', 'factMeaning', 'factSlots', 'factDivides'],
     pow: ['powValue', 'powMeaning']
   }
