@@ -100,9 +100,17 @@
 /* The join and take games (the frames beside the first addition and subtraction slides). */
 .ops-join, .ops-take { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .ops-join-groups { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; }
-.ops-join-b-wrap { display: flex; align-items: center; gap: 12px; }
-.ops-join-b-wrap[hidden] { display: none; }
-.ops-join-a, .ops-join-b { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 4px; }
+.ops-join-total { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.ops-join-total[hidden] { display: none; }
+/* The effect below, shown on click: the swapped sum (swap game) and the balls left (take game). */
+.ops-swap-total, .ops-take-rest { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; }
+.ops-swap-total[hidden], .ops-take-rest[hidden] { display: none; }
+.ops-take-left { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.ops-fill-from { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 4px; }
+/* An apple in a group (the addition games). */
+.ops-apple { font-size: 40px; }
+.ops-fill-apple { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; font-size: 40px; line-height: 1; }
+.ops-join-a, .ops-join-b, .ops-join-all { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 4px; }
 /* A ball taken away: light, with a dashed edge and a cross; its number stays readable under the cross. */
 .ops-take .ops-cross { opacity: 1; background: var(--color-superficie); border: 3px dashed var(--color-texto-suave); }
 .ops-take .ops-cross b { color: var(--color-texto-suave); }

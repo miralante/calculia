@@ -227,18 +227,25 @@
   function namesFrameHtml(total, size) {
     return '<div class="ops-names" data-total="' + total + '" data-size="' + size + '">' + namesFrameInner(total, size) + '</div>';
   }
-  /* The join game beside the first addition slide: two groups of balls, and «Juntar» puts them together. */
+  /* The apples of the addition games: red for the first group, green for the second. */
+  var APPLE_RED = '🍎';
+  var APPLE_GREEN = '🍏';
+  function applesHtml(icon, count) {
+    var html = '';
+    for (var i = 0; i < count; i += 1) html += '<span class="ops-item ops-apple" aria-hidden="true">' + icon + '</span>';
+    return html;
+  }
+  /* The join game beside the first addition slide: two groups of apples. «Juntar» shows the joined group below the sum;
+     the sum stays where it is. */
   function joinFrameInner(a, b) {
-    var balls = function (from, count) {
-      var html = '';
-      for (var i = 0; i < count; i += 1) html += '<span class="ops-deal-piece ops-deal-ball"><b>' + (from + i) + '</b></span>';
-      return html;
-    };
     return '<p class="ops-story ops-pack-instruction">' + t('ui.joinInstruction') + '</p>' +
       '<div class="ops-join-groups">' +
-      '<div class="ops-group-box ops-join-a ops-deal-group">' + balls(1, a) + '</div>' +
-      '<div class="ops-join-b-wrap">' + sign('+') +
-      '<div class="ops-group-box ops-join-b ops-deal-group">' + balls(a + 1, b) + '</div></div>' +
+      '<div class="ops-group-box ops-join-a ops-deal-group">' + applesHtml(APPLE_RED, a) + '</div>' +
+      sign('+') +
+      '<div class="ops-group-box ops-join-b ops-deal-group">' + applesHtml(APPLE_GREEN, b) + '</div>' +
+      '</div>' +
+      '<div class="ops-join-total" hidden>' + sign('=') +
+      '<div class="ops-group-box ops-join-all ops-deal-group">' + applesHtml(APPLE_RED, a) + applesHtml(APPLE_GREEN, b) + '</div>' +
       '</div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + fill(t('ui.joinResult'), { a: a, b: b, T: a + b }) + '</p>' +
       '<div class="ops-deal-actions">' +
@@ -249,12 +256,18 @@
   function joinFrameHtml(a, b) {
     return '<div class="ops-join" data-a="' + a + '" data-b="' + b + '">' + joinFrameInner(a, b) + '</div>';
   }
-  /* The take game beside the first subtraction slide: n balls, and «Quitar» crosses out the taken ones. */
+  /* `count` numbered balls, from 1. */
+  function ballsHtml(count) {
+    var html = '';
+    for (var i = 0; i < count; i += 1) html += '<span class="ops-deal-piece ops-deal-ball"><b>' + (i + 1) + '</b></span>';
+    return html;
+  }
+  /* The take game beside the first subtraction slide: n balls, and «Quitar» crosses out the taken ones. Below, the
+     balls left, as the sum shows them. */
   function takeFrameInner(n, take) {
-    var balls = '';
-    for (var i = 0; i < n; i += 1) balls += '<span class="ops-deal-piece ops-deal-ball"><b>' + (i + 1) + '</b></span>';
     return '<p class="ops-story ops-pack-instruction">' + fill(t('ui.takeInstruction'), { t: take }) + '</p>' +
-      '<div class="ops-pack-pool">' + balls + '</div>' +
+      '<div class="ops-pack-pool">' + ballsHtml(n) + '</div>' +
+      '<div class="ops-take-rest" hidden>' + sign('=') + '<div class="ops-take-left">' + ballsHtml(n - take) + '</div></div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + fill(t('ui.takeResult'), { n: n, t: take, r: n - take }) + '</p>' +
       '<div class="ops-deal-actions">' +
       '<button type="button" class="btn btn-secondary" data-take="one">' + t('ui.takeOne') + '</button>' +
@@ -264,19 +277,40 @@
   function takeFrameHtml(n, take) {
     return '<div class="ops-take" data-n="' + n + '" data-remove="' + take + '">' + takeFrameInner(n, take) + '</div>';
   }
-  /* The fill game: `need` places, `have` of them filled. Addition adds balls («Añadir»); subtraction puts coins in
-     («Poner moneda») until the places are full, so the missing ones are counted. */
+  /* One item of the fill game. `kind` is 'have' (already there) or 'add' (coming in). `place` is 'group' (the small
+     items in the groups above) or 'hole' (the big slot of the row below). Addition: apples. Subtraction: coins. */
+  function fillItemHtml(mode, kind, place) {
+    if (mode === 'sub') {
+      return place === 'hole'
+        ? '<span class="ops-fill-coin"><span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span></span>'
+        : '<span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span>';
+    }
+    var icon = kind === 'have' ? APPLE_RED : APPLE_GREEN;
+    return place === 'hole'
+      ? '<span class="ops-fill-apple" aria-hidden="true">' + icon + '</span>'
+      : '<span class="ops-item ops-apple" aria-hidden="true">' + icon + '</span>';
+  }
+  /* The fill game: `need` places, `have` of them filled. Above: the group already there, a plus, and the items to
+     bring in. Below: the places. «Añadir» moves one item from above into the next empty place, so it is seen filling it. */
   function fillFrameInner(need, have, mode) {
     var sub = mode === 'sub';
-    var slots = '';
-    for (var i = 0; i < need; i += 1) {
-      if (i >= have) slots += '<span class="ops-fill-empty" aria-hidden="true"></span>';
-      else if (sub) slots += '<span class="ops-fill-coin"><span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span></span>';
-      else slots += '<span class="ops-deal-piece ops-deal-ball"><b>' + (i + 1) + '</b></span>';
+    var group = function (count, kind) {
+      var html = '';
+      for (var i = 0; i < count; i += 1) html += fillItemHtml(mode, kind, 'group');
+      return html;
+    };
+    var holes = '';
+    for (var h = 0; h < need; h += 1) {
+      holes += h < have ? fillItemHtml(mode, 'have', 'hole') : '<span class="ops-fill-empty" aria-hidden="true"></span>';
     }
     var values = { n: need, h: have, m: need - have };
     return '<p class="ops-story ops-pack-instruction">' + fill(t(sub ? 'ui.fillInstructionSub' : 'ui.fillInstructionAdd'), values) + '</p>' +
-      '<div class="ops-row ops-fill-row">' + slots + '</div>' +
+      '<div class="ops-join-groups">' +
+      '<div class="ops-group-box ops-deal-group">' + group(have, 'have') + '</div>' +
+      sign('+') +
+      '<div class="ops-group-box ops-deal-group ops-fill-from">' + group(need - have, 'add') + '</div>' +
+      '</div>' +
+      '<div class="ops-row ops-fill-row">' + holes + '</div>' +
       '<p class="ops-story ops-fill-left">' + fill(t(sub ? 'ui.fillLeftSub' : 'ui.fillLeftAdd'), values) + '</p>' +
       '<p class="ops-expr ops-deal-result" hidden>' + fill(t(sub ? 'ui.fillResultSub' : 'ui.fillResultAdd'), values) + '</p>' +
       '<div class="ops-deal-actions">' +
@@ -288,28 +322,22 @@
     return '<div class="ops-fill" data-need="' + need + '" data-have="' + have + '" data-mode="' + mode + '">' +
       fillFrameInner(need, have, mode) + '</div>';
   }
-  /* The swap game: two groups, and «Cambiar el orden» puts the second one first. The sum is the same. */
-  function swapFrameInner(a, b, swapped) {
-    var ballsOf = function (from, count) {
-      var html = '';
-      for (var i = 0; i < count; i += 1) html += '<span class="ops-deal-piece ops-deal-ball"><b>' + (from + i) + '</b></span>';
-      return html;
-    };
-    var boxA = '<div class="ops-group-box ops-deal-group ops-swap-box">' + ballsOf(1, a) + '</div>';
-    var boxB = '<div class="ops-group-box ops-deal-group ops-swap-box">' + ballsOf(a + 1, b) + '</div>';
-    var line = swapped ? boxB + sign('+') + boxA : boxA + sign('+') + boxB;
+  /* The swap game: two groups side by side. «Cambiar el orden» shows the same two groups swapped, below, with the
+     sum; the first line stays where it is. */
+  function swapFrameInner(a, b) {
+    var boxA = '<div class="ops-group-box ops-deal-group ops-swap-box">' + applesHtml(APPLE_RED, a) + '</div>';
+    var boxB = '<div class="ops-group-box ops-deal-group ops-swap-box">' + applesHtml(APPLE_GREEN, b) + '</div>';
     return '<p class="ops-story ops-pack-instruction">' + t('ui.swapInstruction') + '</p>' +
-      '<div class="ops-swap-row">' + line + '</div>' +
-      '<p class="ops-expr ops-deal-result"' + (swapped ? '' : ' hidden') + '>' +
-      fill(t('ui.swapResult'), { a: a, b: b, T: a + b }) + '</p>' +
+      '<div class="ops-swap-row">' + boxA + sign('+') + boxB + '</div>' +
+      '<div class="ops-swap-total" hidden>' + sign('=') + '<div class="ops-swap-row">' + boxB + sign('+') + boxA + '</div></div>' +
+      '<p class="ops-expr ops-deal-result" hidden>' + fill(t('ui.swapResult'), { a: a, b: b, T: a + b }) + '</p>' +
       '<div class="ops-deal-actions">' +
-      (swapped ? '' : '<button type="button" class="btn btn-secondary" data-swap="one">' + t('ui.swapOne') + '</button>') +
-      '<button type="button" class="btn btn-secondary" data-swap="reset" style="visibility:' + (swapped ? 'visible' : 'hidden') + '">' +
-      t('ui.dealReset') + '</button>' +
+      '<button type="button" class="btn btn-secondary" data-swap="one">' + t('ui.swapOne') + '</button>' +
+      '<button type="button" class="btn btn-secondary" data-swap="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
       '</div>';
   }
   function swapFrameHtml(a, b) {
-    return '<div class="ops-swap" data-a="' + a + '" data-b="' + b + '">' + swapFrameInner(a, b, false) + '</div>';
+    return '<div class="ops-swap" data-a="' + a + '" data-b="' + b + '">' + swapFrameInner(a, b) + '</div>';
   }
   /* The frame beside the explanation: a slide with a `frame` spec shows its game on the right. */
   function introFrameHtml(slide) {
@@ -846,9 +874,7 @@
         jbox.innerHTML = joinFrameInner(parseInt(jbox.getAttribute('data-a'), 10), parseInt(jbox.getAttribute('data-b'), 10));
         return;
       }
-      var first = jbox.querySelector('.ops-join-a');
-      jbox.querySelectorAll('.ops-join-b .ops-deal-ball').forEach(function (ball) { first.appendChild(ball); });
-      jbox.querySelector('.ops-join-b-wrap').hidden = true;
+      jbox.querySelector('.ops-join-total').hidden = false;
       join.hidden = true;
       jbox.querySelector('[data-join="reset"]').style.visibility = 'visible';
       jbox.querySelector('.ops-deal-result').hidden = false;
@@ -861,10 +887,12 @@
       tbox.innerHTML = takeFrameInner(parseInt(tbox.getAttribute('data-n'), 10), parseInt(tbox.getAttribute('data-remove'), 10));
       return;
     }
-    var balls = tbox.querySelectorAll('.ops-deal-ball');
+    /* Only the balls in the top pool are crossed out; the balls left below are not part of the pool. */
+    var balls = tbox.querySelectorAll('.ops-pack-pool .ops-deal-ball');
     var crossed = parseInt(tbox.getAttribute('data-remove'), 10);
     for (var i = balls.length - crossed; i < balls.length; i += 1) balls[i].classList.add('ops-cross');
     take.hidden = true;
+    tbox.querySelector('.ops-take-rest').hidden = false;
     tbox.querySelector('[data-take="reset"]').style.visibility = 'visible';
     tbox.querySelector('.ops-deal-result').hidden = false;
   });
@@ -883,16 +911,14 @@
         fbox.innerHTML = fillFrameInner(need, have, mode);
         return;
       }
+      var from = fbox.querySelector('.ops-fill-from');
       var empty = fbox.querySelector('.ops-fill-empty');
-      if (!empty) return;
-      var filled = fbox.querySelectorAll('.ops-fill-row > :not(.ops-fill-empty)').length;
-      if (mode === 'sub') {
-        empty.outerHTML = '<span class="ops-fill-coin"><span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span></span>';
-      } else {
-        empty.outerHTML = '<span class="ops-deal-piece ops-deal-ball"><b>' + (filled + 1) + '</b></span>';
-      }
+      var incoming = from.querySelector('.ops-apple, .ops-coin');
+      if (!empty || !incoming) return;
+      incoming.remove();
+      empty.outerHTML = fillItemHtml(mode, 'add', 'hole');
       fbox.querySelector('[data-fill="reset"]').style.visibility = 'visible';
-      var left = need - filled - 1;
+      var left = from.querySelectorAll('.ops-apple, .ops-coin').length;
       if (left > 0) {
         fbox.querySelector('.ops-fill-left').textContent = fill(t(mode === 'sub' ? 'ui.fillLeftSub' : 'ui.fillLeftAdd'), { m: left });
       } else {
@@ -907,7 +933,14 @@
       var sbox = swapBtn.closest('.ops-swap');
       var sa = parseInt(sbox.getAttribute('data-a'), 10);
       var sb = parseInt(sbox.getAttribute('data-b'), 10);
-      sbox.innerHTML = swapFrameInner(sa, sb, swapBtn.getAttribute('data-swap') === 'one');
+      if (swapBtn.getAttribute('data-swap') === 'reset') {
+        sbox.innerHTML = swapFrameInner(sa, sb);
+        return;
+      }
+      sbox.querySelector('.ops-swap-total').hidden = false;
+      swapBtn.hidden = true;
+      sbox.querySelector('[data-swap="reset"]').style.visibility = 'visible';
+      sbox.querySelector('.ops-deal-result').hidden = false;
     }
   });
 
