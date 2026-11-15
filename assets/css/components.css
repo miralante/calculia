@@ -106,24 +106,6 @@ img, svg, canvas, input, select, textarea, button { max-width: 100%; }
   background: var(--color-animo-suave);
 }
 
-/* ---- Back link (always top left) ---- */
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: var(--boton-min);
-  padding: 6px 16px;
-  border-radius: var(--radio);
-  background: var(--color-superficie);
-  border: 2px solid var(--color-borde);
-  color: var(--color-texto);
-  font-size: var(--texto-pequeno);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.back-link:hover { border-color: var(--mod-coordinacion); }
-
 /* ---- Cards ----
    Padding/border/shadow reducidos para que las cards no dominen la
    pantalla en escritorios. Las tools sobreescriben `border-color` por
@@ -743,6 +725,34 @@ button.bloqueada {
   margin: 0;
   font-size: var(--texto-grande, 1.5rem);
   line-height: 1.2;
+  color: var(--accent, var(--acento, inherit));
+}
+
+/* The back link of a subpage: a bordered button, the same in every suite app.
+   Each colour and size comes from the app's tokens; the names after the first
+   one are the older names some apps use, and the last value is the neutral
+   fallback. A tool may still set its own module colour on the title (it loads
+   after this block and wins). */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--button-min, var(--boton-min, var(--tocable, 44px)));
+  padding: 6px 16px;
+  border-radius: var(--radius, var(--radio, 12px));
+  background: var(--color-surface, var(--color-superficie, var(--superficie-1, #fff)));
+  border: 2px solid var(--color-border, var(--color-borde, var(--borde, #c9ced3)));
+  color: var(--color-text, var(--color-texto, var(--texto-primario, #1a1a2e)));
+  font-size: var(--text-small, var(--texto-pequeno, var(--texto-300, 1rem)));
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.back-link:hover { border-color: var(--accent, var(--acento, currentColor)); }
+
+.back-link:focus-visible {
+  outline: 2px solid var(--accent, var(--acento, currentColor));
+  outline-offset: 3px;
 }
 
 .suite-chrome-controls {
