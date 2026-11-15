@@ -64,8 +64,7 @@
 
   function lineTicks(min, max, labels, color) {
     /* Dibuja el eje horizontal con punta de flecha en los dos
-       extremos y, para cada label, un tick + número + punto en su
-       posición. labels es un array de { n, isMain, color, label }
+       extremos y, para cada label, un punto + número en su posición. labels es un array de { n, isMain, color, label }
        donde isMain agranda el tick. Los negativos van en rojo y
        llevan el signo «−» escrito, para que el dato no dependa solo
        del color (WCAG 1.4.1). El viewBox escala el dibujo con el
@@ -81,7 +80,6 @@
       var x = pos(e.n);
       var neg = e.n < 0;
       var c = neg ? 'var(--numero-negativo)' : (e.color || color);
-      var tickH = e.isMain ? 26 : 18;
       var label = String(e.n);
       if (e.label !== undefined) {
         label = e.label;
@@ -89,8 +87,9 @@
         if (e.n !== Math.floor(e.n)) label = label.replace('.', sep);
         label = label.replace('-', '−');
       }
-      var textFill = neg ? 'var(--numero-negativo)' : 'var(--color-texto)';
-      ticks += '<line x1="' + x + '" y1="' + (midY - tickH / 2) + '" x2="' + x + '" y2="' + (midY + tickH / 2) + '" stroke="' + c + '" stroke-width="4" stroke-linecap="round"/>';
+      /* El número lleva el mismo color que su punto. Los negativos
+         ya usan el rojo de «menos», y llevan el signo «−» escrito. */
+      var textFill = c;
       ticks += '<text x="' + x + '" y="' + (midY + 52) + '" text-anchor="middle" font-size="30" font-weight="700" fill="' + textFill + '">' + label + '</text>';
       ticks += '<circle cx="' + x + '" cy="' + midY + '" r="9" fill="' + c + '" stroke="var(--color-fondo)" stroke-width="3"/>';
     });
@@ -227,6 +226,30 @@
     });
   }
 
+  /* Rellena la lista de ejemplos de vida real: cada trozo va en un
+     <li> con su dibujo (pics[i] de data.js) y su texto. El dibujo es
+     decorativo: el texto ya dice el ejemplo. */
+  function fillExamples(ul, raw, pics) {
+    ul.innerHTML = '';
+    var parts = String(raw || '').split(/\s*·\s*/).filter(function (p) { return p.length > 0; });
+    parts.forEach(function (p, i) {
+      var li = document.createElement('li');
+      var key = pics && pics[i];
+      if (key && DATA.pictures[key]) {
+        var pic = document.createElement('span');
+        pic.className = 'ex-pic';
+        pic.setAttribute('aria-hidden', 'true');
+        pic.innerHTML = DATA.pictures[key];
+        li.appendChild(pic);
+      }
+      var txt = document.createElement('span');
+      txt.className = 'ex-text';
+      txt.textContent = p;
+      li.appendChild(txt);
+      ul.appendChild(li);
+    });
+  }
+
   /* ---- Pintado del slide actual ---- */
   /* La misma card (slideTitle, slideEyebrow, slideVisual, slideReal)
      se rellena según el kind del slide:
@@ -280,7 +303,7 @@
     /* Lista de vida real solo en kind: 'real'. */
     slideReal.innerHTML = '';
     if (s.kind === 'real') {
-      fillList(slideReal, App.i18n.t('slide' + s.id + 'Real'));
+      fillExamples(slideReal, App.i18n.t('slide' + s.id + 'Real'), s.pics);
       slideReal.classList.remove('hidden');
     } else {
       slideReal.classList.add('hidden');

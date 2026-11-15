@@ -9,20 +9,20 @@
 
   App.i18n.register({
     slideNaturalesTitle: 'Naturales',
-    slideNaturalesReal: '🧮 3 manzanas · 5 dedos · 10 años',
+    slideNaturalesReal: '3 manzanas · 5 dedos · 10 años',
     slideEnterosTitle: 'Enteros',
-    slideEnterosReal: '🌡️ −5 °C · sótano −1 · 3 plantas',
+    slideEnterosReal: '−5 °C · sótano −1 · 3 plantas',
     slideFraccionesTitle: 'Fracciones',
-    slideFraccionesReal: '🍕 1/2 pizza · 1/4 de hora',
+    slideFraccionesReal: '1/2 pizza · 1/4 de hora',
     slideDecimalesTitle: 'Decimales',
-    slideDecimalesReal: '💰 1,99 € · 1,5 m · 3,14',
+    slideDecimalesReal: '1,99 € · 1,5 m · 3,14',
 
     /* Características de cada tipo: se muestran en la card de
        exposición, debajo del dibujo. Cada rasgo va separado por « · ». */
     slideNaturalesTraits: 'Son 0, 1, 2, 3… · Nunca son negativos · No tienen decimales',
-    slideEnterosTraits: 'Pueden ser negativos: −3, −2, −1 · El 0 está entre los negativos y los positivos · No tienen decimales',
-    slideFraccionesTraits: 'Son una parte de algo dividido en partes iguales · Se escriben con dos números: 3/4 · El de abajo dice en cuántas partes se divide',
-    slideDecimalesTraits: 'Tienen una coma (,) · Lo que va después de la coma vale menos de 1 · Ejemplo: 2,5 = dos y medio',
+    slideEnterosTraits: 'Pueden ser negativos · El 0 separa los negativos de los positivos · No tienen decimales',
+    slideFraccionesTraits: 'Son una parte de algo dividido en partes iguales · Se escriben con dos números y el signo de división: 3/4 · El de abajo dice en cuántas partes se divide y el de arriba las partes que se tienen',
+    slideDecimalesTraits: 'Tienen una coma (,) · Lo que va después de la coma vale menos de 1',
     traitsEyebrow: 'Sus características:',
     slideVsEnterosTitle: 'Naturales y Enteros',
     slideVsDecimalesTitle: 'Naturales y Decimales',

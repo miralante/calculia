@@ -96,6 +96,40 @@
 .slide-real li:first-child { margin-top: 0; }
 .slide-real li:last-child { margin-bottom: 0; }
 
+/* Características del tipo (card de exposición): mismo estilo que la
+   lista de vida real, pero con letra un poco más grande. */
+#slideTraits { font-size: var(--texto-grande); }
+
+/* Ejemplos de vida real: tarjetas con dibujo arriba y texto debajo,
+   en letra Nunito (redondeada y más amable) y un poco más grande. */
+.slide-examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+  gap: var(--espacio);
+  width: 100%;
+  max-width: 36em;
+  font-family: 'Nunito', var(--fuente);
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  line-height: 1.25;
+}
+.slide-examples li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35em;
+  margin: 0;
+  padding: var(--espacio);
+  border: 2px solid var(--mod-razonamiento-suave);
+  border-radius: 16px;
+}
+.slide-examples .ex-pic svg {
+  display: block;
+  width: 5.5rem;
+  height: 5.5rem;
+}
+.slide-examples .ex-text { text-align: center; }
+
 /* ---- Controles del carrusel (← / → / contador) ---- */
 
 
