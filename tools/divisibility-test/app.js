@@ -220,6 +220,7 @@
 
   App.activityFlow.setup({
     toolId: 'divisibility-test',
+    pairedTest: true,
     intro: DATA.intro,
     real: [],
     skipReal: true,

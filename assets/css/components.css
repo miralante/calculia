@@ -470,6 +470,24 @@ button.locked {
 /* Utilities */
 .centered { text-align: center; }
 .hidden { display: none !important; }
+
+/* Explanation and practice side by side (design.md §3.5). An activity with
+   pairedTest puts its explanation (#screenIntro) and its test (#screenGame)
+   in one .flow-pair. From 768px the test shows next to the explanation,
+   which stays on the left; below that they stack, the explanation first. */
+.flow-pair { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--espacio-grande); align-items: start; }
+.flow-pair > section, .flow-pair > .intro-frame { min-width: 0; }
+.intro-frame { display: flex; flex-direction: column; gap: var(--espacio-grande); }
+@media (min-width: 768px) {
+  .flow-pair.paired { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+/* Beside the test the explanation keeps its slides only: no title card and no buttons that lead away.
+   Beside an intro frame the explanation keeps its buttons: the slides are still being read. */
+.flow-pair.in-test #introHeadingRow,
+.flow-pair.in-test #introActivityTitle,
+.flow-pair.in-test #introCard,
+.flow-pair.in-test #introContinue,
+.flow-pair.in-test #introBack { display: none !important; }
 .stack { display: flex; flex-direction: column; gap: 12px; }
 .row { display: flex; align-items: center; gap: var(--espacio); flex-wrap: wrap; }
 
@@ -765,5 +783,27 @@ button.bloqueada {
   .suite-chrome-name { font-size: 1rem; }
   .suite-chrome-activity h1 { font-size: 1.25rem; }
   .suite-chrome-controls { margin-inline-start: auto; }
+}
+
+/* The body: the page's content region, between the header and the footer.
+   Every suite page marks it with class="suite-body" on its <main>. The class
+   is generic on purpose: it sets the width, the side gutters and min-width:0
+   (so nothing pushes the page sideways). It never sets a grid, a flex or a
+   vertical rhythm: each app keeps its own inner layout (stack, pila, modulos,
+   cards, decks). An app sets its width with --suite-body-max in its tokens.
+   A body placed directly inside a .container takes no gutters of its own, since
+   the container already provides them for the header, the body and the footer. */
+.suite-body {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--suite-body-max, 100%);
+  margin-inline: auto;
+  padding-inline: var(--suite-body-gutter, clamp(12px, 3vw, 24px));
+  padding-block: var(--suite-body-pad-block, 0);
+  min-width: 0;
+}
+
+:where(.container) > .suite-body {
+  padding-inline: 0;
 }
 /* suite:suite-chrome:end */

@@ -58,7 +58,7 @@ var DATA = {
     { id: 'div', symbol: '÷', icon: '➗',
       intro: [
         { visual: { kind: 'names', total: 7, size: 3 } },
-        { visual: { kind: 'deal', total: 6, groups: 2 } },
+        { visual: { kind: 'divide', total: 6, groups: 2, numbered: true, caption: true }, frame: { kind: 'deal', total: 6, groups: 2, balls: true } },
         { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true, numbered: true } },
         { visual: { kind: 'divide', total: 7, size: 3, icon: '🔴', caption: true, numbered: true } },
         { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true, product: true, numbered: true } }

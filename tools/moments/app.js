@@ -34,6 +34,7 @@
 
   App.activityFlow.setup({
     toolId: 'moments',
+    pairedTest: true,
     test: 'options',
     socratic: true,
     intro: DATA.intro.map(function (step) { return { visual: step }; }),

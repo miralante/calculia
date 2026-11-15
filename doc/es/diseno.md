@@ -168,6 +168,49 @@ comprobación 18 rechaza una segunda copia de las clases de la hoja o de los
 fotogramas de la sacudida en el `styles.css` de una actividad, y en
 `activity-flow.css` o `number-sort.css`.
 
+### 3.5 Dos tipos de pantalla: explicativa e interactiva
+
+Toda pantalla de Calculia es de uno de dos tipos. Cada tipo es un **módulo**
+o *frame* propio, no una página suelta, y puede aparecer solo o emparejado con
+otro en la misma vista.
+
+| Tipo | Qué hace la persona | Qué lo sostiene |
+|---|---|---|
+| **Explicativa** (tipo *slide*) | Lee, mira y avanza con ← → o con el botón siguiente. No hay nada que responder. | La tarjeta del carrusel (§3.3) |
+| **Interactiva** (tipo *frame* de juego) | Actúa sobre el contenido: arrastra, coloca, ordena, toca el dibujo o elige, y recibe ✓ o ✗ en cada intento. | La hoja de práctica (§3.4) o la prueba pregunta a pregunta (`'options'`), donde cada pregunta es un frame interactivo |
+
+Reglas de composición:
+
+1. **Pantalla partida en escritorio.** Una explicativa puede compartir la
+   vista con una interactiva: la explicación a la **izquierda** y el frame de
+   juego a la **derecha**, a partir de 768 px de ancho. El orden de lectura y
+   de tabulación es el mismo: primero la explicación, después el juego.
+2. **Móvil: una sola columna.** Por debajo de 768 px la pareja se apila, con
+   la explicación encima y el frame debajo. Nunca hay desplazamiento
+   horizontal (contrato responsive de [`CLAUDE.md`](../../CLAUDE.md)).
+3. **El frame no empieza sin su explicación.** Un frame interactivo se
+   presenta en pareja con la explicación que necesita, o llega después de
+   ella en la pantalla anterior. Nunca aparece suelto antes de haberse
+   explicado.
+4. **La explicación no responde ni puntúa.** Una pantalla explicativa no
+   suma estrellas ni marca aciertos. Su botón nombra la acción siguiente
+   (§4, punto 3).
+5. **Cada intento del frame se comprueba en el propio frame.** Sigue las
+   pautas del §4, puntos 6, 8 y 12: ✓ o ✗ con forma y texto, sin castigo, y
+   una estrella y una explicación al cerrar la ronda.
+6. **Las flechas son de la explicación; el juego tiene su propio botón.** En
+   pantalla partida, ← → pertenecen al carrusel de la izquierda. El botón que
+   empieza el juego, a la derecha, sigue siendo `btn` primario, como
+   `realContinue` (ver `CLAUDE.md`, *Stage navigation outranks transition*).
+
+> **Estado:** implementada en las 17 actividades que usan el flujo de
+> explicación y prueba pregunta a pregunta (`pairedTest: true` en su
+> `app.js`). El contenedor `.flow-pair` vive en `components.css` y lo monta
+> `activity-flow.js`. En *Operaciones*, la diapositiva de «dividir en partes
+> iguales» tiene un juego a su derecha (`introFrameHtml`: repartir bolas
+> numeradas entre amigos). Quedan fuera *Divisores* y *Múltiplos*, cuya práctica
+> es una pantalla propia, y las actividades con flujo de código propio.
+
 ---
 
 ## 4. Las pautas de diseño, en lista
@@ -205,6 +248,10 @@ Estas son las que se comprueban. La fuente normativa es
     color), y la ronda acaba con una estrella y una explicación, nunca
     con una nota. Los ejemplos de vida real siguen a la explicación,
     para que la práctica tenga un uso cotidiano.
+13. **Cada pantalla es explicativa o interactiva, y se dice cuál.** Las
+    explicativas (*slide*) y las interactivas (*frame* de juego) son módulos
+    distintos; pueden ir en pantalla partida con la explicación a la izquierda
+    y el juego a la derecha, según §3.5.
 
 ---
 

@@ -89,6 +89,9 @@
 /* A slice in the deal is drawn large, with its number on the lower edge. It is a tap target to deal it. */
 .ops-deal-piece { display: inline-flex; position: relative; margin-bottom: 8px; cursor: pointer; border-radius: var(--radio); }
 .ops-deal-piece:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 3px; }
+/* The numbered balls of the sharing game beside the division slides: 64px touch targets, the number inside. */
+.ops-deal-ball { width: 64px; height: 64px; margin-bottom: 0; justify-content: center; align-items: center; border-radius: 50%; background: var(--mod-razonamiento); color: var(--texto-sobre-acento); font-size: var(--texto-grande); font-weight: 800; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15); }
+.ops-deal-ball b { font-weight: 800; }
 .ops-deal-piece .ops-slice { width: 64px; height: 64px; }
 
 /* A numbered drawing: room under each row for the number on its lower edge. */

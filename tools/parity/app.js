@@ -272,6 +272,7 @@
 
   App.activityFlow.setup({
     toolId: 'parity',
+    pairedTest: true,
     test: 'options',
     review: 'rule',
     testVisuals: true,

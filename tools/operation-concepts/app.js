@@ -142,9 +142,14 @@
   }
   /* The deal drawing: a pool of pieces, empty groups, and two buttons. «Repartir uno» moves the next piece into the
      next group, in turn, so the sharing is seen happening. The result line shows once the pool is empty. */
-  function dealInner(total, groups, result) {
+  /* `ball`: the pieces are numbered balls (the frame beside the division slides), not slices. */
+  function dealInner(total, groups, result, ball) {
     var pieces = '';
-    for (var i = 0; i < total; i += 1) pieces += '<span class="ops-deal-piece" role="button" tabindex="0">' + SLICE + '<b class="ops-num">' + (i + 1) + '</b></span>';
+    for (var i = 0; i < total; i += 1) {
+      pieces += ball
+        ? '<span class="ops-deal-piece ops-deal-ball" role="button" tabindex="0"><b>' + (i + 1) + '</b></span>'
+        : '<span class="ops-deal-piece" role="button" tabindex="0">' + SLICE + '<b class="ops-num">' + (i + 1) + '</b></span>';
+    }
     var boxes = '';
     for (var g = 0; g < groups; g += 1) {
       boxes += '<div class="ops-deal-slot">' + groupTag('friend', g + 1) +
@@ -159,10 +164,16 @@
       '<button type="button" class="btn btn-secondary" data-deal="reset">' + t('ui.dealReset') + '</button>' +
       '</div>';
   }
-  function dealHtml(total, groups) {
+  function dealHtml(total, groups, ball) {
     var result = fill(t('ui.dealResult'), { T: total, g: groups, e: total / groups });
-    return '<div class="ops-deal" data-total="' + total + '" data-groups="' + groups + '" data-result="' + result + '">' +
-      dealInner(total, groups, result) + '</div>';
+    return '<div class="ops-deal" data-total="' + total + '" data-groups="' + groups + '" data-ball="' + (ball ? '1' : '0') +
+      '" data-result="' + result + '">' + dealInner(total, groups, result, ball) + '</div>';
+  }
+  /* The frame beside the explanation: a slide with a `frame` spec (kind: deal) shows its game on the right. */
+  function introFrameHtml(slide) {
+    var f = slide && slide.frame;
+    if (!f || f.kind !== 'deal') return null;
+    return dealHtml(f.total, f.groups, f.balls);
   }
   /* The total first, and next to it how it is divided: `groups` equal groups (sharing), or groups of `size`
      (packing). A leftover, if any, sits apart. `caption` writes the division underneath. */
@@ -583,7 +594,7 @@
     if (button && button.getAttribute('data-deal') === 'reset') {
       var total = parseInt(box.getAttribute('data-total'), 10);
       var groups = parseInt(box.getAttribute('data-groups'), 10);
-      box.innerHTML = dealInner(total, groups, box.getAttribute('data-result'));
+      box.innerHTML = dealInner(total, groups, box.getAttribute('data-result'), box.getAttribute('data-ball') === '1');
       return;
     }
     dealOne(box);
@@ -600,6 +611,7 @@
 
   App.activityFlow.setup({
     toolId: 'operation-concepts',
+    pairedTest: true,
     test: 'options',
     /* Typed numbers are checked with a hint, then the explanation. The choice questions stay as options. */
     socratic: true,
@@ -609,6 +621,7 @@
     testVisuals: true,
     testVisualClass: 'ops-visual',
     visualHtml: drawingHtml,
+    introFrameHtml: introFrameHtml,
     introCopy: function (i, def) {
       return {
         title: t('ops.' + def.id + '.intro.' + (i + 1) + '.title'),

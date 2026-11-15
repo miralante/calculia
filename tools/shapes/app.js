@@ -296,6 +296,7 @@
      questions; the round shuffles them, and each one is generated when it starts. */
   App.activityFlow.setup({
     toolId: 'shapes',
+    pairedTest: true,
     test: 'options',
     slideProgress: false,
     intro: INTRO,

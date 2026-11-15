@@ -165,6 +165,47 @@ answers (`.options.options-row .option-btn` in the time activities). Check 18
 rejects a second copy of the sheet's classes or of the shake keyframes in an
 activity's `styles.css`, and in `activity-flow.css` or `number-sort.css`.
 
+### 3.5 Two kinds of screen: explanatory and interactive
+
+Every Calculia screen is one of two kinds. Each kind is its own **module**, or
+*frame*, not a loose page, and it can appear on its own or paired with another
+in the same view.
+
+| Kind | What the person does | What carries it |
+|---|---|---|
+| **Explanatory** (*slide* type) | Reads, looks and moves on with ← → or the next button. There is nothing to answer. | The carousel card (§3.3) |
+| **Interactive** (game *frame* type) | Acts on the content: drags, places, orders, taps the drawing or chooses, and gets ✓ or ✗ on each attempt. | The practice sheet (§3.4), or the one-question-per-slide test (`'options'`), where each question is an interactive frame |
+
+Composition rules:
+
+1. **Split screen on desktop.** An explanatory screen can share the view with an
+   interactive one: the explanation on the **left** and the game frame on the
+   **right**, from 768 px wide. Reading and tab order are the same: the
+   explanation first, then the game.
+2. **Mobile: one column.** Below 768 px the pair stacks, with the explanation on
+   top and the frame below. There is never horizontal scrolling (the responsive
+   contract in [`CLAUDE.md`](../../CLAUDE.md)).
+3. **The frame never starts without its explanation.** An interactive frame is
+   presented paired with the explanation it needs, or comes after it on the
+   previous screen. It never appears alone before it has been explained.
+4. **The explanation does not answer or score.** An explanatory screen awards no
+   stars and marks no answers. Its button names the next action (§4, point 3).
+5. **Each attempt in the frame is checked in the frame.** It follows §4, points
+   6, 8 and 12: ✓ or ✗ with shape and text, no penalty, and a star and an
+   explanation when the round closes.
+6. **The arrows belong to the explanation; the game has its own button.** In a
+   split screen, ← → belong to the carousel on the left. The button that starts
+   the game, on the right, stays a primary `btn`, like `realContinue` (see
+   `CLAUDE.md`, *Stage navigation outranks transition*).
+
+> **Status:** implemented in the 17 activities that use the explanation and
+> one-question-per-slide test flow (`pairedTest: true` in their `app.js`). The
+> `.flow-pair` container lives in `components.css` and `activity-flow.js`
+> mounts it. In *Operations*, the «sharing into equal parts» slide has a game on
+> its right (`introFrameHtml`: sharing numbered balls among friends).
+> *Divisors* and *Multiples* are left out, because their practice is
+> a screen of their own, as are the activities with their own flow code.
+
 ---
 
 ## 4. The design guidelines, as a list
@@ -201,6 +242,10 @@ These are the ones that get verified. The normative source is
     the round ends with a star and an explanation, never with a grade. The
     real-life examples follow the explanation, so the practice has an
     everyday use.
+13. **Every screen is explanatory or interactive, and says which.** Explanatory
+    screens (*slide*) and interactive ones (game *frame*) are separate modules;
+    they can share a split screen, with the explanation on the left and the game
+    on the right, per §3.5.
 
 ---
 

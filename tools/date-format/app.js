@@ -120,6 +120,7 @@
 
   App.activityFlow.setup({
     toolId: 'date-format',
+    pairedTest: true,
     test: 'options',
     skipReal: true,
     real: [],

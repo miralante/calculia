@@ -83,7 +83,7 @@
         names: { dividend: 'dividendo', divisor: 'divisor', quotient: 'cociente', rest: 'resto', leftOver: 'sobra' },
         intro: {
           1: { title: 'Cada parte de la división tiene nombre', text: '7 es el dividendo: lo que se reparte. 3 es el divisor. 2 es el cociente: el resultado. 1 es el resto: lo que sobra.' },
-          2: { title: 'Dividir es repartir en partes iguales', text: '6 trozos de pizza entre 2 amigos: a cada uno le tocan 3.' },
+          2: { title: 'Dividir es repartir en partes iguales', text: 'Reparte 6 bolas entre 2 amigos: a cada uno le tocan 3.' },
           3: { title: 'Dividir también es contar cuántos grupos caben', text: '8 bolas en paquetes de 2: salen 4 paquetes.' },
           4: { title: 'Puede sobrar', text: '7 bolas en paquetes de 3: salen 2 paquetes llenos y sobra 1. Es la división con resto.' },
           5: { title: 'Dividir es lo contrario de multiplicar', text: 'Multiplicas: 4 × 2 = 8. Divides: 8 ÷ 2 = 4. Si sabes una, sabes la otra.' }

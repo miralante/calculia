@@ -124,6 +124,7 @@
 
   App.activityFlow.setup({
     toolId: 'common-divisor',
+    pairedTest: true,
     /* The answer is a typed number: the wrong tries get a hint, then the explanation. */
     socratic: true,
     typedAnswers: true,

@@ -39,6 +39,7 @@
 
   App.activityFlow.setup({
     toolId: 'time-convert',
+    pairedTest: true,
     test: 'options',
     /* The answer is a typed number: the wrong tries get a hint, then the explanation. */
     socratic: true,

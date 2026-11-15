@@ -233,6 +233,19 @@
     return config.realText ? config.realText(i, source(ctx)) : t('real.' + (i + 1));
   }
 
+  /* The explanation and the frame on its right share one row (.flow-pair). The row is side by side while a frame
+     is on the right: the test (class in-test: the explanation then keeps only its slides) or an intro frame. */
+  function syncPair() {
+    var pair = document.querySelector('.flow-pair');
+    if (!pair) return;
+    var game = $('#screenGame');
+    var inTest = !!game && pair.contains(game) && !game.classList.contains('hidden');
+    var frame = $('#introFrame');
+    var frameOn = !!frame && !frame.classList.contains('hidden');
+    pair.classList.toggle('paired', inTest || frameOn);
+    pair.classList.toggle('in-test', inTest);
+  }
+
   function paintIntro(ctx) {
     var config = ctx.config;
     var src = source(ctx);
@@ -245,6 +258,16 @@
     var label = config.introVisualAria ? config.introVisualAria(i) : null;
     $('#introVisual').setAttribute('aria-label', label || t('ui.visualAria'));
     if (ctx.slideBars) paintBar(ctx, '#introProgress', '#introProgressFill', i, src.intro.length);
+    /* introFrameHtml: a slide can put an interactive frame on the right of its explanation (or none). */
+    if (config.introFrameHtml) {
+      var frame = $('#introFrame');
+      var frameHtml = config.introFrameHtml(src.intro[i]);
+      if (frame) {
+        frame.innerHTML = frameHtml || '';
+        frame.classList.toggle('hidden', !frameHtml);
+      }
+      syncPair();
+    }
     /* A mode can add to the slide (the gallery shows its last button only on the last slide). */
     if (ctx.mode.paintIntro) ctx.mode.paintIntro(ctx);
   }
@@ -297,7 +320,11 @@
         save: function () { App.storage.set(TOOL_ID, progress); },
         paintStars: function () { $('#stars').textContent = '⭐ ' + progress.stars; },
         show: function (screen) {
-          ctx.screens.forEach(function (id) { $(id).classList.toggle('hidden', id !== screen); });
+          /* pairedTest: the test keeps the explanation on its left. */
+          var keep = [screen];
+          if (config.pairedTest && screen === '#screenGame') keep.push('#screenIntro');
+          ctx.screens.forEach(function (id) { $(id).classList.toggle('hidden', keep.indexOf(id) === -1); });
+          syncPair();
         },
         paintIntro: function () { paintIntro(ctx); },
         paintReal: function () { paintReal(ctx); },
@@ -329,6 +356,21 @@
     var config = ctx.config;
     $('#activity').innerHTML = STAGES + '\n' + (config.reminder ? REMINDER + '\n' : '') + ctx.mode.markup(ctx) +
       (config.extraMarkup ? '\n' + config.extraMarkup : '');
+    /* pairedTest: explanation and test share one row. introFrameHtml: explanation and a frame share one row
+       (see .flow-pair in components.css). The frame sits right after the explanation. */
+    if ((config.pairedTest || config.introFrameHtml) && $('#screenIntro')) {
+      var pair = document.createElement('div');
+      pair.className = 'flow-pair';
+      $('#activity').insertBefore(pair, $('#screenIntro'));
+      pair.appendChild($('#screenIntro'));
+      if (config.introFrameHtml) {
+        var introFrame = document.createElement('div');
+        introFrame.id = 'introFrame';
+        introFrame.className = 'intro-frame hidden';
+        pair.appendChild(introFrame);
+      }
+      if (config.pairedTest && $('#screenGame')) pair.appendChild($('#screenGame'));
+    }
     if (config.introHeading) $('#introHeading').textContent = config.introHeading();
     else removeNode('#introHeadingRow');
     if (config.introCard) {

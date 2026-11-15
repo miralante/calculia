@@ -106,6 +106,7 @@
   App.activityFlow.setup({
     toolId: 'lines',
     test: 'options',
+    pairedTest: true,
     slideProgress: false,
     intro: DATA.concepts.map(function (concept) { return { visual: concept }; }),
     real: DATA.real.map(function (item) { return { visual: item }; }),

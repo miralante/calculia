@@ -59,6 +59,7 @@
 
   App.activityFlow.setup({
     toolId: 'time-compare',
+    pairedTest: true,
     test: 'options',
     intro: DATA.intro.map(function (step) { return { visual: step }; }),
     real: DATA.real.map(function (example) { return { visual: example }; }),

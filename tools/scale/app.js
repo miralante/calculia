@@ -69,6 +69,7 @@
 
   App.activityFlow.setup({
     toolId: 'scale',
+    pairedTest: true,
     test: 'options',
     socratic: true,
     review: 'none',

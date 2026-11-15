@@ -455,6 +455,7 @@
 
   App.activityFlow.setup({
     toolId: 'linear-functions',
+    pairedTest: true,
     test: 'options',
     socratic: true,
     review: 'none',
