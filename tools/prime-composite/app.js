@@ -1,13 +1,12 @@
 /* ============================================================
    Calculia — Primo o compuesto
-   Two stages, the flow of Múltiplos (assets/js/activity-flow.js, test
-   'options', no real-life stage):
-   1. the explanation: composites first, then primes. The slides are
-      interactive: the user arranges dots in rows, and taps the composite
-      (or prime) numbers on a grid of 1 to 20;
-   2. the test: one question at a time, with a hint and the explanation.
-   This file has the drawings, the taps and the questions. The data is in
-   data.js and the texts in strings.<locale>.js.
+   Two stages side by side: the game on the left and the explanation on
+   the right (config.pairedPractice). The explanation slides are
+   interactive: the user arranges dots in rows, and taps the composite (or
+   prime) numbers on a grid of 1 to 20. The game draws a starting number
+   from 2 to 9; the user picks another from the same list; the product is
+   shown, and why it is composite. The data is in data.js and the texts in
+   strings.<locale>.js.
    ============================================================ */
 (function () {
   'use strict';
@@ -15,6 +14,7 @@
   var t = App.i18n.t;
   var fill = App.utils.fill;
   var shuffled = App.utils.shuffle;
+  var $ = App.utils.$;
 
   /* ---- Numbers ----
      Nothing that can be worked out is stored: whether a number is prime
@@ -181,70 +181,88 @@
     if (cell) tapCell(cell);
   });
 
-  /* ---- Test: the questions ---- */
-  /* «Sí» and «No», in a shuffled order. */
-  function yesNoOptions(yes) {
-    return App.answerOptions.yesNo(yes, { yes: t('ui.yes'), no: t('ui.no') });
+  /* ---- Practice: a game, on the left of the explanation -------------------
+     A starting number is drawn at random from DATA.numbers (2 to 9). The user
+     picks another number from the same list; the product is shown, and why it
+     is composite. The first answer for each starting number gives one star.
+     «Otro número de partida» draws a new starting number. */
+  var PRACTICE_HTML = [
+    '<section id="screenPractice" class="hidden stack">',
+    '  <div class="card centered stack pc-game">',
+    '    <p class="instruction" data-i18n="practice.start">Número de partida</p>',
+    '    <p class="pc-start" id="pcStart" aria-live="polite"></p>',
+    '    <p class="instruction" data-i18n="practice.pick">Elige otro número del 2 al 9.</p>',
+    '    <div class="pc-picker" id="pcPicker"></div>',
+    '    <p class="pc-result" id="pcResult" aria-live="polite"></p>',
+    '    <p class="pc-why" id="pcWhy" aria-live="polite"></p>',
+    '  </div>',
+    '  <button type="button" class="btn btn-secondary" id="practiceOther" data-i18n="practice.other">Otro número de partida</button>',
+    '</section>'
+  ].join('\n');
+
+  /* The context of the activity and the starting number of the round. Set on the first start. */
+  var game = null;
+
+  /* A starting number from DATA.numbers, different from the last one. */
+  function drawStart(last) {
+    var list = DATA.numbers;
+    var a;
+    do { a = list[Math.floor(Math.random() * list.length)]; } while (list.length > 1 && a === last);
+    return a;
   }
 
-  /* Is it prime? One number from the primes or from the composites; now and then the 1. */
-  function yesNoQuestion() {
-    var yes = Math.random() < 0.5;
-    var n = yes ? App.utils.pick(DATA.primes) : App.utils.pick(DATA.composites);
-    if (!yes && Math.random() < 0.2) n = 1;
-    var a = n > 1 ? smallestFactor(n) : 1;
-    var values = { n: n, a: a, b: n / a };
-    var type = n === 1 ? 'one' : (yes ? 'prime' : 'composite');
-    return {
-      prompt: fill(t('q.yesno.prompt'), values),
-      hint: fill(t('q.yesno.hint'), values),
-      visual: '<div class="pc-test">' + ringSvg(n) + '</div>',
-      visualAria: fill(t('q.yesno.visualAria'), values),
-      options: yesNoOptions(yes),
-      explanation: fill(t('q.yesno.' + type), values)
-    };
+  /* The number picker: the numbers from 2 to 9, as buttons, in a new random order each time it is shown. */
+  function paintPicker() {
+    var picker = $('#pcPicker');
+    picker.innerHTML = '';
+    shuffled(DATA.numbers.slice()).forEach(function (b) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn btn-secondary pc-pick';
+      btn.textContent = String(b);
+      btn.setAttribute('aria-label', fill(t('practice.pickAria'), { a: game.a, b: b }));
+      btn.addEventListener('click', function () { answer(b); });
+      picker.appendChild(btn);
+    });
   }
 
-  /* The prime among three numbers: the other two are composites. */
-  function pickQuestion() {
-    var p = App.utils.pick(DATA.primes);
-    var others = shuffled(DATA.composites).slice(0, 2);
-    return {
-      prompt: t('q.pick.prompt'),
-      hint: t('q.pick.hint'),
-      visual: '',
-      options: App.utils.numericOptions(p, others),
-      explanation: fill(t('q.pick.explain'), { p: p })
-    };
+  /* A new starting number: the result is cleared and the picker is shown again. */
+  function newRound() {
+    game.a = drawStart(game.a);
+    game.answered = false;
+    $('#pcStart').textContent = String(game.a);
+    $('#pcResult').textContent = '';
+    $('#pcWhy').textContent = '';
+    paintPicker();
   }
 
-  /* How many numbers divide it exactly: 2 for a prime, more for a composite. */
-  function divisorsQuestion() {
-    var n = App.utils.pick(DATA.primes.concat(DATA.composites));
-    var list = divisorsOf(n);
-    var count = list.length;
-    var values = { n: n, list: list.join(', '), count: count };
-    return {
-      prompt: fill(t('q.divisors.prompt'), values),
-      hint: fill(t('q.divisors.hint'), values),
-      visual: '',
-      options: App.utils.numericOptions(count, [count + 1, count - 1, count + 2]),
-      explanation: fill(t(isPrime(n) ? 'q.divisors.prime' : 'q.divisors.composite'), values)
-    };
+  /* The user picked b: the product, and why it is composite. */
+  function answer(b) {
+    var a = game.a;
+    var m = a * b;
+    $('#pcResult').textContent = fill(t('practice.result'), { a: a, b: b, m: m });
+    $('#pcWhy').textContent = fill(t('practice.why'), { a: a, b: b, m: m });
+    if (!game.answered) {
+      game.answered = true;
+      game.ctx.progress.stars += 1;
+      game.ctx.save();
+      game.ctx.paintStars();
+    }
   }
 
-  function makeQuestion(type) {
-    if (type === 'yesno') return yesNoQuestion();
-    if (type === 'pick') return pickQuestion();
-    return divisorsQuestion();
+  /* The practice starts with a new starting number. The fixed button is wired once, the first time. */
+  function startPractice(ctx) {
+    if (!game) {
+      game = { ctx: ctx, a: null, answered: false };
+      $('#practiceOther').addEventListener('click', newRound);
+    }
+    newRound();
+    ctx.show('#screenPractice');
   }
 
   App.activityFlow.setup({
     toolId: 'prime-composite',
-    pairedTest: true,
-    socratic: true,
-    testVisuals: true,
-    testVisualClass: 'pc-test-visual',
+    pairedPractice: true,
     real: [],
     skipReal: true,
     intro: DATA.concepts.map(function (concept) { return { visual: concept }; }),
@@ -253,11 +271,8 @@
       return { title: t('concept.' + id + '.title'), text: t('concept.' + id + '.text') };
     },
     visualHtml: visualHtml,
-    buildRound: function () {
-      var list = [];
-      for (var i = 0; i < DATA.perRound; i += 1) list.push(DATA.questions[i % DATA.questions.length]);
-      return shuffled(list);
-    },
-    makeQuestion: makeQuestion
+    extraMarkup: PRACTICE_HTML,
+    extraScreens: ['#screenPractice'],
+    ownTest: startPractice
   });
 })();

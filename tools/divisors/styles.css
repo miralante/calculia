@@ -28,9 +28,10 @@
 .div-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; }
 .div-label { font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
 
-/* The practice game: the numbers to pick, and the cards of a table up to 10. */
-.div-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 10px; width: 100%; }
-.div-pick { min-height: 64px; font-size: var(--texto-grande); font-weight: 800; }
-.div-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; }
-.div-card { min-height: 64px; font-size: var(--texto-grande); font-weight: 700; font-variant-numeric: tabular-nums; }
-.div-card.shown { color: var(--mod-razonamiento); }
+/* The practice game (on the left, beside the explanation): a starting number, the numbers to pick, the result. */
+.div-game { width: 100%; }
+.div-start { margin: 0; font-size: 56px; font-weight: 900; line-height: 1; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+.div-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 10px; width: 100%; }
+.div-pick { min-height: 56px; font-size: var(--texto-grande); font-weight: 800; }
+.div-result { margin: 0; font-size: var(--texto-grande); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+.div-why { margin: 0; line-height: 1.4; }

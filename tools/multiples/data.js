@@ -4,11 +4,11 @@
    (equal groups of dots and their product) or `times` (the multiplications
    of `each` by 1 to `count`, one per line, as text, no pictures). The texts
    are in strings.<locale>.js (intro.<n>.title and intro.<n>.text).
-   Practice: the game offers the numbers in `numbers`; each one has its table
-   up to 10 (see app.js).
+   Practice: the game draws its starting number from `numbers` (1 to 9) and
+   the user picks the other one from the same list (see app.js).
    ============================================================ */
 var DATA = {
-  numbers: [2, 3, 4, 5, 6, 7, 8, 9],
+  numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
 
   intro: [
     { visual: { kind: 'groups', each: 4, count: 3 } },

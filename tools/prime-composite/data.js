@@ -10,12 +10,12 @@
    The texts are in strings.<locale>.js (concept.<id>.title and .text).
    The taps are handled in app.js.
 
-   The test: each round mixes the `questions` types, `perRound` questions.
-   `primes` and `composites` are the numbers the test asks about.
+   Practice: the game draws its starting number from `numbers` (2 to 9) and
+   the user picks the other one from the same list (see app.js).
+   `primes` and `composites` are checked at start-up (app.js).
    ============================================================ */
 var DATA = {
-  perRound: 6,
-  questions: ['yesno', 'pick', 'divisors'],
+  numbers: [2, 3, 4, 5, 6, 7, 8, 9],
 
   concepts: [
     { id: 'composite', kind: 'rows', n: 6 },

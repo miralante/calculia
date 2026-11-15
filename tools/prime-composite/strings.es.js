@@ -3,7 +3,7 @@
    Archivo específico del idioma. Mismas claves que strings.en.js.
    Se carga desde index.html. Primero los compuestos, luego los primos.
    Frases cortas, una idea por frase (UNE 153101). Los números que
-   cambian en las preguntas van entre llaves: {n}, {p}, {a}…
+   cambian en el juego van entre llaves: {a}, {b}, {m}, {n}…
    ============================================================ */
 (function () {
   'use strict';
@@ -13,12 +13,7 @@
     btnMenu: 'Volver al inicio',
 
     ui: {
-      product: '{k} × {d} = {m}',
-      yes: 'Sí',
-      no: 'No',
-      hintPrefix: '💡 ',
-      wrongPrefix: '❌ Mira: ',
-      rightPrefix: '✅ ¡Correcto! '
+      product: '{k} × {d} = {m}'
     },
 
     /* La explicación: una idea por diapositiva. Los compuestos van primero. */
@@ -75,27 +70,14 @@
       done: '¡Muy bien! Los has encontrado todos.'
     },
 
-    /* La prueba: enunciado, pista (sin dar la respuesta) y explicación al acertar. */
-    q: {
-      yesno: {
-        prompt: '¿El {n} es primo?',
-        hint: 'Mira entre qué números se divide {n} exacto. ¿Solo entre 1 y él mismo?',
-        visualAria: '{n} puntos.',
-        prime: '{n} solo se divide entre 1 y {n}: es primo.',
-        composite: '{n} = {a} × {b}: se divide entre más números. Es compuesto.',
-        one: '1 solo tiene un divisor: él mismo. Por eso no es primo.'
-      },
-      pick: {
-        prompt: '¿Cuál de estos números es primo?',
-        hint: 'Un primo solo se divide entre 1 y él mismo. Busca el que no se puede formar de otra manera.',
-        explain: '{p} es primo: solo se divide entre 1 y {p}. Los otros dos son compuestos.'
-      },
-      divisors: {
-        prompt: '¿Entre cuántos números se divide exacto {n}? Cuenta el 1 y el {n}.',
-        hint: 'Divide {n} entre 2, 3, 4… y mira cuáles salen exactos.',
-        prime: '{n} se divide entre {list}: son {count}. Como son solo 2, es primo.',
-        composite: '{n} se divide entre {list}: son {count}. Como son más de 2, es compuesto.'
-      }
+    /* La práctica: un juego a la izquierda de la explicación. */
+    practice: {
+      start: 'Número de partida',
+      pick: 'Elige otro número del 2 al 9.',
+      pickAria: 'Multiplicar {a} por {b}',
+      result: '{a} × {b} = {m}',
+      why: '{m} es compuesto: sale al multiplicar {a} por {b}. Tiene más de dos divisores, así que no es primo.',
+      other: 'Otro número de partida'
     }
   }, 'es');
 })();

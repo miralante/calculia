@@ -54,8 +54,6 @@
 /* ---- The circle of dots (no rows yet) and the rows the learner makes ---- */
 .pc-ring { width: 180px; height: 180px; }
 .pc-svg-dot { fill: var(--mod-razonamiento); }
-.pc-test-visual .pc-ring { width: 170px; height: 170px; }
-.pc-test { display: flex; justify-content: center; }
 .pc-stage {
   display: flex;
   align-items: center;
@@ -144,11 +142,10 @@
   text-align: center;
 }
 
-/* ---- The answers of the test ---- */
-.answer-name { display: block; }
-.answer-num {
-  display: block;
-  font-size: 2.2rem;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
+/* ---- The practice game (on the left, beside the explanation): a starting number, the numbers to pick, the result ---- */
+.pc-game { width: 100%; }
+.pc-start { margin: 0; font-size: 56px; font-weight: 900; line-height: 1; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+.pc-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 10px; width: 100%; }
+.pc-pick { min-height: 56px; font-size: var(--texto-grande); font-weight: 800; }
+.pc-result { margin: 0; font-size: var(--texto-grande); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+.pc-why { margin: 0; line-height: 1.4; }

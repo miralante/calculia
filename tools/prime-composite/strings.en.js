@@ -2,8 +2,8 @@
    Calculia — Prime or composite: texts (EN)
    Language file, loaded from index.html. Same keys as strings.es.js.
    Composites first, then primes. Short sentences, one idea per
-   sentence. The numbers that change in the questions are in braces:
-   {n}, {p}, {a}…
+   sentence. The numbers that change in the game are in braces:
+   {a}, {b}, {m}, {n}…
    ============================================================ */
 (function () {
   'use strict';
@@ -13,12 +13,7 @@
     btnMenu: 'Back to the start',
 
     ui: {
-      product: '{k} × {d} = {m}',
-      yes: 'Yes',
-      no: 'No',
-      hintPrefix: '💡 ',
-      wrongPrefix: '❌ Look: ',
-      rightPrefix: '✅ Correct! '
+      product: '{k} × {d} = {m}'
     },
 
     /* The explanation: one idea per slide. Composites come first. */
@@ -75,27 +70,14 @@
       done: 'Well done! You found them all.'
     },
 
-    /* The test: the question, a hint (without the answer) and the explanation when right. */
-    q: {
-      yesno: {
-        prompt: 'Is {n} a prime number?',
-        hint: 'Look at which numbers divide {n} exactly. Does it divide only by 1 and by itself?',
-        visualAria: '{n} dots.',
-        prime: '{n} is divided only by 1 and {n}: it is prime.',
-        composite: '{n} = {a} × {b}: it is divided by more numbers. It is composite.',
-        one: '1 has only one divisor: itself. So it is not prime.'
-      },
-      pick: {
-        prompt: 'Choose the prime number.',
-        hint: 'A prime is divided only by 1 and by itself. Find the one that cannot be made another way.',
-        explain: '{p} is prime: it is divided only by 1 and {p}. The other two are composite.'
-      },
-      divisors: {
-        prompt: 'How many numbers divide {n} exactly? Count 1 and {n}.',
-        hint: 'Divide {n} by 2, 3, 4… and see which ones come out exactly.',
-        prime: '{n} is divided by {list}: that is {count}. Since there are only 2, it is prime.',
-        composite: '{n} is divided by {list}: that is {count}. Since there are more than 2, it is composite.'
-      }
+    /* The practice: a game on the left of the explanation. */
+    practice: {
+      start: 'Starting number',
+      pick: 'Choose another number from 2 to 9.',
+      pickAria: 'Multiply {a} by {b}',
+      result: '{a} × {b} = {m}',
+      why: '{m} is composite: it comes from multiplying {a} by {b}. It has more than two divisors, so it is not prime.',
+      other: 'Another starting number'
     }
   }, 'en');
 })();

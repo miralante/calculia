@@ -2,7 +2,7 @@
    Calculia — Divisors: texts (EN)
    Language file, loaded from index.html.
    Short sentences, one idea per sentence. The numbers that change in
-   the game are in braces: {n}, {k}, {q}, {r}…
+   the game are in braces: {a}, {b}, {m}, {k}, {q}, {r}…
    ============================================================ */
 (function () {
   'use strict';
@@ -26,15 +26,14 @@
       4: { title: 'Example: divide 8 by 1, 2, 3…', text: 'If the division comes out exact, it is a divisor. If something is left over, it is not.' }
     },
 
-    /* The practice: a game. Pick a number and tap each card to see the division. */
+    /* The practice: a game on the left of the explanation. */
     practice: {
-      pick: 'Choose a number.',
-      pickAria: 'Divisors of {n}',
-      title: 'Divisors of {n}. Tap each card to see the result.',
-      card: '{n} ÷ {k} = ?',
-      cardAria: '{n} divided by {k}. Tap to see the result.',
-      done: 'Done! The divisors of {n} up to 10 are: {list}.',
-      other: 'Another number'
+      start: 'Starting number',
+      pick: 'Choose another number from 1 to 9.',
+      pickAria: 'Multiply {a} by {b}',
+      result: '{a} × {b} = {m}',
+      why: '{m} ÷ {a} = {b}, with nothing left over. So {a} is a divisor of {m}. {b} is a divisor of {m} too.',
+      other: 'Another starting number'
     }
   }, 'en');
 })();

@@ -2,7 +2,7 @@
    Calculia — Divisores: textos (ES)
    Archivo específico del idioma. Se carga desde index.html.
    Frases cortas, una idea por frase (UNE 153101). Los números que
-   cambian en el juego van entre llaves: {n}, {k}, {q}, {r}…
+   cambian en el juego van entre llaves: {a}, {b}, {m}, {k}, {q}, {r}…
    ============================================================ */
 (function () {
   'use strict';
@@ -26,15 +26,14 @@
       4: { title: 'Ejemplo: divide el 8 entre 1, 2, 3…', text: 'Si la división sale exacta, es divisor. Si sobra, no lo es.' }
     },
 
-    /* La práctica: un juego. Elige un número y toca cada tarjeta para ver la división. */
+    /* La práctica: un juego a la izquierda de la explicación. */
     practice: {
-      pick: 'Elige un número.',
-      pickAria: 'Divisores de {n}',
-      title: 'Divisores de {n}. Toca cada tarjeta para ver el resultado.',
-      card: '{n} ÷ {k} = ?',
-      cardAria: '{n} entre {k}. Toca para ver el resultado.',
-      done: '¡Listo! Los divisores de {n} hasta 10 son: {list}.',
-      other: 'Otro número'
+      start: 'Número de partida',
+      pick: 'Elige otro número del 1 al 9.',
+      pickAria: 'Multiplicar {a} por {b}',
+      result: '{a} × {b} = {m}',
+      why: '{m} ÷ {a} = {b}, sin sobrar. Por eso {a} es divisor de {m}. También {b} es divisor de {m}.',
+      other: 'Otro número de partida'
     }
   }, 'es');
 })();

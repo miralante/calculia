@@ -240,10 +240,13 @@
     if (!pair) return;
     var game = $('#screenGame');
     var inTest = !!game && pair.contains(game) && !game.classList.contains('hidden');
+    /* pairedPractice: the activity's own game shows beside the explanation the same way as a test. */
+    var practice = $('#screenPractice');
+    var inPractice = !!practice && pair.contains(practice) && !practice.classList.contains('hidden');
     var frame = $('#introFrame');
     var frameOn = !!frame && !frame.classList.contains('hidden');
-    pair.classList.toggle('paired', inTest || frameOn);
-    pair.classList.toggle('in-test', inTest);
+    pair.classList.toggle('paired', inTest || inPractice || frameOn);
+    pair.classList.toggle('in-test', inTest || inPractice);
   }
 
   function paintIntro(ctx) {
@@ -253,7 +256,9 @@
     var copy = introCopy(ctx, i);
     paintText('#introTitle', copy ? copy.title : null);
     paintText('#introText', copy ? copy.text : null);
-    $('#introVisual').innerHTML = config.visualHtml(src.intro[i].visual);
+    /* A slide without a drawing (its practice is the frame on the right) leaves the picture empty. */
+    var visual = src.intro[i].visual;
+    $('#introVisual').innerHTML = config.visualHtml && visual ? config.visualHtml(visual) : '';
     /* A slide can name its own picture (a figure names itself); otherwise the generic label. */
     var label = config.introVisualAria ? config.introVisualAria(i) : null;
     $('#introVisual').setAttribute('aria-label', label || t('ui.visualAria'));
@@ -323,7 +328,11 @@
           /* pairedTest: the test keeps the explanation on its left. */
           var keep = [screen];
           if (config.pairedTest && screen === '#screenGame') keep.push('#screenIntro');
+          if (config.pairedPractice && screen === '#screenPractice') keep.push('#screenIntro');
           ctx.screens.forEach(function (id) { $(id).classList.toggle('hidden', keep.indexOf(id) === -1); });
+          /* The intro frame belongs to the explanation: it leaves with it (paintIntro shows it again). */
+          var introFrameEl = $('#introFrame');
+          if (introFrameEl && screen !== '#screenIntro') introFrameEl.classList.add('hidden');
           syncPair();
         },
         paintIntro: function () { paintIntro(ctx); },
@@ -358,10 +367,12 @@
       (config.extraMarkup ? '\n' + config.extraMarkup : '');
     /* pairedTest: explanation and test share one row. introFrameHtml: explanation and a frame share one row
        (see .flow-pair in components.css). The frame sits right after the explanation. */
-    if ((config.pairedTest || config.introFrameHtml) && $('#screenIntro')) {
+    if ((config.pairedTest || config.pairedPractice || config.introFrameHtml) && $('#screenIntro')) {
       var pair = document.createElement('div');
       pair.className = 'flow-pair';
       $('#activity').insertBefore(pair, $('#screenIntro'));
+      /* pairedPractice: the game goes first, so it sits on the left and the explanation on the right. */
+      if (config.pairedPractice && $('#screenPractice')) pair.appendChild($('#screenPractice'));
       pair.appendChild($('#screenIntro'));
       if (config.introFrameHtml) {
         var introFrame = document.createElement('div');
