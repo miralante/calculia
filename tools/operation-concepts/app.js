@@ -140,7 +140,7 @@
   function groupTag(key, n) {
     return '<span class="ops-tag">' + fill(t('ui.' + key), { n: n }) + '</span>';
   }
-  /* The deal drawing: a pool of pieces, empty groups, and two buttons. «Repartir uno» moves the next piece into the
+  /* The deal drawing: a pool of pieces, empty groups, and the buttons. «Repartir» moves the next piece into the
      next group, in turn, so the sharing is seen happening. The result line shows once the pool is empty. */
   /* `ball`: the pieces are numbered balls (the frame beside the division slides), not slices. */
   function dealInner(total, groups, result, ball) {
@@ -155,13 +155,13 @@
       boxes += '<div class="ops-deal-slot">' + groupTag('friend', g + 1) +
         '<div class="ops-group-box ops-empty-box ops-deal-group"></div></div>';
     }
-    /* The buttons stay hidden until the first slice is dealt: the slices themselves are the way to start. */
+    /* «Repartir» is there from the start. «Empezar de nuevo» appears after the first deal. */
     return '<div class="ops-deal-pool">' + pieces + '</div>' +
       '<div class="ops-row ops-deal-groups">' + boxes + '</div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + result + '</p>' +
-      '<div class="ops-deal-actions" hidden>' +
-      '<button type="button" class="btn btn-secondary" data-deal="one">' + t('ui.dealOne') + '</button>' +
-      '<button type="button" class="btn btn-secondary" data-deal="reset">' + t('ui.dealReset') + '</button>' +
+      '<div class="ops-deal-actions">' +
+      '<button type="button" class="btn btn-secondary" data-deal="one">' + t('ui.deal') + '</button>' +
+      '<button type="button" class="btn btn-secondary" data-deal="reset" hidden>' + t('ui.dealReset') + '</button>' +
       '</div>';
   }
   function dealHtml(total, groups, ball) {
@@ -169,11 +169,160 @@
     return '<div class="ops-deal" data-total="' + total + '" data-groups="' + groups + '" data-ball="' + (ball ? '1' : '0') +
       '" data-result="' + result + '">' + dealInner(total, groups, result, ball) + '</div>';
   }
-  /* The frame beside the explanation: a slide with a `frame` spec (kind: deal) shows its game on the right. */
+  /* The grouping drawing: `total` numbered balls and one empty box per group of `size`. The instruction names the
+     task. Each press of «Agrupar» moves the next `size` balls into the next empty box. */
+  function frameGroupsInner(total, size, result) {
+    var groups = Math.floor(total / size);
+    var pieces = '';
+    for (var i = 0; i < total; i += 1) {
+      pieces += '<span class="ops-deal-piece ops-deal-ball"><b>' + (i + 1) + '</b></span>';
+    }
+    var boxes = '';
+    for (var g = 0; g < groups; g += 1) {
+      boxes += '<div class="ops-deal-slot">' + groupTag('packGroup', g + 1) +
+        '<div class="ops-group-box ops-empty-box ops-deal-group"></div></div>';
+    }
+    return '<p class="ops-story ops-pack-instruction">' + fill(t('ui.packInstruction'), { g: groups, e: size }) + '</p>' +
+      '<div class="ops-pack-pool">' + pieces + '</div>' +
+      '<div class="ops-row ops-deal-groups">' + boxes + '</div>' +
+      '<p class="ops-expr ops-deal-result" hidden>' + result + '</p>' +
+      '<div class="ops-deal-actions">' +
+      '<button type="button" class="btn btn-secondary" data-pack="one">' + t('ui.packOne') + '</button>' +
+      '<button type="button" class="btn btn-secondary" data-pack="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
+      '</div>';
+  }
+  function frameGroupsHtml(total, size) {
+    var rest = total % size;
+    var result = fill(t(rest ? 'ui.packResultLeft' : 'ui.packResult'),
+      { T: total, e: size, g: Math.floor(total / size), r: rest });
+    return '<div class="ops-pack" data-total="' + total + '" data-size="' + size + '" data-result="' + result + '">' +
+      frameGroupsInner(total, size, result) + '</div>';
+  }
+  /* The names game beside the first slide: the four names to put in their place under the numbers.
+     Tap a name, then the place it goes. A wrong place shakes and the name stays free. */
+  function namesFrameInner(total, size) {
+    var quotient = Math.floor(total / size), rest = total % size;
+    var nums = { dividend: total, divisor: size, quotient: quotient, rest: rest };
+    var keys = rest ? ['dividend', 'divisor', 'quotient', 'rest'] : ['dividend', 'divisor', 'quotient'];
+    var slot = function (key) {
+      return '<div class="div-part"><span class="div-num">' + nums[key] + '</span>' +
+        '<span class="ops-name-slot" data-slot="' + key + '"></span></div>';
+    };
+    var line = '<div class="div-names">' + slot('dividend') + sign('÷') + slot('divisor') + sign('=') + slot('quotient');
+    if (rest) line += sign(t('ops.div.names.leftOver')) + slot('rest');
+    line += '</div>';
+    /* The names are offered in a different order from the sum, so they are not already in place. */
+    var chips = '';
+    keys.slice().reverse().forEach(function (key) {
+      chips += '<button type="button" class="btn btn-secondary ops-name-chip" data-name="' + key + '">' +
+        t('ops.div.names.' + key) + '</button>';
+    });
+    return '<p class="ops-story ops-names-msg" aria-live="polite">' + t('ui.namesPick') + '</p>' +
+      line +
+      '<div class="ops-row ops-names-chips">' + chips + '</div>' +
+      '<p class="ops-expr ops-names-done" hidden>' + t('ui.namesDone') + '</p>' +
+      '<div class="ops-deal-actions"><button type="button" class="btn btn-secondary" data-names="reset" style="visibility:hidden">' +
+      t('ui.dealReset') + '</button></div>';
+  }
+  function namesFrameHtml(total, size) {
+    return '<div class="ops-names" data-total="' + total + '" data-size="' + size + '">' + namesFrameInner(total, size) + '</div>';
+  }
+  /* The join game beside the first addition slide: two groups of balls, and «Juntar» puts them together. */
+  function joinFrameInner(a, b) {
+    var balls = function (from, count) {
+      var html = '';
+      for (var i = 0; i < count; i += 1) html += '<span class="ops-deal-piece ops-deal-ball"><b>' + (from + i) + '</b></span>';
+      return html;
+    };
+    return '<p class="ops-story ops-pack-instruction">' + t('ui.joinInstruction') + '</p>' +
+      '<div class="ops-join-groups">' +
+      '<div class="ops-group-box ops-join-a ops-deal-group">' + balls(1, a) + '</div>' +
+      '<div class="ops-join-b-wrap">' + sign('+') +
+      '<div class="ops-group-box ops-join-b ops-deal-group">' + balls(a + 1, b) + '</div></div>' +
+      '</div>' +
+      '<p class="ops-expr ops-deal-result" hidden>' + fill(t('ui.joinResult'), { a: a, b: b, T: a + b }) + '</p>' +
+      '<div class="ops-deal-actions">' +
+      '<button type="button" class="btn btn-secondary" data-join="one">' + t('ui.joinOne') + '</button>' +
+      '<button type="button" class="btn btn-secondary" data-join="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
+      '</div>';
+  }
+  function joinFrameHtml(a, b) {
+    return '<div class="ops-join" data-a="' + a + '" data-b="' + b + '">' + joinFrameInner(a, b) + '</div>';
+  }
+  /* The take game beside the first subtraction slide: n balls, and «Quitar» crosses out the taken ones. */
+  function takeFrameInner(n, take) {
+    var balls = '';
+    for (var i = 0; i < n; i += 1) balls += '<span class="ops-deal-piece ops-deal-ball"><b>' + (i + 1) + '</b></span>';
+    return '<p class="ops-story ops-pack-instruction">' + fill(t('ui.takeInstruction'), { t: take }) + '</p>' +
+      '<div class="ops-pack-pool">' + balls + '</div>' +
+      '<p class="ops-expr ops-deal-result" hidden>' + fill(t('ui.takeResult'), { n: n, t: take, r: n - take }) + '</p>' +
+      '<div class="ops-deal-actions">' +
+      '<button type="button" class="btn btn-secondary" data-take="one">' + t('ui.takeOne') + '</button>' +
+      '<button type="button" class="btn btn-secondary" data-take="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
+      '</div>';
+  }
+  function takeFrameHtml(n, take) {
+    return '<div class="ops-take" data-n="' + n + '" data-remove="' + take + '">' + takeFrameInner(n, take) + '</div>';
+  }
+  /* The fill game: `need` places, `have` of them filled. Addition adds balls («Añadir»); subtraction puts coins in
+     («Poner moneda») until the places are full, so the missing ones are counted. */
+  function fillFrameInner(need, have, mode) {
+    var sub = mode === 'sub';
+    var slots = '';
+    for (var i = 0; i < need; i += 1) {
+      if (i >= have) slots += '<span class="ops-fill-empty" aria-hidden="true"></span>';
+      else if (sub) slots += '<span class="ops-fill-coin"><span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span></span>';
+      else slots += '<span class="ops-deal-piece ops-deal-ball"><b>' + (i + 1) + '</b></span>';
+    }
+    var values = { n: need, h: have, m: need - have };
+    return '<p class="ops-story ops-pack-instruction">' + fill(t(sub ? 'ui.fillInstructionSub' : 'ui.fillInstructionAdd'), values) + '</p>' +
+      '<div class="ops-row ops-fill-row">' + slots + '</div>' +
+      '<p class="ops-story ops-fill-left">' + fill(t(sub ? 'ui.fillLeftSub' : 'ui.fillLeftAdd'), values) + '</p>' +
+      '<p class="ops-expr ops-deal-result" hidden>' + fill(t(sub ? 'ui.fillResultSub' : 'ui.fillResultAdd'), values) + '</p>' +
+      '<div class="ops-deal-actions">' +
+      '<button type="button" class="btn btn-secondary" data-fill="one">' + t(sub ? 'ui.fillOneSub' : 'ui.fillOneAdd') + '</button>' +
+      '<button type="button" class="btn btn-secondary" data-fill="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
+      '</div>';
+  }
+  function fillFrameHtml(need, have, mode) {
+    return '<div class="ops-fill" data-need="' + need + '" data-have="' + have + '" data-mode="' + mode + '">' +
+      fillFrameInner(need, have, mode) + '</div>';
+  }
+  /* The swap game: two groups, and «Cambiar el orden» puts the second one first. The sum is the same. */
+  function swapFrameInner(a, b, swapped) {
+    var ballsOf = function (from, count) {
+      var html = '';
+      for (var i = 0; i < count; i += 1) html += '<span class="ops-deal-piece ops-deal-ball"><b>' + (from + i) + '</b></span>';
+      return html;
+    };
+    var boxA = '<div class="ops-group-box ops-deal-group ops-swap-box">' + ballsOf(1, a) + '</div>';
+    var boxB = '<div class="ops-group-box ops-deal-group ops-swap-box">' + ballsOf(a + 1, b) + '</div>';
+    var line = swapped ? boxB + sign('+') + boxA : boxA + sign('+') + boxB;
+    return '<p class="ops-story ops-pack-instruction">' + t('ui.swapInstruction') + '</p>' +
+      '<div class="ops-swap-row">' + line + '</div>' +
+      '<p class="ops-expr ops-deal-result"' + (swapped ? '' : ' hidden') + '>' +
+      fill(t('ui.swapResult'), { a: a, b: b, T: a + b }) + '</p>' +
+      '<div class="ops-deal-actions">' +
+      (swapped ? '' : '<button type="button" class="btn btn-secondary" data-swap="one">' + t('ui.swapOne') + '</button>') +
+      '<button type="button" class="btn btn-secondary" data-swap="reset" style="visibility:' + (swapped ? 'visible' : 'hidden') + '">' +
+      t('ui.dealReset') + '</button>' +
+      '</div>';
+  }
+  function swapFrameHtml(a, b) {
+    return '<div class="ops-swap" data-a="' + a + '" data-b="' + b + '">' + swapFrameInner(a, b, false) + '</div>';
+  }
+  /* The frame beside the explanation: a slide with a `frame` spec shows its game on the right. */
   function introFrameHtml(slide) {
     var f = slide && slide.frame;
-    if (!f || f.kind !== 'deal') return null;
-    return dealHtml(f.total, f.groups, f.balls);
+    if (!f) return null;
+    if (f.kind === 'deal') return dealHtml(f.total, f.groups, f.balls);
+    if (f.kind === 'pack') return frameGroupsHtml(f.total, f.size);
+    if (f.kind === 'names') return namesFrameHtml(f.total, f.size);
+    if (f.kind === 'join') return joinFrameHtml(f.a, f.b);
+    if (f.kind === 'take') return takeFrameHtml(f.n, f.take);
+    if (f.kind === 'fill') return fillFrameHtml(f.need, f.have, f.mode);
+    if (f.kind === 'swap') return swapFrameHtml(f.a, f.b);
+    return null;
   }
   /* The total first, and next to it how it is divided: `groups` equal groups (sharing), or groups of `size`
      (packing). A leftover, if any, sits apart. `caption` writes the division underneath. */
@@ -284,6 +433,8 @@
 
   /* A drawing from its visual spec: intro slides and real-life examples. */
   function drawingHtml(spec) {
+    /* A slide with no picture on the left (the game on the right carries it). */
+    if (!spec) return '';
     if (spec.kind === 'chain') return chainHtml(spec.n);
     if (spec.kind === 'power') return powerHtml(spec.base, spec.exp);
     if (spec.kind === 'growth') return growthHtml(spec.max);
@@ -572,19 +723,19 @@
     };
   }
 
-  /* The deal drawing's buttons: «Repartir uno» moves one piece into the next group; «Empezar de nuevo» rebuilds it. */
-  /* Deals one slice: the next piece of the pool goes into the next group, in turn. */
+  /* The deal drawing's buttons: «Repartir» moves one piece into the next group; «Empezar de nuevo» rebuilds it. */
+  /* Deals one piece: the next piece of the pool goes into the next group, in turn. */
   function dealOne(box) {
     var piece = box.querySelector('.ops-deal-pool .ops-deal-piece');
     if (!piece) return;
     var boxes = box.querySelectorAll('.ops-deal-group');
     var dealt = box.querySelectorAll('.ops-deal-group .ops-deal-piece').length;
     boxes[dealt % boxes.length].appendChild(piece);
-    box.querySelector('.ops-deal-actions').hidden = false;
+    box.querySelector('[data-deal="reset"]').hidden = false;
     if (!box.querySelector('.ops-deal-pool .ops-deal-piece')) box.querySelector('.ops-deal-result').hidden = false;
   }
 
-  /* A tap on a slice in the pool deals it. The buttons below appear after the first deal. */
+  /* A tap on a piece in the pool also deals it. «Repartir» is the main way. */
   document.addEventListener('click', function (e) {
     var target = e.target.closest ? e.target : null;
     var button = target ? target.closest('[data-deal]') : null;
@@ -608,6 +759,157 @@
     dealOne(piece.closest('.ops-deal'));
   });
 
+  /* The grouping drawing's buttons: «Agrupar» makes the next group of balls; «Empezar de nuevo» rebuilds it. */
+  function frameGroupsOne(box) {
+    var size = parseInt(box.getAttribute('data-size'), 10);
+    var pool = box.querySelector('.ops-pack-pool');
+    var left = pool.querySelectorAll('.ops-deal-ball').length;
+    var empty = null;
+    box.querySelectorAll('.ops-deal-group').forEach(function (group) {
+      if (!empty && !group.querySelector('.ops-deal-ball')) empty = group;
+    });
+    if (!empty || left < size) return;
+    for (var k = 0; k < size; k += 1) empty.appendChild(pool.querySelector('.ops-deal-ball'));
+    /* The reset keeps its place from the start (visibility, not hidden), so the buttons do not move while dealing. */
+    box.querySelector('[data-pack="reset"]').style.visibility = 'visible';
+    /* No full group is left: the balls that remain are the rest. They are outlined, and the result shows. */
+    if (left - size < size) {
+      pool.querySelectorAll('.ops-deal-ball').forEach(function (ball) { ball.classList.add('ops-left'); });
+      box.querySelector('[data-pack="one"]').hidden = true;
+      box.querySelector('.ops-deal-result').hidden = false;
+    }
+  }
+  document.addEventListener('click', function (e) {
+    var target = e.target.closest ? e.target : null;
+    var button = target ? target.closest('[data-pack]') : null;
+    if (!button) return;
+    var box = button.closest('.ops-pack');
+    if (button.getAttribute('data-pack') === 'reset') {
+      box.innerHTML = frameGroupsInner(parseInt(box.getAttribute('data-total'), 10),
+        parseInt(box.getAttribute('data-size'), 10), box.getAttribute('data-result'));
+      return;
+    }
+    frameGroupsOne(box);
+  });
+
+  /* The names game's taps: a name is picked (tap it again to drop it), then a place is tapped to put it there. */
+  document.addEventListener('click', function (e) {
+    var target = e.target.closest ? e.target : null;
+    var box = target ? target.closest('.ops-names') : null;
+    if (!box) return;
+    var msg = box.querySelector('.ops-names-msg');
+    if (target.closest('[data-names="reset"]')) {
+      box.innerHTML = namesFrameInner(parseInt(box.getAttribute('data-total'), 10), parseInt(box.getAttribute('data-size'), 10));
+      return;
+    }
+    var chip = target.closest('.ops-name-chip');
+    if (chip && !chip.classList.contains('is-placed')) {
+      var wasOn = chip.classList.contains('is-selected');
+      box.querySelectorAll('.ops-name-chip').forEach(function (c) { c.classList.remove('is-selected'); });
+      if (!wasOn) chip.classList.add('is-selected');
+      msg.textContent = t(wasOn ? 'ui.namesPick' : 'ui.namesPlace');
+      return;
+    }
+    var slot = target.closest('.ops-name-slot');
+    if (!slot || slot.classList.contains('is-ok')) return;
+    var selected = box.querySelector('.ops-name-chip.is-selected');
+    if (!selected) { msg.textContent = t('ui.namesPick'); return; }
+    box.querySelector('[data-names="reset"]').style.visibility = 'visible';
+    if (selected.getAttribute('data-name') === slot.getAttribute('data-slot')) {
+      slot.textContent = selected.textContent;
+      slot.classList.add('is-ok');
+      selected.classList.remove('is-selected');
+      selected.classList.add('is-placed');
+      msg.textContent = t('ui.namesRight');
+      if (!box.querySelector('.ops-name-slot:not(.is-ok)')) {
+        box.querySelector('.ops-names-done').hidden = false;
+        msg.textContent = t('ui.namesDone');
+      }
+    } else {
+      selected.classList.remove('is-selected');
+      slot.classList.remove('is-wrong');
+      void slot.offsetWidth;
+      slot.classList.add('is-wrong');
+      msg.textContent = t('ui.namesWrong');
+    }
+  });
+
+
+  /* The join and take games' buttons. «Juntar» moves the second group into the first; «Quitar» crosses out the last ones. */
+  document.addEventListener('click', function (e) {
+    var target = e.target.closest ? e.target : null;
+    if (!target) return;
+    var join = target.closest('[data-join]');
+    if (join) {
+      var jbox = join.closest('.ops-join');
+      if (join.getAttribute('data-join') === 'reset') {
+        jbox.innerHTML = joinFrameInner(parseInt(jbox.getAttribute('data-a'), 10), parseInt(jbox.getAttribute('data-b'), 10));
+        return;
+      }
+      var first = jbox.querySelector('.ops-join-a');
+      jbox.querySelectorAll('.ops-join-b .ops-deal-ball').forEach(function (ball) { first.appendChild(ball); });
+      jbox.querySelector('.ops-join-b-wrap').hidden = true;
+      join.hidden = true;
+      jbox.querySelector('[data-join="reset"]').style.visibility = 'visible';
+      jbox.querySelector('.ops-deal-result').hidden = false;
+      return;
+    }
+    var take = target.closest('[data-take]');
+    if (!take) return;
+    var tbox = take.closest('.ops-take');
+    if (take.getAttribute('data-take') === 'reset') {
+      tbox.innerHTML = takeFrameInner(parseInt(tbox.getAttribute('data-n'), 10), parseInt(tbox.getAttribute('data-remove'), 10));
+      return;
+    }
+    var balls = tbox.querySelectorAll('.ops-deal-ball');
+    var crossed = parseInt(tbox.getAttribute('data-remove'), 10);
+    for (var i = balls.length - crossed; i < balls.length; i += 1) balls[i].classList.add('ops-cross');
+    take.hidden = true;
+    tbox.querySelector('[data-take="reset"]').style.visibility = 'visible';
+    tbox.querySelector('.ops-deal-result').hidden = false;
+  });
+
+  /* The fill and swap games' buttons. */
+  document.addEventListener('click', function (e) {
+    var target = e.target.closest ? e.target : null;
+    if (!target) return;
+    var fillBtn = target.closest('[data-fill]');
+    if (fillBtn) {
+      var fbox = fillBtn.closest('.ops-fill');
+      var need = parseInt(fbox.getAttribute('data-need'), 10);
+      var have = parseInt(fbox.getAttribute('data-have'), 10);
+      var mode = fbox.getAttribute('data-mode');
+      if (fillBtn.getAttribute('data-fill') === 'reset') {
+        fbox.innerHTML = fillFrameInner(need, have, mode);
+        return;
+      }
+      var empty = fbox.querySelector('.ops-fill-empty');
+      if (!empty) return;
+      var filled = fbox.querySelectorAll('.ops-fill-row > :not(.ops-fill-empty)').length;
+      if (mode === 'sub') {
+        empty.outerHTML = '<span class="ops-fill-coin"><span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span></span>';
+      } else {
+        empty.outerHTML = '<span class="ops-deal-piece ops-deal-ball"><b>' + (filled + 1) + '</b></span>';
+      }
+      fbox.querySelector('[data-fill="reset"]').style.visibility = 'visible';
+      var left = need - filled - 1;
+      if (left > 0) {
+        fbox.querySelector('.ops-fill-left').textContent = fill(t(mode === 'sub' ? 'ui.fillLeftSub' : 'ui.fillLeftAdd'), { m: left });
+      } else {
+        fbox.querySelector('.ops-fill-left').hidden = true;
+        fillBtn.hidden = true;
+        fbox.querySelector('.ops-deal-result').hidden = false;
+      }
+      return;
+    }
+    var swapBtn = target.closest('[data-swap]');
+    if (swapBtn) {
+      var sbox = swapBtn.closest('.ops-swap');
+      var sa = parseInt(sbox.getAttribute('data-a'), 10);
+      var sb = parseInt(sbox.getAttribute('data-b'), 10);
+      sbox.innerHTML = swapFrameInner(sa, sb, swapBtn.getAttribute('data-swap') === 'one');
+    }
+  });
 
   App.activityFlow.setup({
     toolId: 'operation-concepts',

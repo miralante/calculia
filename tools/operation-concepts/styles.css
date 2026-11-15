@@ -84,8 +84,68 @@
 .ops-group-slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .ops-deal-group { min-width: 120px; min-height: 80px; flex-wrap: wrap; align-content: flex-start; gap: 4px; }
 .ops-deal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-/* The buttons of the deal are hidden until the first slice is dealt. */
-.ops-deal-actions[hidden] { display: none; }
+/* «Empezar de nuevo» is hidden until the first slice is dealt. The hidden attribute must win over .btn's display. */
+.ops-deal-actions [hidden] { display: none; }
+/* A slide with no picture on the left: its empty drawing box takes no room. */
+.ops-visual:empty { display: none; }
+/* The grouping drawing (the frame beside the division slides): the instruction, the pool of balls, the boxes. */
+.ops-pack { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-pack-instruction { margin: 0; }
+/* The pool keeps room for two rows of balls, and the boxes stay on one row, so the button does not move while dealing. */
+.ops-pack-pool { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 8px; min-height: 144px; }
+.ops-pack .ops-deal-groups { flex-wrap: nowrap; }
+.ops-pack .ops-deal-group { min-width: 96px; min-height: 80px; }
+.ops-pack .ops-deal-piece { cursor: default; }
+
+/* The join and take games (the frames beside the first addition and subtraction slides). */
+.ops-join, .ops-take { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-join-groups { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; }
+.ops-join-b-wrap { display: flex; align-items: center; gap: 12px; }
+.ops-join-b-wrap[hidden] { display: none; }
+.ops-join-a, .ops-join-b { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 4px; }
+/* A ball taken away: light, with a dashed edge and a cross; its number stays readable under the cross. */
+.ops-take .ops-cross { opacity: 1; background: var(--color-superficie); border: 3px dashed var(--color-texto-suave); }
+.ops-take .ops-cross b { color: var(--color-texto-suave); }
+.ops-take .ops-cross::after { color: var(--color-texto); text-shadow: none; }
+
+/* The fill game (the frames beside the second addition and subtraction slides): places filled one by one. */
+.ops-fill, .ops-swap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-fill-row { gap: 8px; }
+.ops-fill-left { margin: 0; }
+.ops-fill-empty { display: inline-block; width: 64px; height: 64px; box-sizing: border-box; border: 2px dashed var(--color-texto-suave); border-radius: 50%; }
+.ops-fill-coin { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; }
+/* The swap game: the two groups side by side, with the plus between them. */
+.ops-swap-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; }
+.ops-swap-box { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 4px; min-width: 120px; min-height: 80px; }
+
+/* The names game (the frame beside the first division slide): the names to tap, and the empty places under the numbers. */
+.ops-names { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-names-msg, .ops-names-done { margin: 0; }
+.ops-names-chips { min-height: 44px; gap: 8px; }
+.ops-name-chip.is-selected { outline: 3px solid var(--mod-razonamiento); outline-offset: 2px; }
+.ops-name-chip.is-placed { visibility: hidden; }
+.ops-name-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  min-height: 44px;
+  padding: 4px 8px;
+  border: 2px dashed var(--color-texto-suave);
+  border-radius: var(--radio);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+}
+.ops-name-slot.is-ok { border: 2px solid var(--mod-razonamiento); background: var(--mod-razonamiento-suave); }
+.ops-name-slot.is-wrong { animation: ops-shake 0.35s; border-style: solid; }
+@keyframes ops-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ops-name-slot.is-wrong { animation: none; }
+}
 /* A slice in the deal is drawn large, with its number on the lower edge. It is a tap target to deal it. */
 .ops-deal-piece { display: inline-flex; position: relative; margin-bottom: 8px; cursor: pointer; border-radius: var(--radio); }
 .ops-deal-piece:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 3px; }

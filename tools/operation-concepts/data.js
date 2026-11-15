@@ -24,9 +24,9 @@ var DATA = {
   ops: [
     { id: 'add', symbol: '+', icon: '➕',
       intro: [
-        { visual: { kind: 'join', a: 3, b: 2, icon: '🍎', iconB: '🍏' } },
-        { visual: { kind: 'join', a: 3, b: 2, icon: '🍎', iconB: '🍏' } },
-        { visual: { kind: 'swap', a: 3, b: 2, icon: '🍎', iconB: '🍏' } }
+        { frame: { kind: 'join', a: 3, b: 2 } },
+        { frame: { kind: 'fill', mode: 'add', need: 5, have: 3 } },
+        { frame: { kind: 'swap', a: 3, b: 2 } }
       ],
       real: [
         { visual: { kind: 'join', a: 3, b: 2, icon: '🍪', alt: true } },
@@ -35,8 +35,8 @@ var DATA = {
       ] },
     { id: 'sub', symbol: '−', icon: '➖',
       intro: [
-        { visual: { kind: 'take', n: 5, take: 2, icon: '🍪' } },
-        { visual: { kind: 'gap', have: 3, need: 5, coin: true } }
+        { frame: { kind: 'take', n: 5, take: 2 } },
+        { frame: { kind: 'fill', mode: 'sub', need: 5, have: 3 } }
       ],
       real: [
         { visual: { kind: 'take', n: 6, take: 2, icon: '🧃', result: true } },
@@ -57,10 +57,10 @@ var DATA = {
       ] },
     { id: 'div', symbol: '÷', icon: '➗',
       intro: [
-        { visual: { kind: 'names', total: 7, size: 3 } },
-        { visual: { kind: 'divide', total: 6, groups: 2, numbered: true, caption: true }, frame: { kind: 'deal', total: 6, groups: 2, balls: true } },
-        { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true, numbered: true } },
-        { visual: { kind: 'divide', total: 7, size: 3, icon: '🔴', caption: true, numbered: true } },
+        { visual: { kind: 'names', total: 7, size: 3 }, frame: { kind: 'names', total: 7, size: 3 } },
+        { frame: { kind: 'deal', total: 6, groups: 2, balls: true } },
+        { frame: { kind: 'pack', total: 6, size: 2 } },
+        { frame: { kind: 'pack', total: 7, size: 3 } },
         { visual: { kind: 'divide', total: 8, size: 2, icon: '🔴', caption: true, product: true, numbered: true } }
       ],
       real: [
