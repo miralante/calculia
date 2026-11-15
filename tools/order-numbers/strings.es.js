@@ -10,8 +10,7 @@
     instruction: 'Elige qué números quieres ordenar.',
 
     group: {
-      positives: { name: 'Positivos', detail: 'Pon los números positivos de menor a mayor.' },
-      negatives: { name: 'Negativos', detail: 'Pon los números negativos de menor a mayor.' },
+      comparar: { name: 'Mayor, menor o igual', detail: 'Los signos <, > y =.' },
       fractions: { name: 'Fracciones', detail: 'Pon las fracciones de menor a mayor.' },
       decimals: { name: 'Decimales', detail: 'Pon los decimales de menor a mayor.' }
     }

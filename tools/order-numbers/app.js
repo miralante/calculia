@@ -1,6 +1,6 @@
 /* ============================================================
    Calculia — Ordering numbers (group page).
-   Lists the three ordering activities as links. Nothing is
+   Lists the activities of this group as links. Nothing is
    practised here: each activity has its own round.
    ============================================================ */
 (function () {
@@ -12,7 +12,7 @@
   DATA.activities.forEach(function (act) {
     var link = document.createElement('a');
     link.className = 'btn-actividad';
-    link.href = '../' + act.slug + '/';
+    link.href = '../' + act.slug + '/' + (act.sub ? '?sub=' + act.sub : '');
     link.innerHTML = '<span class="picto" aria-hidden="true">' + act.picto + '</span>' +
       '<span>' + App.i18n.t(act.name) + '</span>' +
       '<span class="detail-card">' + App.i18n.t(act.detail) + '</span>';

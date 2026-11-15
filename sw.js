@@ -14,7 +14,7 @@
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
-var VERSION = 'calculia-v508';
+var VERSION = 'calculia-v514';
 
 var FILES = [
   './',
@@ -411,18 +411,6 @@ var FILES = [
   './tools/order-numbers/strings.es.js',
   './tools/order-numbers/strings.en.js',
   './tools/order-numbers/styles.css',
-  './tools/order-positives/',
-  './tools/order-positives/app.js',
-  './tools/order-positives/data.js',
-  './tools/order-positives/strings.es.js',
-  './tools/order-positives/strings.en.js',
-  './tools/order-positives/styles.css',
-  './tools/order-negatives/',
-  './tools/order-negatives/app.js',
-  './tools/order-negatives/data.js',
-  './tools/order-negatives/strings.es.js',
-  './tools/order-negatives/strings.en.js',
-  './tools/order-negatives/styles.css',
   './tools/order-fractions/',
   './tools/order-fractions/app.js',
   './tools/order-fractions/data.js',

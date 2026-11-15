@@ -254,8 +254,6 @@ blocks in the right order:
 | wallet             | ✅ | ✅ | ✅ | ✅ | ✅ |
 | puzzle             | — | — | ✅ | ✅ | ✅ |
 | quantities         | ✅ | ✅ | ✅ | ✅ | ✅ |
-| order-positives    | ✅ | ✅ | ✅ | ✅ | ✅ |
-| order-negatives    | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-decimals     | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 > The em-dash `—` in Puzzle means "not applicable": the activity

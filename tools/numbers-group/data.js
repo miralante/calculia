@@ -17,7 +17,6 @@ var DATA = {
     { slug: 'numbers', sub: 'positivos-y-negativos', picto: '🏢', name: 'group.positivos.name', detail: 'group.positivos.detail' },
     { slug: 'numbers', sub: 'unidades', picto: '🧱', name: 'group.unidades.name', detail: 'group.unidades.detail' },
     { slug: 'numbers', sub: 'placevalue', picto: '🔁', name: 'group.placevalue.name', detail: 'group.placevalue.detail' },
-    { slug: 'numbers', sub: 'comparar', picto: '⚖️', name: 'group.comparar.name', detail: 'group.comparar.detail' },
     { slug: 'ordinals', picto: '🥇', name: 'group.ordinals.name', detail: 'group.ordinals.detail' }
   ]
 };

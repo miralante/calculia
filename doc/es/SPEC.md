@@ -256,8 +256,6 @@ bloques en el orden correcto:
 | wallet           | ✅ | ✅ | ✅ | ✅ | ✅ |
 | puzzle           | — | — | ✅ | ✅ | ✅ |
 | quantities       | ✅ | ✅ | ✅ | ✅ | ✅ |
-| order-positives  | ✅ | ✅ | ✅ | ✅ | ✅ |
-| order-negatives  | ✅ | ✅ | ✅ | ✅ | ✅ |
 | order-decimals   | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 > El guion largo `—` en Puzzle significa "no aplicable": la

@@ -10,8 +10,7 @@
     instruction: 'Choose which numbers you want to order.',
 
     group: {
-      positives: { name: 'Positive', detail: 'Put the positive numbers from smallest to biggest.' },
-      negatives: { name: 'Negative', detail: 'Put the negative numbers from smallest to biggest.' },
+      comparar: { name: 'Greater, smaller or equal', detail: 'The signs <, > and =.' },
       fractions: { name: 'Fractions', detail: 'Put the fractions from smallest to biggest.' },
       decimals: { name: 'Decimals', detail: 'Put the decimals from smallest to biggest.' }
     }
