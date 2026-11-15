@@ -24,6 +24,12 @@
     /* ---------- Menú de prácticas ----------
        Claves '<id>Name' / '<id>Detail': una entrada por práctica
        de DATA.practices. */
+    readName: 'Leer números',
+    readDetail: 'Ves el número con cifras y lo escribes con letras.',
+    writeName: 'Escribir números',
+    writeDetail: 'Oyes el número y lo escribes con letras.',
+    pointsName: 'Poner los puntos',
+    pointsDetail: 'Colocas los puntos en los huecos del número.',
 
     /* ---------- Prácticas de escritura ----------
        {n} = número ya formateado. */

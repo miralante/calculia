@@ -21,6 +21,12 @@
     /* ---------- Practice menu ----------
        Keys '<id>Name' / '<id>Detail': one entry per entry in
        DATA.practices. */
+    readName: 'Read numbers',
+    readDetail: 'You see the number in digits and write it in words.',
+    writeName: 'Write numbers',
+    writeDetail: 'You hear the number and write it in words.',
+    pointsName: 'Place the commas',
+    pointsDetail: 'Put the commas in the gaps of the number.',
 
     /* ---------- Reading and writing practices ----------
        {n} = formatted number. */
