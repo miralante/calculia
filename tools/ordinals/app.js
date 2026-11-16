@@ -162,7 +162,6 @@
   var correctCount = 0;
   var resolved = false;
   var attempts = 0;
-  var chainBanner = '';
 
   /* La fila del round: n animales, la meta al frente y un lugar
      señalado. La meta es lo que fija por dónde empieza la cuenta;
@@ -276,14 +275,18 @@
     return pool;
   }
 
-  /* Los sub-pasos con modo propio; los grupos y el test son
-     envoltorios. */
+  /* Los sub-pasos con modo propio. El grupo es un envoltorio y el test
+     (sub-paso 'random') mezcla estos mismos pasos, así que se excluye. */
+  function isBaseStep(level) {
+    return level.pool !== 'random' && level.mode !== 'random';
+  }
+
   function baseLevels() {
     var out = [];
     DATA.levels.forEach(function (level) {
       if (level.pool === 'group') {
-        if (level.sublevels) out = out.concat(level.sublevels);
-      } else if (level.pool !== 'random' && level.mode !== 'random') {
+        (level.sublevels || []).filter(isBaseStep).forEach(function (sn) { out.push(sn); });
+      } else if (isBaseStep(level)) {
         out.push(level);
       }
     });
@@ -415,15 +418,6 @@
     $('#explanationWrap').classList.add('hidden');
     $('#explanation').textContent = '';
     $('#next').classList.add('hidden');
-    var banner = $('#chainBanner');
-    if (chainBanner) {
-      banner.textContent = chainBanner;
-      banner.classList.remove('hidden');
-      chainBanner = '';
-    } else {
-      banner.textContent = '';
-      banner.classList.add('hidden');
-    }
 
     var optionsEl = $('#options');
     optionsEl.innerHTML = '';
@@ -502,8 +496,6 @@
     save();
     if (currentGroup && currentSubIdx + 1 < currentGroup.sublevels.length) {
       currentSubIdx += 1;
-      chainBanner = t('chainNext')
-        .replace('{name}', t('level.' + currentGroup.sublevels[currentSubIdx].group + 'Name'));
       startLevel(currentGroup.sublevels[currentSubIdx], true);
       return;
     }

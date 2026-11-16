@@ -47,7 +47,11 @@
         </div>
         <p class="expo-note" id="expoNoteEl"></p>
       </div>
-      <button type="button" class="btn" id="expoNext" data-i18n="expoNext"></button>
+      <p class="instruction hidden" id="expoProgressEl" aria-live="polite"></p>
+      <div class="row lesson-actions">
+        <button type="button" class="btn btn-secondary hidden" id="expoBack" data-i18n="expoBack"></button>
+        <button type="button" class="btn" id="expoNext" data-i18n="expoNext"></button>
+      </div>
     </section>
 
     <section id="realScreen" class="hidden stack" aria-labelledby="realTitleEl">

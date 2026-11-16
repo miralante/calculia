@@ -175,17 +175,12 @@
 
     /* ---------- Los pasos ---------- */
     level: {
-      learnName: 'Aprender los lugares',
-      learnDetail: 'Mira una fila y di qué lugar ocupa cada uno.',
-      applyName: 'Usar los ordinales',
-      applyDetail: 'Los más comunes: del primero al décimo y los redondos.',
-      testName: 'Todos',
-      testDetail: 'Un poco de todo, sin orden fijo.'
+      practiceName: 'Practicar los ordinales',
+      practiceDetail: 'Mira la fila, usa los ordinales y termina con un test.'
     },
     levelDone: 'Hecho',
     starsCount: 'Dificultad {n}',
     stepLabel: 'Paso {n} de {total} · {name}',
-    chainNext: 'Siguiente paso: {name}',
     /* Pieza 3 de la ficha del recordatorio y de los ejemplos de la
        regla 1: el número natural con la palabra "posición" delante,
        para que la cifra quede ligada a su papel sin repetir la

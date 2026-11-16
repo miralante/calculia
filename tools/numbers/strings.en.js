@@ -45,15 +45,73 @@
         note: 'The sign opens towards the greater number: the open side is greater.'
       },
       unidades: {
-        title: 'Ones, tens and hundreds',
-        intro: 'Each digit has a value based on its place. The rightmost digit is ones; the next is tens; the next is hundreds.',
-        bullets: [
-          'Ones: 1, 2, 3…',
-          'Tens: 10, 20, 30…',
-          'Hundreds: 100, 200, 300…',
-          'In the number 345: 3 hundreds + 4 tens + 5 ones.'
-        ],
-        note: 'Each colour signals a value: blue (ones), green (tens), purple (hundreds).'
+        slides: [
+          {
+            title: 'Ones',
+            intro: 'Ones are the digit furthest to the right. They count single things.',
+            bullets: [
+              'Ones: 1, 2, 3… up to 9.',
+              'In the number 7 there are 7 ones.'
+            ],
+            note: 'Blue: ones.'
+          },
+          {
+            title: 'Tens',
+            intro: 'Tens are to the left of the ones. One ten is 10 ones put together.',
+            bullets: [
+              '1 ten = 10 ones.',
+              'In the number 40 there are 4 tens and 0 ones.'
+            ],
+            note: 'Green: tens.'
+          },
+          {
+            title: 'Hundreds',
+            intro: 'Hundreds are to the left of the tens. One hundred is 10 tens: 100.',
+            bullets: [
+              '1 hundred = 10 tens = 100.',
+              'In the number 300 there are 3 hundreds.'
+            ],
+            note: 'Purple: hundreds.'
+          },
+          {
+            title: 'Thousands',
+            intro: 'The fourth digit from the right is the thousands. One thousand is 10 hundreds: 1,000.',
+            bullets: [
+              '1 thousand = 10 hundreds = 1,000.',
+              'In the number 4,000 there are 4 thousands.'
+            ],
+            note: 'Large numbers are split into groups of three digits with a comma.'
+          },
+          {
+            title: 'Ten thousands',
+            intro: 'One ten thousand is 10 thousands: 10,000. It is to the left of the thousands.',
+            bullets: [
+              '1 ten thousand = 10 thousands = 10,000.',
+              'In the number 50,000 there are 5 ten thousands.'
+            ]
+          },
+          {
+            title: 'Hundred thousands',
+            intro: 'One hundred thousand is 10 ten thousands: 100,000. It is to the left of the ten thousands.',
+            bullets: [
+              '1 hundred thousand = 10 ten thousands = 100,000.',
+              'In the number 300,000 there are 3 hundred thousands.'
+            ]
+          },
+          {
+            title: 'All the places',
+            intro: 'Each digit is worth something depending on its place. This is how to read 345,678.',
+            bullets: [
+              '3 hundred thousands = 300,000',
+              '4 ten thousands = 40,000',
+              '5 thousands = 5,000',
+              '6 hundreds = 600',
+              '7 tens = 70',
+              '8 ones = 8'
+            ],
+            note: 'Each place is worth 10 times less than the place on its left.'
+          }
+        ]
       },
       placevalue: {
         title: 'Quick sums',
@@ -96,6 +154,9 @@
       }
     },
     expoNext: 'See real-life examples →',
+    expoSlideNext: 'Next →',
+    expoBack: '← Previous',
+    expoProgress: '{n} / {total}',
     realBack: '← Back to the explanation',
     realNext: 'Start practising →',
     level: {          

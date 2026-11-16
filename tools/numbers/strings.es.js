@@ -44,15 +44,73 @@
         note: 'El signo se abre hacia el número más grande: el lado abierto es el mayor.'
       },
       unidades: {
-        title: 'Unidades, decenas y centenas',
-        intro: 'Cada cifra tiene un valor según su lugar. La cifra de la derecha son unidades; la siguiente, decenas; la siguiente, centenas.',
-        bullets: [
-          'Unidades: 1, 2, 3…',
-          'Decenas: 10, 20, 30…',
-          'Centenas: 100, 200, 300…',
-          'En el número 345: 3 centenas + 4 decenas + 5 unidades.'
-        ],
-        note: 'Cada color señala un valor: azul (unidades), verde (decenas), morado (centenas).'
+        slides: [
+          {
+            title: 'Las unidades',
+            intro: 'Las unidades son la cifra de más a la derecha. Cuentan cosas sueltas.',
+            bullets: [
+              'Unidades: 1, 2, 3… hasta 9.',
+              'En el número 7 hay 7 unidades.'
+            ],
+            note: 'Azul: unidades.'
+          },
+          {
+            title: 'Las decenas',
+            intro: 'Las decenas están a la izquierda de las unidades. Una decena son 10 unidades juntas.',
+            bullets: [
+              '1 decena = 10 unidades.',
+              'En el número 40 hay 4 decenas y 0 unidades.'
+            ],
+            note: 'Verde: decenas.'
+          },
+          {
+            title: 'Las centenas',
+            intro: 'Las centenas están a la izquierda de las decenas. Una centena son 10 decenas juntas: 100.',
+            bullets: [
+              '1 centena = 10 decenas = 100.',
+              'En el número 300 hay 3 centenas.'
+            ],
+            note: 'Morado: centenas.'
+          },
+          {
+            title: 'Las unidades de millar',
+            intro: 'La cuarta cifra, contando desde la derecha, son las unidades de millar. Una unidad de millar son 10 centenas: 1.000.',
+            bullets: [
+              '1 unidad de millar = 10 centenas = 1.000.',
+              'En el número 4.000 hay 4 unidades de millar.'
+            ],
+            note: 'Los números grandes se separan en grupos de tres cifras con un punto.'
+          },
+          {
+            title: 'Las decenas de millar',
+            intro: 'Una decena de millar son 10 unidades de millar: 10.000. Está a la izquierda de las unidades de millar.',
+            bullets: [
+              '1 decena de millar = 10 unidades de millar = 10.000.',
+              'En el número 50.000 hay 5 decenas de millar.'
+            ]
+          },
+          {
+            title: 'Las centenas de millar',
+            intro: 'Una centena de millar son 10 decenas de millar: 100.000. Está a la izquierda de las decenas de millar.',
+            bullets: [
+              '1 centena de millar = 10 decenas de millar = 100.000.',
+              'En el número 300.000 hay 3 centenas de millar.'
+            ]
+          },
+          {
+            title: 'Todas las posiciones',
+            intro: 'Cada cifra vale según su lugar. Así se lee el número 345.678.',
+            bullets: [
+              '3 centenas de millar = 300.000',
+              '4 decenas de millar = 40.000',
+              '5 unidades de millar = 5.000',
+              '6 centenas = 600',
+              '7 decenas = 70',
+              '8 unidades = 8'
+            ],
+            note: 'Cada lugar vale 10 veces menos que el de su izquierda.'
+          }
+        ]
       },
       placevalue: {
         title: 'Cuentas rápidas',
@@ -95,6 +153,9 @@
       }
     },
     expoNext: 'Ver ejemplos de la vida real →',
+    expoSlideNext: 'Siguiente →',
+    expoBack: '← Anterior',
+    expoProgress: '{n} / {total}',
     realBack: '← Volver a la explicación',
     realNext: 'Empezar a practicar →',
     level: {          

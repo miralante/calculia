@@ -73,20 +73,20 @@
    solo una palabra, es el piso en el que vive alguien, el puesto
    que quedó en una carrera o su lugar en una clasificación.
 
-   DATA.levels — dos grupos visibles que encadenan sus sub-niveles
-   sin volver al menú (regla 13, un cambio de variable cada vez),
-   más un test que mezcla todo:
+   DATA.levels — UN solo grupo visible ('practice') que encadena sus
+   sub-pasos sin volver al menú (regla 13, un cambio de variable cada
+   vez) y termina con un test que mezcla todo:
 
-     - 'learn' : leer el lugar en la fila.
+     - pasos 1-3: leer el lugar en la fila.
          paso 1 → 2 cambia SÓLO el largo de la fila (3 → 5);
          paso 2 → 3 cambia SÓLO el sentido de la pregunta
          (señala un lugar y nombralo → nombra un lugar y busca
          quién está ahí).
-     - 'apply' : usar el ordinal fuera de la fila.
+     - pasos 4-5: usar el ordinal fuera de la fila.
          paso 4 → 5 cambia SÓLO el sentido (ordinal → cifra,
          cifra → ordinal), con el rango de los ordinales
          presentados en la pantalla 1.
-     - 'test'  : mezcla de los cinco modos, en orden aleatorio,
+     - paso 6 'test': mezcla de los cinco modos, en orden aleatorio,
          sobre los mismos ordinales que la pantalla 1.
 
    El rango de la pantalla 1 —los ordinales que se enseñan— es
@@ -222,24 +222,22 @@ var DATA = {
     { id: 'podio3', n: 3 }
   ],
 
+  /* Un único botón en el menú: el grupo encadena los cinco pasos de
+     práctica y termina con el test. Antes eran tres tarjetas (aprender,
+     usar y test), y el usuario las veía como tres tests. */
   levels: [
     {
-      id: 'learn', pool: 'group', icon: '📚',
+      id: 'practice', pool: 'group', icon: '📚',
       sublevels: [
-        { id: 'l1', group: 'learn', mode: 'positionToName', items: 3, stars: 1 },
-        { id: 'l2', group: 'learn', mode: 'positionToName', items: 5, stars: 2 },
-        { id: 'l3', group: 'learn', mode: 'nameToMember', items: 5, stars: 2 }
-      ]
-    },
-    {
-      id: 'apply', pool: 'group', icon: '🧩',
-      sublevels: [
-        { id: 'l4', group: 'apply', mode: 'ordinalToDigit',
+        { id: 'l1', group: 'practice', mode: 'positionToName', items: 3, stars: 1 },
+        { id: 'l2', group: 'practice', mode: 'positionToName', items: 5, stars: 2 },
+        { id: 'l3', group: 'practice', mode: 'nameToMember', items: 5, stars: 2 },
+        { id: 'l4', group: 'practice', mode: 'ordinalToDigit',
           pool: PRESENTED_ORDINALS, stars: 2 },
-        { id: 'l5', group: 'apply', mode: 'digitToOrdinal',
-          pool: PRESENTED_ORDINALS, stars: 3 }
+        { id: 'l5', group: 'practice', mode: 'digitToOrdinal',
+          pool: PRESENTED_ORDINALS, stars: 3 },
+        { id: 'test', group: 'practice', pool: 'random', mode: 'random', stars: 2 }
       ]
-    },
-    { id: 'test', pool: 'random', mode: 'random', icon: '🎲', stars: 2 }
+    }
   ]
 };

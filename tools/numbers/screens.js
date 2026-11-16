@@ -16,9 +16,29 @@
     var screenExpo = host.screens.expo;
     var screenReal = host.screens.real;
 
-    function paintExpo(id) {
+    /* Slide the exposition is on. A block is one slide, or has a `slides`
+       array of blocks with the same shape (one idea per slide). */
+    var expoIndex = 0;
+
+    function expoSlidesOf(id) {
       var block = App.i18n.t('expo.' + id);
-      if (!block) { show(screenMenu); return; }
+      if (!block) return null;
+      return block.slides || [block];
+    }
+
+    function paintExpo(id, index) {
+      var slides = expoSlidesOf(id);
+      if (!slides) { show(screenMenu); return; }
+      expoIndex = Math.max(0, Math.min(index || 0, slides.length - 1));
+      var block = slides[expoIndex];
+      var lastSlide = expoIndex === slides.length - 1;
+      $('#expoNext').textContent = App.i18n.t(lastSlide ? 'expoNext' : 'expoSlideNext');
+      $('#expoBack').classList.toggle('hidden', expoIndex === 0);
+      var progressEl = $('#expoProgressEl');
+      progressEl.textContent = App.i18n.t('expoProgress')
+        .replace('{n}', expoIndex + 1)
+        .replace('{total}', slides.length);
+      progressEl.classList.toggle('hidden', slides.length < 2);
       $('#expoTitleEl').textContent = block.title || '';
       $('#expoIntroEl').textContent = block.intro || '';
       var bulletsEl = $('#expoBulletsEl');
@@ -63,8 +83,9 @@
         (block.title || '') + ' — ' + (App.i18n.t('activity.' + id + '.name') || ''));
     }
 
-    function startExpoScreen(id) {
-      paintExpo(id);
+    /* index: the slide to open on (default the first; Infinity = the last). */
+    function startExpoScreen(id, index) {
+      paintExpo(id, index);
       show(screenExpo);
     }
 
@@ -76,11 +97,18 @@
     /* ---- Exposition + real-life buttons (hasExpoReal activities) ---- */
     $('#expoNext').addEventListener('click', function () {
       if (!host.current()) return;
-      startRealScreen(host.current().id);
+      var id = host.current().id;
+      var slides = expoSlidesOf(id) || [];
+      if (expoIndex < slides.length - 1) paintExpo(id, expoIndex + 1);
+      else startRealScreen(id);
+    });
+    $('#expoBack').addEventListener('click', function () {
+      if (!host.current() || expoIndex === 0) return;
+      paintExpo(host.current().id, expoIndex - 1);
     });
     $('#realBack').addEventListener('click', function () {
       if (!host.current()) return;
-      startExpoScreen(host.current().id);
+      startExpoScreen(host.current().id, Infinity);
     });
     $('#realNext').addEventListener('click', function () {
       if (!host.current()) return;

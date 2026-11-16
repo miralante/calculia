@@ -173,17 +173,12 @@
 
     /* ---------- The steps ---------- */
     level: {
-      learnName: 'Learn the places',
-      learnDetail: 'Look at a queue and say which place each one takes.',
-      applyName: 'Use the ordinals',
-      applyDetail: 'The common ones: from first to tenth, and the round ones.',
-      testName: 'Everything',
-      testDetail: 'A bit of everything, in no fixed order.'
+      practiceName: 'Practice the ordinals',
+      practiceDetail: 'Look at the queue, use the ordinals and finish with a test.'
     },
     levelDone: 'Done',
     starsCount: 'Difficulty {n}',
     stepLabel: 'Step {n} of {total} · {name}',
-    chainNext: 'Next step: {name}',
     /* Third piece of the reminder chip and the rule-1 examples: the
        natural number with the word "Position" in front, so the figure
        is tied to its role without repeating the ordinal's word
