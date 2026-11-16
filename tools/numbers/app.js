@@ -78,7 +78,10 @@
   var escribirNext = $('#escribirNext');
   var escribirHint = $('#escribirHint');
   /* Persistent progress */
-  var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0 });
+  /* completedRounds counts every round of the tool (lifetime, achievements).
+     roundsByActivity counts them per sub-activity, which is what picks the
+     level: each sub-activity starts at its own first level. */
+  var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0, roundsByActivity: {} });
   /* The stars of the removed 'positivos y negativos' sub-activity used to
      live under their own storage key ('posneg'). Move them once into this
      tool's progress so the star total is kept, then drop the old key. */
@@ -171,7 +174,8 @@
      one, so a person who comes back continues where they were. */
   function levelFromProgress() {
     var levels = activity.levels;
-    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
+    var done = progress.roundsByActivity[activity.id] || 0;
+    return levels[Math.min(done, levels.length - 1)];
   }
 
   function openActivity(id) {
@@ -311,6 +315,7 @@
      the fallback, for a question that forgot to bring its own. */
   function endRound() {
     progress.completedRounds = (progress.completedRounds || 0) + 1;
+    progress.roundsByActivity[activity.id] = (progress.roundsByActivity[activity.id] || 0) + 1;
     save();
     show(screenEnd);
     var summaryEl = $('#endSummary');

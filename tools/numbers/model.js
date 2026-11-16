@@ -368,6 +368,12 @@
     return HUNDREDS_ES[Math.floor(n / 100)] + (n % 100 ? ' ' + under100Es(n % 100) : '');
   }
 
+  /* Before a noun (mil, millones) the final "uno" shortens: "veintiún mil",
+     "ciento un mil", "treinta y un millones". Alone it stays "uno". */
+  function apocopeUnoEs(words) {
+    return words.replace(/veintiuno$/, 'veintiún').replace(/\buno$/, 'un');
+  }
+
   function numberToWordsEs(n) {
     if (n < 1000) return under1000Es(n);
     if (n >= 1000000000000) {
@@ -382,11 +388,11 @@
     if (n >= 1000000) {
       var millions = Math.floor(n / 1000000);
       var millionRest = n % 1000000;
-      return (millions === 1 ? 'un millón' : under1000Es(millions) + ' millones') + (millionRest ? ' ' + numberToWordsEs(millionRest) : '');
+      return (millions === 1 ? 'un millón' : apocopeUnoEs(under1000Es(millions)) + ' millones') + (millionRest ? ' ' + numberToWordsEs(millionRest) : '');
     }
     var thousands = Math.floor(n / 1000);
     var thousandRest = n % 1000;
-    return (thousands === 1 ? 'mil' : under1000Es(thousands) + ' mil') + (thousandRest ? ' ' + under1000Es(thousandRest) : '');
+    return (thousands === 1 ? 'mil' : apocopeUnoEs(under1000Es(thousands)) + ' mil') + (thousandRest ? ' ' + under1000Es(thousandRest) : '');
   }
 
   function under100En(n) {

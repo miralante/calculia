@@ -18,11 +18,18 @@
     hint: '🤔 «{elegida}» is not the answer. Think calmly and look at the question again.',
     refuerzoTitulo: 'Reinforcement',
     refuerzoIntro: "Let's repeat the {n} questions you missed until you get them all right.",
-    grupoEtq: { 0: '', 1: 'thousands', 2: 'millions', 3: 'thousands of millions', 4: 'trillions' },
-    groupLabel: { 0: '', 1: 'thousands', 2: 'millions', 3: 'thousands of millions', 4: 'trillions' },
+    grupoEtq: { 0: '', 1: 'thousands', 2: 'millions', 3: 'billions', 4: 'trillions' },
+    groupLabel: { 0: '', 1: 'thousands', 2: 'millions', 3: 'billions', 4: 'trillions' },
     leyendaUnidadesTxt: 'ones',
     leyendaDecenasTxt: 'tens',
     leyendaCentenasTxt: 'hundreds',
+    /* Place names read by the 'bloques' question (aria label of the blocks). */
+    unidadSingular: 'one',
+    unidadPlural: 'ones',
+    decenaSingular: 'ten',
+    decenaPlural: 'tens',
+    centenaSingular: 'hundred',
+    centenaPlural: 'hundreds',
 
     activity: {
       unidades: { name: 'Ones, tens, hundreds', detail: 'What number is it?', instruction: 'Each colour helps read the number. Blue: ones. Green: tens. Purple: hundreds.' },
