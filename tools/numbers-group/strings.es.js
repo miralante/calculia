@@ -6,7 +6,7 @@
   'use strict';
 
   App.i18n.register({
-    title: '🔢 Números',
+    title: '🔢 Los números',
     instruction: 'Elige qué quieres practicar.',
 
     group: {
