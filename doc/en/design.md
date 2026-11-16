@@ -199,7 +199,8 @@ Composition rules:
    `CLAUDE.md`, *Stage navigation outranks transition*).
 
 > **Status:** implemented in the 17 activities that use the explanation and
-> one-question-per-slide test flow (`pairedTest: true` in their `app.js`). The
+> one-question-per-slide test flow (`pairedTest: true` in their `app.js`). The test
+> takes the whole view: when practice starts, the explanation leaves. The
 > `.flow-pair` container lives in `components.css` and `activity-flow.js`
 > mounts it. In *Operations*, the «sharing into equal parts» slide has a game on
 > its right (`introFrameHtml`: sharing numbered balls among friends).

@@ -205,7 +205,8 @@ Reglas de composición:
 
 > **Estado:** implementada en las 17 actividades que usan el flujo de
 > explicación y prueba pregunta a pregunta (`pairedTest: true` en su
-> `app.js`). El contenedor `.flow-pair` vive en `components.css` y lo monta
+> `app.js`). La prueba va sola: al empezar a practicar, la explicación sale de
+> la vista y la prueba ocupa toda la pantalla. El contenedor `.flow-pair` vive en `components.css` y lo monta
 > `activity-flow.js`. En *Operaciones*, la diapositiva de «dividir en partes
 > iguales» tiene un juego a su derecha (`introFrameHtml`: repartir bolas
 > numeradas entre amigos). Quedan fuera *Divisores* y *Múltiplos*, cuya práctica

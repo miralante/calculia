@@ -453,17 +453,17 @@ button.locked {
 .centered { text-align: center; }
 .hidden { display: none !important; }
 
-/* Explanation and practice side by side (design.md §3.5). An activity with
-   pairedTest puts its explanation (#screenIntro) and its test (#screenGame)
-   in one .flow-pair. From 768px the test shows next to the explanation,
-   which stays on the left; below that they stack, the explanation first. */
+/* Explanation and game side by side (design.md §3.5). The explanation (#screenIntro) and the game
+   share one .flow-pair: an intro frame, or the activity's own practice (pairedPractice). From 768px
+   the game shows next to the explanation, which stays on the left; below that they stack, the
+   explanation first. A pairedTest test shows alone: the explanation leaves when it starts. */
 .flow-pair { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--espacio-grande); align-items: start; }
 .flow-pair > section, .flow-pair > .intro-frame { min-width: 0; }
 .intro-frame { display: flex; flex-direction: column; gap: var(--espacio-grande); }
 @media (min-width: 768px) {
   .flow-pair.paired { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
-/* Beside the test the explanation keeps its slides only: no title card and no buttons that lead away.
+/* Beside a practice the explanation keeps its slides only: no title card and no buttons that lead away.
    Beside an intro frame the explanation keeps its buttons: the slides are still being read. */
 .flow-pair.in-test #introHeadingRow,
 .flow-pair.in-test #introActivityTitle,
@@ -640,6 +640,23 @@ button.bloqueada {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--color-acierto, var(--color-success, var(--exito, #1f6f43)));
+}
+
+.celebration .goal {
+  max-width: 32rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.celebration .goal.hidden {
+  display: none;
+}
+
+.celebration .celebration-more {
+  min-height: 56px;
+  min-width: min(100%, 14rem);
+  font-size: 1.25rem;
 }
 /* suite:celebrate:end */
 

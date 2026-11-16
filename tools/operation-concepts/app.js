@@ -304,20 +304,30 @@
     for (var i = 0; i < count; i += 1) html += '<span class="ops-deal-piece ops-deal-ball"><b>' + (i + 1) + '</b></span>';
     return html;
   }
-  /* The take game beside the first subtraction slide: n balls, and «Quitar» crosses out the taken ones. Below, the
-     balls left, as the sum shows them. */
-  function takeFrameInner(n, take) {
+  /* `count` coins for the money take game: each one is a piece the cross can mark, like a ball. */
+  function coinsHtml(count) {
+    var html = '';
+    for (var i = 0; i < count; i += 1) {
+      html += '<span class="ops-deal-piece ops-take-coin"><span class="ops-coin" aria-hidden="true">' + t('ui.coin') + '</span></span>';
+    }
+    return html;
+  }
+  /* The take game beside the first subtraction slide: n balls (or coins, for a money slide), and «Quitar» crosses out
+     the taken ones. Below, the ones left, as the sum shows them. */
+  function takeFrameInner(n, take, coin) {
+    var pieces = coin ? coinsHtml : ballsHtml;
     return '<p class="ops-story ops-pack-instruction">' + fill(t('ui.takeInstruction'), { t: take }) + '</p>' +
-      '<div class="ops-pack-pool">' + ballsHtml(n) + '</div>' +
-      '<div class="ops-take-rest" hidden>' + sign('=') + '<div class="ops-take-left">' + ballsHtml(n - take) + '</div></div>' +
+      '<div class="ops-pack-pool">' + pieces(n) + '</div>' +
+      '<div class="ops-take-rest" hidden>' + sign('=') + '<div class="ops-take-left">' + pieces(n - take) + '</div></div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + fill(t('ui.takeResult'), { n: n, t: take, r: n - take }) + '</p>' +
       '<div class="ops-deal-actions">' +
       '<button type="button" class="btn btn-secondary" data-take="one">' + t('ui.takeOne') + '</button>' +
       '<button type="button" class="btn btn-secondary" data-take="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
       '</div>';
   }
-  function takeFrameHtml(n, take) {
-    return '<div class="ops-take" data-n="' + n + '" data-remove="' + take + '">' + takeFrameInner(n, take) + '</div>';
+  function takeFrameHtml(n, take, coin) {
+    return '<div class="ops-take" data-n="' + n + '" data-remove="' + take + '" data-coin="' + (coin ? '1' : '0') + '">' +
+      takeFrameInner(n, take, coin) + '</div>';
   }
   /* One item of the fill game. `kind` is 'have' (already there) or 'add' (coming in). `place` is 'group' (the small
      items in the groups above) or 'hole' (the big slot of the row below). Addition: apples. Subtraction: coins. */
@@ -389,7 +399,7 @@
     if (f.kind === 'pack') return frameGroupsHtml(f.total, f.size, f.calc || false);
     if (f.kind === 'names') return namesFrameHtml(f.total, f.size);
     if (f.kind === 'join') return joinFrameHtml(f.a, f.b);
-    if (f.kind === 'take') return takeFrameHtml(f.n, f.take);
+    if (f.kind === 'take') return takeFrameHtml(f.n, f.take, f.coin);
     if (f.kind === 'fill') return fillFrameHtml(f.need, f.have, f.mode);
     if (f.kind === 'swap') return swapFrameHtml(f.a, f.b);
     return null;
@@ -960,11 +970,12 @@
     if (!take) return;
     var tbox = take.closest('.ops-take');
     if (take.getAttribute('data-take') === 'reset') {
-      tbox.innerHTML = takeFrameInner(parseInt(tbox.getAttribute('data-n'), 10), parseInt(tbox.getAttribute('data-remove'), 10));
+      tbox.innerHTML = takeFrameInner(parseInt(tbox.getAttribute('data-n'), 10), parseInt(tbox.getAttribute('data-remove'), 10),
+        tbox.getAttribute('data-coin') === '1');
       return;
     }
-    /* Only the balls in the top pool are crossed out; the balls left below are not part of the pool. */
-    var balls = tbox.querySelectorAll('.ops-pack-pool .ops-deal-ball');
+    /* Only the balls (or coins) in the top pool are crossed out; the ones left below are not part of the pool. */
+    var balls = tbox.querySelectorAll('.ops-pack-pool > .ops-deal-piece');
     var crossed = parseInt(tbox.getAttribute('data-remove'), 10);
     for (var i = balls.length - crossed; i < balls.length; i += 1) balls[i].classList.add('ops-cross');
     take.hidden = true;

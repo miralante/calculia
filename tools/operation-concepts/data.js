@@ -35,7 +35,7 @@ var DATA = {
       ] },
     { id: 'sub', symbol: '−', icon: '➖',
       intro: [
-        { frame: { kind: 'take', n: 5, take: 2 } },
+        { frame: { kind: 'take', n: 5, take: 2, coin: true } },
         { frame: { kind: 'fill', mode: 'sub', need: 5, have: 3 } }
       ],
       real: [

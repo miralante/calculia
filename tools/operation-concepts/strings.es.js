@@ -45,7 +45,7 @@
       joinInstruction: 'Junta los dos grupos.',
       joinOne: 'Juntar',
       joinResult: '{a} + {b} = {T}',
-      takeInstruction: 'Quita {t} bolas.',
+      takeInstruction: 'Quita {t} monedas.',
       takeOne: 'Quitar',
       takeResult: '{n} − {t} = {r}',
       namesPick: 'Toca un nombre y luego el sitio donde va.',
@@ -75,7 +75,7 @@
         name: 'Sumar', symbolName: 'Sumar', detail: 'Juntar cosas y contar el total.',
         intro: {
           1: { title: 'Sumar es juntar', text: 'Juntas 3 manzanas rojas y 2 verdes. Ahora tienes 5 en total.' },
-          2: { title: 'Sumar también es añadir', text: 'Tienes 3 manzanas rojas y te añaden 2 verdes. Las verdes se añaden a las rojas: son 5.' },
+          2: { title: 'Sumar también es añadir', text: 'Tienes 3 manzanas rojas y te añaden 2 verdes, son 5.' },
           3: { title: 'Puedes juntar en cualquier orden', text: '3 + 2 = 2 + 3 = 5' }
         },
         real: {

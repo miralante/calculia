@@ -115,6 +115,9 @@
 .ops-take .ops-cross { opacity: 1; background: var(--color-superficie); border: 3px dashed var(--color-texto-suave); }
 .ops-take .ops-cross b { color: var(--color-texto-suave); }
 .ops-take .ops-cross::after { color: var(--color-texto); text-shadow: none; }
+/* A coin in the take game: a 64px touch target, so the cross sits over the whole coin. */
+.ops-take-coin { width: 64px; height: 64px; margin-bottom: 0; justify-content: center; align-items: center; }
+.ops-take-coin .ops-coin { width: 56px; height: 56px; font-size: 28px; }
 
 /* The fill game (the frames beside the second addition and subtraction slides): places filled one by one. */
 .ops-fill, .ops-swap { display: flex; flex-direction: column; align-items: center; gap: 12px; }

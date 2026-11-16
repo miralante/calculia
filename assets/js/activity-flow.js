@@ -234,19 +234,18 @@
   }
 
   /* The explanation and the frame on its right share one row (.flow-pair). The row is side by side while a frame
-     is on the right: the test (class in-test: the explanation then keeps only its slides) or an intro frame. */
+     is on the right, or while the activity's own practice is (pairedPractice: class in-test, the explanation then
+     keeps only its slides). The test of a pairedTest activity shows alone: its explanation has left. */
   function syncPair() {
     var pair = document.querySelector('.flow-pair');
     if (!pair) return;
-    var game = $('#screenGame');
-    var inTest = !!game && pair.contains(game) && !game.classList.contains('hidden');
-    /* pairedPractice: the activity's own game shows beside the explanation the same way as a test. */
+    /* pairedPractice: the activity's own game shows beside the explanation. */
     var practice = $('#screenPractice');
     var inPractice = !!practice && pair.contains(practice) && !practice.classList.contains('hidden');
     var frame = $('#introFrame');
     var frameOn = !!frame && !frame.classList.contains('hidden');
-    pair.classList.toggle('paired', inTest || inPractice || frameOn);
-    pair.classList.toggle('in-test', inTest || inPractice);
+    pair.classList.toggle('paired', inPractice || frameOn);
+    pair.classList.toggle('in-test', inPractice);
   }
 
   function paintIntro(ctx) {
@@ -325,9 +324,8 @@
         save: function () { App.storage.set(TOOL_ID, progress); },
         paintStars: function () { $('#stars').textContent = '⭐ ' + progress.stars; },
         show: function (screen) {
-          /* pairedTest: the test keeps the explanation on its left. */
+          /* pairedPractice: the activity's own game keeps the explanation on its left. A pairedTest test shows alone. */
           var keep = [screen];
-          if (config.pairedTest && screen === '#screenGame') keep.push('#screenIntro');
           if (config.pairedPractice && screen === '#screenPractice') keep.push('#screenIntro');
           ctx.screens.forEach(function (id) { $(id).classList.toggle('hidden', keep.indexOf(id) === -1); });
           /* The intro frame belongs to the explanation: it leaves with it (paintIntro shows it again). */
@@ -365,8 +363,8 @@
     var config = ctx.config;
     $('#activity').innerHTML = STAGES + '\n' + (config.reminder ? REMINDER + '\n' : '') + ctx.mode.markup(ctx) +
       (config.extraMarkup ? '\n' + config.extraMarkup : '');
-    /* pairedTest: explanation and test share one row. introFrameHtml: explanation and a frame share one row
-       (see .flow-pair in components.css). The frame sits right after the explanation. */
+    /* pairedTest: the test sits in the same row, shown alone once the explanation leaves. introFrameHtml: explanation
+       and a frame share one row (see .flow-pair in components.css). The frame sits right after the explanation. */
     if ((config.pairedTest || config.pairedPractice || config.introFrameHtml) && $('#screenIntro')) {
       var pair = document.createElement('div');
       pair.className = 'flow-pair';

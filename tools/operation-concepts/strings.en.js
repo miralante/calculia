@@ -44,7 +44,7 @@
       joinInstruction: 'Put the two groups together.',
       joinOne: 'Join',
       joinResult: '{a} + {b} = {T}',
-      takeInstruction: 'Take away {t} balls.',
+      takeInstruction: 'Take away {t} coins.',
       takeOne: 'Take away',
       takeResult: '{n} − {t} = {r}',
       namesPick: 'Tap a name, then the place it goes.',
@@ -73,7 +73,7 @@
         name: 'Add', symbolName: 'Add', detail: 'Put things together and count the total.',
         intro: {
           1: { title: 'Adding is putting together', text: 'You put together 3 red apples and 2 green ones. Now you have 5 in total.' },
-          2: { title: 'Adding is also adding more', text: 'You have 3 red apples and someone adds 2 green ones. The green ones are added to the red ones: 5.' },
+          2: { title: 'Adding is also adding more', text: 'You have 3 red apples and someone adds 2 green ones. That makes 5.' },
           3: { title: 'You can put them together in any order', text: '3 + 2 = 2 + 3 = 5' }
         },
         real: {
