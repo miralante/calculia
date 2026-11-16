@@ -11,8 +11,10 @@
 
     group: {
       comparar: { name: 'Mayor, menor o igual', detail: 'Los signos <, > y =.' },
-      fractions: { name: 'Fracciones', detail: 'Pon las fracciones de menor a mayor.' },
-      decimals: { name: 'Decimales', detail: 'Pon los decimales de menor a mayor.' }
+      positives: { name: 'Ordenar positivos', detail: 'Pon los números positivos de menor a mayor.' },
+      negatives: { name: 'Ordenar negativos', detail: 'Pon los números negativos de menor a mayor.' },
+      fractions: { name: 'Ordenar fracciones', detail: 'Pon las fracciones de menor a mayor.' },
+      decimals: { name: 'Ordenar decimales', detail: 'Pon los decimales de menor a mayor.' }
     }
   }, 'es');
 })();

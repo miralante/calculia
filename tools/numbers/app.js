@@ -181,6 +181,13 @@
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
+    /* The heading next to the back link names the sub-activity we are in
+       (the sub-activity's own name from strings.<locale>.js), not the tool. */
+    var heading = document.querySelector('[data-suite-activity] h1');
+    if (heading) {
+      heading.setAttribute('data-i18n', 'activity.' + id + '.name');
+      heading.textContent = App.i18n.t('activity.' + id + '.name');
+    }
     if (activity.hasExpoReal) {
       startExpoScreen(id);
       return;

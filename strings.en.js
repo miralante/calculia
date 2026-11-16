@@ -49,7 +49,7 @@
     "quantities": { "name": "Read and Write Numbers", "detail": "Read and write big numbers." },
     "ordinals": { "name": "Ordinal Numbers", "detail": "First, second, third…" },
     "operationconcepts": { "name": "Operations", "detail": "What adding, subtracting, multiplying and dividing mean." },
-    "order-numbers": { "name": "Order numbers", "detail": "Greater, smaller or equal, decimal and fraction numbers." },
+    "order-numbers": { "name": "Order numbers", "detail": "Positive, negative, greater, smaller or equal, decimal and fraction numbers." },
     "order-fractions": { "name": "Order fractions", "detail": "Put the fractions from smallest to biggest." },
     "order-decimals": { "name": "Order decimals", "detail": "Put the decimals from smallest to biggest." },
     "parity": { "name": "Even and odd", "detail": "Look at the dots: one left alone or all paired up?" },

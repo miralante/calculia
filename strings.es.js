@@ -49,7 +49,7 @@
     "quantities": { "name": "Leer y Escribir Números", "detail": "Lee y escribe números grandes." },
     "ordinals": { "name": "Números ordinales", "detail": "Primero, segundo, tercero…" },
     "operationconcepts": { "name": "Operaciones", "detail": "Qué significa sumar, restar, multiplicar y dividir." },
-    "order-numbers": { "name": "Ordenar números", "detail": "Mayor, menor o igual, decimales y fracciones." },
+    "order-numbers": { "name": "Ordenar números", "detail": "Positivos, negativos, mayor, menor o igual, decimales y fracciones." },
     "order-fractions": { "name": "Ordenar fracciones", "detail": "Pon las fracciones de menor a mayor." },
     "order-decimals": { "name": "Ordenar decimales", "detail": "Pon los decimales de menor a mayor." },
     "parity": { "name": "Pares e impares", "detail": "Mira los puntos: ¿sobra uno o van todos en parejas?" },
