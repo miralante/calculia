@@ -127,7 +127,7 @@ var ctx = {
   checks: 0, rel: rel, listJs: listJs, landingFiles: landingFiles, landingFilesByExt: landingFilesByExt,
   LANDING_FILES: LANDING_FILES, execFileSync: execFileSync, execFile: execFile, shared: {}, parseJobs: null
 };
-['structure', 'strings', 'catalog', 'content', 'assets', 'design'].forEach(function (name) {
+['structure', 'strings', 'catalog', 'content', 'assets', 'design', 'back-step'].forEach(function (name) {
   require('./checks/' + name + '.js')(ctx);
 });
 

@@ -671,8 +671,21 @@
     $('#groupsChooseLevel').addEventListener('click', function () { groupsSwitchTo(gLevelsScreen); });
     $('#groupsEndMenu').addEventListener('click', leaveToMenu);
 
+    /* "← Volver" in the header, inside the walkthrough: the quiz and its end screen go
+       back to the steps, the steps to the reminder, the reminder to the examples, the
+       examples to the carousel. The carousel is the entry, so it goes back to the
+       activities menu (the level above it on this page). Returns false outside the
+       walkthrough (assets/js/suite-chrome.js). */
+    function groupsBackStep() {
+      function on(el) { return !el.classList.contains('hidden'); }
+      if (on(gQuizScreen) || on(gEndScreen)) { groupsSwitchTo(gLevelsScreen); return true; }
+      if (on(gLevelsScreen)) { groupsSwitchTo(gReminderScreen); return true; }
+      if (on(gReminderScreen)) { groupsSwitchTo(gFamousScreen); return true; }
+      if (on(gFamousScreen)) { groupsSwitchTo(gIntroScreen); return true; }
+      if (on(gIntroScreen)) { leaveToMenu(); return true; }
+      return false;
+    }
 
-
-    return { start: groupsStart };
+    return { start: groupsStart, back: groupsBackStep };
   };
 })();

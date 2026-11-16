@@ -17,7 +17,6 @@
 .extra-note { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
-#btnBackToMenu { align-self: center; }
 
 /* Color-coded digits by place value */
 .num-color { font-weight: 800; letter-spacing: 2px; }

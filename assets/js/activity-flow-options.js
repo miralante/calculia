@@ -120,20 +120,6 @@
     }
     html.push(
       '  <button type="button" class="btn hidden" id="btnNext" data-i18n="ui.next">Siguiente →</button>',
-      '</section>',
-      /* Closing screen: a summary, the texts the activity asks for, and one button. */
-      '<section id="screenEnd" class="hidden stack centered" aria-live="polite">',
-      '  <div class="' + ((config.endEmoji && config.endEmoji.cls) || 'emoji-large') + '" aria-hidden="true">' +
-        ((config.endEmoji && config.endEmoji.text) || '🎉') + '</div>',
-      '  <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>',
-      '  <p id="endSummary"></p>'
-    );
-    if (config.transferKey) html.push('  <p class="transfer hidden" id="endTransfer" data-i18n="' + config.transferKey + '"></p>');
-    (config.endNotes || []).forEach(function (note) {
-      html.push('  <p class="' + note.cls + '" data-i18n="' + note.key + '"></p>');
-    });
-    html.push(
-      '  <button type="button" class="btn hidden" id="endNextStep" data-i18n="ui.nextStep">Siguiente paso →</button>',
       '</section>'
     );
     return html.join('\n');
@@ -193,7 +179,6 @@
       badge.textContent = level ? config.levelName(level) : '';
       badge.classList.toggle('hidden', !level);
     }
-    if (config.transferKey) $('#endTransfer').classList.add('hidden');
     App.utils.drawRoundReset();
     s.round = config.buildRound(def, level).map(function (type, i) { return config.makeQuestion(type, i, def); });
     s.qIndex = 0;
@@ -461,32 +446,26 @@
   }
 
   function endRound(ctx) {
-    var s = ctx.mode_state;
     var progress = ctx.progress;
     progress.completedRounds = (progress.completedRounds || 0) + 1;
     if (ctx.current) {
       progress.roundsByActivity[ctx.current.id] = (progress.roundsByActivity[ctx.current.id] || 0) + 1;
     }
     ctx.save();
-    /* With a next step in the chain, the closing screen leads to it. */
+    /* No end screen: the achievement screen (celebrate.js) closes the round. "A por más"
+       goes to the next step of the chain when there is one, else to another round. */
     var more = hasNextStep(ctx);
-    $('#endNextStep').classList.toggle('hidden', !more);
-    /* A round's own summary counts every right answer, the replays included; the default counts the first tries. */
-    $('#endSummary').textContent = fill(t(ctx.config.endSummaryKey || 'ui.roundDone'), {
-      n: ctx.config.endSummaryKey ? s.solved : s.roundRight, total: s.round.length, stars: progress.stars,
-      starsWord: App.i18n.starsWord(progress.stars),
-      nWord: App.i18n.starsWord(ctx.config.endSummaryKey ? s.solved : s.roundRight),
-      activity: ctx.current ? ctx.current.name() : ''
-    });
-    if (ctx.config.transferKey) $('#endTransfer').classList.remove('hidden');
-    ctx.show('#screenEnd');
-    if (App.feedback && App.feedback.celebrate) App.feedback.celebrate(t('core.roundComplete'));
+    App.feedback.celebrate(
+      t(ctx.config.celebrateKey || 'core.roundComplete'),
+      function () { if (more) nextStep(ctx); else startRound(ctx); },
+      App.feedback.starsGoal(progress.stars)
+    );
   }
 
   App.activityFlow.modes.options = {
     screens: function (config) {
       var menu = hasMenu(config);
-      return ['#screenIntro', '#screenReal', '#screenGame', '#screenEnd'].concat(menu ? ['#screenMenu'] : []);
+      return ['#screenIntro', '#screenReal', '#screenGame'].concat(menu ? ['#screenMenu'] : []);
     },
 
     markup: function (ctx) {
@@ -525,7 +504,6 @@
         $('#testReplay').addEventListener('click', function () { speak(ctx.mode_state.question.speak); });
       }
       $('#btnNext').addEventListener('click', function () { nextQuestion(ctx); });
-      $('#endNextStep').addEventListener('click', function () { nextStep(ctx); });
     },
 
     init: function (ctx) {

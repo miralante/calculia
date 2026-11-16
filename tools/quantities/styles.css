@@ -121,6 +121,12 @@
 
 .pt-gap:disabled { cursor: default; }
 
+/* A point is picked from the tray: the empty gaps show as places to put it. */
+.points-board.is-picking .pt-gap:not(.is-placed):not(:disabled) {
+  background: var(--mod-razonamiento-suave);
+  border-radius: 6px;
+}
+
 .pt-gap.is-placed { overflow: visible; }
 
 .pt-point {
@@ -231,6 +237,14 @@
   cursor: grab;
   touch-action: none;
   user-select: none;
+}
+
+/* Picked from the tray: a thick outline and a lifted chip, so the
+   selection shows without relying on colour alone. */
+.tray-chip.is-selected {
+  outline: 4px solid var(--mod-razonamiento);
+  outline-offset: 4px;
+  transform: translateY(-4px);
 }
 
 

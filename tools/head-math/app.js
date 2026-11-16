@@ -305,21 +305,32 @@
       return;
     }
     hide($('#screenQuiz'));
-    show($('#screenFinish'));
-    $('#finishText').textContent = App.i18n.t('roundSummary')
-      .replace('{count}', round.length)
-      .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
+    App.feedback.celebrate(App.i18n.t('core.roundComplete'), startRound, App.feedback.starsGoal(progress.stars));
   }
 
   /* ---- Navigation ---- */
 
   function showOnly(id) {
-    ['#screenMenu', '#screenLevels', '#screenQuiz', '#screenFinish'].forEach(function (screen) {
+    ['#screenMenu', '#screenLevels', '#screenQuiz'].forEach(function (screen) {
       if (screen === id) show($(screen));
       else hide($(screen));
     });
   }
+
+  /* "← Volver" in the header: from a quiz or its end screen, back to the step picker
+     (steps) or to the operation menu; from the step picker, back to the menu
+     (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    if (!$('#screenMenu').classList.contains('hidden')) return false;
+    if ($('#screenLevels').classList.contains('hidden') === false) {
+      showOnly('#screenMenu');
+    } else if (mode === 'steps') {
+      openStepPicker();
+    } else {
+      showOnly('#screenMenu');
+    }
+    return true;
+  };
 
   function startRound() {
     if (mode === 'steps') round = stepsRound();

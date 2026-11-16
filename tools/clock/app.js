@@ -28,7 +28,16 @@
   var screenStart = $('#screenStart');
   var screenLearn = $('#screenLearn');
   var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
+
+  /* "← Volver" in the header: from the lesson, the game or its end screen, back to
+     the start screen, the level above it on this page (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    if (!screenStart.classList.contains('hidden')) return false;
+    screenLearn.classList.add('hidden');
+    screenGame.classList.add('hidden');
+    screenStart.classList.remove('hidden');
+    return true;
+  };
   var questionZoneEl = $('#questionZone');
   var questionTextEl = $('#questionText');
   var optionsEl = $('#options');
@@ -70,6 +79,7 @@
   var learnFromGame = false;
 
   var glue = App.activityGlue({
+    again: function () { startRound(levelFromProgress()); },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
@@ -175,7 +185,6 @@
     paintLearn();
     screenStart.classList.add('hidden');
     screenGame.classList.add('hidden');
-    screenEnd.classList.add('hidden');
     screenLearn.classList.remove('hidden');
     $('#learnStart').classList.toggle('hidden', learnFromGame);
   }
@@ -223,7 +232,6 @@
     reinforcement.begin();
     screenStart.classList.add('hidden');
     screenLearn.classList.add('hidden');
-    screenEnd.classList.add('hidden');
     screenGame.classList.remove('hidden');
     render();
   }
@@ -556,19 +564,8 @@
   }
 
   function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    save();
     screenGame.classList.add('hidden');
-    screenEnd.classList.remove('hidden');
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
-        .replace('{nWord}', App.i18n.starsWord(roundCorrect))
-        .replace('{stars}', progress.stars)
-        .replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    }
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
+    glue.endRound();
   }
 
   /* ---- Events ---- */

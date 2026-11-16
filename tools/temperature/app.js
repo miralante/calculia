@@ -28,10 +28,7 @@
 
   var screenElevator = $('#screenElevator');
   var screenWater = $('#screenWater');
-  var screenEnd = $('#screenEnd');
   var starsEl = $('#stars');
-  var endSummary = $('#endSummary');
-  var endNextGame = $('#endNextGame');
   var liftShaft = $('#liftShaft');
   var liftNumber = $('#liftNumber');
   var liftLabel = $('#liftLabel');
@@ -46,10 +43,19 @@
 
   var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0, elevatorRounds: 0 });
 
-  var showScreen = App.screenSwitch([screenElevator, screenWater, screenEnd]);
+  var showScreen = App.screenSwitch([screenElevator, screenWater]);
+
+  /* "← Volver" in the header: the water game is the second step of the chain (see
+     elevatorGame.nextGame), so from it the link goes back to the elevator, the step
+     before it. The elevator is the first step: its link goes to the hub
+     (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    if (screenWater.classList.contains('hidden')) return false;
+    elevatorGame.start();
+    return true;
+  };
 
   /* The game whose round ended last: its next game is offered there. */
-  var roundEndedGame = null;
 
   /* ============================================================
      Helpers
@@ -463,28 +469,11 @@
   elevatorGame.nextLabel = 'elev.toWater';
 
   /* End of a round: the summary, and the next game when there is one. */
-  function showRoundEnd(game, correct) {
-    roundEndedGame = game;
-    showScreen(screenEnd);
-    endSummary.textContent = fill(t('game.endSummary'), {
-      n: correct,
-      stars: progress.stars,
-      starsWord: App.i18n.starsWord(progress.stars)
-    });
-    $('#contexto').textContent = '';
-    $('#explanation').textContent = '';
-    if (game.nextGame) {
-      endNextGame.textContent = t(game.nextLabel);
-      endNextGame.classList.remove('hidden');
-    } else {
-      endNextGame.classList.add('hidden');
-    }
-    App.feedback.celebrate(t('core.roundComplete'));
+  function showRoundEnd(game) {
+    /* "A por más" goes on to the next game of the chain, or plays this one again. */
+    var next = game.nextGame || game;
+    App.feedback.celebrate(t('core.roundComplete'), function () { next.start(); }, App.feedback.starsGoal(progress.stars));
   }
-
-  endNextGame.addEventListener('click', function () {
-    if (roundEndedGame && roundEndedGame.nextGame) roundEndedGame.nextGame.start();
-  });
 
   /* ============================================================
      Start: the elevator first.

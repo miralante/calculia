@@ -319,22 +319,28 @@
       return;
     }
     hide($('#screenQuiz'));
-    show($('#screenFinish'));
-    $('#finishText').textContent = App.i18n.t('roundSummary')
-      .replace('{count}', round.length)
-      .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
+    App.feedback.celebrate(App.i18n.t('core.roundComplete'), function () { startPractice(lastPractice); }, App.feedback.starsGoal(progress.stars));
   }
 
   /* ---- Navigation ---- */
 
   function showOnly(id) {
     if (App.tts) App.tts.stop();
-    ['#screenTables', '#screenLearn', '#screenQuiz', '#screenFinish'].forEach(function (screen) {
+    ['#screenTables', '#screenLearn', '#screenQuiz'].forEach(function (screen) {
       if (screen === id) show($(screen));
       else hide($(screen));
     });
   }
+
+  /* "← Volver" in the header: from a demo back to its list of facts, from a
+     practice or its end screen, from a table's list back to the tables
+     (assets/js/suite-chrome.js). The tables are the first screen. */
+  App.backStep = function () {
+    if (!$('#screenTables').classList.contains('hidden')) return false;
+    if (!$('#learnDemo').classList.contains('hidden')) { showLearnList(); return true; }
+    showOnly('#screenTables');
+    return true;
+  };
 
   /* Between rounds the input becomes disabled (see checkAnswer). Reset
      it back to enabled for the next round so it accepts input again. */
@@ -347,7 +353,9 @@
 
   /* The four practice modules of the learn screen (written or audio, in
      order or random). The button carries both choices in data attributes. */
+  var lastPractice = null;
   function startPractice(button) {
+    lastPractice = button;
     channel = button.getAttribute('data-channel');
     order = button.getAttribute('data-order');
     round = tablesRound();

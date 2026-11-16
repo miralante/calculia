@@ -41,7 +41,15 @@
 
   var screenStart = $('#screenStart');
   var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
+
+  /* "← Volver" in the header: from the game or its end screen, back to the start
+     screen, the level above it on this page (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    if (!screenStart.classList.contains('hidden')) return false;
+    screenGame.classList.add('hidden');
+    screenStart.classList.remove('hidden');
+    return true;
+  };
   var seriesEl = $('#series');
   var optionsEl = $('#options');
   var feedbackEl = $('#feedback');
@@ -78,6 +86,7 @@
   });
 
   var glue = App.activityGlue({
+    again: function () { startRound(levelFromProgress()); },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
@@ -114,7 +123,6 @@
     currentItem = null;
     reinforcement.begin();
     screenStart.classList.add('hidden');
-    screenEnd.classList.add('hidden');
     screenGame.classList.remove('hidden');
     render();
   }
@@ -253,20 +261,8 @@
   }
 
   function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    save();
     screenGame.classList.add('hidden');
-    screenEnd.classList.remove('hidden');
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', roundCorrect)
-        .replace('{nWord}', App.i18n.starsWord(roundCorrect))
-        .replace('{stars}', progress.stars)
-        .replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    }
-    $('#explanation').textContent = '';
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
+    glue.endRound();
   }
 
   /* Events */

@@ -23,7 +23,6 @@
 
   /* ---- Pantallas ---- */
   var screenGallery = $('#screenGallery');
-  var screenEnd = $('#screenEnd');
 
   /* ---- Elementos de la galería ---- */
   var slideTitle = $('#slideTitle');
@@ -330,18 +329,14 @@
       awardedThisRun = true;
       save();
     }
-    endSummary.textContent = App.i18n.t('endSummary')
-      .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    App.feedback.celebrate(App.i18n.t('endTitle'));
     screenGallery.classList.add('hidden');
-    screenEnd.classList.remove('hidden');
+    App.feedback.celebrate(App.i18n.t('endTitle'), restart, App.feedback.starsGoal(progress.stars));
     paintStars();
   }
 
   function restart() {
     slideIndex = 0;
     renderSlide();
-    screenEnd.classList.add('hidden');
     screenGallery.classList.remove('hidden');
   }
 

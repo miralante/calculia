@@ -25,8 +25,6 @@
   var progressText = $('#progressText');
   var starsEl = $('#stars');
   var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
-  var endSummary = $('#endSummary');
 
   /* Persistent progress (kept across browser closes) */
   var progress = App.storage.progressWith(CONFIG.toolId, { stars: 0 });
@@ -59,10 +57,10 @@
   }
 
   var glue = App.activityGlue({
+    again: function () { startRound(); },
     toolId: CONFIG.toolId,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
-    screenEnd: function () { return screenEnd; },
     roundCorrect: function () { return roundCorrect; },
     show: function (el) { screenGame.classList.add('hidden'); el.classList.remove('hidden'); }
   });
@@ -82,7 +80,6 @@
     /* Reinforce: the callback is called with the failed items when
        the normal round ends, and the session mounts the mini-round. */
     reinforcement.begin();
-    screenEnd.classList.add('hidden');
     screenGame.classList.remove('hidden');
     render();
   }

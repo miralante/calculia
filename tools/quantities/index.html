@@ -17,9 +17,6 @@
     <div class="suite-chrome-activity" data-suite-activity>
       <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
       <h1 data-i18n="title">👀 Leer y Escribir Números</h1>
-      <div class="row center-row">
-      <p id="instruction" data-i18n="instruction">Lee y escribe números grandes.</p>
-      </div>
     </div>
     <p class="stars" data-suite-stars id="stars">⭐ 0</p>
 
@@ -29,6 +26,9 @@
            Es la ÚNICA pantalla sin "hidden" en el marcado: si app.js no llegara a pintarse,
            la persona ve el menú en vez de una página en blanco. app.js la elige igualmente en init(). -->
       <section id="screenMenu" class="stack" aria-labelledby="menuTitle">
+        <div class="row center-row">
+          <p id="instruction" class="instruction" data-i18n="instruction">Lee y escribe números grandes.</p>
+        </div>
         <h2 id="menuTitle" data-i18n="choosePractice">Elige qué quieres practicar.</h2>
         <div class="menu-grid" id="practiceGrid"></div>
       </section>
@@ -74,29 +74,22 @@
         <button type="button" class="btn btn-secondary" id="backToMenu" data-i18n="core.backToMenu">Volver al menú</button>
       </section>
 
-      <section id="screenFinish" class="stack hidden centered">
-        <h2 data-i18n="roundComplete">¡Ronda terminada!</h2>
-        <p id="finishText"></p>
-        <p id="contexto" class="contexto"></p>
-        <p id="explanation" class="explanation"></p>
-        <p class="transfer" id="transfer" data-i18n="transfer"></p>
-    </section>
     </main>
     <footer data-suite-footer data-suite-base="../../" data-suite-settings></footer>
   </div>
 
   <script src="../../assets/js/utils.js?v=calculia-v0d2f78bc"></script>
-  <script src="../../assets/js/i18n.js?v=calculia-v98ee3091"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-vd29aae85"></script>
   <script src="../../assets/js/tts.js?v=calculia-va9046a0d"></script>
   <script src="../../assets/js/storage.js?v=calculia-v8a6191e2"></script>
   <script src="../../assets/js/achievements-engine.js?v=calculia-v53655f03"></script>
   <script src="../../assets/js/achievements.js?v=calculia-v225532f6"></script>
   <script src="../../assets/js/stars-engine.js?v=calculia-v8d4a7ee6"></script>
-  <script src="../../assets/js/feedback.js?v=calculia-v525856f7"></script>
+  <script src="../../assets/js/feedback.js?v=calculia-v610cf3db"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
-  <script src="../../assets/js/activity-glue.js?v=calculia-ved0b2ef9"></script>
+  <script src="../../assets/js/activity-glue.js?v=calculia-v59d35f1b"></script>
   <script src="words.js"></script>
   <script src="questions.js"></script>
   <script src="app.js"></script>

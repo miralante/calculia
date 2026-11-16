@@ -5,7 +5,7 @@
    Each activity passes its problems from data.js; the statements,
    explanations and hints are in strings.<locale>.js. A correct answer
    at the first try is a star. A wrong one shows a hint and can be tried
-   again. The round ends with one button: «Volver al inicio».
+   again. The round ends with the achievement screen: «A por más» plays another round.
 
    Two ways to answer, set by config.answer:
      'options' (default)  the child picks one of the answers shown.
@@ -37,7 +37,6 @@
       var optionsEl = $('#options');
       var feedbackEl = $('#feedback');
       var btnNext = $('#btnNext');
-      var endSummary = $('#endSummary');
       var problems = [];
       var current = 0;
       var correctFirstTry = 0;
@@ -47,7 +46,6 @@
       function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
       function showScreen(id) {
         $('#screenGame').classList.toggle('hidden', id !== 'screenGame');
-        $('#screenEnd').classList.toggle('hidden', id !== 'screenEnd');
       }
       /* How far through the round: `done` problems answered out of the total. */
       function paintBar(done) {
@@ -218,11 +216,7 @@
       function finish() {
         progress.completedRounds += 1;
         save();
-        endSummary.textContent = fill(t('endSummary'), {
-          n: correctFirstTry, total: problems.length, stars: progress.stars,
-          starsWord: App.i18n.starsWord(progress.stars), nWord: App.i18n.starsWord(correctFirstTry)
-        });
-        showScreen('screenEnd');
+        App.feedback.celebrate(t('endTitle'), startRound, App.feedback.starsGoal(progress.stars));
       }
 
       function startRound() {

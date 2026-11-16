@@ -12,7 +12,6 @@
   var screenLearn = $('#screenLearn');
   var screenReal = $('#screenReal');
   var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
   var promptEl = $('#prompt');
   var visualEl = $('#visual');
   var legendEl = $('#legend');
@@ -46,12 +45,12 @@
   var reinforcement = App.reinforce.session({ titleKey: 'reinforceTitle', introKey: 'reinforceIntro', show: paintQuestion });
 
   var glue = App.activityGlue({
+    again: function () { startRound(levelFromProgress()); },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
     activity: function () { return activity; },
     roundCorrect: function () { return round.roundCorrect; },
-    screenEnd: function () { return screenEnd; },
     show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars, endRound = glue.endRound;
@@ -78,7 +77,19 @@
      Screens and flow
      ============================================================ */
 
-  var show = App.screenSwitch([screenLearn, screenReal, screenGame, screenEnd]);
+  var show = App.screenSwitch([screenLearn, screenReal, screenGame]);
+
+  /* "← Volver" in the header steps back one screen inside the activity: the game
+     goes back to the real-life examples, those go back to the
+     explanation (assets/js/suite-chrome.js). The explanation is the first screen. */
+  App.backStep = function () {
+    if (!screenReal.classList.contains('hidden')) { show(screenLearn); return true; }
+    if (!screenGame.classList.contains('hidden')) {
+      show(screenReal);
+      return true;
+    }
+    return false;
+  };
 
   /* Small pictures of everyday places where the rise and run matter. The
      rails and rungs make the ladder recognizable; the house and paired

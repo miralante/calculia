@@ -21,7 +21,7 @@
        exposición, debajo del dibujo. Cada rasgo va separado por « · ». */
     slideNaturalesTraits: 'Nunca son negativos · No tienen decimales',
     slideEnterosTraits: 'Pueden ser negativos · El 0 separa los negativos de los positivos · No tienen decimales',
-    slideFraccionesTraits: 'Las partes que tienes sobre cuántas partes iguales se divide el todo',
+    slideFraccionesTraits: 'Las partes que tienes sobre cuántas partes iguales se divide',
     slideDecimalesTraits: 'Tienen una coma (,) · Lo que va después de la coma vale menos de 1',
     slideVsEnterosTitle: 'Naturales y Enteros',
     slideVsDecimalesTitle: 'Naturales y Decimales',

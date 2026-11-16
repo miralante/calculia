@@ -12,17 +12,15 @@
      toolId:      the storage key (TOOL_ID),
      progress():  the activity's progress object,
      starsEl():   the element that shows the star count,
-     activity():  the current activity definition (needs .levels and .id);
-                  only read when the summary names {activity}
-     roundCorrect(): correct answers in the round that just ended,
-     screenEnd(): the end-of-round screen element,
-     show(el):    shows one screen and hides the others
+     activity():  the current activity definition (needs .levels and .id),
+                  read by the activity's own code
+     again():     starts another round: the "A por más" button of the
+                  achievement screen (celebrate.js)
    }
 
    endRound(options) takes what differs between activities, all optional:
-     summaryKey:   the summary string (default 'endSummary'),
-     celebrateKey: the title of the celebration (default 'core.roundComplete'),
-     values:       more {placeholders} for the summary, { name: value }.
+     celebrateKey: the congratulation (default 'core.roundComplete').
+   There is no end-of-round screen: the achievement screen closes the round.
    ============================================================ */
 (function () {
   'use strict';
@@ -52,41 +50,19 @@
       return levels[Math.min(host.progress().completedRounds || 0, levels.length - 1)];
     }
 
-    // "Ya tienes X estrellas · A por las Y estrellas" (stars-engine.js), shown
-    // once at the end of the round, under the reward. Never after each answer.
-    function appendStarsGoal(zone, total) {
-      if (!zone || !window.ApptonomiaStars) return;
-      var span = document.createElement('span');
-      span.className = 'stars-goal';
-      span.textContent = window.ApptonomiaStars.line(total, {
-        reached: App.i18n.t('core.starsReached'),
-        goal: App.i18n.t('core.starsGoal')
-      });
-      zone.appendChild(span);
-    }
-
-    // Closes a round: counts it, saves, shows the end screen with its summary.
+    // Closes a round: counts it, saves, and shows the achievement screen
+    // (celebrate.js): the congratulation, "Ya tienes X · A por las Y" and
+    // "A por más", which starts the next round.
     function endRound(options) {
       var opts = options || {};
       var progress = host.progress();
       progress.completedRounds = (progress.completedRounds || 0) + 1;
       save();
-      host.show(host.screenEnd());
-      var summaryEl = $('#endSummary');
-      if (summaryEl) {
-        var text = App.i18n.t(opts.summaryKey || 'endSummary');
-        if (text.indexOf('{n}') !== -1) text = text.replace('{n}', host.roundCorrect()).replace('{nWord}', App.i18n.starsWord(host.roundCorrect()));
-        text = text.replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
-        Object.keys(opts.values || {}).forEach(function (name) {
-          text = text.replace('{' + name + '}', opts.values[name]);
-        });
-        if (text.indexOf('{activity}') !== -1) {
-          text = text.replace('{activity}', App.i18n.t('activity.' + host.activity().id + '.name'));
-        }
-        App.feedback.paintReward(summaryEl, progress.stars, text);
-        appendStarsGoal(summaryEl, progress.stars);
-      }
-      App.feedback.celebrate(App.i18n.t(opts.celebrateKey || 'core.roundComplete'));
+      App.feedback.celebrate(
+        App.i18n.t(opts.celebrateKey || 'core.roundComplete'),
+        function () { if (host.again) host.again(); },
+        App.feedback.starsGoal(progress.stars)
+      );
     }
 
     return {

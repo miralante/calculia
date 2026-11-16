@@ -141,12 +141,16 @@
         ]
       },
       unidades: {
-        title: 'Unidades, decenas y centenas en tu día',
+        title: 'Las posiciones en tu día',
         items: [
           { icon: '🥚', text: 'Una caja de huevos tiene 12 unidades (= 1 docena).' },
           { icon: '👟', text: 'Las tallas de zapatos son números de unidades.' },
           { icon: '💶', text: '100 céntimos = 1 €. 10 céntimos = 1 décima de euro.' },
-          { icon: '⏱️', text: '60 minutos = 1 hora. 60 segundos = 1 minuto.' }
+          { icon: '⏱️', text: '60 minutos = 1 hora. 60 segundos = 1 minuto.' },
+          { icon: '🏘️', text: 'Un pueblo de 4.000 habitantes tiene 4 unidades de millar.' },
+          { icon: '🚗', text: 'Un coche nuevo cuesta 12.000 €: 1 decena de millar y 2 unidades de millar.' },
+          { icon: '🏟️', text: 'Un estadio con 50.000 asientos tiene 5 decenas de millar.' },
+          { icon: '🏠', text: 'Una casa que cuesta 150.000 €: 1 centena de millar y 5 decenas de millar.' }
         ]
       },
       placevalue: {

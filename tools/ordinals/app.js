@@ -106,7 +106,6 @@
   var reminderScreen = $('#screenReminder');
   var levelsScreen = $('#screenLevels');
   var quizScreen = $('#screenQuiz');
-  var endScreen = $('#screenEnd');
 
   /* ============================================================
      Pantalla 4: los pasos
@@ -499,18 +498,14 @@
       startLevel(currentGroup.sublevels[currentSubIdx], true);
       return;
     }
-    $('#finalSummary').textContent = t('finalSummary')
-      .replace('{n}', correctCount)
-      .replace('{total}', items.length)
-      .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    switchTo(endScreen);
-    App.feedback.celebrate(t('core.roundComplete'));
+    switchTo(levelsScreen);
+    App.feedback.celebrate(t('core.roundComplete'), null, App.feedback.starsGoal(progress.stars));
   }
 
   /* ============================================================
      Cambio de pantalla y cableado
      ============================================================ */
-  var ALL_SCREENS = [introScreen, famousScreen, reminderScreen, levelsScreen, quizScreen, endScreen];
+  var ALL_SCREENS = [introScreen, famousScreen, reminderScreen, levelsScreen, quizScreen];
 
   function switchTo(screen) {
     ALL_SCREENS.forEach(function (s) { hide(s); });
@@ -530,6 +525,18 @@
      gives back the paint and bind helpers. */
   var screens = App.ordinalsScreens({ switchTo: switchTo, abbrev: abbrev });
   screens.bind();
+
+  /* "← Volver" in the header: from a practice or its end screen back to the levels;
+     the three screens before the levels step back one at a time. The levels screen
+     has no step above it on this page, so its link goes to the Calculia home
+     (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    function on(el) { return !el.classList.contains('hidden'); }
+    if (on(quizScreen)) { switchTo(levelsScreen); return true; }
+    if (on(reminderScreen)) { switchTo(famousScreen); return true; }
+    if (on(famousScreen)) { switchTo(introScreen); return true; }
+    return false;
+  };
 
   $('#next').addEventListener('click', next);
   

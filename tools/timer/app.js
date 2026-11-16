@@ -59,6 +59,16 @@
     });
   }
 
+  /* "← Volver" in the header: from the running count, back to the choice of time,
+     the level above it on this page (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    if (screenRun.classList.contains('hidden')) return false;
+    stopRinging();
+    stopTicking();
+    show(screenPick);
+    return true;
+  };
+
   /* The sound needs one tap first. Each tap on a choice runs this. */
   function unlockAudio() {
     try {

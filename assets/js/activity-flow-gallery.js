@@ -35,29 +35,17 @@
       ctx.save();
     }
     ctx.paintStars();
-    $('#endSummary').textContent = fill(t(ctx.config.endSummaryKey || 'ui.galleryEnd'), { stars: progress.stars });
-    ctx.show('#screenEnd');
-    if (App.feedback && App.feedback.celebrate) App.feedback.celebrate(t('core.roundComplete'));
+    /* No end screen: the achievement screen (celebrate.js) closes the activity on its last slide. */
+    App.feedback.celebrate(t('core.roundComplete'), null, App.feedback.starsGoal(progress.stars));
   }
 
   App.activityFlow.modes.gallery = {
     screens: function () {
-      return ['#screenIntro', '#screenEnd'];
+      return ['#screenIntro'];
     },
 
-    /* The closing screen: a summary, the texts the activity asks for, and one button. */
-    markup: function (ctx) {
-      var notes = (ctx.config.endNotes || []).map(function (note) {
-        return '  <p class="' + note.cls + '" data-i18n="' + note.key + '"></p>';
-      });
-      return [
-        '<section id="screenEnd" class="hidden stack centered" aria-live="polite">',
-        '  <div class="emoji-large" aria-hidden="true">🎉</div>',
-        '  <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>',
-        '  <p id="endSummary"></p>'
-      ].concat(notes, [
-        '</section>'
-      ]).join('\n');
+    markup: function () {
+      return '';
     },
 
     /* The last slide carries the button that ends the activity; the others carry the arrows only. */

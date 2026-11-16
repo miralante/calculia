@@ -11,7 +11,7 @@
 
   /* ---- Screens ---- */
   var SCREENS = ['screenMenu', 'screenQuizGame',
-    'screenPayGame', 'screenEnd'];
+    'screenPayGame'];
   function show(id) {
     SCREENS.forEach(function (p) { $('#' + p).classList.add('hidden'); });
     $('#' + id).classList.remove('hidden');

@@ -83,8 +83,7 @@
   var famousScreen = $('#famousScreen');
   var reminderScreen = $('#reminderScreen');
   var quizScreen = $('#quizScreen');
-  var endScreen = $('#endScreen');
-  var SCREENS = [introScreen, famousScreen, reminderScreen, quizScreen, endScreen];
+  var SCREENS = [introScreen, famousScreen, reminderScreen, quizScreen];
 
   var starsEl = $('#stars');
   var dificultadEl = $('#difficulty');
@@ -119,6 +118,17 @@
     resetAudioUI();
     SCREENS.forEach(function (s) { s.classList.toggle('hidden', s !== screen); });
   }
+
+  /* "← Volver" in the header steps back one screen inside the activity: the practice
+     and its end screen go back to the reminder, the reminder to the famous numbers,
+     the famous numbers to the introduction (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    function on(el) { return !el.classList.contains('hidden'); }
+    if (on(quizScreen)) { show(reminderScreen); return true; }
+    if (on(reminderScreen)) { show(famousScreen); return true; }
+    if (on(famousScreen)) { show(introScreen); return true; }
+    return false;
+  };
 
   /* ---------- Screen 4: levels ---------- */
 
@@ -482,12 +492,7 @@
       startLevel(currentGroup.sublevels[currentSubIdx], true);
       return;
     }
-    show(endScreen);
-    $('#finalSummary').textContent = t('finalSummary')
-      .replace('{n}', correctCount)
-      .replace('{nWord}', App.i18n.starsWord(correctCount))
-      .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    App.feedback.celebrate(t('core.roundComplete'));
+    App.feedback.celebrate(t('core.roundComplete'), function () { startLevel(currentLevel); }, App.feedback.starsGoal(progress.stars));
   }
 
   /* ---------- Eventos ---------- */

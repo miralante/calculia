@@ -23,7 +23,6 @@
   var screenMenu = $('#screenMenu');
   var screenLevels = $('#screenLevels');
   var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
   /* Generic exposition + real-life screens, reused by the sub-activities
      that flag DATA.<act>.hasExpoReal = true. Content painted from strings
      keyed by the current sub-activity id. */
@@ -112,6 +111,7 @@
   var activity = null;
   var answered = false;
   var glue = App.activityGlue({
+    again: function () { startRound(levelFromProgress()); },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
@@ -161,7 +161,7 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenGame, screenEnd, screenExpo, screenReal].forEach(function (p) {
+    [screenMenu, screenGame, screenExpo, screenReal].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -314,18 +314,8 @@
      not the same sentence for every question. The generic line is only
      the fallback, for a question that forgot to bring its own. */
   function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
     progress.roundsByActivity[activity.id] = (progress.roundsByActivity[activity.id] || 0) + 1;
-    save();
-    show(screenEnd);
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', round.roundCorrect)
-        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
-        .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    }
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
+    glue.endRound();
   }
 
   /* The typed-answer modes (reading and writing numbers) are built by typing.js. */
@@ -356,8 +346,22 @@
 
   /* ---- Events ---- */
 
-  var elBtnBackToMenu = $('#btnBackToMenu');
-  if (elBtnBackToMenu) elBtnBackToMenu.addEventListener('click', function () { show(screenMenu); });
+  /* "← Volver" in the header. In the two typed levels (leerNumeros,
+     escribirNumeros) it goes back to the previous level of the activity
+     instead of leaving for the Números menu. Progress steps back with it,
+     so finishing the level it returns to brings the person forward again.
+     Everywhere else the link keeps its href (assets/js/suite-chrome.js). */
+  var TYPED_TIPOS = { lecturaInput: true, escribirInput: true };
+  App.backStep = function () {
+    if (screenGame.classList.contains('hidden') || !round.level || !TYPED_TIPOS[round.level.tipo]) return false;
+    var levels = activity.levels;
+    var idx = levels.indexOf(round.level);
+    if (idx <= 0) return false;
+    progress.roundsByActivity[activity.id] = idx - 1;
+    save();
+    startRound(levels[idx - 1]);
+    return true;
+  };
   $('#btnNext').addEventListener('click', next);
   /* btnRepeat was removed during the 25-activity batch cleanup (memory
      entry on 2026-10-13); the screenEnd section no longer has the
@@ -393,6 +397,14 @@
      go straight to that sub-activity, skipping the menu. Without a valid
      id the menu is shown as before. */
   var initialSub = new URLSearchParams(window.location.search).get('sub');
+  /* "← Volver" goes to the group the sub-activity was opened from: comparar is listed
+     under "Ordenar números" (tools/order-numbers/data.js), the others under "Números"
+     (tools/numbers-group/data.js), which is the static href of the page. */
+  var SUB_GROUP_HUB = { comparar: '../order-numbers/' };
+  if (initialSub && SUB_GROUP_HUB[initialSub]) {
+    var groupBack = document.querySelector('.back-link');
+    if (groupBack) groupBack.setAttribute('href', SUB_GROUP_HUB[initialSub]);
+  }
   if (initialSub && DATA.activities[initialSub]) openActivity(initialSub);
 
 })();

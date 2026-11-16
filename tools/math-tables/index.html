@@ -17,7 +17,6 @@
     <div class="suite-chrome-activity" data-suite-activity>
       <a href="../../" class="back-link" data-i18n="core.back">← Volver</a>
       <h1 data-i18n="title">🔢 Las Tablas</h1>
-      <p id="instruction" data-i18n="instruction">Suma, multiplica, resta y divide con puntos de colores.</p>
     </div>
     <p class="stars" data-suite-stars id="stars">⭐ 0</p>
 
@@ -26,6 +25,9 @@
       <!-- Choose table. The operation comes from the landing card (?op=add,
            multiply, subtract or divide), so there is no operation menu here. -->
       <section id="screenTables" class="stack hidden" aria-labelledby="tablesTitle">
+        <div class="row center-row">
+          <p class="instruction" id="instruction" data-i18n="instruction">Suma, multiplica, resta y divide con puntos de colores.</p>
+        </div>
         <h2 id="tablesTitle" data-i18n="chooseTable">Elige una tabla.</h2>
         <div class="table-grid" id="tableGrid"></div>
         <button type="button" class="btn btn-secondary" id="tablesBack" data-i18n="btnMenu">Volver al inicio</button>
@@ -112,23 +114,17 @@
       </section>
 
       <!-- Round finished -->
-      <section id="screenFinish" class="stack hidden centered">
-        <div class="emoji-large" aria-hidden="true">🎉</div>
-        <h2 data-i18n="core.roundComplete">¡Ronda completada!</h2>
-        <p id="finishText"></p>
-        <p id="transfer" class="transfer" data-i18n="transfer"></p>
-    </section>
     </main>
     <footer data-suite-footer data-suite-base="../../" data-suite-settings></footer>
   </div>
 
   <script src="../../assets/js/utils.js?v=calculia-v0d2f78bc"></script>
-  <script src="../../assets/js/i18n.js?v=calculia-v98ee3091"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-vd29aae85"></script>
   <script src="../../assets/js/storage.js?v=calculia-v8a6191e2"></script>
   <script src="../../assets/js/achievements-engine.js?v=calculia-v53655f03"></script>
   <script src="../../assets/js/achievements.js?v=calculia-v225532f6"></script>
   <script src="../../assets/js/stars-engine.js?v=calculia-v8d4a7ee6"></script>
-  <script src="../../assets/js/feedback.js?v=calculia-v525856f7"></script>
+  <script src="../../assets/js/feedback.js?v=calculia-v610cf3db"></script>
   <script src="../../assets/js/tts.js?v=calculia-va9046a0d"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>

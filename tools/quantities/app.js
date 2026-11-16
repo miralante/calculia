@@ -61,7 +61,6 @@
   /* ----------- Elements ----------- */
   var menuScreen = $('#screenMenu');
   var taskScreen = $('#screenTask');
-  var finishScreen = $('#screenFinish');
 
   var starsEl = $('#stars');
 
@@ -90,6 +89,10 @@
      sits after digit i. */
   var placed = [];
   var wrongGaps = [];
+  /* A point picked from the tray (tap a chip) and not placed yet. While
+     it is picked, the chip shows as selected and the empty gaps as
+     places to put it. */
+  var pickedFromTray = false;
 
   var rint = App.utils.rint;
 
@@ -99,6 +102,7 @@
     var board = $('#pointsBoard');
     var digits = String(case_.n);
     board.innerHTML = '';
+    board.classList.toggle('is-picking', pickedFromTray && waitingCheck);
     for (var i = 0; i < digits.length; i++) {
       var digit = document.createElement('span');
       digit.className = 'pt-digit';
@@ -147,10 +151,21 @@
     tray.innerHTML = '';
     for (var k = 0; k < left; k++) {
       var chip = document.createElement('span');
-      chip.className = 'tray-chip';
+      /* Every point is alike: the first one shows the pick. */
+      chip.className = 'tray-chip' + (k === 0 && pickedFromTray ? ' is-selected' : '');
       chip.textContent = separator();
+      chip.addEventListener('click', onTrayChipClick);
       tray.appendChild(chip);
     }
+  }
+
+  /* Tap a point in the tray to pick it up, tap it again to put it back.
+     A drag is not a pick: the click that ends a drag is swallowed. */
+  function onTrayChipClick() {
+    if (!waitingCheck || justDragged) return;
+    pickedFromTray = !pickedFromTray;
+    renderPointsBoard();
+    renderPointsTray();
   }
 
   /* ----------- Dragging the points -----------
@@ -235,6 +250,7 @@
     setTimeout(function () { justDragged = false; }, 300);
     if (g !== null && d.ghost) {
       /* Glide the point into its gap, then settle it there. */
+      if (d.from === null) pickedFromTray = false;
       glideTo(d.ghost, gapCenter(g), function () { settleDrop(d, g); });
     } else {
       if (d.ghost) d.ghost.remove();
@@ -325,6 +341,7 @@
       var chips = document.querySelectorAll('#pointsTray .tray-chip');
       if (chips.length) fromRect = chips[chips.length - 1].getBoundingClientRect();
       placed.push(i);
+      pickedFromTray = false;
     } else {
       $('#feedback').textContent = t('pointsNoneLeft');
       return;
@@ -390,6 +407,7 @@
     } else if (practice === 'points') {
       placed = [];
       wrongGaps = [];
+      pickedFromTray = false;
       renderPointsBoard();
       renderPointsTray();
       show($('#pointsZone'));
@@ -494,13 +512,10 @@
      ends (in that case consume's callback already started the
      mini-round, and this runs only when the queue empties). */
   function closeRound() {
-    $('#finishText').textContent = t('roundSummary')
-      .replace('{count}', round.length)
-      .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
     $('#contexto').textContent = t('contexto');
     $('#explanation').textContent = t('explicacion');
-    App.feedback.celebrate(t('roundComplete'));
-    switchTo(finishScreen);
+    App.feedback.celebrate(t('roundComplete'), function () { startPractice(practice); }, App.feedback.starsGoal(progress.stars));
+    switchTo(menuScreen);
   }
 
   /* ----------- Start a practice ----------- */
@@ -541,7 +556,7 @@
      One place decides which screen is visible, so the header star
      counter and the scroll position are consistent whichever way the
      person navigates. */
-  var ALL_SCREENS = [menuScreen, taskScreen, finishScreen];
+  var ALL_SCREENS = [menuScreen, taskScreen];
 
   function switchTo(screen) {
     ALL_SCREENS.forEach(function (s) { hide(s); });
@@ -549,6 +564,15 @@
     paintStars();
     window.scrollTo(0, 0);
   }
+
+  /* The header "← Volver" on a practice or on its end screen goes back to the
+     practice menu, the level above it on this page. On the menu it returns
+     false and the link goes to the landing (see assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    if (taskScreen.classList.contains('hidden')) return false;
+    switchTo(menuScreen);
+    return true;
+  };
 
   /* ============================================================
      Wiring

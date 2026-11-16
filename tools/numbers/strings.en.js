@@ -142,12 +142,16 @@
         ]
       },
       unidades: {
-        title: 'Ones, tens and hundreds in your day',
+        title: 'Place values in your day',
         items: [
           { icon: '🥚', text: 'A box of eggs has 12 ones (= 1 dozen).' },
           { icon: '👟', text: 'Shoe sizes are numbers of ones.' },
           { icon: '💶', text: '100 cents = 1 €. 10 cents = one tenth of a euro.' },
-          { icon: '⏱️', text: '60 minutes = 1 hour. 60 seconds = 1 minute.' }
+          { icon: '⏱️', text: '60 minutes = 1 hour. 60 seconds = 1 minute.' },
+          { icon: '🏘️', text: 'A village of 4,000 people has 4 thousands.' },
+          { icon: '🚗', text: 'A new car costs €12,000: 1 ten thousand and 2 thousands.' },
+          { icon: '🏟️', text: 'A stadium with 50,000 seats has 5 ten thousands.' },
+          { icon: '🏠', text: 'A house that costs €150,000: 1 hundred thousand and 5 ten thousands.' }
         ]
       },
       placevalue: {

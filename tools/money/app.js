@@ -14,7 +14,6 @@
   var screenMenu = $('#screenMenu');
   var screenLevels = $('#screenLevels');
   var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
   var promptEl = $('#prompt');
   var visualEl = $('#visual');
   var legendEl = $('#legend');
@@ -46,12 +45,12 @@
   });
 
   var glue = App.activityGlue({
+    again: function () { startRound(levelFromProgress()); },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
     activity: function () { return activity; },
     roundCorrect: function () { return round.roundCorrect; },
-    screenEnd: function () { return screenEnd; },
     show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars, levelFromProgress = glue.levelFromProgress, endRound = glue.endRound;
@@ -250,10 +249,18 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenGame, screenEnd].forEach(function (p) {
+    [screenMenu, screenGame].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
+
+  /* "← Volver" in the header: from a game or its end screen, back to the activity
+     menu, the level above it on this page (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    if (!screenMenu.classList.contains('hidden')) return false;
+    show(screenMenu);
+    return true;
+  };
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
   /* ---- Levels of an activity (now automatic via levelFromProgress) ---- */

@@ -22,7 +22,6 @@
   var screenMenu = $('#screenMenu');
   var screenLevels = $('#screenLevels');
   var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
   var promptEl = $('#prompt');
   var visualEl = $('#visual');
   var legendEl = $('#legend');
@@ -51,12 +50,12 @@
     show: showReinforceQuestion
   });
   var glue = App.activityGlue({
+    again: function () { startRound(levelFromProgress()); },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
     activity: function () { return activity; },
     roundCorrect: function () { return round.roundCorrect; },
-    screenEnd: function () { return screenEnd; },
     show: function (el) { show(el); }
   });
   var save = glue.save, paintStars = glue.paintStars, levelFromProgress = glue.levelFromProgress, endRound = glue.endRound;
@@ -114,7 +113,17 @@
      Screens and flow
      ============================================================ */
 
-  var show = App.screenSwitch([screenMenu, screenGame, screenEnd]);
+  var show = App.screenSwitch([screenMenu, screenGame]);
+
+  /* "← Volver" in the header: inside the counting-in-groups walkthrough it goes one
+     step back (groups.js). From a game or its end screen, back to the activity
+     menu, the level above it on this page (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    if (groups.back()) return true;
+    if (screenGame.classList.contains('hidden') && screenEnd.classList.contains('hidden')) return false;
+    show(screenMenu);
+    return true;
+  };
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
   /* ---- Levels for an activity ---- */
@@ -133,6 +142,9 @@
        flujo flat normal (cuestionario de tres opciones, fin de
        ronda, etc.). */
     if (activity.walkthrough) {
+      /* The walkthrough has its own screens: hide the activity menu and the game,
+         or the menu stays visible under the first group screen. */
+      show(null);
       groupsStart();
       return;
     }

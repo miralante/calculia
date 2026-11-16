@@ -18,7 +18,6 @@
   var screenMenu = $('#screenMenu');
   var screenLevels = $('#screenLevels');
   var screenGame = $('#screenGame');
-  var screenEnd = $('#screenEnd');
   var screenComma = $('#screenComma');
   var promptEl = $('#prompt');
   var visualEl = $('#visual');
@@ -54,11 +53,11 @@
      as before. reinforcement.active() tells the mini-round flow apart. */
   var reinforcement = App.reinforce.session({ titleKey: 'reinforceTitle', introKey: 'reinforceIntro', show: paintQuestion });
   var glue = App.activityGlue({
+    again: function () { startRound(levelFromProgress()); },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
     activity: function () { return activity; },
-    screenEnd: function () { return screenEnd; },
     roundCorrect: function () { return round.roundCorrect; },
     show: function (el) { show(el); }
   });
@@ -173,7 +172,20 @@
      Screens and flow
      ============================================================ */
 
-  var show = App.screenSwitch([screenMenu, screenIntro, screenReal, screenGame, screenComma, screenEnd]);
+  var show = App.screenSwitch([screenMenu, screenIntro, screenReal, screenGame, screenComma]);
+
+  /* "← Volver" in the header steps back one screen inside the activity: the game
+     and its end screen go back to the real-life examples, those go back to the
+     explanation, the explanation and the comma game go back to the activity menu
+     (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    function on(el) { return !el.classList.contains('hidden'); }
+    if (on(screenMenu)) return false;
+    if (on(screenGame)) { openReal(); return true; }
+    if (on(screenReal)) { openIntro(); return true; }
+    show(screenMenu);
+    return true;
+  };
 
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
   /* The level rises one step per completed round of THIS activity, capped

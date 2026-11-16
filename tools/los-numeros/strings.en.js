@@ -21,7 +21,7 @@
        under the drawing. Each trait is separated by « · ». */
     slideNaturalesTraits: 'Never negative · No decimals',
     slideEnterosTraits: 'They can be negative · Zero separates negative from positive numbers · No decimals',
-    slideFraccionesTraits: 'The parts you have over how many equal parts the whole is divided into',
+    slideFraccionesTraits: 'The parts you have over how many equal parts it is divided into',
     slideDecimalesTraits: 'They have a decimal point (.) · What comes after the point is less than 1',
     slideVsEnterosTitle: 'Natural and Integers',
     slideVsDecimalesTitle: 'Natural and Decimals',

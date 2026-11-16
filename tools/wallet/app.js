@@ -35,10 +35,12 @@
   var progress = App.storage.progressWith(TOOL_ID, { stars: 0 });
 
   var glue = App.activityGlue({
+    again: function () {
+      if (currentConfig().isQuiz) startQuizRound(levelFromProgress()); else startPayRound(levelFromProgress());
+    },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },
-    screenEnd: function () { return $('#screenEnd'); },
     roundCorrect: function () { return lastCorrect; },
     show: function (el) { show(el.id); }
   });
@@ -194,7 +196,7 @@
     lastCorrect = correct;
     $('#contexto').textContent = '';
     $('#explanation').textContent = '';
-    glue.endRound({ summaryKey: cfg.summary, values: { t: localeData().perRound } });
+    glue.endRound();
   }
 
   /* ============================================================
@@ -388,6 +390,14 @@
   });
   var elBtnBackToMenuLevels = $('#btnBackToMenuLevels');
   if (elBtnBackToMenuLevels) elBtnBackToMenuLevels.addEventListener('click', function () { show('screenMenu'); });
+
+  /* "← Volver" in the header: from a game or its end screen, back to the activity
+     menu, the level above it on this page (assets/js/suite-chrome.js). */
+  App.backStep = function () {
+    if (!$('#screenMenu').classList.contains('hidden')) return false;
+    show('screenMenu');
+    return true;
+  };
 
   btnNextQuiz.addEventListener('click', nextQuiz);
   btnCheck.addEventListener('click', check);
