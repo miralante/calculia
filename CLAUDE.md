@@ -365,8 +365,9 @@ The round-complete screen (`<section id="screenEnd">` in most,
 `screenFinish` in `math-tables` / `quantities` / `head-math`,
 `screenParityFinish` in `parity`) carries **no** button to leave the
 activity. The header's "← Volver" (`.back-link`) is the only exit: it
-returns to the screen the child came from, and to the landing when there
-is none (see `suite-chrome.js` in the suite's shared blocks).
+is a link to the parent level (its `href`: the group hub, or the landing),
+never a trip back through the browser history (see `suite-chrome.js` in
+the suite's shared blocks).
 
 The end screen shows the summary and, when the round leads to another
 step, the `#endNextStep` button ("Siguiente paso"). Nothing else competes

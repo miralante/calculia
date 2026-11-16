@@ -1,17 +1,22 @@
 /* ============================================================
-   Calculia — Water Temperature (orders on a thermometer)
+   Calculia — Positives and negatives (two games of orders)
 
-   A round is a short sequence of orders such as "go up 4 degrees"
-   or "go down 3 degrees". Each order starts where the previous one
-   ended, so the target is never a fixed number: it is computed from
-   the current temperature and shown live. While the person moves the
-   thermometer, the screen says how many degrees are missing or how
-   far they overshot. When the target is reached, the result is
-   highlighted as an equation (for example 2 − 4 = −2) with a note on
-   what happened to the water, so the sign rules are seen, not just
-   read.
+   Game 1, the elevator: floors from the basement (negative) up to
+   the floors above ground (positive). It is played first.
+   Game 2, water temperature: the same mechanic on a thermometer,
+   with ice below 0 °C and steam at 100 °C. It is offered when the
+   elevator round ends.
 
-   Data and levels in data.js. Shared modules in assets/js/.
+   Both games are one engine, createOrderGame(config). A round is a
+   short sequence of orders such as "go up 4" or "go down 3". Each
+   order starts where the previous one ended, so the target is never
+   fixed: it is computed from the current value and shown live. When
+   the target is reached, the result is highlighted as an equation
+   (for example −2 + 3 = +1) with a note on what happened, so the
+   sign rules are seen, not just read.
+
+   Data in data.js. Texts in strings.<locale>.js. Shared modules in
+   assets/js/.
    ============================================================ */
 (function () {
   'use strict';
@@ -19,339 +24,474 @@
   /* Same storage key as before, so stars already earned are kept. */
   var TOOL_ID = 'temperature';
   var $ = App.utils.$;
+  var randInt = App.utils.rint;
 
-  var screenGame = $('#screenGame');
+  var screenElevator = $('#screenElevator');
+  var screenWater = $('#screenWater');
   var screenEnd = $('#screenEnd');
   var starsEl = $('#stars');
-  var thermoUI = $('#thermoUI');
-  var thermoCount = $('#thermoCount');
-  var thermoOrder = $('#thermoOrder');
+  var endSummary = $('#endSummary');
+  var endNextGame = $('#endNextGame');
+  var liftShaft = $('#liftShaft');
+  var liftNumber = $('#liftNumber');
+  var liftLabel = $('#liftLabel');
   var thermoCard = $('#thermoCard');
   var thermoNumber = $('#thermoNumber');
   var thermoState = $('#thermoState');
   var thermoStateLabel = $('#thermoStateLabel');
-  var thermoTrack = $('#thermoTrack');
   var thermoZeroMark = $('#thermoZeroMark');
+  var thermoHundredMark = $('#thermoHundredMark');
   var thermoNowMark = $('#thermoNowMark');
   var thermoTargetMark = $('#thermoTargetMark');
-  var thermoHundredMark = $('#thermoHundredMark');
-  var thermoTargetText = $('#thermoTargetText');
-  var thermoLive = $('#thermoLive');
-  var thermoControls = $('#thermoControls');
-  var thermoResult = $('#thermoResult');
-  var thermoResultTitle = $('#thermoResultTitle');
-  var thermoResultEq = $('#thermoResultEq');
-  var thermoResultNote = $('#thermoResultNote');
-  var thermoNext = $('#thermoNext');
-  var thermoReset = $('#thermoReset');
-  var thermoExit = $('#thermoExit');
-  var thermoHint = $('#thermoHint');
 
-  var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0 });
+  var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0, elevatorRounds: 0 });
 
-  var glue = App.activityGlue({
-    toolId: TOOL_ID,
-    progress: function () { return progress; },
-    starsEl: function () { return starsEl; },
-    show: function (el) { show(el); }
-  });
-  var save = glue.save, paintStars = glue.paintStars;
+  var showScreen = App.screenSwitch([screenElevator, screenWater, screenEnd]);
 
-  /* Round state. */
-  var level = null;      /* { id, lo, hi, amin, amax, start } */
-  var now = 0;           /* current temperature */
-  var order = null;      /* { from, dir: 'up'|'down', amount, target } */
-  var orderIndex = 0;    /* 1-based number of the order on screen */
-  var roundCorrect = 0;  /* orders completed in this round */
-  var resultShown = false;
+  /* The game whose round ended last: its next game is offered there. */
+  var roundEndedGame = null;
 
   /* ============================================================
      Helpers
      ============================================================ */
 
-  function show(screen) {
-    [screenGame, screenEnd].forEach(function (p) {
-      p.classList.toggle('hidden', p !== screen);
-    });
+  function t(key) {
+    return App.i18n.t(key);
   }
 
-  /* Number with the typographic minus sign, so the screen shows
-     "−4" and not "-4". */
-  function fmt(n) {
+  /* Replaces every {name} in the text with its value. */
+  function fill(text, values) {
+    Object.keys(values).forEach(function (name) {
+      text = text.split('{' + name + '}').join(String(values[name]));
+    });
+    return text;
+  }
+
+  /* Typographic minus, so the screen shows "−4" and not "-4". */
+  function fmtMinus(n) {
     return (n < 0 ? '−' : '') + Math.abs(n);
   }
 
-  function degrees(n) {
-    return App.i18n.t(Math.abs(n) === 1 ? 'gen.degreeOne' : 'gen.degreeMany');
+  /* Signed number: "+3" above zero, "−2" below, "0" at zero. */
+  function fmtSigned(n) {
+    return n > 0 ? '+' + n : fmtMinus(n);
   }
 
-  var randInt = App.utils.rint;
+  function textEl(tag, className, text) {
+    var el = document.createElement(tag);
+    el.className = className;
+    el.textContent = text;
+    return el;
+  }
+
+  function save() {
+    App.storage.set(TOOL_ID, progress);
+  }
+
+  function paintStars() {
+    starsEl.textContent = '⭐ ' + progress.stars;
+  }
+
+  /* ============================================================
+     The order engine, shared by both games
+     ============================================================ */
+
+  /* cfg:
+       root        the game's <section>
+       data        its DATA entry (perRound, min, max, levels)
+       prefix      i18n prefix of its own keys (unitOne, unitMany, hint…)
+       roundsKey   progress counter that picks the level
+       fmt(n)      how a value is written in the equation
+       label(n)    how a value is named in words (target line)
+       paintNow(n) paints the current value on the game's visual
+       paintTrack(now, target) moves the game's markers
+       resultNote(from, to)    the note under the equation
+       onEnd(correct)          called when the round ends
+  */
+  function createOrderGame(cfg) {
+    var root = cfg.root;
+    var data = cfg.data;
+    var prefix = cfg.prefix;
+
+    function q(role) {
+      return root.querySelector('[data-role="' + role + '"]');
+    }
+
+    function unit(n) {
+      return t(prefix + (Math.abs(n) === 1 ? '.unitOne' : '.unitMany'));
+    }
+
+    var els = {
+      count: q('count'),
+      orderText: q('order-text'),
+      orderArrow: q('order-arrow'),
+      live: q('live'),
+      targetText: q('target-text'),
+      result: q('result'),
+      resultTitle: q('result-title'),
+      resultEq: q('result-eq'),
+      resultNote: q('result-note'),
+      next: q('next'),
+      controls: q('controls'),
+      hint: q('hint'),
+      reset: q('reset'),
+      exit: q('exit')
+    };
+    var stepButtons = root.querySelectorAll('[data-step]');
+
+    /* Round state. */
+    var level = null;      /* { id, lo, hi, amin, amax, start } */
+    var now = 0;           /* current value */
+    var order = null;      /* { from, dir: 'up'|'down', amount, target } */
+    var orderIndex = 0;    /* 1-based number of the order on screen */
+    var roundCorrect = 0;  /* orders completed in this round */
+    var resultShown = false;
+
+    /* Build the next order from the current value. The direction is
+       random unless one way has no room left; the size is random within
+       the level's range and never leaves the level's range. */
+    function makeOrder() {
+      var canUp = now + level.amin <= level.hi;
+      var canDown = now - level.amin >= level.lo;
+      var dir;
+      if (canUp && canDown) dir = Math.random() < 0.5 ? 'up' : 'down';
+      else dir = canUp ? 'up' : 'down';
+
+      var room = dir === 'up' ? level.hi - now : now - level.lo;
+      var amount = randInt(level.amin, Math.min(level.amax, room));
+      var target = dir === 'up' ? now + amount : now - amount;
+      return { from: now, dir: dir, amount: amount, target: target };
+    }
+
+    function start() {
+      var rounds = progress[cfg.roundsKey] || 0;
+      level = data.levels[Math.min(rounds, data.levels.length - 1)];
+      now = level.start;
+      orderIndex = 0;
+      roundCorrect = 0;
+      showScreen(root);
+      nextOrder();
+    }
+
+    function nextOrder() {
+      orderIndex += 1;
+      order = makeOrder();
+      resultShown = false;
+      els.result.classList.add('hidden');
+      els.controls.classList.remove('hidden');
+      paintAll();
+      els.hint.textContent = t(prefix + '.hint');
+    }
+
+    /* ---- Painting ---- */
+
+    function paintAll() {
+      paintOrder();
+      cfg.paintNow(now);
+      paintTrack();
+      paintLive();
+      paintButtons();
+    }
+
+    /* The order itself: "Orden 2 de 6", then "Sube 4 grados" with its arrow. */
+    function paintOrder() {
+      els.count.textContent = fill(t('game.orderCount'), { i: orderIndex, total: data.perRound });
+      els.orderText.textContent = fill(
+        t(order.dir === 'up' ? 'game.orderUp' : 'game.orderDown'),
+        { n: order.amount, unit: unit(order.amount) }
+      );
+      els.orderArrow.textContent = order.dir === 'up' ? '↑' : '↓';
+    }
+
+    function paintTrack() {
+      cfg.paintTrack(now, order.target);
+      els.targetText.textContent = fill(t('game.targetText'), { target: cfg.label(order.target) });
+    }
+
+    /* The live line: how far the target is and which way to go.
+       Overshooting is said plainly, not punished. */
+    function paintLive() {
+      if (resultShown) {
+        els.live.textContent = '';
+        return;
+      }
+      var need = order.target - now;          /* >0: still to go up, <0: still down */
+      var n = Math.abs(need);
+      /* Overshoot: past the target in the direction of the order. */
+      var over = (order.dir === 'up') !== (need > 0);
+      var key = over
+        ? (need > 0 ? 'game.liveOverUp' : 'game.liveOverDown')
+        : (need > 0 ? 'game.liveUp' : 'game.liveDown');
+      els.live.textContent = fill(t(key), { n: n, unit: unit(n) });
+    }
+
+    /* A step button is disabled when it would leave the game's range. */
+    function paintButtons() {
+      Array.prototype.forEach.call(stepButtons, function (b) {
+        var next = now + parseInt(b.getAttribute('data-step'), 10);
+        b.disabled = next < data.min || next > data.max;
+      });
+    }
+
+    /* ---- Moving and reaching the target ---- */
+
+    function step(delta) {
+      if (resultShown) return;
+      var next = now + delta;
+      if (next < data.min || next > data.max) return;
+      now = next;
+      cfg.paintNow(now);
+      paintTrack();
+      paintLive();
+      paintButtons();
+      if (now === order.target) reached();
+    }
+
+    /* The target was reached: one star, the result as an equation. */
+    function reached() {
+      resultShown = true;
+      roundCorrect += 1;
+      progress.stars += 1;
+      save();
+      paintStars();
+
+      var from = order.from;
+      var to = order.target;
+      var op = order.dir === 'up' ? '+' : '−';
+
+      els.resultTitle.textContent = t('game.resultTitle');
+      els.resultEq.textContent = fill(t('game.resultEq'), {
+        from: cfg.fmt(from), op: op, n: order.amount, to: cfg.fmt(to)
+      });
+      els.resultNote.textContent = cfg.resultNote(from, to);
+
+      els.controls.classList.add('hidden');
+      els.result.classList.remove('hidden');
+      els.live.textContent = '';
+      paintAll();
+      els.next.textContent = t(orderIndex >= data.perRound ? 'game.finishRound' : 'game.nextOrder');
+      els.next.focus();
+    }
+
+    function advance() {
+      if (!resultShown) return;
+      if (orderIndex >= data.perRound) endRound();
+      else nextOrder();
+    }
+
+    function resetOrder() {
+      if (resultShown) return;
+      now = order.from;
+      cfg.paintNow(now);
+      paintTrack();
+      paintLive();
+      paintButtons();
+    }
+
+    /* Leaving early keeps the stars already earned and ends the round. */
+    function endRound() {
+      progress[cfg.roundsKey] = (progress[cfg.roundsKey] || 0) + 1;
+      save();
+      cfg.onEnd(roundCorrect);
+    }
+
+    /* ---- Wire-up (runs once) ---- */
+
+    Array.prototype.forEach.call(stepButtons, function (b) {
+      b.addEventListener('click', function () {
+        step(parseInt(b.getAttribute('data-step'), 10));
+      });
+    });
+    els.reset.addEventListener('click', resetOrder);
+    els.next.addEventListener('click', advance);
+    els.exit.addEventListener('click', endRound);
+
+    /* Keyboard: arrows or + / − move the marker. */
+    document.addEventListener('keydown', function (ev) {
+      if (root.classList.contains('hidden') || resultShown) return;
+      if (ev.target && /^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
+      if (ev.key === 'ArrowUp' || ev.key === '+') step(1);
+      else if (ev.key === 'ArrowDown' || ev.key === '-' || ev.key === '−') step(-1);
+      else return;
+      ev.preventDefault();
+    });
+
+    els.reset.textContent = t('game.btnReset');
+    els.exit.textContent = t('game.btnExit');
+
+    return { start: start };
+  }
+
+  /* ============================================================
+     Game 1: the elevator
+     ============================================================ */
+
+  /* How a floor is named in words: "planta baja", "sótano 2", "planta 3". */
+  function elevatorLabel(n) {
+    if (n === 0) return t('elev.groundLabel');
+    return fill(t(n < 0 ? 'elev.basementLabel' : 'elev.floorLabel'), { n: Math.abs(n) });
+  }
+
+  /* One row per floor, top to bottom, built once. */
+  var floorRows = [];
+
+  function buildShaft() {
+    for (var f = DATA.elevator.max; f >= DATA.elevator.min; f -= 1) {
+      var row = document.createElement('div');
+      row.className = 'lift-floor' + (f === 0 ? ' is-ground' : f < 0 ? ' is-basement' : '');
+      row.appendChild(textEl('span', 'lift-floor-num', fmtSigned(f)));
+      row.appendChild(textEl('span', 'lift-floor-name', elevatorLabel(f)));
+      var mark = textEl('span', 'lift-floor-mark', '');
+      mark.setAttribute('aria-hidden', 'true');
+      row.appendChild(mark);
+      liftShaft.appendChild(row);
+      floorRows.push({ floor: f, row: row, mark: mark });
+    }
+  }
+
+  function elevatorPaintNow(n) {
+    liftNumber.textContent = fmtSigned(n);
+    liftNumber.setAttribute('aria-label', fill(t('elev.readoutAria'), { floor: elevatorLabel(n) }));
+    liftLabel.textContent = elevatorLabel(n);
+  }
+
+  /* The cabin (🛗) and the target (🎯) move between the floor rows. */
+  function elevatorPaintTrack(now, target) {
+    floorRows.forEach(function (r) {
+      var isNow = r.floor === now;
+      var isTarget = r.floor === target;
+      r.row.classList.toggle('is-now', isNow);
+      r.row.classList.toggle('is-target', isTarget);
+      r.mark.textContent = (isNow ? '🛗' : '') + (isTarget ? '🎯' : '');
+    });
+  }
+
+  /* Where the cabin ends, and whether it passed the ground floor. */
+  function elevatorResultNote(from, to) {
+    var crossed = (from > 0 && to < 0) || (from < 0 && to > 0);
+    var where = t(to === 0 ? 'elev.resultGround' : to < 0 ? 'elev.resultBasement' : 'elev.resultUpper');
+    if (!crossed) return where;
+    return t(to < from ? 'elev.resultCrossDown' : 'elev.resultCrossUp') + ' ' + where;
+  }
+
+  /* ============================================================
+     Game 2: water temperature
+     ============================================================ */
 
   /* Physical state for a temperature. Ice at 0 °C or below, steam at
      100 °C or above, liquid in between. */
-  function stateFor(n) {
+  function waterStateFor(n) {
     if (n <= 0) return 'ice';
     if (n >= 100) return 'steam';
     return 'liquid';
   }
 
-  /* Level chosen by how many rounds the person has completed. The
-     last level repeats once they reach it. */
-  function levelFromProgress() {
-    var levels = DATA.levels;
-    var idx = Math.min(progress.completedRounds || 0, levels.length - 1);
-    return levels[idx];
-  }
-
   /* Position of a temperature on the track, 0–100 %, over the whole
-     thermometer (−50 °C to 250 °C). */
-  function pct(n) {
-    return ((n - DATA.minC) / (DATA.maxC - DATA.minC)) * 100;
+     thermometer. */
+  function waterPct(n) {
+    return ((n - DATA.water.min) / (DATA.water.max - DATA.water.min)) * 100;
   }
 
-  /* ============================================================
-     Orders
-     ============================================================ */
-
-  /* Build the next order from the current temperature. The direction
-     is random unless one way has no room left; the size is random
-     within the level's range and never leaves the level's range. */
-  function makeOrder() {
-    var canUp = now + level.amin <= level.hi;
-    var canDown = now - level.amin >= level.lo;
-    var dir;
-    if (canUp && canDown) dir = Math.random() < 0.5 ? 'up' : 'down';
-    else dir = canUp ? 'up' : 'down';
-
-    var room = dir === 'up' ? level.hi - now : now - level.lo;
-    var amount = randInt(level.amin, Math.min(level.amax, room));
-    var target = dir === 'up' ? now + amount : now - amount;
-    return { from: now, dir: dir, amount: amount, target: target };
+  function waterLabel(n) {
+    return fmtMinus(n) + ' °C';
   }
 
-  function startRound(lv) {
-    level = lv;
-    now = lv.start;
-    orderIndex = 0;
-    roundCorrect = 0;
-    show(screenGame);
-    nextOrder();
-  }
+  function waterPaintNow(n) {
+    thermoNumber.textContent = waterLabel(n);
+    thermoNumber.setAttribute('aria-label', fill(t('water.readoutAria'), { temp: n }));
 
-  function nextOrder() {
-    orderIndex += 1;
-    order = makeOrder();
-    resultShown = false;
-    thermoResult.classList.add('hidden');
-    thermoControls.classList.remove('hidden');
-    paintAll();
-    thermoHint.textContent = App.i18n.t('gen.hint');
-  }
-
-  /* ============================================================
-     Painting
-     ============================================================ */
-
-  function paintAll() {
-    paintOrder();
-    paintNow();
-    paintTrack();
-    paintLive();
-    paintButtons();
-  }
-
-  /* The order itself, big and at the top: the instruction the person
-     must carry out, with its arrow. */
-  function paintOrder() {
-    thermoCount.textContent = App.i18n.t('gen.orderCount')
-      .replace('{i}', String(orderIndex))
-      .replace('{total}', String(DATA.perRound));
-    var key = order.dir === 'up' ? 'gen.orderUp' : 'gen.orderDown';
-    thermoOrder.querySelector('.thermo-order-text').textContent = App.i18n.t(key)
-      .replace('{n}', String(order.amount))
-      .replace('{degrees}', degrees(order.amount));
-    thermoOrder.querySelector('.thermo-order-arrow').textContent = order.dir === 'up' ? '↑' : '↓';
-  }
-
-  /* Number, state emoji, state label and card tint for the current
-     temperature. */
-  function paintNow() {
-    thermoNumber.textContent = fmt(now) + ' °C';
-    thermoNumber.setAttribute('aria-label',
-      App.i18n.t('gen.tempReadoutAria').replace('{temp}', String(now)));
-
-    var state = stateFor(now);
-    var entry = DATA.states[state];
+    var state = waterStateFor(n);
+    var entry = DATA.water.states[state];
     thermoState.textContent = entry.emoji;
     thermoCard.classList.remove('state-ice', 'state-liquid', 'state-steam');
     thermoCard.classList.add('state-' + entry.color);
-    thermoStateLabel.textContent = App.i18n.t('gen.state' + state.charAt(0).toUpperCase() + state.slice(1));
+    thermoStateLabel.textContent = t('water.state' + state.charAt(0).toUpperCase() + state.slice(1));
   }
 
-  /* The number line: where the thermometer is now, where the target
-     is, and where zero is. Moves with every press. */
-  function paintTrack() {
-    thermoNowMark.style.left = pct(now) + '%';
-    thermoTargetMark.style.left = pct(order.target) + '%';
-    /* The two reference points are always drawn, inside the track and
-       never at its ends, which carry no numbers. */
-    thermoZeroMark.style.left = pct(0) + '%';
-    thermoHundredMark.style.left = pct(100) + '%';
-    thermoTargetText.textContent = App.i18n.t('gen.targetText').replace('{target}', fmt(order.target));
+  /* The number line: the current temperature and the target. Zero and
+     100 are drawn as reference points inside the track. */
+  function waterPaintTrack(now, target) {
+    thermoNowMark.style.left = waterPct(now) + '%';
+    thermoTargetMark.style.left = waterPct(target) + '%';
+    thermoZeroMark.style.left = waterPct(0) + '%';
+    thermoHundredMark.style.left = waterPct(100) + '%';
   }
 
-  /* The live line under the thermometer: how far the target is and
-     which way to go. Overshooting is said plainly, not punished. */
-  function paintLive() {
-    if (resultShown) {
-      thermoLive.textContent = '';
-      return;
-    }
-    var need = order.target - now;          /* >0: still to climb, <0: still to fall */
-    var n = Math.abs(need);
-    /* Overshoot: the thermometer is past the target in the direction
-       of the order, so the way back is the opposite one. */
-    var over = (order.dir === 'up') !== (need > 0);
-    var key = over
-      ? (need > 0 ? 'gen.liveOverUp' : 'gen.liveOverDown')
-      : (need > 0 ? 'gen.liveUp' : 'gen.liveDown');
-    thermoLive.textContent = App.i18n.t(key)
-      .replace('{n}', String(n))
-      .replace('{degrees}', degrees(n));
-  }
-
-  /* A step button is disabled when it would leave the level's range.
-     After the result is shown, controls are hidden instead. */
-  function paintButtons() {
-    App.utils.$$('#thermoControls .btn-thermo[data-step]').forEach(function (b) {
-      var next = now + parseInt(b.getAttribute('data-step'), 10);
-      b.disabled = next < DATA.minC || next > DATA.maxC;
-    });
-  }
-
-  /* ============================================================
-     Moving and reaching the target
-     ============================================================ */
-
-  function step(delta) {
-    if (resultShown) return;
-    var next = now + delta;
-    if (next < DATA.minC || next > DATA.maxC) return;
-    now = next;
-    paintNow();
-    paintTrack();
-    paintLive();
-    paintButtons();
-    if (now === order.target) reached();
-  }
-
-  /* The target was reached: one star, the result highlighted as an
-     equation, and a note on what the water did. */
-  function reached() {
-    resultShown = true;
-    roundCorrect += 1;
-    progress.stars += 1;
-    save();
-    paintStars();
-
-    var from = order.from;
-    var to = order.target;
-    var op = order.dir === 'up' ? '+' : '−';
-
-    thermoResultTitle.textContent = App.i18n.t('gen.resultTitle');
-    thermoResultEq.textContent = App.i18n.t('gen.resultEq')
-      .replace('{from}', fmt(from))
-      .replace('{op}', op)
-      .replace('{n}', String(order.amount))
-      .replace('{to}', fmt(to));
-
+  /* Which way the water crossed 0 °C, and what state it ends in. */
+  function waterResultNote(from, to) {
     var crossed = (from > 0 && to < 0) || (from < 0 && to > 0);
     var crossKey = crossed
-      ? (to < from ? 'gen.resultCrossDown' : 'gen.resultCrossUp')
-      : 'gen.resultNoCross';
-    var stateKey = 'gen.resultState' + (stateFor(to) === 'ice' ? 'Ice'
-      : stateFor(to) === 'steam' ? 'Steam' : 'Liquid');
-    thermoResultNote.textContent = App.i18n.t(crossKey) + ' ' + App.i18n.t(stateKey);
-
-    thermoControls.classList.add('hidden');
-    thermoResult.classList.remove('hidden');
-    thermoLive.textContent = '';
-    paintAll();
-    thermoNext.textContent = App.i18n.t(orderIndex >= DATA.perRound
-      ? 'gen.finishRound' : 'gen.nextOrder');
-    thermoNext.focus();
-  }
-
-  function advance() {
-    if (!resultShown) return;
-    if (orderIndex >= DATA.perRound) endRound();
-    else nextOrder();
-  }
-
-  function resetOrder() {
-    if (resultShown) return;
-    now = order.from;
-    paintNow();
-    paintTrack();
-    paintLive();
-    paintButtons();
+      ? (to < from ? 'water.resultCrossDown' : 'water.resultCrossUp')
+      : 'water.resultNoCross';
+    var stateKey = 'water.resultState' + (waterStateFor(to) === 'ice' ? 'Ice'
+      : waterStateFor(to) === 'steam' ? 'Steam' : 'Liquid');
+    return t(crossKey) + ' ' + t(stateKey);
   }
 
   /* ============================================================
-     End of round
+     The two games and the end of a round
      ============================================================ */
 
-  function endRound() {
-    progress.completedRounds = (progress.completedRounds || 0) + 1;
-    save();
-    show(screenEnd);
-    var summaryEl = $('#endSummary');
-    if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('gen.endSummary')
-        .replace('{n}', String(roundCorrect))
-        .replace('{stars}', String(progress.stars))
-        .replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    }
+  var elevatorGame = createOrderGame({
+    root: screenElevator,
+    data: DATA.elevator,
+    prefix: 'elev',
+    roundsKey: 'elevatorRounds',
+    fmt: fmtSigned,
+    label: elevatorLabel,
+    paintNow: elevatorPaintNow,
+    paintTrack: elevatorPaintTrack,
+    resultNote: elevatorResultNote,
+    onEnd: function (correct) { showRoundEnd(elevatorGame, correct); }
+  });
+
+  var waterGame = createOrderGame({
+    root: screenWater,
+    data: DATA.water,
+    prefix: 'water',
+    roundsKey: 'completedRounds',
+    fmt: fmtMinus,
+    label: waterLabel,
+    paintNow: waterPaintNow,
+    paintTrack: waterPaintTrack,
+    resultNote: waterResultNote,
+    onEnd: function (correct) { showRoundEnd(waterGame, correct); }
+  });
+
+  /* The elevator leads to the water game; the water game is the last. */
+  elevatorGame.nextGame = waterGame;
+  elevatorGame.nextLabel = 'elev.toWater';
+
+  /* End of a round: the summary, and the next game when there is one. */
+  function showRoundEnd(game, correct) {
+    roundEndedGame = game;
+    showScreen(screenEnd);
+    endSummary.textContent = fill(t('game.endSummary'), {
+      n: correct,
+      stars: progress.stars,
+      starsWord: App.i18n.starsWord(progress.stars)
+    });
     $('#contexto').textContent = '';
     $('#explanation').textContent = '';
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'));
+    if (game.nextGame) {
+      endNextGame.textContent = t(game.nextLabel);
+      endNextGame.classList.remove('hidden');
+    } else {
+      endNextGame.classList.add('hidden');
+    }
+    App.feedback.celebrate(t('core.roundComplete'));
   }
 
-  /* Leaving early keeps the stars already earned and ends the round. */
-  function exitRound() {
-    endRound();
-  }
+  endNextGame.addEventListener('click', function () {
+    if (roundEndedGame && roundEndedGame.nextGame) roundEndedGame.nextGame.start();
+  });
 
   /* ============================================================
-     Wire-up (runs once at load)
+     Start: the elevator first.
      ============================================================ */
 
-  App.utils.$$('#thermoControls .btn-thermo[data-step]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      step(parseInt(b.getAttribute('data-step'), 10));
-    });
-  });
-  thermoReset.addEventListener('click', resetOrder);
-  thermoNext.addEventListener('click', advance);
-  thermoExit.addEventListener('click', exitRound);
-
-  /* Keyboard: arrows or + / − move the thermometer. Enter on the
-     result button is handled by the button itself. */
-  document.addEventListener('keydown', function (ev) {
-    if (screenGame.classList.contains('hidden') || resultShown) return;
-    if (ev.target && /^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
-    if (ev.key === 'ArrowUp' || ev.key === '+') step(1);
-    else if (ev.key === 'ArrowDown' || ev.key === '-' || ev.key === '−') step(-1);
-    else return;
-    ev.preventDefault();
-  });
-
-  /* Static labels (the buttons keep their symbols in the HTML). */
-  thermoReset.textContent = App.i18n.t('gen.btnReset');
-  thermoExit.textContent = App.i18n.t('gen.btnExit');
-
-  /* Start. */
+  buildShaft();
   paintStars();
-  startRound(levelFromProgress());
+  elevatorGame.start();
 
 })();

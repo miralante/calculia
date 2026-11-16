@@ -242,6 +242,67 @@
 
 .thermo-exit { margin-top: 8px; }
 
+/* ---- Game titles (one per game) ---- */
+.game-title {
+  margin: 0;
+  text-align: center;
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  color: var(--mod-razonamiento);
+}
+
+/* ---- Elevator (game 1) ----
+   The shaft is a column of floor rows, highest floor on top. The cabin
+   (🛗) marks the current floor and the target (🎯) the floor asked for;
+   both are also shown as text and by the row's highlight. */
+.lift-card { padding: 16px; max-width: 560px; width: 100%; margin: 0 auto; }
+.lift-card .thermo-state { font-size: 64px; }
+
+.lift-shaft {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  overflow: hidden;
+}
+.lift-floor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border-top: 1px solid var(--color-borde);
+  font-size: var(--texto-base);
+  color: var(--color-texto);
+}
+.lift-floor:first-child { border-top: none; }
+.lift-floor.is-ground   { background: #E8F5E9; }
+.lift-floor.is-basement { background: #ECEFF1; }
+.lift-floor.is-now      { background: var(--mod-memoria-suave); font-weight: 800; }
+.lift-floor.is-target   { background: var(--mod-secuencia-suave); font-weight: 800; }
+.lift-floor.is-now.is-target { background: var(--mod-coordinacion-suave); }
+
+.lift-floor-num {
+  min-width: 3.2em;
+  text-align: right;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.lift-floor-name {
+  flex: 1;
+  color: var(--color-texto-suave);
+}
+.lift-floor-mark {
+  min-width: 2.2em;
+  text-align: center;
+  font-size: 22px;
+  line-height: 1;
+}
+
 /* End-of-round. Same look as other tools. */
 .emoji-large { font-size: 96px; }
 #screenEnd { padding-top: 48px; }
