@@ -359,25 +359,20 @@ Implementation invariants (sheet mode):
   so DOM access uses `querySelectorAll('.test-sheet-card')`
   rather than `.children`. Don't reintroduce the property name.
 
-## End screen: no home button (2026-11-15)
+## Achievement screen: the only closing screen (2026-11-16)
 
-The round-complete screen (`<section id="screenEnd">` in most,
-`screenFinish` in `math-tables` / `quantities` / `head-math`,
-`screenParityFinish` in `parity`) carries **no** button to leave the
-activity. The header's "← Volver" (`.back-link`) is the only exit: it
-is a link to the parent level (its `href`: the group hub, or the landing),
-never a trip back through the browser history (see `suite-chrome.js` in
-the suite's shared blocks).
+Each round ends with the achievement screen (`App.feedback.celebrate`; the suite block
+in `assets/js/feedback.js`, canonical in `apptonomia/scripts/suite/celebrate.js`): a
+congratulation, the progress line "Ya tienes X estrellas · A por las Y estrellas"
+(`App.feedback.starsGoal`), and the button **«A por más»**, which starts another round
+or the next step of a chain. There is no timer and no separate end screen
+(`screenEnd`, `screenFinish`, `endNextStep`, `#endSummary`): do not reintroduce them.
+The header «← Volver» stays as the only exit.
 
-The end screen shows the summary and, when the round leads to another
-step, the `#endNextStep` button ("Siguiente paso"). Nothing else competes
-with the next step or with the header back link.
-
-This replaces the earlier rule (2026-10-14) of one primary
-"Volver al inicio" button: the header link now covers that exit, so the
-end-screen copy is removed. `App.utils.bindEndBackToStart()` and the
-`#endBackToStart` button are gone from every activity; do not reintroduce
-them.
+The flows give this screen for free: `activity-flow-options.js` and
+`activity-flow-gallery.js` call it, and `word-problems.js` too. Hand-rolled activities
+call `glue.endRound()` from `App.activityGlue`, and pass `again` in the host object
+(the round to start on "A por más").
 
 ## Public-facing wording: "usuario/a tipo" euphemism
 

@@ -244,12 +244,12 @@ Las actividades con explicación en diapositivas, vida real y test
 sus dibujos (`visualHtml`), la baraja de cada ronda (`buildRound`, que
 sigue llamando a `App.utils.shuffle`) y el generador de preguntas
 (`makeQuestion`). El motor monta las pantallas en `<div id="activity">`
-y gestiona estrellas, progreso guardado y pantalla final. Los estilos
+y gestiona estrellas, progreso guardado y la pantalla de logros. Los estilos
 genéricos están en `assets/css/activity-flow.css` y los dibujos
 compartidos de una familia en su propio fichero (p. ej.
 `assets/css/common-factors.css`). Así un cambio de diseño del flujo se
 hace en un único sitio. Todas las pruebas usan `test: 'options'`: una
-pregunta cada vez, con pantalla final. El modo `test: 'sheet'` (toda la
+pregunta cada vez, y la pantalla de logros cierra la ronda. El modo `test: 'sheet'` (toda la
 ronda en una hoja, con «Comprobar» y «Otra ronda», sin pantalla final)
 sigue en el motor por si una actividad futura lo necesita; hoy ninguna lo
 usa.
@@ -258,7 +258,7 @@ En el modo `options`, `socratic: true` da la retroalimentación socrática
 de `scale` (primer fallo, pista; segundo, explicación; las demás
 opciones se bloquean hasta «Entendido»), `review: 'rule'` pone «Repasar
 la regla» bajo la pregunta, `introCard` añade una tarjeta sobre las
-diapositivas y `endNotes` añade textos a la pantalla final.
+diapositivas .
 
 Las cuatro actividades de orden (`order-*`) usan el modo `options` a través
 de `App.numberSort.setup`, que delega en el motor: el nivel se muestra como
@@ -309,7 +309,7 @@ todavía no tiene motor compartido, la sección lo dice.
 | Progreso | `App.storage` bajo la clave de la actividad: `stars`, `completedRounds` y `roundsByActivity` para los menús | Esqueleto (ayudas en `App.activityGlue`) |
 | Ronda | `buildRound` devuelve los tipos de pregunta de la ronda, barajados. `makeQuestion(tipo)` devuelve `{ prompt, hint, options, explanation }`, con opciones `[{ html, aria, correct }]` (contrato en 2.2.1) | Actividad |
 | Retroalimentación | Acierto: una estrella y la explicación. Fallo: la pista, y la opción se apaga. Nunca se castiga. `App.feedback` para el tono y los bloqueos | Esqueleto |
-| Pantalla final | Sin botón de salida: el «← Volver» de la cabecera sale de la actividad. El resumen usa `ui.roundDone` o `endSummaryKey`. | Esqueleto (regla de pantalla final en `CLAUDE.md`) |
+| Pantalla de logros | Sin pantalla final: la pantalla de logros (`celebrate`, en `feedback.js`) cierra la ronda con la felicitación, «Ya tienes X · A por las Y» y el botón «A por más», que empieza otra ronda. El «← Volver» de la cabecera sale de la actividad. | Esqueleto (regla de la pantalla de logros en `CLAUDE.md`) |
 | Ayudas compartidas | `App.utils` (`fill`, `rint`, `pick`, `shuffle`, `numericOptions`, …). Las copias locales están prohibidas para los nombres de `scripts/check.js` | Núcleo |
 
 El contrato en todas las familias: sin temporizadores, sin vidas, sin
@@ -341,7 +341,7 @@ Las claves de configuración que lee el motor:
 | `introHeading`, `introCard` | Línea sobre las diapositivas, y una tarjeta encima de ellas |
 | `buildRound(def, level)`, `makeQuestion(tipo, índice, def)` | La ronda y sus preguntas |
 | `test` | `'options'` (por defecto, una pregunta cada vez); `'sheet'` para el modo hoja, sin uso hoy |
-| `levelName`, `transferKey` | Etiqueta del nivel en el test, y frase de la pantalla final (las actividades de orden) |
+| `levelName` | Etiqueta del nivel en el test (las actividades de orden) |
 | `socratic` | Primer fallo: pista. Segundo fallo: explicación. Las demás opciones se bloquean hasta «Entendido» |
 | `review` | `'back'` (por defecto), `'rule'` (repasar la regla bajo la pregunta) o `'none'` |
 | `reinforce` | Las preguntas falladas se repiten en una mini-ronda hasta acertarlas todas (`App.reinforce`) |
@@ -349,13 +349,12 @@ Las claves de configuración que lee el motor:
 | `skipReal` | Las diapositivas llevan directamente al test (botón «Empezar a practicar») |
 | `reminder` | `{ title(), html(), next() }`: una tarjeta con la regla, leída otra vez entre los ejemplos de la vida real y el test. El botón de después inicia el test (`startTest` del modo) |
 | `explanationVisual` (en una pregunta) | HTML que se pinta bajo el texto de la explicación (la retroalimentación socrática y la respuesta acertada). El texto sigue en `explanation`; esto es para un dibujo o una fórmula |
-| `steps` (en una entrada del menú) | La entrada es una cadena: sus pasos se suceden, una ronda cada uno, sin volver al menú. La pantalla final ofrece «Siguiente paso →» hasta el último, y un aviso dice «Paso n de m». Cada paso es un objeto como una entrada del menú, con su propio `buildRound` y `makeQuestion` |
+| `steps` (en una entrada del menú) | La entrada es una cadena: sus pasos se suceden, una ronda cada uno, sin volver al menú. La pantalla de logros ofrece «A por más», que pasa al siguiente paso hasta el último, y un aviso dice «Paso n de m». Cada paso es un objeto como una entrada del menú, con su propio `buildRound` y `makeQuestion` |
 | `steps` (en una pregunta) | Una pregunta de varios pasos, respondidos uno a uno («Paso 1 de 3»); puntúa una vez, en su último paso, y solo si no se falló ningún paso |
 | `testVisuals`, `testVisualClass` | Un dibujo en cada pregunta del test |
-| `endSummaryKey`, `endNotes`, `endEmoji` | Texto del resumen, textos extra y emoji de la pantalla final |
 | `prepareProgress`, `slideProgress`, `backHref`, `menuBackKey` | Conversión del progreso, barras de progreso, enlace de volver, etiqueta del menú |
 | `typedAnswers`, `audio`, `introContinueKey` | Opciones del test: un número escrito en vez de opciones (`question.input = { answer }`), una pregunta leída en voz alta con un botón para oírla otra vez (`question.speak`), y la clave del botón tras las diapositivas cuando no hay ejemplos de la vida real (`skipReal`) |
-| `test: 'gallery'` | Solo diapositivas, sin test: la última diapositiva lleva el botón que termina la actividad, y la pantalla final da una estrella por página. Un modo puede pintar más una diapositiva (`paintIntro`), y una actividad puede mandar las diapositivas a su propia pantalla al leerlas (`mode_state.afterIntro`, que lee el modo de opciones) |
+| `test: 'gallery'` | Solo diapositivas, sin test: la última diapositiva lleva el botón que termina la actividad, y la pantalla de logros da una estrella por página. Un modo puede pintar más una diapositiva (`paintIntro`), y una actividad puede mandar las diapositivas a su propia pantalla al leerlas (`mode_state.afterIntro`, que lee el modo de opciones) |
 | `extraMarkup`, `extraScreens`, `open(ctx)` de la entrada | Pantallas propias de una actividad: marcado añadido a la página, pantallas que el motor oculta y muestra, y una entrada del menú que inicia su propio flujo |
 
 Qué variante de la familia A encaja con cada actividad:
@@ -423,7 +422,7 @@ menú → ronda, sin diapositivas):
 - **Comprobación**: `check(elemento, acción)` devuelve `{ correct, hint, explanation }`.
   Acierto: una estrella y una frase breve de ánimo. Fallo: la pista y otro intento.
 - **Refuerzo**: `reinforce: true` repite los fallos hasta acertarlos todos.
-- **Cierre**: la pantalla final con un único botón, como en la familia A.
+- **Cierre**: la pantalla de logros con su botón «A por más», como en la familia A.
 - **No permitido**: temporizadores, vidas, puntuación negativa, «fin del juego».
 
 Una actividad necesita más que este contrato, y queda fuera hasta que el
@@ -827,9 +826,9 @@ justificación canónica).
 | `tts.js` | `App.tts.speak` | solo páginas que leen en voz alta (la mayoría) |
 | `storage.js` | `App.storage.{get, set, remove, progressWith}` | solo páginas que leen o escriben `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | solo el `app.js` de la actividad |
-| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | el modo `test: 'gallery'` del flujo de tres etapas: solo diapositivas, la pantalla final y una estrella por página |
+| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | el modo `test: 'gallery'` del flujo de tres etapas: solo diapositivas, la pantalla de logros y una estrella por página |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | actividades que llevan su propio bucle de ronda (no `App.activityFlow`) |
-| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | el modo `test: 'gallery'` del flujo de tres etapas: solo diapositivas, la pantalla final y una estrella por página |
+| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | el modo `test: 'gallery'` del flujo de tres etapas: solo diapositivas, la pantalla de logros y una estrella por página |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | las actividades que muestran una fila de puntos o un Sí / No barajado (divisibility-test, multiples, prime-composite) |
 | `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | el modo hoja del flujo de actividad (`activity-flow-sheet.js`), que hoy no usa ninguna actividad |
 | `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}`, `App.classicPainter(host)` → `{startRound, paintQuestion, render}` | las actividades clásicas de una pregunta (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): el objeto de estado de la ronda, la respuesta, la pista, el siguiente paso, el menú y el inicio y pintado de una pregunta compartidos (de momento geometry, operations y percent) |

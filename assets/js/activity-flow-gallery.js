@@ -8,8 +8,6 @@
 
    Options of the activity, besides the core ones (see activity-flow.js):
      finishKey       i18n key of the button of the last slide (optional; default ui.finish)
-     endSummaryKey   i18n key of the closing summary, with {stars} (optional; default ui.galleryEnd)
-     endNotes        [{ key, cls }] i18n texts shown on the closing screen before its button (optional)
      backHref        where the closing button goes (optional; default the landing)
 
    Texts: ui.finish, ui.galleryEnd, core.roundComplete, btnMenu.

@@ -235,11 +235,11 @@ its drawings (`visualHtml`), the shuffle of each round (`buildRound`,
 which still calls `App.utils.shuffle`) and the question generator
 (`makeQuestion`). The engine builds the screens inside
 `<div id="activity">` and handles the stars, the saved progress and the
-end screen. The generic styles are in `assets/css/activity-flow.css`,
+achievement screen. The generic styles are in `assets/css/activity-flow.css`,
 and the drawings shared by a family in their own file (for example
 `assets/css/common-factors.css`). A design change to the flow is then
 made in one place. Every test uses `test: 'options'`: one question at a
-time, with a closing screen. The `test: 'sheet'` mode (the whole round on
+time, with the achievement screen. The `test: 'sheet'` mode (the whole round on
 one sheet, with «Check» and «Another round», no closing screen) stays in
 the engine in case a future activity needs it; no activity uses it now.
 
@@ -247,12 +247,11 @@ In the `options` mode, `socratic: true` gives the socratic feedback of
 `scale` (first miss, a hint; second miss, the explanation; the other
 options lock until «Understood»), `review: 'rule'` puts «Review the rule»
 under the question, `introCard` adds a card above the slides, and
-`endNotes` adds texts to the closing screen.
+the achievement screen closes the round.
 
 The four order activities (`order-*`) use the `options` mode through
 `App.numberSort.setup`, which delegates to the engine: the level is shown as
-a badge (`levelName`), the transfer sentence appears on the closing screen
-(`transferKey`), and the level rises with the rounds done. `operation-concepts` follows the closing-screen rule:
+a badge (`levelName`), and the level rises with the rounds done. `operation-concepts` follows the closing-screen rule:
 no exit button; «New round» lives inside the test, and the exit is the header «← Back».
 
 #### 2.2.3.1 Options of the 'options' mode: no real-life stage, several steps
@@ -295,7 +294,7 @@ not yet shared by an engine, the section says so.
 | Progress | `App.storage` under the activity's key: `stars`, `completedRounds`, and `roundsByActivity` for menus | Skeleton (helpers in `App.activityGlue`) |
 | Round | `buildRound` returns the question types of a round, shuffled. `makeQuestion(type)` returns `{ prompt, hint, options, explanation }`, with options `[{ html, aria, correct }]` (contract in 2.2.1) | Activity |
 | Feedback | Right answer: a star and the explanation. Wrong answer: the hint, and the option stays off. Nothing is punished. `App.feedback` for the tone and the locks | Skeleton |
-| Closing screen | No exit button: the header «← Back» leaves the activity. The summary uses `ui.roundDone` or `endSummaryKey`. | Skeleton (see the closing-screen rule in `CLAUDE.md`) |
+| Achievement screen | No end screen: the achievement screen closes the round, with «A por más» (another round). The header «← Back» leaves the activity. | Skeleton (see the achievement-screen rule in `CLAUDE.md`) |
 | Shared helpers | `App.utils` (`fill`, `rint`, `pick`, `shuffle`, `numericOptions`, …). Local copies are forbidden for the names listed in `scripts/check.js` | Core |
 
 The contract in every family: no timers, no lives, no negative score, and
@@ -328,7 +327,7 @@ The configuration keys the engine reads:
 | `introHeading`, `introCard` | Line above the slides, and a card above them |
 | `buildRound(def, level)`, `makeQuestion(type, index, def)` | The round and its questions |
 | `test` | `'options'` (default, one question at a time); `'sheet'` for the sheet mode, unused now |
-| `levelName`, `transferKey` | Level label in the test, and the sentence on the closing screen (the order activities) |
+| `levelName` | Level label in the test (the order activities) |
 | `socratic` | First miss: hint. Second miss: explanation. Other options lock until «Understood» |
 | `review` | `'back'` (default), `'rule'` (review the rule under the question) or `'none'` |
 | `reinforce` | Missed questions are replayed in a mini-round until all are right (`App.reinforce`) |
@@ -336,13 +335,12 @@ The configuration keys the engine reads:
 | `skipReal` | The slides lead straight to the test (button «Start practising») |
 | `reminder` | `{ title(), html(), next() }`: a card with the rule, read once more between the real-life examples and the test. The button under it starts the test (the mode's `startTest`) |
 | `explanationVisual` (in a question) | HTML painted under the explanation text (the socratic feedback and the right answer). The text stays in `explanation`; this is for a picture or a formula |
-| `steps` (in a menu entry) | The entry is a chain: its steps follow each other, one round each, without going back to the menu. The closing screen offers «Siguiente paso →» until the last one, and a banner says «Paso n de m». Each step is a menu-entry-like object with its own `buildRound` and `makeQuestion` |
+| `steps` (in a menu entry) | The entry is a chain: its steps follow each other, one round each, without going back to the menu. The achievement screen's «A por más» goes on to the next step until the last one, and a banner says «Paso n de m». Each step is a menu-entry-like object with its own `buildRound` and `makeQuestion` |
 | `steps` (in a question) | A question made of several steps, answered one at a time (`Step 1 of 3`); it scores once, at its last step, and only if no step was missed |
 | `testVisuals`, `testVisualClass` | A picture in each test question |
-| `endSummaryKey`, `endNotes`, `endEmoji` | Summary text, extra texts and emoji of the closing screen |
 | `prepareProgress`, `slideProgress`, `backHref`, `menuBackKey` | Progress conversion, progress bars, back link, menu label |
 | `typedAnswers`, `audio`, `introContinueKey` | Options of the test: a typed number instead of choices (`question.input = { answer }`), a question read aloud with a button to hear it again (`question.speak`), and the key of the button after the slides when there are no real-life examples (`skipReal`) |
-| `test: 'gallery'` | Slides only, with no test: the last slide carries the button that ends the activity, and the closing screen gives one star per page. A mode can paint a slide further (`paintIntro`), and an activity can send the slides to its own screen once they are read (`mode_state.afterIntro`, read by the options mode) |
+| `test: 'gallery'` | Slides only, with no test: the last slide carries the button that ends the activity, and the achievement screen gives one star per page. A mode can paint a slide further (`paintIntro`), and an activity can send the slides to its own screen once they are read (`mode_state.afterIntro`, read by the options mode) |
 | `extraMarkup`, `extraScreens`, entry `open(ctx)` | An activity’s own screens: markup appended to the page, screens the engine hides and shows, and a menu entry that starts its own flow |
 
 Which family-A variant fits which activity:
@@ -408,7 +406,7 @@ without slides):
 - **Check**: `check(item, action)` returns `{ correct, hint, explanation }`.
   Right: a star and a short praise. Wrong: the hint, and a retry.
 - **Reinforce**: `reinforce: true` replays the misses until all are right.
-- **Close**: the closing screen with no exit button, as in family A.
+- **Close**: the achievement screen with «A por más», as in family A.
 - **Not allowed**: timers, lives, negative score, «game over».
 
 One activity needs more than this contract, and stays outside it until the
@@ -799,9 +797,9 @@ in §2.1 above are the canonical rationale).
 | `tts.js` | `App.tts.speak` | only pages that read aloud (most do) |
 | `storage.js` | `App.storage.{get, set, remove, progressWith}` | only pages that read or write `localStorage` (`index.html`, `config/`) |
 | `feedback.js` | `App.feedback.{success, encourage, celebrate}` | only the activity's `app.js` |
-| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | the `test: 'gallery'` mode of the three-stage flow: slides only, the closing screen, one star per page |
+| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | the `test: 'gallery'` mode of the three-stage flow: slides only, the achievement screen, one star per page |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | activities that keep their own round loop (not `App.activityFlow`) |
-| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | the `test: 'gallery'` mode of the three-stage flow: slides only, the closing screen, one star per page |
+| `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | the `test: 'gallery'` mode of the three-stage flow: slides only, the achievement screen, one star per page |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | the activities that show a row of dots or a shuffled Yes / No (divisibility-test, multiples, prime-composite) |
 | `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | the sheet mode of the activity flow (`activity-flow-sheet.js`), which no activity uses now |
 | `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}`, `App.classicPainter(host)` → `{startRound, paintQuestion, render}` | the classic one-question activities (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): the round state object and the shared answer, hint, next step, menu, and the start and painting of a question (geometry, operations and percent so far) |

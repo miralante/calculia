@@ -214,8 +214,7 @@ pasos, en este orden, y con la misma función pedagógica.
    o el detalle que permite entenderla. La explicación se publica
    en el lugar de la pista tras acierto o segundo fallo, y se
    mantiene visible hasta la siguiente pregunta.
-4. **Transferencia** — al cerrar la ronda (`screenEnd` /
-   `screenFinish`), la actividad incluye una frase de
+4. **Transferencia** — al cerrar la ronda (la pantalla de logros), la actividad incluye una frase de
    **transferencia** que conecta lo practicado con la vida real:
    dónde se usará lo aprendido más allá de la app ("esto te
    servirá para…"). La transferencia no es opcional: si aporta

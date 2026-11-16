@@ -93,8 +93,6 @@
     realText: function (i) { return t('real.' + DATA.real[i].id + '.text'); },
     buildRound: buildRound,
     makeQuestion: makeQuestion,
-    endNotes: [{ key: 'transfer', cls: 'transfer' }],
-    endSummaryKey: 'endSummary',
     backHref: '../../'
   });
 })();

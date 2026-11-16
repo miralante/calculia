@@ -19,14 +19,6 @@
                      examples, and the slides are shared by all of them. Without
                      it (default) the menu comes first and each activity has its
                      own slides (activities[i].intro and .real)
-     endSummaryKey   i18n key of the closing summary, with {n}, {total}, {stars}
-                     and {activity} (optional; default ui.roundDone). With it,
-                     {n} counts every right answer, replays included; by default
-                     it counts the right answers at the first try
-     endNotes        [{ key, cls }] i18n texts shown on the closing screen
-                     before its button (optional)
-     endEmoji        { text, cls } for the closing screen (optional; default
-                     🎉 with cls emoji-large)
      typedAnswers    true: a question may ask for a typed number instead of
                      options (needs socratic): question.input = { answer }
      audio           true: a question may be read aloud (question.speak), with a
@@ -173,7 +165,7 @@
     var def = ctx.current || config;
     var level = ctx.current ? App.activityFlow.levelOf(ctx, ctx.current) : null;
     paintChainBanner(ctx);
-    /* The level badge (levelName) and the closing sentence (transferKey) of an activity with levels. */
+    /* The level badge (levelName) of an activity with levels. */
     if (config.levelName) {
       var badge = $('#difficulty');
       badge.textContent = level ? config.levelName(level) : '';

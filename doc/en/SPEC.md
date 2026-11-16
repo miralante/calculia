@@ -212,8 +212,7 @@ with the same pedagogical function.
    understandable. The explanation is rendered in the hint slot
    after a correct answer or a second failure, and stays visible
    until the next question.
-4. **Transfer** — when the round ends (`screenEnd` /
-   `screenFinish`), the activity includes a **transfer** sentence
+4. **Transfer** — when the round ends (the achievement screen), the activity includes a **transfer** sentence
    that connects what was practised with real life: where the
    learned skill will be used outside the app ("this will help
    you…"). Transfer is not optional: when it adds value, it must

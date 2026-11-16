@@ -296,7 +296,6 @@
       next: function () { return t('reminderNext'); }
     },
     buildRound: makeRound,
-    makeQuestion: function (item) { return question(item); },
-    endNotes: [{ key: 'parityTransfer', cls: 'transfer' }]
+    makeQuestion: function (item) { return question(item); }
   });
 })();
