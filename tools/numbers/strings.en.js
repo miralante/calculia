@@ -25,59 +25,12 @@
     leyendaCentenasTxt: 'hundreds',
 
     activity: {
-      'positivos-y-negativos': { name: 'Positives and negatives', detail: 'Learn the signs with a thermometer and an elevator.', instruction: 'Numbers can be above or below zero. Look at the examples and practise with the thermometer and the elevator.' },
       unidades: { name: 'Ones and tens', detail: 'What number is it?', instruction: 'Each colour helps read the number. Blue: ones. Green: tens. Purple: hundreds.' },
       placevalue: { name: 'Changing position', detail: '10 small ones become 1 big one.', instruction: 'When you put 10 of the same together, they form 1 of the next group. The digit moves one position to the left.' },
       comparar: { name: 'Greater, smaller or equal', detail: 'The signs <, > and =.', instruction: 'Look at the two numbers. The sign opens towards the bigger number. If both are the same, the sign is =.' }
     },
-    signed: {
-      introInstruction: 'First, we will learn what positive and negative numbers mean.',
-      theoryTitle: 'Positive and negative numbers',
-      theoryIntro: 'Numbers can be above or below zero.',
-      rulePositive: 'Positive numbers are greater than 0: +1, +2, +3…',
-      ruleNegative: 'Negative numbers are less than 0: −1, −2, −3…',
-      ruleZero: '0 is not positive or negative. It is the starting point.',
-      numberlineAria: 'Number line from minus three to plus three. Zero is in the middle.',
-      introNext: 'See real-life examples →',
-      realIntro: 'Now we will see signed numbers in everyday situations.',
-      realTitle: 'Signed numbers in daily life',
-      realNext: '👉 Practise with the thermometer →',
-      real: {
-        termometro: {
-          title: 'The thermometer',
-          text: 'Below 0 °C it is cold. −5 °C is five degrees below zero. At 0 °C, water starts to freeze.'
-        },
-        ascensor: {
-          title: 'The elevator',
-          text: 'The basement can be floor −1. The ground floor is 0. Floors above can be +1, +2…'
-        },
-        cuentas: {
-          title: 'Money',
-          text: 'A debt can be written as a negative number: −€20. A positive balance can be written as a positive number: +€20.'
-        }
-      },
-      tempHint: 'Press +1 or −1 to move the thermometer. See whether the temperature is above or below 0.',
-      tempStepDown: 'Go down one degree',
-      tempStepUp: 'Go up one degree',
-      tempReset: 'Start again',
-      tempGoals: {
-        negative: 'Go below 0 °C.',
-        positive: 'Go above 0 °C.',
-        zero: 'Land exactly on 0 °C.'
-      },
-      tempReadout: 'Temperature: {value} degrees Celsius',
-      sign: {
-        positive: 'Positive number',
-        negative: 'Negative number',
-        zero: 'Zero'
-      },
-      tempSuccess: '✅ Goal reached!',
-      tempNext: 'Next challenge →',
-      endSummary: 'You practised positive and negative numbers. You now have {stars} {starsWord}.'
-    },
-    /* Exposition + real-life screens for the 3 sub-activities that don't
-       have their own custom lesson (positivos-y-negativos uses the
-       dedicated signed.* flow). Each activity gets a brief theoretical
+    /* Exposition + real-life screens for the sub-activities that don't
+       have their own custom lesson. Each activity gets a brief theoretical
        slide (expo.*) followed by everyday examples (real.*), with a
        "Next" button linking them and from there to the practice. */
     expo: {
@@ -158,8 +111,6 @@
       o1: 'Queue of 3',
       o2: 'Queue of 5',
       o3: 'Find a place',
-      libre: '🛗 Free elevator',
-      meta: '🎯 Reach a floor',
       u99: 'Up to 99',
       u999: 'Up to 999',
       umiles: 'Thousands',
@@ -210,19 +161,6 @@
       counterWordsOn: '✍️ Hide number in words',
       counterWordsOff: '✍️ Show number in words',
       counterWordsAria: 'Show the number written in words',
-      elevatorHint: 'Press + or − to move the elevator. Watch the floor change and whether it goes up or down.',
-      elevatorHintLibre: 'Press + or − to move the elevator. Watch the floor change and whether it goes up or down.',
-      elevatorHintMeta: 'Press + or − until you reach the target floor. You must land on the exact floor.',
-      elevatorSuggestionUp: '💡 Suggestion: go up to floor {piso}.',
-      elevatorSuggestionDown: '💡 Suggestion: go down to floor {piso}.',
-      elevatorReadoutAria: 'The elevator is on floor {piso}',
-      elevatorStateAbove: 'Upper floor (positive number)',
-      elevatorStateBelow: 'Lower floor (negative number)',
-      elevatorStateGround: 'Ground floor (zero)',
-      elevatorGoalMeta: 'Goal: reach floor {piso}.',
-      elevatorSuccess: '🏢 You reached floor {piso}!',
-      elevatorBtnReset: '🔄 Start at 0',
-      elevatorBtnExit: '✅ Exit',
       /* The line that shows up when an answer is wrong. One per question
          type, and each one says what to look at in the picture or the
          number in front of you: the single old sentence ("Try again.
@@ -252,7 +190,7 @@
       lecturaInputReveal: '👁 Show result',
       lecturaInputIdleHint: 'Press «Generate» to start.'
     },
-    transfer: 'This will help you read large numbers, understand the elevator of a building, or know which digit changes when you add 100.',
+    transfer: 'This will help you read large numbers or know which digit changes when you add 100.',
 
     /* Feedback for the interactive "leer números" practice. The
        success / reveal messages live at the root so app.js can

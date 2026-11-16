@@ -24,10 +24,7 @@
   var screenLevels = $('#screenLevels');
   var screenGame = $('#screenGame');
   var screenEnd = $('#screenEnd');
-  var signedIntroScreen = $('#signedIntroScreen');
-  var signedRealScreen = $('#signedRealScreen');
-  var signedTempScreen = $('#signedTempScreen');
-  /* Generic exposition + real-life screens, reused by the 5 sub-activities
+  /* Generic exposition + real-life screens, reused by the sub-activities
      that flag DATA.<act>.hasExpoReal = true. Content painted from strings
      keyed by the current sub-activity id. */
   var screenExpo = $('#expoScreen');
@@ -49,10 +46,6 @@
      refs are populated for every level; render() hides the whole
      #counterUI block when the level isn't a counter. */
   var counterUI = $('#counterUI');
-  /* Free-exploration elevator level (see data.js: 'ascensorLibre' /
-     'ascensorMeta'). Same mechanic as the water-temperature tool:
-     −10/−1/+1/+10 buttons, the visual reacts on every step. */
-  var elevatorUI = $('#elevatorUI');
   /* Interactive "leer números" level (see data.js: 'lecturaInput').
      The flow is: a "Generate" button reveals a number in words;
      the user types the numeric form; "Comprobar" validates, "Ver
@@ -84,21 +77,17 @@
   var escribirReveal = $('#escribirReveal');
   var escribirNext = $('#escribirNext');
   var escribirHint = $('#escribirHint');
-  /* Random exploration suggestion. Painted by paintElevatorSuggestion
-     on every render (entry, reset, "play again"). Same pattern as
-     the temperature tool's #thermoSuggestion. */
   /* Persistent progress */
-  var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0, signedRounds: 0 });
+  var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0 });
+  /* The stars of the removed 'positivos y negativos' sub-activity used to
+     live under their own storage key ('posneg'). Move them once into this
+     tool's progress so the star total is kept, then drop the old key. */
   var legacySignedProgress = App.storage.get('posneg');
   if (!progress.signedLegacyMigrated &&
       (typeof legacySignedProgress.stars === 'number' ||
        typeof legacySignedProgress.completedRounds === 'number')) {
     var migratedProgress = Object.assign({}, progress);
     migratedProgress.stars += legacySignedProgress.stars || 0;
-    migratedProgress.signedRounds = Math.max(
-      migratedProgress.signedRounds,
-      legacySignedProgress.completedRounds || 0
-    );
     migratedProgress.signedLegacyMigrated = true;
     if (App.storage.set(TOOL_ID, migratedProgress)) {
       progress = migratedProgress;
@@ -142,10 +131,6 @@
 
   /* ---- Utilidades ---- */
 
-  /* Pick a random integer in [min, max] inclusive, avoiding
-     `avoid`. Used by paintElevatorSuggestion to pick a starting
-     floor that is not where the elevator already is. Up to 8
-     attempts so a near-full range still finds a different value. */
   /* The round takes elements from the pool without repeating: the
      activity passes a unique key per round (e.g. '<slug>:<level>:<slot>')
      and App.utils.drawRound refills the bag when it runs out. */
@@ -173,8 +158,7 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenGame, screenEnd, signedIntroScreen, signedRealScreen, signedTempScreen,
-     screenExpo, screenReal].forEach(function (p) {
+    [screenMenu, screenGame, screenEnd, screenExpo, screenReal].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -187,19 +171,12 @@
      one, so a person who comes back continues where they were. */
   function levelFromProgress() {
     var levels = activity.levels;
-    var completed = activity.id === 'positivos-y-negativos'
-      ? progress.signedRounds
-      : progress.completedRounds;
-    return levels[Math.min(completed || 0, levels.length - 1)];
+    return levels[Math.min(progress.completedRounds || 0, levels.length - 1)];
   }
 
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
-    if (id === 'positivos-y-negativos') {
-      startSignedIntro();
-      return;
-    }
     if (activity.hasExpoReal) {
       startExpoScreen(id);
       return;
@@ -246,15 +223,6 @@
       return;
     }
 
-    /* The 'elevator' missions ('ascensorLibre', 'ascensorMeta') are
-       also not a quiz: the generator returns a marker, and
-       render() hands off to renderElevator() which hides the quiz
-       parts and shows the free-exploration UI. */
-    if (round.question.tipo === 'elevator') {
-      renderElevator(round.question);
-      return;
-    }
-
     /* The interactive "leer números" level: also a quiz, but with
        a typed input + "Comprobar" / "Ver resultado" instead of
        multiple-choice options. Hands off to renderLecturaInput
@@ -279,7 +247,6 @@
     quizCard.classList.remove('hidden');
     optionsEl.classList.remove('hidden');
     counterUI.classList.add('hidden');
-    elevatorUI.classList.add('hidden');
     lecturaUI.classList.add('hidden');
     escribirUI.classList.add('hidden');
 
@@ -343,31 +310,11 @@
      not the same sentence for every question. The generic line is only
      the fallback, for a question that forgot to bring its own. */
   function endRound() {
-    if (activity.id === 'positivos-y-negativos') {
-      progress.signedRounds += 1;
-    } else {
-      progress.completedRounds = (progress.completedRounds || 0) + 1;
-    }
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
     save();
     show(screenEnd);
     var summaryEl = $('#endSummary');
-    if (round.level.tipo === 'counter') {
-    var summaryEl = $('#endSummary');
     if (summaryEl) {
-      summaryEl.textContent = App.i18n.t('endSummary')
-        .replace('{n}', round.roundCorrect)
-        .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
-        .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    }
-    } else if (activity.id === 'positivos-y-negativos') {
-      summaryEl.textContent = App.i18n.t('signed.endSummary')
-        .replace('{stars}', progress.stars).replace('{starsWord}', App.i18n.starsWord(progress.stars));
-    } else if (round.level.tipo === 'ascensorLibre' || round.level.tipo === 'ascensorMeta') {
-      /* Free-exploration elevator: no question count, only a star
-         tally. Different from the counter summary to keep each
-         tool's closing line distinct. */
-      summaryEl.textContent = '';
-    } else {
       summaryEl.textContent = App.i18n.t('endSummary')
         .replace('{n}', round.roundCorrect)
         .replace('{activity}', App.i18n.t('activity.' + activity.id + '.name'))
@@ -387,62 +334,7 @@
     progress: progress
   });
 
-  /* ============================================================
-
-     Free-exploration elevator (no quiz)
-     Sibling of the water-temperature tool: −10/−1/+1/+10 buttons,
-     the visual reacts on every step. The big number reads with a
-     sign; the shaft shows the elevator emoji on the current floor,
-     with the ground floor (0) always highlighted as the boundary
-     between positive and negative. Same storage shape as the
-     counter — progress.stars increments on exit.
-     ============================================================ */
-
-  /* Per-mission state. Held in closures so re-entering the level
-     (Exit —  Play again) starts fresh. */
-  /* Set to the celebration key once a 'meta' mission lands on the
-     target, so we don't replay the same celebration on every
-     subsequent step. Reset on exit/re-enter. */
-  /* Show the goal line. For 'libre' missions the goal is empty
-     (no target, just explore). For 'meta' missions the goal reads
-     the target floor with its sign. */
-  /* Pick a random floor in [elevatorMin, elevatorMax] inclusive,
-     avoiding the level's starting floor and 0. Same helper used
-     by the temperature tool; kept local because both tools share
-     the exact same mechanic. Avoids 0 because 0 is the ground
-     floor — saying "go to floor 0" while the elevator is already
-     there adds noise rather than direction. */
-  /* Paint the suggestion line. For 'ascensorMeta' the goal line
-     already names the target floor, so showing ANOTHER random
-     floor would conflict — hide the suggestion. For 'ascensorLibre'
-     the goal line is empty, so the suggestion adds a concrete
-     starting floor to the open-ended mission. */
-  /* Main render: number, state label, accessibility text, button
-     enable/disable, live shaft. Called on every value change. */
-  /* Render the shaft. Same shape as the old quiz-style
-     shaftHTML(min, max, markers) but with a single marker — the
-     elevator emoji on the current floor — and the ground floor
-     always tinted with the project reasoning colour. Floors are
-     listed top-to-bottom (max first) so floor +10 sits at the top
-     and floor −10 at the bottom, matching the building
-     convention. */
-  /* For 'meta' missions, when the user lands on the target floor
-     (within DATA.elevador.tolerancia), show the celebration once.
-     'libre' missions have no target, so no celebration fires. */
-  /* Three paint variants for the displayed number, chosen from the
-     current toggle state:
-       - showSep              —  digit groups with . separator + label
-       - !showSep && colorGroups —  digit groups with a coloured background
-                                   per 3-digit chunk (no separator glyph)
-       - !showSep && !colorGroups —  one continuous digit string */
-  /* Elevator step handler: clamps the new value within the mission
-     range and redraws. Same pattern as counterAddStep — the
-     button enable/disable state is recomputed inside paintElevator
-     so the next click will reflect the updated bounds. */
-  /* Reads the current floor aloud with the matching above/on/
-     below-ground line. Same wording as the state label so the
-     audio and the visible label stay in sync. */
-  /* The counter and the elevator (free-exploration levels) live in counter.js; the page gives them what they need. */
+  /* The counter (free-exploration level) lives in counter.js; the page gives it what it needs. */
   var freeLevels = App.numbersCounter({
     progress: progress,
     save: save,
@@ -452,9 +344,9 @@
     screenMenu: screenMenu,
     level: function () { return round.level; },
     el: { feedbackEl: feedbackEl, progressBar: progressBar, quizCard: quizCard, optionsEl: optionsEl,
-      btnNext: btnNext, progressFill: progressFill, progressText: progressText, counterUI: counterUI, elevatorUI: elevatorUI }
+      btnNext: btnNext, progressFill: progressFill, progressText: progressText, counterUI: counterUI }
   });
-  var renderCounter = freeLevels.renderCounter, renderElevator = freeLevels.renderElevator;
+  var renderCounter = freeLevels.renderCounter;
 
 
   /* ---- Events ---- */
@@ -465,33 +357,21 @@
   /* btnRepeat was removed during the 25-activity batch cleanup (memory
      entry on 2026-10-13); the screenEnd section no longer has the
      button, so its handler is gone too. If a future batch re-adds the
-     button, wire this up again with the hasExpoReal/positivos-y-negativos
-     branches restored. */
+     button, wire this up again with the hasExpoReal branch restored. */
   var elBtnRepeat = $('#btnRepeat');
   if (elBtnRepeat) elBtnRepeat.addEventListener('click', function () {
-    if (activity.id === 'positivos-y-negativos') startSignedIntro();
-    else if (activity.hasExpoReal) startExpoScreen(activity.id);
+    if (activity.hasExpoReal) startExpoScreen(activity.id);
     else startRound(levelFromProgress());
   });
 
-  /* The exposition, the real-life screens and the signed-temperature mission live in screens.js. */
+  /* The exposition and the real-life screens live in screens.js. */
   var expositions = App.numbersScreens({
     show: show,
-    paintStars: paintStars,
     current: function () { return activity; },
     startCurrentRound: function () { startRound(levelFromProgress()); },
-    startPositivosNegativos: startPositivosNegativos,
-    screens: { menu: screenMenu, expo: screenExpo, real: screenReal, signedIntro: signedIntroScreen,
-      signedReal: signedRealScreen, signedTemp: signedTempScreen }
+    screens: { menu: screenMenu, expo: screenExpo, real: screenReal }
   });
-  var startSignedIntro = expositions.startSignedIntro, startExpoScreen = expositions.startExpoScreen, startRealScreen = expositions.startRealScreen;
-
-  /* After the last signed-temperature mission the activity is positivos y negativos: its round starts here. */
-  function startPositivosNegativos() {
-    activity = DATA.activities['positivos-y-negativos'];
-    activity.id = 'positivos-y-negativos';
-    startRound(levelFromProgress());
-  }
+  var startExpoScreen = expositions.startExpoScreen, startRealScreen = expositions.startRealScreen;
 
 
   $('#noteExtra').innerHTML = App.i18n.t('notaTablas')

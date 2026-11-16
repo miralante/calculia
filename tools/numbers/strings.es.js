@@ -24,59 +24,12 @@
     leyendaDecenasTxt: 'decenas',
     leyendaCentenasTxt: 'centenas',
     activity: {
-      'positivos-y-negativos': { name: 'Positivos y negativos', detail: 'Comprende los signos y practica con el termómetro y el ascensor.', instruction: 'Los números pueden estar por encima o por debajo de cero. Mira los ejemplos y practica con el termómetro y el ascensor.' },
       unidades: { name: 'Unidades y decenas', detail: '¿Qué número es?', instruction: 'Cada color ayuda a leer el número. Azul: unidades. Verde: decenas. Morado: centenas.' },
       placevalue: { name: 'Cambiar de posición', detail: '10 pequeños se cambian por 1 grande.', instruction: 'Cuando juntas 10 iguales, forman 1 del grupo siguiente. La cifra se mueve una posición a la izquierda.' },
       comparar: { name: 'Mayor, menor o igual', detail: 'Los signos <, > y =.', instruction: 'Mira los dos números. El signo se abre hacia el número más grande. Si los dos son iguales, el signo es =.' }
     },
-    signed: {
-      introInstruction: 'Primero veremos qué significan los números positivos y negativos.',
-      theoryTitle: 'Números positivos y negativos',
-      theoryIntro: 'Los números pueden estar por encima o por debajo del cero.',
-      rulePositive: 'Los positivos son mayores que 0: +1, +2, +3…',
-      ruleNegative: 'Los negativos van por debajo del 0: −1, −2, −3…',
-      ruleZero: 'El 0 no es positivo ni negativo. Es el punto de partida.',
-      numberlineAria: 'Recta numérica desde menos tres hasta más tres. El cero está en el centro.',
-      introNext: 'Ver ejemplos de la vida real →',
-      realIntro: 'Ahora veremos los números con signo en situaciones cotidianas.',
-      realTitle: 'Números con signo en el día a día',
-      realNext: '👉 Practicar con el termómetro →',
-      real: {
-        termometro: {
-          title: 'El termómetro',
-          text: 'Por debajo de 0 °C hace frío. −5 °C son cinco grados bajo cero. A 0 °C el agua empieza a congelarse.'
-        },
-        ascensor: {
-          title: 'El ascensor',
-          text: 'El sótano puede ser la planta −1. La planta baja es el 0. Las plantas de arriba pueden ser +1, +2…'
-        },
-        cuentas: {
-          title: 'Las cuentas',
-          text: 'Una deuda puede escribirse con un número negativo: −20 €. Un saldo a favor puede escribirse con uno positivo: +20 €.'
-        }
-      },
-      tempHint: 'Pulsa +1 o −1 para mover el termómetro. Mira si la temperatura está por encima o por debajo de 0.',
-      tempStepDown: 'Bajar un grado',
-      tempStepUp: 'Subir un grado',
-      tempReset: 'Empezar otra vez',
-      tempGoals: {
-        negative: 'Baja de 0 °C.',
-        positive: 'Sube por encima de 0 °C.',
-        zero: 'Llega justo a 0 °C.'
-      },
-      tempReadout: 'Temperatura: {value} grados Celsius',
-      sign: {
-        positive: 'Número positivo',
-        negative: 'Número negativo',
-        zero: 'Cero'
-      },
-      tempSuccess: '✅ ¡Objetivo conseguido!',
-      tempNext: 'Siguiente reto →',
-      endSummary: 'Has practicado los números positivos y negativos. Ahora tienes {stars} {starsWord}.'
-    },
-    /* Exposition + real-life screens for the 3 sub-activities that don't
-       have their own custom lesson (positivos-y-negativos uses the
-       dedicated signed.* flow). Each activity gets a brief theoretical
+    /* Exposition + real-life screens for the sub-activities that don't
+       have their own custom lesson. Each activity gets a brief theoretical
        slide (expo.*) followed by everyday examples (real.*), with a
        "Siguiente" button linking them and from there to the practice. */
     expo: {
@@ -157,8 +110,6 @@
       o1: 'Fila de 3',
       o2: 'Fila de 5',
       o3: 'Buscar un lugar',
-      libre: '🛗 Ascensor libre',
-      meta: '🎯 Llegar a un piso',
       u99: 'Hasta 99',
       u999: 'Hasta 999',
       umiles: 'Los miles',
@@ -209,19 +160,6 @@
       counterWordsOn: '✍️ Ocultar cómo se escribe',
       counterWordsOff: '✍️ Mostrar cómo se escribe',
       counterWordsAria: 'Mostrar el número escrito con palabras',
-      elevatorHint: 'Pulsa + o − para mover el ascensor. Mira cómo cambia el piso y si sube o baja.',
-      elevatorHintLibre: 'Pulsa + o − para mover el ascensor. Mira cómo cambia el piso y si sube o baja.',
-      elevatorHintMeta: 'Pulsa + o − hasta llegar al piso objetivo. Tienes que acertar el piso exacto.',
-      elevatorSuggestionUp: '💡 Sugerencia: sube hasta el piso {piso}.',
-      elevatorSuggestionDown: '💡 Sugerencia: baja hasta el piso {piso}.',
-      elevatorReadoutAria: 'El ascensor está en el piso {piso}',
-      elevatorStateAbove: 'Piso de arriba (número positivo)',
-      elevatorStateBelow: 'Piso de abajo (número negativo)',
-      elevatorStateGround: 'Planta baja (cero)',
-      elevatorGoalMeta: 'Objetivo: llegar al piso {piso}.',
-      elevatorSuccess: '🏢 ¡Has llegado al piso {piso}!',
-      elevatorBtnReset: '🔄 Empezar en 0',
-      elevatorBtnExit: '✅ Salir',
       /* La pista que sale al fallar. Una por tipo de pregunta, y cada una
          dice qué mirar en el dibujo o en el número de delante: la frase
          única de antes («Prueba otra vez. Piensa con calma») era la misma
@@ -251,7 +189,7 @@
       lecturaInputReveal: '👁 Ver resultado',
       lecturaInputIdleHint: 'Pulsa «Generar» para empezar.'
     },
-    transfer: 'Esto te servirá para leer números grandes, entender el ascensor de un edificio o saber qué cifra cambia al sumar 100.',
+    transfer: 'Esto te servirá para leer números grandes o saber qué cifra cambia al sumar 100.',
 
     /* Mensajes para la práctica interactiva de "leer números". Los
        textos de acierto / revelación viven en la raíz para que app.js

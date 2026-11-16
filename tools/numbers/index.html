@@ -22,64 +22,6 @@
     <main class="suite-body">
     <span class="stars" data-suite-stars id="stars">⭐ 0</span>
 
-    <section id="signedIntroScreen" class="hidden stack">
-      <div class="row center-row">
-        <p class="instruction" data-i18n="signed.introInstruction"></p>
-      </div>
-      <div class="card centered stack signed-lesson-card">
-        <h2 data-i18n="signed.theoryTitle"></h2>
-        <div class="signed-theory">
-          <p data-i18n="signed.theoryIntro"></p>
-          <ul>
-            <li data-i18n="signed.rulePositive"></li>
-            <li data-i18n="signed.ruleNegative"></li>
-            <li data-i18n="signed.ruleZero"></li>
-          </ul>
-        </div>
-        <div class="signed-numberline" id="signedNumberline" role="img"></div>
-      </div>
-      <button type="button" class="btn" id="signedIntroNext" data-i18n="signed.introNext"></button>
-    </section>
-
-    <section id="signedRealScreen" class="hidden stack">
-      <div class="row center-row">
-        <p class="instruction" data-i18n="signed.realIntro"></p>
-      </div>
-      <div class="card centered stack signed-lesson-card">
-        <h2 data-i18n="signed.realTitle"></h2>
-        <div class="signed-real-list" id="signedRealList"></div>
-      </div>
-      <div class="row signed-lesson-actions">
-        <button type="button" class="btn" id="signedRealNext" data-i18n="signed.realNext"></button>
-      </div>
-    </section>
-
-    <section id="signedTempScreen" class="hidden stack">
-      <div class="card centered stack signed-temp-card">
-        <p class="signed-temp-goal" id="signedTempGoal"></p>
-        <div class="signed-temp-display">
-          <div class="signed-thermometer" aria-hidden="true">
-            <div class="signed-thermometer-track">
-              <div id="signedThermometerMercury" class="signed-thermometer-mercury"></div>
-            </div>
-            <span class="signed-thermometer-zero">0</span>
-          </div>
-          <div>
-            <p class="signed-temp-number" id="signedTempNumber" aria-live="polite"></p>
-            <p class="signed-temp-sign" id="signedTempSign"></p>
-          </div>
-        </div>
-      </div>
-      <p class="instruction signed-temp-hint" data-i18n="signed.tempHint"></p>
-      <p class="signed-temp-success hidden" id="signedTempSuccess" aria-live="polite"></p>
-      <div class="signed-temp-controls">
-        <button type="button" class="btn-signed-temp" data-step="-1" data-i18n-aria="signed.tempStepDown">−1</button>
-        <button type="button" class="btn-signed-temp" id="signedTempReset" data-i18n="signed.tempReset"></button>
-        <button type="button" class="btn-signed-temp" data-step="1" data-i18n-aria="signed.tempStepUp">+1</button>
-      </div>
-      <button type="button" class="btn hidden" id="signedTempNext" data-i18n="signed.tempNext"></button>
-    </section>
-
     <section id="screenMenu" class="stack">
       <div class="row center-row">
         <p class="instruction" id="instruction" data-i18n="instructionMenu">Elige una actividad.</p>
@@ -91,8 +33,7 @@
     <!-- Exposition + real-life example screens for the 5 sub-activities
          (ordinales, comparar, recta, unidades, placevalue). One pair of
          sections, content painted dynamically from strings keyed by the
-         current sub-activity id. positivos-y-negativos keeps its own
-         dedicated signed.* flow. After the real-life screen, "Empezar a
+         current sub-activity id. After the real-life screen, "Empezar a
          practicar" leads into the existing game/free-exploration UI. -->
     <section id="expoScreen" class="hidden stack" aria-labelledby="expoTitleEl">
       <div class="row center-row">
@@ -117,7 +58,7 @@
         <h2 id="realTitleEl"></h2>
         <div class="real-list" id="realListEl"></div>
       </div>
-      <div class="row signed-lesson-actions">
+      <div class="row lesson-actions">
         <button type="button" class="btn btn-secondary" id="realBack" data-i18n="realBack"></button>
         <button type="button" class="btn" id="realNext" data-i18n="realNext"></button>
       </div>
@@ -241,46 +182,6 @@
         </div>
         <p class="counter-written hidden" id="counterWritten" aria-live="polite"></p>
         <p class="instruction counter-hint" id="counterHint" data-i18n="gen.counterHint"></p>
-      </div>
-
-      <!-- Free-exploration elevator ('positivos-y-negativos'). Shown only
-           when level.tipo is 'ascensorLibre' or 'ascensorMeta'. Same
-           mechanic as the water-temperature tool: −1/+1 buttons move
-           one floor at a time (the building is small, ±3, so a single
-           step always gets there); the visual reacts on every step
-           (the elevator emoji moves up and down the shaft), the floor
-           number reads aloud with the matching sign. No quiz, no
-           wrong-answer feedback;
-           for 'ascensorMeta' a celebration message appears once the
-           target floor is reached. The shaft is decorative
-           (aria-hidden); the accessible reading lives in the live
-           region #elevatorNumber. -->
-      <div id="elevatorUI" class="hidden stack">
-        <div class="card centered elevator-card">
-          <p class="elevator-goal" id="elevatorGoal"></p>
-          <div class="elevator-visual">
-            <div id="elevatorShaft" class="elevator-shaft-dynamic" aria-hidden="true"></div>
-            <div id="elevatorNumber" class="elevator-number" aria-live="polite"></div>
-            <p class="elevator-state-label" id="elevatorStateLabel"></p>
-          </div>
-        </div>
-        <!-- Random exploration suggestion. Same pattern as the
-             temperature tool: a starting idea the user can ignore
-             or take. For 'ascensorMeta' the goal line above names
-             the target, so the random suggestion is hidden to
-             avoid sending contradictory directions. For
-             'ascensorLibre' it adds a concrete starting floor to
-             the open-ended mission. -->
-        <p class="elevator-suggestion hidden" id="elevatorSuggestion" aria-live="polite"></p>
-        <div class="elevator-controls">
-          <div class="elevator-row">
-            <button type="button" class="btn-elevator" data-step="-1">−1</button>
-            <button type="button" class="btn-elevator btn-elevator-secondary" id="elevatorReset">🔄 Start at 0</button>
-            <button type="button" class="btn-elevator" data-step="1">+1</button>
-            <button type="button" class="btn-elevator" id="elevatorExit">✅ Exit</button>
-          </div>
-        </div>
-        <p class="instruction elevator-hint" id="elevatorHint" data-i18n="gen.elevatorHint"></p>
       </div>
     </section>
 

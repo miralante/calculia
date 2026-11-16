@@ -19,9 +19,9 @@
 
     /* Características de cada tipo: se muestran en la card de
        exposición, debajo del dibujo. Cada rasgo va separado por « · ». */
-    slideNaturalesTraits: 'Son 0, 1, 2, 3… · Nunca son negativos · No tienen decimales',
+    slideNaturalesTraits: 'Nunca son negativos · No tienen decimales',
     slideEnterosTraits: 'Pueden ser negativos · El 0 separa los negativos de los positivos · No tienen decimales',
-    slideFraccionesTraits: 'Son una parte de algo dividido en partes iguales · Se escriben con dos números y el signo de división: 3/4 · El de abajo dice en cuántas partes se divide y el de arriba las partes que se tienen',
+    slideFraccionesTraits: 'Son una parte de algo dividido en partes iguales · Se escriben así: 3/4 · Arriba: las partes que tienes · Abajo: en cuántas partes iguales se divide el todo',
     slideDecimalesTraits: 'Tienen una coma (,) · Lo que va después de la coma vale menos de 1',
     traitsEyebrow: 'Sus características:',
     slideVsEnterosTitle: 'Naturales y Enteros',

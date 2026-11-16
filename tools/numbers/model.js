@@ -86,32 +86,6 @@
 
   var GENERATORS = {
 
-    /* Free-exploration elevator missions (positivos-y-negativos).
-       Not a quiz, no prompt/options. Each generator returns a marker
-       that render() detects to switch into the elevator UI
-       (renderElevator). 'libre' has no target — exit when ready
-       (+1 star). 'meta' has a target floor (level.meta); a
-       celebration message plays once the user lands on it, then
-       exit still grants the star. Same shape as the 'counter'
-       generator and the water-temperature missions. */
-    ascensorLibre: function (nv) {
-      return { tipo: 'elevator', mode: 'libre', min: nv.min, max: nv.max };
-    },
-    ascensorMeta: function (nv) {
-      return {
-        tipo: 'elevator',
-        mode: 'meta',
-        min: nv.min,
-        max: nv.max,
-        target: nv.meta,
-        inicio: (typeof nv.inicio === 'number') ? nv.inicio : 0
-      };
-    },
-
-    
-
-    
-
     /* The signs <, > and =. The relation is picked FIRST
        and the pair built to match it, so the three signs come up equally
        often and the answer can never be guessed by always choosing one.

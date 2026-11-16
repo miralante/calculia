@@ -19,9 +19,9 @@
 
     /* Characteristics of each type: shown on the exposition card,
        under the drawing. Each trait is separated by « · ». */
-    slideNaturalesTraits: 'They are 0, 1, 2, 3… · Never negative · No decimals',
+    slideNaturalesTraits: 'Never negative · No decimals',
     slideEnterosTraits: 'They can be negative · Zero separates negative from positive numbers · No decimals',
-    slideFraccionesTraits: 'They are a part of something divided into equal parts · Written with two numbers and a division sign: 3/4 · The bottom number says how many parts it is divided into and the top number says how many parts you have',
+    slideFraccionesTraits: 'They are a part of something divided into equal parts · Written like this: 3/4 · Top: the parts you have · Bottom: how many equal parts the whole is divided into',
     slideDecimalesTraits: 'They have a decimal point (.) · What comes after the point is less than 1',
     traitsEyebrow: 'Its characteristics:',
     slideVsEnterosTitle: 'Natural and Integers',

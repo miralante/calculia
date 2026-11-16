@@ -30,7 +30,6 @@
     var progressBar = $('#progressBar');
     var quizCard = $('#quizCard');
     var counterUI = $('#counterUI');
-    var elevatorUI = $('#elevatorUI');
     var lecturaUI = $('#lecturaUI');
     var lecturaWords = $('#lecturaWords');
     var lecturaInput = $('#lecturaInput');
@@ -148,7 +147,6 @@
       quizCard.classList.add("hidden");
       optionsEl.classList.add("hidden");
       counterUI.classList.add("hidden");
-      elevatorUI.classList.add("hidden");
       lecturaUI.classList.remove("hidden");
       btnNext.classList.add("hidden");
 
@@ -271,7 +269,7 @@
     }
 
     /* Wire up the lecturaInput controls once (the elements persist
-       across questions). Same pattern as the counter and elevator
+       across questions). Same pattern as the counter
        wire-ups: a single addEventListener for each button, with the
        current question read from the closure each click. */
     if (lecturaGenerate) {
@@ -335,7 +333,6 @@
       quizCard.classList.add("hidden");
       optionsEl.classList.add("hidden");
       counterUI.classList.add("hidden");
-      elevatorUI.classList.add("hidden");
       lecturaUI.classList.add("hidden");
       escribirUI.classList.remove("hidden");
       btnNext.classList.add("hidden");

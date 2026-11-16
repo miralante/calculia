@@ -1,27 +1,24 @@
 /* ============================================================
-   Calculia — Numbers: the free-exploration counter and elevator.
-   Two levels that are not questions: a counter that reads a number aloud and in words, and an
-   elevator that goes up and down by steps. They own their drawing, their buttons and their state.
-   The page gives them what they need in the host object: the shared progress, save(), paintStars(),
-   endRound(), show(), the current level, and the elements of the round that they reuse.
+   Calculia — Numbers: the free-exploration counter.
+   A level that is not a question: a counter that reads a number aloud and in words. It owns its
+   drawing, its buttons and its state.
+   The page gives it what it needs in the host object: the shared progress, save(), paintStars(),
+   endRound(), show(), the current level, and the elements of the round that it reuses.
    ============================================================ */
 (function () {
   'use strict';
   var $ = App.utils.$;
   var M = App.numbersModel;
-  var pickRandomInt = M.pickRandomInt, POS_CLASS = M.POS_CLASS, paintNumber = M.paintNumber, counterSay = M.counterSay, numberToWords = M.numberToWords;
+  var POS_CLASS = M.POS_CLASS, paintNumber = M.paintNumber, counterSay = M.counterSay, numberToWords = M.numberToWords;
   /* host: { progress, save(), paintStars(), endRound(), show(), level(), screenMenu, el: {...} } */
   App.numbersCounter = function (host) {
     var progress = host.progress;
     var save = host.save;
     var paintStars = host.paintStars;
     var endRound = host.endRound;
-    var show = host.show;
-    var screenMenu = host.screenMenu;
-    var paintNumber = host.paintNumber || M.paintNumber;
     var feedbackEl = host.el.feedbackEl, progressBar = host.el.progressBar, quizCard = host.el.quizCard,
       optionsEl = host.el.optionsEl, btnNext = host.el.btnNext, progressFill = host.el.progressFill,
-      progressText = host.el.progressText, counterUI = host.el.counterUI, elevatorUI = host.el.elevatorUI;
+      progressText = host.el.progressText, counterUI = host.el.counterUI;
     var counterNumber = $('#counterNumber');
     var counterSep = $('#counterSep');
     var counterSepLabel = $('#counterSepLabel');
@@ -34,20 +31,12 @@
     var counterWords = $('#counterWords');
     var counterWordsLabel = $('#counterWordsLabel');
     var counterWritten = $('#counterWritten');
-    var elevatorGoal = $('#elevatorGoal');
-    var elevatorShaft = $('#elevatorShaft');
-    var elevatorNumber = $('#elevatorNumber');
-    var elevatorStateLabel = $('#elevatorStateLabel');
-    var elevatorReset = $('#elevatorReset');
-    var elevatorExit = $('#elevatorExit');
-    var elevatorHint = $('#elevatorHint');
-    var elevatorSuggestion = $('#elevatorSuggestion');
     var counterValue = 0;
     var counterMax = 0;
     var counterShowSep = true;
     var counterColorGroups = false;
     var counterShowWords = false;
-  
+
     function renderCounter(q) {
       counterValue = 0;
       counterMax = q.max;
@@ -57,7 +46,6 @@
       counterWords.setAttribute('aria-pressed', 'false');
       counterWordsLabel.textContent = App.i18n.t('gen.counterWordsOff');
       counterUI.classList.remove('hidden');
-      elevatorUI.classList.add('hidden');
       counterHint.textContent = App.i18n.t('gen.counterHint');
       /* The progress bar / quiz card / options belong to the quiz flow;
          they're hidden while the counter is shown so the screen reads
@@ -75,12 +63,12 @@
       paintCounterToggle();
       paintStars();
     }
-  
+
     function paintCounter() {
       counterNumber.innerHTML = paintCounterNumber(counterValue);
       counterWritten.textContent = counterShowWords ? numberToWords(counterValue) : '';
       counterWritten.classList.toggle('hidden', !counterShowWords);
-      /* Disable "-" buttons at 0; the "−" buttons share the .data-step
+      /* Disable "-" buttons at 0; the "−" buttons share the .data-step
          attribute that starts with "-". */
       App.utils.$$('#counterUI .btn-counter[data-step]').forEach(function (b) {
         var step = parseInt(b.getAttribute('data-step'), 10);
@@ -89,152 +77,7 @@
         b.disabled = wouldBeNeg || wouldBeOver;
       });
     }
-  
-    var elevatorValue = 0;
-    var elevatorMin = 0;
-    var elevatorMax = 0;
-    var elevatorMode = 'libre';
-    var elevatorTarget = 0;
-    var elevatorCelebrated = false;
-  
-    function renderElevator(q) {
-      elevatorValue = (q.mode === 'meta' && typeof q.inicio === 'number')
-        ? q.inicio : 0;
-      elevatorMin = (typeof q.min === 'number') ? q.min : DATA.elevador.min;
-      elevatorMax = (typeof q.max === 'number') ? q.max : DATA.elevador.max;
-      elevatorMode = q.mode || 'libre';
-      elevatorTarget = (typeof q.target === 'number') ? q.target : 0;
-      elevatorCelebrated = false;
-      elevatorUI.classList.remove('hidden');
-      counterUI.classList.add('hidden');
-      elevatorHint.textContent = App.i18n.t(
-        elevatorMode === 'meta' ? 'gen.elevatorHintMeta' : 'gen.elevatorHintLibre'
-      );
-      /* The progress bar / quiz card / options belong to the quiz
-         flow; they're hidden while the elevator is shown so the
-         screen reads as a free exploration surface, not a question. */
-      progressBar.classList.add('hidden');
-      quizCard.classList.add('hidden');
-      optionsEl.classList.add('hidden');
-      btnNext.classList.add('hidden');
-      feedbackEl.textContent = '';
-      feedbackEl.className = 'feedback';
-      /* progressText stays at 0/6; the bar is hidden, so it isn't read. */
-      progressFill.style.width = '0%';
-      progressText.textContent = '';
-      paintElevatorGoal();
-      paintElevatorSuggestion();
-      paintElevator();
-      paintStars();
-    }
-  
-    function paintElevatorGoal() {
-      if (elevatorMode !== 'meta') {
-        elevatorGoal.textContent = '';
-        return;
-      }
-      var t = elevatorTarget;
-      var key = 'gen.elevatorGoalMeta';
-      elevatorGoal.textContent = App.i18n.t(key).replace(
-        '{piso}', (t < 0 ? '−' : '') + Math.abs(t)
-      );
-    }
-  
-    function pickElevatorSuggestion() {
-      var start = (elevatorMode === 'meta' && typeof host.level().inicio === 'number')
-        ? host.level().inicio : 0;
-      var v = pickRandomInt(elevatorMin, elevatorMax, start);
-      while (v === 0) v = pickRandomInt(elevatorMin, elevatorMax, start);
-      return v;
-    }
-  
-    function paintElevatorSuggestion() {
-      if (elevatorMode === 'meta') {
-        elevatorSuggestion.textContent = '';
-        elevatorSuggestion.classList.add('hidden');
-        return;
-      }
-      var v = pickElevatorSuggestion();
-      var sign = v < 0 ? '−' : '+';
-      var key = v < 0 ? 'gen.elevatorSuggestionDown'
-        : 'gen.elevatorSuggestionUp';
-      elevatorSuggestion.textContent = App.i18n.t(key)
-        .replace('{piso}', sign + Math.abs(v));
-      elevatorSuggestion.classList.remove('hidden');
-    }
-  
-    function paintElevator() {
-      var n = elevatorValue;
-      /* Big floor number. The sign is part of the text so screen
-         readers say "menos cinco" naturally. */
-      elevatorNumber.textContent = (n < 0 ? '−' : '') + Math.abs(n);
-      elevatorNumber.setAttribute(
-        'aria-label',
-        App.i18n.t('gen.elevatorReadoutAria')
-          .replace('{piso}', (n < 0 ? '−' : '') + Math.abs(n))
-      );
-      /* State label: above / on / below ground. Same vocabulary as
-         the activity instruction so the user sees the same words in
-         three places (instruction, hint, label). */
-      var labelKey = n > 0 ? 'gen.elevatorStateAbove'
-        : n < 0 ? 'gen.elevatorStateBelow'
-        : 'gen.elevatorStateGround';
-      elevatorStateLabel.textContent = App.i18n.t(labelKey);
-      /* Disable "+" / "−" at the true edges of the building (±3) so the
-         elevator cannot be sent past the top or bottom floor. With a
-         ±3 range and single-floor steps this is a rare, honest edge
-         case — not a stand-in for a range the buttons don't fit. */
-      App.utils.$$('#elevatorUI .btn-elevator[data-step]').forEach(function (b) {
-        var step = parseInt(b.getAttribute('data-step'), 10);
-        var wouldBe = elevatorValue + step;
-        b.disabled = (wouldBe < elevatorMin) || (wouldBe > elevatorMax);
-      });
-      /* Live shaft. */
-      paintElevatorShaft();
-      celebrateIfElevatorGoalReached();
-    }
-  
-    function paintElevatorShaft() {
-      var html = '';
-      for (var f = elevatorMax; f >= elevatorMin; f--) {
-        var clases = 'floor-row';
-        var contenido = '';
-        if (f === 0) {
-          clases += ' ground-floor';
-          contenido += '<span class="floor-icon">🛗</span>';
-        }
-        if (f === elevatorValue) {
-          clases += ' current-floor';
-          contenido += '<span class="floor-icon">🛗</span>';
-        }
-        contenido = '<span class="floor-label">' + (f > 0 ? '+' + f : (f < 0 ? '−' + Math.abs(f) : '0')) + '</span>' + contenido;
-        html += '<div class="' + clases + '">' + contenido + '</div>';
-      }
-      elevatorShaft.innerHTML = html;
-    }
-  
-    function celebrateIfElevatorGoalReached() {
-      if (elevatorCelebrated) return;
-      if (elevatorMode !== 'meta') return;
-      var diff = Math.abs(elevatorValue - elevatorTarget);
-      if (diff > DATA.elevador.tolerancia) return;
-      var t = elevatorTarget;
-      var key = 'gen.elevatorSuccess';
-      feedbackEl.textContent = App.i18n.t(key).replace(
-        '{piso}', (t < 0 ? '−' : '') + Math.abs(t)
-      );
-      /* Set 'feedback' first so the bare class literal the CSS
-         coverage check scans for matches a real selector. The
-         'success' modifier is added with classList.add afterwards.
-         Same intent as the temperature tool: App.feedback.success()
-         would overwrite the celebration text with a generic
-         "⭐ Fantastic!" pick, which doesn't fit here — the message
-         has to identify the floor the user just reached. */
-      feedbackEl.className = 'feedback';
-      feedbackEl.classList.add('success');
-      elevatorCelebrated = true;
-    }
-  
+
     function paintCounterToggle() {
       /* The button shows what the current state LOOKS LIKE; clicking
          it switches to the other state. The label is built from
@@ -257,7 +100,13 @@
         counterGroups.setAttribute('aria-pressed', String(counterColorGroups));
       }
     }
-  
+
+    /* Three paint variants for the displayed number, chosen from the
+       current toggle state:
+         - showSep              —  digit groups with . separator + label
+         - !showSep && colorGroups —  digit groups with a coloured background
+                                     per 3-digit chunk (no separator glyph)
+         - !showSep && !colorGroups —  one continuous digit string */
     function paintCounterNumber(n) {
       if (counterShowSep) return paintNumber(n, { labels: true });
       var s = String(n);
@@ -268,7 +117,6 @@
         var body = '';
         for (var j = 0; j < groups[g].length; j++) {
           var pos = groups[g].length - 1 - j;
-          var posAbs = (groups.length - 1 - g) * 3 + pos;
           body += '<span class="' + POS_CLASS[pos] + '">' + groups[g][j] + '</span>';
         }
         if (counterColorGroups && groups.length > 1) {
@@ -283,35 +131,20 @@
       html += '</span>';
       return html;
     }
-  
+
     function counterAddStep(step) {
       var next = counterValue + step;
       if (next < 0 || next > counterMax) return;
       counterValue = next;
       paintCounter();
     }
-  
-    function elevatorAddStep(step) {
-      var next = elevatorValue + step;
-      if (next < elevatorMin || next > elevatorMax) return;
-      elevatorValue = next;
-      paintElevator();
-    }
-  
-    function exitElevator() {
-      progress.stars += 1;
-      save();
-      paintStars();
-      endRound();
-    }
-  
+
     function exitCounter() {
       progress.stars += 1;
       save();
       paintStars();
       endRound();
     }
-  
 
     /* Wire up the counter buttons once (the elements persist). */
     App.utils.$$('#counterUI .btn-counter[data-step]').forEach(function (b) {
@@ -360,31 +193,7 @@
       counterWordsLabel.textContent = App.i18n.t(counterShowWords ? 'gen.counterWordsOn' : 'gen.counterWordsOff');
       paintCounter();
     });
-  
-    /* Wire up the elevator buttons once (the elements persist). Same
-       pattern as the counter wire-up: step buttons share .data-step,
-       the reset button takes the user back to the mission's actual
-       starting point (0 for libre, the per-level 'inicio' for meta). */
-    App.utils.$$('#elevatorUI .btn-elevator[data-step]').forEach(function (b) {
-      b.addEventListener('click', function () {
-        elevatorAddStep(parseInt(b.getAttribute('data-step'), 10));
-      });
-    });
-    elevatorReset.addEventListener('click', function () {
-      elevatorValue = (elevatorMode === 'meta')
-        ? ((typeof host.level().inicio === 'number') ? host.level().inicio : 0)
-        : 0;
-      elevatorCelebrated = false;
-      feedbackEl.textContent = '';
-      feedbackEl.className = 'feedback';
-      paintElevatorSuggestion();
-      paintElevator();
-    });
-    elevatorExit.addEventListener('click', function () { exitElevator(); });
-    /* Localized labels for the elevator icon buttons (kept out of the
-       HTML to avoid duplicating strings per locale). */
-    elevatorReset.textContent = App.i18n.t('gen.elevatorBtnReset');
-    elevatorExit.textContent = App.i18n.t('gen.elevatorBtnExit');
-    return { renderCounter: renderCounter, renderElevator: renderElevator };
+
+    return { renderCounter: renderCounter };
   };
 })();

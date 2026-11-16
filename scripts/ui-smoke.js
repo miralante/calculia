@@ -1493,7 +1493,7 @@ async function exerciseNumbers(page, baseUrl) {
   await page.goto(baseUrl + '/');
   await page.evaluate(() => {
     localStorage.setItem('calculia:numbers', JSON.stringify({
-      stars: 2, completedRounds: 8, signedRounds: 1,
+      stars: 2, completedRounds: 8,
     }));
     localStorage.setItem('calculia:posneg', JSON.stringify({ stars: 4, completedRounds: 2 }));
     localStorage.setItem('calculia:locale', 'es');
@@ -1504,19 +1504,11 @@ async function exerciseNumbers(page, baseUrl) {
      Tipos de números y Los números (ver PUBLIC_SLUGS de scripts/check.js). */
   assert.equal(await page.locator('a[href="tools/numbers-group/"]').count(), 1,
     'La portada pública no muestra Números');
-  /* Positivos y negativos dejó de ser una herramienta propia y se
-     integró en Números (commit "feat(numbers): integrate positive and
-     negative practice"), así que ya no existe tools/posneg/: ese
-     catálogo solo debe seguir siendo una clave localStorage heredada,
-     nunca una tarjeta. Comprobado sobre la portada, que ya muestra el
-     catálogo completo. */
-  await page.goto(baseUrl + '/');
-  await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
-  await page.reload();
+  /* Positivos y negativos ya no es una herramienta propia: la clave
+     localStorage 'posneg' solo sirve para migrar estrellas antiguas y nunca
+     debe aparecer como tarjeta en la portada. */
   assert.equal(await page.locator('a[href$="posneg"]').count(), 0,
     'El catálogo vuelve a enlazar Positivos y negativos como herramienta separada');
-  await page.evaluate(() => localStorage.setItem('calculia:locale', 'es'));
-  await page.reload();
 
   const catalogCard = page.locator('a[href="tools/numbers-group/"]');
   assert.ok(await catalogCard.isVisible().catch(() => false),
@@ -1531,9 +1523,21 @@ async function exerciseNumbers(page, baseUrl) {
   await page.reload();
   await catalogCard.click();
   await page.waitForURL('**/tools/numbers-group/', { timeout: NAV_TIMEOUT });
-  await page.locator('#activitiesMenu a.btn-actividad[href="../numbers/?sub=positivos-y-negativos"]').click();
-  await page.waitForURL('**/tools/numbers/?sub=positivos-y-negativos', { timeout: NAV_TIMEOUT });
-  await page.waitForSelector('#signedIntroScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
+
+  /* El grupo ya no ofrece Positivos y negativos: quedan cinco actividades. */
+  await page.waitForSelector('#activitiesMenu a.btn-actividad', { timeout: NAV_TIMEOUT });
+  assert.equal(await page.locator('#activitiesMenu a.btn-actividad').count(), 5,
+    'El grupo Números no muestra las cinco actividades esperadas');
+  assert.equal(await page.locator('#activitiesMenu a.btn-actividad[href*="positivos"]').count(), 0,
+    'El grupo Números sigue enlazando Positivos y negativos');
+  actions += 1;
+
+  /* Una actividad que sigue existente se abre desde el grupo (con su
+     explicación de la sección de expo). La migración de estrellas se
+     comprueba después, porque se ejecuta al abrir tools/numbers/. */
+  await page.locator('#activitiesMenu a.btn-actividad[href="../numbers/?sub=unidades"]').click();
+  await page.waitForURL('**/tools/numbers/?sub=unidades', { timeout: NAV_TIMEOUT });
+  await page.waitForSelector('#expoScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
   actions += 1;
 
   const migrated = await page.evaluate(() => ({
@@ -1541,114 +1545,19 @@ async function exerciseNumbers(page, baseUrl) {
     legacy: localStorage.getItem('calculia:posneg'),
   }));
   assert.equal(migrated.numbers.stars, 6,
-    'Las estrellas existentes y las de Positivos y negativos no se conservaron al migrar');
-  assert.equal(migrated.numbers.signedRounds, 2,
-    'Las rondas previas no se conservaron para la progresión del ascensor');
+    'Las estrellas existentes y las del progreso antiguo no se conservaron al migrar');
   assert.equal(migrated.numbers.completedRounds, 8,
     'La migración alteró la progresión de las demás actividades de Números');
   assert.equal(migrated.legacy, null,
     'El progreso anterior quedó duplicado tras migrarlo');
-
-  /* Positivos y negativos se abre directamente desde la portada de Números
-     (sin el menú de Los Números): ya estamos en su explicación. */
-  assert.equal(await page.locator('#signedNumberline .signed-numberline-tick').count(), 7,
-    'La explicación no muestra una recta numérica visual');
   actions += 1;
-
-  await page.locator('#signedIntroNext').click();
-  await page.waitForSelector('#signedRealScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
-  assert.equal(await page.locator('#signedRealList .signed-real-item').count(), 3,
-    'Faltan los ejemplos cotidianos de termómetro, ascensor o cuentas');
-  assert.ok((await page.locator('#signedRealList').innerText()).includes('El termómetro') &&
-    (await page.locator('#signedRealList').innerText()).includes('El ascensor'),
-  'Los ejemplos cotidianos no se muestran en español');
-  for (const width of [320, 375, 768, 1280]) {
-    await page.setViewportSize({ width, height: 900 });
-    const documentWidth = await page.evaluate(() => ({
-      client: document.documentElement.clientWidth,
-      scroll: document.documentElement.scrollWidth,
-    }));
-    assert.ok(documentWidth.scroll <= documentWidth.client + 1,
-      'La pantalla de ejemplos tiene desbordamiento horizontal a ' + width + 'px');
-  }
-  await page.setViewportSize({ width: 1280, height: 900 });
-  actions += 1;
-
-  await page.locator('#signedRealNext').click();
-  await page.waitForSelector('#signedTempScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
-  for (const width of [320, 375, 768, 1280]) {
-    await page.setViewportSize({ width, height: 900 });
-    const dimensions = await page.evaluate(() => {
-      const controls = Array.from(document.querySelectorAll(
-        '#signedTempScreen .btn-signed-temp'
-      )).map(button => {
-        const rect = button.getBoundingClientRect();
-        return { left: rect.left, right: rect.right, height: rect.height };
-      });
-      return {
-        client: document.documentElement.clientWidth,
-        scroll: document.documentElement.scrollWidth,
-        controls,
-      };
-    });
-    assert.ok(dimensions.scroll <= dimensions.client + 1,
-      'La pantalla del termómetro tiene desbordamiento horizontal a ' + width + 'px');
-    assert.ok(dimensions.controls.every(control =>
-      control.left >= 0 && control.right <= width && control.height >= 44),
-    'Los controles del termómetro no caben o no tienen un tamaño táctil usable a ' + width + 'px');
-  }
-  await page.setViewportSize({ width: 1280, height: 900 });
-  for (let step = 0; step < 3; step += 1) {
-    await page.locator('#signedTempScreen [data-step="-1"]').click();
-  }
-  assert.equal((await page.locator('#signedTempNumber').innerText()).trim(), '−1 °C',
-    'El termómetro no cambia al cruzar el cero hacia los negativos');
-  await page.locator('#signedTempNext').click();
-  for (let step = 0; step < 3; step += 1) {
-    await page.locator('#signedTempScreen [data-step="1"]').click();
-  }
-  assert.equal((await page.locator('#signedTempNumber').innerText()).trim(), '+1 °C',
-    'El termómetro no cambia al cruzar el cero hacia los positivos');
-  await page.locator('#signedTempNext').click();
-  for (let step = 0; step < 2; step += 1) {
-    await page.locator('#signedTempScreen [data-step="1"]').click();
-  }
-  assert.equal((await page.locator('#signedTempNumber').innerText()).trim(), '0 °C',
-    'El último reto no llega exactamente a cero');
-  await page.locator('#signedTempNext').click();
-  await page.waitForSelector('#elevatorUI:not(.hidden)', { timeout: NAV_TIMEOUT });
-  for (let step = 0; step < 3; step += 1) {
-    await page.locator('#elevatorUI .btn-elevator[data-step="-1"]').click();
-  }
-  assert.ok((await page.locator('#feedback').innerText()).includes('¡Has llegado'),
-    'El ascensor no confirma la llegada al piso negativo objetivo');
-  await page.locator('#elevatorExit').click();
-  await page.waitForSelector('#screenEnd:not(.hidden)', { timeout: NAV_TIMEOUT });
-  assert.match(await page.locator('#endSummary').innerText(), /positivos y negativos/,
-    'El resumen no corresponde a la práctica integrada');
-  actions += 9;
-
-  const completed = await page.evaluate(() =>
-    JSON.parse(localStorage.getItem('calculia:numbers') || '{}'));
-  assert.equal(completed.signedRounds, 3,
-    'La actividad integrada no continúa la progresión guardada');
-  assert.equal(completed.stars, 7,
-    'El progreso de estrellas no se conserva ni se actualiza correctamente');
-  assert.equal(completed.completedRounds, 8,
-    'Completar el ascensor alteró el progreso de las demás actividades de Números');
 
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
   await page.goto(baseUrl + '/tools/numbers-group/');
-  await page.locator('#activitiesMenu a.btn-actividad[href="../numbers/?sub=positivos-y-negativos"]').click();
-  await page.waitForSelector('#signedIntroScreen:not(.hidden)', { timeout: NAV_TIMEOUT });
-  assert.ok((await page.locator('#signedIntroScreen').innerText()).includes('Positive and negative numbers'),
-    'La explicación de números con signo no está traducida al inglés');
-  await page.locator('#signedIntroNext').click();
-  assert.ok((await page.locator('#signedRealList').innerText()).includes('The thermometer'),
-    'Los ejemplos cotidianos no están traducidos al inglés');
-  actions += 2;
-  /* La pantalla de ejemplos reales no tiene botón de volver: es el último
-     paso de esta comprobación, así que no hay nada más que recorrer. */
+  await page.waitForSelector('#activitiesMenu a.btn-actividad', { timeout: NAV_TIMEOUT });
+  assert.equal(await page.locator('#activitiesMenu a.btn-actividad').count(), 5,
+    'The numbers group does not show the five expected activities');
+  actions += 1;
 
   return actions ? 1 : 0;
 }

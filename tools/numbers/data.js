@@ -4,8 +4,6 @@
    - DATA.activities[id]: picto and levels[]. Each level: { id, tipo,
      ...config }. The 'tipo' chooses the question generator in app.js.
      Object.keys(DATA.activities) fixes the menu order.
-   - DATA.signedNumbers: lesson examples and thermometer practice for
-     positive and negative numbers.
    - DATA.readings: large numbers with their reading in words, per
      locale (DATA.readings[locale][lista]). NOTE: the numeric scale
      differs between locales (10^9 is "mil millones" in Spanish but
@@ -22,33 +20,6 @@ var DATA = {
   perRound: 6,
 
   activities: {
-    /* Positive and negative numbers via an elevator (floors below ground
-       = negative, floors above ground = positive, ground floor = 0).
-       Free-exploration mode: same mechanic as the water-temperature
-       tool (−1/+1 buttons, the visual reacts on every step). The
-       person drives the elevator from the ground floor to the
-       basement and back, watching the floor number change. Two
-       missions (rule 13, only one variable changes between them):
-       libre  → meta. libre has no target, just explore. meta adds a
-       single target floor (the elevator starts somewhere else and
-       has to be navigated to the goal, crossing zero in the
-       process). Range (−3/+3): a small, realistic building — 3
-       parking floors below ground, 3 floors above it — small
-       enough that every floor fits on screen at once and moving
-       one floor at a time (the only button) always reaches the
-       target in a few taps, no ±10 jump needed.
-       First in the menu because the elevator visual ties the rest
-       of the tool together: every other practice lives on the same
-       number line, and meeting the relatives one can already read
-       what "above zero" and "below zero" mean. */
-    "positivos-y-negativos": {
-      picto: '🏢',
-      levels: [
-        { id: 'libre', tipo: 'ascensorLibre', min: -3, max: 3 },
-        { id: 'meta',  tipo: 'ascensorMeta',  min: -3, max: 3, meta: -1, inicio: 2 }
-      ]
-    },
-
     unidades: {
       hasExpoReal: true,
       /* Progression (rule 13): order designed so each step changes
@@ -124,21 +95,6 @@ var DATA = {
     }
   },
 
-  signedNumbers: {
-    real: [
-      { id: 'termometro', object: '🌡️' },
-      { id: 'ascensor', object: '🏢' },
-      { id: 'cuentas', object: '💰' }
-    ],
-    temperature: [
-      { id: 'negative', start: 2, target: 'negative' },
-      { id: 'positive', start: -2, target: 'positive' },
-      { id: 'zero', start: -2, target: 0 }
-    ],
-    min: -10,
-    max: 10
-  },
-
   /* Large numbers and how to read them, per language. nota is shown as a hint.
      The scale differs between languages: see the note above. */
   readings: {
@@ -212,22 +168,5 @@ var DATA = {
     en: ['one', 'ten', 'one hundred', 'one thousand', 'ten thousand',
       'one hundred thousand', 'one million', 'ten million', 'one hundred million',
       'one billion', 'ten billion', 'one hundred billion', 'one trillion']
-  },
-
-  /* Shared config for the elevator free-exploration missions
-     ('positivos-y-negativos'). Centralised here so the visual range
-     and the tolerance for 'ascensorMeta' stay in lockstep across
-     levels. */
-  elevador: {
-    /* Inclusive range the user can move within: a small, realistic
-       building (3 floors below ground, 3 above). Small enough that
-       moving one floor at a time — the only step size offered — is
-       always enough to reach any floor in a few taps. */
-    min: -3,
-    max: 3,
-    /* Tolerance for 'ascensorMeta' (a ±tolerance band around the
-     target floor counts as a hit). 0 means "land exactly on the
-     floor" — the user must stop the right number of times. */
-    tolerancia: 0
   }
 };
