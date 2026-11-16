@@ -30,7 +30,7 @@
     "prime-composite": { "name": "Prime or composite", "detail": "When a number is prime and when it is composite." },
     "divisibility-test": { "name": "Divisibility", "detail": "When a number divides exactly." },
 
-    "numbers-group": { "name": "The numbers", "detail": "Number types, reading and comparing." },
+    "numbers-group": { "name": "The numbers", "detail": "Number types and comparing." },
     "numbers": { "name": "Numbers", "detail": "Read and compare. Learn about positive and negative numbers." },
     "losnumeros": { "name": "Number Types", "detail": "Natural numbers, integers, decimals and fractions." },
     "lines": { "name": "Lines", "detail": "Do they cross? Do they make a corner?" },

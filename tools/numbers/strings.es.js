@@ -24,8 +24,8 @@
     leyendaDecenasTxt: 'decenas',
     leyendaCentenasTxt: 'centenas',
     activity: {
-      unidades: { name: 'Unidades y decenas', detail: '¿Qué número es?', instruction: 'Cada color ayuda a leer el número. Azul: unidades. Verde: decenas. Morado: centenas.' },
-      placevalue: { name: 'Cambiar de posición', detail: '10 pequeños se cambian por 1 grande.', instruction: 'Cuando juntas 10 iguales, forman 1 del grupo siguiente. La cifra se mueve una posición a la izquierda.' },
+      unidades: { name: 'Unidades, decenas, centenas', detail: '¿Qué número es?', instruction: 'Cada color ayuda a leer el número. Azul: unidades. Verde: decenas. Morado: centenas.' },
+      placevalue: { name: 'Cuentas rápidas', detail: '10 pequeños se cambian por 1 grande.', instruction: 'Cuando juntas 10 iguales, forman 1 del grupo siguiente. La cifra se mueve una posición a la izquierda.' },
       comparar: { name: 'Mayor, menor o igual', detail: 'Los signos <, > y =.', instruction: 'Mira los dos números. El signo se abre hacia el número más grande. Si los dos son iguales, el signo es =.' }
     },
     /* Exposition + real-life screens for the sub-activities that don't
@@ -55,7 +55,7 @@
         note: 'Cada color señala un valor: azul (unidades), verde (decenas), morado (centenas).'
       },
       placevalue: {
-        title: 'Cambiar de posición',
+        title: 'Cuentas rápidas',
         intro: '10 unidades forman 1 decena. 10 decenas forman 1 centena. 10 centenas forman 1 millar. Y así sigue.',
         bullets: [
           '10 × 1 = 1 decena (10)',

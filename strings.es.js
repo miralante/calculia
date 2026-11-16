@@ -30,7 +30,7 @@
     "prime-composite": { "name": "Primo o compuesto", "detail": "Cuándo un número es primo y cuándo es compuesto." },
     "divisibility-test": { "name": "Divisibilidad", "detail": "Cuándo un número se divide exacto." },
 
-    "numbers-group": { "name": "Los números", "detail": "Tipos de números, lectura y comparación." },
+    "numbers-group": { "name": "Los números", "detail": "Tipos de números y comparación." },
     "numbers": { "name": "Los Números", "detail": "Lee y compara. Aprende los positivos y negativos." },
     "losnumeros": { "name": "Tipos de Números", "detail": "Naturales, enteros, decimales y fracciones." },
     "lines": { "name": "Rectas", "detail": "¿Se cruzan? ¿Hacen esquina?" },

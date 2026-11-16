@@ -13,7 +13,7 @@
     slideEnterosTitle: 'Enteros',
     slideEnterosReal: '−5 °C · sótano −1 · 3 plantas',
     slideFraccionesTitle: 'Fracciones',
-    slideFraccionesReal: '1/2 pizza · 1/4 de hora',
+    slideFraccionesReal: '1/4 pizza · 1/4 de hora',
     slideDecimalesTitle: 'Decimales',
     slideDecimalesReal: '1,99 € · 1,5 m · 3,14',
 
@@ -21,9 +21,8 @@
        exposición, debajo del dibujo. Cada rasgo va separado por « · ». */
     slideNaturalesTraits: 'Nunca son negativos · No tienen decimales',
     slideEnterosTraits: 'Pueden ser negativos · El 0 separa los negativos de los positivos · No tienen decimales',
-    slideFraccionesTraits: 'Son una parte de algo dividido en partes iguales · Se escriben así: 3/4 · Arriba: las partes que tienes · Abajo: en cuántas partes iguales se divide el todo',
+    slideFraccionesTraits: 'Las partes que tienes sobre cuántas partes iguales se divide el todo',
     slideDecimalesTraits: 'Tienen una coma (,) · Lo que va después de la coma vale menos de 1',
-    traitsEyebrow: 'Sus características:',
     slideVsEnterosTitle: 'Naturales y Enteros',
     slideVsDecimalesTitle: 'Naturales y Decimales',
     title: 'Tipos de Números',
@@ -38,7 +37,7 @@
        cotidianos). La frase de vida real puede tener varios
        ejemplos separados por « · »; el JS los rompe en una lista. */
     /* Etiquetas dentro del SVG de la pizza de fracciones. */
-    fraccionOneHalf: '1/2',
+    fraccionOneQuarter: '1/4',
 
     /* Eyebrow que aparece sobre la lista de ejemplos de vida real. */
     realEyebrow: 'En la vida real:',

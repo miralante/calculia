@@ -12,8 +12,8 @@
     group: {
       types: { name: 'Tipos de números', detail: 'Naturales, enteros, decimales y fracciones.' },
       temperature: { name: 'Temperatura del agua', detail: 'Sube y baja los grados. Mira qué pasa con el agua.' },
-      unidades: { name: 'Unidades y decenas', detail: '¿Qué número es?' },
-      placevalue: { name: 'Cambiar de posición', detail: '10 pequeños se cambian por 1 grande.' },
+      unidades: { name: 'Unidades, decenas, centenas', detail: '¿Qué número es?' },
+      placevalue: { name: 'Cuentas rápidas', detail: '10 pequeños se cambian por 1 grande.' },
       ordinals: { name: 'Números ordinales', detail: 'Primero, segundo, tercero…' }
     }
   }, 'es');

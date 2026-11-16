@@ -31,7 +31,6 @@
   var slideReal = $('#slideReal');
   var slideEyebrow = $('#slideEyebrow');
   var slideTraits = $('#slideTraits');
-  var slideTraitsEyebrow = $('#slideTraitsEyebrow');
   var slidePrev = $('#slidePrev');
   var slideNext = $('#slideNext');
   var slideBar = $('#slideProgress');
@@ -139,8 +138,8 @@
   }
 
 
-  /* Tipo 4: Fracciones. Una pizza sola, con 1/2 y 1/4 marcados
-     (un cuarto entero en morado, medio en otro color). */
+  /* Tipo 4: Fracciones. Una pizza partida en 4 cuartos; se marca
+     uno (1/4) en morado y el resto queda en color claro. */
   function visualTypeFraccion() {
     var cx = 300, cy = 110, r = 90;
     function slice(start, end) {
@@ -151,11 +150,10 @@
       return 'M ' + cx + ' ' + cy + ' L ' + sx + ' ' + sy +
              ' A ' + r + ' ' + r + ' 0 0 1 ' + ex + ' ' + ey + ' Z';
     }
-    /* 4 cuartos, dos marcados como fracción. */
+    /* 4 cuartos, uno marcado como fracción (1/4). */
     var slices = '';
     var fill = ['#FFE5C2', '#FFE5C2', '#FFE5C2', '#FFE5C2'];
-    fill[0] = 'var(--mod-memoria)'; /* 1/4 (cuarto superior) */
-    fill[1] = 'var(--mod-memoria)'; /* 1/2 = dos cuartos consecutivos (cuarto superior + derecho) */
+    fill[0] = 'var(--mod-memoria)'; /* 1/4 (cuarto superior derecho) */
     for (var i = 0; i < 4; i++) {
       var start = -Math.PI / 2 + i * (Math.PI / 2);
       var end = start + Math.PI / 2;
@@ -164,7 +162,7 @@
     return '' +
       '<svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg">' +
         slices +
-        '<text x="' + cx + '" y="' + (cy + r + 32) + '" text-anchor="middle" font-size="24" font-weight="700" fill="var(--color-texto)" data-i18n="fraccionOneHalf">1/2</text>' +
+        '<text x="' + cx + '" y="' + (cy + r + 32) + '" text-anchor="middle" font-size="24" font-weight="700" fill="var(--color-texto)" data-i18n="fraccionOneQuarter">1/4</text>' +
       '</svg>';
   }
 
@@ -292,11 +290,9 @@
        debajo del dibujo. Las comparaciones y las cards de vida real
        no las muestran. */
     var traitsOn = s.kind === 'expo' && s.visual.indexOf('type') === 0;
-    slideTraitsEyebrow.classList.toggle('hidden', !traitsOn);
     slideTraits.classList.toggle('hidden', !traitsOn);
     slideTraits.innerHTML = '';
     if (traitsOn) {
-      slideTraitsEyebrow.textContent = App.i18n.t('traitsEyebrow') || '';
       fillList(slideTraits, App.i18n.t('slide' + s.id + 'Traits'));
     }
 

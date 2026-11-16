@@ -25,8 +25,8 @@
     leyendaCentenasTxt: 'hundreds',
 
     activity: {
-      unidades: { name: 'Ones and tens', detail: 'What number is it?', instruction: 'Each colour helps read the number. Blue: ones. Green: tens. Purple: hundreds.' },
-      placevalue: { name: 'Changing position', detail: '10 small ones become 1 big one.', instruction: 'When you put 10 of the same together, they form 1 of the next group. The digit moves one position to the left.' },
+      unidades: { name: 'Ones, tens, hundreds', detail: 'What number is it?', instruction: 'Each colour helps read the number. Blue: ones. Green: tens. Purple: hundreds.' },
+      placevalue: { name: 'Quick sums', detail: '10 small ones become 1 big one.', instruction: 'When you put 10 of the same together, they form 1 of the next group. The digit moves one position to the left.' },
       comparar: { name: 'Greater, smaller or equal', detail: 'The signs <, > and =.', instruction: 'Look at the two numbers. The sign opens towards the bigger number. If both are the same, the sign is =.' }
     },
     /* Exposition + real-life screens for the sub-activities that don't
@@ -56,7 +56,7 @@
         note: 'Each colour signals a value: blue (ones), green (tens), purple (hundreds).'
       },
       placevalue: {
-        title: 'Trading places',
+        title: 'Quick sums',
         intro: '10 ones make 1 ten. 10 tens make 1 hundred. 10 hundreds make 1 thousand. And so on.',
         bullets: [
           '10 × 1 = 1 ten (10)',

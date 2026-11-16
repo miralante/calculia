@@ -96,9 +96,10 @@ var DATA = {
       '</svg>',
     pizza: '<svg viewBox="0 0 100 100" aria-hidden="true">' +
       '<circle cx="50" cy="50" r="42" fill="#FFCC80" stroke="#E65100" stroke-width="3"/>' +
-      '<path d="M50 8 A42 42 0 0 0 50 92 Z" fill="#E53935"/>' +
-      '<g fill="#B71C1C"><circle cx="30" cy="34" r="6"/><circle cx="36" cy="62" r="6"/><circle cx="24" cy="50" r="5"/></g>' +
+      '<path d="M50 50 L50 8 A42 42 0 0 1 92 50 Z" fill="#E53935"/>' +
+      '<g fill="#B71C1C"><circle cx="62" cy="28" r="5"/><circle cx="74" cy="40" r="5"/><circle cx="58" cy="40" r="4"/></g>' +
       '<line x1="50" y1="8" x2="50" y2="92" stroke="#E65100" stroke-width="3"/>' +
+      '<line x1="8" y1="50" x2="92" y2="50" stroke="#E65100" stroke-width="3"/>' +
       '</svg>',
     clock: '<svg viewBox="0 0 100 100" aria-hidden="true">' +
       '<circle cx="50" cy="50" r="42" fill="#fff" stroke="#37474F" stroke-width="4"/>' +
