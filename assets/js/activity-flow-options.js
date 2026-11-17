@@ -450,7 +450,7 @@
     var more = hasNextStep(ctx);
     App.feedback.celebrate(
       t(ctx.config.celebrateKey || 'core.roundComplete'),
-      function () { if (more) nextStep(ctx); else reviewIntro(ctx); },
+      more ? function () { nextStep(ctx); } : null,
       App.feedback.starsGoal(progress.stars)
     );
   }

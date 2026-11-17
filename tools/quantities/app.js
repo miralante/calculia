@@ -514,7 +514,7 @@
   function closeRound() {
     $('#contexto').textContent = t('contexto');
     $('#explanation').textContent = t('explicacion');
-    App.feedback.celebrate(t('roundComplete'), function () { window.location.reload(); }, App.feedback.starsGoal(progress.stars));
+    App.feedback.celebrate(t('roundComplete'), null, App.feedback.starsGoal(progress.stars));
     switchTo(menuScreen);
   }
 

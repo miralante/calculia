@@ -52,8 +52,8 @@
 
     // Closes a round: counts it, saves, and shows the achievement screen
     // (celebrate.js): the congratulation, "Ya tienes X · A por las Y" and
-    // "A por más". That returns the person to the entry point of the activity:
-    // reloading the page shows its first screen, and the progress is saved.
+    // "A por más". That returns the person to the entry point of the activity, the hub
+    // card that started it (App.navigation.entry in celebrate.js); the progress is saved.
     function endRound(options) {
       var opts = options || {};
       var progress = host.progress();
@@ -61,7 +61,7 @@
       save();
       App.feedback.celebrate(
         App.i18n.t(opts.celebrateKey || 'core.roundComplete'),
-        function () { window.location.reload(); },
+        null,
         App.feedback.starsGoal(progress.stars)
       );
     }

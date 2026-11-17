@@ -319,7 +319,7 @@
       return;
     }
     hide($('#screenQuiz'));
-    App.feedback.celebrate(App.i18n.t('core.roundComplete'), function () { window.location.reload(); }, App.feedback.starsGoal(progress.stars));
+    App.feedback.celebrate(App.i18n.t('core.roundComplete'), null, App.feedback.starsGoal(progress.stars));
   }
 
   /* ---- Navigation ---- */
