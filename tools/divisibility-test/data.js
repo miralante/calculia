@@ -19,13 +19,20 @@ var DATA = {
      plus the explanation questions: which number divides, and yes or no. */
   questions: ['rule2', 'rule3', 'rule5', 'rule10', 'pick', 'yesno'],
 
+  /* The balls are coloured like the pairs of Pares e impares: one colour per
+     full group, and the balls left over in their own colour. */
+  groupColors: ['#F9C5D1', '#BFE3F7', '#FFE7A0', '#CDEFC4'],
+  leftoverColor: '#FFB08A',
+
+  /* The rules, in the order of the explanation: each rule has its own game
+     (tap the numbers that divide exactly; for 3, the digits are shown too). */
   intro: [
-    { frame: { kind: 'groups', n: 12, d: 3 } },
-    { frame: { kind: 'groups', n: 13, d: 3 } },
+    { frame: { kind: 'balls', n: 12, d: 3 } },
+    { frame: { kind: 'balls', n: 13, d: 3 } },
     { frame: { kind: 'tap', d: 2, numbers: [14, 15, 22, 27, 30, 41] } },
+    { frame: { kind: 'tap', d: 3, numbers: [12, 14, 15, 21, 22, 27] } },
     { frame: { kind: 'tap', d: 5, numbers: [15, 23, 30, 41, 50, 62] } },
     { frame: { kind: 'tap', d: 10, numbers: [30, 45, 50, 61, 100, 27] } },
-    { frame: { kind: 'digits', n: 12 } },
     { frame: { kind: 'digits', n: 14 } },
     { frame: { kind: 'groups', n: 13, d: 5 } }
   ]

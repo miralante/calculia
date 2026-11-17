@@ -63,15 +63,53 @@
       groupsBody(f.n, f.d, 0, { choices: true }) + '</div>';
   }
 
-  /* The tap frame: the numbers as buttons. A tap shows the division for that number. */
+  /* One ball of the balls frame: its number, in the colour of its group. */
+  function ballHtml(v, color) {
+    return '<span class="div-ball" style="background-color:' + color + '">' + v + '</span>';
+  }
+
+  /* The balls frame, the same support as Pares e impares: the balls in groups of d,
+     one colour per full group, and the balls left over in their own colour. */
+  function ballsBody(n, d) {
+    var q = Math.floor(n / d);
+    var r = n % d;
+    var num = 0;
+    var html = '<p class="ops-story">' + fill(t('ui.divInstruction'), { T: n, d: d }) + '</p>';
+    html += '<div class="div-balls" role="img" aria-label="' +
+      fill(t(r ? 'ui.ballsAriaRest' : 'ui.ballsAriaWhole'), { T: n, d: d, q: q, r: r }) + '">';
+    for (var g = 0; g < q; g += 1) {
+      var color = DATA.groupColors[g % DATA.groupColors.length];
+      html += '<div class="div-ball-group">';
+      for (var i = 0; i < d; i += 1) { num += 1; html += ballHtml(num, color); }
+      html += '</div>';
+    }
+    if (r) {
+      html += '<div class="div-ball-group div-ball-left">';
+      for (var j = 0; j < r; j += 1) { num += 1; html += ballHtml(num, DATA.leftoverColor); }
+      html += '</div>';
+    }
+    html += '</div>';
+    html += '<p class="ops-expr ops-div-result">' + fill(t(r ? 'ui.divRest' : 'ui.divWhole'), { T: n, d: d, q: q, r: r }) + '</p>';
+    return html;
+  }
+  function ballsFrameHtml(f) {
+    return '<div class="ops-div">' + ballsBody(f.n, f.d) + '</div>';
+  }
+
+  /* The tap frame, a game for one rule: the rule is written above the numbers, and the
+     numbers are buttons. A tap shows the division for that number; find all the ones that
+     divide exactly and the game is won. For 3, the digits and their sum are shown too. */
   function tapFrameHtml(f) {
+    var total = f.numbers.filter(function (v) { return v % f.d === 0; }).length;
     var chips = f.numbers.map(function (v) {
       return '<button type="button" class="btn btn-secondary ops-div-chip" data-tap="' + v + '" data-d="' + f.d + '">' + v + '</button>';
     }).join('');
-    return '<div class="ops-div ops-tap">' +
+    return '<div class="ops-div ops-tap" data-total="' + total + '">' +
+      '<p class="div-rule-card">' + t('ui.ruleCard' + f.d) + '</p>' +
       '<p class="ops-story">' + fill(t('ui.tapInstruction'), { d: f.d }) + '</p>' +
       '<div class="ops-div-chips">' + chips + '</div>' +
       '<p class="ops-expr ops-div-result" hidden></p>' +
+      '<p class="ops-expr ops-div-done" hidden>' + fill(t('ui.tapDone'), { d: f.d }) + '</p>' +
       '</div>';
   }
 
@@ -99,6 +137,7 @@
   function gameHtml(slide) {
     var f = slide && slide.frame;
     if (!f) return '';
+    if (f.kind === 'balls') return ballsFrameHtml(f);
     if (f.kind === 'tap') return tapFrameHtml(f);
     if (f.kind === 'digits') return digitsFrameHtml(f);
     return groupsFrameHtml(f);
@@ -117,9 +156,16 @@
     chip.disabled = true;
     chip.classList.add(r ? 'is-no' : 'is-yes');
     chip.textContent = n + (r ? ' ✕' : ' ✓');
-    var out = chip.closest('.ops-tap').querySelector('.ops-div-result');
-    out.textContent = fill(t(r ? 'ui.tapNo' : 'ui.tapYes'), { n: n, d: d, q: q, r: r });
+    var box = chip.closest('.ops-tap');
+    var out = box.querySelector('.ops-div-result');
+    var text = fill(t(r ? 'ui.tapNo' : 'ui.tapYes'), { n: n, d: d, q: q, r: r });
+    if (d === 3) text += ' ' + fill(t('ui.digitsResult'), { parts: String(n).split('').join(' + '), s: digitSum(n) });
+    out.textContent = text;
     out.hidden = false;
+    /* The game is won when every number that divides exactly has been found. */
+    if (box.querySelectorAll('.is-yes').length === Number(box.getAttribute('data-total'))) {
+      box.querySelector('.ops-div-done').hidden = false;
+    }
   }
   function groupsStep(button) {
     var w = button.closest('.ops-div');

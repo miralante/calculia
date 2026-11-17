@@ -26,6 +26,13 @@
       tapInstruction: 'Toca los números que se dividen exacto entre {d}.',
       tapYes: '{n} ÷ {d} = {q}: no sobra nada.',
       tapNo: '{n} ÷ {d} = {q} y sobra {r}.',
+      tapDone: '¡Muy bien! Has encontrado todos los que se dividen exacto entre {d}.',
+      ruleCard2: 'Regla del 2: si termina en 0, 2, 4, 6 u 8, se divide exacto entre 2.',
+      ruleCard3: 'Regla del 3: si la suma de sus cifras se divide exacto entre 3, el número también.',
+      ruleCard5: 'Regla del 5: si termina en 0 o en 5, se divide exacto entre 5.',
+      ruleCard10: 'Regla del 10: si termina en 0, se divide exacto entre 10.',
+      ballsAriaWhole: '{T} bolas en {q} grupos de {d}, sin sobrar.',
+      ballsAriaRest: '{T} bolas en {q} grupos de {d}, y sobra {r}.',
       digitsInstruction: 'Suma las cifras de {n}.',
       digitsSum: 'Sumar las cifras',
       digitsResult: '{parts} = {s}',
@@ -34,12 +41,12 @@
 
     /* La explicación: una idea por diapositiva. La práctica está a la derecha (data.js y app.js). */
     intro: {
-      1: { title: 'Divisible: no sobra nada', text: '12 entre 3: salen 4 grupos y no sobra nada. Por eso 12 es divisible entre 3.' },
-      2: { title: 'No divisible: sobra algo', text: '13 entre 3: salen 4 grupos y sobra 1. Ese 1 es el resto. Por eso 13 no es divisible entre 3.' },
-      3: { title: 'Divisible entre 2: termina en cifra par', text: 'Las cifras pares son 0, 2, 4, 6 y 8. 14 termina en 4: se divide exacto entre 2.' },
-      4: { title: 'Divisible entre 5: termina en 0 o en 5', text: '15 termina en 5: se divide exacto entre 5. Si termina en otra cifra, no.' },
-      5: { title: 'Divisible entre 10: termina en 0', text: '30 termina en 0: se divide exacto entre 10. Si termina en otra cifra, no.' },
-      6: { title: 'Divisible entre 3: suma las cifras', text: 'Suma las cifras de 12: 1 + 2 = 3. El 3 se divide exacto entre 3. Por eso 12 es divisible entre 3.' },
+      1: { title: 'Divisible: no sobra nada', text: '12 bolas en grupos de 3: salen 4 grupos y no sobra ninguna. Por eso 12 es divisible entre 3.' },
+      2: { title: 'No divisible: sobra algo', text: '13 bolas en grupos de 3: salen 4 grupos y sobra 1 bola. Esa bola es el resto. Por eso 13 no es divisible entre 3.' },
+      3: { title: 'Regla del 2: termina en cifra par', text: 'Si termina en 0, 2, 4, 6 u 8, se divide exacto entre 2. Toca los números que sí se dividen entre 2.' },
+      4: { title: 'Regla del 3: suma las cifras', text: 'Suma las cifras: si la suma se divide exacto entre 3, el número también. Toca los que sí se dividen entre 3.' },
+      5: { title: 'Regla del 5: termina en 0 o en 5', text: 'Si termina en 0 o en 5, se divide exacto entre 5. Toca los que sí se dividen entre 5.' },
+      6: { title: 'Regla del 10: termina en 0', text: 'Si termina en 0, se divide exacto entre 10. Toca los que sí se dividen entre 10.' },
       7: { title: 'Si la suma no se divide entre 3, tampoco', text: 'Suma las cifras de 14: 1 + 4 = 5. Como 5 no se divide entre 3, 14 no es divisible entre 3.' },
       8: { title: 'Lo que sobra es el resto', text: '13 bolas en paquetes de 5: se llenan 2 paquetes. Sobran 3 bolas. Ese 3 es el resto: no llena un paquete.' }
     },

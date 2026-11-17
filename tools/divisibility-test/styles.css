@@ -73,3 +73,41 @@
 .ops-div-result { margin-top: 4px; }
 .ops-div-choice[aria-pressed="true"] { background: var(--mod-razonamiento); color: var(--color-superficie); }
 .ops-tap { gap: 14px; }
+.ops-div-done { color: var(--mod-razonamiento); }
+
+/* The rule of the game, written above its numbers. */
+.div-rule-card {
+  margin: 0;
+  padding: 12px 14px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* The balls, as in Pares e impares: one framed group per full group, the balls left over apart. */
+.div-balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.div-ball-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+}
+.div-ball-left { border-style: dashed; }
+.div-ball {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  color: #1F1D1A;
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
