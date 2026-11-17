@@ -1,7 +1,6 @@
 /* Fractions — tool-specific styles. Shared styles live in assets/css/. */
 
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
-.btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 .center-row { justify-content: center; }
 

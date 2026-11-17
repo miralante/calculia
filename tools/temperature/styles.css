@@ -4,7 +4,6 @@
    readout. Layout checked at 320, 375, 768 and desktop widths. */
 
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
-.btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 
 /* ---- Menu ---- */

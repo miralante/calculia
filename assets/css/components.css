@@ -43,10 +43,13 @@ img, svg, canvas, input, select, textarea, button { max-width: 100%; }
 .btn:hover { transform: scale(1.03); box-shadow: var(--sombra); }
 .btn:active { transform: scale(0.98); }
 
+/* Secondary buttons take the progress bar's colour (--mod-coordinacion, the same token as .progress-fill),
+   so the arrows and the secondary actions read as one set with the bar. The text uses the token that
+   reads on accents in each theme (--texto-sobre-acento: white on the light theme's blue, dark on dark). */
 .btn-secondary {
-  background: var(--color-superficie);
-  color: var(--color-texto);
-  border-color: var(--color-borde);
+  background: var(--mod-coordinacion);
+  color: var(--texto-sobre-acento);
+  border-color: var(--mod-coordinacion);
 }
 
 .btn-acierto { background: var(--color-acierto); }

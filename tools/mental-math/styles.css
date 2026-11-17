@@ -3,7 +3,6 @@
    (the cycle repeats every group of 3 digits). Signs are shown in orange. */
 
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
-.btn:not(.btn-secondary):not(.btn-audio) { background: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 .center-row { justify-content: center; }
 
