@@ -52,6 +52,14 @@ img, svg, canvas, input, select, textarea, button { max-width: 100%; }
   border-color: var(--mod-coordinacion);
 }
 
+/* The carousel arrows keep the plain look: they only move through the slides.
+   The start and end buttons of the activity carry the progress bar's colour. */
+.carousel-controls .btn-secondary {
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border-color: var(--color-borde);
+}
+
 .btn-acierto { background: var(--color-acierto); }
 
 /* En pantallas altas (escritorio típico) los botones se compactan:

@@ -2,9 +2,6 @@
 
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
-.btn:not(.btn-secondary):not(.btn-audio) {
-  background: var(--mod-razonamiento);
-}
 
 .instruction { flex: 1; min-width: 200px; }
 

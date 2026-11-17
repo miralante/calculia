@@ -13,9 +13,6 @@
 
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
-.btn:not(.btn-secondary):not(.btn-audio) {
-  background: var(--mod-razonamiento);
-}
 
 /* ---- Galería única de 7 slides (mismo flujo que Formas) ----
    Una sola card visible a la vez. El visual ocupa la mayor
