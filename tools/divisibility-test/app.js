@@ -2,7 +2,7 @@
    Calculia — Divisibilidad
    Two stages, the flow of Operaciones: 1. explanation (slides: the text on
    the left, and on the right a frame the child works with: share balls in
-   groups, tap the numbers that divide exactly, add the digits), 2. test (one
+   groups, the teacher's number with the child's divisor, add the digits), 2. test (one
    question at a time). There is no real-life stage: the test is the practice.
    The stages and the screens are built by assets/js/activity-flow.js (mode
    'options', skipReal); a question of a rule has several steps (`steps`),
@@ -96,21 +96,57 @@
     return '<div class="ops-div">' + ballsBody(f.n, f.d) + '</div>';
   }
 
-  /* The tap frame, a game for one rule: the rule is written above the numbers, and the
-     numbers are buttons. A tap shows the division for that number; find all the ones that
-     divide exactly and the game is won. For 3, the digits and their sum are shown too. */
-  function tapFrameHtml(f) {
-    var total = f.numbers.filter(function (v) { return v % f.d === 0; }).length;
-    var chips = f.numbers.map(function (v) {
-      return '<button type="button" class="btn btn-secondary ops-div-chip" data-tap="' + v + '" data-d="' + f.d + '">' + v + '</button>';
-    }).join('');
-    return '<div class="ops-div ops-tap" data-total="' + total + '">' +
-      '<p class="div-rule-card">' + t('ui.ruleCard' + f.d) + '</p>' +
-      '<p class="ops-story">' + fill(t('ui.tapInstruction'), { d: f.d }) + '</p>' +
-      '<div class="ops-div-chips">' + chips + '</div>' +
-      '<p class="ops-expr ops-div-result" hidden></p>' +
-      '<p class="ops-expr ops-div-done" hidden>' + fill(t('ui.tapDone'), { d: f.d }) + '</p>' +
-      '</div>';
+  /* The teacher frame, a game for one rule. The teacher (the app) has chosen a number, and
+     shows it; the child chooses a divisor (2, 3, 5 or 10). Then the teacher checks the rule
+     for that divisor on the number (the last digit, or the sum of the digits for 3) and gives
+     the division. «Otro número» lets the teacher choose another number from the list. The
+     frame is redrawn from its own data attributes, as the groups frame is. */
+  function teacherBody(numbers, idx, rule, pick) {
+    var n = numbers[idx];
+    var html = '<p class="div-rule-card">' + t('ui.ruleCard' + rule) + '</p>';
+    html += '<p class="ops-story">' + fill(t('ui.teacherStart'), { n: n }) + '</p>';
+    html += '<div class="ops-div-choices">' + DATA.divisors.map(function (v) {
+      return '<button type="button" class="btn btn-secondary ops-div-choice" data-teacher-d="' + v + '" aria-pressed="' +
+        (v === pick) + '">' + fill(t('ui.divChoice'), { d: v }) + '</button>';
+    }).join('') + '</div>';
+    if (pick) html += teacherResult(n, pick);
+    html += '<div class="ops-div-actions"><button type="button" class="btn btn-secondary" data-teacher-next>' +
+      t('ui.teacherNext') + '</button></div>';
+    return html;
+  }
+  /* The teacher's answer for the number n and the divisor d: the rule, then the division. */
+  function teacherResult(n, d) {
+    var q = Math.floor(n / d);
+    var r = n % d;
+    var rule;
+    if (d === 3) {
+      var s = digitSum(n);
+      var sumValues = { n: n, a: Math.floor(n / 10), b: n % 10, s: s, q3: Math.floor(s / 3), r: s % 3 };
+      rule = fill(t('q.rule.sumExplain'), sumValues) + ' ' + fill(t(s % 3 ? 'q.rule.div3No' : 'q.rule.div3Yes'), sumValues);
+    } else {
+      var c = n % 10;
+      var ok = d === 2 ? c % 2 === 0 : (d === 5 ? c === 0 || c === 5 : c === 0);
+      rule = fill(t('q.rule.check.' + d + (ok ? '.yes' : '.no')), { c: c });
+    }
+    return '<p class="ops-story">' + rule + '</p>' +
+      '<p class="ops-expr ops-div-result">' + fill(t(r ? 'q.yesno.no' : 'q.yesno.yes'), { n: n, d: d, q: q, r: r }) + '</p>';
+  }
+  function teacherFrameHtml(f) {
+    return '<div class="ops-div div-teacher" data-numbers="' + f.numbers.join(',') + '" data-idx="0" data-rule="' + f.d + '">' +
+      teacherBody(f.numbers, 0, f.d, 0) + '</div>';
+  }
+  function teacherPick(button) {
+    var w = button.closest('.div-teacher');
+    var numbers = w.getAttribute('data-numbers').split(',').map(Number);
+    w.innerHTML = teacherBody(numbers, Number(w.getAttribute('data-idx')), Number(w.getAttribute('data-rule')),
+      Number(button.getAttribute('data-teacher-d')));
+  }
+  function teacherNext(button) {
+    var w = button.closest('.div-teacher');
+    var numbers = w.getAttribute('data-numbers').split(',').map(Number);
+    var idx = (Number(w.getAttribute('data-idx')) + 1) % numbers.length;
+    w.setAttribute('data-idx', String(idx));
+    w.innerHTML = teacherBody(numbers, idx, Number(w.getAttribute('data-rule')), 0);
   }
 
   /* The digits frame: the digits of n, their sum on a button, then the sum shared in groups of 3. */
@@ -138,7 +174,7 @@
     var f = slide && slide.frame;
     if (!f) return '';
     if (f.kind === 'balls') return ballsFrameHtml(f);
-    if (f.kind === 'tap') return tapFrameHtml(f);
+    if (f.kind === 'teacher') return teacherFrameHtml(f);
     if (f.kind === 'digits') return digitsFrameHtml(f);
     return groupsFrameHtml(f);
   }
@@ -146,26 +182,6 @@
   /* The frames' buttons. A group or a choice redraws the frame from its own data attributes. */
   function frameOpts(w) {
     return { choices: w.getAttribute('data-choices') === '1' };
-  }
-  function tapChip(chip) {
-    if (chip.disabled) return;
-    var n = Number(chip.getAttribute('data-tap'));
-    var d = Number(chip.getAttribute('data-d'));
-    var q = Math.floor(n / d);
-    var r = n % d;
-    chip.disabled = true;
-    chip.classList.add(r ? 'is-no' : 'is-yes');
-    chip.textContent = n + (r ? ' ✕' : ' ✓');
-    var box = chip.closest('.ops-tap');
-    var out = box.querySelector('.ops-div-result');
-    var text = fill(t(r ? 'ui.tapNo' : 'ui.tapYes'), { n: n, d: d, q: q, r: r });
-    if (d === 3) text += ' ' + fill(t('ui.digitsResult'), { parts: String(n).split('').join(' + '), s: digitSum(n) });
-    out.textContent = text;
-    out.hidden = false;
-    /* The game is won when every number that divides exactly has been found. */
-    if (box.querySelectorAll('.is-yes').length === Number(box.getAttribute('data-total'))) {
-      box.querySelector('.ops-div-done').hidden = false;
-    }
   }
   function groupsStep(button) {
     var w = button.closest('.ops-div');
@@ -182,8 +198,10 @@
   document.addEventListener('click', function (e) {
     var target = e.target.closest ? e.target : null;
     if (!target) return;
-    var chip = target.closest('[data-tap]');
-    if (chip) { tapChip(chip); return; }
+    var teacherChoice = target.closest('[data-teacher-d]');
+    if (teacherChoice) { teacherPick(teacherChoice); return; }
+    var teacherNextBtn = target.closest('[data-teacher-next]');
+    if (teacherNextBtn) { teacherNext(teacherNextBtn); return; }
     var choice = target.closest('[data-divisor]');
     if (choice) {
       var cw = choice.closest('.ops-div');

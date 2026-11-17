@@ -103,4 +103,8 @@
 .mul-result { margin: 0; font-size: var(--texto-grande); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
 .mul-why { margin: 0; line-height: 1.4; }
 
+/* The partner's drawing: a line saying who chose what, then the groups it makes. */
+.mul-draw { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+.mul-partner { margin: 0; text-align: center; line-height: 1.4; }
+
 /* Test answers */

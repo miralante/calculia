@@ -50,10 +50,11 @@
   var PRACTICE_HTML = [
     '<section id="screenPractice" class="hidden stack">',
     '  <div class="card centered stack mul-game">',
-    '    <p class="instruction" data-i18n="practice.start">Número de partida</p>',
+    '    <p class="instruction" data-i18n="practice.start">Yo elijo este número</p>',
     '    <p class="mul-start" id="mulStart" aria-live="polite"></p>',
-    '    <p class="instruction" data-i18n="practice.pick">Elige otro número del 1 al 9.</p>',
+    '    <p class="instruction" data-i18n="practice.pick">Ahora elige tú otro número del 1 al 9.</p>',
     '    <div class="mul-picker" id="mulPicker"></div>',
+    '    <div class="mul-draw" id="mulDraw" aria-live="polite"></div>',
     '    <p class="mul-result" id="mulResult" aria-live="polite"></p>',
     '    <p class="mul-why" id="mulWhy" aria-live="polite"></p>',
     '  </div>',
@@ -92,15 +93,18 @@
     game.a = drawStart(game.a);
     game.answered = false;
     $('#mulStart').textContent = String(game.a);
+    $('#mulDraw').innerHTML = '';
     $('#mulResult').textContent = '';
     $('#mulWhy').textContent = '';
     paintPicker();
   }
 
-  /* The user picked b: the product, and why it is a multiple of both numbers. */
+  /* The user picked b. The partner (the app) makes the multiple: a groups of b dots,
+     the product, and why it is a multiple of both numbers. */
   function answer(b) {
     var a = game.a;
     var m = a * b;
+    $('#mulDraw').innerHTML = '<p class="mul-partner">' + fill(t('practice.partner'), { a: a, b: b }) + '</p>' + groupsHtml(a, b);
     $('#mulResult').textContent = fill(t('practice.result'), { a: a, b: b, m: m });
     $('#mulWhy').textContent = fill(t('practice.why'), { a: a, b: b, m: m });
     if (!game.answered) {

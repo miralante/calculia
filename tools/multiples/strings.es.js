@@ -31,9 +31,10 @@
 
     /* La práctica: un juego a la derecha de la explicación. */
     practice: {
-      start: 'Número de partida',
-      pick: 'Elige otro número del 1 al 9.',
+      start: 'Yo elijo este número',
+      pick: 'Ahora elige tú otro número del 1 al 9.',
       pickAria: 'Multiplicar {a} por {b}',
+      partner: 'Yo elijo {a} y tú eliges {b}. Hacemos el múltiplo:',
       result: '{a} × {b} = {m}',
       why: '{m} es múltiplo de {a} y de {b}. El múltiplo de {a} sale al multiplicarlo por {b}.',
       other: 'Otro número de partida'

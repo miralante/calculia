@@ -35,3 +35,8 @@
 .div-pick { min-height: 56px; font-size: var(--texto-grande); font-weight: 800; }
 .div-result { margin: 0; font-size: var(--texto-grande); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
 .div-why { margin: 0; line-height: 1.4; }
+
+/* The partner's drawing: the groups of the divisor, and the part left over in a dashed box. */
+.div-draw { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+.div-partner { margin: 0; text-align: center; line-height: 1.4; }
+.div-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; }

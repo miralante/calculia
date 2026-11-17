@@ -57,10 +57,11 @@
   var PRACTICE_HTML = [
     '<section id="screenPractice" class="hidden stack">',
     '  <div class="card centered stack div-game">',
-    '    <p class="instruction" data-i18n="practice.start">Número de partida</p>',
+    '    <p class="instruction" data-i18n="practice.start">Yo elijo este número</p>',
     '    <p class="div-start" id="divStart" aria-live="polite"></p>',
-    '    <p class="instruction" data-i18n="practice.pick">Elige otro número del 1 al 9.</p>',
+    '    <p class="instruction" data-i18n="practice.pick">Ahora elige tú un número del 1 al 9. Es el divisor.</p>',
     '    <div class="div-picker" id="divPicker"></div>',
+    '    <div class="div-draw" id="divDraw" aria-live="polite"></div>',
     '    <p class="div-result" id="divResult" aria-live="polite"></p>',
     '    <p class="div-why" id="divWhy" aria-live="polite"></p>',
     '  </div>',
@@ -71,9 +72,9 @@
   /* The context of the activity and the starting number of the round. Set on the first start. */
   var game = null;
 
-  /* A starting number from DATA.numbers, different from the last one. */
+  /* The partner's number from DATA.starts, different from the last one. */
   function drawStart(last) {
-    var list = DATA.numbers;
+    var list = DATA.starts;
     var a;
     do { a = list[Math.floor(Math.random() * list.length)]; } while (list.length > 1 && a === last);
     return a;
@@ -99,17 +100,35 @@
     game.a = drawStart(game.a);
     game.answered = false;
     $('#divStart').textContent = String(game.a);
+    $('#divDraw').innerHTML = '';
     $('#divResult').textContent = '';
     $('#divWhy').textContent = '';
     paintPicker();
   }
 
-  /* The user picked b: the product, and why both numbers divide it exactly. */
+  /* The partner's number a split into groups of the user's divisor b: complete groups, and
+     what is left over in its own colour. */
+  function divideDrawHtml(a, b) {
+    var q = Math.floor(a / b);
+    var r = a % b;
+    var html = '<p class="div-partner">' + fill(t('practice.partner'), { a: a, b: b }) + '</p><div class="ops-group-stack">';
+    for (var g = 0; g < q; g += 1) html += '<div class="ops-group-box"><div class="ops-row">' + items(b, 'ops-item') + '</div></div>';
+    if (r) html += '<div class="ops-group-box div-left"><div class="ops-row">' + items(r, 'ops-item') + '</div></div>';
+    return html + '</div>';
+  }
+
+  /* The user picked b: the partner divides a by b, and says whether b is a divisor of a. */
   function answer(b) {
     var a = game.a;
-    var m = a * b;
-    $('#divResult').textContent = fill(t('practice.result'), { a: a, b: b, m: m });
-    $('#divWhy').textContent = fill(t('practice.why'), { a: a, b: b, m: m });
+    var q = Math.floor(a / b);
+    var r = a % b;
+    $('#divDraw').innerHTML = divideDrawHtml(a, b);
+    $('#divResult').textContent = r
+      ? fill(t('ui.divideRest'), { n: a, k: b, q: q, r: r })
+      : fill(t('ui.divide'), { n: a, k: b, q: q });
+    $('#divWhy').textContent = r
+      ? fill(t('practice.whyNo'), { a: a, b: b, r: r })
+      : fill(t('practice.why'), { a: a, b: b, q: q });
     if (!game.answered) {
       game.answered = true;
       game.ctx.progress.stars += 1;

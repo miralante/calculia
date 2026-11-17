@@ -28,11 +28,12 @@
 
     /* La práctica: un juego a la derecha de la explicación. */
     practice: {
-      start: 'Número de partida',
-      pick: 'Elige otro número del 1 al 9.',
-      pickAria: 'Multiplicar {a} por {b}',
-      result: '{a} × {b} = {m}',
-      why: '{m} ÷ {a} = {b}, sin sobrar. Por eso {a} es divisor de {m}. También {b} es divisor de {m}.',
+      start: 'Yo elijo este número',
+      pick: 'Ahora elige tú un número del 1 al 9. Es el divisor.',
+      pickAria: 'Dividir {a} entre {b}',
+      partner: 'Yo elijo {a} y tú eliges {b}. Hacemos el reparto en grupos de {b}:',
+      why: '{a} se reparte en {q} grupos de {b} sin sobrar. Por eso {b} es divisor de {a}.',
+      whyNo: '{a} no se reparte en grupos de {b} sin sobrar: sobra {r}. Por eso {b} no es divisor de {a}.',
       other: 'Otro número de partida'
     }
   }, 'es');

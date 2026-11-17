@@ -31,9 +31,10 @@
 
     /* The practice: a game on the right of the explanation. */
     practice: {
-      start: 'Starting number',
-      pick: 'Choose another number from 1 to 9.',
+      start: 'I choose this number',
+      pick: 'Now you choose another number from 1 to 9.',
       pickAria: 'Multiply {a} by {b}',
+      partner: 'I chose {a} and you chose {b}. Let us make the multiple:',
       result: '{a} × {b} = {m}',
       why: '{m} is a multiple of {a} and of {b}. A multiple of {a} comes from multiplying it by {b}.',
       other: 'Another starting number'

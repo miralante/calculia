@@ -87,6 +87,9 @@
   text-align: center;
 }
 
+/* The teacher's frame: the number the teacher chose, the divisors the child chooses from. */
+.div-teacher { width: 100%; }
+
 /* The balls, as in Pares e impares: one framed group per full group, the balls left over apart. */
 .div-balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .div-ball-group {

@@ -28,11 +28,12 @@
 
     /* The practice: a game on the right of the explanation. */
     practice: {
-      start: 'Starting number',
-      pick: 'Choose another number from 1 to 9.',
-      pickAria: 'Multiply {a} by {b}',
-      result: '{a} × {b} = {m}',
-      why: '{m} ÷ {a} = {b}, with nothing left over. So {a} is a divisor of {m}. {b} is a divisor of {m} too.',
+      start: 'I choose this number',
+      pick: 'Now you choose a number from 1 to 9. It is the divisor.',
+      pickAria: 'Divide {a} by {b}',
+      partner: 'I chose {a} and you chose {b}. Let us share it into groups of {b}:',
+      why: '{a} splits into {q} groups of {b} with nothing left over. So {b} is a divisor of {a}.',
+      whyNo: '{a} does not split into groups of {b} with nothing left over: {r} is left over. So {b} is not a divisor of {a}.',
       other: 'Another starting number'
     }
   }, 'en');

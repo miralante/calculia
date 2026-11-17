@@ -11,6 +11,9 @@
 var DATA = {
   numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
 
+  /* The partner's own numbers: the app chooses one of these, the user chooses a divisor from `numbers`. */
+  starts: [6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 24],
+
   intro: [
     { visual: { kind: 'groups', each: 4, count: 3 } },
     { visual: { kind: 'divide', each: 12, count: 10 } },
