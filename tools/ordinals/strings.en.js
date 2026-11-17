@@ -50,7 +50,7 @@
        reminder on screen 3 already shows the whole series, repeating
        them here was just re-loading the same content. */
     famousTitle: 'In real life',
-    famousSubtitle: 'Four places where ordinals make sense:',
+    famousSubtitle: 'Places where ordinals make sense:',
     /* The 'back: ← Back' for screen 2 used to live here: back
        navigation between screens (1→2→3→4→5) no longer exists. Only
        the header's '← Volver' is left, which goes to the Calculia

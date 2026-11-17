@@ -945,7 +945,27 @@ async function enterShapesIntro(page) {
   await page.waitForSelector('#screenIntro:not(.hidden)', { timeout: NAV_TIMEOUT });
 }
 
+/* Raised when the four test questions show no hint at all (see the check in
+   exerciseShapesOnce). It is the only failure that is retried. */
+class NoHintSeen extends Error {}
+
+/* A wrong answer shows a hint only when the option clicked first is wrong. The
+   options are shuffled, so the first option can be right in all four questions
+   (about one run in eighty) and then no hint is ever shown. That is a fact of the
+   random round, not a broken hint, so the whole exercise runs again from a fresh
+   round. Three tries make a real miss practically impossible. */
 async function exerciseShapes(page, baseUrl) {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await exerciseShapesOnce(page, baseUrl);
+    } catch (error) {
+      if (!(error instanceof NoHintSeen) || attempt >= 3) throw error;
+      process.stdout.write('\n[' + APP + '] Formas: ronda sin pistas, se repite (intento ' + (attempt + 1) + ')');
+    }
+  }
+}
+
+async function exerciseShapesOnce(page, baseUrl) {
   let actions = 0;
   await page.goto(baseUrl + '/');
   await page.evaluate(() => localStorage.removeItem('calculia:shapes'));
@@ -1422,7 +1442,9 @@ async function exerciseShapes(page, baseUrl) {
     await page.locator('#btnNext').click();
     await page.waitForTimeout(150);
   }
-  assert.ok(hintsSeen > 0, 'Ninguna respuesta equivocada mostró pista en cuatro preguntas');
+  if (hintsSeen === 0) {
+    throw new NoHintSeen('Ninguna respuesta equivocada mostró pista en cuatro preguntas');
+  }
 
   /* La aclaración de la galería también tiene que estar en inglés: si
      falta, sale el nombre de la clave en pantalla. Se comprueba una

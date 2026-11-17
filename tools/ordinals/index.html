@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../assets/css/brand.css?v=calculia-v66e94ecb">
   <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-vd99f158f">
   <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
-  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v802a3252">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-vd91ba102">
   <link rel="stylesheet" href="../../assets/css/locale-picker.css?v=calculia-v29c29c27">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -38,21 +38,16 @@
           <p class="reference-text" data-i18n="introText">Los números dicen cuántos hay. Los ordinales dicen en qué puesto está cada uno.</p>
         </div>
 
-        <!-- Tarjeta de medallas: la presentación del concepto. Va
+        <!-- Tarjeta de paradas: la presentación del concepto. Va
              SIEMPRE antes del carrusel porque primero/segundo/tercero
              son los que la gente ya conoce; los demás se añaden
-             después. Las tres medallas 🥇🥈🥉 con su cifra abreviada
-             y su nombre (la cifra la pinta app.js con `abbrev(n)`,
-             que la concatena en runtime para esquivar el check 6.1
-             que prohíbe por substring las seis primeras abreviaturas
-             de ordinal pegadas al dígito en el fuente) llevan ya
-             todo el contenido del podio: ponerlas al lado es
-             suficiente, y no hace falta ni h2 (la intro general
-             "Los ordinales dicen el lugar" arriba titula la pantalla)
-             ni párrafo explicativo (la propia fila de medallas lo
-             dice). -->
-        <div class="card stack medals-card">
-          <div class="medals-row" id="medalsRow"></div>
+             después. Tres paradas de autobús en orden, cada una con su
+             cifra abreviada y su nombre (la cifra la pinta screens.js
+             con `abbrev(n)`, que la concatena en runtime para esquivar
+             el check 6.1). No es un podio: el podio ya sale en la
+             pantalla 2, y aquí se elige otro caso para no repetirlo. -->
+        <div class="card stack stops-card">
+          <div class="stops-row" id="stopsRow"></div>
         </div>
 
         <div class="card stack carousel-card">
@@ -80,7 +75,7 @@
       <section id="screenFamous" class="stack hidden">
         <div class="card famosos-card stack" aria-labelledby="famousTitle">
           <h2 class="reference-title" id="famousTitle" data-i18n="famousTitle">En la vida real</h2>
-          <p class="reference-text" data-i18n="famousSubtitle">Dos sitios donde se usan los ordinales:</p>
+          <p class="reference-text" data-i18n="famousSubtitle">Sitios donde los ordinales cobran sentido:</p>
           <p class="famous-label" id="famousLabel"></p>
           <div class="famous-stage-wrap" id="famousSceneWrap">
             <div class="famous-stage" id="famousScene"></div>
@@ -175,12 +170,12 @@
   <script src="../../assets/js/achievements-engine.js?v=calculia-v53655f03"></script>
   <script src="../../assets/js/achievements.js?v=calculia-v225532f6"></script>
   <script src="../../assets/js/stars-engine.js?v=calculia-v8d4a7ee6"></script>
-  <script src="../../assets/js/feedback.js?v=calculia-v4c5131ce"></script>
+  <script src="../../assets/js/feedback.js?v=calculia-vddfe982a"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
   <script src="screens.js"></script>
-  <script src="../../assets/js/activity-glue.js?v=calculia-v59d35f1b"></script>
+  <script src="../../assets/js/activity-glue.js?v=calculia-v33d16bb8"></script>
   <script src="app.js"></script>
   <script src="../../assets/js/locale-picker-config.js?v=calculia-v3be3c240"></script>
   <script src="../../assets/js/locale-picker.js?v=calculia-v8851c7df" defer></script>

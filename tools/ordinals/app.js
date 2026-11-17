@@ -539,7 +539,12 @@
   };
 
   $('#next').addEventListener('click', next);
-  
+
+  /* "Empezar a practicar" enters the practice directly, as roman-numerals
+     does. The steps screen is still there (the back link of the quiz returns to
+     it); it has one level, so the practice is the only thing to choose. */
+  $('#referenceNext').addEventListener('click', function () { startLevel(DATA.levels[0]); });
+
 
   function init() {
     App.i18n.apply();

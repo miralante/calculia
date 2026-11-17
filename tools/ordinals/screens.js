@@ -1,6 +1,6 @@
 /* ============================================================
    Calculia — Ordinal numbers: the three screens before the levels.
-   Screen 1 is the podium card and the carousel, screen 2 the real-life
+   Screen 1 is the bus-stop card and the carousel, screen 2 the real-life
    scenes (the podium, the ranking, the queue and the building) and screen 3
    the reminder (the ordinal row and the rule). This file owns their drawing
    and their buttons. The page gives it switchTo() and the abbreviation helper,
@@ -46,24 +46,30 @@
        Screen 1: podium card + carousel
        ============================================================ */
 
-    /* The podium card is fixed and always comes before the carousel: first,
-       second and third are the ones people already know. The podium is drawn
-       as three columns (2nd, 1st, 3rd) whose stands rise to the first place,
-       so the shape itself says who won. */
-    function paintMedals() {
-      var el = $('#medalsRow');
+    /* The stops card is fixed and always comes before the carousel: first,
+       second and third are the ones people already know. It uses a bus route
+       (three stops in order) instead of the podium, which is already the
+       first scene of screen 2; the podium's own case is not repeated here. */
+    function stopSvg() {
+      return '<svg class="stop-svg" width="40" height="40" viewBox="0 0 40 40" aria-hidden="true" focusable="false">' +
+        '<rect x="18" y="18" width="4" height="20" rx="2" fill="currentColor"/>' +
+        '<rect x="8" y="3" width="24" height="18" rx="6" fill="currentColor"/>' +
+        '</svg>';
+    }
+
+    function paintStops() {
+      var el = $('#stopsRow');
       if (!el) return;
-      var order = [2, 1, 3];
       el.setAttribute('role', 'group');
       el.setAttribute('aria-label', [1, 2, 3].map(function (n) {
         return abbrev(n) + ' — ' + t('ord.' + n + 'Name');
       }).join('; '));
-      el.innerHTML = order.map(function (n) {
-        return '<div class="podium-col">' +
-          medalSvg(n) +
-          '<div class="podium-stand podium-stand--' + n + '">' +
-            '<span class="podium-figure">' + abbrev(n) + '</span>' +
-            '<span class="podium-name">' + t('ord.' + n + 'Name') + '</span>' +
+      el.innerHTML = [1, 2, 3].map(function (n) {
+        return '<div class="stop-col">' +
+          '<span class="stop-sign">' + stopSvg() + '</span>' +
+          '<div class="stop-stand">' +
+            '<span class="stop-figure">' + abbrev(n) + '</span>' +
+            '<span class="stop-name">' + t('ord.' + n + 'Name') + '</span>' +
           '</div>' +
         '</div>';
       }).join('');
@@ -334,13 +340,13 @@
       });
       $('#famousNext2').addEventListener('click', function () { famousStep(1); });
       $('#famousNextBtn').addEventListener('click', function () { switchTo(reminderScreen); });
-
-      $('#referenceNext').addEventListener('click', function () { switchTo(levelsScreen); });
+      /* #referenceNext ("Empezar a practicar") is bound in app.js: it starts the
+         practice directly, as roman-numerals does, instead of showing the steps. */
     }
 
     return {
       paint: function () {
-        paintMedals();
+        paintStops();
         paintCarousel();
         paintFamous();
         paintOrdinalRow();

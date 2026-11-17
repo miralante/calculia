@@ -34,7 +34,7 @@
    Shared card titles
    ============================================================ */
 .reference-card,
-.medals-card,
+.stops-card,
 .famosos-card,
 .ordinals-card,
 .rule-card,
@@ -53,7 +53,8 @@
    Three columns, 2nd · 1st · 3rd. The stands rise to the first place, so
    the shape says who won before anyone reads a word.
    ============================================================ */
-.medals-row {
+/* Screen 1 intro: three bus stops in order, first to third, left to right. */
+.stops-row {
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -62,7 +63,7 @@
   padding-top: 8px;
 }
 
-.podium-col {
+.stop-col {
   flex: 1 1 0;
   max-width: 124px;
   display: flex;
@@ -71,7 +72,10 @@
   gap: 6px;
 }
 
-.podium-stand {
+.stop-sign { line-height: 0; color: var(--mod-razonamiento); }
+.stop-svg { display: block; }
+
+.stop-stand {
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -79,22 +83,14 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 8px 4px;
-  border-radius: 12px 12px 0 0;
+  padding: 10px 4px;
+  border-radius: 12px;
   background: var(--mod-razonamiento-suave);
   color: var(--color-texto);
 }
-.podium-stand--2 { height: 92px; }
-.podium-stand--3 { height: 72px; }
-.podium-stand--1 {
-  height: 124px;
-  background: var(--mod-razonamiento);
-  color: var(--texto-sobre-acento);
-}
 
-.podium-figure { font-size: 28px; font-weight: 800; line-height: 1; }
-.podium-stand--1 .podium-figure { font-size: 32px; }
-.podium-name { font-size: var(--texto-pequeno); font-weight: 700; }
+.stop-figure { font-size: 28px; font-weight: 800; line-height: 1; }
+.stop-name { font-size: var(--texto-pequeno); font-weight: 700; }
 
 /* ============================================================
    Screen 1: carousel
@@ -536,10 +532,8 @@
    Responsive: 320 / 375 / 768 / desktop
    ============================================================ */
 @media (max-width: 480px) {
-  .podium-col { gap: 4px; }
-  .podium-figure { font-size: 24px; }
-  .podium-stand--1 .podium-figure { font-size: 26px; }
-  .podium-name { font-size: var(--texto-base); }
+  .stop-figure { font-size: 24px; }
+  .stop-name { font-size: var(--texto-base); }
   .ordinal-hero { font-size: 60px; }
   .quiz-shown { font-size: 48px; min-height: 72px; }
   .big-digit { font-size: 64px; }
@@ -550,9 +544,6 @@
 }
 
 @media (max-width: 360px) {
-  .podium-stand--1 { height: 100px; }
-  .podium-stand--2 { height: 76px; }
-  .podium-stand--3 { height: 60px; }
   .quiz-shown { font-size: 38px; }
   .queue-member, .queue-pointer { width: 34px; font-size: 1.4rem; }
   .queue-start-spacer, .queue-start.queue-goal { width: 48px; min-width: 48px; }

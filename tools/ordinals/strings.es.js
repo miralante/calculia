@@ -56,7 +56,7 @@
        recordatorio de la pantalla 3 ya muestra la serie entera, y
        repetirlas aquí era recargar lo mismo. */
     famousTitle: 'En la vida real',
-    famousSubtitle: 'Cuatro sitios donde los ordinales cobran sentido:',
+    famousSubtitle: 'Sitios donde los ordinales cobran sentido:',
     /* Antes había aquí un 'back: Anterior' para Pantalla 2: la navegación
        hacia atrás entre pantallas (1→2→3→4→5) ya no existe. Solo
        queda el "← Volver" de la cabecera, que va a la portada de
