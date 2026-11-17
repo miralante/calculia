@@ -445,11 +445,12 @@
     }
     ctx.save();
     /* No end screen: the achievement screen (celebrate.js) closes the round. "A por más"
-       goes to the next step of the chain when there is one, else to another round. */
+       goes to the next step of the chain when there is one, else back to the entry point
+       of the activity (its first explanation slide). */
     var more = hasNextStep(ctx);
     App.feedback.celebrate(
       t(ctx.config.celebrateKey || 'core.roundComplete'),
-      function () { if (more) nextStep(ctx); else startRound(ctx); },
+      function () { if (more) nextStep(ctx); else reviewIntro(ctx); },
       App.feedback.starsGoal(progress.stars)
     );
   }

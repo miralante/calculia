@@ -242,3 +242,10 @@
 .ops-calc { margin-top: 4px; }
 .ops-int { color: var(--mod-razonamiento); font-weight: 900; }
 .ops-calc-parts { margin: 0; }
+/* A game's check: one question, its answers as buttons. Hidden until the game has been played (the attribute, not a class). */
+.ops-check { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.ops-check[hidden] { display: none; }
+.ops-check-q { margin: 0; font-weight: 700; text-align: center; }
+.ops-check-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.ops-check-option.is-wrong { opacity: 0.6; text-decoration: line-through; }
+.ops-check-msg { margin: 0; min-height: 1.5em; font-weight: 600; text-align: center; }

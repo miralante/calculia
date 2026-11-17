@@ -57,7 +57,6 @@
   }
 
   var glue = App.activityGlue({
-    again: function () { startRound(); },
     toolId: CONFIG.toolId,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },

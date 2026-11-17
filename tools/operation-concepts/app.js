@@ -145,6 +145,23 @@
   /* The deal drawing: a pool of pieces, empty groups, and the buttons. «Repartir» moves the next piece into the
      next group, in turn, so the sharing is seen happening. The result line shows once the pool is empty. */
   /* `ball`: the pieces are numbered balls (the frame beside the division slides), not slices. */
+  /* A game's check (design §3.5): one question, its answers in a random order, one of them right. A right answer shows
+     ✓ and opens the game's result; a wrong one shows ✗ and closes (no penalty). Hidden until the game has been played. */
+  function checkHtml(question, choices) {
+    var buttons = App.utils.shuffle(choices).map(function (c) {
+      return '<button type="button" class="btn btn-secondary ops-check-option" data-check-option="' + (c.ok ? '1' : '0') + '">' +
+        c.label + '</button>';
+    });
+    return '<div class="ops-check" hidden><p class="ops-story ops-check-q">' + question + '</p>' +
+      '<div class="ops-check-options">' + buttons.join('') + '</div>' +
+      '<p class="ops-check-msg" aria-live="polite"></p></div>';
+  }
+  /* Numeric answers: the right number, then up to two others from `candidates` (zero or more, distinct). */
+  function numberChoices(correct, candidates) {
+    var values = [correct];
+    candidates.forEach(function (v) { if (v >= 0 && values.indexOf(v) === -1 && values.length < 3) values.push(v); });
+    return values.map(function (v) { return { label: String(v), ok: v === correct }; });
+  }
   function dealInner(total, groups, result, ball) {
     var pieces = '';
     for (var i = 0; i < total; i += 1) {
@@ -161,6 +178,7 @@
     return '<div class="ops-deal-pool">' + pieces + '</div>' +
       '<div class="ops-row ops-deal-groups">' + boxes + '</div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + result + '</p>' +
+      checkHtml(t('ui.checkDealQ'), numberChoices(total / groups, [total / groups + 1, total / groups - 1, total / groups + 2])) +
       '<div class="ops-deal-actions">' +
       '<button type="button" class="btn btn-secondary" data-deal="one">' + t('ui.deal') + '</button>' +
       '<button type="button" class="btn btn-secondary" data-deal="reset" hidden>' + t('ui.dealReset') + '</button>' +
@@ -224,6 +242,7 @@
       '<div class="ops-row ops-deal-groups">' + boxes + '</div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + result + '</p>' +
       (calc === 'relation' ? relationLineHtml(total, size) : (calc ? calcLineHtml(total, size) : '')) +
+      checkHtml(t('ui.checkPackQ'), numberChoices(Math.floor(total / size), [Math.floor(total / size) + 1, Math.floor(total / size) - 1, Math.floor(total / size) + 2])) +
       '<div class="ops-deal-actions">' +
       '<button type="button" class="btn btn-secondary" data-pack="one">' + t('ui.packOne') + '</button>' +
       '<button type="button" class="btn btn-secondary" data-pack="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
@@ -290,6 +309,7 @@
       '<div class="ops-group-box ops-join-all ops-deal-group">' + applesHtml(APPLE_RED, a) + applesHtml(APPLE_GREEN, b) + '</div>' +
       '</div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + fill(t('ui.joinResult'), { a: a, b: b, T: a + b }) + '</p>' +
+      checkHtml(fill(t('ui.checkJoinQ'), { a: a, b: b }), numberChoices(a + b, [a + b + 1, a + b - 1, a + b + 2])) +
       '<div class="ops-deal-actions">' +
       '<button type="button" class="btn btn-secondary" data-join="one">' + t('ui.joinOne') + '</button>' +
       '<button type="button" class="btn btn-secondary" data-join="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
@@ -320,6 +340,7 @@
       '<div class="ops-pack-pool">' + pieces(n) + '</div>' +
       '<div class="ops-take-rest" hidden>' + sign('=') + '<div class="ops-take-left">' + pieces(n - take) + '</div></div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + fill(t('ui.takeResult'), { n: n, t: take, r: n - take }) + '</p>' +
+      checkHtml(fill(t('ui.checkTakeQ'), { n: n, t: take }), numberChoices(n - take, [n - take + 1, n - take - 1, n - take + 2])) +
       '<div class="ops-deal-actions">' +
       '<button type="button" class="btn btn-secondary" data-take="one">' + t('ui.takeOne') + '</button>' +
       '<button type="button" class="btn btn-secondary" data-take="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
@@ -363,8 +384,10 @@
       '<div class="ops-group-box ops-deal-group ops-fill-from">' + group(need - have, 'add') + '</div>' +
       '</div>' +
       '<div class="ops-row ops-fill-row">' + holes + '</div>' +
-      '<p class="ops-story ops-fill-left">' + fill(t(sub ? 'ui.fillLeftSub' : 'ui.fillLeftAdd'), values) + '</p>' +
+      /* The count of what is missing is the question's answer, so it stays out of sight until the question is answered. */
+      '<p class="ops-story ops-fill-left" hidden>' + fill(t(sub ? 'ui.fillLeftSub' : 'ui.fillLeftAdd'), values) + '</p>' +
       '<p class="ops-expr ops-deal-result" hidden>' + fill(t(sub ? 'ui.fillResultSub' : 'ui.fillResultAdd'), values) + '</p>' +
+      checkHtml(fill(t(sub ? 'ui.checkFillSubQ' : 'ui.checkFillAddQ'), { n: need }), numberChoices(need - have, [need - have + 1, need - have - 1, need - have + 2])) +
       '<div class="ops-deal-actions">' +
       '<button type="button" class="btn btn-secondary" data-fill="one">' + t(sub ? 'ui.fillOneSub' : 'ui.fillOneAdd') + '</button>' +
       '<button type="button" class="btn btn-secondary" data-fill="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
@@ -383,6 +406,7 @@
       '<div class="ops-swap-row">' + boxA + sign('+') + boxB + '</div>' +
       '<div class="ops-swap-total" hidden>' + sign('=') + '<div class="ops-swap-row">' + boxB + sign('+') + boxA + '</div></div>' +
       '<p class="ops-expr ops-deal-result" hidden>' + fill(t('ui.swapResult'), { a: a, b: b, T: a + b }) + '</p>' +
+      checkHtml(t('ui.checkSwapQ'), [{ label: t('ui.checkYes'), ok: false }, { label: t('ui.checkNo'), ok: true }]) +
       '<div class="ops-deal-actions">' +
       '<button type="button" class="btn btn-secondary" data-swap="one">' + t('ui.swapOne') + '</button>' +
       '<button type="button" class="btn btn-secondary" data-swap="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button>' +
@@ -832,7 +856,7 @@
     /* Nothing left to deal: «Repartir» goes away, the result shows and «Empezar de nuevo» appears. It stays hidden until then. */
     if (!box.querySelector('.ops-deal-pool .ops-deal-piece')) {
       box.querySelector('[data-deal="one"]').hidden = true;
-      box.querySelector('.ops-deal-result').hidden = false;
+      box.querySelector('.ops-check').hidden = false;
       box.querySelector('[data-deal="reset"]').hidden = false;
     }
   }
@@ -889,8 +913,8 @@
         lone.insertAdjacentHTML('afterend', '<span class="ops-tag ops-rest-tag">' + fill(t('ui.remainder'), { r: 1 }) + '</span>');
       }
       box.querySelector('[data-pack="one"]').hidden = true;
-      box.querySelector('.ops-deal-result').hidden = false;
-      box.querySelectorAll('.ops-calc, .ops-calc-parts').forEach(function (el) { el.hidden = false; });
+      /* The result and the calculator's line open only when the question is answered (they give it away). */
+      box.querySelector('.ops-check').hidden = false;
     }
   }
   document.addEventListener('click', function (e) {
@@ -963,7 +987,7 @@
       jbox.querySelector('.ops-join-total').hidden = false;
       join.hidden = true;
       jbox.querySelector('[data-join="reset"]').style.visibility = 'visible';
-      jbox.querySelector('.ops-deal-result').hidden = false;
+      jbox.querySelector('.ops-check').hidden = false;
       return;
     }
     var take = target.closest('[data-take]');
@@ -981,7 +1005,7 @@
     take.hidden = true;
     tbox.querySelector('.ops-take-rest').hidden = false;
     tbox.querySelector('[data-take="reset"]').style.visibility = 'visible';
-    tbox.querySelector('.ops-deal-result').hidden = false;
+    tbox.querySelector('.ops-check').hidden = false;
   });
 
   /* The fill and swap games' buttons. */
@@ -1008,7 +1032,7 @@
       } else {
         fbox.querySelector('.ops-fill-left').hidden = true;
         fillBtn.hidden = true;
-        fbox.querySelector('.ops-deal-result').hidden = false;
+        fbox.querySelector('.ops-check').hidden = false;
         fbox.querySelector('[data-fill="reset"]').style.visibility = 'visible';
       }
       return;
@@ -1025,7 +1049,31 @@
       sbox.querySelector('.ops-swap-total').hidden = false;
       swapBtn.hidden = true;
       sbox.querySelector('[data-swap="reset"]').style.visibility = 'visible';
-      sbox.querySelector('.ops-deal-result').hidden = false;
+      sbox.querySelector('.ops-check').hidden = false;
+    }
+  });
+
+  /* The check's answers: the right one shows ✓, opens the game's result (and the calculator's line, if any) and
+     closes the question; a wrong one shows ✗ and is closed, with no penalty. */
+  document.addEventListener('click', function (e) {
+    var target = e.target.closest ? e.target : null;
+    var option = target ? target.closest('[data-check-option]') : null;
+    if (!option || option.disabled) return;
+    var check = option.closest('.ops-check');
+    if (!check || check.classList.contains('is-solved')) return;
+    var msg = check.querySelector('.ops-check-msg');
+    if (option.getAttribute('data-check-option') === '1') {
+      check.classList.add('is-solved');
+      option.textContent = option.textContent + ' ✓';
+      check.querySelectorAll('[data-check-option]').forEach(function (b) { b.disabled = true; });
+      msg.textContent = t('ui.checkRight');
+      check.parentNode.querySelectorAll(':scope > .ops-deal-result, :scope > .ops-calc, :scope > .ops-calc-parts').forEach(function (el) {
+        el.hidden = false;
+      });
+    } else {
+      option.textContent = option.textContent + ' ✗';
+      option.disabled = true;
+      msg.textContent = t('ui.checkWrong');
     }
   });
 

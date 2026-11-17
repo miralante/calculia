@@ -55,7 +55,6 @@
   });
 
   var glue = App.activityGlue({
-    again: function () { startRound(levelFromProgress()); },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },

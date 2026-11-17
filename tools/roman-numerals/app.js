@@ -492,7 +492,7 @@
       startLevel(currentGroup.sublevels[currentSubIdx], true);
       return;
     }
-    App.feedback.celebrate(t('core.roundComplete'), function () { startLevel(currentLevel); }, App.feedback.starsGoal(progress.stars));
+    App.feedback.celebrate(t('core.roundComplete'), function () { window.location.reload(); }, App.feedback.starsGoal(progress.stars));
   }
 
   /* ---------- Eventos ---------- */

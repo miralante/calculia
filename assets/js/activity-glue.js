@@ -14,9 +14,9 @@
      starsEl():   the element that shows the star count,
      activity():  the current activity definition (needs .levels and .id),
                   read by the activity's own code
-     again():     starts another round: the "A por más" button of the
-                  achievement screen (celebrate.js)
    }
+   The "A por más" button of the achievement screen reloads the page: that is the
+   entry point of the activity (see navigation-flow.md).
 
    endRound(options) takes what differs between activities, all optional:
      celebrateKey: the congratulation (default 'core.roundComplete').
@@ -52,7 +52,8 @@
 
     // Closes a round: counts it, saves, and shows the achievement screen
     // (celebrate.js): the congratulation, "Ya tienes X · A por las Y" and
-    // "A por más", which starts the next round.
+    // "A por más". That returns the person to the entry point of the activity:
+    // reloading the page shows its first screen, and the progress is saved.
     function endRound(options) {
       var opts = options || {};
       var progress = host.progress();
@@ -60,7 +61,7 @@
       save();
       App.feedback.celebrate(
         App.i18n.t(opts.celebrateKey || 'core.roundComplete'),
-        function () { if (host.again) host.again(); },
+        function () { window.location.reload(); },
         App.feedback.starsGoal(progress.stars)
       );
     }

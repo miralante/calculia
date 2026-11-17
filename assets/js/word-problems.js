@@ -216,7 +216,7 @@
       function finish() {
         progress.completedRounds += 1;
         save();
-        App.feedback.celebrate(t('endTitle'), startRound, App.feedback.starsGoal(progress.stars));
+        App.feedback.celebrate(t('endTitle'), function () { window.location.reload(); }, App.feedback.starsGoal(progress.stars));
       }
 
       function startRound() {

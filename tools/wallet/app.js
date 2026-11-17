@@ -35,9 +35,6 @@
   var progress = App.storage.progressWith(TOOL_ID, { stars: 0 });
 
   var glue = App.activityGlue({
-    again: function () {
-      if (currentConfig().isQuiz) startQuizRound(levelFromProgress()); else startPayRound(levelFromProgress());
-    },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },

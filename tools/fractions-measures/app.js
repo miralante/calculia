@@ -53,7 +53,6 @@
      as before. reinforcement.active() tells the mini-round flow apart. */
   var reinforcement = App.reinforce.session({ titleKey: 'reinforceTitle', introKey: 'reinforceIntro', show: paintQuestion });
   var glue = App.activityGlue({
-    again: function () { startRound(levelFromProgress()); },
     toolId: TOOL_ID,
     progress: function () { return progress; },
     starsEl: function () { return starsEl; },

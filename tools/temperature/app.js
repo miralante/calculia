@@ -489,7 +489,7 @@
     var key = stageKey;
     progress[stage.roundsKey] = (progress[stage.roundsKey] || 0) + 1;
     save();
-    App.feedback.celebrate(t('core.roundComplete'), function () { openStage(key); }, App.feedback.starsGoal(progress.stars));
+    App.feedback.celebrate(t('core.roundComplete'), function () { window.location.reload(); }, App.feedback.starsGoal(progress.stars));
   }
 
   /* ============================================================
