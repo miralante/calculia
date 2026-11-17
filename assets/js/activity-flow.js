@@ -159,6 +159,7 @@
     '      <button type="button" class="btn btn-secondary" id="introNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>',
     '    </div>',
     '  </article>',
+    '  <button type="button" class="btn btn-secondary hidden" id="introRestart" data-i18n="ui.startOver">Empezar otra vez</button>',
     '  <button type="button" class="btn btn-secondary" id="introContinue" data-i18n="ui.seeReal">Ver ejemplos reales →</button>',
     '  <button type="button" class="btn btn-secondary hidden" id="introBack" data-i18n="ui.menuBack">← Volver al menú</button>',
     '</section>',
@@ -176,6 +177,7 @@
     '      <button type="button" class="btn btn-secondary" id="realNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>',
     '    </div>',
     '  </article>',
+    '  <button type="button" class="btn btn-secondary hidden" id="realRestart" data-i18n="ui.startOver">Empezar otra vez</button>',
     '  <button type="button" class="btn" id="realContinue" data-i18n="ui.startTest">Empezar a practicar →</button>',
     '</section>'
   ].join('\n');
@@ -272,6 +274,10 @@
       }
       syncPair();
     }
+    /* On the last slide the arrows leave: «Empezar otra vez» takes their place (back to the first slide). */
+    var lastIntro = i === src.intro.length - 1;
+    $('#introPrev').parentNode.classList.toggle('hidden', lastIntro);
+    $('#introRestart').classList.toggle('hidden', !lastIntro);
     /* A mode can add to the slide (the gallery shows its last button only on the last slide). */
     if (ctx.mode.paintIntro) ctx.mode.paintIntro(ctx);
   }
@@ -285,6 +291,10 @@
     $('#realVisual').setAttribute('aria-label', t('ui.visualAria'));
     $('#realText').textContent = realCopy(ctx, i);
     if (ctx.slideBars) paintBar(ctx, '#realProgress', '#realProgressFill', i, src.real.length);
+    /* On the last example the arrows leave: «Empezar otra vez» takes their place (back to the first example). */
+    var lastReal = i === src.real.length - 1;
+    $('#realPrev').parentNode.classList.toggle('hidden', lastReal);
+    $('#realRestart').classList.toggle('hidden', !lastReal);
   }
 
   /* ---- setup: the context, the markup, the stages and the mode ----------- */
@@ -410,6 +420,14 @@
     $('#introNext').addEventListener('click', function () {
       ctx.state.intro = (ctx.state.intro + 1) % source(ctx).intro.length;
       paintIntro(ctx);
+    });
+    $('#introRestart').addEventListener('click', function () {
+      ctx.state.intro = 0;
+      paintIntro(ctx);
+    });
+    $('#realRestart').addEventListener('click', function () {
+      ctx.state.real = 0;
+      paintReal(ctx);
     });
     $('#realContinue').addEventListener('click', function () { ctx.afterReal(); });
     if (ctx.config.reminder) {

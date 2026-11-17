@@ -46,7 +46,8 @@
       return '';
     },
 
-    /* The last slide carries the button that ends the activity; the others carry the arrows only. */
+    /* The last slide carries the button that ends the activity (the arrows and «Empezar otra vez» are
+       handled by activity-flow.js). */
     paintIntro: function (ctx) {
       var last = ctx.state.intro === ctx.config.intro.length - 1;
       var button = $('#introContinue');

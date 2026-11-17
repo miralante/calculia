@@ -78,6 +78,7 @@
         typeLabel: 'Escribe el resultado',
         typeFirst: 'Escribe un número antes de comprobar.',
         finish: 'Terminar →',
+        startOver: 'Empezar otra vez',
         galleryEnd: 'Has repasado todo. Ahora tienes {stars} estrellas.',
       }
     },
@@ -137,6 +138,7 @@
         typeLabel: 'Type the answer',
         typeFirst: 'Type a number before checking.',
         finish: 'Finish →',
+        startOver: 'Start again',
         galleryEnd: "You have gone through everything. Now you have {stars} stars.",
       }
     }

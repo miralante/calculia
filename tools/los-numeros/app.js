@@ -35,6 +35,8 @@
   var slideBar = $('#slideProgress');
   var slideBarFill = $('#slideProgressFill');
   var slideFinish = $('#slideFinish');
+  var slideControls = $('#slideControls');
+  var slideRestart = $('#slideRestart');
 
   /* ---- Persistencia ---- */
   var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0 });
@@ -308,14 +310,14 @@
     slideBar.setAttribute('aria-valuemax', String(TOTAL));
     slideBar.setAttribute('aria-valuenow', String(slideIndex + 1));
     slideBarFill.style.width = ((slideIndex + 1) / TOTAL * 100) + '%';
-    if (slideIndex === TOTAL - 1) {
-      slideFinish.classList.remove('hidden');
-    } else {
-      slideFinish.classList.add('hidden');
-    }
+    /* On the last slide the arrows leave: the activity ends there, or starts again from the first slide. */
+    var last = slideIndex === TOTAL - 1;
+    slideControls.classList.toggle('hidden', last);
+    slideRestart.classList.toggle('hidden', !last);
+    slideFinish.classList.toggle('hidden', !last);
   }
 
-  /* The slides wrap around, like the other carousels; the finish button still shows on the last one. */
+  /* The arrows wrap around, like the other carousels (the last slide has none). */
   function goSlide(delta) {
     slideIndex = (slideIndex + delta + TOTAL) % TOTAL;
     renderSlide();
@@ -344,6 +346,7 @@
   slidePrev.addEventListener('click', function () { goSlide(-1); });
   slideNext.addEventListener('click', function () { goSlide(1); });
   slideFinish.addEventListener('click', finishActivity);
+  slideRestart.addEventListener('click', function () { slideIndex = 0; renderSlide(); });
   /* btnRepeat was removed during the 25-activity end-stage cleanup
      (memory entry 2026-10-13). If a future batch re-adds the button,
      wire it back to restart(). */

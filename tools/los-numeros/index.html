@@ -24,7 +24,8 @@
 
     <!-- Galería única: 7 slides seguidas, sin secciones separadas.
          Mismo flujo que Formas: una sola card visible, ← / → para
-         cambiar. El último slide muestra el botón "Terminar". -->
+         cambiar. En el último slide las flechas desaparecen y se
+         ven "Empezar otra vez" y "Terminar". -->
     <section id="screenGallery" class="stack">
       <div class="row center-row">
         <p class="instruction" data-i18n="galleryIntro">Mira y pasa las tarjetas.</p>
@@ -47,10 +48,11 @@
              from strings.<id>Real, split on ' · '. -->
         <ul class="slide-real slide-examples hidden" id="slideReal"></ul>
       </div>
-      <div class="carousel-controls">
+      <div class="carousel-controls" id="slideControls">
         <button type="button" class="btn btn-secondary" id="slidePrev" aria-label="Anterior">←</button>
         <button type="button" class="btn btn-secondary" id="slideNext" aria-label="Siguiente">→</button>
       </div>
+      <button type="button" class="btn btn-secondary hidden" id="slideRestart" data-i18n="ui.startOver">Empezar otra vez</button>
       <button type="button" class="btn hidden" id="slideFinish" data-i18n="finish">Terminar →</button>
     </section>
 
@@ -62,7 +64,7 @@
   </div>
 
   <script src="../../assets/js/utils.js?v=calculia-v0d2f78bc"></script>
-  <script src="../../assets/js/i18n.js?v=calculia-vd29aae85"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-v700cda60"></script>
   <script src="../../assets/js/storage.js?v=calculia-v8a6191e2"></script>
   <script src="../../assets/js/achievements-engine.js?v=calculia-v53655f03"></script>
   <script src="../../assets/js/achievements.js?v=calculia-v225532f6"></script>
