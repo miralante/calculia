@@ -11,7 +11,7 @@ cálculo y razonamiento lógico:
 - **Matemáticas**: Los Números, Formas, Geometría, Fracciones, Medidas, Escala, Restar y
   Cálculo Mental, Dinero, Porcentajes, Las Tablas, Grupos exactos, Cuentas rápidas,
   Cantidades, Números Romanos,
-  Problemas, Temperatura del agua.
+  Problemas, Sube y baja.
 - **Razonamiento y lógica**: Adivinanzas, Patrones, El Monedero, La balanza, Datos
   y gráficos, El Calendario, El Reloj, Historias, ¿Qué no encaja?, Puzzle.
 

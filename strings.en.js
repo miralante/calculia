@@ -62,7 +62,7 @@
     "headmath": { "name": "Mental Math", "detail": "Add, subtract and share with visual help." },
     "romannumerals": { "name": "Roman Numerals", "detail": "Learn to recognize centuries." },
     "problems": { "name": "Problems", "detail": "Understand and solve." },
-    "temperature": { "name": "Water Temperature", "detail": "Raise and lower the degrees. See what happens to the water." },
+    "temperature": { "name": "Up and down", "detail": "Numbers below zero: the elevator and the water thermometer." },
     "riddles": { "name": "Riddles", "detail": "What is it? Think and choose." },
     "patterns": { "name": "Patterns", "detail": "What comes next?" },
     "wallet": { "name": "The Wallet", "detail": "Pay the right price." },

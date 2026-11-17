@@ -34,7 +34,7 @@
       'factorization': 'Factorización', 'multiples': 'Múltiplos', 'divisors': 'Divisores', 'prime-composite': 'Primo o compuesto', 'divisibility-test': 'Divisibilidad',
       'word-add': 'Problemas de sumar', 'word-subtract': 'Problemas de restar', 'word-multiply': 'Problemas de multiplicar', 'word-divide': 'Problemas de dividir',
       'roman-numerals': 'Números Romanos', 'riddles': 'Adivinanzas', 'patterns': 'Patrones',
-      'problems': 'Problemas', 'temperature': 'Temperatura del agua',
+      'problems': 'Problemas', 'temperature': 'Sube y baja',
       'wallet': 'El Monedero', 'algebra': 'La balanza', 'charts': 'Datos y gráficos', 'calendar': 'El Calendario', 'clock': 'El Reloj', 'stories': 'Historias',
       'time-group': 'Tiempo y reloj', 'time-units': 'Unidades de tiempo', 'time-convert': 'Cambia de unidad', 'moments': 'Momentos del día', 'time-durations': '¿Cuánto tarda?', 'timer': 'Temporizador', 'time-compare': '¿Cuál dura más?', 'date-format': 'Leer fechas',
       'odd-one-out': '¿Qué no encaja?', 'puzzle': 'Puzzle'

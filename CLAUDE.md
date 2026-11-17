@@ -21,7 +21,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Calculia is a static, dependency-free web app with 29 activities for
 practicing math and logical reasoning: Numbers, Shapes, Geometry, Trigonometry, Same shapes, Fractions, Measures, Scale,
 Subtraction and Mental Math, Money, Percentages, Math Tables, Exact groups, Quick sums, Quantities, Roman
-Numerals, Problems, Water Temperature, The balance, Data and charts, The Calendar, Riddles, Patterns,
+Numerals, Problems, Up and down (positives and negatives), The balance, Data and charts, The Calendar, Riddles, Patterns,
 The Wallet, The Clock, Stories, What Doesn't Belong?, and Puzzle. See
 [`doc/en/SPEC.md`](doc/en/SPEC.md) (or [`doc/es/SPEC.md`](doc/es/SPEC.md))
 for the full product definition — target audience, accessibility rules,

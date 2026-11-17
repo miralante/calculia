@@ -61,7 +61,7 @@ is rebalanced, this is the document to read first.
 | Wallet | `wallet/` | Giving and receiving money, working out change, managing a small budget. | cartera, pagar, vuelta, gasto, presupuesto. |
 | Quantities | `quantities/` | Comparing quantities, estimating, reasoning about "more / less / equal". | más, menos, igual, comparar, estimar. |
 | Roman numerals | `roman-numerals/` | Reading and writing Roman numerals up to the thousands. | romano, I, V, X, L, C, D, M, convertir. |
-| Temperature | `temperature/` | Reading a thermometer, comparing temperatures, converting between °C and °F. | temperatura, grado, Celsius, Fahrenheit, termómetro. |
+| Up and down | `temperature/` | Positive and negative numbers on an elevator and a water thermometer, reaching a target. | positivos, negativos, cero, ascensor, termómetro, objetivo. |
 
 ### 2.2 Module 2 — Reasoning and logic (🧩)
 
@@ -111,7 +111,6 @@ is rebalanced, this is the document to read first.
 - Reading analogue and digital clocks (`clock/`).
 - Reasoning about durations (`clock/`, `stories/`).
 - Reading a thermometer (`temperature/`).
-- Converting °C ↔ °F (`temperature/`).
 
 ### 3.6 Number systems
 

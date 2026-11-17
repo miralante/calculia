@@ -26,11 +26,11 @@
   "faq": [
     {
       "question": "¿Qué es Calculia?",
-      "answer": "Calculia es una aplicación web gratuita y sin registro con veintiocho actividades cortas y visuales de cálculo y razonamiento lógico: números, formas, escala, fracciones, medidas, suma y resta, dinero, tablas, cantidades, números romanos, temperatura del agua, acertijos, patrones, el monedero, el calendario, el reloj, cuentos, ¿qué sobra? y puzzle."
+      "answer": "Calculia es una aplicación web gratuita y sin registro con veintiocho actividades cortas y visuales de cálculo y razonamiento lógico: números, formas, escala, fracciones, medidas, suma y resta, dinero, tablas, cantidades, números romanos, sube y baja (ascensor y termómetro), acertijos, patrones, el monedero, el calendario, el reloj, cuentos, ¿qué sobra? y puzzle."
     },
     {
       "question": "¿Cuántas actividades tiene Calculia?",
-      "answer": "Veintiocho, agrupadas en dos secciones: Matemáticas (números, formas, escala, fracciones, medidas, sumas y restas, dinero, tablas, cantidades, números romanos y temperatura del agua) y Razonamiento lógico (acertijos, patrones, el monedero, el calendario, el reloj, cuentos, ¿qué sobra? y puzzle)."
+      "answer": "Veintiocho, agrupadas en dos secciones: Matemáticas (números, formas, escala, fracciones, medidas, sumas y restas, dinero, tablas, cantidades, números romanos y sube y baja (ascensor y termómetro)) y Razonamiento lógico (acertijos, patrones, el monedero, el calendario, el reloj, cuentos, ¿qué sobra? y puzzle)."
     },
     {
       "question": "¿Calculia necesita conexión a internet?",

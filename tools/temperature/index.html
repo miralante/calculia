@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Water Temperature | Calculia</title>
+  <title>Sube y baja | Calculia</title>
   <meta name="theme-color" content="#FAF7F2">
-    <link rel="stylesheet" href="../../assets/css/brand.css?v=calculia-v66e94ecb">
+  <link rel="stylesheet" href="../../assets/css/brand.css?v=calculia-v66e94ecb">
   <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-vd99f158f">
   <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
   <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v2eb04b2e">
@@ -17,111 +17,72 @@
     <div data-suite-header data-suite-logo="../../assets/img/icono.svg?v=calculia-v8587a7e0" data-suite-byline></div>
     <div class="suite-chrome-activity" data-suite-activity>
       <a href="../numbers-group/" class="back-link" data-i18n="core.back">← Volver</a>
-      <h1 data-i18n="title">🌡️ Temperatura del agua</h1>
+      <h1 data-i18n="title">🛗 Sube y baja</h1>
     </div>
     <main class="suite-body">
     <span class="stars" data-suite-stars id="stars">⭐ 0</span>
 
-    <!-- Game 1, the elevator: the first game of the tool. Floors below
-         the ground floor are negative, above it positive. The shaft rows
-         are built by app.js. -->
-    <section id="screenElevator" class="hidden stack">
-      <h2 class="game-title" data-i18n="elev.gameTitle">🛗 Juego 1: el ascensor</h2>
+    <!-- Menu: the two games. Each card opens one game on the shared board. -->
+    <section id="screenMenu" class="stack">
+      <p class="card centered menu-intro" data-i18n="menu.intro"></p>
 
-      <div class="card centered stack thermo-order-card">
-        <p class="thermo-order-count" data-role="count"></p>
-        <p class="thermo-order" aria-live="polite">
-          <span class="thermo-order-arrow" data-role="order-arrow" aria-hidden="true"></span>
-          <span class="thermo-order-text" data-role="order-text"></span>
-        </p>
+      <div class="stage-grid">
+        <button type="button" class="stage-card" data-stage="elevator">
+          <span class="stage-icon" aria-hidden="true">🛗</span>
+          <span class="stage-name" data-i18n="elev.name">Ascensor</span>
+          <span class="stage-detail" data-i18n="elev.detail"></span>
+          <span class="stage-level" data-role="level"></span>
+        </button>
+
+        <button type="button" class="stage-card" data-stage="water">
+          <span class="stage-icon" aria-hidden="true">🌡️</span>
+          <span class="stage-name" data-i18n="water.name">Termómetro del agua</span>
+          <span class="stage-detail" data-i18n="water.detail"></span>
+          <span class="stage-level" data-role="level"></span>
+        </button>
       </div>
-
-      <div class="card centered stack lift-card">
-        <div class="thermo-visual">
-          <div class="thermo-state" aria-hidden="true">🛗</div>
-          <div id="liftNumber" class="thermo-number" aria-live="polite"></div>
-          <p class="thermo-state-label" id="liftLabel"></p>
-        </div>
-
-        <div class="lift-shaft" id="liftShaft"></div>
-
-        <p class="thermo-target" data-role="target-text"></p>
-        <p class="thermo-live" data-role="live" aria-live="polite"></p>
-      </div>
-
-      <div class="card centered stack thermo-result hidden" data-role="result" role="status">
-        <p class="thermo-result-title" data-role="result-title"></p>
-        <p class="thermo-result-eq" data-role="result-eq"></p>
-        <p class="thermo-result-note" data-role="result-note"></p>
-        <button type="button" class="btn" data-role="next"></button>
-      </div>
-
-      <div class="thermo-controls" data-role="controls">
-        <div class="thermo-row">
-          <button type="button" class="btn-thermo" data-step="-1" data-i18n="elev.btnDown">▼ Bajar</button>
-          <button type="button" class="btn-thermo btn-thermo-secondary" data-role="reset">↺</button>
-          <button type="button" class="btn-thermo" data-step="1" data-i18n="elev.btnUp">▲ Subir</button>
-        </div>
-        <button type="button" class="btn-thermo btn-thermo-exit" data-role="exit">✅ Salir</button>
-      </div>
-      <p class="instruction thermo-hint" data-role="hint"></p>
     </section>
 
-    <!-- Game 2, water temperature: the thermometer, reached after the
-         elevator (or from the end screen). Same mechanic as game 1. -->
-    <section id="screenWater" class="hidden stack">
-      <h2 class="game-title" data-i18n="water.gameTitle">🌡️ Juego 2: la temperatura del agua</h2>
+    <!-- Play: one board for both games. app.js sets the scale, the steps and the texts. -->
+    <section id="screenPlay" class="hidden stack">
+      <p class="play-stage" data-role="stage"></p>
+      <p class="play-level" data-role="level"></p>
 
-      <div class="card centered stack thermo-order-card">
-        <p class="thermo-order-count" data-role="count"></p>
-        <p class="thermo-order" aria-live="polite">
-          <span class="thermo-order-arrow" data-role="order-arrow" aria-hidden="true"></span>
-          <span class="thermo-order-text" data-role="order-text"></span>
+      <div class="card centered stack order-card">
+        <p class="order-count" data-role="count"></p>
+        <p class="order" aria-live="polite">
+          <span class="order-arrow" data-role="order-arrow" aria-hidden="true"></span>
+          <span data-role="order-text"></span>
         </p>
       </div>
 
-      <div class="card centered stack thermo-card" id="thermoCard">
-        <div class="thermo-visual">
-          <div id="thermoState" class="thermo-state" aria-hidden="true">💧</div>
-          <div id="thermoNumber" class="thermo-number" aria-live="polite"></div>
-          <p class="thermo-state-label" id="thermoStateLabel"></p>
-        </div>
+      <div class="card board" data-role="board">
+        <div class="scale" data-role="scale"></div>
 
-        <!-- Number line from the lowest to the highest temperature. The
-             marker for the current temperature and the target move on
-             every press; zero is drawn in the middle. -->
-        <div class="thermo-track-wrap" aria-hidden="true">
-          <div class="thermo-track" id="thermoTrack">
-            <span class="thermo-track-ref" id="thermoZeroMark">0</span>
-            <span class="thermo-track-ref" id="thermoHundredMark">100</span>
-            <span class="thermo-mark thermo-mark-target" id="thermoTargetMark">🎯</span>
-            <span class="thermo-mark thermo-mark-now" id="thermoNowMark">▲</span>
-          </div>
+        <div class="readout">
+          <p class="readout-value" data-role="value" aria-live="polite"></p>
+          <p class="readout-label" data-role="value-label"></p>
+          <p class="readout-target" data-role="target"></p>
+          <p class="live" data-role="live" aria-live="polite"></p>
         </div>
-        <p class="thermo-target" data-role="target-text"></p>
-        <p class="thermo-live" data-role="live" aria-live="polite"></p>
       </div>
 
-      <!-- Shown when the target is reached: the result as an equation
-           in large type, then what happened to the water. -->
-      <div class="card centered stack thermo-result hidden" data-role="result" role="status">
-        <p class="thermo-result-title" data-role="result-title"></p>
-        <p class="thermo-result-eq" data-role="result-eq"></p>
-        <p class="thermo-result-note" data-role="result-note"></p>
+      <!-- Shown when the target is reached: the value, then what happened. -->
+      <div class="card centered stack play-result hidden" data-role="result" role="status">
+        <p class="play-result-title" data-role="result-title"></p>
+        <p class="play-result-value" data-role="result-value"></p>
+        <p class="play-result-note" data-role="result-note"></p>
         <button type="button" class="btn" data-role="next"></button>
       </div>
 
-      <div class="thermo-controls" data-role="controls">
-        <div class="thermo-row">
-          <button type="button" class="btn-thermo" data-step="-10">−10</button>
-          <button type="button" class="btn-thermo" data-step="-1">−1</button>
-          <button type="button" class="btn-thermo btn-thermo-secondary" data-role="reset">↺</button>
-          <button type="button" class="btn-thermo" data-step="1">+1</button>
-          <button type="button" class="btn-thermo" data-step="10">+10</button>
+      <div class="play-controls" data-role="controls">
+        <div class="step-row" data-role="steps"></div>
+        <div class="play-actions">
+          <button type="button" class="btn btn-secondary" data-role="reset" data-i18n="game.btnReset">↺ Empezar la orden de nuevo</button>
+          <button type="button" class="btn btn-secondary" data-role="exit" data-i18n="game.btnExit">✅ Salir al menú</button>
         </div>
-        <button type="button" class="btn-thermo btn-thermo-exit" data-role="exit">✅ Salir</button>
       </div>
-      <p class="instruction thermo-hint" data-role="hint"></p>
+      <p class="instruction play-hint" data-role="hint" data-i18n="game.hint"></p>
     </section>
 
     </main>

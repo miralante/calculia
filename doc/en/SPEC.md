@@ -10,7 +10,7 @@ logical reasoning:
 
 - **Math**: Numbers, Shapes, Geometry, Fractions, Measures, Scale, Subtraction and
   Mental Math, Money, Percentages, Math Tables, Exact groups, Quick sums, Quantities, Roman Numerals,
-  Problems, Water Temperature.
+  Problems, Up and down.
 - **Reasoning and logic**: Riddles, Patterns, The Wallet, The balance, Data and
   charts, The Calendar,
   The Clock,

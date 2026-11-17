@@ -62,7 +62,7 @@
     "headmath": { "name": "Cálculo de cabeza", "detail": "Suma, resta y reparte con ayuda visual." },
     "romannumerals": { "name": "Números Romanos", "detail": "Aprende a reconocer los siglos." },
     "problems": { "name": "Problemas", "detail": "Entender y resolver." },
-    "temperature": { "name": "Temperatura del agua", "detail": "Sube y baja los grados. Mira qué pasa con el agua." },
+    "temperature": { "name": "Sube y baja", "detail": "Números bajo cero: el ascensor y el termómetro del agua." },
     "riddles": { "name": "Adivinanzas", "detail": "¿Qué es? Piensa y elige." },
     "patterns": { "name": "Patrones", "detail": "¿Qué sigue ahora?" },
     "wallet": { "name": "El Monedero", "detail": "Paga el precio justo." },

@@ -84,7 +84,7 @@ Si aciertas, aparecerá una celebración breve. Si no, recibirás un mensaje de 
 | **Fracciones** | Reconocer, comparar y operar con fracciones sencillas y decimales. |
 | **Medidas** | Elegir la unidad adecuada (cm, m, g, kg, ml, l) y estimar longitud, peso y capacidad. |
 | **Problemas** | Problemas contados con palabras: decidir si hay que sumar o restar, y después cuántos son, con la situación dibujada para poder contarla. |
-| **Temperatura** | Leer un termómetro, comparar temperaturas y convertir entre °C y °F. |
+| **Sube y baja** | Números positivos y negativos: subir y bajar en un ascensor y en el termómetro del agua hasta llegar al objetivo. |
 
 ### 🧩 Razonamiento y lógica
 

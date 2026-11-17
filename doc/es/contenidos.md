@@ -62,7 +62,7 @@ primero.
 | Cartera | `wallet/` | Dar y recibir dinero, calcular vueltas, gestionar un pequeño presupuesto. | cartera, pagar, vuelta, gasto, presupuesto. |
 | Cantidades | `quantities/` | Comparar cantidades, estimar y razonar sobre "más / menos / igual". | más, menos, igual, comparar, estimar. |
 | Números romanos | `roman-numerals/` | Leer y escribir números romanos hasta los millares. | romano, I, V, X, L, C, D, M, convertir. |
-| Temperatura | `temperature/` | Leer un termómetro, comparar temperaturas, convertir entre °C y °F. | temperatura, grado, Celsius, Fahrenheit, termómetro. |
+| Sube y baja | `temperature/` | Números positivos y negativos en un ascensor y en el termómetro del agua, hasta llegar al objetivo. | positivos, negativos, cero, ascensor, termómetro, objetivo. |
 
 ### 2.2 Módulo 2 — Razonamiento y lógica (🧩)
 
@@ -112,7 +112,6 @@ primero.
 - Leer relojes analógicos y digitales (`clock/`).
 - Razonar sobre duraciones (`clock/`, `stories/`).
 - Leer un termómetro (`temperature/`).
-- Convertir °C ↔ °F (`temperature/`).
 
 ### 3.6 Sistemas de numeración
 

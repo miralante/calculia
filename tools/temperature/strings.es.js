@@ -1,85 +1,85 @@
 /* ============================================================
-   Calculia — Positives and negatives — texts (ES)
-   Locale-specific file. Loaded conditionally from index.html
-   according to App.i18n.locale().
+   Calculia — Sube y baja — texts (ES)
+   Locale-specific file. Loaded from index.html.
+   Keys mirror strings.en.js one to one.
    ============================================================ */
 (function () {
   'use strict';
 
   App.i18n.register({
-    title: '🌡️ Temperatura del agua',
-    contexto: 'En la vida real, el agua se congela, se calienta o hierve según los grados. Aquí lo ves y lo tocas.',
-    transfer: 'Esto te servirá para leer el termómetro del tiempo, entender una receta o saber cuándo algo está caliente sin tocarlo.',
-    btnMenu: 'Volver al inicio',
+    title: '🛗 Sube y baja',
 
-    activity: {
-      'water-temperature': {
-      }
-    },
-
-    level: {
-      cerca: 'Cerca del 0',
-      cruzar: 'Cruzar el 0',
-      estados: 'Hielo y vapor'
+    menu: {
+      intro: 'Hay números bajo cero: están por debajo del 0. Elige un juego, sube y baja hasta el 🎯 y mira qué pasa.'
     },
 
     /* Shared by both games. */
     game: {
-      btnReset:   '↺ Empezar de nuevo',
-      btnExit:    '✅ Salir',
-
-      /* Order on screen: "Orden 2 de 6", "Sube 4 grados", "Baja 2 plantas". */
-      orderCount: 'Orden {i} de {total}',
-      orderUp:    'Sube {n} {unit}',
-      orderDown:  'Baja {n} {unit}',
-
-      /* Live line while moving: how far off the target, and which way. */
-      liveUp:       'Te faltan {n} {unit}: sube.',
-      liveDown:     'Te faltan {n} {unit}: baja.',
-      liveOverUp:   'Te has pasado {n} {unit}. Ahora sube.',
-      liveOverDown: 'Te has pasado {n} {unit}. Ahora baja.',
+      levelLine:    'Nivel {n} de {total}: {level}',
       targetText:   'Objetivo: {target}',
+      hint:         'Usa los botones o las flechas del teclado hasta llegar al 🎯.',
 
-      /* Result, highlighted when the target is reached. */
-      resultTitle: '✅ ¡Objetivo conseguido!',
-      resultEq:    '{from} {op} {n} = {to}',
-      nextOrder:   '👉 Siguiente orden →',
-      finishRound: '🏁 Terminar la ronda',
+      /* The order: "Orden 2 de 6", then "Sube 4 grados" with its arrow. */
+      orderCount:   'Orden {i} de {total}',
+      orderUp:      'Sube {n} {unit}',
+      orderDown:    'Baja {n} {unit}',
 
-      endSummary: 'Has completado {n} órdenes. Ahora tienes {stars} {starsWord}.'
+      /* Names of the step buttons, read by screen readers. */
+      stepUp:       'Subir {n} {unit}',
+      stepDown:     'Bajar {n} {unit}',
+
+      /* Live line while moving. It says where to go, never how far. */
+      liveUp:       'Sube hasta el 🎯.',
+      liveDown:     'Baja hasta el 🎯.',
+      liveOverUp:   'Te has pasado. Ahora sube.',
+      liveOverDown: 'Te has pasado. Ahora baja.',
+
+      /* Result, shown when the marker reaches the target. */
+      resultTitle:  '✅ ¡Objetivo conseguido!',
+      nextOrder:    '👉 Siguiente orden →',
+      finishRound:  '🏁 Terminar la ronda',
+
+      btnReset:     '↺ Empezar la orden de nuevo',
+      btnExit:      '✅ Salir al menú'
     },
 
     /* Game 1: the elevator. */
     elev: {
-      gameTitle:   '🛗 Juego 1: el ascensor',
-      unitOne:     'planta',
-      unitMany:    'plantas',
-      hint:        'Usa ▼ y ▲ (o las flechas del teclado) hasta llegar a la planta que pide la orden. 🛗 es tu ascensor; 🎯, la planta a la que quieres ir.',
-      btnUp:       '▲ Subir',
-      btnDown:     '▼ Bajar',
-      readoutAria: 'Ascensor en {floor}',
+      name:    'Ascensor',
+      detail:  'Plantas bajo el suelo y sobre el suelo.',
+      unitOne: 'planta',
+      unitMany: 'plantas',
 
       /* Floor names: 0 is the ground floor; negative floors are the basement. */
       groundLabel:   'planta baja',
       basementLabel: 'sótano {n}',
       floorLabel:    'planta {n}',
 
+      level: {
+        cerca:  'Cerca de la planta baja',
+        cruzar: 'Cruzar la planta baja',
+        todo:   'Todo el edificio'
+      },
+
       resultCrossUp:   'Has subido y has pasado la planta baja.',
       resultCrossDown: 'Has bajado y has pasado la planta baja.',
       resultGround:    'Estás en la planta baja.',
       resultBasement:  'Estás bajo el suelo, en el sótano.',
-      resultUpper:     'Estás sobre el suelo.',
-
-      toWater: '🌡️ Siguiente juego: temperatura del agua →'
+      resultUpper:     'Estás sobre el suelo.'
     },
 
-    /* Game 2: water temperature. */
+    /* Game 2: the water thermometer. */
     water: {
-      gameTitle:   '🌡️ Juego 2: la temperatura del agua',
-      unitOne:     'grado',
-      unitMany:    'grados',
-      hint:        'Usa −1 y +1 (o las flechas del teclado) hasta llegar al objetivo. El marcador ▲ es tu temperatura; el 🎯, el objetivo.',
-      readoutAria: 'Termómetro a {temp} grados Celsius',
+      name:    'Termómetro del agua',
+      detail:  'Grados bajo cero, hielo, agua y vapor.',
+      unitOne: 'grado',
+      unitMany: 'grados',
+
+      level: {
+        cerca:   'Cerca del 0',
+        cruzar:  'Cruzar el 0',
+        estados: 'Hielo y vapor'
+      },
 
       stateIce:    'hielo',
       stateLiquid: 'agua líquida',

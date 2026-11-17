@@ -49,7 +49,7 @@ questions:
 | **Quantities** | Comparing, "more / less / equal". |
 | **Mental math** | Simple additions and subtractions. |
 
-| **Temperature** | Reading a thermometer. |
+| **Up and down** | Positive and negative numbers on an elevator and a water thermometer. |
 | **Shapes** | Recognising shapes, counting sides and vertices, and introducing perimeter, area, volume, symmetry and similarity. |
 | **Geometry** | Angles, grid squares and equal sides. |
 

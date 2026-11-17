@@ -84,7 +84,7 @@ If you get it right, a brief celebration appears. If not, you get an encouraging
 | **Fractions** | Recognise, compare and operate with simple fractions and decimals. |
 | **Measures** | Choose the right unit (cm, m, g, kg, ml, l) and estimate length, weight and capacity. |
 | **Problems** | Word problems: decide whether to add or take away, then work out how many, with the situation drawn to be counted. |
-| **Temperature** | Read a thermometer, compare temperatures and convert between °C and °F. |
+| **Up and down** | Positive and negative numbers: go up and down an elevator and a water thermometer to reach a target. |
 
 ### 🧩 Reasoning and logic
 

@@ -38,7 +38,7 @@ de pantalla.
 | **Cantidades** | Comparar cantidades, estimar y razonar sobre "más / menos / igual". |
 | **Números romanos** | Leer y escribir números romanos hasta los millares. |
 | **Problemas** | Problemas contados con palabras: decidir si hay que sumar o restar, y después cuántos son, con la situación dibujada para poder contarla. |
-| **Temperatura** | Leer un termómetro, comparar temperaturas y convertir entre °C y °F. |
+| **Sube y baja** | Números positivos y negativos: subir y bajar en un ascensor y en el termómetro del agua hasta llegar al objetivo. |
 
 ## Módulo 2: 🧩 Razonamiento y lógica
 

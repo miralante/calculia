@@ -48,7 +48,7 @@ preguntas:
 | **Números** | Reconocimiento numérico, conteo. |
 | **Cantidades** | Comparar, "más / menos / igual". |
 | **Cálculo mental** | Sumas y restas sencillas. |
-| **Temperatura** | Lectura del termómetro. |
+| **Sube y baja** | Números positivos y negativos en un ascensor y en el termómetro del agua. |
 
 #### Para personas con nivel intermedio
 

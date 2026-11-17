@@ -170,8 +170,8 @@ contenido, no una distracción):
   pintado es siempre de izquierda a derecha.
 
 `temperature` queda fuera de este contrato porque su mecánica no es de
-opción múltiple y la ronda no tiene orden que barajar (las parejas se
-arman al abrir el termómetro).
+opción múltiple y la ronda no tiene orden que barajar (cada orden sale de la
+posición anterior).
 
 #### 2.2.2 Implementación
 

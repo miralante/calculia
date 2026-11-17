@@ -36,7 +36,7 @@ grouped by the skill they work on, not by screen folder.
 | **Quantities** | Compare quantities, estimate and reason about "more / less / equal". |
 | **Roman numerals** | Read and write Roman numerals up to the thousands. |
 | **Problems** | Word problems: decide whether to add or take away, then work out how many, with the situation drawn to be counted. |
-| **Temperature** | Read a thermometer, compare temperatures and convert between °C and °F. |
+| **Up and down** | Positive and negative numbers: go up and down an elevator and a water thermometer to reach a target. |
 
 ## Module 2: 🧩 Reasoning and logic
 

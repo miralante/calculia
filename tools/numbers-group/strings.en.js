@@ -11,7 +11,7 @@
 
     group: {
       types: { name: 'Number types', detail: 'Natural numbers, integers, decimals and fractions.' },
-      temperature: { name: 'Water Temperature', detail: 'Raise and lower the degrees. See what happens to the water.' },
+      temperature: { name: 'Up and down', detail: 'Numbers below zero: the elevator and the water thermometer.' },
       unidades: { name: 'Ones, tens, hundreds', detail: 'What number is it?' },
       placevalue: { name: 'Quick sums', detail: '10 small ones become 1 big one.' },
       ordinals: { name: 'Ordinal Numbers', detail: 'First, second, third…' }
