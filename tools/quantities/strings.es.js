@@ -17,7 +17,6 @@
 
   App.i18n.register({
     title: '👀 Leer y Escribir Números',
-    instruction: 'Lee y escribe números grandes.',
     choosePractice: 'Elige qué quieres practicar.',
     btnMenu: 'Volver al inicio',
 

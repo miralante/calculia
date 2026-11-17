@@ -8,7 +8,7 @@
 
   App.i18n.register({
     "title": "💶 The Coin Purse",
-    "instruction": "Here you practise real money: counting it, paying, checking the change and saving.",
+    "instruction": "Choose what you want to practise.",
     "btnMenu": "Back to start",
     "menuCount": "How much is there?",
     "menuCountDetail": "Look at the money and choose the total.",

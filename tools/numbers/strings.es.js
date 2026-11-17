@@ -8,7 +8,7 @@
 
   App.i18n.register({
     title: '🧮 Los Números',
-    instructionMenu: 'Matemáticas para el día a día. Elige una actividad.',
+    instructionMenu: 'Elige qué quieres practicar.',
     notaTablas: '🔢 Para contar, sumar y multiplicar, ve a {link}.',
     notaTablasLink: 'Tablas',
     btnMenu: 'Volver al inicio',

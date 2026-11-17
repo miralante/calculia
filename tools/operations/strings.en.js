@@ -11,7 +11,7 @@
 
   App.i18n.register({
     title: '➗ Quick sums',
-    instructionMenu: 'Choose an activity.',
+    instructionMenu: 'Choose what you want to practise.',
     btnMenu: 'Back to start',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} {starsWord}.',
     correctExplanation: '✅ Correct! The answer is: ',

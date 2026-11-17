@@ -14,7 +14,6 @@
 
   App.i18n.register({
     title: '👀 Read and Write Numbers',
-    instruction: 'Read and write big numbers.',
     choosePractice: 'Choose what you want to practise.',
     btnMenu: 'Back to the start',
 

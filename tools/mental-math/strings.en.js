@@ -9,7 +9,7 @@
   App.i18n.register({
     answerIs: 'The answer is {answer}.',
     title: '🧠 Subtraction and Mental Math',
-    instructionMenu: 'Choose an activity.',
+    instructionMenu: 'Choose what you want to practise.',
     btnMenu: 'Back to start',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} {starsWord}.',
     explicacionCorrecta: '✅ Correct! The answer is: ',

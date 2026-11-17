@@ -4,7 +4,7 @@
   App.i18n.register({
     title: '🔢 Math Tables',
     btnMenu: 'Back to the start',
-    instruction: 'Add, multiply, subtract and divide with colored dots.',
+    instruction: 'Choose what you want to practise.',
     chooseTable: 'Choose a table.',
     tableButton: 'Table of {n}',
     learnInstruction: 'Tap an operation to see it counted with dots.',
