@@ -10,14 +10,13 @@
     title: '🛗 Sube y baja',
 
     menu: {
-      intro: 'Hay números bajo cero: están por debajo del 0. Elige un juego, sube y baja hasta el 🎯 y mira qué pasa.'
+      intro: 'Números bajo cero. Elige un juego y sube y baja hasta el 🎯.'
     },
 
     /* Shared by both games. */
     game: {
       levelLine:    'Nivel {n} de {total}: {level}',
-      targetText:   'Objetivo: {target}',
-      hint:         'Usa los botones o las flechas del teclado hasta llegar al 🎯.',
+      targetText:   '🎯 {target}',
 
       /* The order: "Orden 2 de 6", then "Sube 4 grados" with its arrow. */
       orderCount:   'Orden {i} de {total}',
@@ -28,19 +27,17 @@
       stepUp:       'Subir {n} {unit}',
       stepDown:     'Bajar {n} {unit}',
 
-      /* Live line while moving. It says where to go, never how far. */
-      liveUp:       'Sube hasta el 🎯.',
-      liveDown:     'Baja hasta el 🎯.',
-      liveOverUp:   'Te has pasado. Ahora sube.',
-      liveOverDown: 'Te has pasado. Ahora baja.',
+      /* Live line, only when the player goes past the target. */
+      liveOverUp:   'Te has pasado. Sube.',
+      liveOverDown: 'Te has pasado. Baja.',
 
       /* Result, shown when the marker reaches the target. */
       resultTitle:  '✅ ¡Objetivo conseguido!',
       nextOrder:    '👉 Siguiente orden →',
       finishRound:  '🏁 Terminar la ronda',
 
-      btnReset:     '↺ Empezar la orden de nuevo',
-      btnExit:      '✅ Salir al menú'
+      btnReset:     '↺ Repetir',
+      btnExit:      '🏠 Menú'
     },
 
     /* Game 1: the elevator. */

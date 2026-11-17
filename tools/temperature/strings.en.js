@@ -10,14 +10,13 @@
     title: '🛗 Up and down',
 
     menu: {
-      intro: 'Some numbers are below zero: they are under the 0. Pick a game, go up and down to reach the 🎯 and see what happens.'
+      intro: 'Numbers below zero. Pick a game and go up and down to reach the 🎯.'
     },
 
     /* Shared by both games. */
     game: {
       levelLine:    'Level {n} of {total}: {level}',
-      targetText:   'Target: {target}',
-      hint:         'Use the buttons or the arrow keys until you reach the 🎯.',
+      targetText:   '🎯 {target}',
 
       /* The order: "Order 2 of 6", then "Go up 4 degrees" with its arrow. */
       orderCount:   'Order {i} of {total}',
@@ -28,19 +27,17 @@
       stepUp:       'Go up {n} {unit}',
       stepDown:     'Go down {n} {unit}',
 
-      /* Live line while moving. It says where to go, never how far. */
-      liveUp:       'Go up to the 🎯.',
-      liveDown:     'Go down to the 🎯.',
-      liveOverUp:   'You went too far. Now go up.',
-      liveOverDown: 'You went too far. Now go down.',
+      /* Live line, only when the player goes past the target. */
+      liveOverUp:   'You went too far. Go up.',
+      liveOverDown: 'You went too far. Go down.',
 
       /* Result, shown when the marker reaches the target. */
       resultTitle:  '✅ Target reached!',
       nextOrder:    '👉 Next order →',
       finishRound:  '🏁 Finish the round',
 
-      btnReset:     '↺ Start this order again',
-      btnExit:      '✅ Exit to the menu'
+      btnReset:     '↺ Try again',
+      btnExit:      '🏠 Menu'
     },
 
     /* Game 1: the elevator. */

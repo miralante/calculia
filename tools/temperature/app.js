@@ -84,10 +84,36 @@
     starsEl.textContent = '⭐ ' + progress.stars;
   }
 
-  /* Position of a value on the scale, in % from the top (the maximum). */
-  function scalePct(n) {
-    var d = stage.data;
-    return ((d.max - n) / (d.max - d.min)) * 100;
+  /* The range on screen for the current level, and whether the scale runs
+     left to right (the water thermometer) or bottom to top (the elevator). */
+  var range = null;
+  var horizontal = false;
+
+  /* Position of a value along the scale, in %: from the top (the maximum)
+     for a vertical scale, from the left (the minimum) for a horizontal one. */
+  function pct(n) {
+    var p = ((n - range.min) / (range.max - range.min)) * 100;
+    return horizontal ? p : 100 - p;
+  }
+
+  function placeAt(el, n) {
+    if (horizontal) el.style.left = pct(n) + '%';
+    else el.style.top = pct(n) + '%';
+  }
+
+  /* A band between two values, such as a zone. */
+  function placeSpan(el, a, b) {
+    var p1 = pct(a);
+    var p2 = pct(b);
+    var start = Math.min(p1, p2);
+    var size = Math.abs(p2 - p1);
+    if (horizontal) {
+      el.style.left = start + '%';
+      el.style.width = size + '%';
+    } else {
+      el.style.top = start + '%';
+      el.style.height = size + '%';
+    }
   }
 
   /* ============================================================
@@ -191,8 +217,7 @@
     controls: q('controls'),
     steps: q('steps'),
     reset: q('reset'),
-    exit: q('exit'),
-    hint: q('hint')
+    exit: q('exit')
   };
 
   function unit(prefix, n) {
@@ -200,44 +225,70 @@
   }
 
   /* ============================================================
-     The scale: one vertical track from min to max, built per game
+     The scale: one track from min to max, built per level
      ============================================================ */
 
-  function buildScale(data) {
+  /* The range on screen for a level. A level may narrow the game's scale
+     (the water thermometer shows only the numbers its orders use). Zones are
+     cut to that range, and keys are kept only when they fall inside it. */
+  function scaleFor(data, lvl) {
+    var s = lvl.scale || data;
+    var zones = [];
+    data.zones.forEach(function (z) {
+      var a = Math.max(Math.min(z.from, z.to), s.min);
+      var b = Math.min(Math.max(z.from, z.to), s.max);
+      if (b > a) zones.push({ from: a, to: b, cls: z.cls });
+    });
+    return {
+      min: s.min,
+      max: s.max,
+      zones: zones,
+      ticks: s.ticks || rangeOf(s.min, s.max),
+      keys: data.keys.filter(function (k) { return k >= s.min && k <= s.max; })
+    };
+  }
+
+  /* Builds the track with its zones, ticks and the two markers: the position
+     (the game's own icon) and the target (🎯). */
+  function buildScale(marker) {
     els.scale.innerHTML = '';
+    els.scale.classList.toggle('is-horizontal', horizontal);
 
     var labels = textEl('div', 'scale-labels', '');
     var track = textEl('div', 'scale-track', '');
 
-    data.zones.forEach(function (z) {
+    range.zones.forEach(function (z) {
       var zone = textEl('div', 'scale-zone ' + z.cls, '');
-      zone.style.top = scalePct(z.to) + '%';
-      zone.style.height = (scalePct(z.from) - scalePct(z.to)) + '%';
+      placeSpan(zone, z.from, z.to);
       track.appendChild(zone);
     });
 
-    var ticks = data.ticks || rangeOf(data.min, data.max);
-    ticks.forEach(function (n) {
-      var key = data.keys.indexOf(n) !== -1;
+    range.ticks.forEach(function (n) {
+      var key = range.keys.indexOf(n) !== -1;
       var line = textEl('div', 'scale-tick' + (key ? ' is-key' : ''), '');
-      line.style.top = scalePct(n) + '%';
+      placeAt(line, n);
       track.appendChild(line);
 
       var label = textEl('span', 'scale-label' + (key ? ' is-key' : ''), fmtSigned(n));
-      label.style.top = scalePct(n) + '%';
+      placeAt(label, n);
       labels.appendChild(label);
     });
 
-    /* The position marker sits on the left edge, the target on the right edge. */
-    els.markNow = textEl('span', 'scale-mark scale-mark-now', data.marker);
+    els.markNow = textEl('span', 'scale-mark scale-mark-now', marker);
     els.markNow.setAttribute('aria-hidden', 'true');
     els.markTarget = textEl('span', 'scale-mark scale-mark-target', '🎯');
     els.markTarget.setAttribute('aria-hidden', 'true');
     track.appendChild(els.markNow);
     track.appendChild(els.markTarget);
 
-    els.scale.appendChild(labels);
-    els.scale.appendChild(track);
+    /* Vertical: the labels sit beside the track. Horizontal: under it. */
+    if (horizontal) {
+      els.scale.appendChild(track);
+      els.scale.appendChild(labels);
+    } else {
+      els.scale.appendChild(labels);
+      els.scale.appendChild(track);
+    }
   }
 
   /* Every whole value from min to max, highest first. */
@@ -270,7 +321,7 @@
   function paintButtons() {
     stepButtons.forEach(function (b) {
       var next = now + b.delta;
-      b.el.disabled = next < stage.data.min || next > stage.data.max;
+      b.el.disabled = next < range.min || next > range.max;
     });
   }
 
@@ -331,12 +382,13 @@
     els.board.classList.remove('state-ice', 'state-liquid', 'state-steam');
     if (stage.stateOf) els.board.classList.add('state-' + stage.stateOf(now));
 
-    els.markNow.style.top = scalePct(now) + '%';
-    els.markTarget.style.top = scalePct(order.target) + '%';
+    placeAt(els.markNow, now);
+    placeAt(els.markTarget, order.target);
   }
 
-  /* The live line says where to go, never how far (no counting needed).
-     Going past the target is said plainly. */
+  /* The live line is silent while the player is on the right way; the order
+     already says where to go. It speaks only when the player goes past the
+     target, and says so plainly. */
   function paintLive() {
     if (resultShown) {
       els.live.textContent = '';
@@ -346,10 +398,11 @@
     /* Overshoot: past the target, against the direction of the order's
        remaining trip (the order said up, the marker is above the target). */
     var over = (order.dir === 'up') !== (need > 0);
-    var key = over
-      ? (need > 0 ? 'game.liveOverUp' : 'game.liveOverDown')
-      : (need > 0 ? 'game.liveUp' : 'game.liveDown');
-    els.live.textContent = t(key);
+    if (!over) {
+      els.live.textContent = '';
+      return;
+    }
+    els.live.textContent = t(need > 0 ? 'game.liveOverUp' : 'game.liveOverDown');
   }
 
   /* ============================================================
@@ -359,7 +412,7 @@
   function step(delta) {
     if (resultShown || !order) return;
     var next = now + delta;
-    if (next < stage.data.min || next > stage.data.max) return;
+    if (next < range.min || next > range.max) return;
     now = next;
     if (now === order.target) {
       reached();
@@ -450,7 +503,10 @@
     now = level.start;
     orderIndex = 0;
 
-    buildScale(stage.data);
+    horizontal = !!stage.data.horizontal;
+    range = scaleFor(stage.data, level);
+    els.board.classList.toggle('is-horizontal', horizontal);
+    buildScale(stage.data.marker);
     buildSteps(stage.data, stage.prefix);
     els.stage.textContent = t(stage.prefix + '.name');
     els.level.textContent = fill(t('game.levelLine'), {
@@ -458,7 +514,6 @@
     });
     els.reset.textContent = t('game.btnReset');
     els.exit.textContent = t('game.btnExit');
-    els.hint.textContent = t('game.hint');
 
     showScreen(screenPlay);
     nextOrder();

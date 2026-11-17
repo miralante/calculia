@@ -13,7 +13,7 @@
    Fields:
      perRound   orders per round
      min / max  limits of the scale (inclusive); the buttons never leave them
-     ticks      values written on the scale (default: every whole value)
+     horizontal true: the scale runs left to right (default: bottom to top)
      keys       values drawn as reference lines (ground floor, 0 °C, 100 °C)
      steps      sizes of the step buttons, negative = down
      marker     icon of the current position on the scale
@@ -23,6 +23,8 @@
                   lo / hi    range the orders stay within (inclusive)
                   amin/amax  size of a single order
                   start      where the first order of the round begins
+                  scale      optional: { min, max, ticks } of the scale for
+                             this level (default: the game's min and max)
    ============================================================ */
 var DATA = {
   /* Game 1: the elevator. Floors below ground are negative, the
@@ -49,31 +51,36 @@ var DATA = {
     ]
   },
 
-  /* Game 2: the water thermometer, in °C at 1 atm. Ice at or below
-     freeze, liquid between, steam at or above boil. The scale stops at
-     −20 and 120 °C: the orders never go beyond −10 and 110. */
+  /* Game 2: the water thermometer, in °C at 1 atm, lying horizontally.
+     Ice at or below freeze, liquid between, steam at or above boil.
+     The game's range is the widest one (−10 to 110 °C); each level
+     narrows it to the numbers its orders use, so the scale stays tight
+     around the targets. */
   water: {
     perRound: 6,
-    min: -20,
-    max: 120,
-    ticks: [-20, 0, 20, 40, 60, 80, 100, 120],
+    min: -10,
+    max: 110,
+    horizontal: true,
     keys: [0, 100],
     steps: [-10, -1, 1, 10],
     marker: '💧',
     freeze: 0,
     boil: 100,
     zones: [
-      { from: -20, to: 0,   cls: 'zone-ice' },
+      { from: -10, to: 0,   cls: 'zone-ice' },
       { from: 0,   to: 100, cls: 'zone-liquid' },
-      { from: 100, to: 120, cls: 'zone-steam' }
+      { from: 100, to: 110, cls: 'zone-steam' }
     ],
     levels: [
       /* 1. Near zero: small orders around the freezing point. */
-      { id: 'cerca',   lo: -6,  hi: 6,   amin: 1, amax: 4,  start: 0 },
+      { id: 'cerca',   lo: -6,  hi: 6,   amin: 1, amax: 4,  start: 0,
+        scale: { min: -6, max: 6, ticks: [-6, -4, -2, 0, 2, 4, 6] } },
       /* 2. Crossing zero: bigger orders that pass through 0 °C. */
-      { id: 'cruzar',  lo: -10, hi: 10,  amin: 2, amax: 8,  start: 2 },
+      { id: 'cruzar',  lo: -10, hi: 10,  amin: 2, amax: 8,  start: 2,
+        scale: { min: -10, max: 10, ticks: [-10, -5, 0, 5, 10] } },
       /* 3. Physical states: ice below 0 °C, steam above 100 °C. */
-      { id: 'estados', lo: -10, hi: 110, amin: 5, amax: 30, start: 20 }
+      { id: 'estados', lo: -10, hi: 110, amin: 5, amax: 30, start: 20,
+        scale: { min: -10, max: 110, ticks: [-10, 0, 20, 40, 60, 80, 100] } }
     ]
   }
 };
