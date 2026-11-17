@@ -57,7 +57,8 @@ var DATA = {
       ] },
     { id: 'div', symbol: '÷', icon: '➗',
       intro: [
-        { visual: { kind: 'names', total: 7, size: 3 }, frame: { kind: 'names', total: 7, size: 3 } },
+        /* The game draws the division itself: no drawing above it, so the same expression is not shown twice. */
+        { frame: { kind: 'names', total: 7, size: 3 } },
         { frame: { kind: 'deal', total: 6, groups: 2, balls: true } },
         { frame: { kind: 'pack', total: 6, size: 2 } },
         { frame: { kind: 'pack', total: 7, size: 3 } },
