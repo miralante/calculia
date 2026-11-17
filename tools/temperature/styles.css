@@ -126,7 +126,10 @@
   background: var(--color-superficie);
 }
 .scale-zone { position: absolute; left: 0; right: 0; }
-.zone-basement { background: #ECEFF1; }
+/* The basement is hatched, so it reads as the part under the ground. */
+.zone-basement {
+  background: repeating-linear-gradient(135deg, #ECEFF1 0 8px, #CFD8DC 8px 10px);
+}
 .zone-ice      { background: #E3F2FD; }
 .zone-liquid   { background: #F0FAFF; }
 .zone-steam    { background: #F5F5F5; }
@@ -139,6 +142,21 @@
   transform: translateY(-50%);
 }
 .scale-tick.is-key { border-top: 3px solid var(--color-texto); }
+
+/* The building (vertical line only): a roof over the shaft. The track and the
+   labels start below it, so the ground floor and the labels stay aligned. */
+.scale:not(.is-horizontal) .scale-track { margin-top: 18px; }
+.scale:not(.is-horizontal) .scale-labels { margin-top: 18px; }
+.scale:not(.is-horizontal) .scale-track::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  top: -18px;
+  height: 18px;
+  background: var(--color-texto-suave);
+  border-radius: 12px 12px 0 0;
+}
 
 /* The position: the game's icon, on the shaft. */
 .scale-mark {

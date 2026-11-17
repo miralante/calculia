@@ -31,7 +31,7 @@
 
       /* Result, shown when the marker reaches the target. */
       resultTitle:  '✅ Target reached!',
-      nextOrder:    '👉 Next order →',
+      nextOrder:    '👉 Keep going →',
       finishRound:  '🏁 Finish the round',
 
       btnReset:     '↺ Try again',

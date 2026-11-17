@@ -8,7 +8,8 @@
    the marker meets the arrow. There are no levels.
 
    A round is six orders. Each order starts where the previous one
-   ended. Reaching the target gives one star and shows the value.
+   ended. Reaching the target gives one star. The water game also says
+   what happened to the water; the elevator only says "conseguido".
    Going past the target is said plainly, never punished.
 
    Data in data.js. Texts in strings.<locale>.js. Shared modules in
@@ -164,7 +165,9 @@
       valueIcon: function () { return ''; },
       markerOf: function () { return DATA.elevator.marker; },
       stateOf: null,
-      note: elevatorNote
+      note: elevatorNote,
+      /* The result shows only "conseguido" and the next button. */
+      explain: false
     },
     water: {
       data: DATA.water,
@@ -175,7 +178,8 @@
       valueIcon: function (n) { return DATA.water.states[waterStateFor(n)]; },
       markerOf: function (n) { return DATA.water.states[waterStateFor(n)]; },
       stateOf: waterStateFor,
-      note: waterNote
+      note: waterNote,
+      explain: true
     }
   };
 
@@ -426,6 +430,9 @@
     els.resultTitle.textContent = t('game.resultTitle');
     els.resultValue.textContent = stage.valueText(order.target);
     els.resultNote.textContent = stage.note(order.from, order.target);
+    /* The elevator's result is only "conseguido" and the button. */
+    els.resultValue.classList.toggle('hidden', !stage.explain);
+    els.resultNote.classList.toggle('hidden', !stage.explain);
     els.next.textContent = t(orderIndex >= stage.data.perRound ? 'game.finishRound' : 'game.nextOrder');
 
     els.controls.classList.add('hidden');
@@ -453,7 +460,7 @@
 
   /* A full round: then the achievement screen. */
   function finishRound() {
-    App.feedback.celebrate(t('core.roundComplete'), function () { window.location.reload(); }, App.feedback.starsGoal(progress.stars));
+    App.feedback.celebrate(t('core.roundComplete'), null, App.feedback.starsGoal(progress.stars));
   }
 
   /* ============================================================
