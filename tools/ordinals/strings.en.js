@@ -188,6 +188,8 @@
     placePrefix: 'Position {n}',
 
     /* ---------- The queue ---------- */
+    /* Real-life queue: the counter the people wait for. The quiz keeps "Goal". */
+    queueCounter: 'Counter',
     queueGoal: 'Goal',
     queueHint: 'Count from the goal.',
     queueAria: 'Queue of {n}. The arrow points at place {pos}.',

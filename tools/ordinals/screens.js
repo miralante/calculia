@@ -1,6 +1,6 @@
 /* ============================================================
    Calculia — Ordinal numbers: the three screens before the levels.
-   Screen 1 is the bus-stop card and the carousel, screen 2 the real-life
+   Screen 1 is the race-finish card and the carousel, screen 2 the real-life
    scenes (the podium, the ranking, the queue and the building) and screen 3
    the reminder (the ordinal row and the rule). This file owns their drawing
    and their buttons. The page gives it switchTo() and the abbreviation helper,
@@ -34,6 +34,22 @@
       '</svg>';
   }
 
+  /* A football player in kit, for the ranking: blue shirt with sleeves, white
+     shorts, socks and a ball at the feet. The kit colours are fixed, so the
+     figure reads the same in light and dark themes. Decorative. */
+  function footballerSvg() {
+    return '<svg class="person-svg" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" focusable="false">' +
+      '<circle cx="14" cy="5.5" r="3.6" fill="#F1C27D"/>' +
+      '<path d="M10.2 5.2c0-2.3 1.7-3.6 3.8-3.6s3.8 1.3 3.8 3.6c-1-1-6.6-1-7.6 0z" fill="#3B2A1A"/>' +
+      '<path d="M9.6 10.4 5.2 12.6l1.6 5 2.4-1.1V22h8.6v-5.5l2.4 1.1 1.6-5-4.4-2.2c-1.2 1.6-7.6 1.6-9.2 0z" fill="#1E5BB8"/>' +
+      '<path d="M9.6 17.6h8.8l.4 3.6h-9.6z" fill="#FFFFFF"/>' +
+      '<rect x="10.4" y="21.2" width="2.6" height="3.4" fill="#F1C27D"/>' +
+      '<rect x="15" y="21.2" width="2.6" height="3.4" fill="#F1C27D"/>' +
+      '<circle cx="22.4" cy="24.6" r="2.4" fill="#FFFFFF" stroke="#14161E" stroke-width="0.8"/>' +
+      '<path d="M22.4 22.6l1 .7-.4 1.1h-1.2l-.4-1.1z" fill="#14161E"/>' +
+      '</svg>';
+  }
+
   /* host: { switchTo(screen), abbrev(n) }. Returns { paint(), bind() }. */
   App.ordinalsScreens = function (host) {
     var switchTo = host.switchTo;
@@ -46,14 +62,20 @@
        Screen 1: podium card + carousel
        ============================================================ */
 
-    /* The stops card is fixed and always comes before the carousel: first,
-       second and third are the ones people already know. It uses a bus route
-       (three stops in order) instead of the podium, which is already the
-       first scene of screen 2; the podium's own case is not repeated here. */
-    function stopSvg() {
-      return '<svg class="stop-svg" width="40" height="40" viewBox="0 0 40 40" aria-hidden="true" focusable="false">' +
-        '<rect x="18" y="18" width="4" height="20" rx="2" fill="currentColor"/>' +
-        '<rect x="8" y="3" width="24" height="18" rx="6" fill="currentColor"/>' +
+    /* The first card is fixed and always comes before the carousel: first,
+       second and third are the ones people already know. It is a race finish:
+       three runners in their lanes, the first one reaching the line and the
+       others a little behind. It shows what the places mean at the finish. */
+    function runnerSvg() {
+      return '<svg class="runner-svg" width="26" height="30" viewBox="0 0 26 30" aria-hidden="true" focusable="false">' +
+        '<g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M15 10.5 12 18"/>' +
+        '<path d="M14 11.5 19.5 15"/>' +
+        '<path d="M14 11.5 9 12.5"/>' +
+        '<path d="M12 18 17.5 25"/>' +
+        '<path d="M12 18 6.5 24"/>' +
+        '</g>' +
+        '<circle cx="17" cy="5" r="3.4" fill="currentColor"/>' +
         '</svg>';
     }
 
@@ -64,15 +86,19 @@
       el.setAttribute('aria-label', [1, 2, 3].map(function (n) {
         return abbrev(n) + ' — ' + t('ord.' + n + 'Name');
       }).join('; '));
-      el.innerHTML = [1, 2, 3].map(function (n) {
-        return '<div class="stop-col">' +
-          '<span class="stop-sign">' + stopSvg() + '</span>' +
-          '<div class="stop-stand">' +
-            '<span class="stop-figure">' + abbrev(n) + '</span>' +
-            '<span class="stop-name">' + t('ord.' + n + 'Name') + '</span>' +
-          '</div>' +
+      el.innerHTML = '<div class="race-lanes">' + [1, 2, 3].map(function (n) {
+        var o = ordinalByN(n);
+        return '<div class="race-lane ' + o.cls + '">' +
+          '<span class="race-label">' +
+            '<span class="race-ord">' + abbrev(n) + '</span>' +
+            '<span class="race-name">' + t('ord.' + n + 'Name') + '</span>' +
+          '</span>' +
+          '<span class="race-track">' +
+            '<span class="race-runner race-runner--' + n + '" aria-hidden="true">' + runnerSvg() + '</span>' +
+            '<span class="race-tape" aria-hidden="true"></span>' +
+          '</span>' +
         '</div>';
-      }).join('');
+      }).join('') + '</div>';
     }
 
     var carouselIdx = 0;
@@ -162,7 +188,7 @@
 
     /* Queue: the goal at the front, then the people, each with its figure. */
     function renderQueue(total) {
-      var cells = ['<span class="queue-start queue-goal" aria-hidden="true">' + t('queueGoal') + '</span>'];
+      var cells = ['<span class="queue-counter" aria-hidden="true">' + t('queueCounter') + '</span>'];
       for (var i = 1; i <= total; i++) {
         var o = ordinalByN(i);
         cells.push(
@@ -184,7 +210,7 @@
         rows.push(
           '<div class="classification-row ' + o.cls + '">' +
             '<span class="classification-ord ' + o.cls + '">' + abbrev(i) + '</span>' +
-            '<span class="classification-person" aria-hidden="true">' + personSvg() + '</span>' +
+            '<span class="classification-person" aria-hidden="true">' + footballerSvg() + '</span>' +
           '</div>'
         );
       }

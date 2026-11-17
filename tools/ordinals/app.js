@@ -526,17 +526,15 @@
   var screens = App.ordinalsScreens({ switchTo: switchTo, abbrev: abbrev });
   screens.bind();
 
-  /* "← Volver" in the header: from a practice or its end screen back to the levels;
-     the three screens before the levels step back one at a time. The levels screen
-     has no step above it on this page, so its link goes to the Calculia home
-     (assets/js/suite-chrome.js). */
+  /* "← Volver" in the header always goes back to the activity's entry screen
+     (the introduction), from any other screen of this page. From the entry
+     screen itself the link has no step above it, so it follows its href to the
+     numbers hub (assets/js/suite-chrome.js). */
   App.backStep = function () {
-    function on(el) { return !el.classList.contains('hidden'); }
-    if (on(quizScreen)) { switchTo(levelsScreen); return true; }
-    if (on(reminderScreen)) { switchTo(famousScreen); return true; }
-    if (on(famousScreen)) { switchTo(introScreen); return true; }
+    if (!on(introScreen)) { switchTo(introScreen); return true; }
     return false;
   };
+  function on(el) { return !el.classList.contains('hidden'); }
 
   $('#next').addEventListener('click', next);
 

@@ -191,6 +191,8 @@
 
     /* ---------- La fila ---------- */
     queueGoal: 'Meta',
+    /* Real-life queue: the counter the people wait for. The quiz keeps "Meta". */
+    queueCounter: 'Ventanilla',
     queueHint: 'Cuenta desde la meta.',
     queueAria: 'Fila de {n}. La flecha señala el lugar {pos}.',
 

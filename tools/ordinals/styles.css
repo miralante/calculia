@@ -53,44 +53,67 @@
    Three columns, 2nd · 1st · 3rd. The stands rise to the first place, so
    the shape says who won before anyone reads a word.
    ============================================================ */
-/* Screen 1 intro: three bus stops in order, first to third, left to right. */
-.stops-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  padding-top: 8px;
-}
+/* Screen 1 intro: a race finish. Three lanes, first to third from top to bottom;
+   the runner of each place is a little further from the line than the one
+   before it. The checkered tape on the right is the finish line. */
+.stops-row { width: 100%; padding-top: 8px; }
+.race-lanes { display: flex; flex-direction: column; gap: 8px; }
 
-.stop-col {
-  flex: 1 1 0;
-  max-width: 124px;
+.race-lane {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio);
+  padding: 6px 10px;
+  border-left: 6px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+.race-lane.ord-c1 { border-left-color: var(--mod-coordinacion); }
+.race-lane.ord-c2 { border-left-color: var(--mod-secuencia); }
+.race-lane.ord-c3 { border-left-color: var(--mod-emocional); }
+
+.race-label {
+  flex: 0 0 auto;
+  width: 6.5rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 6px;
+  line-height: 1.1;
 }
+.race-ord { font-size: var(--texto-grande); font-weight: 800; font-variant-numeric: tabular-nums; }
+.race-name { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto); }
 
-.stop-sign { line-height: 0; color: var(--mod-razonamiento); }
-.stop-svg { display: block; }
-
-.stop-stand {
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  padding: 10px 4px;
-  border-radius: 12px;
-  background: var(--mod-razonamiento-suave);
+.race-track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 42px;
+  border-bottom: 2px dashed var(--color-borde);
+}
+.race-runner {
+  position: absolute;
+  bottom: 0;
+  line-height: 0;
+  transform: translateX(-100%);
   color: var(--color-texto);
 }
+.race-runner--1 { left: 96%; }
+.race-runner--2 { left: 80%; }
+.race-runner--3 { left: 64%; }
+.race-lane.ord-c1 .race-runner { color: var(--mod-coordinacion); }
+.race-lane.ord-c2 .race-runner { color: var(--mod-secuencia); }
+.race-lane.ord-c3 .race-runner { color: var(--mod-emocional); }
+.runner-svg { display: block; width: 34px; height: 39px; }
 
-.stop-figure { font-size: 28px; font-weight: 800; line-height: 1; }
-.stop-name { font-size: var(--texto-pequeno); font-weight: 700; }
+/* The finish line: a checkered band at the right end of every track. */
+.race-tape {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  background-color: var(--color-superficie);
+  background-image: conic-gradient(var(--color-texto) 25%, transparent 0 50%, var(--color-texto) 0 75%, transparent 0);
+  background-size: 6px 6px;
+}
 
 /* ============================================================
    Screen 1: carousel
@@ -235,6 +258,23 @@
   justify-content: center;
   align-items: flex-end;
 }
+/* The counter the queue waits for: a desk with a label, at the front of the line. */
+.queue-counter {
+  flex: 0 0 auto;
+  align-self: center;
+  box-sizing: border-box;
+  width: 92px;
+  padding: 8px 6px 6px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--texto-sobre-acento);
+  background: var(--mod-razonamiento);
+  border-radius: 10px 10px 4px 4px;
+  border-bottom: 6px solid var(--mod-razonamiento-suave);
+}
 .queue-start.queue-goal {
   width: 64px;
   min-width: 64px;
@@ -292,6 +332,7 @@
   font-variant-numeric: tabular-nums;
 }
 .classification-person { display: inline-flex; color: var(--color-texto-suave); }
+.classification-person .person-svg { width: 44px; height: 44px; }
 
 /* ----- The podium: a stand with three places, first in the centre ----- */
 .famous-podium {
@@ -532,8 +573,8 @@
    Responsive: 320 / 375 / 768 / desktop
    ============================================================ */
 @media (max-width: 480px) {
-  .stop-figure { font-size: 24px; }
-  .stop-name { font-size: var(--texto-base); }
+  .race-label { width: 5.5rem; }
+  .race-name { font-size: var(--texto-base); }
   .ordinal-hero { font-size: 60px; }
   .quiz-shown { font-size: 48px; min-height: 72px; }
   .big-digit { font-size: 64px; }
@@ -556,4 +597,11 @@
   .building-floor-ord { font-size: var(--texto-base); }
   .building-floor-label { font-size: var(--texto-pequeno); }
   .queue-person-cell { min-width: 36px; }
+}
+
+/* Phones: the counter and the people must fit the queue box without overflow. */
+@media (max-width: 480px) {
+  .famous-queue { gap: 6px; }
+  .queue-counter { width: 60px; padding: 6px 4px 5px; font-size: 0.72rem; }
+  .queue-person-cell { min-width: 38px; }
 }
