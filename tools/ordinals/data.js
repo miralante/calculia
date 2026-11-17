@@ -1,116 +1,21 @@
 /* ============================================================
-   Calculia — Números ordinales.
+   Calculia — Números ordinales: datos.
 
-   Qué es y de dónde viene
-   ------------------------
-   Los ordinales YA EXISTÍAN en este proyecto como sub-actividad de
-   Los Números (`ordinales`, niveles `o1`-`o3`). Esta actividad toma
-   esa idea —una fila con meta y animales, la meta marca por
-   dónde empieza la cuenta— y le aplica la metodología de
-   Números Romanos: pantallas de presentación, ejemplos de la vida
-   real, recordatorio con las reglas y pasos encadenados que cambian
-   una sola variable cada vez.
+   La actividad usa la plantilla compartida de Calculia
+   (assets/js/activity-flow.js, modo 'options'): explicación con
+   diapositivas, ejemplos de la vida real, recordatorio y un único
+   test de una pregunta por pantalla. Este fichero solo guarda los
+   datos; los dibujos están en screens.js, las preguntas en app.js y
+   los textos en strings.<locale>.js.
 
-   Lo que se conserva de `numbers` porque ya estaba probado:
-     - la fila de animales (sin género ni tono de piel que elegir, y
-       en español el ordinal concuerda con "lugar", así que no hay
-       que seguir además el género gramatical),
-     - la meta al frente, que es lo que hace que "primero" no
-       dependa de adivinar por qué extremo se cuenta,
-     - las opciones equivocadas VECINAS (target±1, target±2), porque
-       el error real aquí no es un número cualquiera equivocado: es
-       contar desde el otro extremo o empezar por cero.
+   Ordinales: 'n' es su número y 'cls' la clase de color. El color
+   recorre cinco valores; ayuda a seguir la serie, pero la cifra y la
+   palabra son las que identifican cada ordinal.
 
-   Qué cambia respecto a `numbers`:
-     - deja de ser una pantalla más dentro de otra actividad y pasa
-       a tener las suyas cuatro, como Romanos,
-     - los ordinales llegan hasta el décimo, no solo hasta el quinto,
-       porque los pisos y las veces de algo llegan bastante más allá
-       de cinco y "quinto" no era el final del mundo real,
-     - se enseñan dos reglas que la fila por sí sola no explica.
-
-   Estructura de datos
-   ------------------
-   DATA.ordinals — un ordinal por fila. 'n' es su número, 'cls' la
-   clase de color. Las palabras viven en strings.<locale>.js como
-   'ord.<n>Name' (primero, segundo…) y 'ord.<n>Place' (primer
-   lugar, segundo lugar…). La clave NPlace se sigue usando para
-   las preguntas del juego ("¿Quién está en sexto lugar?"); la
-   ficha del recordatorio ya no la usa, porque "sexto lugar"
-   repite "sexto" sin aportar información — la pieza 3 de la ficha
-   es ahora el número natural (1, 2, 3…). Los tres primeros
-   no llevan campo de medalla: la medalla la dibuja screens.js como
-   SVG en línea (no emoji). Es lo que abre la actividad, porque
-   "primero, segundo, tercero" es la cara que la gente ya
-   reconoce sin tener que aprenderla primero.
-
-   No hay forma abreviada con el signo de grado superíndice, y es
-   deliberado: check.js (comprobación 6.1) prohíbe por substring las
-   seis primeras abreviaturas de ordinal en todo lo que se sirve al
-   navegador, porque son indistinguibles de la marca de curso
-   escolar, y el escaneo es sobre el contenido crudo del fichero
-   (comentarios incluidos). La cifra hace el mismo trabajo: la
-   persona ve "3" y "tercero" juntos, que es justo la correspondencia
-   que hay que aprender.
-
-   El color recorre 5 valores y se repite del sexto en adelante. Es
-   deliberado y no es un descuido: el color aquí no identifica al
-   ordinal —eso lo hacen la cifra y la palabra, que siempre están
-   escritas al lado—, sino que ayuda a seguir la serie.
-
-   DATA.famous — los CUATRO escenarios de la vida real. No son un
-   carrusel de ordinales sueltos: la pantalla 2 ("En la vida real")
-   recorre uno a uno los casos que la RAE y la vida cotidiana asocian
-   a los ordinales, "el podio", "la clasificación", "la cola" y "el
-   edificio", que son los contextos donde alguien escucha de verdad
-   "quedó en el primer lugar", "va el tercero en la clasificación",
-   "es el primero de la cola" o "vivo en el tercer piso". Cada
-   escenario muestra varios ordinales a la vez (3 en el podio, 5 en
-   los demás) para que se vea la serie funcionando, no un ordinal
-   suelto.
-
-   DATA.scenes — apoyo bajo el enunciado del juego: "tercero" no es
-   solo una palabra, es el piso en el que vive alguien, el puesto
-   que quedó en una carrera o su lugar en una clasificación.
-
-   DATA.levels — UN solo grupo visible ('practice') que encadena sus
-   sub-pasos sin volver al menú (regla 13, un cambio de variable cada
-   vez) y termina con un test que mezcla todo:
-
-     - pasos 1-3: leer el lugar en la fila.
-         paso 1 → 2 cambia SÓLO el largo de la fila (3 → 5);
-         paso 2 → 3 cambia SÓLO el sentido de la pregunta
-         (señala un lugar y nombralo → nombra un lugar y busca
-         quién está ahí).
-     - pasos 4-5: usar el ordinal fuera de la fila.
-         paso 4 → 5 cambia SÓLO el sentido (ordinal → cifra,
-         cifra → ordinal), con el rango de los ordinales
-         presentados en la pantalla 1.
-     - paso 6 'test': mezcla de los cinco modos, en orden aleatorio,
-         sobre los mismos ordinales que la pantalla 1.
-
-   El rango de la pantalla 1 —los ordinales que se enseñan— es
-   intencionadamente corto: 1..10 más los cuatro ordinales "redondos"
-   que la gente necesita oír en la vida real (undécimo, duodécimo,
-   vigésimo, trigésimo). Meter los 29 huecos intermedios sólo serviría
-   para llenar la pantalla de palabras que no suenan en ningún sitio.
-   La serie entera, si alguien la necesita, sigue en el diccionario.
-
-   Los cuatro modos base:
-
-     - positionToName : la flecha señala a alguien → ¿qué lugar es?
-     - nameToMember   : se nombra un lugar → ¿quién está ahí?
-     - ordinalToDigit : "tercero" → 3
-     - digitToOrdinal : 4 → "cuarto"
-
-   El largo de la fila NO es un modo: es el campo 'items' del
-   sub-nivel, y por eso el paso 1 → 2 puede cambiarlo sin tocar
-   nada más.
-
-   La fila tiene un tope de 5 en los pasos de la fila y 3 en el
-   primero: a 375px de ancho, seis animales de 44px más separaciones
-   ya no caben y empezarían a salirse. El rango de ordinales se
-   practica en los pasos de texto, donde no hay que dibujar a nadie.
+   Los ordinales que se enseñan son 1..10 más los redondos 11, 12, 20,
+   30 y 40 (PRESENTED_ORDINALS). Las opciones falsas de los modos de
+   texto son los vecinos dentro de esa serie, para que nunca aparezca
+   un número cuya palabra no se enseña.
    ============================================================ */
 
 var ORDINALS = [
@@ -131,11 +36,8 @@ var ORDINALS = [
   { n: 40, cls: 'ord-c5' }
 ];
 
-/* Quién se coloca en la fila. Emoji, así que la lista no necesita
-   separarse por idioma (mismo criterio que la serie de patrones en
-   tools/patterns/). Animales y no personas: no hay género ni tono de
-   piel que elegir, y en español el ordinal concuerda con "lugar",
-   así que la palabra no carga además con el género gramatical. */
+/* Quién se coloca en la fila del test. Emoji de animales: no hay
+   género ni tono de piel que elegir. */
 var QUEUE_MEMBERS = ['🐶', '🐱', '🐭', '🐰', '🦊', '🐻', '🐼', '🐯'];
 
 function ordinalByN(n) {
@@ -143,101 +45,43 @@ function ordinalByN(n) {
   return found || ORDINALS[0];
 }
 
-/* El conjunto de ordinales que se enseñan y se preguntan en los
-   pasos de práctica. Lo comparten el carrusel de la pantalla 1 y los
-   modos de texto de la pantalla 5 (apply + test). Si la pantalla 1
-   cambia, basta con tocar este array y el resto se actualiza. */
 var PRESENTED_ORDINALS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 20, 30, 40];
 
 var DATA = {
-  /* Cuántos ítems tiene una ronda. Más corta que la de Cantidades
-     porque aquí cada ronda enseña una regla y hay tres pantallas
-     antes: una ronda larga escondería el mensaje final. */
+  /* Preguntas por test. Cinco: una ronda corta, como en el resto de
+     tests de la suite. */
   perRound: 5,
+  /* Como mucho cinco personas en la fila: a 375px, seis animales ya no
+     caben con sus separaciones. */
   maxQueue: 5,
   ordinals: ORDINALS,
   queueMembers: QUEUE_MEMBERS,
   presentedOrdinals: PRESENTED_ORDINALS,
 
-  /* Orden del carrusel de la pantalla 1: arranca en el cuarto, el
-     primero que NO está en la tarjeta de medallas de arriba (🥇🥈🥉).
-     Mostrar 1/2/3 otra vez duplicaba la medalla: la persona veía dos
-     veces "🥉 tercero" y solo una vez "🥇 cuarto". El recordatorio
-     (pantalla 3) sigue usando presentedOrdinals, que sí incluye los
-     tres primeros, porque ahí la serie entera va junta y la medalla
-     no se pinta. */
+  /* Diapositivas de la explicación, después de la carrera: la serie
+     que se añade a primero, segundo y tercero. */
   carousel: [4, 5, 6, 7, 8, 9, 10, 11, 12, 20, 30, 40],
 
-  /* Los CUATRO escenarios de la vida real. La pantalla 2 ("En la vida
-     real") recorre uno a uno estos casos: el podio (los tres primeros
-     suben a una tarima con sus medallas 🥇🥈🥉), la clasificación
-     (una tabla con los puestos del 1 al 5 y un nombre al lado), la
-     cola (el primero va delante) y el edificio (los pisos se cuentan
-     de abajo arriba, con flechas arriba/abajo para señalar el piso
-     actual).
-     No es un carrusel de ordinales sueltos: cada escenario muestra
-     varios ordinales a la vez para que se vea la serie funcionando.
-
-     Antes de los escenarios había dos slides-lista con los ordinales
-     más conocidos (1-9 y los redondos 11/12/20/30/40). Se quitaron:
-     el recordatorio de la pantalla 3 ya muestra la serie entera, así
-     que repetirlas aquí era recargar lo mismo. La persona va directa
-     a los casos donde los ordinales cobran sentido.
-
-     El podio muestra 3 posiciones (no 5): el podio olímpico es de
-     tres puestos por definición, y añadir más filas ya no parecería
-     un podio. La clasificación sí muestra 5, como la cola y el
-     edificio, para que la serie se vea entera funcionando. */
-  famous: [
-    { id: 'podio', type: 'scenario', n: 3 },
-    { id: 'clasificacion', type: 'scenario', n: 5 },
-    { id: 'cola', type: 'scenario', n: 5 },
-    { id: 'edificio', type: 'scenario', n: 5 }
+  /* Ejemplos de la vida real, en este orden. 'n' es cuántos puestos
+     se dibujan. */
+  real: [
+    { id: 'podio', n: 3 },
+    { id: 'clasificacion', n: 5 },
+    { id: 'cola', n: 5 },
+    { id: 'edificio', n: 5 }
   ],
 
-  /* Situaciones de apoyo en el juego, para que el ordinal nombre
-     algo y no sea una palabra suelta. Repartidas entre los cuatro
-     escenarios de la pantalla 2: el edificio (1-5), la cola (1-5),
-     la clasificación (1-5) y el podio (1-3, que es lo que tiene un
-     podio olímpico). Si la pantalla 2 enseña un escenario, el juego
-     puede apoyarse en él al preguntar el ordinal. */
-  scenes: [
-    { id: 'piso', n: 1 },
-    { id: 'piso2', n: 2 },
-    { id: 'piso3', n: 3 },
-    { id: 'piso4', n: 4 },
-    { id: 'piso5', n: 5 },
-    { id: 'cola', n: 1 },
-    { id: 'cola2', n: 2 },
-    { id: 'cola3', n: 3 },
-    { id: 'cola4', n: 4 },
-    { id: 'cola5', n: 5 },
-    { id: 'clasificacion', n: 1 },
-    { id: 'clasificacion2', n: 2 },
-    { id: 'clasificacion3', n: 3 },
-    { id: 'clasificacion4', n: 4 },
-    { id: 'clasificacion5', n: 5 },
-    { id: 'podio', n: 1 },
-    { id: 'podio2', n: 2 },
-    { id: 'podio3', n: 3 }
-  ],
+  /* El piso que se resalta en el edificio del ejemplo ("vivo en el
+     tercer piso"). */
+  buildingHere: 3,
 
-  /* Un único botón en el menú: el grupo encadena los cinco pasos de
-     práctica y termina con el test. Antes eran tres tarjetas (aprender,
-     usar y test), y el usuario las veía como tres tests. */
-  levels: [
-    {
-      id: 'practice', pool: 'group', icon: '📚',
-      sublevels: [
-        { id: 'l1', group: 'practice', mode: 'positionToName', items: 3, stars: 1 },
-        { id: 'l2', group: 'practice', mode: 'positionToName', items: 5, stars: 2 },
-        { id: 'l3', group: 'practice', mode: 'nameToMember', items: 5, stars: 2 },
-        { id: 'l4', group: 'practice', mode: 'ordinalToDigit',
-          pool: PRESENTED_ORDINALS, stars: 2 },
-        { id: 'l5', group: 'practice', mode: 'digitToOrdinal',
-          pool: PRESENTED_ORDINALS, stars: 3 },
-        { id: 'test', group: 'practice', pool: 'random', mode: 'random', stars: 2 }
-      ]
-    }
+  /* Los modos de pregunta del test. 'items' es el largo de la fila;
+     'pool' la lista de ordinales de la que se saca el ordinal. */
+  modes: [
+    { mode: 'positionToName', items: 3 },
+    { mode: 'positionToName', items: 5 },
+    { mode: 'nameToMember', items: 5 },
+    { mode: 'ordinalToDigit', pool: PRESENTED_ORDINALS },
+    { mode: 'digitToOrdinal', pool: PRESENTED_ORDINALS }
   ]
 };

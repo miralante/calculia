@@ -437,5 +437,17 @@
       paintIntro(ctx);
       ctx.show('#screenIntro');
     }
+
+    /* The header's «← Volver» steps back to the entry of the activity (its first slide) from
+       any screen inside it; from the entry itself, or from the menu, it returns false and the
+       link goes to the hub (suite-chrome.js). The same rule for every activity of the template. */
+    App.backStep = function () {
+      var open = ctx.screens.filter(function (id) { return !$(id).classList.contains('hidden'); })[0];
+      if (!open || open === '#screenIntro' || open === '#screenMenu') return false;
+      ctx.state.intro = 0;
+      paintIntro(ctx);
+      ctx.show('#screenIntro');
+      return true;
+    };
   }
 })();

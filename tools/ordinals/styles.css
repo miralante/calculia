@@ -121,39 +121,20 @@
    dots shows the position in the series.
    ============================================================ */
 /* The slide's own classes: the shared .carousel-* rules stay untouched. */
-.ordinal-hero { font-size: 76px; font-weight: 800; line-height: 1; }
-.ordinal-hero-name { font-size: clamp(1.5rem, 5vw, 2.25rem); font-weight: 800; line-height: 1.1; text-align: center; }
-.ordinal-hero-place { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
-
-.carousel-dots {
+.ordinal-hero-wrap {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   gap: 6px;
   width: 100%;
 }
-.carousel-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
-  background: var(--color-borde);
-  transition: width 0.2s ease;
-}
-.carousel-dot--on { width: 22px; background: var(--mod-razonamiento); }
+.ordinal-hero { font-size: 76px; font-weight: 800; line-height: 1; }
+.ordinal-hero-name { font-size: clamp(1.5rem, 5vw, 2.25rem); font-weight: 800; line-height: 1.1; text-align: center; }
+.ordinal-hero-place { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
 
 /* ============================================================
-   Screen 2: real-life scenes
+   The real-life examples: podium, ranking, queue and building
    ============================================================ */
-.famous-label {
-  margin: 0;
-  font-weight: 800;
-  font-size: var(--texto-grande);
-  color: var(--mod-razonamiento);
-  text-align: center;
-}
-.famous-stage-wrap { width: 100%; }
 .famous-stage {
   display: flex;
   flex-direction: column;
@@ -169,15 +150,15 @@
   border-radius: var(--radio);
   background: var(--color-fondo);
 }
-.famous-text { margin: 0; color: var(--color-texto); text-align: center; }
-
 /* ----- The building: floors counted from the bottom up ----- */
 .famous-building { gap: 6px; align-items: stretch; }
 
 .building-floor {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  min-width: 0;
   min-height: 46px;
   box-sizing: border-box;
   padding: 6px 12px 6px 0;
@@ -207,48 +188,18 @@
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.building-floor-label { flex: 1; color: var(--color-texto); white-space: nowrap; }
+.building-floor-label { flex: 1 1 auto; white-space: nowrap; color: var(--color-texto); }
 .building-here {
-  font-size: 13px;
+  flex: 0 0 auto;
+  font-size: 12px;
   font-weight: 800;
   color: var(--texto-sobre-acento);
   background: var(--mod-razonamiento);
   border-radius: 999px;
-  padding: 3px 8px;
+  padding: 2px 6px;
   white-space: nowrap;
 }
-.building-person { display: inline-flex; font-size: 1.6rem; line-height: 1; }
-
-.building-arrows {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--espacio);
-  margin-top: 4px;
-}
-.building-arrow {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 2px solid var(--mod-razonamiento);
-  background: var(--mod-razonamiento);
-  color: var(--texto-sobre-acento);
-  font-size: 22px;
-  font-weight: 700;
-  font-family: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  cursor: pointer;
-  transition: transform 0.1s ease, opacity 0.2s ease;
-}
-.building-arrow--up,
-.building-arrow--down { flex: 0 0 56px; }
-.building-arrow:hover:not(:disabled) { transform: scale(1.08); }
-.building-arrow:active:not(:disabled) { transform: scale(0.94); }
-.building-arrow:disabled { opacity: 0.28; cursor: not-allowed; transform: none; }
-.building-arrow:focus-visible { outline: 3px solid var(--color-texto); outline-offset: 3px; }
+.building-person { flex: 0 0 auto; display: inline-flex; font-size: 1.6rem; line-height: 1; }
 
 /* ----- The queue: the goal first, then the people, each with its figure ----- */
 .famous-queue {
@@ -488,16 +439,29 @@
 .queue-member,
 .queue-pointer {
   flex: 0 0 auto;
+  box-sizing: border-box;
   width: 44px;
   text-align: center;
   font-size: 2rem;
   line-height: 1.1;
 }
-.queue-start-spacer { flex: 0 0 auto; width: 64px; }
+/* The goal cell is exactly as wide as the spacer above the arrows. A pill
+   with an automatic width was a few pixels wider, which pushed every animal
+   off the arrow that points at it. flex-basis stays auto so the width the
+   small-screen rules set below still applies. */
+.queue-start-spacer,
+.queue-start.queue-goal {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 64px;
+}
 .queue-start {
   font-size: 1.6rem;
   border-radius: var(--radio);
   background: var(--mod-razonamiento-suave);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .queue-pointers { min-height: 2.2rem; }
 .queue-pointer { font-size: 1.5rem; }
@@ -587,7 +551,8 @@
 @media (max-width: 360px) {
   .quiz-shown { font-size: 38px; }
   .queue-member, .queue-pointer { width: 34px; font-size: 1.4rem; }
-  .queue-start-spacer, .queue-start.queue-goal { width: 48px; min-width: 48px; }
+  .queue-start-spacer, .queue-start.queue-goal { width: 54px; min-width: 54px; }
+  .queue-start { font-size: 0.8rem; }
   .famous-podium { gap: 6px; }
   .podium-pos { min-width: 64px; }
   .podium-pos--1 .podium-block { min-height: 100px; }
@@ -604,4 +569,5 @@
   .famous-queue { gap: 6px; }
   .queue-counter { width: 60px; padding: 6px 4px 5px; font-size: 0.72rem; }
   .queue-person-cell { min-width: 38px; }
+  .queue-start { font-size: 1rem; letter-spacing: 0; padding-left: 0; padding-right: 0; }
 }

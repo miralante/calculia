@@ -19,153 +19,19 @@
       <a href="../numbers-group/" class="back-link" data-i18n="core.back">← Volver</a>
       <h1 data-i18n="title">🥇 Números ordinales</h1>
     </div>
-    <span class="stars" data-suite-stars id="stars">⭐ 0</span>
+    <p class="stars" data-suite-stars id="stars">⭐ 0</p>
 
     <main class="suite-body">
-      <!-- Pantalla 1: la serie, dividida en tarjeta de medallas
-           (presentación del concepto) y carrusel (lo que viene
-           después). La tarjeta de medallas es fija: explica
-           primero/segundo/tercero. El carrusel añade el resto
-           (cuarto en adelante + los redondos 11/12/20/30). Si
-           app.js no llegara a pintarse, se ve esto en vez de una
-           página en blanco. -->
-      <section id="screenIntro" class="stack">
-        <div class="row center-row">
-          <p class="instruction" data-i18n="instruction">Aprende qué lugar ocupa cada uno.</p>
-        </div>
-        <div class="card reference-card stack intro-card">
-          <h2 class="reference-title" data-i18n="introTitle">Los ordinales dicen el lugar</h2>
-          <p class="reference-text" data-i18n="introText">Los números dicen cuántos hay. Los ordinales dicen en qué puesto está cada uno.</p>
-        </div>
-
-        <!-- Tarjeta de paradas: la presentación del concepto. Va
-             SIEMPRE antes del carrusel porque primero/segundo/tercero
-             son los que la gente ya conoce; los demás se añaden
-             después. Tres paradas de autobús en orden, cada una con su
-             cifra abreviada y su nombre (la cifra la pinta screens.js
-             con `abbrev(n)`, que la concatena en runtime para esquivar
-             el check 6.1). No es un podio: el podio ya sale en la
-             pantalla 2, y aquí se elige otro caso para no repetirlo. -->
-        <div class="card stack stops-card">
-          <div class="stops-row" id="stopsRow"></div>
-        </div>
-
-        <div class="card stack carousel-card">
-          <div class="carousel-display" id="carouselDisplay" role="button" tabindex="0"></div>
-          <div class="carousel-dots" id="carouselDots" aria-hidden="true"></div>
-          <div class="carousel-controls" id="carouselControls">
-            <button type="button" class="btn btn-secondary" id="carouselPrev" data-i18n="prev">←</button>
-            <button type="button" class="btn btn-secondary" id="carouselNext" data-i18n="nextArrow">→</button>
-          </div>
-        </div>
-
-        <!-- Aparece solo al llegar al último slide del carrusel
-             (screens.js, paintCarouselEnd). -->
-        <div class="row intro-buttons">
-          <button type="button" class="btn btn-secondary hidden" id="introNext" data-i18n="introNext">Ver en la vida real →</button>
-        </div>
-      </section>
-
-      <!-- Pantalla 2: DOS escenarios de la vida real —el edificio y
-           la cola— que se recorren con los mismos controles de
-           carrusel que la pantalla 1. Cada escenario muestra varios
-           ordinales a la vez, no un ordinal suelto: la persona ve
-           los ordinales rodeados de contexto, que es como se
-           encuentran en la realidad. -->
-      <section id="screenFamous" class="stack hidden">
-        <div class="card famosos-card stack" aria-labelledby="famousTitle">
-          <h2 class="reference-title" id="famousTitle" data-i18n="famousTitle">En la vida real</h2>
-          <p class="reference-text" data-i18n="famousSubtitle">Sitios donde los ordinales cobran sentido:</p>
-          <p class="famous-label" id="famousLabel"></p>
-          <div class="famous-stage-wrap" id="famousSceneWrap">
-            <div class="famous-stage" id="famousScene"></div>
-          </div>
-          <p class="famous-text" id="famousText"></p>
-          <div class="carousel-controls" id="famousControls">
-            <button type="button" class="btn btn-secondary" id="famousPrev2" data-i18n="prev">←</button>
-            <button type="button" class="btn btn-secondary" id="famousNext2" data-i18n="nextArrow">→</button>
-          </div>
-        </div>
-
-        <!-- Aparece solo al llegar al último escenario (screens.js,
-             paintFamousEnd). -->
-        <div class="row intro-buttons">
-          <button type="button" class="btn btn-secondary hidden" id="famousNextBtn" data-i18n="continue">Recuerda →</button>
-        </div>
-      </section>
-
-      <!-- Pantalla 3: recordatorio. La serie entera en fichas de
-           color (forma corta · palabra · lugar), y las dos reglas con
-           ejemplos calculados por app.js. -->
-      <section id="screenReminder" class="stack hidden">
-        <!-- Antes había aquí un botón "← Volver a los ejemplos" que
-             llevaba a Pantalla 1): se ha quitado. La persona usa
-             el "← Volver" global de la cabecera para volver a la
-             portada de Calculia. -->
-        <div class="card reference-card stack">
-          <h2 class="reference-title" data-i18n="reminderTitle">Recuerda la serie entera</h2>
-          <p class="reference-text" data-i18n="reminderText">Cada ordinal va con su número.</p>
-        </div>
-
-        <div class="card stack ordinals-card">
-          <div class="ordinals-row" id="ordinalsRow"></div>
-        </div>
-
-        <div class="card stack rule-card">
-          <p class="rule-title" data-i18n="ruleMatchTitle">Cada ordinal va con su número:</p>
-          <div id="ruleMatch"></div>
-        </div>
-
-        <div class="row reminder-buttons">
-          <button type="button" class="btn" id="referenceNext" data-i18n="start">Empezar a practicar →</button>
-        </div>
-      </section>
-
-      <!-- Pantalla 4: un único botón. El grupo encadena los pasos de
-           práctica y termina con el test. -->
-      <section id="screenLevels" class="stack hidden">
-        <!-- Antes había aquí un botón "← Volver al recordatorio" que
-             llevaba a Pantalla 3 (Recuerda). Se ha quitado: solo
-             queda el "← Volver" global de la cabecera para volver
-             a la portada de Calculia. -->
-        <h2 data-i18n="chooseLevel">Elige un paso.</h2>
-        <div class="menu-grid" id="levelsGrid"></div>
-      </section>
-
-      <!-- Pantalla de juego. -->
-      <section id="screenQuiz" class="stack hidden">
-        <!-- Antes había aquí un botón "← Volver a los pasos" que
-             llevaba a Pantalla 4. Se ha quitado: solo queda el
-             "← Volver" global de la cabecera. -->
-        <div class="progress-bar" aria-hidden="true">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-        <div class="progress-row">
-          <span class="progress-text" id="progressText"></span>
-          <span class="progress-step" id="stepLabel"></span>
-        </div>
-
-        <div class="card centered stack quiz-card">
-          <div class="quiz-shown" id="shown"></div>
-          <p class="context-text hidden" id="context"></p>
-        </div>
-
-        <h2 class="question centered" id="question"></h2>
-        <div class="options-grid" id="options" aria-label="Opciones"></div>
-        <div class="feedback" id="feedback" aria-live="polite"></div>
-        <div class="explanation hidden" id="explanationWrap">
-          <p id="explanation" aria-live="polite"></p>
-        </div>
-        <button type="button" class="btn hidden" id="next" data-i18n="core.next">Siguiente →</button>
-      </section>
-
-      <!-- Pantalla final. -->
+      <!-- The three stages (explanation, real life, reminder and test) are
+           built by assets/js/activity-flow.js into this element. -->
+      <div id="activity"></div>
     </main>
+
     <footer data-suite-footer data-suite-base="../../" data-suite-settings></footer>
   </div>
 
   <script src="../../assets/js/utils.js?v=calculia-v0d2f78bc"></script>
-  <script src="../../assets/js/i18n.js?v=calculia-vb93e602e"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-v0044cbfa"></script>
   <script src="../../assets/js/storage.js?v=calculia-v8a6191e2"></script>
   <script src="../../assets/js/achievements-engine.js?v=calculia-v53655f03"></script>
   <script src="../../assets/js/achievements.js?v=calculia-v225532f6"></script>
@@ -176,7 +42,12 @@
   <script src="data.js"></script>
   <script src="screens.js"></script>
   <script src="../../assets/js/activity-glue.js?v=calculia-v6c16a00d"></script>
+  <script src="../../assets/js/activity-flow.js?v=calculia-vffebdf82"></script>
+  <script src="../../assets/js/activity-flow-options.js?v=calculia-v525cfb23"></script>
+  <script src="../../assets/js/activity-flow-sheet.js?v=calculia-v27c547eb"></script>
+  <script src="../../assets/js/sheet-test.js?v=calculia-vd629caed"></script>
   <script src="app.js"></script>
+  <script src="../../assets/js/sw-register.js?v=calculia-v4a242865"></script>
   <script src="../../assets/js/locale-picker-config.js?v=calculia-v3be3c240"></script>
   <script src="../../assets/js/locale-picker.js?v=calculia-v8851c7df" defer></script>
   <script src="../../assets/js/suite-chrome.js?v=calculia-ve3cd47ff"></script>

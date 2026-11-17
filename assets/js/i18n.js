@@ -81,6 +81,12 @@
         finish: 'Terminar →',
         startOver: 'Empezar otra vez',
         galleryEnd: 'Has repasado todo. Ahora tienes {stars} estrellas.',
+        /* Texts of the shared flow (activity-flow.js, activity-flow-options.js). */
+        realLabel: 'Ejemplos de la vida real',
+        hintPrefix: '💡 ',
+        wrongPrefix: 'La respuesta es: ',
+        reviewRule: 'Repasar la regla',
+        backToPractice: 'Volver al test →',
       }
     },
     en: {
@@ -142,6 +148,12 @@
         finish: 'Finish →',
         startOver: 'Start again',
         galleryEnd: "You have gone through everything. Now you have {stars} stars.",
+        /* Texts of the shared flow (activity-flow.js, activity-flow-options.js). */
+        realLabel: 'Real-life examples',
+        hintPrefix: '💡 ',
+        wrongPrefix: 'The answer is: ',
+        reviewRule: 'Review the rule',
+        backToPractice: 'Back to the test →',
       }
     }
   };
