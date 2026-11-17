@@ -1,7 +1,7 @@
 /* ============================================================
    Calculia — Primo o compuesto
-   Two stages side by side: the game on the left and the explanation on
-   the right (config.pairedPractice). The explanation slides are
+   Two stages: the explanation, then the game (config.pairedPractice), one
+   after the other, never side by side. The explanation slides are
    interactive: the user arranges dots in rows, and taps the composite (or
    prime) numbers on a grid of 1 to 20. The game draws a starting number
    from 2 to 9; the user picks another from the same list; the product is

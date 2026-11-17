@@ -1,7 +1,7 @@
 /* ============================================================
    Calculia — Múltiplos
-   Two stages side by side: the explanation on the left and the game on
-   the right (config.pairedPractice with config.practiceOnRight). The game draws a starting number
+   Two stages: the explanation, then the game (config.pairedPractice), one
+   after the other, never side by side. The game draws a starting number
    from 1 to 9; the user picks another number from 1 to 9; the product
    is shown, with the reason it is a multiple. The stages and the screens
    are built by assets/js/activity-flow.js (mode 'options', skipReal); this
@@ -130,7 +130,6 @@
     extraMarkup: PRACTICE_HTML,
     extraScreens: ['#screenPractice'],
     pairedPractice: true,
-    practiceOnRight: true,
     practiceFromStart: true,
     ownTest: startPractice
   });

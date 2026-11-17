@@ -165,47 +165,49 @@ answers (`.options.options-row .option-btn` in the time activities). Check 18
 rejects a second copy of the sheet's classes or of the shake keyframes in an
 activity's `styles.css`, and in `activity-flow.css` or `number-sort.css`.
 
-### 3.5 Two kinds of screen: explanatory and interactive
+### 3.5 Slides: static and dynamic
 
-Every Calculia screen is one of two kinds. Each kind is its own **module**, or
-*frame*, not a loose page, and it can appear on its own or paired with another
-in the same view.
+Every Calculia slide is either **static** or **dynamic**. A dynamic slide is
+either an **animation** or a **game**. There is no split screen: each slide takes
+the full width, and whatever goes with it sits underneath, not beside it.
 
 | Kind | What the person does | What carries it |
 |---|---|---|
-| **Explanatory** (*slide* type) | Reads, looks and moves on with ← → or the next button. There is nothing to answer. | The carousel card (§3.3) |
-| **Interactive** (game *frame* type) | Acts on the content: drags, places, orders, taps the drawing or chooses, and gets ✓ or ✗ on each attempt. | The practice sheet (§3.4), or the one-question-per-slide test (`'options'`), where each question is an interactive frame |
+| **Static** | Reads and looks; moves on with ← → or the next button. There is nothing to do. | The carousel card (§3.3) |
+| **Dynamic · animation** | Watches a drawing that moves when the slide opens. There is nothing to do. | The carousel card with `kind: 'animated'` in the slide data. The drawing enters with `slide-draw-in` (`components.css`) and stays still under reduced motion |
+| **Dynamic · game** | Acts on the content: drags, places, orders, taps the drawing or chooses, and gets ✓ or ✗ on each attempt. | The carousel card and, underneath and full width, an interactive frame (`gameHtml`, `.intro-game`) |
 
-Composition rules:
+Rules:
 
-1. **Split screen on desktop.** An explanatory screen can share the view with an
-   interactive one: the explanation on the **left** and the game frame on the
-   **right**, from 768 px wide. Reading and tab order are the same: the
-   explanation first, then the game.
-2. **Mobile: one column.** Below 768 px the pair stacks, with the explanation on
-   top and the frame below. There is never horizontal scrolling (the responsive
-   contract in [`CLAUDE.md`](../../CLAUDE.md)).
-3. **The frame never starts without its explanation.** An interactive frame is
-   presented paired with the explanation it needs, or comes after it on the
-   previous screen. It never appears alone before it has been explained.
-4. **The explanation does not answer or score.** An explanatory screen awards no
-   stars and marks no answers. Its button names the next action (§4, point 3).
-5. **Each attempt in the frame is checked in the frame.** It follows §4, points
-   6, 8 and 12: ✓ or ✗ with shape and text, no penalty, and a star and an
-   explanation when the round closes.
-6. **The arrows belong to the explanation; the game has its own button.** In a
-   split screen, ← → belong to the carousel on the left. The button that starts
-   the game, on the right, stays a primary `btn`, like `realContinue` (see
-   `CLAUDE.md`, *Stage navigation outranks transition*).
+1. **One width, one column.** At every screen size the explanation comes on top
+   and the slide's game underneath. There are never two columns and never
+   horizontal scrolling (the responsive contract in [`CLAUDE.md`](../../CLAUDE.md)).
+2. **A game shows alone.** The practice (`pairedPractice`) and the test
+   (`pairedTest`) take the screen: when they start, the explanation leaves the
+   view. Inside a slide, the game sits under its explanation.
+3. **The game never starts without its explanation.** It sits in the same slide,
+   after the explanation. It never appears alone before it has been explained.
+4. **A slide does not score.** Neither a static nor a dynamic slide awards stars
+   or marks answers. Its button names the next action (§4, point 3).
+5. **Each attempt in a game is checked in the game.** It follows §4, points 6, 8
+   and 12: ✓ or ✗ with shape and text, no penalty, and a star and an explanation
+   when the round closes.
+6. **The arrows belong to the slide; the game has its own button.** ← → belong to
+   the carousel. The button that starts a practice stays a primary `btn`, like
+   `realContinue` (see `CLAUDE.md`, *Stage navigation outranks transition*).
+
+`assets/js/activity-flow.js` sets `data-slide-kind` (`static`, `animated` or
+`game`) on the explanation screen.
 
 > **Status:** implemented in the 17 activities that use the explanation and
 > one-question-per-slide test flow (`pairedTest: true` in their `app.js`). The test
 > takes the whole view: when practice starts, the explanation leaves. The
-> `.flow-pair` container lives in `components.css` and `activity-flow.js`
-> mounts it. In *Operations*, the «sharing into equal parts» slide has a game on
-> its right (`introFrameHtml`: sharing numbered balls among friends).
-> *Divisors* and *Multiples* are left out, because their practice is
-> a screen of their own, as are the activities with their own flow code.
+> `.flow-stack` container lives in `components.css` and `activity-flow.js`
+> mounts it. Slides with a game underneath: *Operations* (`gameHtml`:
+> sharing numbered balls among friends) and *Divisibility* (`gameHtml`).
+> *Divisors*, *Multiples* and *Prime or composite* have their practice on a
+> screen of its own, shown after the explanation. No slide has `kind: 'animated'`
+> yet: the mechanism is ready.
 
 ---
 
@@ -243,10 +245,9 @@ These are the ones that get verified. The normative source is
     the round ends with a star and an explanation, never with a grade. The
     real-life examples follow the explanation, so the practice has an
     everyday use.
-13. **Every screen is explanatory or interactive, and says which.** Explanatory
-    screens (*slide*) and interactive ones (game *frame*) are separate modules;
-    they can share a split screen, with the explanation on the left and the game
-    on the right, per §3.5.
+13. **Every slide is static or dynamic, and says which.** A dynamic slide is an
+    animation (`kind: 'animated'`) or a game (`gameHtml`). All of them take
+    the full width and stack; none sits in a split screen, per §3.5.
 
 ---
 

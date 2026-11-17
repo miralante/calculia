@@ -73,9 +73,9 @@
       unitMany: 'degrees',
 
       level: {
-        cerca:   'Near 0',
         cruzar:  'Crossing 0',
-        estados: 'Ice and steam'
+        hervir:  'Boiling: near 100',
+        estados: 'Ice, water and steam'
       },
 
       stateIce:    'ice',

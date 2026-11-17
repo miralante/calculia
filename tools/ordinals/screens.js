@@ -94,10 +94,23 @@
         '<span class="ordinal-hero-place">' + t('placePrefix').replace('{n}', n) + '</span>';
       el.setAttribute('aria-label', abbrev(n) + ' — ' + t('ord.' + n + 'Name'));
       paintDots();
+      paintCarouselEnd();
     }
 
+    /* The tour is linear: it ends on the last slide. There the arrows go away
+       and "Ver en la vida real" appears; before that, the button stays hidden. */
+    function paintCarouselEnd() {
+      var atEnd = carouselIdx === DATA.carousel.length - 1;
+      $('#carouselControls').classList.toggle('hidden', atEnd);
+      $('#introNext').classList.toggle('hidden', !atEnd);
+    }
+
+    /* Moves one slide; does nothing past either end, so the card click on the
+       last slide cannot wrap back to the start. */
     function carouselStep(delta) {
-      carouselIdx = App.utils.wrapIndex(carouselIdx, delta, DATA.carousel.length);
+      var next = carouselIdx + delta;
+      if (next < 0 || next >= DATA.carousel.length) return;
+      carouselIdx = next;
       paintCarousel();
     }
 
@@ -233,10 +246,21 @@
         labelEl.textContent = t('podiumLabel');
         ariaEl.setAttribute('aria-label', t('podiumAria'));
       }
+      paintFamousEnd();
+    }
+
+    /* Same rule as the carousel: the arrows go away on the last scene and
+       "Recuerda" appears there. */
+    function paintFamousEnd() {
+      var atEnd = famousIdx === DATA.famous.length - 1;
+      $('#famousControls').classList.toggle('hidden', atEnd);
+      $('#famousNextBtn').classList.toggle('hidden', !atEnd);
     }
 
     function famousStep(delta) {
-      famousIdx = (famousIdx + delta + DATA.famous.length) % DATA.famous.length;
+      var next = famousIdx + delta;
+      if (next < 0 || next >= DATA.famous.length) return;
+      famousIdx = next;
       /* Each time the slide changes, the highlighted floor goes back to 1. */
       currentFloor = 1;
       paintFamous();

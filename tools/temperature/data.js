@@ -53,32 +53,34 @@ var DATA = {
 
   /* Game 2: the water thermometer, in °C at 1 atm, lying horizontally.
      Ice at or below freeze, liquid between, steam at or above boil.
-     The game's range is the widest one (−10 to 110 °C); each level
-     narrows it to the numbers its orders use, so the scale stays tight
-     around the targets. */
+     Every level shows the states it teaches: the orders cross 0 °C
+     (ice and water), cross 100 °C (water and steam), or go through all
+     three. Each level's scale is tight around its orders, but the
+     scale always reaches the boiling point of the level that needs it. */
   water: {
     perRound: 6,
     min: -10,
-    max: 110,
+    max: 120,
     horizontal: true,
     keys: [0, 100],
     steps: [-10, -1, 1, 10],
-    marker: '💧',
+    /* The icon of each state: drawn on the track and in the readout. */
+    states: { ice: '🧊', liquid: '💧', steam: '♨️' },
     freeze: 0,
     boil: 100,
     zones: [
       { from: -10, to: 0,   cls: 'zone-ice' },
       { from: 0,   to: 100, cls: 'zone-liquid' },
-      { from: 100, to: 110, cls: 'zone-steam' }
+      { from: 100, to: 120, cls: 'zone-steam' }
     ],
     levels: [
-      /* 1. Near zero: small orders around the freezing point. */
-      { id: 'cerca',   lo: -6,  hi: 6,   amin: 1, amax: 4,  start: 0,
-        scale: { min: -6, max: 6, ticks: [-6, -4, -2, 0, 2, 4, 6] } },
-      /* 2. Crossing zero: bigger orders that pass through 0 °C. */
-      { id: 'cruzar',  lo: -10, hi: 10,  amin: 2, amax: 8,  start: 2,
+      /* 1. Crossing zero: the water freezes below 0 °C and melts above it. */
+      { id: 'cruzar',  lo: -10, hi: 10,  amin: 2, amax: 6, start: 2,
         scale: { min: -10, max: 10, ticks: [-10, -5, 0, 5, 10] } },
-      /* 3. Physical states: ice below 0 °C, steam above 100 °C. */
+      /* 2. Near boiling: the water boils at 100 °C and turns to steam. */
+      { id: 'hervir',  lo: 80,  hi: 120, amin: 2, amax: 8, start: 90,
+        scale: { min: 80, max: 120, ticks: [80, 90, 100, 110, 120] } },
+      /* 3. All the states: ice, water and steam. */
       { id: 'estados', lo: -10, hi: 110, amin: 5, amax: 30, start: 20,
         scale: { min: -10, max: 110, ticks: [-10, 0, 20, 40, 60, 80, 100] } }
     ]

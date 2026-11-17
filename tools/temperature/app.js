@@ -165,6 +165,8 @@
       roundsKey: 'elevatorRounds',
       valueText: fmtSigned,
       valueName: elevatorName,
+      valueIcon: function () { return ''; },
+      markerOf: function () { return DATA.elevator.marker; },
       stateOf: null,
       note: elevatorNote
     },
@@ -174,6 +176,9 @@
       roundsKey: 'completedRounds',
       valueText: function (n) { return fmtSigned(n) + ' °C'; },
       valueName: waterName,
+      /* The state's icon: 🧊 ice, 💧 water, ♨️ steam. */
+      valueIcon: function (n) { return DATA.water.states[waterStateFor(n)]; },
+      markerOf: function (n) { return DATA.water.states[waterStateFor(n)]; },
       stateOf: waterStateFor,
       note: waterNote
     }
@@ -200,7 +205,7 @@
   var els = {
     stage: q('stage'),
     level: q('level'),
-    count: q('count'),
+    orderBar: q('progress'),
     orderText: q('order-text'),
     orderArrow: q('order-arrow'),
     board: q('board'),
@@ -250,7 +255,7 @@
 
   /* Builds the track with its zones, ticks and the two markers: the position
      (the game's own icon) and the target (🎯). */
-  function buildScale(marker) {
+  function buildScale() {
     els.scale.innerHTML = '';
     els.scale.classList.toggle('is-horizontal', horizontal);
 
@@ -274,7 +279,7 @@
       labels.appendChild(label);
     });
 
-    els.markNow = textEl('span', 'scale-mark scale-mark-now', marker);
+    els.markNow = textEl('span', 'scale-mark scale-mark-now', '');
     els.markNow.setAttribute('aria-hidden', 'true');
     els.markTarget = textEl('span', 'scale-mark scale-mark-target', '🎯');
     els.markTarget.setAttribute('aria-hidden', 'true');
@@ -365,8 +370,28 @@
     paintButtons();
   }
 
+  /* The order bar: one segment per order of the round. The done ones fill
+     up; the current one is outlined. The text "Orden 2 de 6" goes to the
+     bar's accessible value, so screen readers still hear it. */
+  function buildOrderBar(total) {
+    els.orderBar.innerHTML = '';
+    els.orderBar.setAttribute('aria-valuemin', '0');
+    els.orderBar.setAttribute('aria-valuemax', String(total));
+    for (var i = 0; i < total; i += 1) {
+      els.orderBar.appendChild(textEl('span', 'order-seg', ''));
+    }
+  }
+
   function paintOrder() {
-    els.count.textContent = fill(t('game.orderCount'), { i: orderIndex, total: stage.data.perRound });
+    var segments = els.orderBar.querySelectorAll('.order-seg');
+    Array.prototype.forEach.call(segments, function (seg, i) {
+      seg.classList.toggle('is-done', i < orderIndex - 1);
+      seg.classList.toggle('is-current', i === orderIndex - 1);
+    });
+    els.orderBar.setAttribute('aria-valuenow', String(orderIndex - 1));
+    els.orderBar.setAttribute('aria-valuetext', fill(t('game.orderCount'), {
+      i: orderIndex, total: stage.data.perRound
+    }));
     els.orderText.textContent = fill(t(order.dir === 'up' ? 'game.orderUp' : 'game.orderDown'), {
       n: order.amount, unit: unit(stage.prefix, order.amount)
     });
@@ -376,12 +401,14 @@
   /* The readout (value and what it means), the target, and both markers on the scale. */
   function paintPosition() {
     els.value.textContent = stage.valueText(now);
-    els.valueLabel.textContent = stage.valueName(now);
+    var icon = stage.valueIcon(now);
+    els.valueLabel.textContent = (icon ? icon + ' ' : '') + stage.valueName(now);
     els.target.textContent = fill(t('game.targetText'), { target: stage.valueText(order.target) });
 
     els.board.classList.remove('state-ice', 'state-liquid', 'state-steam');
     if (stage.stateOf) els.board.classList.add('state-' + stage.stateOf(now));
 
+    els.markNow.textContent = stage.markerOf(now);
     placeAt(els.markNow, now);
     placeAt(els.markTarget, order.target);
   }
@@ -506,7 +533,8 @@
     horizontal = !!stage.data.horizontal;
     range = scaleFor(stage.data, level);
     els.board.classList.toggle('is-horizontal', horizontal);
-    buildScale(stage.data.marker);
+    buildScale();
+    buildOrderBar(stage.data.perRound);
     buildSteps(stage.data, stage.prefix);
     els.stage.textContent = t(stage.prefix + '.name');
     els.level.textContent = fill(t('game.levelLine'), {

@@ -391,8 +391,8 @@
   function swapFrameHtml(a, b) {
     return '<div class="ops-swap" data-a="' + a + '" data-b="' + b + '">' + swapFrameInner(a, b) + '</div>';
   }
-  /* The frame beside the explanation: a slide with a `frame` spec shows its game on the right. */
-  function introFrameHtml(slide) {
+  /* The game under the explanation: a slide with a `frame` spec shows its game below it, full width. */
+  function gameHtml(slide) {
     var f = slide && slide.frame;
     if (!f) return null;
     if (f.kind === 'deal') return dealHtml(f.total, f.groups, f.balls);
@@ -1041,7 +1041,7 @@
     testVisuals: true,
     testVisualClass: 'ops-visual',
     visualHtml: drawingHtml,
-    introFrameHtml: introFrameHtml,
+    gameHtml: gameHtml,
     introCopy: function (i, def) {
       return {
         title: t('ops.' + def.id + '.intro.' + (i + 1) + '.title'),

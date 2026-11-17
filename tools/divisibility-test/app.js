@@ -95,8 +95,8 @@
       '</div>';
   }
 
-  /* The frame beside an explanation slide (activity-flow puts it on the right). */
-  function introFrameHtml(slide) {
+  /* The game of a dynamic explanation slide (activity-flow puts it under the explanation, full width). */
+  function gameHtml(slide) {
     var f = slide && slide.frame;
     if (!f) return '';
     if (f.kind === 'tap') return tapFrameHtml(f);
@@ -264,7 +264,7 @@
     intro: DATA.intro,
     real: [],
     skipReal: true,
-    introFrameHtml: introFrameHtml,
+    gameHtml: gameHtml,
     buildRound: function () {
       var list = [];
       for (var i = 0; i < DATA.perRound; i += 1) list.push(DATA.questions[i % DATA.questions.length]);

@@ -73,9 +73,9 @@
       unitMany: 'grados',
 
       level: {
-        cerca:   'Cerca del 0',
         cruzar:  'Cruzar el 0',
-        estados: 'Hielo y vapor'
+        hervir:  'Hervir: cerca de 100',
+        estados: 'Hielo, agua y vapor'
       },
 
       stateIce:    'hielo',

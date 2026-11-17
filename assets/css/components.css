@@ -464,23 +464,21 @@ button.locked {
 .centered { text-align: center; }
 .hidden { display: none !important; }
 
-/* Explanation and game side by side (design.md §3.5). The explanation (#screenIntro) and the game
-   share one .flow-pair: an intro frame, or the activity's own practice (pairedPractice). From 768px
-   the game shows next to the explanation, which stays on the left; below that they stack, the
-   explanation first. A pairedTest test shows alone: the explanation leaves when it starts. */
-.flow-pair { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--espacio-grande); align-items: start; }
-.flow-pair > section, .flow-pair > .intro-frame { min-width: 0; }
-.intro-frame { display: flex; flex-direction: column; gap: var(--espacio-grande); }
-@media (min-width: 768px) {
-  .flow-pair.paired { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+/* Slides, one column (design.md §3.5). Every screen is full width and stacks top to bottom at every
+   width: the explanation (#screenIntro), then the game of a dynamic slide (.intro-game), then the
+   activity's own practice or test. Only one of them shows at a time; a game leaves the explanation. */
+.flow-stack { display: flex; flex-direction: column; gap: var(--espacio-grande); }
+.flow-stack > section, .flow-stack > .intro-game { min-width: 0; width: 100%; }
+.intro-game { display: flex; flex-direction: column; gap: var(--espacio-grande); }
+/* Dynamic slide, animation (data-slide-kind="animated"): the drawing moves once when the slide opens.
+   Still for readers who ask for reduced motion. */
+@keyframes slide-draw-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
 }
-/* Beside a practice the explanation keeps its slides only: no title card and no buttons that lead away.
-   Beside an intro frame the explanation keeps its buttons: the slides are still being read. */
-.flow-pair.in-test #introHeadingRow,
-.flow-pair.in-test #introActivityTitle,
-.flow-pair.in-test #introCard,
-.flow-pair.in-test #introContinue,
-.flow-pair.in-test #introBack { display: none !important; }
+@media (prefers-reduced-motion: no-preference) {
+  [data-slide-kind="animated"] #introVisual > * { animation: slide-draw-in 0.6s ease-out both; }
+}
 .stack { display: flex; flex-direction: column; gap: 12px; }
 .row { display: flex; align-items: center; gap: var(--espacio); flex-wrap: wrap; }
 

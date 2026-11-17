@@ -235,21 +235,6 @@
     return config.realText ? config.realText(i, source(ctx)) : t('real.' + (i + 1));
   }
 
-  /* The explanation and the frame on its right share one row (.flow-pair). The row is side by side while a frame
-     is on the right, or while the activity's own practice is (pairedPractice: class in-test, the explanation then
-     keeps only its slides). The test of a pairedTest activity shows alone: its explanation has left. */
-  function syncPair() {
-    var pair = document.querySelector('.flow-pair');
-    if (!pair) return;
-    /* pairedPractice: the activity's own game shows beside the explanation. */
-    var practice = $('#screenPractice');
-    var inPractice = !!practice && pair.contains(practice) && !practice.classList.contains('hidden');
-    var frame = $('#introFrame');
-    var frameOn = !!frame && !frame.classList.contains('hidden');
-    pair.classList.toggle('paired', inPractice || frameOn);
-    pair.classList.toggle('in-test', inPractice);
-  }
-
   function paintIntro(ctx) {
     var config = ctx.config;
     var src = source(ctx);
@@ -257,23 +242,24 @@
     var copy = introCopy(ctx, i);
     paintText('#introTitle', copy ? copy.title : null);
     paintText('#introText', copy ? copy.text : null);
-    /* A slide without a drawing (its practice is the frame on the right) leaves the picture empty. */
+    /* A slide without a drawing (its practice is the game under it) leaves the picture empty. */
     var visual = src.intro[i].visual;
     $('#introVisual').innerHTML = config.visualHtml && visual ? config.visualHtml(visual) : '';
     /* A slide can name its own picture (a figure names itself); otherwise the generic label. */
     var label = config.introVisualAria ? config.introVisualAria(i) : null;
     $('#introVisual').setAttribute('aria-label', label || t('ui.visualAria'));
     if (ctx.slideBars) paintBar(ctx, '#introProgress', '#introProgressFill', i, src.intro.length);
-    /* introFrameHtml: a slide can put an interactive frame on the right of its explanation (or none). */
-    if (config.introFrameHtml) {
-      var frame = $('#introFrame');
-      var frameHtml = config.introFrameHtml(src.intro[i]);
-      if (frame) {
-        frame.innerHTML = frameHtml || '';
-        frame.classList.toggle('hidden', !frameHtml);
-      }
-      syncPair();
+    /* Two kinds of slide (design.md §3.5): static, or dynamic. A dynamic slide is either an animation (kind: 'animated'
+       in its data: the drawing moves when the slide opens) or a game (gameHtml: an interactive frame, full width,
+       under the explanation). The kind is written on the explanation so the CSS can style it. */
+    var frame = $('#introGame');
+    var frameHtml = config.gameHtml ? config.gameHtml(src.intro[i]) : '';
+    if (frame) {
+      frame.innerHTML = frameHtml || '';
+      frame.classList.toggle('hidden', !frameHtml);
     }
+    var kind = frameHtml ? 'game' : (src.intro[i].kind === 'animated' ? 'animated' : 'static');
+    $('#screenIntro').setAttribute('data-slide-kind', kind);
     /* On the last slide the arrows leave: «Empezar otra vez» takes their place (back to the first slide). */
     var lastIntro = i === src.intro.length - 1;
     $('#introPrev').parentNode.classList.toggle('hidden', lastIntro);
@@ -334,14 +320,11 @@
         save: function () { App.storage.set(TOOL_ID, progress); },
         paintStars: function () { $('#stars').textContent = '⭐ ' + progress.stars; },
         show: function (screen) {
-          /* pairedPractice: the activity's own game keeps the explanation on its left. A pairedTest test shows alone. */
-          var keep = [screen];
-          if (config.pairedPractice && screen === '#screenPractice') keep.push('#screenIntro');
-          ctx.screens.forEach(function (id) { $(id).classList.toggle('hidden', keep.indexOf(id) === -1); });
+          /* One screen at a time: a game (the practice, the test) shows alone, and the explanation leaves. */
+          ctx.screens.forEach(function (id) { $(id).classList.toggle('hidden', id !== screen); });
           /* The intro frame belongs to the explanation: it leaves with it (paintIntro shows it again). */
-          var introFrameEl = $('#introFrame');
-          if (introFrameEl && screen !== '#screenIntro') introFrameEl.classList.add('hidden');
-          syncPair();
+          var introGameEl = $('#introGame');
+          if (introGameEl && screen !== '#screenIntro') introGameEl.classList.add('hidden');
         },
         paintIntro: function () { paintIntro(ctx); },
         paintReal: function () { paintReal(ctx); },
@@ -373,25 +356,22 @@
     var config = ctx.config;
     $('#activity').innerHTML = STAGES + '\n' + (config.reminder ? REMINDER + '\n' : '') + ctx.mode.markup(ctx) +
       (config.extraMarkup ? '\n' + config.extraMarkup : '');
-    /* pairedTest: the test sits in the same row, shown alone once the explanation leaves. introFrameHtml: explanation
-       and a frame share one row (see .flow-pair in components.css). The frame sits right after the explanation. */
-    if ((config.pairedTest || config.pairedPractice || config.introFrameHtml) && $('#screenIntro')) {
-      var pair = document.createElement('div');
-      pair.className = 'flow-pair';
-      $('#activity').insertBefore(pair, $('#screenIntro'));
-      /* pairedPractice: the game sits beside the explanation. By default the game goes first (on the left);
-         practiceOnRight puts the explanation on the left and the game on its right. */
-      var practice = config.pairedPractice ? $('#screenPractice') : null;
-      if (practice && !config.practiceOnRight) pair.appendChild(practice);
-      pair.appendChild($('#screenIntro'));
-      if (practice && config.practiceOnRight) pair.appendChild(practice);
-      if (config.introFrameHtml) {
-        var introFrame = document.createElement('div');
-        introFrame.id = 'introFrame';
-        introFrame.className = 'intro-frame hidden';
-        pair.appendChild(introFrame);
+    /* One column, top to bottom (design.md §3.5): the explanation, then the game under it when the slide has one
+       (gameHtml), then the activity's own practice (pairedPractice) or test (pairedTest). Each game shows alone
+       once it starts; the explanation never sits beside it. See .flow-stack in components.css. */
+    if ((config.pairedTest || config.pairedPractice || config.gameHtml) && $('#screenIntro')) {
+      var stack = document.createElement('div');
+      stack.className = 'flow-stack';
+      $('#activity').insertBefore(stack, $('#screenIntro'));
+      stack.appendChild($('#screenIntro'));
+      if (config.gameHtml) {
+        var introGame = document.createElement('div');
+        introGame.id = 'introGame';
+        introGame.className = 'intro-game hidden';
+        stack.appendChild(introGame);
       }
-      if (config.pairedTest && $('#screenGame')) pair.appendChild($('#screenGame'));
+      if (config.pairedPractice && $('#screenPractice')) stack.appendChild($('#screenPractice'));
+      if (config.pairedTest && $('#screenGame')) stack.appendChild($('#screenGame'));
     }
     if (config.introHeading) $('#introHeading').textContent = config.introHeading();
     else removeNode('#introHeadingRow');

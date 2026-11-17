@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../assets/css/brand.css?v=calculia-v66e94ecb">
   <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-vd99f158f">
   <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
-  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v7acc30e8">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v802a3252">
   <link rel="stylesheet" href="../../assets/css/locale-picker.css?v=calculia-v29c29c27">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -58,14 +58,16 @@
         <div class="card stack carousel-card">
           <div class="carousel-display" id="carouselDisplay" role="button" tabindex="0"></div>
           <div class="carousel-dots" id="carouselDots" aria-hidden="true"></div>
-          <div class="carousel-controls">
+          <div class="carousel-controls" id="carouselControls">
             <button type="button" class="btn btn-secondary" id="carouselPrev" data-i18n="prev">←</button>
             <button type="button" class="btn btn-secondary" id="carouselNext" data-i18n="nextArrow">→</button>
           </div>
         </div>
 
+        <!-- Aparece solo al llegar al último slide del carrusel
+             (screens.js, paintCarouselEnd). -->
         <div class="row intro-buttons">
-          <button type="button" class="btn btn-secondary" id="introNext" data-i18n="introNext">Ver en la vida real →</button>
+          <button type="button" class="btn btn-secondary hidden" id="introNext" data-i18n="introNext">Ver en la vida real →</button>
         </div>
       </section>
 
@@ -84,14 +86,16 @@
             <div class="famous-stage" id="famousScene"></div>
           </div>
           <p class="famous-text" id="famousText"></p>
-          <div class="carousel-controls">
+          <div class="carousel-controls" id="famousControls">
             <button type="button" class="btn btn-secondary" id="famousPrev2" data-i18n="prev">←</button>
             <button type="button" class="btn btn-secondary" id="famousNext2" data-i18n="nextArrow">→</button>
           </div>
         </div>
 
+        <!-- Aparece solo al llegar al último escenario (screens.js,
+             paintFamousEnd). -->
         <div class="row intro-buttons">
-          <button type="button" class="btn btn-secondary" id="famousNextBtn" data-i18n="continue">Recuerda →</button>
+          <button type="button" class="btn btn-secondary hidden" id="famousNextBtn" data-i18n="continue">Recuerda →</button>
         </div>
       </section>
 
@@ -171,7 +175,7 @@
   <script src="../../assets/js/achievements-engine.js?v=calculia-v53655f03"></script>
   <script src="../../assets/js/achievements.js?v=calculia-v225532f6"></script>
   <script src="../../assets/js/stars-engine.js?v=calculia-v8d4a7ee6"></script>
-  <script src="../../assets/js/feedback.js?v=calculia-v610cf3db"></script>
+  <script src="../../assets/js/feedback.js?v=calculia-v4c5131ce"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>

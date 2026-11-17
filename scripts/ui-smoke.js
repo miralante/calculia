@@ -1137,7 +1137,8 @@ async function exerciseShapes(page, baseUrl) {
     galleryNames.includes('octágono') && galleryNames.includes('cubo') &&
     galleryNames.includes('cono'),
   'La galería no incluye formas planas y cuerpos geométricos');
-  await page.locator('#introNext').click();
+  /* On the last slide the arrows leave: «Empezar otra vez» (#introRestart) takes their place. */
+  await page.locator('#introRestart').click();
   assert.equal(await introCards.count(), 2,
     'La galería no vuelve a la primera diapositiva al terminar');
 
@@ -1366,10 +1367,12 @@ async function exerciseShapes(page, baseUrl) {
   }
   assert.equal(new Set(realExamples).size, realCount,
     'No hay un ejemplo cotidiano distinto para cada forma');
-  for (let i = 0; i < realCount - 2; i += 1) {
-    await page.locator('#realPrev').click();
-    actions += 1;
-  }
+  /* On the last example the arrows leave: «Empezar otra vez» (#realRestart) takes their place, so the way
+     back to the triangle (the second example) is restart plus one step forward. */
+  await page.locator('#realRestart').click();
+  actions += 1;
+  await page.locator('#realNext').click();
+  actions += 1;
   /* Back at the triangle slide: still the plain three-sided sign, now with
      nothing drawn on top of it. */
   assert.ok((await page.locator('#realText').innerText()).includes('señal de peligro'),
