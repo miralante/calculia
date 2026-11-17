@@ -55,24 +55,6 @@ var DATA = {
       ]
     },
 
-    placevalue: {
-      hasExpoReal: true,
-      /* Place-value exchange ("10 of these make 1 of those") and the
-      /* Place-value exchange ("10 of these make 1 of those") and the
-         ×10 ladder up to 10^12. Progression (rule 13): pv1→pv2→pv3
-         only change 'lugar' (which exchange). pv3→pv4 changes 'tipo'
-         (exchange → ladder). pv4→pv5 only changes the exponent range
-         (up to a million → up to a trillion / billón). */
-      picto: '🔁',
-      levels: [
-        { id: 'pv1', tipo: 'canje', lugar: 0 },
-        { id: 'pv2', tipo: 'canje', lugar: 1 },
-        { id: 'pv3', tipo: 'canje', lugar: 2 },
-        { id: 'pv4', tipo: 'escalera', minExp: 0, maxExp: 5 },
-        { id: 'pv5', tipo: 'escalera', minExp: 6, maxExp: 11 }
-      ]
-    },
-
     /* The comparison signs (see TODO.md, not served to the browser).
        Progression (rule 13), exactly one variable per step:
          c1→c2  magnitude grows, blocks stay.

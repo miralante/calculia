@@ -17,24 +17,16 @@
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
 
-/* Color-coded digits by place value */
-.num-color { font-weight: 800; letter-spacing: 2px; }
-.digit-u { color: var(--mod-coordinacion); }   /* blue — units / ground floor (0) */
-.digit-d { color: var(--mod-secuencia); }      /* green — tens */
-.digit-c { color: var(--mod-emocional); }      /* purple — hundreds */
-.digit-sep { color: var(--color-texto-suave); }
+/* The colours by place (blue, green, purple), the legend, the signs, the
+   empty boxes and the blocks are shared: assets/css/place-value.css. What
+   stays here is what only numbers shows: the negative scale and the words. */
 .digit-pos { color: var(--mod-secuencia); }    /* green — positive scale (above 0) */
-.digit-comma, .digit-dec, .sign { color: var(--mod-memoria); } /* orange — negative scale (below 0) */
-.highlight { text-decoration: underline; text-underline-offset: 6px; }
-.group { display: inline-flex; flex-direction: column; align-items: center; }
-.group-label { font-size: 14px; font-weight: 700; color: var(--color-texto-suave); letter-spacing: 0; }
+.digit-comma, .digit-dec { color: var(--mod-memoria); } /* orange — negative scale (below 0) */
 
 .card { border-color: var(--mod-razonamiento-suave); }
 .prompt { font-weight: 700 }
 .visual { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); }
 .visual-number { font-size: 52px; }
-.legend { font-size: var(--texto-pequeno); font-weight: 700; }
-.hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
 .words-number { font-size: var(--texto-grande); font-weight: 800; }
 
 /* Expressions (×10 ladder) */
@@ -42,42 +34,9 @@
   display: flex; align-items: center; justify-content: center;
   gap: 12px; font-size: 40px; font-weight: 800; flex-wrap: wrap;
 }
-.sign { font-size: 40px; font-weight: 800; }
-.num-box {
-  min-width: 64px; min-height: 64px; padding: 8px 12px;
-  display: inline-flex; align-items: center; justify-content: center;
-  border: 3px solid var(--color-borde); border-radius: var(--radio);
-  background: var(--color-superficie); font-size: 30px; font-weight: 800;
-}
-.num-box.empty { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
 
 /* Number dictation */
 .dictation-pending { font-size: 80px; }
-
-/* Units, tens, and hundreds blocks */
-.blocks { display: flex; align-items: flex-end; justify-content: center; gap: var(--espacio-grande); flex-wrap: wrap; }
-.blocks-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; justify-content: center; max-width: 340px; }
-.block-100 {
-  width: 60px; height: 60px; display: inline-flex; align-items: center; justify-content: center;
-  background: var(--mod-emocional-suave); border: 3px solid var(--mod-emocional);
-  border-radius: 8px; font-weight: 800; color: var(--mod-emocional);
-}
-.block-10 {
-  width: 26px; height: 60px; display: inline-flex; align-items: center; justify-content: center;
-  background: var(--mod-secuencia-suave); border: 3px solid var(--mod-secuencia);
-  border-radius: 8px; font-weight: 700; font-size: 12px; color: var(--mod-secuencia);
-}
-.block-1 { width: 26px; height: 26px; border-radius: 50%; background: var(--mod-coordinacion-suave); border: 3px solid var(--mod-coordinacion); }
-.block-1000 {
-  min-width: 76px; height: 60px; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center;
-  background: var(--mod-razonamiento-suave); border: 3px solid var(--mod-razonamiento);
-  border-radius: 8px; font-weight: 800; color: var(--mod-razonamiento);
-}
-/* Ten small blocks framed together: ready to trade for 1 big one. */
-.trade-group {
-  display: inline-flex; flex-wrap: wrap; gap: 4px; align-items: flex-end; justify-content: center;
-  max-width: 200px; padding: 8px; border: 3px dashed var(--mod-razonamiento); border-radius: var(--radio);
-}
 
 /* Answer options */
 .options .option-btn { text-align: center; font-size: 26px; }
@@ -204,42 +163,6 @@
   font-weight: 700;
 }
 
-.lesson-actions { justify-content: center; flex-wrap: wrap; }
-/* Generic exposition + real-life screens for the sub-activities.
-   Mirrors the expo-lesson-card layout so the "explanation + life
-   examples" sequence has the same shape on every sub-activity. */
-.expo-lesson-card { max-width: 760px; margin: 0 auto; }
-.expo-lesson { max-width: 620px; text-align: left; }
-.expo-lesson p, .expo-lesson li { font-size: var(--texto-base); line-height: 1.5; }
-.expo-lesson ul { padding-left: 1.5em; }
-.expo-lesson li + li { margin-top: 8px; }
-.expo-note {
-  margin-top: 12px;
-  font-size: var(--texto-base);
-  font-style: italic;
-  color: var(--color-texto-suave);
-  text-align: left;
-  max-width: 620px;
-}
-
-.real-list { display: grid; gap: 14px; width: 100%; text-align: left; }
-.real-list-item {
-  display: grid;
-  grid-template-columns: 56px minmax(0, 1fr);
-  align-items: center;
-  gap: 14px;
-  padding: 14px;
-  border: 2px solid var(--color-borde);
-  border-radius: var(--radio);
-  background: var(--color-superficie);
-}
-.real-list-item p { margin: 0; line-height: 1.45; font-size: var(--texto-base); }
-.real-list-icon { font-size: 40px; text-align: center; }
-
-@media (max-width: 380px) {
-  .real-list-item { grid-template-columns: 44px minmax(0, 1fr); gap: 10px; padding: 10px; }
-  .real-list-icon { font-size: 32px; }
-}
 
 /* ============================================================
    Interactive "leer números" (data.js: 'lecturaInput')

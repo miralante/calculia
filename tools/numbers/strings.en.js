@@ -33,7 +33,6 @@
 
     activity: {
       unidades: { name: 'Ones, tens, hundreds', detail: 'What number is it?', instruction: 'Each colour helps read the number. Blue: ones. Green: tens. Purple: hundreds.' },
-      placevalue: { name: 'Quick sums', detail: '10 small ones become 1 big one.', instruction: 'When you put 10 of the same together, they form 1 of the next group. The digit moves one position to the left.' },
       comparar: { name: 'Greater, smaller or equal', detail: 'The signs <, > and =.', instruction: 'Look at the two numbers. The sign opens towards the bigger number. If both are the same, the sign is =.' }
     },
     /* Exposition + real-life screens for the sub-activities that don't
@@ -120,16 +119,6 @@
           }
         ]
       },
-      placevalue: {
-        title: 'Quick sums',
-        intro: '10 ones make 1 ten. 10 tens make 1 hundred. 10 hundreds make 1 thousand. And so on.',
-        bullets: [
-          '10 × 1 = 1 ten (10)',
-          '10 × 10 = 1 hundred (100)',
-          '10 × 100 = 1 thousand (1,000)'
-        ],
-        note: 'Multiplying by 10 moves the digit one place to the left and adds a zero.'
-      }
     },
     real: {
       comparar: {
@@ -154,15 +143,6 @@
           { icon: '🏠', text: 'A house that costs €150,000: 1 hundred thousand and 5 ten thousands.' }
         ]
       },
-      placevalue: {
-        title: 'Trading 10s in your daily life',
-        items: [
-          { icon: '🥚', text: '10 loose eggs make 1 dozen.' },
-          { icon: '✏️', text: '10 loose pencils make 1 pack.' },
-          { icon: '💶', text: '10 coins of 10 cents = 1 euro.' },
-          { icon: '⏱️', text: '10 years = 1 decade. 10 decades = 1 century (100 years).' }
-        ]
-      }
     },
     expoNext: 'See real-life examples →',
     expoSlideNext: 'Next →',
@@ -189,11 +169,6 @@
       umillones: 'Millions and trillion',
       udictado: 'Listen and choose',
       counter: 'Free counter',
-      pv1: 'Ones to tens',
-      pv2: 'Tens to hundreds',
-      pv3: 'Hundreds to thousands',
-      pv4: 'Ladder of 10: up to one million',
-      pv5: 'Ladder of 10: up to one trillion',
 
            },
     gen: {
@@ -208,19 +183,6 @@
       signEqual: 'is equal to',
       bloquesEnunciado: 'What number do the blocks make?',
       bloquesVisualAria: 'Blocks: {texto}',
-      canjeDirecto0: 'With {n} ones, how many tens do you make?',
-      canjeDirecto1: 'With {n} tens, how many hundreds do you make?',
-      canjeDirecto2: 'With {n} hundreds, how many thousands do you make?',
-      canjePista0: '10 ones make 1 ten.',
-      canjePista1: '10 tens make 1 hundred.',
-      canjePista2: '10 hundreds make 1 thousand: 1,000.',
-      canjeAriaDirecto: '{k} groups of 10 blocks',
-      canjeInverso0: '{k} tens. How many ones is that?',
-      canjeInverso1: '{k} hundreds. How many tens is that?',
-      canjeInverso2: '{k} thousands. How many hundreds is that?',
-      canjeAriaInverso: '{k} big blocks',
-      escaleraEnunciado: 'How much is 10 × this number?',
-      escaleraPista: 'Times 10: each digit moves one place to the left and a zero is added.',
       counterHint: 'Tap to add or subtract. Watch how the digits and the groups (ones, tens, hundreds, thousands…) change.',
       counterAudioAria: 'Read the number aloud',
       counterResetLabel: '🔄 Start at 0',
@@ -240,9 +202,6 @@
          strategy, never the answer. */
       socraticCompare: '🤔 «{elegida}» is not the sign. Compare the biggest places of both numbers first: they decide which way the sign opens.',
       socraticBlocks: '🤔 «{elegida}» does not match the blocks. Count the blocks in each group, then put the totals together.',
-      socraticTradeUp: '🤔 «{elegida}» is not the number of groups. Look at the blocks and group them in tens: count the groups.',
-      socraticTradeDown: '🤔 «{elegida}» is not how many small blocks fit. Look at each big block and count how many small ones fit inside.',
-      socraticLadder: '🤔 «{elegida}» does not have the right number of zeros. Look at the number: it is a one followed by zeros, count how many.',
       /* Interactive "escribir números" — typed-input practice with
          audio. "Generar" plays the number aloud, "Reproducir"
          replays it, "Comprobar" validates, "Ver resultado" reveals. */

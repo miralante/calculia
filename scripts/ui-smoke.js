@@ -1524,10 +1524,10 @@ async function exerciseNumbers(page, baseUrl) {
   await catalogCard.click();
   await page.waitForURL('**/tools/numbers-group/', { timeout: NAV_TIMEOUT });
 
-  /* El grupo ya no ofrece Positivos y negativos: quedan cinco actividades. */
+  /* El grupo ya no ofrece Positivos y negativos ni Cuentas rápidas (ahora dentro de Cuentas rápidas): quedan cuatro actividades. */
   await page.waitForSelector('#activitiesMenu a.btn-actividad', { timeout: NAV_TIMEOUT });
-  assert.equal(await page.locator('#activitiesMenu a.btn-actividad').count(), 5,
-    'El grupo Números no muestra las cinco actividades esperadas');
+  assert.equal(await page.locator('#activitiesMenu a.btn-actividad').count(), 4,
+    'El grupo Números no muestra las cuatro actividades esperadas');
   assert.equal(await page.locator('#activitiesMenu a.btn-actividad[href*="positivos"]').count(), 0,
     'El grupo Números sigue enlazando Positivos y negativos');
   actions += 1;
@@ -1555,8 +1555,8 @@ async function exerciseNumbers(page, baseUrl) {
   await page.evaluate(() => localStorage.setItem('calculia:locale', 'en'));
   await page.goto(baseUrl + '/tools/numbers-group/');
   await page.waitForSelector('#activitiesMenu a.btn-actividad', { timeout: NAV_TIMEOUT });
-  assert.equal(await page.locator('#activitiesMenu a.btn-actividad').count(), 5,
-    'The numbers group does not show the five expected activities');
+  assert.equal(await page.locator('#activitiesMenu a.btn-actividad').count(), 4,
+    'The numbers group does not show the four expected activities');
   actions += 1;
 
   return actions ? 1 : 0;

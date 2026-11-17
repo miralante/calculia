@@ -1,6 +1,6 @@
 /* ============================================================
-   Calculia — Numbers: the screens around the test.
-   The exposition and the real-life screens of an activity: the screens that come before the test.
+   Calculia — the exposition and real-life screens around a sub-activity's test.
+   Shared by every activity that sets hasExpoReal: the exposition (its slides) and the real-life screen, both painted from strings keyed by the activity id (expo.<id>, real.<id>).
    This file owns them and their buttons. The page gives it what it needs in the host object: the
    screens, show(), the current activity, and the start of the round of this activity.
    ============================================================ */
@@ -10,7 +10,7 @@
   var $ = App.utils.$;
 
   /* host: { show(screen), current(), startCurrentRound(), screens: { menu, expo, real } } */
-  App.numbersScreens = function (host) {
+  App.expoScreens = function (host) {
     var show = host.show;
     var screenMenu = host.screens.menu;
     var screenExpo = host.screens.expo;

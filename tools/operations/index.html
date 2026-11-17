@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
   <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v6c0097ad">
   <link rel="stylesheet" href="../../assets/css/locale-picker.css?v=calculia-v29c29c27">
+  <link rel="stylesheet" href="../../assets/css/place-value.css?v=calculia-v81001ba4">
+  <link rel="stylesheet" href="../../assets/css/expo-screens.css?v=calculia-vf97bfa45">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -53,6 +55,42 @@
       <button type="button" class="btn hidden" id="btnNext" data-i18n="core.next">Siguiente →</button>
     </section>
 
+    <!-- Explanation + real-life screens of «Cuentas rápidas de los números»
+         (placevalue). Painted from strings keyed by the sub-activity id
+         (assets/js/expo-screens.js). -->
+    <section id="expoScreen" class="hidden stack" aria-labelledby="expoTitleEl">
+      <div class="row center-row">
+        <p class="instruction" id="expoInstructionEl" data-i18n="instructionMenu"></p>
+      </div>
+      <div class="card centered stack expo-lesson-card">
+        <h2 id="expoTitleEl"></h2>
+        <div class="expo-lesson">
+          <p id="expoIntroEl"></p>
+          <ul id="expoBulletsEl"></ul>
+        </div>
+        <p class="expo-note" id="expoNoteEl"></p>
+      </div>
+      <p class="instruction hidden" id="expoProgressEl" aria-live="polite"></p>
+      <div class="row lesson-actions">
+        <button type="button" class="btn btn-secondary hidden" id="expoBack" data-i18n="expoBack"></button>
+        <button type="button" class="btn" id="expoNext" data-i18n="expoNext"></button>
+      </div>
+    </section>
+
+    <section id="realScreen" class="hidden stack" aria-labelledby="realTitleEl">
+      <div class="row center-row">
+        <p class="instruction" id="realInstructionEl" data-i18n="instructionMenu"></p>
+      </div>
+      <div class="card centered stack expo-lesson-card">
+        <h2 id="realTitleEl"></h2>
+        <div class="real-list" id="realListEl"></div>
+      </div>
+      <div class="row lesson-actions">
+        <button type="button" class="btn btn-secondary" id="realBack" data-i18n="realBack"></button>
+        <button type="button" class="btn" id="realNext" data-i18n="realNext"></button>
+      </div>
+    </section>
+
     </main>
     <footer data-suite-footer data-suite-base="../../" data-suite-settings></footer>
   </div>
@@ -67,6 +105,8 @@
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
+  <script src="../../assets/js/place-value.js?v=calculia-v1d3bf245"></script>
+  <script src="../../assets/js/expo-screens.js?v=calculia-v5249596b"></script>
   <script src="../../assets/js/activity-glue.js?v=calculia-v59d35f1b"></script>
   <script src="../../assets/js/classic-quiz.js?v=calculia-v92a6ac05"></script>
   <script src="app.js"></script>

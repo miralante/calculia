@@ -70,6 +70,25 @@ var DATA = {
         { id: 'o1', tipo: 'whatFirst' },
         { id: 'o2', tipo: 'orderResult' }
       ]
+    },
+
+    /* Cuentas rápidas de los números (antes en tools/numbers/): 10 de una
+       clase cambian por 1 de la siguiente, y multiplicar por 10 mueve la
+       cifra. Lleva su propia explicación y vida real (hasExpoReal) y cuenta
+       sus rondas aparte (ownProgress), para que empiece en su primer nivel. */
+    placevalue: {
+      picto: '🔁',
+      hasExpoReal: true,
+      ownProgress: true,
+      /* Canje (pv1→pv3: cambia de qué grupo se trata) y escalera del ×10
+         (pv4→pv5: cambia el rango de potencias). */
+      levels: [
+        { id: 'pv1', tipo: 'canje', lugar: 0 },
+        { id: 'pv2', tipo: 'canje', lugar: 1 },
+        { id: 'pv3', tipo: 'canje', lugar: 2 },
+        { id: 'pv4', tipo: 'escalera', minExp: 0, maxExp: 5 },
+        { id: 'pv5', tipo: 'escalera', minExp: 6, maxExp: 11 }
+      ]
     }
   },
 

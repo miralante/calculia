@@ -1,0 +1,66 @@
+/* ============================================================
+   Calculia — Place value: the shared drawing of digits and blocks.
+   Digits are coloured by place: blue units, green tens, purple
+   hundreds. The drawing is made by assets/js/place-value.js (and by
+   the activities' own generators, which use the same classes): the
+   ten-blocks that can be traded for a big one, the empty box of a
+   ×10 ladder, and the colour legend under a question.
+   Used by tools/numbers/ and tools/operations/. A tool keeps its own
+   rules for what is not here (its comma and cents, its expressions).
+   ============================================================ */
+
+/* ---- Digits ---- */
+.num-color { font-weight: 800; letter-spacing: 2px; }
+.digit-u { color: var(--mod-coordinacion); }   /* blue — units */
+.digit-d { color: var(--mod-secuencia); }      /* green — tens */
+.digit-c { color: var(--mod-emocional); }      /* purple — hundreds */
+.digit-sep { color: var(--color-texto-suave); }
+.highlight { text-decoration: underline; text-underline-offset: 6px; }
+/* A group of three digits with its label under it (thousands, millions…). */
+.place-group { display: inline-flex; flex-direction: column; align-items: center; }
+.group-label { font-size: 14px; font-weight: 700; color: var(--color-texto-suave); letter-spacing: 0; }
+
+/* ---- Legend and hint under a question ---- */
+.legend { font-size: var(--texto-pequeno); font-weight: 700; }
+.hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
+
+/* ---- Signs and empty boxes (orange signs, as in the number scale) ---- */
+.sign { font-size: 40px; font-weight: 800; color: var(--mod-memoria); }
+.num-box {
+  min-width: 64px; min-height: 64px; padding: 8px 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 3px solid var(--color-borde); border-radius: var(--radio);
+  background: var(--color-superficie); font-size: 30px; font-weight: 800;
+}
+.num-box.empty { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
+
+/* A ×10 ladder or any "a — b = ?" row, wrapping on narrow screens. */
+.place-expression {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; font-size: 40px; font-weight: 800; flex-wrap: wrap;
+}
+
+/* ---- Units, tens and hundreds as blocks ---- */
+.blocks { display: flex; align-items: flex-end; justify-content: center; gap: var(--espacio-grande); flex-wrap: wrap; }
+.blocks-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; justify-content: center; max-width: 340px; }
+.block-100 {
+  width: 60px; height: 60px; display: inline-flex; align-items: center; justify-content: center;
+  background: var(--mod-emocional-suave); border: 3px solid var(--mod-emocional);
+  border-radius: 8px; font-weight: 800; color: var(--mod-emocional);
+}
+.block-10 {
+  width: 26px; height: 60px; display: inline-flex; align-items: center; justify-content: center;
+  background: var(--mod-secuencia-suave); border: 3px solid var(--mod-secuencia);
+  border-radius: 8px; font-weight: 700; font-size: 12px; color: var(--mod-secuencia);
+}
+.block-1 { width: 26px; height: 26px; border-radius: 50%; background: var(--mod-coordinacion-suave); border: 3px solid var(--mod-coordinacion); }
+.block-1000 {
+  min-width: 76px; height: 60px; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center;
+  background: var(--mod-razonamiento-suave); border: 3px solid var(--mod-razonamiento);
+  border-radius: 8px; font-weight: 800; color: var(--mod-razonamiento);
+}
+/* Ten small blocks framed together: ready to trade for 1 big one. */
+.trade-group {
+  display: inline-flex; flex-wrap: wrap; gap: 4px; align-items: flex-end; justify-content: center;
+  max-width: 200px; padding: 8px; border: 3px dashed var(--mod-razonamiento); border-radius: var(--radio);
+}

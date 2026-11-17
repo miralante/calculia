@@ -801,6 +801,8 @@ in §2.1 above are the canonical rationale).
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | activities that keep their own round loop (not `App.activityFlow`) |
 | `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | the `test: 'gallery'` mode of the three-stage flow: slides only, the achievement screen, one star per page |
 | `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | the activities that show a row of dots or a shuffled Yes / No (divisibility-test, multiples, prime-composite) |
+| `place-value.js` | `App.placeValue`: `digits`, `paintNumber`, `paintSign`, `legendHtml`, `legendText`, `repeat` | the colour of digits by place (units blue, tens green, hundreds purple) for numbers and operations; styles in `assets/css/place-value.css` |
+| `expo-screens.js` | `App.expoScreens(host)` → `{startExpoScreen, startRealScreen}` | the exposition and real-life screens before the test, for the activities that set `hasExpoReal` in their `data.js` (numbers, operations) |
 | `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | the sheet mode of the activity flow (`activity-flow-sheet.js`), which no activity uses now |
 | `classic-quiz.js` | `App.classicRound()`, `App.classicQuiz(host)` → `{answer, showHint, next}`, `App.activityMenu(host)` → `{paint}`, `App.classicPainter(host)` → `{startRound, paintQuestion, render}` | the classic one-question activities (algebra, calendar, charts, divisibility, fractions-measures, geometry, measures, operations, percent, problems): the round state object and the shared answer, hint, next step, menu, and the start and painting of a question (geometry, operations and percent so far) |
 

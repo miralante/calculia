@@ -380,8 +380,8 @@
     else startRound(levelFromProgress());
   });
 
-  /* The exposition and the real-life screens live in screens.js. */
-  var expositions = App.numbersScreens({
+  /* The exposition and the real-life screens are shared (assets/js/expo-screens.js). */
+  var expositions = App.expoScreens({
     show: show,
     current: function () { return activity; },
     startCurrentRound: function () { startRound(levelFromProgress()); },
@@ -404,6 +404,13 @@
      go straight to that sub-activity, skipping the menu. Without a valid
      id the menu is shown as before. */
   var initialSub = new URLSearchParams(window.location.search).get('sub');
+  /* Cuentas rápidas (placevalue) now lives in tools/operations/ as one of its
+     sub-activities. Old links to ?sub=placevalue are sent there. */
+  var MOVED_SUB = { placevalue: '../operations/?sub=placevalue' };
+  if (initialSub && MOVED_SUB[initialSub]) {
+    window.location.replace(MOVED_SUB[initialSub]);
+    return;
+  }
   /* "← Volver" goes to the group the sub-activity was opened from: comparar is listed
      under "Ordenar números" (tools/order-numbers/data.js), the others under "Números"
      (tools/numbers-group/data.js), which is the static href of the page. */

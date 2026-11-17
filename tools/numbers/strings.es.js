@@ -32,7 +32,6 @@
     centenaPlural: 'centenas',
     activity: {
       unidades: { name: 'Unidades, decenas, centenas', detail: '¿Qué número es?', instruction: 'Cada color ayuda a leer el número. Azul: unidades. Verde: decenas. Morado: centenas.' },
-      placevalue: { name: 'Cuentas rápidas', detail: '10 pequeños se cambian por 1 grande.', instruction: 'Cuando juntas 10 iguales, forman 1 del grupo siguiente. La cifra se mueve una posición a la izquierda.' },
       comparar: { name: 'Mayor, menor o igual', detail: 'Los signos <, > y =.', instruction: 'Mira los dos números. El signo se abre hacia el número más grande. Si los dos son iguales, el signo es =.' }
     },
     /* Exposition + real-life screens for the sub-activities that don't
@@ -119,16 +118,6 @@
           }
         ]
       },
-      placevalue: {
-        title: 'Cuentas rápidas',
-        intro: '10 unidades forman 1 decena. 10 decenas forman 1 centena. 10 centenas forman 1 millar. Y así sigue.',
-        bullets: [
-          '10 × 1 = 1 decena (10)',
-          '10 × 10 = 1 centena (100)',
-          '10 × 100 = 1 millar (1.000)'
-        ],
-        note: 'Multiplicar por 10 mueve la cifra un lugar a la izquierda y añade un cero.'
-      }
     },
     real: {
       comparar: {
@@ -153,15 +142,6 @@
           { icon: '🏠', text: 'Una casa que cuesta 150.000 €: 1 centena de millar y 5 decenas de millar.' }
         ]
       },
-      placevalue: {
-        title: 'Los cambios de 10 en tu día',
-        items: [
-          { icon: '🥚', text: '10 huevos sueltos forman 1 docena.' },
-          { icon: '✏️', text: '10 lápices sueltos forman 1 paquete.' },
-          { icon: '💶', text: '10 monedas de 10 céntimos = 1 euro.' },
-          { icon: '⏱️', text: '10 años = 1 década. 10 décadas = 1 siglo (100 años).' }
-        ]
-      }
     },
     expoNext: 'Ver ejemplos de la vida real →',
     expoSlideNext: 'Siguiente →',
@@ -188,11 +168,6 @@
       umillones: 'Millones y billón',
       udictado: 'Escucha y elige',
       counter: 'Contador libre',
-      pv1: 'De unidades a decenas',
-      pv2: 'De decenas a centenas',
-      pv3: 'De centenas a miles',
-      pv4: 'Escalera del 10: hasta el millón',
-      pv5: 'Escalera del 10: hasta el billón',
 
            },
     gen: {
@@ -207,19 +182,6 @@
       signEqual: 'es igual a',
       bloquesEnunciado: '¿Qué número forman los bloques?',
       bloquesVisualAria: 'Bloques: {texto}',
-      canjeDirecto0: 'Con {n} unidades, ¿cuántas decenas formas?',
-      canjeDirecto1: 'Con {n} decenas, ¿cuántas centenas formas?',
-      canjeDirecto2: 'Con {n} centenas, ¿cuántos miles formas?',
-      canjePista0: '10 unidades forman 1 decena.',
-      canjePista1: '10 decenas forman 1 centena.',
-      canjePista2: '10 centenas forman 1 millar: 1.000.',
-      canjeAriaDirecto: '{k} grupos de 10 bloques',
-      canjeInverso0: '{k} decenas. ¿Cuántas unidades son?',
-      canjeInverso1: '{k} centenas. ¿Cuántas decenas son?',
-      canjeInverso2: '{k} miles. ¿Cuántas centenas son?',
-      canjeAriaInverso: '{k} bloques grandes',
-      escaleraEnunciado: '¿Cuánto es 10 × este número?',
-      escaleraPista: 'Por 10: cada cifra se mueve un sitio a la izquierda y se añade un cero.',
       counterHint: 'Pulsa para sumar o restar. Mira cómo cambian las cifras y los grupos (unidades, decenas, centenas, miles…).',
       counterAudioAria: 'Leer el número en voz alta',
       counterResetLabel: '🔄 Empezar en 0',
@@ -238,9 +200,6 @@
          para todas. No dan la respuesta, dan la estrategia. */
       socraticCompare: '🤔 «{elegida}» no es el signo. Compara primero las cifras de más valor de los dos números: ellas dicen hacia dónde abre el signo.',
       socraticBlocks: '🤔 «{elegida}» no cuadra con los bloques. Cuenta los bloques de cada grupo y después junta los resultados.',
-      socraticTradeUp: '🤔 «{elegida}» no es el número de grupos. Mira los bloques y agrúpalos de diez en diez: cuenta los grupos.',
-      socraticTradeDown: '🤔 «{elegida}» no es cuántos bloques pequeños entran. Mira cada bloque grande y cuenta cuántos pequeños caben dentro.',
-      socraticLadder: '🤔 «{elegida}» no tiene los ceros que toca. Mira el número: es un uno seguido de ceros, cuenta cuántos hay.',
       /* Práctica interactiva de "escribir números" — el número se
          genera y se reproduce en audio. "Generar" lo dice en voz
          alta, "Reproducir" lo repite, "Comprobar" valida, "Ver

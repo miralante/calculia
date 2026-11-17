@@ -11,6 +11,9 @@
 
   var screenMenu = $('#screenMenu');
   var screenGame = $('#screenGame');
+  /* Explanation and real-life screens of the placevalue sub-activity (assets/js/expo-screens.js). */
+  var screenExpo = $('#expoScreen');
+  var screenReal = $('#realScreen');
   var promptEl = $('#prompt');
   var visualEl = $('#visual');
   var legendEl = $('#legend');
@@ -24,7 +27,17 @@
   var starsEl = $('#stars');
 
   /* Persistent progress */
-  var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0 });
+  var progress = App.storage.progressWith(TOOL_ID, { stars: 0, completedRounds: 0, roundsByActivity: {} });
+  /* Cuentas rápidas de los números used to be a sub-activity of tools/numbers/,
+     where its rounds were counted. Carry that count over once, so a person who
+     had reached a later level keeps it. */
+  if (!progress.placevalueMigrated) {
+    var oldNumbers = App.storage.get('numbers');
+    var oldRounds = oldNumbers.roundsByActivity && oldNumbers.roundsByActivity.placevalue;
+    if (typeof oldRounds === 'number') progress.roundsByActivity.placevalue = oldRounds;
+    progress.placevalueMigrated = true;
+    App.storage.set(TOOL_ID, progress);
+  }
 
   /* Round state */
   var activity = null;
@@ -40,7 +53,27 @@
     roundCorrect: function () { return round.roundCorrect; },
     show: function (el) { show(el); }
   });
-  var save = glue.save, paintStars = glue.paintStars, levelFromProgress = glue.levelFromProgress, endRound = glue.endRound;
+  var save = glue.save, paintStars = glue.paintStars;
+
+  /* The level rises one step per completed round, capped at the last one, so a
+     person who comes back continues where they were. A sub-activity that has
+     ownProgress counts its own rounds (data.js); the others share the tool's count. */
+  function levelFromProgress() {
+    var levels = activity.levels;
+    var done = activity.ownProgress
+      ? (progress.roundsByActivity[activity.id] || 0)
+      : (progress.completedRounds || 0);
+    return levels[Math.min(done, levels.length - 1)];
+  }
+
+  /* Closes a round: counts it for the sub-activity that owns its progress, then
+     lets the glue save it and show the achievement screen. */
+  function endRound() {
+    if (activity.ownProgress) {
+      progress.roundsByActivity[activity.id] = (progress.roundsByActivity[activity.id] || 0) + 1;
+    }
+    glue.endRound();
+  }
 
   /* The round state and the shared answer, hint and next step (assets/js/classic-quiz.js). */
   var round = { level: null, index: 0, roundCorrect: 0, answered: false, attempts: 0, question: null };
@@ -178,6 +211,20 @@
     return parens
       ? '( ' + o.a + ' + ' + o.b + ' ) × ' + o.c
       : o.a + ' + ' + o.b + ' × ' + o.c;
+  }
+
+  /* ---- Digits by place (for «Cuentas rápidas de los números») ----
+     The drawing of the digits is shared with tools/numbers/ (assets/js/place-value.js). */
+  var paintNumber = App.placeValue.paintNumber;
+  var paintSign = App.placeValue.paintSign;
+  var repeatHtml = App.placeValue.repeat;
+  var legendPlace = App.placeValue.legendText;
+
+  /* Three distinct numbers, drawn as numbers with their colours. */
+  function pickPlaceOptions(correct, candidates) {
+    return pickOptions(correct, candidates).map(function (o) {
+      return { html: paintNumber(Number(o.html)), correct: o.correct };
+    });
   }
 
   var GENERATORS = {
@@ -359,6 +406,67 @@
         hint: App.i18n.t('gen.socraticOrderResult'),
         options: pickOptions(right, [other, right + 1, right - 1])
       };
+    },
+
+    /* Place-value exchange: 10 of one kind make 1 of the next (ones→tens,
+       tens→hundreds, hundreds→thousands). Even questions group small blocks
+       into framed tens; odd questions go the other way (how many small ones
+       make these big blocks?). */
+    canje: function (nv, i) {
+      var blocks = [
+        '<span class="block-1"></span>',
+        '<span class="block-10">10</span>',
+        '<span class="block-100">100</span>',
+        '<span class="block-1000">1' + App.utils.thousandsSeparator() + '000</span>'
+      ];
+      var hint = App.i18n.t('gen.canjePista' + nv.lugar);
+      if (i % 2 === 0) {
+        /* Big blocks get large fast: fewer groups for bigger places. */
+        var k = App.utils.rint(2, [5, 4, 3][nv.lugar]);
+        var n = k * 10;
+        return {
+          prompt: App.i18n.t('gen.canjeDirecto' + nv.lugar).replace('{n}', n),
+          visual: '<div class="blocks">' +
+            repeatHtml('<span class="trade-group">' + repeatHtml(blocks[nv.lugar], 10) + '</span>', k) +
+            '</div><p class="hint">' + hint + '</p>',
+          visualAria: App.i18n.t('gen.canjeAriaDirecto').replace('{k}', k),
+          legend: legendPlace(),
+          hint: App.i18n.t('gen.socraticTradeUp'),
+          options: pickPlaceOptions(k, [n, k + 1, k - 1])
+        };
+      }
+      var kInv = App.utils.rint(2, 9);
+      return {
+        prompt: App.i18n.t('gen.canjeInverso' + nv.lugar).replace('{k}', kInv),
+        visual: '<div class="blocks"><span class="blocks-group">' +
+          repeatHtml(blocks[nv.lugar + 1], kInv) +
+          '</span></div><p class="hint">' + hint + '</p>',
+        visualAria: App.i18n.t('gen.canjeAriaInverso').replace('{k}', kInv),
+        legend: legendPlace(),
+        hint: App.i18n.t('gen.socraticTradeDown'),
+        options: pickPlaceOptions(kInv * 10, [kInv, kInv * 10 + 10, (kInv - 1) * 10])
+      };
+    },
+
+    /* ×10 ladder: multiplying a power of ten by 10 moves every digit one place
+       left, up to 10^12 (un billón / one trillion). The exponent range gives
+       exactly 6 rungs per level, so a round walks the whole ladder without repeats. */
+    escalera: function (nv) {
+      var exponents = [];
+      for (var e = nv.minExp; e <= nv.maxExp; e++) exponents.push(e);
+      var exp = App.utils.drawRound('esc' + nv.id, exponents);
+      var n = Math.pow(10, exp);
+      var correct = n * 10;
+      return {
+        prompt: App.i18n.t('gen.escaleraEnunciado'),
+        hint: App.i18n.t('gen.socraticLadder'),
+        visual: '<div class="place-expression">' + paintNumber(10) + paintSign('—') +
+          paintNumber(n, { labels: true }) + paintSign('=') +
+          '<span class="num-box empty">?</span></div>' +
+          '<p class="hint">' + App.i18n.t('gen.escaleraPista') + '</p>',
+        legend: legendPlace(),
+        options: pickPlaceOptions(correct, [n, correct * 10])
+      };
     }
   };
 
@@ -367,7 +475,7 @@
      ============================================================ */
 
   function show(screen) {
-    [screenMenu, screenGame].forEach(function (p) {
+    [screenMenu, screenGame, screenExpo, screenReal].forEach(function (p) {
       p.classList.toggle('hidden', p !== screen);
     });
   }
@@ -380,13 +488,25 @@
     return true;
   };
 
+  /* The explanation and the real-life screens, for the sub-activities that set
+     hasExpoReal in data.js (assets/js/expo-screens.js). */
+  var expositions = App.expoScreens({
+    show: show,
+    current: function () { return activity; },
+    startCurrentRound: function () { startRound(levelFromProgress()); },
+    screens: { menu: screenMenu, expo: screenExpo, real: screenReal }
+  });
+  var startExpoScreen = expositions.startExpoScreen;
+
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
-  /* The level rises one step per completed round, capped at the last
-     one, so a person who comes back continues where they were. */
 
   function openActivity(id) {
     activity = DATA.activities[id];
     activity.id = id;
+    if (activity.hasExpoReal) {
+      startExpoScreen(id);
+      return;
+    }
     startRound(levelFromProgress());
   }
 
@@ -431,5 +551,11 @@
      to the Calculia landing. The end screen is a closing card, not a
      second menu: picking another activity is a tap away on the home
      page, so it does not need its own button here. */
+
+  /* Opened from another tool with ?sub=<id> (e.g. an old link to the
+     placevalue sub-activity, now here): go straight to that sub-activity,
+     skipping the menu. Without a valid id the menu is shown as before. */
+  var initialSub = new URLSearchParams(window.location.search).get('sub');
+  if (initialSub && DATA.activities[initialSub]) openActivity(initialSub);
 
 })();

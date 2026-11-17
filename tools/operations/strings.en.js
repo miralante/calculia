@@ -24,8 +24,45 @@
       voltear: { name: 'Turn it round', detail: 'The order changes nothing.', instruction: 'In a multiplication the order does not matter: 3 times 4 and 4 times 3 are the same number of dots, arranged another way. If you know one, you already know the other.' },
       partir: { name: 'Cut the sum', detail: 'Two easy parts.', instruction: 'A hard multiplication is cut into two easy ones. 6 times 7 is 6 times 5 and 6 times 2. You do the two parts and put them together.' },
       repartir: { name: 'Share out', detail: 'How many each, how many groups.', instruction: 'Dividing is said in two ways. One: share between several and see how many each one gets. The other: make groups of a size and see how many groups come out.' },
-      orden: { name: 'What comes first', detail: 'Times and brackets.', instruction: 'When there are two operations, the multiplication is done before the addition. But if there are brackets, what is inside the brackets goes first. Brackets are in charge.' }
+      orden: { name: 'What comes first', detail: 'Times and brackets.', instruction: 'When there are two operations, the multiplication is done before the addition. But if there are brackets, what is inside the brackets goes first. Brackets are in charge.' },
+      placevalue: { name: 'Quick sums', detail: '10 small ones become 1 big one.', instruction: 'When you put 10 of the same together, they form 1 of the next group. The digit moves one position to the left.' }
     },
+    /* Explanation and real-life screen of «placevalue» (hasExpoReal). */
+    expo: {
+      placevalue: {
+        title: 'Quick sums',
+        intro: '10 ones make 1 ten. 10 tens make 1 hundred. 10 hundreds make 1 thousand. And so on.',
+        bullets: [
+          '10 × 1 = 1 ten (10)',
+          '10 × 10 = 1 hundred (100)',
+          '10 × 100 = 1 thousand (1,000)'
+        ],
+        note: 'Multiplying by 10 moves the digit one place to the left and adds a zero.'
+      }
+    },
+    real: {
+      placevalue: {
+        title: 'Trading 10s in your daily life',
+        items: [
+          { icon: '🥚', text: '10 loose eggs make 1 dozen.' },
+          { icon: '✏️', text: '10 loose pencils make 1 pack.' },
+          { icon: '💶', text: '10 coins of 10 cents = 1 euro.' },
+          { icon: '⏱️', text: '10 years = 1 decade. 10 decades = 1 century (100 years).' }
+        ]
+      }
+    },
+    expoNext: 'See real-life examples →',
+    expoSlideNext: 'Next →',
+    expoBack: '← Previous',
+    expoProgress: '{n} / {total}',
+    realBack: '← Back to the explanation',
+    realNext: 'Start practising →',
+    /* Colour legend of the digits (ones, tens, hundreds) and the names of the
+       thousand groups, for «Quick sums». */
+    leyendaUnidadesTxt: 'ones',
+    leyendaDecenasTxt: 'tens',
+    leyendaCentenasTxt: 'hundreds',
+    grupoEtq: { 0: '', 1: 'thousands', 2: 'millions', 3: 'billions', 4: 'trillions' },
     level: {
     },
     gen: {
@@ -60,7 +97,24 @@
       socraticShare: '🤔 «{elegida}» is not what each pile has: look at just one pile and count the dots it has.',
       socraticGroups: '🤔 «{elegida}» counts dots instead of piles: the question asks how many piles there are, count those.',
       socraticWhatFirst: '🤔 «{elegida}» does not start in the right place: look first for brackets, and if there are any, they come first.',
-      socraticOrderResult: '🤔 «{elegida}» works the steps in another order: do what is inside the brackets, or the multiplication, first; then add.'
+      socraticOrderResult: '🤔 «{elegida}» works the steps in another order: do what is inside the brackets, or the multiplication, first; then add.',
+      /* «Quick sums» of the numbers: trading and the ×10 ladder texts. */
+      canjeDirecto0: 'With {n} ones, how many tens do you make?',
+      canjeDirecto1: 'With {n} tens, how many hundreds do you make?',
+      canjeDirecto2: 'With {n} hundreds, how many thousands do you make?',
+      canjePista0: '10 ones make 1 ten.',
+      canjePista1: '10 tens make 1 hundred.',
+      canjePista2: '10 hundreds make 1 thousand: 1,000.',
+      canjeAriaDirecto: '{k} groups of 10 blocks',
+      canjeInverso0: '{k} tens. How many ones is that?',
+      canjeInverso1: '{k} hundreds. How many tens is that?',
+      canjeInverso2: '{k} thousands. How many hundreds is that?',
+      canjeAriaInverso: '{k} big blocks',
+      escaleraEnunciado: 'How much is 10 × this number?',
+      escaleraPista: 'Times 10: each digit moves one place to the left and a zero is added.',
+      socraticTradeUp: '🤔 «{elegida}» is not the number of groups. Look at the blocks and group them in tens: count the groups.',
+      socraticTradeDown: '🤔 «{elegida}» is not how many small blocks fit. Look at each big block and count how many small ones fit inside.',
+      socraticLadder: '🤔 «{elegida}» does not have the right number of zeros. Look at the number: it is a one followed by zeros, count how many.'
     },
     transfer: 'This will help you do big sums in your head by cutting them into parts, and share things out between several people with none left over and none missing.'
   }, 'en');

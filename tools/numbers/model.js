@@ -13,48 +13,16 @@
   var pickRandomInt = App.utils.pickRandomInt;
 
 
-  var POS_CLASS = ['digit-u', 'digit-d', 'digit-c'];
+  var POS_CLASS = App.placeValue.PLACE_CLASS;
 
   var thousandsSeparator = App.utils.thousandsSeparator;
 
 
-  function legendPos() {
-    return '<span class="digit-u">' + App.i18n.t('leyendaUnidadesTxt') + '</span> · ' +
-      '<span class="digit-d">' + App.i18n.t('leyendaDecenasTxt') + '</span> · ' +
-      '<span class="digit-c">' + App.i18n.t('leyendaCentenasTxt') + '</span>';
-  }
-
-  function digits(n, labels, highlight) {
-    var s = String(n);
-    var groups = [];
-    for (var i = s.length; i > 0; i -= 3) groups.unshift(s.slice(Math.max(0, i - 3), i));
-    var html = '';
-    for (var g = 0; g < groups.length; g++) {
-      var body = '';
-      for (var j = 0; j < groups[g].length; j++) {
-        var pos = groups[g].length - 1 - j;
-        var posAbs = (groups.length - 1 - g) * 3 + pos;
-        var cls = POS_CLASS[pos];
-        if (highlight === posAbs) cls += ' highlight';
-        body += '<span class="' + cls + '">' + groups[g][j] + '</span>';
-      }
-      if (g > 0) html += '<span class="digit-sep">' + thousandsSeparator() + '</span>';
-      if (labels && groups.length > 1) {
-        html += '<span class="group"><span>' + body + '</span>' +
-          '<span class="group-label">' + (App.i18n.t('grupoEtq.' + (groups.length - 1 - g)) || '&nbsp;') + '</span></span>';
-      } else {
-        html += body;
-      }
-    }
-    return html;
-  }
-
-  function paintNumber(n, opts) {
-    opts = opts || {};
-    return '<span class="num-color">' + digits(n, opts.labels, opts.highlight) + '</span>';
-  }
-
-  function paintSign(s) { return '<span class="sign">' + s + '</span>'; }
+  /* The drawing of digits is shared with tools/operations/ (assets/js/place-value.js). */
+  var digits = App.placeValue.digits;
+  var paintNumber = App.placeValue.paintNumber;
+  var paintSign = App.placeValue.paintSign;
+  function legendPos() { return App.placeValue.legendHtml(); }
 
   function buildOptions(correct, distractors, format) {
     var values = [correct];
@@ -72,11 +40,7 @@
     });
   }
 
-  function repeat(html, times) {
-    var s = '';
-    for (var i = 0; i < times; i++) s += html;
-    return s;
-  }
+  var repeat = App.placeValue.repeat;
 
   function numberAsBlocks(n) {
     return repeat('<span class="block-100">100</span>', Math.floor(n / 100)) +
@@ -160,74 +124,6 @@
           function (v) { return paintNumber(v); })
       };
     },
-
-    /* Place-value exchange: 10 of one kind become 1 of the next
-       (units— tens, tens— hundreds, hundreds— thousands). Even questions
-       group small blocks into framed tens; odd questions go the other
-       way (how many small ones make these big blocks?). */
-    canje: function (nv, i) {
-      var blocks = [
-        '<span class="block-1"></span>',
-        '<span class="block-10">10</span>',
-        '<span class="block-100">100</span>',
-        '<span class="block-1000">1' + thousandsSeparator() + '000</span>'
-      ];
-      var hint = App.i18n.t('gen.canjePista' + nv.lugar);
-      if (i % 2 === 0) {
-        /* Big blocks get large fast: fewer groups for bigger places. */
-        var k = rint(2, [5, 4, 3][nv.lugar]);
-        var n = k * 10;
-        var statement = App.i18n.t('gen.canjeDirecto' + nv.lugar).replace('{n}', n);
-        return {
-          prompt: statement,
-          visual: '<div class="blocks">' +
-            repeat('<span class="trade-group">' + repeat(blocks[nv.lugar], 10) + '</span>', k) +
-            '</div><p class="hint">' + hint + '</p>',
-          visualAria: App.i18n.t('gen.canjeAriaDirecto').replace('{k}', k),
-          legend: legendPos(),
-          hint: App.i18n.t('gen.socraticTradeUp'),
-          options: buildOptions(k, [n, k + 1, k - 1],
-            function (v) { return paintNumber(v); })
-        };
-      }
-      var kInv = rint(2, 9);
-      var statementInv = App.i18n.t('gen.canjeInverso' + nv.lugar).replace('{k}', kInv);
-      return {
-        prompt: statementInv,
-        visual: '<div class="blocks"><span class="blocks-group">' +
-          repeat(blocks[nv.lugar + 1], kInv) +
-          '</span></div><p class="hint">' + hint + '</p>',
-        visualAria: App.i18n.t('gen.canjeAriaInverso').replace('{k}', kInv),
-        legend: legendPos(),
-        hint: App.i18n.t('gen.socraticTradeDown'),
-        options: buildOptions(kInv * 10, [kInv, kInv * 10 + 10, (kInv - 1) * 10],
-          function (v) { return paintNumber(v); })
-      };
-    },
-
-    /* —10 ladder: multiplying a power of ten by 10 moves every digit
-       one place left, up to 10^12 (un billón / one trillion). The
-       exponent range gives exactly 6 rungs per level, so a round
-       walks the whole ladder without repeats. */
-    escalera: function (nv) {
-      var exponents = [];
-      for (var e = nv.minExp; e <= nv.maxExp; e++) exponents.push(e);
-      var exp = App.utils.drawRound('esc' + nv.id, exponents);
-      var n = Math.pow(10, exp);
-      var correct = n * 10;
-      return {
-        prompt: App.i18n.t('gen.escaleraEnunciado'),
-        hint: App.i18n.t('gen.socraticLadder'),
-        visual: '<div class="expression">' + paintNumber(10) + paintSign('—') +
-          paintNumber(n, { labels: true }) + paintSign('=') +
-          '<span class="num-box empty">?</span></div>' +
-          '<p class="hint">' + App.i18n.t('gen.escaleraPista') + '</p>',
-        legend: legendPos(),
-        options: buildOptions(correct, [n, correct * 10],
-          function (v) { return paintNumber(v); })
-      };
-    },
-
 
 
     /* Free-exploration counter: not a quiz, no prompt/options. Returns
