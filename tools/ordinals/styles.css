@@ -217,7 +217,7 @@
   padding: 3px 8px;
   white-space: nowrap;
 }
-.building-person { display: inline-flex; color: var(--color-texto-suave); }
+.building-person { display: inline-flex; font-size: 1.6rem; line-height: 1; }
 
 .building-arrows {
   display: flex;
@@ -297,7 +297,7 @@
   flex: 0 0 auto;
   min-width: 44px;
 }
-.queue-person-figure { display: inline-flex; color: var(--color-texto-suave); }
+.queue-person-figure { display: inline-flex; font-size: 1.6rem; line-height: 1; }
 .queue-person-ord {
   font-size: var(--texto-base);
   font-weight: 800;
@@ -373,7 +373,7 @@
 .podium-pos--2 .podium-block,
 .podium-pos--3 .podium-block { min-height: 92px; }
 .podium-pos--3 .podium-block { min-height: 72px; }
-.podium-person { display: inline-flex; color: inherit; }
+.podium-person { display: inline-flex; font-size: 1.6rem; line-height: 1; }
 .podium-ord {
   font-size: var(--texto-grande);
   font-weight: 800;

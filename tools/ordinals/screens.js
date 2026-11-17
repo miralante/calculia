@@ -25,28 +25,28 @@
       '</svg>';
   }
 
-  /* A plain person silhouette for the real-life scenes. Drawn in the current
-     text colour, so it follows the theme. Decorative. */
-  function personSvg() {
-    return '<svg class="person-svg" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" focusable="false">' +
-      '<circle cx="14" cy="9" r="6" fill="currentColor"/>' +
-      '<path d="M3 26c0-6 5-10 11-10s11 4 11 10z" fill="currentColor"/>' +
-      '</svg>';
-  }
+  /* Neutral person emoji for the real-life scenes (building, queue, podium).
+     The pool is small and has no gender or skin tone. Each place takes the
+     next one, so neighbours differ and the sequence is predictable. */
+  var NEIGHBOURS = ['🧑', '👶', '🧒', '🧓', '🧑'];
+  function neighbourEmoji(n) { return NEIGHBOURS[(n - 1) % NEIGHBOURS.length]; }
 
-  /* A football player in kit, for the ranking: blue shirt with sleeves, white
-     shorts, socks and a ball at the feet. The kit colours are fixed, so the
-     figure reads the same in light and dark themes. Decorative. */
-  function footballerSvg() {
+  /* Kit colours of the five rows of the ranking: one per place, so each
+     footballer is told apart by colour as well as by the ordinal next to it. */
+  var KIT = ['#1E5BB8', '#2E7D32', '#6A3FA0', '#C0632A', '#B3446C'];
+
+  /* A footballer bust in kit: head with hair, a collar in white, shoulders in
+     the kit colour, and a ball at the side. Decorative. */
+  function footballerSvg(n) {
+    var kit = KIT[(n - 1) % KIT.length];
     return '<svg class="person-svg" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" focusable="false">' +
-      '<circle cx="14" cy="5.5" r="3.6" fill="#F1C27D"/>' +
-      '<path d="M10.2 5.2c0-2.3 1.7-3.6 3.8-3.6s3.8 1.3 3.8 3.6c-1-1-6.6-1-7.6 0z" fill="#3B2A1A"/>' +
-      '<path d="M9.6 10.4 5.2 12.6l1.6 5 2.4-1.1V22h8.6v-5.5l2.4 1.1 1.6-5-4.4-2.2c-1.2 1.6-7.6 1.6-9.2 0z" fill="#1E5BB8"/>' +
-      '<path d="M9.6 17.6h8.8l.4 3.6h-9.6z" fill="#FFFFFF"/>' +
-      '<rect x="10.4" y="21.2" width="2.6" height="3.4" fill="#F1C27D"/>' +
-      '<rect x="15" y="21.2" width="2.6" height="3.4" fill="#F1C27D"/>' +
-      '<circle cx="22.4" cy="24.6" r="2.4" fill="#FFFFFF" stroke="#14161E" stroke-width="0.8"/>' +
-      '<path d="M22.4 22.6l1 .7-.4 1.1h-1.2l-.4-1.1z" fill="#14161E"/>' +
+      '<path d="M4 28c0-6.5 4.5-10 10-10s10 3.5 10 10z" fill="' + kit + '"/>' +
+      '<path d="M11 18.2 14 22l3-3.8" fill="none" stroke="#FFFFFF" stroke-width="1.4" stroke-linejoin="round"/>' +
+      '<rect x="12.2" y="14" width="3.6" height="4.5" fill="#F1C27D"/>' +
+      '<circle cx="14" cy="9.5" r="5" fill="#F1C27D"/>' +
+      '<path d="M9 9c0-3.4 2.2-5.2 5-5.2s5 1.8 5 5.2c-1.2-1.6-2.8-2.4-5-2.4S10.2 7.4 9 9z" fill="#3B2A1A"/>' +
+      '<circle cx="22.2" cy="23.2" r="3.4" fill="#FFFFFF" stroke="#14161E" stroke-width="0.8"/>' +
+      '<path d="M22.2 21.4l1.3.9-.5 1.5h-1.6l-.5-1.5z" fill="#14161E"/>' +
       '</svg>';
   }
 
@@ -171,7 +171,7 @@
             '<span class="building-floor-ord ' + o.cls + '">' + abbrev(i) + '</span>' +
             '<span class="building-floor-label">' + t('buildingFloor').replace('{n}', i) + '</span>' +
             (isCurrent ? '<span class="building-here">' + t('buildingHere') + '</span>' : '') +
-            '<span class="building-person" aria-hidden="true">' + personSvg() + '</span>' +
+            '<span class="building-person" aria-hidden="true">' + neighbourEmoji(i) + '</span>' +
           '</div>'
         );
       }
@@ -193,7 +193,7 @@
         var o = ordinalByN(i);
         cells.push(
           '<span class="queue-person-cell">' +
-            '<span class="queue-person-figure" aria-hidden="true">' + personSvg() + '</span>' +
+            '<span class="queue-person-figure" aria-hidden="true">' + neighbourEmoji(i) + '</span>' +
             '<span class="queue-person-ord ' + o.cls + '">' + abbrev(i) + '</span>' +
           '</span>'
         );
@@ -210,7 +210,7 @@
         rows.push(
           '<div class="classification-row ' + o.cls + '">' +
             '<span class="classification-ord ' + o.cls + '">' + abbrev(i) + '</span>' +
-            '<span class="classification-person" aria-hidden="true">' + footballerSvg() + '</span>' +
+            '<span class="classification-person" aria-hidden="true">' + footballerSvg(i) + '</span>' +
           '</div>'
         );
       }
@@ -231,7 +231,7 @@
         return '<div class="podium-pos ' + p.cls + '">' +
           '<div class="podium-medal">' + medalSvg(p.n) + '</div>' +
           '<div class="podium-block">' +
-            '<span class="podium-person" aria-hidden="true">' + personSvg() + '</span>' +
+            '<span class="podium-person" aria-hidden="true">' + neighbourEmoji(p.n) + '</span>' +
             '<span class="podium-ord ' + o.cls + '">' + abbrev(p.n) + '</span>' +
           '</div>' +
         '</div>';
