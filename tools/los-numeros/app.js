@@ -331,8 +331,10 @@
       awardedThisRun = true;
       save();
     }
-    screenGallery.classList.add('hidden');
-    App.feedback.celebrate(App.i18n.t('endTitle'), restart, App.feedback.starsGoal(progress.stars));
+    /* The gallery stays on its last slide. «A por más» only closes the achievement
+       screen: the person stays here («Empezar otra vez» or «← Volver»). Restarting
+       the activity from there made every close show the first slide again and loop. */
+    App.feedback.celebrate(App.i18n.t('endTitle'), null, App.feedback.starsGoal(progress.stars));
     paintStars();
   }
 
