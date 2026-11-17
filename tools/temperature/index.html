@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../assets/css/brand.css?v=calculia-v66e94ecb">
   <link rel="stylesheet" href="../../assets/css/tokens.css?v=calculia-vd99f158f">
   <link rel="stylesheet" href="../../assets/css/base.css?v=calculia-v89f2211a">
-  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-v6d732ec4">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=calculia-vd91ba102">
   <link rel="stylesheet" href="../../assets/css/locale-picker.css?v=calculia-v29c29c27">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -31,27 +31,26 @@
           <span class="stage-icon" aria-hidden="true">🛗</span>
           <span class="stage-name" data-i18n="elev.name">Ascensor</span>
           <span class="stage-detail" data-i18n="elev.detail"></span>
-          <span class="stage-level" data-role="level"></span>
         </button>
 
         <button type="button" class="stage-card" data-stage="water">
           <span class="stage-icon" aria-hidden="true">🌡️</span>
           <span class="stage-name" data-i18n="water.name">Termómetro del agua</span>
           <span class="stage-detail" data-i18n="water.detail"></span>
-          <span class="stage-level" data-role="level"></span>
         </button>
       </div>
     </section>
 
     <!-- Play: one board for both games. app.js sets the scale, the steps and the texts. -->
     <section id="screenPlay" class="hidden stack">
-      <div class="play-head">
-        <p class="play-stage" data-role="stage"></p>
-        <p class="play-level" data-role="level"></p>
+      <!-- The shared progress bar: suite-chrome.js moves it under the header. -->
+      <div class="progress-bar" data-suite-progress>
+        <div class="progress-fill" data-role="progress-fill"></div>
       </div>
 
+      <p class="play-stage" data-role="stage"></p>
+
       <div class="card centered stack order-card">
-        <div class="order-bar" data-role="progress" role="progressbar" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"></div>
         <p class="order" aria-live="polite">
           <span class="order-arrow" data-role="order-arrow" aria-hidden="true"></span>
           <span data-role="order-text"></span>
@@ -64,7 +63,6 @@
         <div class="readout">
           <p class="readout-value" data-role="value" aria-live="polite"></p>
           <p class="readout-label" data-role="value-label"></p>
-          <p class="readout-target" data-role="target"></p>
           <p class="live" data-role="live" aria-live="polite"></p>
         </div>
       </div>
@@ -91,12 +89,12 @@
   </div>
 
   <script src="../../assets/js/utils.js?v=calculia-v0d2f78bc"></script>
-  <script src="../../assets/js/i18n.js?v=calculia-v700cda60"></script>
+  <script src="../../assets/js/i18n.js?v=calculia-vb93e602e"></script>
   <script src="../../assets/js/storage.js?v=calculia-v8a6191e2"></script>
   <script src="../../assets/js/achievements-engine.js?v=calculia-v53655f03"></script>
   <script src="../../assets/js/achievements.js?v=calculia-v225532f6"></script>
-  <script src="../../assets/js/stars-engine.js?v=calculia-v8d4a7ee6"></script>
-  <script src="../../assets/js/feedback.js?v=calculia-vddfe982a"></script>
+  <script src="../../assets/js/stars-engine.js?v=calculia-vef47fec2"></script>
+  <script src="../../assets/js/feedback.js?v=calculia-vf049acf0"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>

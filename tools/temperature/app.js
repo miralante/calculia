@@ -2,11 +2,10 @@
    Calculia — Sube y baja (positives and negatives)
 
    Menu: the two games, the elevator and the water thermometer.
-   Play: one board for both. A vertical scale shows the position
-   (the marker) and the target (🎯); the player moves the marker with
-   the step buttons or the arrow keys. The target is computed by the
-   game, so nothing is added or subtracted: the player only goes up
-   or down until the marker meets the 🎯.
+   Play: one line of numbers for both. The marker shows where the player
+   is; an arrow shows the target. The target is computed by the game, so
+   nothing is added or subtracted: the player only goes up or down until
+   the marker meets the arrow. There are no levels.
 
    A round is six orders. Each order starts where the previous one
    ended. Reaching the target gives one star and shows the value.
@@ -27,9 +26,7 @@
   var screenPlay = $('#screenPlay');
   var starsEl = $('#stars');
 
-  /* roundsKey of each game: 'completedRounds' is the water game's counter,
-     kept under its old name so the level already reached is not lost. */
-  var progress = App.storage.progressWith(TOOL_ID, { stars: 0, elevatorRounds: 0, completedRounds: 0 });
+  var progress = App.storage.progressWith(TOOL_ID, { stars: 0 });
 
   var showScreen = App.screenSwitch([screenMenu, screenPlay]);
 
@@ -84,13 +81,13 @@
     starsEl.textContent = '⭐ ' + progress.stars;
   }
 
-  /* The range on screen for the current level, and whether the scale runs
-     left to right (the water thermometer) or bottom to top (the elevator). */
+  /* The line on screen for the current game, and whether it runs left to
+     right (the water thermometer) or bottom to top (the elevator). */
   var range = null;
   var horizontal = false;
 
-  /* Position of a value along the scale, in %: from the top (the maximum)
-     for a vertical scale, from the left (the minimum) for a horizontal one. */
+  /* Position of a value along the line, in %: from the top (the maximum)
+     for a vertical line, from the left (the minimum) for a horizontal one. */
   function pct(n) {
     var p = ((n - range.min) / (range.max - range.min)) * 100;
     return horizontal ? p : 100 - p;
@@ -162,7 +159,6 @@
     elevator: {
       data: DATA.elevator,
       prefix: 'elev',
-      roundsKey: 'elevatorRounds',
       valueText: fmtSigned,
       valueName: elevatorName,
       valueIcon: function () { return ''; },
@@ -173,7 +169,6 @@
     water: {
       data: DATA.water,
       prefix: 'water',
-      roundsKey: 'completedRounds',
       valueText: function (n) { return fmtSigned(n) + ' °C'; },
       valueName: waterName,
       /* The state's icon: 🧊 ice, 💧 water, ♨️ steam. */
@@ -190,8 +185,6 @@
 
   var stageKey = null;    /* 'elevator' | 'water' while a game is open */
   var stage = null;       /* STAGES[stageKey] */
-  var level = null;       /* the level being played */
-  var levelIndex = 0;     /* 0-based index of that level */
   var now = 0;            /* current value */
   var order = null;       /* { from, dir: 'up'|'down', amount, target } */
   var orderIndex = 0;     /* 1-based number of the order on screen */
@@ -202,17 +195,18 @@
     return screenPlay.querySelector('[data-role="' + role + '"]');
   }
 
+  /* The shared progress bar is moved to the top of the page by
+     assets/js/suite-chrome.js. Its fill is captured here, before that move,
+     so the game keeps updating it from its new place. */
   var els = {
     stage: q('stage'),
-    level: q('level'),
-    orderBar: q('progress'),
+    progressFill: q('progress-fill'),
     orderText: q('order-text'),
     orderArrow: q('order-arrow'),
     board: q('board'),
     scale: q('scale'),
     value: q('value'),
     valueLabel: q('value-label'),
-    target: q('target'),
     live: q('live'),
     result: q('result'),
     resultTitle: q('result-title'),
@@ -229,47 +223,33 @@
     return t(prefix + (Math.abs(n) === 1 ? '.unitOne' : '.unitMany'));
   }
 
-  /* ============================================================
-     The scale: one track from min to max, built per level
-     ============================================================ */
-
-  /* The range on screen for a level. A level may narrow the game's scale
-     (the water thermometer shows only the numbers its orders use). Zones are
-     cut to that range, and keys are kept only when they fall inside it. */
-  function scaleFor(data, lvl) {
-    var s = lvl.scale || data;
-    var zones = [];
-    data.zones.forEach(function (z) {
-      var a = Math.max(Math.min(z.from, z.to), s.min);
-      var b = Math.min(Math.max(z.from, z.to), s.max);
-      if (b > a) zones.push({ from: a, to: b, cls: z.cls });
-    });
-    return {
-      min: s.min,
-      max: s.max,
-      zones: zones,
-      ticks: s.ticks || rangeOf(s.min, s.max),
-      keys: data.keys.filter(function (k) { return k >= s.min && k <= s.max; })
-    };
+  /* Every whole value from min to max, highest first. */
+  function wholeValues(min, max) {
+    var out = [];
+    for (var n = max; n >= min; n -= 1) out.push(n);
+    return out;
   }
 
-  /* Builds the track with its zones, ticks and the two markers: the position
-     (the game's own icon) and the target (🎯). */
+  /* ============================================================
+     The line: one track from min to max, built per game
+     ============================================================ */
+
   function buildScale() {
     els.scale.innerHTML = '';
     els.scale.classList.toggle('is-horizontal', horizontal);
 
     var labels = textEl('div', 'scale-labels', '');
     var track = textEl('div', 'scale-track', '');
+    var data = stage.data;
 
-    range.zones.forEach(function (z) {
+    data.zones.forEach(function (z) {
       var zone = textEl('div', 'scale-zone ' + z.cls, '');
       placeSpan(zone, z.from, z.to);
       track.appendChild(zone);
     });
 
-    range.ticks.forEach(function (n) {
-      var key = range.keys.indexOf(n) !== -1;
+    (data.ticks || wholeValues(data.min, data.max)).forEach(function (n) {
+      var key = data.keys.indexOf(n) !== -1;
       var line = textEl('div', 'scale-tick' + (key ? ' is-key' : ''), '');
       placeAt(line, n);
       track.appendChild(line);
@@ -279,12 +259,15 @@
       labels.appendChild(label);
     });
 
-    els.markNow = textEl('span', 'scale-mark scale-mark-now', '');
+    /* The position: the game's own icon, on the line. The target: an arrow
+       that points at it from outside the track (◀ from the right in the
+       elevator, ▼ from above in the thermometer). */
+    els.markNow = textEl('span', 'scale-mark', '');
     els.markNow.setAttribute('aria-hidden', 'true');
-    els.markTarget = textEl('span', 'scale-mark scale-mark-target', '🎯');
-    els.markTarget.setAttribute('aria-hidden', 'true');
+    els.arrow = textEl('span', 'scale-arrow', horizontal ? '▼' : '◀');
+    els.arrow.setAttribute('role', 'img');
     track.appendChild(els.markNow);
-    track.appendChild(els.markTarget);
+    track.appendChild(els.arrow);
 
     /* Vertical: the labels sit beside the track. Horizontal: under it. */
     if (horizontal) {
@@ -294,13 +277,6 @@
       els.scale.appendChild(labels);
       els.scale.appendChild(track);
     }
-  }
-
-  /* Every whole value from min to max, highest first. */
-  function rangeOf(min, max) {
-    var out = [];
-    for (var n = max; n >= min; n -= 1) out.push(n);
-    return out;
   }
 
   /* ============================================================
@@ -322,7 +298,7 @@
     });
   }
 
-  /* A step button is disabled when it would leave the scale. */
+  /* A step button is disabled when it would leave the line. */
   function paintButtons() {
     stepButtons.forEach(function (b) {
       var next = now + b.delta;
@@ -335,17 +311,18 @@
      ============================================================ */
 
   /* Builds the next order from the current value. The direction is random
-     unless one way has no room left; the size is random within the level's
-     range and never leaves it. */
+     unless one way has no room left; the size is random within the game's
+     sizes and never leaves the line. */
   function makeOrder() {
-    var canUp = now + level.amin <= level.hi;
-    var canDown = now - level.amin >= level.lo;
+    var sizes = stage.data.orders;
+    var canUp = now + sizes.amin <= range.max;
+    var canDown = now - sizes.amin >= range.min;
     var dir;
     if (canUp && canDown) dir = Math.random() < 0.5 ? 'up' : 'down';
     else dir = canUp ? 'up' : 'down';
 
-    var room = dir === 'up' ? level.hi - now : now - level.lo;
-    var amount = randInt(level.amin, Math.min(level.amax, room));
+    var room = dir === 'up' ? range.max - now : now - range.min;
+    var amount = randInt(sizes.amin, Math.min(sizes.amax, room));
     var target = dir === 'up' ? now + amount : now - amount;
     return { from: now, dir: dir, amount: amount, target: target };
   }
@@ -365,52 +342,41 @@
 
   function paintAll() {
     paintOrder();
+    paintProgress();
     paintPosition();
     paintLive();
     paintButtons();
   }
 
-  /* The order bar: one segment per order of the round. The done ones fill
-     up; the current one is outlined. The text "Orden 2 de 6" goes to the
-     bar's accessible value, so screen readers still hear it. */
-  function buildOrderBar(total) {
-    els.orderBar.innerHTML = '';
-    els.orderBar.setAttribute('aria-valuemin', '0');
-    els.orderBar.setAttribute('aria-valuemax', String(total));
-    for (var i = 0; i < total; i += 1) {
-      els.orderBar.appendChild(textEl('span', 'order-seg', ''));
-    }
+  /* The shared progress bar: the share of the round already done. The order
+     on screen counts as done once its target is reached. */
+  function paintProgress() {
+    var done = orderIndex - 1 + (resultShown ? 1 : 0);
+    els.progressFill.style.width = (done / stage.data.perRound * 100) + '%';
   }
 
   function paintOrder() {
-    var segments = els.orderBar.querySelectorAll('.order-seg');
-    Array.prototype.forEach.call(segments, function (seg, i) {
-      seg.classList.toggle('is-done', i < orderIndex - 1);
-      seg.classList.toggle('is-current', i === orderIndex - 1);
-    });
-    els.orderBar.setAttribute('aria-valuenow', String(orderIndex - 1));
-    els.orderBar.setAttribute('aria-valuetext', fill(t('game.orderCount'), {
-      i: orderIndex, total: stage.data.perRound
-    }));
     els.orderText.textContent = fill(t(order.dir === 'up' ? 'game.orderUp' : 'game.orderDown'), {
       n: order.amount, unit: unit(stage.prefix, order.amount)
     });
     els.orderArrow.textContent = order.dir === 'up' ? '↑' : '↓';
   }
 
-  /* The readout (value and what it means), the target, and both markers on the scale. */
+  /* The readout (value and what it means), the target arrow, and the marker. */
   function paintPosition() {
     els.value.textContent = stage.valueText(now);
     var icon = stage.valueIcon(now);
     els.valueLabel.textContent = (icon ? icon + ' ' : '') + stage.valueName(now);
-    els.target.textContent = fill(t('game.targetText'), { target: stage.valueText(order.target) });
 
     els.board.classList.remove('state-ice', 'state-liquid', 'state-steam');
     if (stage.stateOf) els.board.classList.add('state-' + stage.stateOf(now));
 
     els.markNow.textContent = stage.markerOf(now);
     placeAt(els.markNow, now);
-    placeAt(els.markTarget, order.target);
+    placeAt(els.arrow, order.target);
+    els.arrow.setAttribute('aria-label', fill(t('game.targetText'), {
+      target: stage.valueText(order.target)
+    }));
   }
 
   /* The live line is silent while the player is on the right way; the order
@@ -464,6 +430,7 @@
 
     els.controls.classList.add('hidden');
     els.result.classList.remove('hidden');
+    paintProgress();
     paintPosition();
     els.live.textContent = '';
     els.next.focus();
@@ -484,11 +451,8 @@
     paintButtons();
   }
 
-  /* A full round: it counts toward the next level, then the achievement screen. */
+  /* A full round: then the achievement screen. */
   function finishRound() {
-    var key = stageKey;
-    progress[stage.roundsKey] = (progress[stage.roundsKey] || 0) + 1;
-    save();
     App.feedback.celebrate(t('core.roundComplete'), function () { window.location.reload(); }, App.feedback.starsGoal(progress.stars));
   }
 
@@ -496,21 +460,7 @@
      Screens: menu and play
      ============================================================ */
 
-  /* Level reached in a game: the number of finished rounds picks it, the last one repeats. */
-  function levelOf(key) {
-    var s = STAGES[key];
-    var idx = Math.min(progress[s.roundsKey] || 0, s.data.levels.length - 1);
-    return { index: idx, level: s.data.levels[idx], total: s.data.levels.length };
-  }
-
   function paintMenu() {
-    Array.prototype.forEach.call(screenMenu.querySelectorAll('[data-stage]'), function (card) {
-      var info = levelOf(card.getAttribute('data-stage'));
-      var prefix = STAGES[card.getAttribute('data-stage')].prefix;
-      card.querySelector('[data-role="level"]').textContent = fill(t('game.levelLine'), {
-        n: info.index + 1, total: info.total, level: t(prefix + '.level.' + info.level.id)
-      });
-    });
     paintStars();
   }
 
@@ -524,22 +474,15 @@
   function openStage(key) {
     stageKey = key;
     stage = STAGES[key];
-    var info = levelOf(key);
-    level = info.level;
-    levelIndex = info.index;
-    now = level.start;
+    now = stage.data.start;
     orderIndex = 0;
 
     horizontal = !!stage.data.horizontal;
-    range = scaleFor(stage.data, level);
+    range = { min: stage.data.min, max: stage.data.max };
     els.board.classList.toggle('is-horizontal', horizontal);
     buildScale();
-    buildOrderBar(stage.data.perRound);
     buildSteps(stage.data, stage.prefix);
     els.stage.textContent = t(stage.prefix + '.name');
-    els.level.textContent = fill(t('game.levelLine'), {
-      n: levelIndex + 1, total: stage.data.levels.length, level: t(stage.prefix + '.level.' + level.id)
-    });
     els.reset.textContent = t('game.btnReset');
     els.exit.textContent = t('game.btnExit');
 

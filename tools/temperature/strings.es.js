@@ -10,16 +10,14 @@
     title: '🛗 Sube y baja',
 
     menu: {
-      intro: 'Números bajo cero. Elige un juego y sube y baja hasta el 🎯.'
+      intro: 'Elige un juego y sube y baja hasta la flecha.'
     },
 
     /* Shared by both games. */
     game: {
-      levelLine:    'Nivel {n} de {total}: {level}',
-      targetText:   '🎯 {target}',
+      targetText:   'Objetivo: {target}',
 
       /* The order: "Orden 2 de 6", then "Sube 4 grados" with its arrow. */
-      orderCount:   'Orden {i} de {total}',
       orderUp:      'Sube {n} {unit}',
       orderDown:    'Baja {n} {unit}',
 
@@ -52,11 +50,6 @@
       basementLabel: 'sótano {n}',
       floorLabel:    'planta {n}',
 
-      level: {
-        cerca:  'Cerca de la planta baja',
-        cruzar: 'Cruzar la planta baja',
-        todo:   'Todo el edificio'
-      },
 
       resultCrossUp:   'Has subido y has pasado la planta baja.',
       resultCrossDown: 'Has bajado y has pasado la planta baja.',
@@ -72,11 +65,6 @@
       unitOne: 'grado',
       unitMany: 'grados',
 
-      level: {
-        cruzar:  'Cruzar el 0',
-        hervir:  'Hervir: cerca de 100',
-        estados: 'Hielo, agua y vapor'
-      },
 
       stateIce:    'hielo',
       stateLiquid: 'agua líquida',

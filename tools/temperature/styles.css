@@ -1,7 +1,9 @@
 /* Sube y baja — tool-specific styles.
    Shared styles live in assets/css/. The tool reuses .card, .btn,
-   .btn-secondary and .stack; the rest is the menu, the scale and the
-   readout. Layout checked at 320, 375, 768 and desktop widths. */
+   .btn-secondary, .progress-bar (the suite's progress bar, moved under
+   the header by suite-chrome.js) and .stack. The rest is the menu, the
+   building (the scale) and the readout. Layout checked at 320, 375, 768
+   and desktop widths. */
 
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
@@ -48,51 +50,18 @@
 .stage-icon { font-size: 56px; line-height: 1; }
 .stage-name { font-size: var(--texto-grande); font-weight: 800; }
 .stage-detail { font-size: var(--texto-base); color: var(--color-texto-suave); }
-.stage-level { font-size: var(--texto-pequeno); font-weight: 700; color: var(--mod-razonamiento); }
 
-/* ---- Play: headings ---- */
+/* ---- Play: the game name, the order, the building ---- */
 
-/* One line: the game name, then its level. */
-.play-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: center;
-  gap: 4px 12px;
-  text-align: center;
-}
 .play-stage {
   margin: 0;
+  text-align: center;
   font-size: var(--texto-grande);
   font-weight: 800;
   color: var(--mod-razonamiento);
 }
-.play-level {
-  margin: 0;
-  font-size: var(--texto-pequeno);
-  font-weight: 700;
-  color: var(--color-texto-suave);
-}
-
-/* ---- The order: what to do, big and first ---- */
 
 .order-card { padding: 12px 16px; max-width: 560px; width: 100%; margin: 0 auto; }
-/* The order bar: one segment per order of the round; the done ones fill up,
-   the current one is outlined. */
-.order-bar {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-}
-.order-seg {
-  flex: 0 1 44px;
-  height: 12px;
-  border: 2px solid var(--mod-razonamiento);
-  border-radius: 6px;
-  background: transparent;
-}
-.order-seg.is-done { background: var(--mod-razonamiento); }
-.order-seg.is-current { box-shadow: 0 0 0 3px var(--color-superficie), 0 0 0 5px var(--mod-razonamiento); }
 .order {
   margin: 0;
   display: flex;
@@ -107,7 +76,7 @@
 }
 .order-arrow { font-size: 1.2em; line-height: 1; }
 
-/* ---- The board: the scale and the readout side by side, at every width ---- */
+/* The board: the building and the readout side by side, at every width. */
 
 .board {
   display: grid;
@@ -125,9 +94,9 @@
 .board.state-liquid { background: #F0FAFF; border-color: #BBDEFB; }
 .board.state-steam  { background: #F5F5F5; border-color: #BDBDBD; }
 
-/* The scale: labels on the left, one track from the maximum (top) to the
-   minimum (bottom). Every position is a % of the track height. The height
-   follows the screen so the whole game fits without scrolling. */
+/* The scale is the building: one vertical shaft from the maximum (top) to the
+   minimum (bottom). Every position is a % of the shaft. The height follows the
+   screen so the whole game fits without scrolling. */
 .scale {
   position: relative;
   display: grid;
@@ -171,24 +140,34 @@
 }
 .scale-tick.is-key { border-top: 3px solid var(--color-texto); }
 
-/* The position marker is on the left edge, the target on the right edge,
-   so they never cover each other even when they are one step apart. */
+/* The position: the game's icon, on the shaft. */
 .scale-mark {
   position: absolute;
+  left: 0;
   font-size: 26px;
   line-height: 1;
+  transform: translate(-50%, -50%);
   transition: top 0.25s ease, left 0.25s ease;
 }
-.scale-mark-now    { left: 0; transform: translate(-50%, -50%); }
-.scale-mark-target { right: 0; transform: translate(50%, -50%); }
 
-/* ---- Horizontal scale (the water thermometer): the track runs left to
-   right from the minimum to the maximum, the labels sit under it and the
-   target sits above it. The board stacks the scale above the readout. ---- */
+/* The target: an arrow outside the shaft that points at the floor (◀ from the
+   right in the elevator). */
+.scale-arrow {
+  position: absolute;
+  left: 100%;
+  margin-left: 6px;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--mod-razonamiento);
+  transform: translateY(-50%);
+  transition: top 0.25s ease, left 0.25s ease;
+}
+
+/* ---- Horizontal (the water thermometer): the shaft lies left to right, the
+   labels sit under it, and the arrow points down at the target from above. ---- */
 
 .board.is-horizontal { grid-template-columns: minmax(0, 1fr); }
-/* Full width: the value, its name and the target share one row; the live
-   line gets the row below. */
+/* Full width: the value and its name share one row; the live line gets the row below. */
 .board.is-horizontal .readout {
   flex-direction: row;
   flex-wrap: wrap;
@@ -217,12 +196,17 @@
   transform: translateX(-50%);
 }
 .scale.is-horizontal .scale-tick.is-key { border-top: 0; border-left: 3px solid var(--color-texto); }
-.scale.is-horizontal .scale-mark-now { top: 50%; transform: translate(-50%, -50%); }
-.scale.is-horizontal .scale-mark-target { top: 0; right: auto; transform: translate(-50%, -100%); }
+.scale.is-horizontal .scale-mark { left: auto; top: 50%; }
+.scale.is-horizontal .scale-arrow {
+  left: auto;
+  top: 0;
+  margin: 0 0 0 0;
+  transform: translate(-50%, -100%);
+}
 .scale.is-horizontal .scale-labels { position: relative; height: 1.7em; margin: 0 20px; }
 .scale.is-horizontal .scale-label { top: 6px; right: auto; transform: translateX(-50%); }
 
-/* The readout: the value, what it means, and the target. */
+/* The readout: the value and what it means. */
 .readout {
   display: flex;
   flex-direction: column;
@@ -246,12 +230,6 @@
   font-size: var(--texto-grande);
   font-weight: 700;
   color: var(--color-texto-suave);
-}
-.readout-target {
-  margin: 0;
-  font-size: var(--texto-base);
-  font-weight: 800;
-  color: var(--color-texto);
 }
 .live {
   margin: 0;
@@ -336,7 +314,7 @@
 }
 
 /* Wide screens: the order, the step buttons and the result on the left,
-   the board on the right, so the whole game fits without scrolling. */
+   the building on the right, so the whole game fits without scrolling. */
 @media (min-width: 760px) {
   #screenPlay:not(.hidden) {
     display: grid;
@@ -344,7 +322,7 @@
     align-items: start;
     gap: 12px 24px;
   }
-  #screenPlay:not(.hidden) > .play-head,
+  #screenPlay:not(.hidden) > .play-stage,
   #screenPlay:not(.hidden) > .order-card,
   #screenPlay:not(.hidden) > .play-result,
   #screenPlay:not(.hidden) > .play-controls { grid-column: 1; }
@@ -356,7 +334,7 @@
   }
   .order-card,
   .play-result { max-width: none; margin: 0; }
-  .play-head { justify-content: flex-start; text-align: left; }
+  .play-stage { text-align: left; }
   .play-controls { align-items: flex-start; }
   .step-row,
   .play-actions { justify-content: flex-start; }
@@ -365,5 +343,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .board,
-  .scale-mark { transition: none; }
+  .scale-mark,
+  .scale-arrow { transition: none; }
 }

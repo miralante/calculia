@@ -10,16 +10,14 @@
     title: '🛗 Up and down',
 
     menu: {
-      intro: 'Numbers below zero. Pick a game and go up and down to reach the 🎯.'
+      intro: 'Pick a game and go up and down to the arrow.'
     },
 
     /* Shared by both games. */
     game: {
-      levelLine:    'Level {n} of {total}: {level}',
-      targetText:   '🎯 {target}',
+      targetText:   'Target: {target}',
 
       /* The order: "Order 2 of 6", then "Go up 4 degrees" with its arrow. */
-      orderCount:   'Order {i} of {total}',
       orderUp:      'Go up {n} {unit}',
       orderDown:    'Go down {n} {unit}',
 
@@ -52,11 +50,6 @@
       basementLabel: 'basement {n}',
       floorLabel:    'floor {n}',
 
-      level: {
-        cerca:  'Near the ground floor',
-        cruzar: 'Crossing the ground floor',
-        todo:   'The whole building'
-      },
 
       resultCrossUp:   'You went up and passed the ground floor.',
       resultCrossDown: 'You went down and passed the ground floor.',
@@ -72,11 +65,6 @@
       unitOne: 'degree',
       unitMany: 'degrees',
 
-      level: {
-        cruzar:  'Crossing 0',
-        hervir:  'Boiling: near 100',
-        estados: 'Ice, water and steam'
-      },
 
       stateIce:    'ice',
       stateLiquid: 'liquid water',
