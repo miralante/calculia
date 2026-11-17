@@ -202,6 +202,8 @@
        que la persona ve en el visual con el realce del piso. */
     buildingAria: 'Edificio de {n} pisos. Estás en el piso {current}; la planta baja es el piso 1 y se sube hasta el {top}.',
     buildingFloor: 'piso {n}',
+    /* Text tag on the current floor, so the highlight is not colour alone. */
+    buildingHere: 'Estás aquí',
     /* Etiquetas accesibles de las flechas arriba/abajo. No son
        visibles — solo las oyen los lectores de pantalla. */
     buildingArrowUp: 'Subir al piso de arriba',

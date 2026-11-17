@@ -1,24 +1,16 @@
-/* Números ordinales — tool-specific styles.
+/* Números ordinales — tool styles.
 
-   Cuatro pantallas con la misma estructura que Números Romanos:
-   medallas + carrusel, ejemplos reales, recordatorio y juego.
+   Shared pieces (buttons, cards, progress bar, option buttons, carousel
+   arrows, menu grid) come from components.css. This file adds only what
+   the ordinal screens need: the podium, the carousel dots, the real-life
+   scenes, the reminder chips and the game's queue.
 
-   Contrato "actividad aislada": no se importan estilos de otros
-   tools/, así que todo lo que se usa aquí está definido aquí. Sólo
-   .btn, .option-btn y .explanation vienen de components.css.
+   Colour: the five ordinal classes cycle over module tokens and repeat
+   from the sixth ordinal on. Colour never identifies an ordinal on its
+   own: the figure and the word are always written next to it (WCAG 1.4.1).
+   The header keeps the module colour so it is not confused with an
+   ordinal colour. */
 
-   La fila (`queue-row`) reproduce el criterio que ya usa Los Números:
-   la columna de la meta, la de la flecha y la de cada animal
-   comparten anchura, para que la flecha caiga exactamente encima
-   del sitio que señala. Si el ancho se dividiera entre "n"
-   generosamente, la flecha se desplazaría y apuntaría a otro.
-
-   Los cinco colores recorren la serie y se repiten del sexto al
-   décimo y más allá (ver data.js). El color nunca identifica al
-   ordinal: la cifra y la palabra van siempre escritas al lado, así
-   que repetir color no puede llevar a error (WCAG 1.4.1). El turquesa
-   de la cabecera no es color de ningún ordinal, para que marca y
-   paleta no se pisen. */
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 .ord-c1 { color: var(--mod-coordinacion); }
@@ -27,8 +19,6 @@
 .ord-c4 { color: var(--mod-memoria); }
 .ord-c5 { color: var(--mod-lenguaje); }
 
-/* Rejilla de pasos: usa .menu-grid / .btn-actividad (components.css),
-   igual que el resto de tarjetas. Solo queda el detalle de estrellas. */
 .practice-stars { font-size: var(--texto-pequeno); letter-spacing: 2px; }
 .practice-done {
   font-size: var(--texto-pequeno);
@@ -41,9 +31,15 @@
 }
 
 /* ============================================================
-   Pantallas 1 y 2: medallas, carrusel y ejemplos
+   Shared card titles
    ============================================================ */
-.reference-card { border-color: var(--mod-razonamiento-suave); }
+.reference-card,
+.medals-card,
+.famosos-card,
+.ordinals-card,
+.rule-card,
+.quiz-card { border-color: var(--mod-razonamiento-suave); }
+
 .reference-title { margin: 0; font-size: var(--texto-grande); color: var(--mod-razonamiento); }
 .reference-text { margin: 0; color: var(--color-texto); }
 
@@ -52,154 +48,92 @@
   gap: var(--espacio);
 }
 
-
-
-/* ----- Tarjeta de medallas (presentación del concepto) -----
-   El podio es la metáfora que ya se conoce sin tener que aprenderla:
-   🥇 arriba, 🥈 en medio, 🥉 abajo. La disposición se ha copiado
-   del podio olímpico y se reconoce al primer vistazo.
-
-   La altura se deja flexible (auto) y NO se fija: si las medallas
-   bajaran a una sola fila en 320px (3 × 90px = 270px + textos), el
-   podio dejaría de parecerse a un podio y pasaría a parecerse a
-   una lista horizontal. Tres columnas en tablet/escritorio y una
-   columna en 320-375px (auto-fit + minmax) es lo que mejor
-   preserva la forma de podio en ambos sitios. */
-.medals-card { border-color: var(--mod-razonamiento-suave); }
-
+/* ============================================================
+   Screen 1: podium card
+   Three columns, 2nd · 1st · 3rd. The stands rise to the first place, so
+   the shape says who won before anyone reads a word.
+   ============================================================ */
 .medals-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--espacio);
-  align-items: end;
-  width: 100%;
-  margin-top: var(--espacio);
-}
-
-/* Cada medalla se pinta con su número de podio (🥇 arriba, 🥈 en
-   medio, 🥉 abajo) usando grid-row. Si los tres se quedaran en la
-   misma fila, el 🥇 no parecería el primero: el ojo entiende "el
-   primero" como "el que está más alto".
-
-   Dentro de cada pieza, el texto (cifra + nombre) y la medalla van
-   pegados a la izquierda: la cifra y la palabra son lo que se lee,
-   y la medalla es el "sello" que confirma el puesto. Si la medalla
-   viviera arriba del número, se leería como un adorno; si viviera
-   debajo, como dato separado. El texto se alinea a la derecha de
-   su columna para que quede pegado a la medalla — así cifra,
-   palabra y medalla forman una sola unidad visual.
-
-   Antes este bloque justificaba el contenido a la derecha de la
-   tarjeta (`justify-content: space-between` + `flex: 1 1 auto` en
-   .medal-text). Eso metía texto y medalla en el borde derecho y
-   dejaba un gran hueco a la izquierda, vacío y raro. Ahora todo va
-   pegado a la izquierda: el bloque del texto ocupa su contenido
-   natural, y la medalla se queda justo al lado. */
-.medal-item {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--espacio);
-  padding: var(--espacio);
-  border-radius: var(--radio);
-  background: var(--color-fondo);
-  border: 2px solid var(--mod-razonamiento-suave);
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding-top: 8px;
 }
 
-/* Bloque de texto (cifra + nombre) a la izquierda de la medalla.
-   Las dos piezas en columna, alineadas a la derecha de su columna
-   para que el "primero" (más ancho que "1º") quede pegado a la
-   medalla y no descolgue la composición. Sin `flex: 1 1 auto`: el
-   bloque ocupa solo su contenido, no se estira hasta el borde
-   derecho de la tarjeta. */
-.medal-text {
+.podium-col {
+  flex: 1 1 0;
+  max-width: 124px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-}
-.medal-item--1 { grid-row: 1; padding-bottom: calc(var(--espacio) + 8px); }
-.medal-item--2 { grid-row: 2; }
-.medal-item--3 { grid-row: 3; }
-
-.medal-icon {
-  font-size: 56px;
-  line-height: 1;
-}
-.medal-figure {
-  font-size: var(--texto-titulo);
-  font-weight: 800;
-  line-height: 1.1;
-}
-.medal-name {
-  font-size: var(--texto-grande);
-  font-weight: 800;
+  align-items: center;
+  gap: 6px;
 }
 
-/* En 480px+ los tres en columna. Por debajo de 480px, el podium
-   se aplana a una fila (auto-fit minmax(140px, 1fr) lo hace
-   solo): tres columnas de 140px no caben en 320-375px, así que se
-   baja a 1-2 columnas. La forma de podio se pierde en pantallas
-   pequeñas y se gana legibilidad: en 320px con letras grandes, el
-   🥇 solo no se lee si va arriba de los otros dos. */
-@media (max-width: 480px) {
-  .medal-icon { font-size: 44px; }
-  .medal-figure { font-size: var(--texto-grande); }
-  .medal-name { font-size: var(--texto-base); }
-}
-
-/* ----- Carrusel (después de las medallas) ----- */
-
-
-
-
-/* Figura y nombre: la cifra grande (≥20px en negrita) cuenta como
-   texto grande a efectos de contraste AAA. */
-
-/* Cuando el ordinal lleva medalla (1, 2, 3), la medalla y la cifra
-   van en la misma fila y a la misma altura. La medalla y la cifra
-   comparten papel — las dos "marcan el puesto" — así que viven en
-   una sola pieza. Separarlas en líneas distintas convertiría la
-   medalla en un adorno encima del número y haría que la persona
-   leyera "🥇" y "1" como dos datos separados. */
-.carousel-figure-row {
+.podium-stand {
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 2px;
+  padding: 8px 4px;
+  border-radius: 12px 12px 0 0;
+  background: var(--mod-razonamiento-suave);
+  color: var(--color-texto);
 }
-.carousel-medal { font-size: 44px; line-height: 1; }
+.podium-stand--2 { height: 92px; }
+.podium-stand--3 { height: 72px; }
+.podium-stand--1 {
+  height: 124px;
+  background: var(--mod-razonamiento);
+  color: var(--texto-sobre-acento);
+}
 
+.podium-figure { font-size: 28px; font-weight: 800; line-height: 1; }
+.podium-stand--1 .podium-figure { font-size: 32px; }
+.podium-name { font-size: var(--texto-pequeno); font-weight: 700; }
 
+/* ============================================================
+   Screen 1: carousel
+   The figure is the hero; the word and the place sit under it; a row of
+   dots shows the position in the series.
+   ============================================================ */
+/* The slide's own classes: the shared .carousel-* rules stay untouched. */
+.ordinal-hero { font-size: 76px; font-weight: 800; line-height: 1; }
+.ordinal-hero-name { font-size: clamp(1.5rem, 5vw, 2.25rem); font-weight: 800; line-height: 1.1; text-align: center; }
+.ordinal-hero-place { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
 
+.carousel-dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+.carousel-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--color-borde);
+  transition: width 0.2s ease;
+}
+.carousel-dot--on { width: 22px; background: var(--mod-razonamiento); }
 
-
-
-
-
-/* ----- Pantalla 2: escenario (edificio o cola) ----- */
-.famosos-card { border-color: var(--mod-razonamiento-suave); }
-
-/* Etiqueta encima del escenario: es la que dice "El edificio" o
-   "La cola" — el subtítulo ("Dos sitios donde se usan los
-   ordinales") ya está en la cabecera de la tarjeta, esta es la
-   versión corta que va pegada a la imagen. */
+/* ============================================================
+   Screen 2: real-life scenes
+   ============================================================ */
 .famous-label {
   margin: 0;
-  font-weight: 700;
+  font-weight: 800;
   font-size: var(--texto-grande);
   color: var(--mod-razonamiento);
   text-align: center;
 }
-
-/* El escenario en sí: un marco con borde que contiene el edificio
-   o la cola. El borde doble es lo que separa la escena del resto
-   de la tarjeta y la hace reconocible como "lo que se mira". El
-   escenario siempre está visible en un único marco, no animado: la
-   persona que mira la pantalla tiene que poder ver los cinco
-   ordinales a la vez, y un escenario partido en dos mitades (con
-   un carrusel por dentro) lo impediría. */
 .famous-stage-wrap { width: 100%; }
 .famous-stage {
   display: flex;
@@ -208,70 +142,64 @@
   justify-content: center;
   width: 100%;
   max-width: 480px;
+  box-sizing: border-box;
   margin: 0 auto;
   padding: var(--espacio);
-  border: 3px solid var(--mod-razonamiento-suave);
-  border-radius: var(--radio);
-  background: var(--color-superficie);
   min-height: 180px;
+  border: 2px solid var(--mod-razonamiento-suave);
+  border-radius: var(--radio);
+  background: var(--color-fondo);
 }
+.famous-text { margin: 0; color: var(--color-texto); text-align: center; }
 
-/* Las listas explícitas (1-9, redondos) se quitaron: el recordatorio
-   ya muestra la serie entera, y repetirlas aquí era redundante. El
-   CSS de .famous-list queda solo si reaparecen; por ahora, no se
-   emite. */
-
-/* ----- El edificio -----
-   Una pila de plantas, la baja abajo (porque así es como se
-   cuentan los pisos: el primero es el de abajo). El primer piso
-   lleva la medalla 🥇 y un fondo más cálido para que la cuenta
-   arranque visualmente desde él: si la planta baja se quedara sin
-   marca, alguien podría leer la pila de arriba abajo y pensar que
-   el primero es el último. */
-
-.famous-building {
-  gap: 4px;
-  align-items: stretch;
-}
+/* ----- The building: floors counted from the bottom up ----- */
+.famous-building { gap: 6px; align-items: stretch; }
 
 .building-floor {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--espacio);
-  padding: 10px 12px;
-  border: 2px solid var(--mod-razonamiento-suave);
+  gap: 12px;
+  min-height: 46px;
+  box-sizing: border-box;
+  padding: 6px 12px 6px 0;
+  border: 2px solid var(--color-borde);
+  border-left: 8px solid var(--color-borde);
   border-radius: var(--radio);
-  background: var(--color-fondo);
+  background: var(--color-superficie);
   font-weight: 700;
-  min-height: 44px;
 }
+.building-floor.ord-c1 { border-left-color: var(--mod-coordinacion); }
+.building-floor.ord-c2 { border-left-color: var(--mod-secuencia); }
+.building-floor.ord-c3 { border-left-color: var(--mod-emocional); }
+.building-floor.ord-c4 { border-left-color: var(--mod-memoria); }
+.building-floor.ord-c5 { border-left-color: var(--mod-lenguaje); }
 
-/* Piso actualmente destacado: la persona lo ve "encendido" mientras
-   navega con las flechas. Se pinta con el realce del módulo
-   (fondo suave + borde), y se aplica al piso que diga currentFloor,
-   no solo al primero: si la persona pulsa la flecha arriba, el piso
-   2 hereda el realce y el piso 1 vuelve al estilo normal. La sombra
-   y el ligero escalado hacen que el piso "salte" del resto sin
-   necesidad de un color más chillón. */
+/* The current floor: tinted, outlined, and tagged in text, so it does not
+   depend on colour alone. */
 .building-floor--current {
   background: var(--mod-razonamiento-suave);
   border-color: var(--mod-razonamiento);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+.building-floor-ord {
+  min-width: 3ch;
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.building-floor-label { flex: 1; color: var(--color-texto); white-space: nowrap; }
+.building-here {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--texto-sobre-acento);
+  background: var(--mod-razonamiento);
+  border-radius: 999px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.building-person { display: inline-flex; color: var(--color-texto-suave); }
 
-/* Flechas arriba/abajo del edificio: redondas, del color del módulo,
-   con el mismo tamaño mínimo táctil que los botones del proyecto
-   (48-56px). Se desactivan en los extremos: la flecha de arriba en
-   el ático, la de abajo en la planta baja. La transición de scale
-   evita que el cambio de piso se sienta como un "salto".
-
-   Las dos flechas van DENTRO de .building-arrows, una al lado de la
-   otra, SIEMPRE DEBAJO del edificio (no una arriba y una abajo):
-   con la flecha arriba en responsive el botón quedaba colgando del
-   borde superior, separado del contexto; juntas forman el control
-   "estás en el piso N, pulsa ▲ o ▼" que sigue al edificio. */
 .building-arrows {
   display: flex;
   align-items: center;
@@ -279,74 +207,31 @@
   gap: var(--espacio);
   margin-top: 4px;
 }
-
-.building-arrow,
-.building-arrow--up,
-.building-arrow--down {
+.building-arrow {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--mod-razonamiento);
-  color: #fff;
   border: 2px solid var(--mod-razonamiento);
+  background: var(--mod-razonamiento);
+  color: var(--texto-sobre-acento);
   font-size: 22px;
   font-weight: 700;
   font-family: inherit;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 4px auto;
-  transition: transform 0.1s ease, opacity 0.2s ease, background 0.2s ease;
   padding: 0;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.2s ease;
 }
-.building-arrow:hover:not(:disabled) {
-  transform: scale(1.08);
-  background: var(--mod-razonamiento);
-  filter: brightness(1.08);
-}
-.building-arrow:active:not(:disabled) {
-  transform: scale(0.94);
-}
-.building-arrow:disabled {
-  opacity: 0.28;
-  cursor: not-allowed;
-  transform: none;
-  filter: none;
-}
-.building-arrow:focus-visible {
-  outline: 3px solid var(--color-texto);
-  outline-offset: 3px;
-}
+.building-arrow--up,
+.building-arrow--down { flex: 0 0 56px; }
+.building-arrow:hover:not(:disabled) { transform: scale(1.08); }
+.building-arrow:active:not(:disabled) { transform: scale(0.94); }
+.building-arrow:disabled { opacity: 0.28; cursor: not-allowed; transform: none; }
+.building-arrow:focus-visible { outline: 3px solid var(--color-texto); outline-offset: 3px; }
 
-.building-floor-ord {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  font-size: var(--texto-grande);
-  font-weight: 800;
-  min-width: 2.5ch;
-  font-variant-numeric: tabular-nums;
-}
-
-.building-floor-label {
-  flex: 1;
-  text-align: right;
-  color: var(--color-texto);
-}
-
-.building-person { font-size: 1.6rem; line-height: 1; margin-left: 6px; }
-
-/* ----- La cola -----
-   Una fila horizontal con la meta al frente y las personas
-   detrás. Misma idea que la fila del juego, pero con personas en
-   vez de animales y con la cifra ordinal al lado de cada persona.
-
-   Los emojis de persona son genéricos (🧑) para evitar el escollo
-   del género y el tono de piel: el CLAUDE.md de Calculia dice
-   "no hay género ni tono de piel que elegir" en la cola
-   abstracta; aquí, donde la cola ES la de personas esperando, lo
-   respetamos igual. */
+/* ----- The queue: the goal first, then the people, each with its figure ----- */
 .famous-queue {
   flex-direction: row;
   flex-wrap: nowrap;
@@ -354,23 +239,20 @@
   justify-content: center;
   align-items: flex-end;
 }
-
-/* The goal (meta) at the front of the queue: a written label, not a
-   flag. It is a chip wide enough for the word, so the media rules that
-   narrow .queue-start on small screens do not cut it. */
 .queue-start.queue-goal {
-  width: auto;
-  min-width: 44px;
-  padding: 4px 8px;
+  width: 64px;
+  min-width: 64px;
+  box-sizing: border-box;
+  padding: 4px 6px;
   font-size: 0.95rem;
   font-weight: 800;
   line-height: 1.2;
-  color: #fff;
+  color: var(--texto-sobre-acento);
   background: var(--mod-razonamiento);
+  border-radius: 999px;
   white-space: nowrap;
   align-self: center;
 }
-
 .queue-person-cell {
   display: flex;
   flex-direction: column;
@@ -379,96 +261,51 @@
   flex: 0 0 auto;
   min-width: 44px;
 }
-
-.queue-person-emoji { font-size: 2rem; line-height: 1; }
-
+.queue-person-figure { display: inline-flex; color: var(--color-texto-suave); }
 .queue-person-ord {
   font-size: var(--texto-base);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
 
-@media (max-width: 360px) {
-  .queue-person-cell { min-width: 36px; }
-  .queue-person-emoji { font-size: 1.6rem; }
-  .building-person { font-size: 1.3rem; }
-  .building-floor { padding: 6px 8px; min-height: 36px; }
-  .building-floor-ord { font-size: var(--texto-base); }
-  .building-floor-label { font-size: var(--texto-pequeno); }
-}
-
-.famous-text { margin: 0; color: var(--color-texto); text-align: center; }
-
-/* ----- La clasificación -----
-   Una tabla vertical con los puestos del 1 al 5: cifra ordinal a la
-   izquierda, participante (emoji) a la derecha. Es la lectura
-   natural de "del primero al último" en una carrera o en una liga.
-
-   El color del ordinal es el mismo que el de la cola y el edificio,
-   así la persona ve que es la misma serie funcionando en un escenario
-   nuevo. La cifra va a la izquierda y el emoji a la derecha para que
-   el ojo recorra los puestos en orden: si fuera al revés (emoji a la
-   izquierda, cifra a la derecha), el emoji distraería y la cifra
-   dejaría de ser la protagonista. */
-
-.famous-classification {
-  gap: 6px;
-  align-items: stretch;
-}
-
+/* ----- The ranking: figure on the left, participant on the right ----- */
+.famous-classification { gap: 6px; align-items: stretch; }
 .classification-row {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   gap: var(--espacio);
-  padding: 8px 14px;
-  border: 2px solid var(--mod-razonamiento-suave);
-  border-radius: var(--radio);
-  background: var(--color-fondo);
-  font-weight: 700;
+  box-sizing: border-box;
   min-height: 44px;
   min-width: 180px;
+  padding: 8px 14px;
+  border: 2px solid var(--color-borde);
+  border-left: 8px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
 }
-
+.classification-row.ord-c1 { border-left-color: var(--mod-coordinacion); }
+.classification-row.ord-c2 { border-left-color: var(--mod-secuencia); }
+.classification-row.ord-c3 { border-left-color: var(--mod-emocional); }
+.classification-row.ord-c4 { border-left-color: var(--mod-memoria); }
+.classification-row.ord-c5 { border-left-color: var(--mod-lenguaje); }
 .classification-ord {
+  min-width: 3ch;
   font-size: var(--texto-grande);
   font-weight: 800;
   line-height: 1.1;
-  min-width: 2.5ch;
   font-variant-numeric: tabular-nums;
 }
+.classification-person { display: inline-flex; color: var(--color-texto-suave); }
 
-.classification-emoji {
-  font-size: 1.6rem;
-  line-height: 1;
-}
-
-/* ----- El podio -----
-   Una tarima con tres posiciones: 🥇 arriba en el centro, 🥈 a la
-   izquierda, 🥉 a la derecha. El podio olímpico tiene esta forma y
-   se reconoce al primer vistazo; por eso se respeta aunque el
-   responsive lo aplane después.
-
-   Alturas distintas: la pieza 1 es la más alta (es quien ganó), las
-   piezas 2 y 3 son más bajas y a la misma altura (segundo y tercero
-   son el mismo "subió al podio" sin importar el orden). Si las tres
-   tuvieran la misma altura, dejaría de parecer un podio y pasaría a
-   parecerse a una fila de tres.
-
-   La medalla va ENCIMA del bloque (no al lado): la medalla es lo que
-   "marca el puesto" y debe verse primero; debajo va el bloque con
-   el emoji del participante y la cifra ordinal. Si la medalla
-   viviera al lado del emoji, se leería como un adorno. */
-
+/* ----- The podium: a stand with three places, first in the centre ----- */
 .famous-podium {
   flex-direction: row;
+  flex-wrap: nowrap;
   align-items: flex-end;
   justify-content: center;
   gap: var(--espacio);
-  flex-wrap: nowrap;
   padding-top: var(--espacio);
 }
-
 .podium-pos {
   display: flex;
   flex-direction: column;
@@ -476,12 +313,8 @@
   gap: 6px;
   min-width: 84px;
 }
-
-.podium-medal {
-  font-size: 40px;
-  line-height: 1;
-}
-
+.podium-medal { line-height: 0; }
+.person-svg { display: block; }
 .podium-block {
   display: flex;
   flex-direction: column;
@@ -489,124 +322,101 @@
   justify-content: center;
   gap: 4px;
   width: 100%;
+  box-sizing: border-box;
   padding: 10px 6px;
-  border: 2px solid var(--mod-razonamiento-suave);
-  border-radius: var(--radio);
-  background: var(--color-fondo);
+  border-radius: 12px 12px 0 0;
+  background: var(--mod-razonamiento-suave);
+  color: var(--color-texto);
 }
-
-/* Altura del bloque: el primero es el más alto (ganó la carrera), el
-   segundo y el tercero comparten altura (ambos "subieron al podio"
-   sin importar el orden). Esto es lo que da la silueta de podio: si
-   los tres tuvieran la misma altura, parecerían una fila. */
-.podium-pos--1 .podium-block { min-height: 110px; }
+.podium-pos--1 .podium-block {
+  min-height: 124px;
+  background: var(--mod-razonamiento);
+  color: var(--texto-sobre-acento);
+}
 .podium-pos--2 .podium-block,
-.podium-pos--3 .podium-block { min-height: 78px; }
-
-.podium-emoji {
-  font-size: 1.6rem;
-  line-height: 1;
-}
-
+.podium-pos--3 .podium-block { min-height: 92px; }
+.podium-pos--3 .podium-block { min-height: 72px; }
+.podium-person { display: inline-flex; color: inherit; }
 .podium-ord {
   font-size: var(--texto-grande);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
-
-@media (max-width: 360px) {
-  .classification-row { min-width: 0; padding: 6px 10px; min-height: 36px; }
-  .classification-ord { font-size: var(--texto-base); }
-  .classification-emoji { font-size: 1.3rem; }
-  .podium-pos { min-width: 64px; }
-  .podium-medal { font-size: 32px; }
-  .podium-pos--1 .podium-block { min-height: 88px; }
-  .podium-pos--2 .podium-block,
-  .podium-pos--3 .podium-block { min-height: 64px; }
-  .podium-emoji { font-size: 1.3rem; }
-}
+/* On the teal first place the figure must read white, not the ordinal colour. */
+.podium-pos--1 .podium-ord { color: var(--texto-sobre-acento); }
 
 /* ============================================================
-   Pantalla 3: recordatorio
+   Screen 3: reminder
    ============================================================ */
 .reminder-buttons { justify-content: center; margin-top: var(--espacio-grande); }
 
-.ordinals-row { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--espacio); width: 100%; }
-
-/* Cada ficha lleva la cifra, la palabra y el número natural: la
-   cifra (1.º) y el natural (1) son las dos formas que la persona
-   tiene que aprender a leer e intercambiar en el juego, y la
-   palabra (primero) las conecta. Antes la tercera pieza era
-   "primer lugar" / "sexto lugar" — eso era la palabra + "lugar"
-   y repetía la pieza central sin añadir información. */
+/* The series as a grid of chips: three per row on a phone, more on a wide
+   screen. The stripe on top carries the ordinal colour. */
+.ordinals-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 8px;
+  width: 100%;
+}
 .ord-chip {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 2px;
-  padding: var(--espacio);
-  min-width: 150px;
-  border: 3px solid var(--mod-razonamiento-suave);
+  box-sizing: border-box;
+  min-height: 72px;
+  padding: 8px 6px;
+  border: 2px solid var(--color-borde);
+  border-top: 6px solid var(--color-borde);
   border-radius: var(--radio);
   background: var(--color-superficie);
 }
+.ord-chip.ord-c1 { border-top-color: var(--mod-coordinacion); }
+.ord-chip.ord-c2 { border-top-color: var(--mod-secuencia); }
+.ord-chip.ord-c3 { border-top-color: var(--mod-emocional); }
+.ord-chip.ord-c4 { border-top-color: var(--mod-memoria); }
+.ord-chip.ord-c5 { border-top-color: var(--mod-lenguaje); }
 .ord-chip-figure {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: var(--texto-grande);
   font-weight: 800;
   line-height: 1.1;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
 }
-.ord-chip-medal { font-size: 1.4rem; line-height: 1; }
-.ord-chip-name { font-size: var(--texto-base); font-weight: 700; }
-/* Pieza 3 de la ficha: "Posición N" — el número natural (1, 2, 3…)
-   con la palabra "Posición" delante, que es lo que dice qué papel
-   juega el número sin repetir la palabra del ordinal ("décimo
-   lugar" repetía "décimo"; "décimo · Posición 10" ya no). El nombre
-   "-place" se conserva por compatibilidad con los selectores
-   existentes y con el CSS responsive. */
-.ord-chip-place { font-size: var(--texto-pequeno); color: var(--color-texto-suave); }
+.ord-chip-figure .medal-svg { width: 22px; height: 22px; }
+.ord-chip-name { font-size: var(--texto-base); font-weight: 700; color: var(--color-texto); }
+.ord-chip-place { font-size: var(--texto-pequeno); color: var(--color-texto-suave); text-align: center; }
 
-.rule-card { border-color: var(--mod-razonamiento-suave); }
-.rule-title { font-weight: 700; margin: 0; text-align: center; font-size: var(--texto-base); color: var(--color-texto); }
+.rule-title { font-weight: 800; margin: 0; text-align: center; font-size: var(--texto-base); color: var(--color-texto); }
 
-/* "1.º · primero · 1" — la regla que comparten todas las fichas del
-   recordatorio (cifra, palabra, número natural). El comentario está
-   en CSS porque la regla visual ya está aquí; app.js la pinta con
-   la misma fórmula. */
+/* One rule row: figure · word · place. */
 .rule-example {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   gap: 8px;
-  font-size: var(--texto-grande);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: var(--radio);
+  background: var(--color-fondo);
+  font-size: var(--texto-base);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
-.rule-example--tight { font-size: var(--texto-base); }
-.ex-figure { font-size: var(--texto-grande); }
-.ex-name { font-size: var(--texto-base); }
-/* Pieza 3: "Posición N" — el número natural al que corresponde el
-   ordinal (1, 2, 3...) con "Posición" delante. Tamaño base y forma
-   de cifra: la cifra ordinal (1º) y el número natural (1) son las
-   dos formas que la persona tiene que aprender a leer e
-   intercambiar, y se ven igual de importantes en la fila. */
-.ex-natural { font-size: var(--texto-base); font-variant-numeric: tabular-nums; }
+.ex-figure { font-size: var(--texto-base); }
+.ex-name { color: var(--color-texto); }
+.ex-natural { font-weight: 700; color: var(--color-texto-suave); }
 .ex-op { color: var(--color-texto-suave); }
 
-/* Antes del rediseño, debajo de los ejemplos de la regla 1 vivía una
-   segunda regla ("la cuenta empieza en el primero, no hay lugar cero")
-   apoyada en una miniatura de fila con meta. Era redundante con
-   la primera y se quitó: el conteo desde la meta se entiende
-   mejor en el juego, donde la fila es real. La miniatura y su CSS
-   (clases .strip*) ya no se emiten. */
-
 /* ============================================================
-   Pantalla 4: juego
+   Screen 4: the game
    ============================================================ */
-.quiz-card { border-color: var(--mod-razonamiento-suave); }
+.quiz-card { gap: 12px; }
 
 .quiz-shown {
   font-size: 64px;
@@ -621,13 +431,12 @@
   gap: 4px;
   width: 100%;
 }
-
 .big-word { font-size: var(--texto-titulo); line-height: 1.1; }
 .big-digit { font-size: 88px; line-height: 1; }
 
-/* La fila: meta, animales y (en su sitio) la flecha. La columna
-   de la meta es un hueco de la misma anchura que las demás, sólo
-   que con la meta dentro, para que todo quede alineado. */
+/* The queue row: goal, animals and the arrow. The goal column, the arrow
+   column and each animal share one width, so the arrow lands exactly on the
+   place it points at. */
 .queue-row {
   display: flex;
   align-items: center;
@@ -636,23 +445,23 @@
   flex-wrap: nowrap;
   max-width: 100%;
 }
+/* The goal column (64px) and the arrow spacer share one width, and every
+   animal and every arrow slot shares another (44px). Same widths in both
+   rows keep the arrow over the place it points at. */
 .queue-member,
-.queue-start,
-.queue-pointer,
-.queue-start-spacer {
+.queue-pointer {
   flex: 0 0 auto;
   width: 44px;
   text-align: center;
   font-size: 2rem;
   line-height: 1.1;
 }
+.queue-start-spacer { flex: 0 0 auto; width: 64px; }
 .queue-start {
   font-size: 1.6rem;
   border-radius: var(--radio);
   background: var(--mod-razonamiento-suave);
 }
-/* La fila de punteros es sólo un marcador de posición: cuando no hay
-   flecha no debe añadir altura. */
 .queue-pointers { min-height: 2.2rem; }
 .queue-pointer { font-size: 1.5rem; }
 
@@ -670,7 +479,13 @@
   max-width: 480px;
 }
 
-.question { color: var(--color-texto-suave); font-size: var(--texto-grande); }
+.question {
+  margin: 0;
+  font-size: var(--texto-grande);
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--color-texto);
+}
 
 .progress-row {
   display: flex;
@@ -681,63 +496,73 @@
 }
 .progress-step { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
 
-/* Cabecera de la mini-ronda encadenada: sólo al pasar de un
-   sub-paso al siguiente, para que se entienda que el nivel cambió a
-   propósito. */
-.round-header {
-  margin: 0;
-  padding: var(--espacio);
-  border-radius: var(--radio);
-  background: var(--mod-razonamiento-suave);
-  color: var(--color-texto);
-  font-weight: 700;
-  text-align: center;
+/* Options: one column on a phone (words read better on a line of their own),
+   a grid of several on a wide screen. */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: min(100%, 480px);
+}
+@media (min-width: 480px) {
+  .options-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--espacio); }
 }
 
-/* minmax(110px) en vez de tres columnas fijas: a 375px, tres
-   columnas de ~90px obligaban a partir las palabras ("terce/ro"),
-   y una palabra de ordinal partida se lee como dos. Con 110px
-   mínimos salen dos columnas cómodas a 320-375px y tres en tablet y
-   escritorio, sin tocar nada más. */
-.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: var(--espacio); width: min(100%, 480px); }
-
-/* Opciones de texto: `break-word` y no `anywhere`. `anywhere` parte
-   la palabra aunque haya sitio (affecta además al cálculo de
-   min-content); `break-word` sólo corta si de verdad no cabe, que es
-   justo cuando no hay otra opción. */
-.option-btn--word { font-size: var(--texto-base); overflow-wrap: break-word; padding: 12px 10px; }
+/* Word options: left-aligned text, the check (when correct) on the right. */
+.option-btn--word {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--texto-base);
+  font-weight: 700;
+  overflow-wrap: break-word;
+  padding: 12px 16px;
+}
+.option-btn.correct::after {
+  content: "✓";
+  margin-left: auto;
+  padding-left: 8px;
+  font-weight: 800;
+  color: var(--color-acierto);
+}
 
 /* ============================================================
-   Pantalla final
+   Final screen
    ============================================================ */
 .big-emoji { font-size: 96px; }
 .transfer { color: var(--color-texto-suave); max-width: 480px; }
 
 /* ============================================================
-   Responsive — 320 / 375 / 768 / desktop
+   Responsive: 320 / 375 / 768 / desktop
    ============================================================ */
 @media (max-width: 480px) {
-  .carousel-medal { font-size: 32px; }
-  .carousel-figure-row { gap: 6px; }
-  .famoso-figure { font-size: 32px; }
+  .podium-col { gap: 4px; }
+  .podium-figure { font-size: 24px; }
+  .podium-stand--1 .podium-figure { font-size: 26px; }
+  .podium-name { font-size: var(--texto-base); }
+  .ordinal-hero { font-size: 60px; }
   .quiz-shown { font-size: 48px; min-height: 72px; }
   .big-digit { font-size: 64px; }
   .big-word { font-size: var(--texto-grande); }
-  .rule-example { font-size: var(--texto-base); }
-  .ex-figure { font-size: var(--texto-base); }
-  .ord-chip { min-width: 0; flex: 1 1 130px; }
   .big-emoji { font-size: 64px; }
-  /* La fila se estrecha un poco para que cinco animales + meta
-     sigan cabiendo en 375px sin desbordar. */
-  .queue-member, .queue-start, .queue-pointer, .queue-start-spacer { width: 40px; font-size: 1.7rem; }
+  .queue-member, .queue-pointer { width: 40px; font-size: 1.7rem; }
+  .queue-start-spacer, .queue-start.queue-goal { width: 56px; min-width: 56px; }
 }
 
-/* Muy estrecho (320px): las tres opciones en fila se quedan sin
-   sitio y bajan a una columna. El mínimo táctil de 64px se mantiene
-   en las dos direcciones. */
 @media (max-width: 360px) {
+  .podium-stand--1 { height: 100px; }
+  .podium-stand--2 { height: 76px; }
+  .podium-stand--3 { height: 60px; }
   .quiz-shown { font-size: 38px; }
-  .queue-member, .queue-start, .queue-pointer, .queue-start-spacer { width: 34px; font-size: 1.4rem; }
+  .queue-member, .queue-pointer { width: 34px; font-size: 1.4rem; }
+  .queue-start-spacer, .queue-start.queue-goal { width: 48px; min-width: 48px; }
+  .famous-podium { gap: 6px; }
+  .podium-pos { min-width: 64px; }
+  .podium-pos--1 .podium-block { min-height: 100px; }
+  .podium-pos--2 .podium-block { min-height: 80px; }
+  .podium-pos--3 .podium-block { min-height: 62px; }
+  .building-floor { padding: 6px 8px; min-height: 40px; }
+  .building-floor-ord { font-size: var(--texto-base); }
+  .building-floor-label { font-size: var(--texto-pequeno); }
+  .queue-person-cell { min-width: 36px; }
 }
-/* Centra el botón de "Recuerda →" (Pantalla 2). Antes convivía
-   con un botón de "← Anterior" que ya no existe. */

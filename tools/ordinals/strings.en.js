@@ -201,6 +201,8 @@
        highlight. */
     buildingAria: 'Building with {n} floors. You are on floor {current}; the ground floor is floor 1 and you climb up to floor {top}.',
     buildingFloor: 'floor {n}',
+    /* Text tag on the current floor, so the highlight is not colour alone. */
+    buildingHere: 'You are here',
     /* Accessible labels for the up/down arrows. Not visible — only
        heard by screen readers. */
     buildingArrowUp: 'Go up one floor',

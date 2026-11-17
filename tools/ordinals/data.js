@@ -39,8 +39,8 @@
    ficha del recordatorio ya no la usa, porque "sexto lugar"
    repite "sexto" sin aportar información — la pieza 3 de la ficha
    es ahora el número natural (1, 2, 3…). Los tres primeros
-   llevan además 'medal' con la medalla correspondiente
-   (🥇🥈🥉): la medalla es lo que abre la actividad, porque
+   no llevan campo de medalla: la medalla la dibuja screens.js como
+   SVG en línea (no emoji). Es lo que abre la actividad, porque
    "primero, segundo, tercero" es la cara que la gente ya
    reconoce sin tener que aprenderla primero.
 
@@ -114,9 +114,9 @@
    ============================================================ */
 
 var ORDINALS = [
-  { n: 1, cls: 'ord-c1', medal: '🥇' },
-  { n: 2, cls: 'ord-c2', medal: '🥈' },
-  { n: 3, cls: 'ord-c3', medal: '🥉' },
+  { n: 1, cls: 'ord-c1' },
+  { n: 2, cls: 'ord-c2' },
+  { n: 3, cls: 'ord-c3' },
   { n: 4, cls: 'ord-c4' },
   { n: 5, cls: 'ord-c5' },
   { n: 6, cls: 'ord-c1' },
