@@ -13,14 +13,15 @@
 
     ui: {
       visualAria: 'Drawing or divisions that show the divisors.',
-      product: '{k} × {d} = {m}',
       divide: '{n} ÷ {k} = {q}',
       divideRest: '{n} ÷ {k} = {q}, {r} left over',
+      exactTag: 'whole division',
+      restTag: 'not whole: {r} left over',
     },
 
-    /* The explanation: one idea per slide. The drawing is in data.js. */
+    /* The explanation: one idea per slide. The divisions are in data.js. */
     intro: {
-      1: { title: 'A divisor divides exactly', text: '12 splits into 3 groups of 4, with nothing left over. So 3 is a divisor of 12.' },
+      1: { title: 'A divisor divides exactly', text: '12 ÷ 3 = 4: the division is whole, nothing is left over. So 3 is a divisor of 12. But 12 ÷ 5 is not whole: 2 is left over.' },
       2: { title: 'Divide 12 by 1, 2, 3…', text: 'If the division comes out exact, it is a divisor. If something is left over, it is not.' },
       3: { title: 'Example: divide 6 by 1, 2, 3…', text: 'If the division comes out exact, it is a divisor. If something is left over, it is not.' },
       4: { title: 'Example: divide 8 by 1, 2, 3…', text: 'If the division comes out exact, it is a divisor. If something is left over, it is not.' }
@@ -31,9 +32,10 @@
       start: 'I choose this number',
       pick: 'Now you choose a number from 1 to 9. It is the divisor.',
       pickAria: 'Divide {a} by {b}',
-      partner: 'I chose {a} and you chose {b}. Let us share it into groups of {b}:',
-      why: '{a} splits into {q} groups of {b} with nothing left over. So {b} is a divisor of {a}.',
-      whyNo: '{a} does not split into groups of {b} with nothing left over: {r} is left over. So {b} is not a divisor of {a}.',
+      partner: 'I chose {a} and you chose {b}. Let us divide {a} by {b}:',
+      listTitle: 'The divisions of {a}:',
+      why: '{a} ÷ {b} is a whole division: nothing is left over. So {b} is a divisor of {a}.',
+      whyNo: '{a} ÷ {b} is not whole: {r} is left over. So {b} is not a divisor of {a}.',
       other: 'Another starting number'
     }
   }, 'en');

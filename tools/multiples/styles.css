@@ -106,5 +106,32 @@
 /* The partner's drawing: a line saying who chose what, then the groups it makes. */
 .mul-draw { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
 .mul-partner { margin: 0; text-align: center; line-height: 1.4; }
+.mul-list-title { margin: 0; font-size: var(--texto-grande); font-weight: 700; text-align: center; }
+
+/* The multiple itself: the product in a filled box, so it is the first thing the eye finds. */
+.mul-hit {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: var(--radio);
+  background: var(--mod-razonamiento);
+  color: var(--color-superficie);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.mul-tag { font-size: var(--texto-pequeno); color: var(--color-texto); font-weight: 700; }
+
+/* The multiples of the starting number, in a row; the one the user made is the marked chip. */
+.mul-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.mul-chip {
+  min-width: 52px;
+  padding: 6px 10px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.mul-chip.mul-hit { border-color: var(--color-texto); }
 
 /* Test answers */

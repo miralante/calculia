@@ -13,14 +13,15 @@
 
     ui: {
       visualAria: 'Dibujo o divisiones que muestran los divisores.',
-      product: '{k} × {d} = {m}',
       divide: '{n} ÷ {k} = {q}',
       divideRest: '{n} ÷ {k} = {q}, sobra {r}',
+      exactTag: 'división entera',
+      restTag: 'no es entera: sobra {r}',
     },
 
-    /* La explicación: una idea por diapositiva. El dibujo está en data.js. */
+    /* La explicación: una idea por diapositiva. Las divisiones están en data.js. */
     intro: {
-      1: { title: 'Un divisor divide exacto', text: '12 se reparte en 3 grupos de 4, sin sobrar. Por eso 3 es divisor de 12.' },
+      1: { title: 'Un divisor divide exacto', text: '12 ÷ 3 = 4: la división es entera, no sobra nada. Por eso 3 es divisor de 12. En cambio 12 ÷ 5 no es entera: sobra 2.' },
       2: { title: 'Divide el 12 entre 1, 2, 3…', text: 'Si la división sale exacta, es divisor. Si sobra, no lo es.' },
       3: { title: 'Ejemplo: divide el 6 entre 1, 2, 3…', text: 'Si la división sale exacta, es divisor. Si sobra, no lo es.' },
       4: { title: 'Ejemplo: divide el 8 entre 1, 2, 3…', text: 'Si la división sale exacta, es divisor. Si sobra, no lo es.' }
@@ -31,9 +32,10 @@
       start: 'Yo elijo este número',
       pick: 'Ahora elige tú un número del 1 al 9. Es el divisor.',
       pickAria: 'Dividir {a} entre {b}',
-      partner: 'Yo elijo {a} y tú eliges {b}. Hacemos el reparto en grupos de {b}:',
-      why: '{a} se reparte en {q} grupos de {b} sin sobrar. Por eso {b} es divisor de {a}.',
-      whyNo: '{a} no se reparte en grupos de {b} sin sobrar: sobra {r}. Por eso {b} no es divisor de {a}.',
+      partner: 'Yo elijo {a} y tú eliges {b}. Dividimos {a} entre {b}:',
+      listTitle: 'Las divisiones de {a}:',
+      why: '{a} ÷ {b} es una división entera: no sobra nada. Por eso {b} es divisor de {a}.',
+      whyNo: '{a} ÷ {b} no es entera: sobra {r}. Por eso {b} no es divisor de {a}.',
       other: 'Otro número de partida'
     }
   }, 'es');

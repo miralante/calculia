@@ -3,9 +3,9 @@
    Two stages: the explanation, then the game (config.pairedPractice), one
    after the other, never side by side. The game draws a starting number
    from 1 to 9; the user picks another number from 1 to 9; the product
-   is shown, with the reason it is a multiple. The stages and the screens
-   are built by assets/js/activity-flow.js (mode 'options', skipReal); this
-   file has the drawings and the game. The texts are in strings.<locale>.js
+   is shown, marked in the list of multiples, with the reason it is a
+   multiple. The stages and the screens are built by assets/js/activity-flow.js
+   (mode 'options', skipReal); this file has the lines of multiples and the game. The texts are in strings.<locale>.js
    and the slides and the numbers in data.js.
    ============================================================ */
 (function () {
@@ -15,31 +15,30 @@
   var fill = App.utils.fill;
   function t(key) { return App.i18n.t(key); }
 
-  /* ---- Drawing ----------------------------------------------------------
-     Every drawing is made of small dots. A row of dots is a group; the
-     product of its groups is written under it («3 × 4 = 12»). */
-  var DOT = '🔴';
-  function items(count, cls) { return App.answerOptions.dotRow(count, cls, DOT); }
-  function productText(count, each) {
-    return fill(t('ui.product'), { k: count, d: each, m: count * each });
-  }
-  /* `count` equal groups of `each` dots, one above the other, and their product. */
-  function groupsHtml(count, each) {
-    var html = '<div class="ops-group-stack">';
-    for (var g = 0; g < count; g += 1) html += '<div class="ops-group-box"><div class="ops-row">' + items(each, 'ops-item') + '</div></div>';
-    return html + '</div><p class="ops-expr">' + productText(count, each) + '</p>';
-  }
-  /* The multiplications of `each` by 1 to `count`, one per line, as text: «5 × 1 = 5», «5 × 2 = 10»… No pictures. */
+  /* ---- Drawing: no pictures. The concept is written, and the multiple is marked.
+     Each line is a multiplication «5 × 2 = 10»; the product, which is the multiple,
+     is highlighted and tagged «múltiplo de 5». */
   function timesHtml(each, count) {
     var html = '<div class="mul-ladder">';
     for (var k = 1; k <= count; k += 1) {
-      html += '<div class="mul-row"><span class="mul-label">' + fill(t('ui.times'), { d: each, k: k, m: each * k }) + '</span></div>';
+      html += '<div class="mul-row"><span class="mul-label">' + each + ' × ' + k + ' = </span>' +
+        '<span class="mul-hit">' + (each * k) + '</span>' +
+        '<span class="mul-tag">' + fill(t('ui.multipleTag'), { d: each }) + '</span></div>';
     }
     return html + '</div>';
   }
   function visualHtml(spec) {
-    if (spec.kind === 'groups') return groupsHtml(spec.count, spec.each);
     return timesHtml(spec.each, spec.count);
+  }
+
+  /* The partner's multiples of a: a × 1 to a × 9, in a row. The one the user made, a × b, is marked. */
+  function multiplesHtml(a, b) {
+    var html = '<p class="mul-partner">' + fill(t('practice.partner'), { a: a, b: b }) + '</p>';
+    html += '<p class="mul-list-title">' + fill(t('practice.listTitle'), { a: a }) + '</p><div class="mul-chips">';
+    for (var k = 1; k <= 9; k += 1) {
+      html += '<span class="mul-chip' + (k === b ? ' mul-hit' : '') + '">' + (a * k) + '</span>';
+    }
+    return html + '</div>';
   }
 
   /* ---- Practice: a game, on the left of the explanation -------------------
@@ -99,12 +98,12 @@
     paintPicker();
   }
 
-  /* The user picked b. The partner (the app) makes the multiple: a groups of b dots,
-     the product, and why it is a multiple of both numbers. */
+  /* The user picked b. The partner (the app) makes the multiple a × b: the list of its
+     multiples with a × b marked, the product, and why it is a multiple of both numbers. */
   function answer(b) {
     var a = game.a;
     var m = a * b;
-    $('#mulDraw').innerHTML = '<p class="mul-partner">' + fill(t('practice.partner'), { a: a, b: b }) + '</p>' + groupsHtml(a, b);
+    $('#mulDraw').innerHTML = multiplesHtml(a, b);
     $('#mulResult').textContent = fill(t('practice.result'), { a: a, b: b, m: m });
     $('#mulWhy').textContent = fill(t('practice.why'), { a: a, b: b, m: m });
     if (!game.answered) {

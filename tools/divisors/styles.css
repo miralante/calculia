@@ -39,4 +39,18 @@
 /* The partner's drawing: the groups of the divisor, and the part left over in a dashed box. */
 .div-draw { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
 .div-partner { margin: 0; text-align: center; line-height: 1.4; }
-.div-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; }
+.div-list-title { margin: 0; font-size: var(--texto-grande); font-weight: 700; text-align: center; }
+
+/* Whether a division is whole: a filled tag for «división entera», an outlined one for a remainder. */
+.div-row { flex-wrap: nowrap; }
+.div-tag {
+  padding: 2px 10px;
+  border-radius: var(--radio);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.div-exact-tag { background: var(--mod-razonamiento); color: var(--color-superficie); }
+.div-rest-tag { border: 2px solid var(--mod-razonamiento); color: var(--color-texto); }
+/* The division the user chose: its line is framed. */
+.div-chosen { outline: 3px solid var(--color-texto); outline-offset: 3px; border-radius: var(--radio); }

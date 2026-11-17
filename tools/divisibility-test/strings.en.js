@@ -14,39 +14,34 @@
     ui: {
       nextStep: 'Next step',
       stepOf: 'Step {i} of {n}',
-      visualAria: 'Drawing of dots shared into groups.',
+      visualAria: 'Divisions that show whether they come out exact.',
       yes: 'Yes',
       no: 'No',
-      divInstruction: 'Share {T} balls into groups of {d}.',
       divChoice: '÷ {d}',
-      divOne: 'Make a group of {d}',
-      divReset: 'Start again',
-      divWhole: '{T} ÷ {d} = {q}. Nothing is left over: it divides exactly.',
-      divRest: '{T} ÷ {d} = {q} with {r} left over: it does not divide exactly.',
+      lineExact: '{n} ÷ {d} = {q}',
+      lineRest: '{n} ÷ {d} = {q}, {r} left over',
+      exactTag: 'comes out exact',
+      restTag: '{r} left over',
       teacherStart: 'I choose {n}. You choose a divisor: 2, 3, 5 or 10.',
       teacherNext: 'I choose another number',
       digitsInstruction: 'Add the digits of {n}.',
-      digitsSum: 'Add the digits',
       digitsResult: '{parts} = {s}',
-      digitsAsk: 'Now check whether {s} divides by 3.',
       ruleCard2: 'Rule for 2: if it ends in 0, 2, 4, 6 or 8, it divides exactly by 2.',
       ruleCard3: 'Rule for 3: if the sum of its digits divides exactly by 3, the number does too.',
       ruleCard5: 'Rule for 5: if it ends in 0 or 5, it divides exactly by 5.',
       ruleCard10: 'Rule for 10: if it ends in 0, it divides exactly by 10.',
-      ballsAriaWhole: '{T} balls in {q} groups of {d}, nothing left over.',
-      ballsAriaRest: '{T} balls in {q} groups of {d}, and {r} left over.'
     },
 
     /* The explanation: one idea per slide. The practice is on the right (data.js and app.js). */
     intro: {
-      1: { title: 'Divisible: nothing is left over', text: '12 balls in groups of 3: you get 4 groups and no ball is left over. So 12 is divisible by 3.' },
-      2: { title: 'Not divisible: something is left over', text: '13 balls in groups of 3: you get 4 groups and 1 ball is left over. That ball is the remainder. So 13 is not divisible by 3.' },
+      1: { title: 'Divisible: it comes out exact', text: '12 ÷ 3 = 4: nothing is left over. So 12 is divisible by 3.' },
+      2: { title: 'Not divisible: something is left over', text: '13 ÷ 3 = 4 with 1 left over. That 1 is the remainder. So 13 is not divisible by 3.' },
       3: { title: 'Rule for 2: ends in an even digit', text: 'If it ends in 0, 2, 4, 6 or 8, it divides exactly by 2. I choose a number and you choose the divisor: I tell you if it comes out exact.' },
       4: { title: 'Rule for 3: add the digits', text: 'Add the digits: if the sum divides exactly by 3, the number does too. I choose a number and you choose the divisor.' },
       5: { title: 'Rule for 5: ends in 0 or 5', text: 'If it ends in 0 or 5, it divides exactly by 5. I choose a number and you choose the divisor.' },
       6: { title: 'Rule for 10: ends in 0', text: 'If it ends in 0, it divides exactly by 10. I choose a number and you choose the divisor.' },
       7: { title: 'If the sum is not divisible by 3, neither is the number', text: 'Add the digits of 14: 1 + 4 = 5. Since 5 is not divisible by 3, 14 is not divisible by 3.' },
-      8: { title: 'What is left over is the remainder', text: '13 balls in packs of 5: 2 packs are full. 3 balls are left over. That 3 is the remainder: it does not fill a pack.' }
+      8: { title: 'What is left over is the remainder', text: '13 ÷ 5 = 2 with 3 left over. That 3 is the remainder: it does not fill a group of 5.' }
     },
 
     /* The test: the question, a hint (without the answer) and the explanation when right. */

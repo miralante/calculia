@@ -17,16 +17,15 @@
       yes: 'Sí',
       no: 'No',
       visualAria: 'Dibujo o multiplicaciones que muestran los múltiplos.',
-      product: '{k} × {d} = {m}',
-      times: '{d} × {k} = {m}',
+      multipleTag: 'múltiplo de {d}',
     },
 
-    /* La explicación: una idea por diapositiva. El dibujo está en data.js. */
+    /* La explicación: una idea por diapositiva. Las líneas están en data.js. */
     intro: {
-      1: { title: 'El múltiplo sale al multiplicar', text: 'Elige un número y multiplícalo por otro: así obtienes un múltiplo. 3 × 4 = 12. Por eso 12 es múltiplo de 3 y también de 4.' },
-      2: { title: 'Multiplica el 5 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado es un múltiplo de 5.' },
-      3: { title: 'Ejemplo: multiplica el 2 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado es un múltiplo de 2.' },
-      4: { title: 'Ejemplo: multiplica el 3 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado es un múltiplo de 3.' }
+      1: { title: 'Un múltiplo sale al multiplicar', text: 'Un múltiplo sale al multiplicar un número por otro. 3 × 4 = 12. Por eso 12 es múltiplo de 3 y también de 4.' },
+      2: { title: 'Multiplica el 5 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado marcado es un múltiplo de 5.' },
+      3: { title: 'Ejemplo: multiplica el 2 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado marcado es un múltiplo de 2.' },
+      4: { title: 'Ejemplo: multiplica el 3 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado marcado es un múltiplo de 3.' }
     },
 
     /* La práctica: un juego a la derecha de la explicación. */
@@ -34,7 +33,8 @@
       start: 'Yo elijo este número',
       pick: 'Ahora elige tú otro número del 1 al 9.',
       pickAria: 'Multiplicar {a} por {b}',
-      partner: 'Yo elijo {a} y tú eliges {b}. Hacemos el múltiplo:',
+      partner: 'Yo elijo {a} y tú eliges {b}. Multiplicamos {a} por {b}:',
+      listTitle: 'Los múltiplos de {a}:',
       result: '{a} × {b} = {m}',
       why: '{m} es múltiplo de {a} y de {b}. El múltiplo de {a} sale al multiplicarlo por {b}.',
       other: 'Otro número de partida'

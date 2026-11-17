@@ -15,37 +15,31 @@
   var fill = App.utils.fill;
   function t(key) { return App.i18n.t(key); }
 
-  /* ---- Drawing ----------------------------------------------------------
-     Every drawing is made of small dots. A row of dots is a group; the
-     product of its groups is written under it («3 × 4 = 12»). */
-  var DOT = '🔴';
-  function items(count, cls) { return App.answerOptions.dotRow(count, cls, DOT); }
-  function productText(count, each) {
-    return fill(t('ui.product'), { k: count, d: each, m: count * each });
-  }
-  /* `count` equal groups of `each` dots, one above the other, and their product. */
-  function groupsHtml(count, each) {
-    var html = '<div class="ops-group-stack">';
-    for (var g = 0; g < count; g += 1) html += '<div class="ops-group-box"><div class="ops-row">' + items(each, 'ops-item') + '</div></div>';
-    return html + '</div><p class="ops-expr">' + productText(count, each) + '</p>';
-  }
-  /* n ÷ k, with the quotient; «sobra» with what is left over when the division is not exact. */
+  /* ---- Drawing: no pictures. The point is whether the division is whole («entera») or not.
+     Each line is a division n ÷ k. If nothing is left over, the line is marked «división
+     entera»; if something is left over, it is marked with the remainder. */
+  /* n ÷ k, with the quotient and, when it is not exact, what is left over. */
   function divisionText(n, k) {
     var q = Math.floor(n / k);
     var r = n % k;
     if (r === 0) return fill(t('ui.divide'), { n: n, k: k, q: q });
     return fill(t('ui.divideRest'), { n: n, k: k, q: q, r: r });
   }
-  /* The divisions of n by 1 to `count`, one per line, as text: «12 ÷ 1 = 12», «12 ÷ 5 = 2, sobra 2»… No pictures. */
+  /* One division as a line: the expression, and the tag that says whether it is whole. */
+  function divisionLineHtml(n, k, chosen) {
+    var r = n % k;
+    var tag = r === 0
+      ? '<span class="div-tag div-exact-tag">' + t('ui.exactTag') + '</span>'
+      : '<span class="div-tag div-rest-tag">' + fill(t('ui.restTag'), { r: r }) + '</span>';
+    return '<div class="div-row' + (chosen ? ' div-chosen' : '') + '"><span class="div-label">' + divisionText(n, k) + '</span>' + tag + '</div>';
+  }
+  /* The divisions of n by 1 to `count`, one per line, as text. */
   function divideHtml(n, count) {
     var html = '<div class="div-ladder">';
-    for (var k = 1; k <= count; k += 1) {
-      html += '<div class="div-row"><span class="div-label">' + divisionText(n, k) + '</span></div>';
-    }
+    for (var k = 1; k <= count; k += 1) html += divisionLineHtml(n, k, false);
     return html + '</div>';
   }
   function visualHtml(spec) {
-    if (spec.kind === 'groups') return groupsHtml(spec.count, spec.each);
     return divideHtml(spec.each, spec.count);
   }
 
@@ -106,26 +100,21 @@
     paintPicker();
   }
 
-  /* The partner's number a split into groups of the user's divisor b: complete groups, and
-     what is left over in its own colour. */
-  function divideDrawHtml(a, b) {
-    var q = Math.floor(a / b);
-    var r = a % b;
-    var html = '<p class="div-partner">' + fill(t('practice.partner'), { a: a, b: b }) + '</p><div class="ops-group-stack">';
-    for (var g = 0; g < q; g += 1) html += '<div class="ops-group-box"><div class="ops-row">' + items(b, 'ops-item') + '</div></div>';
-    if (r) html += '<div class="ops-group-box div-left"><div class="ops-row">' + items(r, 'ops-item') + '</div></div>';
+  /* The partner's divisions of a, from 1 to 9, one per line: the one the user chose (b) is marked. */
+  function divisionsHtml(a, b) {
+    var html = '<p class="div-partner">' + fill(t('practice.partner'), { a: a, b: b }) + '</p>';
+    html += '<p class="div-list-title">' + fill(t('practice.listTitle'), { a: a }) + '</p><div class="div-ladder">';
+    for (var k = 1; k <= 9; k += 1) html += divisionLineHtml(a, k, k === b);
     return html + '</div>';
   }
 
-  /* The user picked b: the partner divides a by b, and says whether b is a divisor of a. */
+  /* The user picked b: the partner divides a by b, and says whether the division is whole. */
   function answer(b) {
     var a = game.a;
     var q = Math.floor(a / b);
     var r = a % b;
-    $('#divDraw').innerHTML = divideDrawHtml(a, b);
-    $('#divResult').textContent = r
-      ? fill(t('ui.divideRest'), { n: a, k: b, q: q, r: r })
-      : fill(t('ui.divide'), { n: a, k: b, q: q });
+    $('#divDraw').innerHTML = divisionsHtml(a, b);
+    $('#divResult').textContent = divisionText(a, b);
     $('#divWhy').textContent = r
       ? fill(t('practice.whyNo'), { a: a, b: b, r: r })
       : fill(t('practice.why'), { a: a, b: b, q: q });

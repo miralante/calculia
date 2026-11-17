@@ -1,7 +1,8 @@
 /* ==========================================================================
    Calculia — Divisibilidad: styles
-   The practice frames on the right of each explanation: balls shared in
-   groups, numbers to tap, digits to add. Texts and buttons come from app.js.
+   The practice frames on the right of each explanation: divisions written
+   out, with whether each one comes out exact; and the teacher's game. No
+   pictures. Texts and buttons come from app.js.
    ========================================================================== */
 
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
@@ -15,65 +16,14 @@
 .ops-story { margin: 0; font-size: var(--texto-grande); text-align: center; line-height: 1.4; }
 .ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; line-height: 1.4; }
 
-/* One frame: the instruction, the buttons, the drawing, and the result below it. */
-.ops-div { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+/* One frame: the text, the buttons, and the result below them. */
+.ops-div { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
 .ops-div-choices,
-.ops-div-actions,
-.ops-div-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-
-/* One ball. The numbers are shown as dots (🔴), so the groups read at a glance. */
-.ops-item {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  min-height: 36px;
-  font-size: 30px;
-  line-height: 1;
-}
-/* The balls left over after the full groups: a dashed outline, so they read apart. */
-.ops-div-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; border-radius: 50%; }
-
-/* The groups made so far: one framed box for each group of d balls. */
-.ops-div-groups { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-.ops-div-box {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px;
-  padding: 6px 10px;
-  border: 2px solid var(--mod-razonamiento);
-  border-radius: var(--radio);
-}
-/* The balls not in a group yet. Their row keeps a height, so the frame does not jump. */
-.ops-div-pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; min-height: 44px; }
-
-/* The tap frame: the numbers as buttons, marked ✓ or ✕ after the tap. */
-.ops-div-chip { min-width: 72px; font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
-.ops-div-chip.is-yes { background: var(--mod-razonamiento); color: var(--color-superficie); }
-.ops-div-chip.is-no { opacity: 0.6; }
-.ops-div-chip:disabled { cursor: default; }
-
-/* The digits frame: each digit in a card, then the sum and its groups. */
-.ops-digits { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.ops-digit {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  border: 2px solid var(--mod-razonamiento);
-  border-radius: var(--radio);
-  font-size: 32px;
-  font-weight: 800;
-}
-.ops-digits-group { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-div-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 
 /* The result line of a frame, and the choice of the divisor (the one in use is pressed). */
 .ops-div-result { margin-top: 4px; }
 .ops-div-choice[aria-pressed="true"] { background: var(--mod-razonamiento); color: var(--color-superficie); }
-.ops-tap { gap: 14px; }
-.ops-div-done { color: var(--mod-razonamiento); }
 
 /* The rule of the game, written above its numbers. */
 .div-rule-card {
@@ -90,27 +40,16 @@
 /* The teacher's frame: the number the teacher chose, the divisors the child chooses from. */
 .div-teacher { width: 100%; }
 
-/* The balls, as in Pares e impares: one framed group per full group, the balls left over apart. */
-.div-balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-.div-ball-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px;
-  border: 2px solid var(--mod-razonamiento);
+/* The divisions, one per line: the expression, then the tag that says whether it comes out exact. */
+.div-ladder { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+.div-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; }
+.div-label { font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+.div-tag {
+  padding: 2px 10px;
   border-radius: var(--radio);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  white-space: nowrap;
 }
-.div-ball-left { border-style: dashed; }
-.div-ball {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  color: #1F1D1A;
-  font-size: 20px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
+.div-exact-tag { background: var(--mod-razonamiento); color: var(--color-superficie); }
+.div-rest-tag { border: 2px solid var(--mod-razonamiento); color: var(--color-texto); }

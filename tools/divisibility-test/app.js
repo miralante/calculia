@@ -1,9 +1,10 @@
 /* ============================================================
    Calculia — Divisibilidad
    Two stages, the flow of Operaciones: 1. explanation (slides: the text on
-   the left, and on the right a frame the child works with: share balls in
-   groups, the teacher's number with the child's divisor, add the digits), 2. test (one
-   question at a time). There is no real-life stage: the test is the practice.
+   the left, and on the right a frame the child works with: a division written
+   out with whether it comes out exact, the teacher's number with the child's
+   divisor, the digits added), 2. test (one question at a time). There are no
+   pictures and no real-life stage: the test is the practice.
    The stages and the screens are built by assets/js/activity-flow.js (mode
    'options', skipReal); a question of a rule has several steps (`steps`),
    scored once. Texts are in strings.<locale>.js, the slides and the test
@@ -18,89 +19,49 @@
   var pick = App.utils.pick;
   function t(key) { return App.i18n.t(key); }
 
-  var DOT = '🔴';
   function digitSum(n) {
     return String(n).split('').reduce(function (sum, digit) { return sum + Number(digit); }, 0);
   }
 
-  /* ---- Frames: the practice beside each explanation ----------------------- */
-  function items(count, cls) { return App.answerOptions.dotRow(count, cls, DOT); }
+  /* ---- Frames: the practice beside each explanation. Text only, no pictures. ---- */
 
-  /* The groups frame, drawn from its state: `groups` groups of `d` balls are made, and the
-     balls left over wait below. The buttons sit above the drawing, so they do not move as
-     the groups grow. Once every full group is made, the leftover is shown and the result. */
-  function groupsBody(n, d, groups, opts) {
+  /* One division n ÷ d as a line: the expression, and a tag that says whether it comes out exact. */
+  function divisionLineHtml(n, d) {
     var q = Math.floor(n / d);
     var r = n % d;
-    var done = groups >= q;
-    var html = '<p class="ops-story">' + fill(t('ui.divInstruction'), { T: n, d: d }) + '</p>';
-    if (opts.choices) {
-      html += '<div class="ops-div-choices">' + DATA.divisors.map(function (v) {
-        return '<button type="button" class="btn btn-secondary ops-div-choice" data-divisor="' + v + '" aria-pressed="' +
-          (v === d) + '">' + fill(t('ui.divChoice'), { d: v }) + '</button>';
-      }).join('') + '</div>';
-    }
-    html += '<div class="ops-div-actions">' +
-      '<button type="button" class="btn btn-secondary" data-div="step" style="visibility:' + (done ? 'hidden' : 'visible') + '">' +
-      fill(t('ui.divOne'), { d: d }) + '</button>' +
-      '<button type="button" class="btn btn-secondary" data-div="reset" style="visibility:' + (groups ? 'visible' : 'hidden') + '">' +
-      t('ui.divReset') + '</button>' +
+    var expr = r
+      ? fill(t('ui.lineRest'), { n: n, d: d, q: q, r: r })
+      : fill(t('ui.lineExact'), { n: n, d: d, q: q });
+    var tag = r
+      ? '<span class="div-tag div-rest-tag">' + fill(t('ui.restTag'), { r: r }) + '</span>'
+      : '<span class="div-tag div-exact-tag">' + t('ui.exactTag') + '</span>';
+    return '<div class="div-row"><span class="div-label">' + expr + '</span>' + tag + '</div>';
+  }
+  /* The divisions of the pairs in the frame, one per line. */
+  function divideFrameHtml(f) {
+    return '<div class="ops-div">' +
+      '<div class="div-ladder">' + f.pairs.map(function (p) { return divisionLineHtml(p[0], p[1]); }).join('') + '</div>' +
       '</div>';
-    html += '<div class="ops-div-groups">';
-    for (var g = 0; g < groups; g += 1) html += '<div class="ops-div-box">' + items(d, 'ops-item') + '</div>';
-    html += '</div>';
-    var left = n - groups * d;
-    html += '<div class="ops-div-pool">' + items(left, done ? 'ops-item ops-div-left' : 'ops-item') + '</div>';
-    if (done && r === 0) {
-      html += '<p class="ops-expr ops-div-result">' + fill(t('ui.divWhole'), { T: n, d: d, q: q }) + '</p>';
-    } else if (done) {
-      html += '<p class="ops-expr ops-div-result">' + fill(t('ui.divRest'), { T: n, d: d, q: q, r: r }) + '</p>';
-    }
-    return html;
-  }
-  function groupsFrameHtml(f) {
-    return '<div class="ops-div" data-n="' + f.n + '" data-d="' + f.d + '" data-choices="1">' +
-      groupsBody(f.n, f.d, 0, { choices: true }) + '</div>';
   }
 
-  /* One ball of the balls frame: its number, in the colour of its group. */
-  function ballHtml(v, color) {
-    return '<span class="div-ball" style="background-color:' + color + '">' + v + '</span>';
-  }
-
-  /* The balls frame, the same support as Pares e impares: the balls in groups of d,
-     one colour per full group, and the balls left over in their own colour. */
-  function ballsBody(n, d) {
-    var q = Math.floor(n / d);
-    var r = n % d;
-    var num = 0;
-    var html = '<p class="ops-story">' + fill(t('ui.divInstruction'), { T: n, d: d }) + '</p>';
-    html += '<div class="div-balls" role="img" aria-label="' +
-      fill(t(r ? 'ui.ballsAriaRest' : 'ui.ballsAriaWhole'), { T: n, d: d, q: q, r: r }) + '">';
-    for (var g = 0; g < q; g += 1) {
-      var color = DATA.groupColors[g % DATA.groupColors.length];
-      html += '<div class="div-ball-group">';
-      for (var i = 0; i < d; i += 1) { num += 1; html += ballHtml(num, color); }
-      html += '</div>';
-    }
-    if (r) {
-      html += '<div class="div-ball-group div-ball-left">';
-      for (var j = 0; j < r; j += 1) { num += 1; html += ballHtml(num, DATA.leftoverColor); }
-      html += '</div>';
-    }
-    html += '</div>';
-    html += '<p class="ops-expr ops-div-result">' + fill(t(r ? 'ui.divRest' : 'ui.divWhole'), { T: n, d: d, q: q, r: r }) + '</p>';
-    return html;
-  }
-  function ballsFrameHtml(f) {
-    return '<div class="ops-div">' + ballsBody(f.n, f.d) + '</div>';
+  /* The digits frame: the digits of n written with their sum, then the sum divided by 3. */
+  function sumFrameHtml(f) {
+    var digits = String(f.n).split('');
+    var s = digitSum(f.n);
+    return '<div class="ops-div">' +
+      '<p class="ops-story">' + fill(t('ui.digitsInstruction'), { n: f.n }) + '</p>' +
+      '<div class="div-ladder">' +
+        '<div class="div-row"><span class="div-label">' + fill(t('ui.digitsResult'), { parts: digits.join(' + '), s: s }) + '</span></div>' +
+        divisionLineHtml(s, 3) +
+      '</div>' +
+      '</div>';
   }
 
   /* The teacher frame, a game for one rule. The teacher (the app) has chosen a number, and
      shows it; the child chooses a divisor (2, 3, 5 or 10). Then the teacher checks the rule
      for that divisor on the number (the last digit, or the sum of the digits for 3) and gives
      the division. «Otro número» lets the teacher choose another number from the list. The
-     frame is redrawn from its own data attributes, as the groups frame is. */
+     frame is redrawn from its own data attributes. */
   function teacherBody(numbers, idx, rule, pick) {
     var n = numbers[idx];
     var html = '<p class="div-rule-card">' + t('ui.ruleCard' + rule) + '</p>';
@@ -149,50 +110,14 @@
     w.innerHTML = teacherBody(numbers, idx, Number(w.getAttribute('data-rule')), 0);
   }
 
-  /* The digits frame: the digits of n, their sum on a button, then the sum shared in groups of 3. */
-  function digitsFrameHtml(f) {
-    var digits = String(f.n).split('');
-    var s = digitSum(f.n);
-    var cards = digits.map(function (c) { return '<span class="ops-digit">' + c + '</span>'; }).join('');
-    return '<div class="ops-digits">' +
-      '<p class="ops-story">' + fill(t('ui.digitsInstruction'), { n: f.n }) + '</p>' +
-      '<div class="ops-div-chips">' + cards + '</div>' +
-      '<div class="ops-div-actions" data-digits-actions>' +
-      '<button type="button" class="btn btn-secondary" data-digits="sum">' + t('ui.digitsSum') + '</button>' +
-      '</div>' +
-      '<p class="ops-expr ops-div-result" hidden>' + fill(t('ui.digitsResult'), { parts: digits.join(' + '), s: s }) + '</p>' +
-      '<div class="ops-digits-group" hidden>' +
-      '<p class="ops-story">' + fill(t('ui.digitsAsk'), { s: s }) + '</p>' +
-      '<div class="ops-div" data-n="' + s + '" data-d="3" data-choices="0">' +
-      groupsBody(s, 3, 0, { choices: false }) + '</div>' +
-      '</div>' +
-      '</div>';
-  }
-
   /* The game of a dynamic explanation slide (activity-flow puts it under the explanation, full width). */
   function gameHtml(slide) {
     var f = slide && slide.frame;
     if (!f) return '';
-    if (f.kind === 'balls') return ballsFrameHtml(f);
+    if (f.kind === 'divide') return divideFrameHtml(f);
     if (f.kind === 'teacher') return teacherFrameHtml(f);
-    if (f.kind === 'digits') return digitsFrameHtml(f);
-    return groupsFrameHtml(f);
-  }
-
-  /* The frames' buttons. A group or a choice redraws the frame from its own data attributes. */
-  function frameOpts(w) {
-    return { choices: w.getAttribute('data-choices') === '1' };
-  }
-  function groupsStep(button) {
-    var w = button.closest('.ops-div');
-    var n = Number(w.getAttribute('data-n'));
-    var d = Number(w.getAttribute('data-d'));
-    var groups = w.querySelectorAll('.ops-div-box').length;
-    if (button.getAttribute('data-div') === 'reset') {
-      w.innerHTML = groupsBody(n, d, 0, frameOpts(w));
-    } else if (groups < Math.floor(n / d)) {
-      w.innerHTML = groupsBody(n, d, groups + 1, frameOpts(w));
-    }
+    if (f.kind === 'sum') return sumFrameHtml(f);
+    return '';
   }
 
   document.addEventListener('click', function (e) {
@@ -202,25 +127,6 @@
     if (teacherChoice) { teacherPick(teacherChoice); return; }
     var teacherNextBtn = target.closest('[data-teacher-next]');
     if (teacherNextBtn) { teacherNext(teacherNextBtn); return; }
-    var choice = target.closest('[data-divisor]');
-    if (choice) {
-      var cw = choice.closest('.ops-div');
-      var cn = Number(cw.getAttribute('data-n'));
-      var cd = Number(choice.getAttribute('data-divisor'));
-      cw.setAttribute('data-d', String(cd));
-      cw.innerHTML = groupsBody(cn, cd, 0, frameOpts(cw));
-      return;
-    }
-    var sum = target.closest('[data-digits]');
-    if (sum) {
-      var dbox = sum.closest('.ops-digits');
-      dbox.querySelector('[data-digits-actions]').hidden = true;
-      dbox.querySelector('.ops-div-result').hidden = false;
-      dbox.querySelector('.ops-digits-group').hidden = false;
-      return;
-    }
-    var step = target.closest('[data-div]');
-    if (step) groupsStep(step);
   });
 
   /* ---- Test: the questions ------------------------------------------------ */
