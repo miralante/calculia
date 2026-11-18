@@ -554,7 +554,7 @@
   /* n! as 4 × 3 × 2 × 1 = 24. */
   function chainHtml(n) { return chipLine(factorsDown(n, 1), factorialOf(n)); }
   /* a^n as 2 × 2 × 2 = 8. */
-  function powerHtml(base, exp) { return chipLine(repeatOf(base, exp), Math.pow(base, exp)); }
+  function powerHtml(base, exp) { return '<div class="power-visual">' + chipLine(repeatOf(base, exp), Math.pow(base, exp)) + '</div>'; }
   /* The first few factorials, one card each: the value grows fast. */
   function growthHtml(max) {
     var html = '<div class="fac-growth">';
@@ -638,18 +638,14 @@
     return App.utils.shuffle(list);
   }
 
-  /* ---- Powers: the practice that replaces the test. Two parts, each with its own card:
-     1. I give the base, you type the exponent, and I show how many times the base is
-        multiplied and the final value.
-     2. I show the base multiplied out, you type the exponent, and I show the result.
-     Numbers from 2 to 5. There is no test and no stars here. ---- */
+  /* ---- Powers: the practice that replaces the test. Two screens, one step each:
+     1. the base is shown; you type the exponent, and the multiplications and the value appear;
+     2. the multiplication is shown; you type the exponent, and the power appears.
+     Numbers from 2 to 5. Little text: the pictures carry it. There is no test and no stars here. ---- */
   var POWER_HTML = [
-    '<section id="screenPower" class="hidden stack">',
-    '  <button type="button" class="btn btn-secondary" id="powerBack"></button>',
-    '  <article class="card centered stack power-card" id="powerPart1">',
-    '    <h2 class="prompt" id="powTitle1"></h2>',
-    '    <p class="power-base" id="powBase" aria-live="polite"></p>',
-    '    <p class="instruction" id="powAsk1"></p>',
+    '<section id="screenPower1" class="hidden stack">',
+    '  <article class="card centered stack power-card">',
+    '    <div class="power-base" id="powBase" aria-live="polite"></div>',
     '    <div class="input-row">',
     '      <label class="visually-hidden" for="powExp1" id="powLabel1"></label>',
     '      <input type="number" id="powExp1" min="1" max="9" inputmode="numeric" autocomplete="off">',
@@ -657,19 +653,21 @@
     '    </div>',
     '    <p class="feedback" id="powFeedback1" aria-live="polite"></p>',
     '    <div class="power-result" id="powResult1" aria-live="polite"></div>',
-    '    <button type="button" class="btn btn-secondary hidden" id="powNext1"></button>',
+    '    <button type="button" class="btn hidden" id="powNext1"></button>',
     '  </article>',
-    '  <article class="card centered stack power-card" id="powerPart2">',
-    '    <h2 class="prompt" id="powTitle2"></h2>',
-    '    <p class="fac-expr" id="powShow2" aria-live="polite"></p>',
-    '    <p class="instruction" id="powAsk2"></p>',
+    '</section>',
+    '<section id="screenPower2" class="hidden stack">',
+    '  <article class="card centered stack power-card">',
+    '    <button type="button" class="btn btn-secondary power-back" id="powBack2"></button>',
+    '    <div class="power-result" id="powShow2" aria-live="polite"></div>',
     '    <div class="input-row">',
     '      <label class="visually-hidden" for="powExp2" id="powLabel2"></label>',
     '      <input type="number" id="powExp2" min="1" max="9" inputmode="numeric" autocomplete="off">',
     '      <button type="button" class="btn" id="powCheck2"></button>',
     '    </div>',
     '    <p class="feedback" id="powFeedback2" aria-live="polite"></p>',
-    '    <button type="button" class="btn btn-secondary hidden" id="powNext2"></button>',
+    '    <div class="power-result" id="powResult2" aria-live="polite"></div>',
+    '    <button type="button" class="btn hidden" id="powNext2"></button>',
     '  </article>',
     '</section>'
   ].join('\n');
@@ -679,7 +677,7 @@
 
   function byId(id) { return document.getElementById(id); }
 
-  /* A whole number typed in the box, or null when it is not one from 1 to 9. */
+  /* A whole number typed in the box, or an error text when it is not one from 1 to 9. */
   function typedExponent(id) {
     var raw = byId(id).value.trim();
     if (raw === '') return { error: t('power.empty') };
@@ -688,10 +686,20 @@
     return { value: n };
   }
 
-  /* Part 1: a new base, and the empty card to answer it. */
+  /* The factors in a row, without a result: 3 × 3 × 3 × 3. */
+  function factorsOnly(parts) {
+    var html = '';
+    parts.forEach(function (p, i) {
+      if (i) html += sign('×');
+      html += '<span class="fac-chip">' + p + '</span>';
+    });
+    return '<div class="fac-line">' + html + '</div>';
+  }
+
+  /* Screen 1: a new base, and the empty answer under it. */
   function newBase() {
     power1.base = rint(2, 5);
-    byId('powBase').textContent = String(power1.base);
+    byId('powBase').innerHTML = '<span class="fac-chip">' + power1.base + '</span>';
     byId('powExp1').value = '';
     byId('powResult1').innerHTML = '';
     byId('powFeedback1').textContent = '';
@@ -699,70 +707,67 @@
     byId('powCheck1').disabled = false;
   }
 
-  /* Part 1: the number of multiplications, then the multiplication and its value. */
+  /* Screen 1: the number of multiplications, then the multiplication and its value. */
   function checkPart1() {
     var typed = typedExponent('powExp1');
     if (typed.error) { byId('powFeedback1').textContent = typed.error; return; }
     var b = power1.base, e = typed.value;
-    var value = Math.pow(b, e);
     byId('powFeedback1').textContent = '';
     byId('powResult1').innerHTML =
       '<p class="power-count">' + fill(t('power.count'), { e: e }) + '</p>' +
-      '<p class="fac-expr">' + repeatOf(b, e).join(' × ') + ' = ' + value + '</p>';
+      chipLine(repeatOf(b, e), Math.pow(b, e));
     byId('powNext1').classList.remove('hidden');
   }
 
-  /* Part 2: a new multiplication of the same base, shown out in full. */
+  /* Screen 2: a new multiplication of a base, shown out in full. */
   function newProduct() {
     power2.base = rint(2, 5);
     power2.exp = rint(2, 5);
-    byId('powShow2').textContent = repeatOf(power2.base, power2.exp).join(' × ');
+    byId('powShow2').innerHTML = factorsOnly(repeatOf(power2.base, power2.exp));
     byId('powExp2').value = '';
     byId('powFeedback2').textContent = '';
+    byId('powResult2').innerHTML = '';
     byId('powNext2').classList.add('hidden');
   }
 
-  /* Part 2: a right exponent shows the result; a wrong one gets a hint, never the answer. */
+  /* Screen 2: a right exponent shows the power; a wrong one only gets a short hint. */
   function checkPart2() {
     var typed = typedExponent('powExp2');
     if (typed.error) { byId('powFeedback2').textContent = typed.error; return; }
     var b = power2.base, e = power2.exp;
     if (typed.value === e) {
-      byId('powFeedback2').textContent = fill(t('power.right'), { b: b, e: e, T: Math.pow(b, e) });
+      byId('powFeedback2').textContent = '✅';
+      byId('powResult2').innerHTML = '<div class="fac-line"><span class="fac-chip">' + b + '</span><sup>' + e + '</sup> = <span class="fac-chip fac-result">' + Math.pow(b, e) + '</span></div>';
       byId('powNext2').classList.remove('hidden');
     } else {
-      byId('powFeedback2').textContent = fill(t('power.wrong'), { b: b });
+      byId('powFeedback2').textContent = t('power.wrong');
     }
   }
 
-  /* The power practice of the menu entry (ownTest): wired once, then a new base and a new product. */
+  /* The power practice of the menu entry (ownTest): screen 1 with a new base; screen 2 is one tap away. */
   function startPower(ctx) {
     powerCtx = ctx;
     if (!powerWired) {
       powerWired = true;
-      byId('powerBack').addEventListener('click', function () { powerCtx.openMenu(); });
       byId('powCheck1').addEventListener('click', checkPart1);
       byId('powCheck2').addEventListener('click', checkPart2);
       byId('powExp1').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); checkPart1(); } });
       byId('powExp2').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); checkPart2(); } });
-      byId('powNext1').addEventListener('click', newBase);
+      byId('powNext1').addEventListener('click', function () { newProduct(); powerCtx.show('#screenPower2'); });
       byId('powNext2').addEventListener('click', newProduct);
+      byId('powBack2').addEventListener('click', function () { powerCtx.show('#screenPower1'); });
     }
     /* The texts are set on every start, so a language change shows in the practice too. */
-    byId('powerBack').textContent = t('ui.otherOps');
-    byId('powTitle1').textContent = t('power.part1');
-    byId('powAsk1').textContent = t('power.ask1');
     byId('powLabel1').textContent = t('power.label');
-    byId('powCheck1').textContent = t('ui.check');
-    byId('powNext1').textContent = t('power.nextBase');
-    byId('powTitle2').textContent = t('power.part2');
-    byId('powAsk2').textContent = t('power.ask2');
     byId('powLabel2').textContent = t('power.label');
+    byId('powCheck1').textContent = t('ui.check');
     byId('powCheck2').textContent = t('ui.check');
-    byId('powNext2').textContent = t('power.nextProduct');
+    byId('powNext1').textContent = t('ui.next');
+    byId('powNext2').textContent = t('power.another');
+    byId('powBack2').textContent = '←';
+    byId('powBack2').setAttribute('aria-label', t('ui.prev'));
     newBase();
-    newProduct();
-    ctx.show('#screenPower');
+    ctx.show('#screenPower1');
   }
 
   var ACTIVITIES = DATA.ops.map(function (entry) {
@@ -1249,7 +1254,7 @@
     testVisuals: true,
     testVisualClass: 'ops-visual',
     extraMarkup: POWER_HTML,
-    extraScreens: ['#screenPower'],
+    extraScreens: ['#screenPower1', '#screenPower2'],
     visualHtml: drawingHtml,
     gameHtml: gameHtml,
     introCopy: function (i, def) {

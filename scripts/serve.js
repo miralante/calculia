@@ -93,6 +93,10 @@ const resolveCandidates = (pathname, referer) => {
     list.push(path.join(ROOT, pathname));
   }
 
+  // A folder URL (/tools/operation-concepts/) is that folder's index.html, as the
+  // landing's cards link to it. Without this it fell back to the landing page.
+  if (pathname.endsWith('/')) list.push(path.join(ROOT, pathname, 'index.html'));
+
   // SPA fallback for extensionless paths
   if (!path.extname(pathname)) list.push(path.join(ROOT, 'index.html'));
 

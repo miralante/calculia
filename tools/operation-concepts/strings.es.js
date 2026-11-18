@@ -161,8 +161,8 @@
       pow: {
         name: 'Potencias', detail: 'Multiplicar muchas veces el mismo número.',
         intro: {
-          1: { title: 'Potencia es multiplicar lo mismo', text: '2 × 2 × 2 = 8\n2 × 2 × 2 = 2³ = 8\n2³ se lee «2 elevado a 3».' },
-          2: { title: 'El número pequeño cuenta las veces', text: '3 × 3 = 9\n3² = 3 × 3 = 9\nEl 2 pequeño dice cuántas veces se escribe el 3' }
+          1: { title: 'Potencia es multiplicar lo mismo', text: '2 × 2 × 2 = 2³ = 8\n2³ se lee «2 elevado a 3».' },
+          2: { title: 'El número pequeño cuenta las veces', text: '3² = 3 × 3 = 9\nEl 2 pequeño dice cuántas veces se escribe el 3' }
         },
         real: {
           1: 'Un cuadrado de 3 por 3 tiene 3² = 9 casillas.',
@@ -295,23 +295,16 @@
       }
     },
 
-    /* La práctica de Potencias (sin test): dos partes, cada una con su tarjeta. */
+    /* La práctica de Potencias (sin test): pocas palabras, las figuras cuentan. */
     power: {
-      part1: 'Parte 1: tú pones el exponente',
-      ask1: 'Esta es la base. ¿Cuántas veces se multiplica? Escribe el exponente.',
-      part2: 'Parte 2: tú pones el exponente',
-      ask2: 'Mira la multiplicación. ¿Cuántas veces se repite la base? Escribe el exponente.',
       label: 'Exponente',
-      count: 'Se multiplica {e} veces:',
-      right: '✅ ¡Bien! El exponente es {e}: {b} elevado a {e} = {T}.',
-      wrong: '🤔 Cuenta otra vez cuántas veces se repite el {b}.',
-      empty: 'Escribe un número.',
-      range: 'Escribe un número del 1 al 9.',
-      nextBase: 'Otra base →',
-      nextProduct: 'Otra multiplicación →'
+      count: '{e} veces',
+      empty: 'Escribe un número',
+      range: 'Del 1 al 9',
+      wrong: '🤔 Cuenta otra vez',
+      another: 'Otra →'
     },
 
-    /* Respuestas de la pregunta de operación: el nombre y su símbolo. */
     answerName: { add: 'Sumar', sub: 'Restar', mul: 'Multiplicar', div: 'Dividir' },
 
     /* Cierre de la explicación de un «pick» al acertar. */

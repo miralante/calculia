@@ -267,3 +267,23 @@
 .power-base { font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 700; margin: 0; line-height: 1.1; }
 .power-result { width: 100%; }
 .power-count { font-weight: 600; margin: 0.5rem 0; }
+
+/* No «← Otras operaciones» under the slides: the header «← Volver» is the way out. */
+#introBack { display: none; }
+
+/* Powers slides: the title and the text go above the drawing (the chips of the multiplication). */
+.gallery-card:has(#introVisual .power-visual) { display: flex; flex-direction: column; }
+.gallery-card:has(#introVisual .power-visual) #introTitle { order: -2; }
+.gallery-card:has(#introVisual .power-visual) #introText { order: -1; }
+
+/* Powers practice: the base as a big number, and the answer lines under each card. */
+.power-card { max-width: 100%; }
+.power-base { font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 700; margin: 0; line-height: 1.1; }
+.power-result { width: 100%; }
+.power-count { font-weight: 600; margin: 0.5rem 0; }
+
+/* Powers practice: the back arrow of screen 2 sits on its own line, at the start. */
+.power-back { align-self: flex-start; min-width: 3rem; }
+
+/* Powers practice: the box for the exponent is big enough to read and to tap. */
+.power-card input[type="number"] { width: 4.5rem; min-height: 3rem; font-size: 1.4rem; text-align: center; }

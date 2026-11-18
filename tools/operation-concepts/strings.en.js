@@ -159,8 +159,8 @@
       pow: {
         name: 'Powers', detail: 'Multiply the same number many times.',
         intro: {
-          1: { title: 'A power is multiplying the same thing', text: '2 × 2 × 2 = 8\n2 × 2 × 2 = 2³ = 8\n2³ is read «2 to the power of 3».' },
-          2: { title: 'The small number counts the times', text: '3 × 3 = 9\n3² = 3 × 3 = 9\nThe small 2 says how many times the 3 is written' }
+          1: { title: 'A power is multiplying the same thing', text: '2 × 2 × 2 = 2³ = 8\n2³ is read «2 to the power of 3».' },
+          2: { title: 'The small number counts the times', text: '3² = 3 × 3 = 9\nThe small 2 says how many times the 3 is written' }
         },
         real: {
           1: 'A square of 3 by 3 has 3² = 9 squares.',
@@ -290,20 +290,14 @@
       }
     },
 
-    /* The Powers practice (no test): two parts, each with its own card. */
+    /* The Powers practice (no test): few words, the pictures count. */
     power: {
-      part1: 'Part 1: you type the exponent',
-      ask1: 'This is the base. How many times is it multiplied? Type the exponent.',
-      part2: 'Part 2: you type the exponent',
-      ask2: 'Look at the multiplication. How many times does the base repeat? Type the exponent.',
       label: 'Exponent',
-      count: 'It is multiplied {e} times:',
-      right: '✅ Right! The exponent is {e}: {b} to the power of {e} = {T}.',
-      wrong: '🤔 Count again how many times the {b} repeats.',
-      empty: 'Type a number.',
-      range: 'Type a number from 1 to 9.',
-      nextBase: 'Another base →',
-      nextProduct: 'Another multiplication →'
+      count: '{e} times',
+      empty: 'Type a number',
+      range: 'From 1 to 9',
+      wrong: '🤔 Count again',
+      another: 'Another →'
     },
 
     answerName: { add: 'Add', sub: 'Subtract', mul: 'Multiply', div: 'Divide' },
