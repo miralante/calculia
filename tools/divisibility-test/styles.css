@@ -53,3 +53,50 @@
 }
 .div-exact-tag { background: var(--mod-razonamiento); color: var(--color-superficie); }
 .div-rest-tag { border: 2px solid var(--mod-razonamiento); color: var(--color-texto); }
+
+/* The balls frame: the groups are boxes, the balls in each one are dots. A full group is a solid
+   box with its tick; the balls left over sit apart in a dashed box, with the number left written. */
+.ball-groups { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 12px; max-width: 100%; }
+.ball-group {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: var(--radio);
+  border: 2px solid var(--mod-razonamiento);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+.ball-frame .ball-groups { width: 100%; }
+.ball-group.is-full { border-style: solid; }
+.ball-group.is-rest { border-style: dashed; }
+.ball-row { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+.ball-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--mod-razonamiento);
+}
+.ball-row.is-rest .ball-dot { background: transparent; border: 2px solid var(--mod-razonamiento); }
+.ball-group-tag { text-align: center; overflow-wrap: anywhere; }
+
+/* The calculator frame: each division is a line, the screen shows what the calculator shows. */
+.calc-frame { width: 100%; }
+.calc-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; width: 100%; }
+.calc-expr { font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+.calc-screen {
+  min-width: 7em;
+  max-width: 100%;
+  padding: 6px 12px;
+  border: 3px solid var(--color-texto);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: var(--texto-grande);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  overflow-wrap: anywhere;
+}

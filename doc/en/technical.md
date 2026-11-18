@@ -360,8 +360,8 @@ Which family-A variant fits which activity:
 - **Options, one mixed round after the slides**: `trigonometry` (two slides, one with the ladders and one with the ramps; three real-life examples; seven question types in one round, shuffled).
 - **Options, with a menu of activities**: `fractions-measures` (fractions and decimals, each with its own slides, examples and levels; the comma game is a third entry that opens its own screen through `open(ctx)`).
 - **Options, with a menu of levels and chained steps** (menu first): `mental-math`. Three flat entries (anchors, restar, cabeza) whose levels rise with the rounds and that have no slides of their own, so they start at once; and «Count in groups» in three entries (learn and use, chains of steps; all, one round), each with its own slides. A menu entry without `intro` starts its round at once.
-- **Teach → test, no real life**: `multiples`, `prime-composite`,
-  `divisibility-test` (the last one also uses `steps`).
+- **Teach → test, no real life**: `multiples`, `prime-composite`.
+- **Teach → games, no real life**: `divisibility-test`. The slides explain, and the practice is the games of each rule (`pairedPractice` + `ownTest`); there is no test.
 
 Rules of thumb: leave out real life when no real example adds a new case; use
 `steps` when a question is a chain of checks, each one needed for the next;
@@ -803,7 +803,7 @@ in §2.1 above are the canonical rationale).
 | `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | the `test: 'gallery'` mode of the three-stage flow: slides only, the achievement screen, one star per page |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | activities that keep their own round loop (not `App.activityFlow`) |
 | `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | the `test: 'gallery'` mode of the three-stage flow: slides only, the achievement screen, one star per page |
-| `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | the activities that show a row of dots or a shuffled Yes / No (divisibility-test, multiples, prime-composite) |
+| `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | the activities that show a row of dots or a shuffled Yes / No (multiples, prime-composite) |
 | `place-value.js` | `App.placeValue`: `digits`, `paintNumber`, `paintSign`, `legendHtml`, `legendText`, `repeat` | the colour of digits by place (units blue, tens green, hundreds purple) for numbers and operations; styles in `assets/css/place-value.css` |
 | `expo-screens.js` | `App.expoScreens(host)` → `{startExpoScreen, startRealScreen}` | the exposition and real-life screens before the test, for the activities that set `hasExpoReal` in their `data.js` (numbers, operations) |
 | `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | the sheet mode of the activity flow (`activity-flow-sheet.js`), which no activity uses now |

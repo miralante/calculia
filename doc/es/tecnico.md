@@ -375,8 +375,8 @@ Qué variante de la familia A encaja con cada actividad:
 - **Galería** (`test: 'gallery'`): `los-numeros`, diez diapositivas y sin test: los tipos de número, cada uno con su dibujo y sus ejemplos de la vida real, y la última diapositiva termina la actividad.
 - **Opciones, una ronda mixta tras las diapositivas**: `trigonometry` (dos diapositivas, una con las escaleras y otra con las rampas; tres ejemplos de la vida real; siete tipos de pregunta en una ronda, mezclados).
 - **Opciones, con menú de actividades**: `fractions-measures` (fracciones y decimales, cada una con sus diapositivas, ejemplos y niveles; el juego de la coma es una tercera entrada que abre sus propias pantallas con `open(ctx)`).
-- **Enseñar → test, sin vida real**: `multiples`, `prime-composite`,
-  `divisibility-test` (esta última usa además `steps`).
+- **Enseñar → test, sin vida real**: `multiples`, `prime-composite`.
+- **Enseñar → juegos, sin vida real**: `divisibility-test`. Las diapositivas explican y la práctica son los juegos de cada regla (`pairedPractice` + `ownTest`); no hay test.
 
 Reglas prácticas: quitar la vida real cuando ningún ejemplo real añade un caso
 nuevo; usar `steps` cuando una pregunta encadena comprobaciones y cada una hace
@@ -833,7 +833,7 @@ justificación canónica).
 | `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | el modo `test: 'gallery'` del flujo de tres etapas: solo diapositivas, la pantalla de logros y una estrella por página |
 | `activity-glue.js` | `App.activityGlue(host)` → `{save, paintStars, levelFromProgress, endRound}` | actividades que llevan su propio bucle de ronda (no `App.activityFlow`) |
 | `activity-flow-gallery.js` | `App.activityFlow.modes.gallery` | el modo `test: 'gallery'` del flujo de tres etapas: solo diapositivas, la pantalla de logros y una estrella por página |
-| `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | las actividades que muestran una fila de puntos o un Sí / No barajado (divisibility-test, multiples, prime-composite) |
+| `answer-options.js` | `App.answerOptions.{dotRow, yesNo}` | las actividades que muestran una fila de puntos o un Sí / No barajado (multiples, prime-composite) |
 | `place-value.js` | `App.placeValue`: `digits`, `paintNumber`, `paintSign`, `legendHtml`, `legendText`, `repeat` | el color de las cifras por posición (unidades azul, decenas verde, centenas morado) para numbers y operations; estilos en `assets/css/place-value.css` |
 | `expo-screens.js` | `App.expoScreens(host)` → `{startExpoScreen, startRealScreen}` | las pantallas de explicación y de vida real antes de la prueba, para las actividades que activan `hasExpoReal` en su `data.js` (numbers, operations) |
 | `sheet-test.js` | `App.sheetTest.create({...})` → `{set, render, check}` | el modo hoja del flujo de actividad (`activity-flow-sheet.js`), que hoy no usa ninguna actividad |
