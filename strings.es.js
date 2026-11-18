@@ -44,7 +44,6 @@
     "mentalmath": { "name": "Restar y Cálculo Mental", "detail": "Resta, cuentas grandes y contar en grupos." },
     "percent": { "name": "Porcentajes", "detail": "Rebajas, recetas y planos." },
     "money": { "name": "Dinero", "detail": "Cuenta, paga y calcula el cambio." },
-    "divisibility": { "name": "Grupos exactos", "detail": "Múltiplos, primos y cuadrados." },
     "operations": { "name": "Cuentas rápidas", "detail": "Partir, repartir y el orden." },
     "quantities": { "name": "Leer y Escribir Números", "detail": "Lee y escribe números grandes." },
     "ordinals": { "name": "Números ordinales", "detail": "Primero, segundo, tercero…" },

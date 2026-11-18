@@ -14,7 +14,7 @@
    the load with net::ERR_FAILED ("No se puede acceder a este sitio")
    on every activity link. Reproduced against production with a one-off probe (removed; see git history).
    ============================================================ */
-var VERSION = 'calculia-v599';
+var VERSION = 'calculia-v600';
 
 var FILES = [
   './',
@@ -373,14 +373,6 @@ var FILES = [
   './tools/puzzle/strings.es.js',
   './tools/puzzle/strings.en.js',
   './tools/puzzle/styles.css',
-  './tools/divisibility/',
-  './tools/divisibility/app.js',
-  './tools/divisibility/model.js',
-  './tools/divisibility/questions.js',
-  './tools/divisibility/data.js',
-  './tools/divisibility/strings.es.js',
-  './tools/divisibility/strings.en.js',
-  './tools/divisibility/styles.css',
   './tools/operations/',
   './tools/operations/app.js',
   './tools/operations/data.js',

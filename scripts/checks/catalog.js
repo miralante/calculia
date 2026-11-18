@@ -50,7 +50,11 @@ module.exports = function (ctx) {
       if (!expected.has(slug)) failures.push('catálogo: ' + label + ' contiene slug inesperado "' + slug + '"');
     });
   }
-  var expectedSlugs = new Set(slugs.filter(function (slug) { return !groupChildren.has(slug); }));
+  /* TEMPORARY exception (2026-11-18): prime-composite is also linked from the landing,
+     next to primes, so the owner can choose which of the two to keep. Remove it from
+     this list (and the landing card) once that choice is made. */
+  var TEMP_LANDING_EXTRA = ['prime-composite'];
+  var expectedSlugs = new Set(slugs.filter(function (slug) { return !groupChildren.has(slug) || TEMP_LANDING_EXTRA.indexOf(slug) !== -1; }));
   assertExactCatalog('portada', publicSlugs, expectedSlugs);
   if (fs.existsSync(path.join(ROOT, 'dev'))) {
     failures.push('dev/ no debe existir: la portada muestra todo el catálogo');
