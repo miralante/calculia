@@ -95,33 +95,43 @@
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
 .suite-chrome-activity .activity-icon { width: 48px; height: 48px; flex: none; }
 
-/* The practice game (on the left, beside the explanation): a starting number, the numbers to pick, the result. */
+/* The practice game (on the right, beside the explanation): the number, the idea in one sentence,
+   the buttons 1 to 9 in order, the product, and the list of the multiples found so far. */
 .mul-game { width: 100%; }
-.mul-start { margin: 0; font-size: 56px; font-weight: 900; line-height: 1; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
-.mul-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 10px; width: 100%; }
-.mul-pick { min-height: 56px; font-size: var(--texto-grande); font-weight: 800; }
-.mul-result { margin: 0; font-size: var(--texto-grande); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
-.mul-why { margin: 0; line-height: 1.4; }
+.mul-start { margin: 0; font-size: 64px; font-weight: 900; line-height: 1; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
+.mul-concept { margin: 0; font-size: var(--texto-grande); font-weight: 700; line-height: 1.4; text-align: center; }
+.mul-ask { margin: 0; text-align: center; line-height: 1.4; }
 
-/* The partner's drawing: a line saying who chose what, then the groups it makes. */
-.mul-draw { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
-.mul-partner { margin: 0; text-align: center; line-height: 1.4; }
-.mul-list-title { margin: 0; font-size: var(--texto-grande); font-weight: 700; text-align: center; }
+/* The buttons 1 to 9 in order: three rows of three on a phone, one row of nine when there is room. */
+.mul-picker { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; width: 100%; }
+@media (min-width: 560px) {
+  .mul-picker { grid-template-columns: repeat(9, minmax(0, 1fr)); }
+}
+.mul-pick { min-height: 56px; font-size: var(--texto-grande); font-weight: 800; font-variant-numeric: tabular-nums; }
+.mul-pick[aria-pressed="true"] { background: var(--mod-razonamiento); color: var(--color-superficie); }
 
-/* The multiple itself: the product in a filled box, so it is the first thing the eye finds. */
+/* The product of the tapped number: the multiplication, then the multiple in a filled box. */
+.mul-eq { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; min-height: 56px; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+.mul-expr { color: var(--color-texto); }
 .mul-hit {
   display: inline-block;
-  padding: 2px 12px;
+  min-width: 56px;
+  padding: 4px 14px;
   border-radius: var(--radio);
   background: var(--mod-razonamiento);
   color: var(--color-superficie);
   font-weight: 800;
+  text-align: center;
   font-variant-numeric: tabular-nums;
 }
-.mul-tag { font-size: var(--texto-pequeno); color: var(--color-texto); font-weight: 700; }
+.mul-why { margin: 0; line-height: 1.4; text-align: center; min-height: 1.4em; }
 
-/* The multiples of the starting number, in a row; the one the user made is the marked chip. */
-.mul-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+/* The list of the multiples found, in order from the smallest. */
+.mul-trail-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+.mul-trail-title { margin: 0; font-size: var(--texto-pequeno); font-weight: 700; text-align: center; }
+.mul-trail-title:empty { display: none; }
+.mul-trail { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; min-height: 0; }
+.mul-trail:empty { display: none; }
 .mul-chip {
   min-width: 52px;
   padding: 6px 10px;
@@ -132,6 +142,8 @@
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
-.mul-chip.mul-hit { border-color: var(--color-texto); }
+
+/* The explanation's line drawing (the rows of the times slides) */
+.mul-tag { font-size: var(--texto-pequeno); color: var(--color-texto); font-weight: 700; }
 
 /* Test answers */

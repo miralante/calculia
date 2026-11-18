@@ -30,13 +30,11 @@
 
     /* The practice: a game on the right of the explanation. */
     practice: {
-      start: 'I choose this number',
-      pick: 'Now you choose another number from 1 to 9.',
+      concept: 'A multiple of {a} comes from multiplying {a} by another number.',
+      ask: 'Tap a number. We multiply it by {a}.',
       pickAria: 'Multiply {a} by {b}',
-      partner: 'I chose {a} and you chose {b}. We multiply {a} by {b}:',
-      listTitle: 'The multiples of {a}:',
-      result: '{a} × {b} = {m}',
-      why: '{m} is a multiple of {a} and of {b}. A multiple of {a} comes from multiplying it by {b}.',
+      why: 'So {m} is a multiple of {a}.',
+      trail: 'The multiples of {a} you have so far:',
       other: 'Another starting number'
     }
   }, 'en');

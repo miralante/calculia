@@ -1,11 +1,12 @@
 /* ============================================================
    Calculia — Múltiplos
    Two stages: the explanation, then the game (config.pairedPractice), one
-   after the other, never side by side. The game draws a starting number
-   from 1 to 9; the user picks another number from 1 to 9; the product
-   is shown, marked in the list of multiples, with the reason it is a
-   multiple. The stages and the screens are built by assets/js/activity-flow.js
-   (mode 'options', skipReal); this file has the lines of multiples and the game. The texts are in strings.<locale>.js
+   after the other, never side by side. The game draws a number a from 1 to 9.
+   The user taps the numbers 1 to 9 in order; each tap multiplies a by that
+   number, shows the product as the multiple, and adds it to the list of the
+   multiples found so far, kept in order. The stages and the screens are built
+   by assets/js/activity-flow.js (mode 'options', skipReal); this file has the
+   drawing of the explanation and the game. The texts are in strings.<locale>.js
    and the slides and the numbers in data.js.
    ============================================================ */
 (function () {
@@ -31,81 +32,100 @@
     return timesHtml(spec.each, spec.count);
   }
 
-  /* The partner's multiples of a: a × 1 to a × 9, in a row. The one the user made, a × b, is marked. */
-  function multiplesHtml(a, b) {
-    var html = '<p class="mul-partner">' + fill(t('practice.partner'), { a: a, b: b }) + '</p>';
-    html += '<p class="mul-list-title">' + fill(t('practice.listTitle'), { a: a }) + '</p><div class="mul-chips">';
-    for (var k = 1; k <= 9; k += 1) {
-      html += '<span class="mul-chip' + (k === b ? ' mul-hit' : '') + '">' + (a * k) + '</span>';
-    }
-    return html + '</div>';
-  }
-
-  /* ---- Practice: a game, on the left of the explanation -------------------
-     A starting number is drawn at random from DATA.numbers (1 to 9). The user
-     picks another number from the same list; the product is shown, with the
-     reason it is a multiple. The first answer for each starting number gives
-     one star. «Otro número de partida» draws a new starting number. */
+  /* ---- Practice: a game on the right of the explanation -----------------
+     A number a is drawn from DATA.numbers (1 to 9). The buttons are the
+     numbers 1 to 9, always in order. Each tap k shows a × k as the multiple,
+     and the list of the multiples found so far grows in order. The first
+     tap of each round gives one star. «Otro número de partida» draws a new a
+     and clears the list. */
   var PRACTICE_HTML = [
     '<section id="screenPractice" class="hidden stack">',
     '  <div class="card centered stack mul-game">',
-    '    <p class="instruction" data-i18n="practice.start">Yo elijo este número</p>',
     '    <p class="mul-start" id="mulStart" aria-live="polite"></p>',
-    '    <p class="instruction" data-i18n="practice.pick">Ahora elige tú otro número del 1 al 9.</p>',
+    '    <p class="mul-concept" id="mulConcept"></p>',
+    '    <p class="mul-ask" id="mulAsk"></p>',
     '    <div class="mul-picker" id="mulPicker"></div>',
-    '    <div class="mul-draw" id="mulDraw" aria-live="polite"></div>',
-    '    <p class="mul-result" id="mulResult" aria-live="polite"></p>',
+    '    <div class="mul-eq" id="mulEq" aria-live="polite"></div>',
     '    <p class="mul-why" id="mulWhy" aria-live="polite"></p>',
+    '    <div class="mul-trail-wrap">',
+    '      <p class="mul-trail-title" id="mulTrailTitle"></p>',
+    '      <div class="mul-trail" id="mulTrail"></div>',
+    '    </div>',
     '  </div>',
     '  <button type="button" class="btn btn-secondary" id="practiceOther" data-i18n="practice.other">Otro número de partida</button>',
     '</section>'
   ].join('\n');
 
-  /* The context of the activity and the starting number of the round. Set on the first start. */
+  /* The context of the activity and the state of the round. Set on the first start. */
   var game = null;
 
-  /* A starting number from DATA.numbers, different from the last one. */
+  /* A number a from DATA.numbers, shuffled, different from the last one. */
   function drawStart(last) {
-    var list = DATA.numbers;
-    var a;
-    do { a = list[Math.floor(Math.random() * list.length)]; } while (list.length > 1 && a === last);
+    var list = App.utils.shuffle(DATA.numbers.slice());
+    var a = list[0];
+    if (list.length > 1 && a === last) { a = list[1]; }
     return a;
   }
 
-  /* The number picker: the numbers from 1 to 9, as buttons, in a new random order each time it is shown. */
+  /* The buttons 1 to 9, in order. The ones already tapped are pressed. */
   function paintPicker() {
     var picker = $('#mulPicker');
     picker.innerHTML = '';
-    App.utils.shuffle(DATA.numbers.slice()).forEach(function (b) {
+    DATA.numbers.forEach(function (k) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn btn-secondary mul-pick';
-      btn.textContent = String(b);
-      btn.setAttribute('aria-label', fill(t('practice.pickAria'), { a: game.a, b: b }));
-      btn.addEventListener('click', function () { answer(b); });
+      btn.textContent = '× ' + k;
+      btn.setAttribute('aria-label', fill(t('practice.pickAria'), { a: game.a, b: k }));
+      btn.setAttribute('aria-pressed', game.found[k] ? 'true' : 'false');
+      btn.addEventListener('click', function () { answer(k); });
       picker.appendChild(btn);
     });
   }
 
-  /* A new starting number: the result is cleared and the picker is shown again. */
+  /* The multiples found so far, in order from the smallest. */
+  function paintTrail() {
+    var trail = $('#mulTrail');
+    var keys = Object.keys(game.found).map(Number).sort(function (x, y) { return x - y; });
+    trail.innerHTML = '';
+    if (keys.length === 0) {
+      $('#mulTrailTitle').textContent = '';
+      return;
+    }
+    $('#mulTrailTitle').textContent = fill(t('practice.trail'), { a: game.a });
+    keys.forEach(function (k) {
+      var chip = document.createElement('span');
+      chip.className = 'mul-chip';
+      chip.textContent = String(game.a * k);
+      trail.appendChild(chip);
+    });
+  }
+
+  /* A new starting number: the list is cleared and the buttons are shown again. */
   function newRound() {
     game.a = drawStart(game.a);
     game.answered = false;
+    game.found = {};
     $('#mulStart').textContent = String(game.a);
-    $('#mulDraw').innerHTML = '';
-    $('#mulResult').textContent = '';
+    $('#mulConcept').textContent = fill(t('practice.concept'), { a: game.a });
+    $('#mulAsk').textContent = fill(t('practice.ask'), { a: game.a });
+    $('#mulEq').innerHTML = '';
     $('#mulWhy').textContent = '';
     paintPicker();
+    paintTrail();
   }
 
-  /* The user picked b. The partner (the app) makes the multiple a × b: the list of its
-     multiples with a × b marked, the product, and why it is a multiple of both numbers. */
-  function answer(b) {
+  /* The user tapped k: the product a × k is the multiple. It is shown in a box,
+     said in one short sentence, and added to the list in order. */
+  function answer(k) {
     var a = game.a;
-    var m = a * b;
-    $('#mulDraw').innerHTML = multiplesHtml(a, b);
-    $('#mulResult').textContent = fill(t('practice.result'), { a: a, b: b, m: m });
-    $('#mulWhy').textContent = fill(t('practice.why'), { a: a, b: b, m: m });
+    var m = a * k;
+    game.found[k] = true;
+    $('#mulEq').innerHTML = '<span class="mul-expr">' + a + ' × ' + k + ' = </span>' +
+      '<span class="mul-hit">' + m + '</span>';
+    $('#mulWhy').textContent = fill(t('practice.why'), { a: a, m: m });
+    paintPicker();
+    paintTrail();
     if (!game.answered) {
       game.answered = true;
       game.ctx.progress.stars += 1;
@@ -117,7 +137,7 @@
   /* The practice starts with a new starting number. The fixed button is wired once, the first time. */
   function startPractice(ctx) {
     if (!game) {
-      game = { ctx: ctx, a: null, answered: false };
+      game = { ctx: ctx, a: null, answered: false, found: {} };
       $('#practiceOther').addEventListener('click', newRound);
     }
     newRound();

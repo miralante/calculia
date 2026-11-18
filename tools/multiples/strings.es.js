@@ -30,13 +30,11 @@
 
     /* La práctica: un juego a la derecha de la explicación. */
     practice: {
-      start: 'Yo elijo este número',
-      pick: 'Ahora elige tú otro número del 1 al 9.',
+      concept: 'Un múltiplo de {a} sale al multiplicar {a} por otro número.',
+      ask: 'Toca un número. Lo multiplicamos por {a}.',
       pickAria: 'Multiplicar {a} por {b}',
-      partner: 'Yo elijo {a} y tú eliges {b}. Multiplicamos {a} por {b}:',
-      listTitle: 'Los múltiplos de {a}:',
-      result: '{a} × {b} = {m}',
-      why: '{m} es múltiplo de {a} y de {b}. El múltiplo de {a} sale al multiplicarlo por {b}.',
+      why: 'Por eso {m} es múltiplo de {a}.',
+      trail: 'Los múltiplos de {a} que ya tienes:',
       other: 'Otro número de partida'
     }
   }, 'es');
