@@ -36,6 +36,8 @@
     ruleMatchTitle: 'Cada ordinal va con su número:',
     /* Botón del recordatorio: empieza el test. */
     start: 'Empezar a practicar →',
+    /* Botón de los ejemplos reales: abre el recordatorio, antes del test. */
+    realContinue: 'Recuerda',
 
     /* Pieza del número natural de un ordinal: "Posición 3". El número va
        al final porque es el dato. */

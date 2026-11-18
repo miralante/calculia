@@ -30,6 +30,8 @@
     ruleMatchTitle: 'Each ordinal goes with its number:',
     /* Reminder button: starts the test. */
     start: 'Start practising →',
+    /* Real-life examples button: opens the reminder, before the test. */
+    realContinue: 'Remember',
 
     /* The natural number of an ordinal: "Position 3". */
     placePrefix: 'Position {n}',

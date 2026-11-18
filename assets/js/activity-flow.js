@@ -33,7 +33,11 @@
                      hides the title and the text; an empty text hides
                      only the text.
      realText        function(i) -> text of example i (optional; defaults
-                     to the key real.<n>)
+                     to the key real.<n>; null hides it)
+     realTitle       function(i) -> title of example i, above its picture
+                     (optional; hidden when absent)
+     realContinueKey i18n key of the button after the examples (optional;
+                     default ui.startTest, the primary «Empezar a practicar»)
      introHeading    function() -> the line above the slides (optional;
                      without it there is no line)
      introCard       function() -> { title, text, html? }: a card above the slides (html: optional markup under the text)
@@ -170,6 +174,7 @@
     '  </div>',
     '  <div class="progress-bar" id="realProgress" data-suite-progress role="progressbar" aria-valuemin="0"><div class="progress-fill" id="realProgressFill"></div></div>',
     '  <article class="card centered stack real-card">',
+    '    <h2 class="concept-title hidden" id="realTitle"></h2>',
     '    <div class="ops-visual" id="realVisual"></div>',
     '    <p class="real-text" id="realText"></p>',
     '    <div class="carousel-controls">',
@@ -275,7 +280,9 @@
     var spec = src.real[i].visual;
     $('#realVisual').innerHTML = config.realVisualHtml ? config.realVisualHtml(spec) : config.visualHtml(spec);
     $('#realVisual').setAttribute('aria-label', t('ui.visualAria'));
-    $('#realText').textContent = realCopy(ctx, i);
+    /* The title (optional: config.realTitle) goes above the picture; the text under it. */
+    paintText('#realTitle', config.realTitle ? config.realTitle(i, src) : null);
+    paintText('#realText', realCopy(ctx, i));
     if (ctx.slideBars) paintBar(ctx, '#realProgress', '#realProgressFill', i, src.real.length);
     /* On the last example the arrows leave: «Empezar otra vez» takes their place (back to the first example). */
     var lastReal = i === src.real.length - 1;
@@ -389,6 +396,13 @@
       removeNode('#realProgress');
     }
     App.i18n.apply();
+    /* The button under the examples can name its own text (realContinueKey). When it names one it
+       leads to a sub-stage (the reminder), so it is secondary: CLAUDE.md, carousel rule. */
+    if (config.realContinueKey) {
+      var realContinue = $('#realContinue');
+      realContinue.textContent = t(config.realContinueKey);
+      realContinue.className = 'btn btn-secondary';
+    }
     ctx.paintStars();
 
     /* Slides wrap around: the last one leads back to the first, and the first back to the last. */

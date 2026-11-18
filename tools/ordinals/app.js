@@ -198,8 +198,8 @@
     toolId: 'ordinals',
     test: 'options',
     socratic: true,
-    /* The rule is reopened from under the question, as in the other tests. */
-    review: 'rule',
+    /* Sin botón de repaso: la regla ya se lee en el recordatorio, antes del test. */
+    review: 'none',
     testVisuals: true,
     testVisualClass: 'quiz-shown',
     introHeading: function () { return t('instruction'); },
@@ -210,7 +210,11 @@
     introCopy: function () { return { title: null, text: null }; },
     visualHtml: function (spec) { return V.intro(spec); },
     real: REAL,
-    realText: function (i) { return t(REAL_LABEL[DATA.real[i].id]); },
+    /* El nombre del ejemplo va como título, encima del dibujo. */
+    realTitle: function (i) { return t(REAL_LABEL[DATA.real[i].id]); },
+    realText: function () { return null; },
+    /* Desde los ejemplos, el botón abre el recordatorio: se llama «Recuerda». */
+    realContinueKey: 'realContinue',
     realVisualHtml: function (spec) { return V.real(spec); },
     reminder: {
       title: function () { return t('reminderTitle'); },
