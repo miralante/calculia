@@ -46,7 +46,7 @@ var DATA = {
       ] },
     { id: 'mul', symbol: '×', icon: '✖️',
       intro: [
-        { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', caption: true } },
+        { frame: { kind: 'repeat', size: 4, times: 3, icon: '🔋' } },
         { visual: { kind: 'groups', groups: 3, each: 4, icon: '🔋', sum: true, product: true } },
         { visual: { kind: 'groups', groups: 4, each: 3, icon: '🔋', sum: true, product: true } },
         { visual: { kind: 'swapgroups', a: 3, b: 4, icon: '🔋' } }

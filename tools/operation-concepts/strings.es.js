@@ -26,6 +26,11 @@
       packGroup: 'Grupo {n}',
       packResult: '{T} ÷ {e} = {g}',
       packResultLeft: '{T} ÷ {e} = {g}, sobra {r}',
+      repeatInstruction: 'Haz {g} grupos de {e} pilas.',
+      repeatOne: 'Repetir',
+      repeatSum: '{sum} = {T}',
+      repeatSay: 'Eso es multiplicar: {g} veces {e} pilas.',
+      repeatProduct: '{g} × {e} = {T}',
       calcValue: '{T} ÷ {e} = {v}',
       relationLine: '{g} × {e} = {T}',
       calcWhole: 'Antes de la coma: {q} paquetes llenos.',
@@ -110,7 +115,7 @@
       mul: {
         name: 'Multiplicar', symbolName: 'Multiplicar', detail: 'Repetir el mismo grupo muchas veces.',
         intro: {
-          1: { title: 'Multiplicar es repetir un grupo', text: 'Hay 3 paquetes y en cada paquete hay 4 pilas. Son 4 + 4 + 4 = 12. Multiplicando, 3 veces 4 pilas: 3 × 4 = 12.' },
+          1: { title: 'Multiplicar es repetir un grupo', text: 'Este es un grupo de 4 pilas. Repítelo 3 veces.' },
           2: { title: 'Es sumar lo mismo varias veces', text: '3 × 4 se lee «3 veces 4»: el 4 se repite 3 veces.' },
           3: { title: 'Cambiar el orden de los grupos', text: '4 grupos de 3 también son 12: 3 + 3 + 3 + 3 = 12.' },
           4: { title: 'El orden no cambia el total', text: '3 × 4 = 4 × 3. El total es 12 en los dos casos.' }

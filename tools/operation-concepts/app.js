@@ -259,6 +259,54 @@
   }
   /* The data-calc of a grouping drawing, read back: 'r' the relation, '1' the calculator, '0' none. */
   function calcOf(attr) { return attr === 'r' ? 'relation' : attr === '1'; }
+
+  /* The repeat game (multiplication, the first slide): a pack of `size` items on the left. «Repetir» copies it into the
+     next empty box on the right, `times` times. Once every copy is made, the sum and the product show. */
+  function repeatFrameInner(size, times, icon) {
+    var args = { g: times, e: size, T: size * times, sum: new Array(times).fill(String(size)).join(' + ') };
+    var slots = '';
+    for (var g = 0; g < times; g += 1) slots += '<div class="ops-repeat-slot ops-empty-box"></div>';
+    return '<p class="ops-story ops-pack-instruction">' + fill(t('ui.repeatInstruction'), args) + '</p>' +
+      '<div class="ops-repeat-row">' +
+        '<div class="ops-repeat-pack"><div class="ops-group-box">' + row(size, icon) + '</div>' +
+        '<button type="button" class="btn btn-secondary" data-repeat="one">' + t('ui.repeatOne') + '</button></div>' +
+        '<div class="ops-repeat-copies">' + slots + '</div>' +
+      '</div>' +
+      '<div class="ops-repeat-result" aria-live="polite">' +
+        '<p class="ops-expr" hidden>' + fill(t('ui.repeatSum'), args) + '</p>' +
+        '<p class="ops-story" hidden>' + fill(t('ui.repeatSay'), args) + '</p>' +
+        '<p class="ops-expr" hidden>' + fill(t('ui.repeatProduct'), args) + '</p>' +
+      '</div>' +
+      '<div class="ops-deal-actions"><button type="button" class="btn btn-secondary" data-repeat="reset" style="visibility:hidden">' + t('ui.dealReset') + '</button></div>';
+  }
+  function repeatFrameHtml(size, times, icon) {
+    return '<div class="ops-repeat" data-size="' + size + '" data-times="' + times + '" data-icon="' + icon + '">' +
+      repeatFrameInner(size, times, icon) + '</div>';
+  }
+  /* «Repetir» fills the next empty box with a copy of the pack. The last copy shows the sum and the product,
+     and «Repetir» goes away. «Empezar de nuevo» rebuilds the game. */
+  function repeatOne(box) {
+    var slot = box.querySelector('.ops-repeat-slot.ops-empty-box');
+    if (!slot) return;
+    slot.classList.remove('ops-empty-box');
+    slot.appendChild(box.querySelector('.ops-repeat-pack .ops-group-box').cloneNode(true));
+    if (box.querySelector('.ops-repeat-slot.ops-empty-box')) return;
+    box.querySelectorAll('.ops-repeat-result > *').forEach(function (line) { line.hidden = false; });
+    box.querySelector('[data-repeat="one"]').style.visibility = 'hidden';
+    box.querySelector('[data-repeat="reset"]').style.visibility = 'visible';
+  }
+  document.addEventListener('click', function (e) {
+    var target = e.target.closest ? e.target : null;
+    var button = target ? target.closest('[data-repeat]') : null;
+    if (!button) return;
+    var box = button.closest('.ops-repeat');
+    if (button.getAttribute('data-repeat') === 'reset') {
+      box.innerHTML = repeatFrameInner(parseInt(box.getAttribute('data-size'), 10),
+        parseInt(box.getAttribute('data-times'), 10), box.getAttribute('data-icon'));
+      return;
+    }
+    repeatOne(box);
+  });
   /* The names game beside the first slide: the four names to put in their place under the numbers.
      Tap a name, then the place it goes. A wrong place shakes and the name stays free. */
   function namesFrameInner(total, size) {
@@ -421,6 +469,7 @@
     if (!f) return null;
     if (f.kind === 'deal') return dealHtml(f.total, f.groups, f.balls);
     if (f.kind === 'pack') return frameGroupsHtml(f.total, f.size, f.calc || false);
+    if (f.kind === 'repeat') return repeatFrameHtml(f.size, f.times, f.icon);
     if (f.kind === 'names') return namesFrameHtml(f.total, f.size);
     if (f.kind === 'join') return joinFrameHtml(f.a, f.b);
     if (f.kind === 'take') return takeFrameHtml(f.n, f.take, f.coin);

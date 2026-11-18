@@ -97,6 +97,15 @@
 .ops-pack .ops-deal-group { min-width: 96px; min-height: 80px; }
 .ops-pack .ops-deal-piece { cursor: default; }
 
+/* The repeat game (multiplication, the first slide): the pack on the left, its copies going down on the right. */
+.ops-repeat { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-repeat-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 24px; }
+.ops-repeat-pack { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ops-repeat-copies { display: flex; flex-direction: column; gap: 8px; }
+.ops-repeat-slot { min-width: 160px; min-height: 56px; display: flex; justify-content: center; }
+.ops-repeat-slot .ops-group-box { width: 100%; }
+.ops-repeat-result { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
 /* The join and take games (the frames beside the first addition and subtraction slides). */
 .ops-join, .ops-take { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .ops-join-groups { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; }

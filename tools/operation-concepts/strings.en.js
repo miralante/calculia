@@ -25,6 +25,11 @@
       packGroup: 'Group {n}',
       packResult: '{T} ÷ {e} = {g}',
       packResultLeft: '{T} ÷ {e} = {g}, left over {r}',
+      repeatInstruction: 'Make {g} groups of {e} batteries.',
+      repeatOne: 'Repeat',
+      repeatSum: '{sum} = {T}',
+      repeatSay: 'That is multiplying: {g} times {e} batteries.',
+      repeatProduct: '{g} × {e} = {T}',
       calcValue: '{T} ÷ {e} = {v}',
       relationLine: '{g} × {e} = {T}',
       calcWhole: 'Before the decimal point: {q} full packs.',
@@ -108,7 +113,7 @@
       mul: {
         name: 'Multiply', symbolName: 'Multiply', detail: 'Repeat the same group many times.',
         intro: {
-          1: { title: 'Multiplying is repeating a group', text: 'There are 3 packs and each pack has 4 batteries. That is 4 + 4 + 4 = 12. Multiplying, 3 times 4 batteries: 3 × 4 = 12.' },
+          1: { title: 'Multiplying is repeating a group', text: 'This is a group of 4 batteries. Repeat it 3 times.' },
           2: { title: 'It is adding the same thing many times', text: '3 × 4 is read as «3 times 4»: the 4 repeats 3 times.' },
           3: { title: 'Changing the order of the groups', text: '4 groups of 3 are also 12: 3 + 3 + 3 + 3 = 12.' },
           4: { title: 'The order does not change the total', text: '3 × 4 = 4 × 3. The total is 12 both ways.' }
