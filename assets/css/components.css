@@ -738,25 +738,31 @@ main.is-celebrating > :not(.celebration) {
   font-weight: 700;
 }
 
-/* The subpage's activity block: centred between the brand and the controls. It takes
-   the room left over (flex-basis 0), so the stars and the gear keep the first row;
-   a long title wraps inside its own space instead of pushing the controls down. */
+/* The subpage's activity block: the back link and the title stay on one row, the title
+   starting right after the back link (the same x on every subpage). It takes the room
+   left over (flex-basis 0), so the stars and the gear keep the first row; a long title
+   wraps inside its own space instead of dropping under the back link. */
 .suite-chrome-activity {
   display: flex;
   flex: 1 1 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 8px 12px;
   min-width: 0;
-  text-align: center;
+  text-align: start;
 }
+
+.suite-chrome-activity .back-link { flex: none; }
 
 /* An activity icon sits inside the title, before the text, so every title starts at the same x. */
 .suite-chrome-activity h1 .activity-icon { display: inline-block; width: 1.4em; height: 1.4em; vertical-align: -0.25em; margin-inline-end: 0.2em; }
 
 .suite-chrome-activity h1 {
   margin: 0;
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: start;
   font-size: var(--texto-grande, 1.5rem);
   line-height: 1.2;
   color: var(--accent, var(--acento, inherit));
