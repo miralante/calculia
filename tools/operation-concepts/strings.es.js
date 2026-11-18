@@ -156,8 +156,8 @@
       pow: {
         name: 'Potencias', detail: 'Multiplicar muchas veces el mismo número.',
         intro: {
-          1: { title: 'Potencia es multiplicar lo mismo', text: '2³ se lee «2 elevado a 3». El 2 se multiplica 3 veces: 2 × 2 × 2 = 8.' },
-          2: { title: 'El número pequeño cuenta las veces', text: '3² = 3 × 3 = 9. El 2 pequeño dice cuántas veces se escribe el 3.' }
+          1: { title: 'Potencia es multiplicar lo mismo', text: '2 × 2 × 2 = 8\n2 × 2 × 2 = 2³ = 8\n2³ se lee «2 elevado a 3».' },
+          2: { title: 'El número pequeño cuenta las veces', text: '3 × 3 = 9\n3² = 3 × 3 = 9\nEl 2 pequeño dice cuántas veces se escribe el 3' }
         },
         real: {
           1: 'Un cuadrado de 3 por 3 tiene 3² = 9 casillas.',
@@ -287,17 +287,23 @@
         prompt: '¿Entre cuál de estos números se divide exacto {n}!?',
         hint: 'Divide {T} entre cada número. El que no deja nada sobrando es la respuesta.',
         explain: '{T} ÷ {k} = {g}, sin nada sobrando.'
-      },
-      powValue: {
-        prompt: '¿Cuánto vale {b} elevado a {e}?',
-        hint: 'Multiplica el {b} tantas veces como diga {e}.',
-        explain: '{chain} = {T}.'
-      },
-      powMeaning: {
-        prompt: '¿Qué significa {b} elevado a {e}?',
-        hint: 'El número pequeño dice cuántas veces se multiplica el grande.',
-        explain: '{b} elevado a {e} es {chain}, que vale {T}.'
       }
+    },
+
+    /* La práctica de Potencias (sin test): dos partes, cada una con su tarjeta. */
+    power: {
+      part1: 'Parte 1: tú pones el exponente',
+      ask1: 'Esta es la base. ¿Cuántas veces se multiplica? Escribe el exponente.',
+      part2: 'Parte 2: tú pones el exponente',
+      ask2: 'Mira la multiplicación. ¿Cuántas veces se repite la base? Escribe el exponente.',
+      label: 'Exponente',
+      count: 'Se multiplica {e} veces:',
+      right: '✅ ¡Bien! El exponente es {e}: {b} elevado a {e} = {T}.',
+      wrong: '🤔 Cuenta otra vez cuántas veces se repite el {b}.',
+      empty: 'Escribe un número.',
+      range: 'Escribe un número del 1 al 9.',
+      nextBase: 'Otra base →',
+      nextProduct: 'Otra multiplicación →'
     },
 
     /* Respuestas de la pregunta de operación: el nombre y su símbolo. */

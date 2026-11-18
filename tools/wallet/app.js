@@ -388,14 +388,6 @@
   var elBtnBackToMenuLevels = $('#btnBackToMenuLevels');
   if (elBtnBackToMenuLevels) elBtnBackToMenuLevels.addEventListener('click', function () { show('screenMenu'); });
 
-  /* "← Volver" in the header: from a game or its end screen, back to the activity
-     menu, the level above it on this page (assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    if (!$('#screenMenu').classList.contains('hidden')) return false;
-    show('screenMenu');
-    return true;
-  };
-
   btnNextQuiz.addEventListener('click', nextQuiz);
   btnCheck.addEventListener('click', check);
   btnRemoveLast.addEventListener('click', removeLastPiece);

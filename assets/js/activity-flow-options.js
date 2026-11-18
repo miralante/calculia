@@ -117,11 +117,21 @@
     return html.join('\n');
   }
 
-  /* With the rule review, the button under the slides goes back to the test when
-     the slides were opened from it. Only then is it the primary one. */
+  /* No real-life stage: the activity's config says so (skipReal), or the menu entry picked
+     says so (its own skipReal). Then the slides lead straight to the test. */
+  function skipsReal(ctx) { return !!(ctx.config.skipReal || (ctx.current && ctx.current.skipReal)); }
+
+  /* The button under the slides: «Ver ejemplos reales», or «Empezar a practicar» when there are
+     none. With the rule review it goes back to the test when the slides were opened from it;
+     only then is it the primary one. */
   function paintIntroContinue(ctx) {
-    if (!isRule(ctx.config)) return;
     var button = $('#introContinue');
+    if (skipsReal(ctx)) {
+      button.textContent = t(ctx.config.introContinueKey || 'ui.startTest');
+      button.className = 'btn';
+      return;
+    }
+    if (!isRule(ctx.config)) return;
     var reviewing = ctx.mode_state.reviewing;
     button.textContent = t(reviewing ? 'ui.backToPractice' : 'ui.seeReal');
     button.className = reviewing ? 'btn' : 'btn btn-secondary';
@@ -158,8 +168,10 @@
   }
 
   function startRound(ctx) {
-    /* An activity with its own practice (config.ownTest) shows that instead of the rounds. */
-    if (ctx.config.ownTest) { ctx.config.ownTest(ctx); return; }
+    /* An activity with its own practice shows that instead of the rounds: the menu entry picked
+       (its ownTest), or else the activity's (config.ownTest). */
+    var own = (ctx.current && ctx.current.ownTest) || ctx.config.ownTest;
+    if (own) { own(ctx); return; }
     var s = ctx.mode_state;
     var config = ctx.config;
     var def = ctx.current || config;
@@ -501,12 +513,6 @@
 
     init: function (ctx) {
       paintIntroContinue(ctx);
-      /* Without real-life examples the slides lead straight to the test. */
-      if (ctx.config.skipReal) {
-        var start = $('#introContinue');
-        start.textContent = t(ctx.config.introContinueKey || 'ui.startTest');
-        start.className = 'btn';
-      }
     },
 
     /* With the menu first the activity starts there; otherwise at its slides. */
@@ -538,6 +544,7 @@
       var title = $('#introActivityTitle');
       title.textContent = def.picto + ' ' + def.name();
       title.classList.remove('hidden');
+      paintIntroContinue(ctx);
       ctx.paintIntro();
       ctx.show('#screenIntro');
     },
@@ -553,7 +560,7 @@
         go();
         return true;
       }
-      if (ctx.config.skipReal) { startRound(ctx); return true; }
+      if (skipsReal(ctx)) { startRound(ctx); return true; }
       if (!(isRule(ctx.config) && s.reviewing)) return false;
       s.reviewing = false;
       paintIntroContinue(ctx);

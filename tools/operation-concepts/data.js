@@ -2,8 +2,9 @@
    Calculia — Operaciones — datos
    Seis subactividades, una por operación: + − × ÷, el factorial (!) y
    las potencias (^). Cada una tiene su explicación (slides con dibujo),
-   sus ejemplos de la vida real y su prueba. No hay cálculo difícil: se
-   trata de entender qué significa cada operación y cuándo se usa.
+   sus ejemplos de la vida real y su prueba (las potencias no tienen
+   ejemplos: `skipReal`). No hay cálculo difícil: se trata de entender qué
+   significa cada operación y cuándo se usa.
    `pick: false` quita la operación de las preguntas «¿qué operación
    usarías?», que solo cubren las cuatro básicas.
 
@@ -72,6 +73,12 @@ var DATA = {
         { visual: { kind: 'divide', total: 6, size: 2, icon: '📖', caption: true, alt: true, label: 'shelf' } },
         { visual: { kind: 'divide', total: 8, size: 3, icon: '🍪', caption: true, alt: true, label: 'box' } }
       ] },
+    { id: 'pow', symbol: '^', pick: false,
+      intro: [
+        { visual: { kind: 'power', base: 2, exp: 3 } },
+        { visual: { kind: 'power', base: 3, exp: 2 } }
+      ],
+      skipReal: true },
     { id: 'fac', symbol: '!', pick: false,
       intro: [
         { visual: { kind: 'chain', n: 4 } },
@@ -82,16 +89,6 @@ var DATA = {
         { visual: { kind: 'slots', n: 3, counts: true, result: true } },
         { visual: { kind: 'slots', n: 4, counts: true, result: true } },
         { visual: { kind: 'slots', n: 5, counts: true, result: true } }
-      ] },
-    { id: 'pow', symbol: '^', pick: false,
-      intro: [
-        { visual: { kind: 'power', base: 2, exp: 3 } },
-        { visual: { kind: 'power', base: 3, exp: 2 } }
-      ],
-      real: [
-        { visual: { kind: 'groups', groups: 3, each: 3, icon: '🟦', alt: true } },
-        { visual: { kind: 'power', base: 2, exp: 3 } },
-        { visual: { kind: 'power', base: 10, exp: 2 } }
       ] }
   ],
 
@@ -114,7 +111,6 @@ var DATA = {
     sub: ['pick', 'take', 'gap'],
     mul: ['pick', 'times', 'repeat', 'swapTimes'],
     div: ['pick', 'share', 'rest', 'leftover', 'relation', 'integer', 'decimal'],
-    fac: ['factValue', 'factMeaning', 'factSlots', 'factDivides'],
-    pow: ['powValue', 'powMeaning']
+    fac: ['factValue', 'factMeaning', 'factSlots', 'factDivides']
   }
 };

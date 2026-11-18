@@ -317,21 +317,6 @@
     });
   }
 
-  /* "← Volver" in the header: from a quiz or its end screen, back to the step picker
-     (steps) or to the operation menu; from the step picker, back to the menu
-     (assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    if (!$('#screenMenu').classList.contains('hidden')) return false;
-    if ($('#screenLevels').classList.contains('hidden') === false) {
-      showOnly('#screenMenu');
-    } else if (mode === 'steps') {
-      openStepPicker();
-    } else {
-      showOnly('#screenMenu');
-    }
-    return true;
-  };
-
   function startRound() {
     if (mode === 'steps') round = stepsRound();
     else if (mode === 'decompose') round = decomposeRound();

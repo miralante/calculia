@@ -78,18 +78,6 @@
 
   var show = App.screenSwitch([screenLearn, screenReal, screenGame]);
 
-  /* "← Volver" in the header steps back one screen inside the activity: the game
-     goes back to the real-life examples, those go back to the
-     explanation (assets/js/suite-chrome.js). The explanation is the first screen. */
-  App.backStep = function () {
-    if (!screenReal.classList.contains('hidden')) { show(screenLearn); return true; }
-    if (!screenGame.classList.contains('hidden')) {
-      show(screenReal);
-      return true;
-    }
-    return false;
-  };
-
   /* Small pictures of everyday places where the rise and run matter. The
      rails and rungs make the ladder recognizable; the house and paired
      ramps keep each example grounded in a familiar object. */

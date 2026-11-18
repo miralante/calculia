@@ -42,14 +42,6 @@
   var screenStart = $('#screenStart');
   var screenGame = $('#screenGame');
 
-  /* "← Volver" in the header: from the game or its end screen, back to the start
-     screen, the level above it on this page (assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    if (!screenStart.classList.contains('hidden')) return false;
-    screenGame.classList.add('hidden');
-    screenStart.classList.remove('hidden');
-    return true;
-  };
   var seriesEl = $('#series');
   var optionsEl = $('#options');
   var feedbackEl = $('#feedback');

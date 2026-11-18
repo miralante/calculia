@@ -119,17 +119,6 @@
     SCREENS.forEach(function (s) { s.classList.toggle('hidden', s !== screen); });
   }
 
-  /* "← Volver" in the header steps back one screen inside the activity: the practice
-     and its end screen go back to the reminder, the reminder to the famous numbers,
-     the famous numbers to the introduction (assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    function on(el) { return !el.classList.contains('hidden'); }
-    if (on(quizScreen)) { show(reminderScreen); return true; }
-    if (on(reminderScreen)) { show(famousScreen); return true; }
-    if (on(famousScreen)) { show(introScreen); return true; }
-    return false;
-  };
-
   /* ---------- Screen 4: levels ---------- */
 
   /* Returns true if a group (with sublevels) is complete: every

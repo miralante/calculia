@@ -249,3 +249,12 @@
 .ops-check-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 .ops-check-option.is-wrong { opacity: 0.6; text-decoration: line-through; }
 .ops-check-msg { margin: 0; min-height: 1.5em; font-weight: 600; text-align: center; }
+
+/* Powers, first slide: its text is three lines (the multiplications, then the sentence about 2³). */
+#introText { white-space: pre-line; }
+
+/* Powers practice: the base as a big number, and the answer lines under each card. */
+.power-card { max-width: 100%; }
+.power-base { font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 700; margin: 0; line-height: 1.1; }
+.power-result { width: 100%; }
+.power-count { font-weight: 600; margin: 0.5rem 0; }

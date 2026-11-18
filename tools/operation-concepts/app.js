@@ -589,6 +589,133 @@
     return App.utils.shuffle(list);
   }
 
+  /* ---- Powers: the practice that replaces the test. Two parts, each with its own card:
+     1. I give the base, you type the exponent, and I show how many times the base is
+        multiplied and the final value.
+     2. I show the base multiplied out, you type the exponent, and I show the result.
+     Numbers from 2 to 5. There is no test and no stars here. ---- */
+  var POWER_HTML = [
+    '<section id="screenPower" class="hidden stack">',
+    '  <button type="button" class="btn btn-secondary" id="powerBack"></button>',
+    '  <article class="card centered stack power-card" id="powerPart1">',
+    '    <h2 class="prompt" id="powTitle1"></h2>',
+    '    <p class="power-base" id="powBase" aria-live="polite"></p>',
+    '    <p class="instruction" id="powAsk1"></p>',
+    '    <div class="input-row">',
+    '      <label class="visually-hidden" for="powExp1" id="powLabel1"></label>',
+    '      <input type="number" id="powExp1" min="1" max="9" inputmode="numeric" autocomplete="off">',
+    '      <button type="button" class="btn" id="powCheck1"></button>',
+    '    </div>',
+    '    <p class="feedback" id="powFeedback1" aria-live="polite"></p>',
+    '    <div class="power-result" id="powResult1" aria-live="polite"></div>',
+    '    <button type="button" class="btn btn-secondary hidden" id="powNext1"></button>',
+    '  </article>',
+    '  <article class="card centered stack power-card" id="powerPart2">',
+    '    <h2 class="prompt" id="powTitle2"></h2>',
+    '    <p class="fac-expr" id="powShow2" aria-live="polite"></p>',
+    '    <p class="instruction" id="powAsk2"></p>',
+    '    <div class="input-row">',
+    '      <label class="visually-hidden" for="powExp2" id="powLabel2"></label>',
+    '      <input type="number" id="powExp2" min="1" max="9" inputmode="numeric" autocomplete="off">',
+    '      <button type="button" class="btn" id="powCheck2"></button>',
+    '    </div>',
+    '    <p class="feedback" id="powFeedback2" aria-live="polite"></p>',
+    '    <button type="button" class="btn btn-secondary hidden" id="powNext2"></button>',
+    '  </article>',
+    '</section>'
+  ].join('\n');
+
+  var powerCtx = null, powerWired = false;
+  var power1 = { base: 0 }, power2 = { base: 0, exp: 0 };
+
+  function byId(id) { return document.getElementById(id); }
+
+  /* A whole number typed in the box, or null when it is not one from 1 to 9. */
+  function typedExponent(id) {
+    var raw = byId(id).value.trim();
+    if (raw === '') return { error: t('power.empty') };
+    var n = Number(raw);
+    if (!Number.isInteger(n) || n < 1 || n > 9) return { error: t('power.range') };
+    return { value: n };
+  }
+
+  /* Part 1: a new base, and the empty card to answer it. */
+  function newBase() {
+    power1.base = rint(2, 5);
+    byId('powBase').textContent = String(power1.base);
+    byId('powExp1').value = '';
+    byId('powResult1').innerHTML = '';
+    byId('powFeedback1').textContent = '';
+    byId('powNext1').classList.add('hidden');
+    byId('powCheck1').disabled = false;
+  }
+
+  /* Part 1: the number of multiplications, then the multiplication and its value. */
+  function checkPart1() {
+    var typed = typedExponent('powExp1');
+    if (typed.error) { byId('powFeedback1').textContent = typed.error; return; }
+    var b = power1.base, e = typed.value;
+    var value = Math.pow(b, e);
+    byId('powFeedback1').textContent = '';
+    byId('powResult1').innerHTML =
+      '<p class="power-count">' + fill(t('power.count'), { e: e }) + '</p>' +
+      '<p class="fac-expr">' + repeatOf(b, e).join(' × ') + ' = ' + value + '</p>';
+    byId('powNext1').classList.remove('hidden');
+  }
+
+  /* Part 2: a new multiplication of the same base, shown out in full. */
+  function newProduct() {
+    power2.base = rint(2, 5);
+    power2.exp = rint(2, 5);
+    byId('powShow2').textContent = repeatOf(power2.base, power2.exp).join(' × ');
+    byId('powExp2').value = '';
+    byId('powFeedback2').textContent = '';
+    byId('powNext2').classList.add('hidden');
+  }
+
+  /* Part 2: a right exponent shows the result; a wrong one gets a hint, never the answer. */
+  function checkPart2() {
+    var typed = typedExponent('powExp2');
+    if (typed.error) { byId('powFeedback2').textContent = typed.error; return; }
+    var b = power2.base, e = power2.exp;
+    if (typed.value === e) {
+      byId('powFeedback2').textContent = fill(t('power.right'), { b: b, e: e, T: Math.pow(b, e) });
+      byId('powNext2').classList.remove('hidden');
+    } else {
+      byId('powFeedback2').textContent = fill(t('power.wrong'), { b: b });
+    }
+  }
+
+  /* The power practice of the menu entry (ownTest): wired once, then a new base and a new product. */
+  function startPower(ctx) {
+    powerCtx = ctx;
+    if (!powerWired) {
+      powerWired = true;
+      byId('powerBack').addEventListener('click', function () { powerCtx.openMenu(); });
+      byId('powCheck1').addEventListener('click', checkPart1);
+      byId('powCheck2').addEventListener('click', checkPart2);
+      byId('powExp1').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); checkPart1(); } });
+      byId('powExp2').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); checkPart2(); } });
+      byId('powNext1').addEventListener('click', newBase);
+      byId('powNext2').addEventListener('click', newProduct);
+    }
+    /* The texts are set on every start, so a language change shows in the practice too. */
+    byId('powerBack').textContent = t('ui.otherOps');
+    byId('powTitle1').textContent = t('power.part1');
+    byId('powAsk1').textContent = t('power.ask1');
+    byId('powLabel1').textContent = t('power.label');
+    byId('powCheck1').textContent = t('ui.check');
+    byId('powNext1').textContent = t('power.nextBase');
+    byId('powTitle2').textContent = t('power.part2');
+    byId('powAsk2').textContent = t('power.ask2');
+    byId('powLabel2').textContent = t('power.label');
+    byId('powCheck2').textContent = t('ui.check');
+    byId('powNext2').textContent = t('power.nextProduct');
+    newBase();
+    newProduct();
+    ctx.show('#screenPower');
+  }
+
   var ACTIVITIES = DATA.ops.map(function (entry) {
     return {
       id: entry.id,
@@ -596,7 +723,10 @@
       name: function () { return t('ops.' + entry.id + '.name'); },
       detail: function () { return t('ops.' + entry.id + '.detail'); },
       intro: entry.intro,
-      real: entry.real
+      real: entry.real,
+      skipReal: entry.skipReal,
+      /* Powers has no test: after its slides, its own practice. */
+      ownTest: entry.id === 'pow' ? startPower : null
     };
   });
 
@@ -612,7 +742,7 @@
     });
   }
 
-  /* The factorial and power questions: a small calculation with its own drawing. */
+  /* The factorial questions: a small calculation with its own drawing. */
   function makeMath(type) {
     var key = 'q.' + type + '.';
     if (type === 'factValue') {
@@ -658,30 +788,11 @@
         explanation: fill(t(key + 'explain'), { T: whole, k: fits, g: whole / fits })
       };
     }
-    if (type === 'powValue') {
-      var pb = rint(2, 5), pe = rint(2, 3), pv = Math.pow(pb, pe), pChain = repeatOf(pb, pe).join(' × ');
-      return {
-        prompt: fill(t(key + 'prompt'), { b: pb, e: pe }),
-        visual: '<p class="fac-expr">' + pChain + ' = ?</p>',
-        hint: fill(t(key + 'hint'), { b: pb, e: pe }),
-        input: { answer: pv },
-        explanation: fill(t(key + 'explain'), { chain: pChain, T: pv })
-      };
-    }
-    /* powMeaning: which multiplication is the power. The wrong ones add instead, or change the small number. */
-    var mb = rint(2, 5), me = rint(2, 3), mText = repeatOf(mb, me).join(' × ');
-    return {
-      prompt: fill(t(key + 'prompt'), { b: mb, e: me }),
-      visual: '',
-      hint: t(key + 'hint'),
-      options: textOptions(mText, [repeatOf(mb, me).join(' + '), mb + ' × ' + (me + 1)]),
-      explanation: fill(t(key + 'explain'), { b: mb, e: me, chain: mText, T: Math.pow(mb, me) })
-    };
   }
 
   /* A question of the round: def is the operation being practised (its entry of ACTIVITIES). */
   function makeQuestion(type, index, def) {
-    if (type.indexOf('fact') === 0 || type.indexOf('pow') === 0) return makeMath(type);
+    if (type.indexOf('fact') === 0) return makeMath(type);
     var q = t('q.' + type + '.prompt');
     var hint = t('q.' + type + '.hint');
     var icon = pickIcon(), pair = pickTwoIcons();
@@ -1088,6 +1199,8 @@
     menuBackKey: 'ui.otherOps',
     testVisuals: true,
     testVisualClass: 'ops-visual',
+    extraMarkup: POWER_HTML,
+    extraScreens: ['#screenPower'],
     visualHtml: drawingHtml,
     gameHtml: gameHtml,
     introCopy: function (i, def) {

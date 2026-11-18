@@ -270,6 +270,10 @@ final: sin botón de salida (la salida es el «← Volver» de la cabecera); «O
 
 Dos opciones permiten usar el modo 'options' sin copiar su flujo:
 
+- En un menú, una entrada puede llevar su propio `skipReal: true` (Potencias en
+  Operaciones, cuyas entradas tienen cada una sus diapositivas); sus diapositivas
+  llevan entonces a la práctica propia de la entrada (`ownTest` de la entrada, en
+  vez de rondas de preguntas).
 - `skipReal: true` hace que las diapositivas de explicación lleven directamente
   al test. El botón bajo las diapositivas dice «Empezar a practicar», y la etapa
   de vida real no se muestra. Usan esta opción Múltiplos, Primo o compuesto y

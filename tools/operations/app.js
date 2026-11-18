@@ -479,14 +479,6 @@
     });
   }
 
-  /* "← Volver" in the header: from a game or its end screen, back to the activity
-     menu, the level above it on this page (assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    if (!screenMenu.classList.contains('hidden')) return false;
-    show(screenMenu);
-    return true;
-  };
-
   /* The explanation and the real-life screens, for the sub-activities that set
      hasExpoReal in data.js (assets/js/expo-screens.js). */
   var expositions = App.expoScreens({

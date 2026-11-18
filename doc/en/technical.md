@@ -260,7 +260,10 @@ Two options let an activity use the 'options' mode without copying its flow:
 
 - `skipReal: true` makes the explanation slides lead straight to the test. The
   button under the slides reads «Start practising», and the real-life stage is
-  not shown. Multiples, Prime or composite and Divisibility use it.
+  not shown. Multiples, Prime or composite and Divisibility use it. In a menu,
+  an entry can carry its own `skipReal: true` (Powers in Operations, whose menu
+  entries each have their own slides); its slides then lead to the entry's own
+  practice (`ownTest` on the entry, not a test of rounds).
 - A question may carry `steps: [ {prompt, hint, options, explanation}, … ]`
   instead of its own prompt and options. The steps are answered one at a time,
   under «Step 1 of 3»; the question scores once, at its last step, and only if no

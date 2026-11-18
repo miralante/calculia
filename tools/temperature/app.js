@@ -31,14 +31,6 @@
 
   var showScreen = App.screenSwitch([screenMenu, screenPlay]);
 
-  /* "← Volver" in the header: inside a game it goes back to the menu; in the
-     menu it goes to the hub (assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    if (screenPlay.classList.contains('hidden')) return false;
-    showMenu();
-    return true;
-  };
-
   /* ============================================================
      Helpers
      ============================================================ */

@@ -565,15 +565,6 @@
     window.scrollTo(0, 0);
   }
 
-  /* The header "← Volver" on a practice or on its end screen goes back to the
-     practice menu, the level above it on this page. On the menu it returns
-     false and the link goes to the landing (see assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    if (taskScreen.classList.contains('hidden')) return false;
-    switchTo(menuScreen);
-    return true;
-  };
-
   /* ============================================================
      Wiring
      ============================================================ */

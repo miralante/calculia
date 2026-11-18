@@ -352,22 +352,6 @@
 
   /* ---- Events ---- */
 
-  /* "← Volver" in the header. In the two typed levels (leerNumeros,
-     escribirNumeros) it goes back to the previous level of the activity
-     instead of leaving for the Números menu. Progress steps back with it,
-     so finishing the level it returns to brings the person forward again.
-     Everywhere else the link keeps its href (assets/js/suite-chrome.js). */
-  var TYPED_TIPOS = { lecturaInput: true, escribirInput: true };
-  App.backStep = function () {
-    if (screenGame.classList.contains('hidden') || !round.level || !TYPED_TIPOS[round.level.tipo]) return false;
-    var levels = activity.levels;
-    var idx = levels.indexOf(round.level);
-    if (idx <= 0) return false;
-    progress.roundsByActivity[activity.id] = idx - 1;
-    save();
-    startRound(levels[idx - 1]);
-    return true;
-  };
   $('#btnNext').addEventListener('click', next);
   /* btnRepeat was removed during the 25-activity batch cleanup (memory
      entry on 2026-10-13); the screenEnd section no longer has the

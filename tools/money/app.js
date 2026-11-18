@@ -253,14 +253,6 @@
     });
   }
 
-  /* "← Volver" in the header: from a game or its end screen, back to the activity
-     menu, the level above it on this page (assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    if (!screenMenu.classList.contains('hidden')) return false;
-    show(screenMenu);
-    return true;
-  };
-
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
   /* ---- Levels of an activity (now automatic via levelFromProgress) ---- */
 

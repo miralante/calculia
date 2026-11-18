@@ -240,14 +240,6 @@
     });
   }
 
-  /* "← Volver" in the header: from a game or its end screen, back to the activity
-     menu, the level above it on this page (assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    if (!screenMenu.classList.contains('hidden')) return false;
-    show(screenMenu);
-    return true;
-  };
-
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
   /* The level rises one step per completed round, capped at the last
      one, so a person who comes back continues where they were. */

@@ -332,16 +332,6 @@
     });
   }
 
-  /* "← Volver" in the header: from a demo back to its list of facts, from a
-     practice or its end screen, from a table's list back to the tables
-     (assets/js/suite-chrome.js). The tables are the first screen. */
-  App.backStep = function () {
-    if (!$('#screenTables').classList.contains('hidden')) return false;
-    if (!$('#learnDemo').classList.contains('hidden')) { showLearnList(); return true; }
-    showOnly('#screenTables');
-    return true;
-  };
-
   /* Between rounds the input becomes disabled (see checkAnswer). Reset
      it back to enabled for the next round so it accepts input again. */
   function resetInputControls() {

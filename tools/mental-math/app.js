@@ -114,16 +114,6 @@
 
   var show = App.screenSwitch([screenMenu, screenGame]);
 
-  /* "← Volver" in the header: inside the counting-in-groups walkthrough it goes one
-     step back (groups.js). From a game or its end screen, back to the activity
-     menu, the level above it on this page (assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    if (groups.back()) return true;
-    if (screenGame.classList.contains('hidden') && screenEnd.classList.contains('hidden')) return false;
-    show(screenMenu);
-    return true;
-  };
-
   /* ---- Activity menu (flat grid, one button per DATA.activities entry) ---- */
   /* ---- Levels for an activity ---- */
   /* (openActivity now auto via levelFromProgress) */

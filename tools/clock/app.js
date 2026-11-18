@@ -29,15 +29,6 @@
   var screenLearn = $('#screenLearn');
   var screenGame = $('#screenGame');
 
-  /* "← Volver" in the header: from the lesson, the game or its end screen, back to
-     the start screen, the level above it on this page (assets/js/suite-chrome.js). */
-  App.backStep = function () {
-    if (!screenStart.classList.contains('hidden')) return false;
-    screenLearn.classList.add('hidden');
-    screenGame.classList.add('hidden');
-    screenStart.classList.remove('hidden');
-    return true;
-  };
   var questionZoneEl = $('#questionZone');
   var questionTextEl = $('#questionText');
   var optionsEl = $('#options');
