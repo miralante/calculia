@@ -11,6 +11,7 @@ var DATA = {
   numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
 
   intro: [
+    { visual: { kind: 'example', each: 3, k: 2 } },
     { visual: { kind: 'times', each: 3, count: 4 } },
     { visual: { kind: 'times', each: 5, count: 10 } },
     { visual: { kind: 'times', each: 2, count: 10 } },

@@ -19,16 +19,19 @@
   /* ---- Drawing: no pictures. The concept is written, and the multiple is marked.
      Each line is a multiplication «5 × 2 = 10»; the product, which is the multiple,
      is highlighted and tagged «múltiplo de 5». */
+  function rowHtml(each, k) {
+    return '<div class="mul-row"><span class="mul-label">' + each + ' × ' + k + ' = </span>' +
+      '<span class="mul-hit">' + (each * k) + '</span>' +
+      '<span class="mul-tag">' + fill(t('ui.multipleTag'), { d: each }) + '</span></div>';
+  }
   function timesHtml(each, count) {
     var html = '<div class="mul-ladder">';
-    for (var k = 1; k <= count; k += 1) {
-      html += '<div class="mul-row"><span class="mul-label">' + each + ' × ' + k + ' = </span>' +
-        '<span class="mul-hit">' + (each * k) + '</span>' +
-        '<span class="mul-tag">' + fill(t('ui.multipleTag'), { d: each }) + '</span></div>';
-    }
+    for (var k = 1; k <= count; k += 1) html += rowHtml(each, k);
     return html + '</div>';
   }
+  /* The definition slide: one multiplication, the multiple marked. */
   function visualHtml(spec) {
+    if (spec.kind === 'example') return '<div class="mul-ladder">' + rowHtml(spec.each, spec.k) + '</div>';
     return timesHtml(spec.each, spec.count);
   }
 

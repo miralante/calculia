@@ -22,10 +22,11 @@
 
     /* The explanation: one idea per slide. The lines are in data.js. */
     intro: {
-      1: { title: 'A multiple comes from multiplying', text: 'A multiple comes from multiplying a number by another. 3 × 4 = 12. So 12 is a multiple of 3 and also of 4.' },
-      2: { title: 'Multiply 5 by 1, 2, 3…', text: 'Each line is a multiplication. The marked result is a multiple of 5.' },
-      3: { title: 'Example: multiply 2 by 1, 2, 3…', text: 'Each line is a multiplication. The marked result is a multiple of 2.' },
-      4: { title: 'Example: multiply 3 by 1, 2, 3…', text: 'Each line is a multiplication. The marked result is a multiple of 3.' }
+      1: { title: 'What is a multiple?', text: 'A multiple of 3 comes from multiplying 3 by another number. For example, 3 × 2 = 6. So 6 is a multiple of 3.' },
+      2: { title: 'Multiply 3 by 1, 2, 3, 4…', text: 'Each line is a multiplication. The marked result is a multiple of 3.' },
+      3: { title: 'Multiply 5 by 1, 2, 3…', text: 'Each line is a multiplication. The marked result is a multiple of 5.' },
+      4: { title: 'Example: multiply 2 by 1, 2, 3…', text: 'Each line is a multiplication. The marked result is a multiple of 2.' },
+      5: { title: 'Example: multiply 3 by 1, 2, 3…', text: 'Each line is a multiplication. The marked result is a multiple of 3.' }
     },
 
     /* The practice: a game on the right of the explanation. */

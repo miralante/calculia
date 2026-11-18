@@ -22,10 +22,11 @@
 
     /* La explicación: una idea por diapositiva. Las líneas están en data.js. */
     intro: {
-      1: { title: 'Un múltiplo sale al multiplicar', text: 'Un múltiplo sale al multiplicar un número por otro. 3 × 4 = 12. Por eso 12 es múltiplo de 3 y también de 4.' },
-      2: { title: 'Multiplica el 5 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado marcado es un múltiplo de 5.' },
-      3: { title: 'Ejemplo: multiplica el 2 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado marcado es un múltiplo de 2.' },
-      4: { title: 'Ejemplo: multiplica el 3 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado marcado es un múltiplo de 3.' }
+      1: { title: '¿Qué es un múltiplo?', text: 'Un múltiplo de 3 sale al multiplicar 3 por otro número. Por ejemplo, 3 × 2 = 6. Por eso 6 es múltiplo de 3.' },
+      2: { title: 'Multiplica el 3 por 1, 2, 3, 4…', text: 'Cada línea es una multiplicación. El resultado marcado es un múltiplo de 3.' },
+      3: { title: 'Multiplica el 5 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado marcado es un múltiplo de 5.' },
+      4: { title: 'Ejemplo: multiplica el 2 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado marcado es un múltiplo de 2.' },
+      5: { title: 'Ejemplo: multiplica el 3 por 1, 2, 3…', text: 'Cada línea es una multiplicación. El resultado marcado es un múltiplo de 3.' }
     },
 
     /* La práctica: un juego a la derecha de la explicación. */
