@@ -7,7 +7,7 @@
 
   App.i18n.register({
     title: '➗ Divisors and multiples',
-    instruction: 'Choose what you want to practise.',
+    instruction: 'Choose what you want to practise',
 
     group: {
       factor: { name: 'Factorization', detail: 'Break a number into prime factors.' },

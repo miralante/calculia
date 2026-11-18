@@ -12,7 +12,7 @@
     btnMenu: 'Volver al inicio',
 
     ui: {
-      menuInstruction: 'Elige una operación.',
+      menuInstruction: 'Elige qué quieres practicar',
       hintPrefix: '',
       wrongPrefix: '❌ Mira: ',
       rightPrefix: '✅ ¡Correcto! ',
@@ -163,11 +163,6 @@
         intro: {
           1: { title: 'Potencia es multiplicar lo mismo', text: '2 × 2 × 2 = 2³ = 8\n2³ se lee «2 elevado a 3».' },
           2: { title: 'El número pequeño cuenta las veces', text: '3² = 3 × 3 = 9\nEl 2 pequeño dice cuántas veces se escribe el 3' }
-        },
-        real: {
-          1: 'Un cuadrado de 3 por 3 tiene 3² = 9 casillas.',
-          2: 'Un cubo de 2 cubitos por lado tiene 2³ = 8 cubitos.',
-          3: 'Con 10 filas de 10 cromos son 10² = 100 cromos.'
         }
       }
     },

@@ -7,7 +7,7 @@
 
   App.i18n.register({
     title: '⏳ Time and clock',
-    instruction: 'Choose what you want to practise.',
+    instruction: 'Choose what you want to practise',
 
     group: {
       units: { name: 'Units of time', detail: 'From century to second: explanation and real-life examples.' },

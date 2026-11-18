@@ -185,10 +185,6 @@
 }
 
 /* ---- Screens ---- */
-.center-row {
-  justify-content: center;
-  text-align: center;
-}
 .centered { align-items: center }
 
 .concept-card {

@@ -8,7 +8,7 @@
 
   App.i18n.register({
     title: '💰 Dinero',
-    instructionMenu: 'Elige qué quieres practicar.',
+    instructionMenu: 'Elige qué quieres practicar',
     notaMonedero: '💶 Para pagar con monedas de verdad, entra en {link}.',
     notaMonederoLink: 'El Monedero',
     btnMenu: 'Volver al inicio',

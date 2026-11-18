@@ -8,7 +8,7 @@
 
   App.i18n.register({
     title: '🍕 Fracciones',
-    instructionMenu: 'Elige qué quieres practicar.',
+    instructionMenu: 'Elige qué quieres practicar',
     btnBackToMenu: '← Otras actividades',
     btnMenu: 'Volver al inicio',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} {starsWord}.',

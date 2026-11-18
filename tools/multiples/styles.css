@@ -93,7 +93,6 @@
 }
 
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
-.suite-chrome-activity .activity-icon { width: 48px; height: 48px; flex: none; }
 
 /* The practice game (on the right, beside the explanation): the number, the idea in one sentence,
    the buttons 1 to 9 in order, the product, and the list of the multiples found so far. */

@@ -39,7 +39,7 @@
     ui: {
       seeReal: 'Verlas en la vida real →',
       realLabel: 'Las escalas están a tu alrededor',
-      menuInstruction: 'Elige qué quieres practicar.',
+      menuInstruction: 'Elige qué quieres practicar',
       menuTitle: 'Practica con una actividad',
       menuText: 'Empiezas por el primer nivel. Cuando terminas una ronda, pasas al siguiente.',
       hintPrefix: '',

@@ -554,6 +554,7 @@
   /* n! as 4 × 3 × 2 × 1 = 24. */
   function chainHtml(n) { return chipLine(factorsDown(n, 1), factorialOf(n)); }
   /* a^n as 2 × 2 × 2 = 8. */
+  /* The class lets the styles put the title and the text of this slide above its drawing. */
   function powerHtml(base, exp) { return '<div class="power-visual">' + chipLine(repeatOf(base, exp), Math.pow(base, exp)) + '</div>'; }
   /* The first few factorials, one card each: the value grows fast. */
   function growthHtml(max) {

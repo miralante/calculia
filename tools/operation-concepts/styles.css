@@ -216,7 +216,6 @@
 }
 
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
-.suite-chrome-activity .activity-icon { width: 48px; height: 48px; flex: none; }
 
 /* Factorials and powers: numbers in framed boxes, the growth cards, and the empty places to count. */
 .fac-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
@@ -261,12 +260,6 @@
 
 /* Powers, first slide: its text is three lines (the multiplications, then the sentence about 2³). */
 #introText { white-space: pre-line; }
-
-/* Powers practice: the base as a big number, and the answer lines under each card. */
-.power-card { max-width: 100%; }
-.power-base { font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 700; margin: 0; line-height: 1.1; }
-.power-result { width: 100%; }
-.power-count { font-weight: 600; margin: 0.5rem 0; }
 
 /* No «← Otras operaciones» under the slides: the header «← Volver» is the way out. */
 #introBack { display: none; }

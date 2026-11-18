@@ -4,7 +4,7 @@
   App.i18n.register({
     title: '🔢 Las Tablas',
     btnMenu: 'Volver al inicio',
-    instruction: 'Elige qué quieres practicar.',
+    instruction: 'Elige qué quieres practicar',
     chooseTable: 'Elige una tabla.',
     tableButton: 'Tabla del {n}',
     learnInstruction: 'Toca una operación para ver cómo se cuenta con puntos.',

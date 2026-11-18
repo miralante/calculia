@@ -8,7 +8,7 @@
 
   App.i18n.register({
     title: '💰 Money',
-    instructionMenu: 'Choose what you want to practise.',
+    instructionMenu: 'Choose what you want to practise',
     notaMonederoLink: 'The Wallet',
     notaMonedero: '💶 To pay with real coins, go to {link}.',
     btnMenu: 'Back to start',

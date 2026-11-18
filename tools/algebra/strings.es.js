@@ -13,7 +13,7 @@
 
   App.i18n.register({
     title: '⚖️ La balanza',
-    instructionMenu: 'Elige qué quieres practicar.',
+    instructionMenu: 'Elige qué quieres practicar',
     btnMenu: 'Volver al inicio',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} {starsWord}.',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',

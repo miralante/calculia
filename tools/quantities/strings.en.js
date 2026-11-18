@@ -14,7 +14,7 @@
 
   App.i18n.register({
     title: '👀 Read and Write Numbers',
-    choosePractice: 'Choose what you want to practise.',
+    choosePractice: 'Choose what you want to practise',
     btnMenu: 'Back to the start',
 
     /* ---------- Practice menu ----------

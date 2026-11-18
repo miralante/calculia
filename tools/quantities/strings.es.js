@@ -17,7 +17,7 @@
 
   App.i18n.register({
     title: '👀 Leer y Escribir Números',
-    choosePractice: 'Elige qué quieres practicar.',
+    choosePractice: 'Elige qué quieres practicar',
     btnMenu: 'Volver al inicio',
 
     /* ---------- Menú de prácticas ----------

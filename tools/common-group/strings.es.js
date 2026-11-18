@@ -7,7 +7,7 @@
 
   App.i18n.register({
     title: '➗ Divisores y múltiplos',
-    instruction: 'Elige qué quieres practicar.',
+    instruction: 'Elige qué quieres practicar',
 
     group: {
       factor: { name: 'Factorización', detail: 'Descomponer un número en factores primos.' },

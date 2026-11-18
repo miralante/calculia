@@ -39,7 +39,7 @@
     ui: {
       seeReal: 'See them in real life →',
       realLabel: 'Scales are all around you',
-      menuInstruction: 'Choose what you want to practise.',
+      menuInstruction: 'Choose what you want to practise',
       menuTitle: 'Practise with one activity',
       menuText: 'You start at the first level. When you finish a round, you move on to the next.',
       hintPrefix: '',

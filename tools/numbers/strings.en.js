@@ -8,7 +8,7 @@
 
   App.i18n.register({
     title: '🧮 Numbers',
-    instructionMenu: 'Choose what you want to practise.',
+    instructionMenu: 'Choose what you want to practise',
     notaTablasLink: 'Math Tables',
     notaTablas: '🔢 To count, add and multiply, go to {link}.',
     btnMenu: 'Back to start',

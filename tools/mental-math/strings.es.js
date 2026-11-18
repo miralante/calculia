@@ -9,7 +9,7 @@
   App.i18n.register({
     answerIs: 'La respuesta es {answer}.',
     title: '🧠 Restar y Cálculo Mental',
-    instructionMenu: 'Elige qué quieres practicar.',
+    instructionMenu: 'Elige qué quieres practicar',
     btnMenu: 'Volver al inicio',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} {starsWord}.',
     explicacionCorrecta: '✅ ¡Correcto! La respuesta es: ',

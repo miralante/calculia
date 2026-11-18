@@ -5,7 +5,6 @@
 
 .instruction { font-size: var(--texto-base); }
 
-.center-row { justify-content: center; }
 
 .difficulty {
   font-size: var(--texto-pequeno);

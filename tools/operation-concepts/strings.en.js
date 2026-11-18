@@ -11,7 +11,7 @@
     btnMenu: 'Back to start',
 
     ui: {
-      menuInstruction: 'Choose an operation.',
+      menuInstruction: 'Choose what you want to practise',
       hintPrefix: '',
       wrongPrefix: '❌ Look: ',
       rightPrefix: '✅ Correct! ',
@@ -161,11 +161,6 @@
         intro: {
           1: { title: 'A power is multiplying the same thing', text: '2 × 2 × 2 = 2³ = 8\n2³ is read «2 to the power of 3».' },
           2: { title: 'The small number counts the times', text: '3² = 3 × 3 = 9\nThe small 2 says how many times the 3 is written' }
-        },
-        real: {
-          1: 'A square of 3 by 3 has 3² = 9 squares.',
-          2: 'A cube with 2 small cubes on each side has 2³ = 8 small cubes.',
-          3: 'With 10 rows of 10 stickers, there are 10² = 100 stickers.'
         }
       }
     },

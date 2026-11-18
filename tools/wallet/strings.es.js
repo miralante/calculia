@@ -8,7 +8,7 @@
 
   App.i18n.register({
     "title": "💶 El Monedero",
-    "instruction": "Elige qué quieres practicar.",
+    "instruction": "Elige qué quieres practicar",
     "btnMenu": "Volver al inicio",
     "menuCount": "¿Cuánto hay?",
     "menuCountDetail": "Mira el dinero y elige el total.",

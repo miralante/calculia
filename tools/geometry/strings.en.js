@@ -12,7 +12,7 @@
 
   App.i18n.register({
     title: '📐 Geometry',
-    instructionMenu: 'Choose what you want to practise.',
+    instructionMenu: 'Choose what you want to practise',
     btnMenu: 'Back to start',
     endSummary: 'You solved {n} questions of {activity}. You now have {stars} {starsWord}.',
     correctExplanation: '✅ Correct! The answer is: ',

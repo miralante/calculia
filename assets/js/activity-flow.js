@@ -95,7 +95,7 @@
     '  <div class="row center-row"><p class="instruction" data-i18n="ui.menuInstruction">Elige un test.</p></div>',
     '  <div class="card reference-card stack">',
     '    <h2 class="reference-title" data-i18n="ui.menuTitle">¿Qué quieres practicar?</h2>',
-    '    <p class="reference-text" data-i18n="ui.menuText">Elige qué quieres practicar.</p>',
+    '    <p class="reference-text" data-i18n="ui.menuText">Elige qué quieres practicar</p>',
     '  </div>',
     '  <div id="activitiesMenu"></div>',
     '</section>'

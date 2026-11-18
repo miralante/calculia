@@ -7,7 +7,7 @@
 
   App.i18n.register({
     title: '🔢 The numbers',
-    instruction: 'Choose what you want to practise.',
+    instruction: 'Choose what you want to practise',
 
     group: {
       types: { name: 'Number types', detail: 'Natural numbers, integers, decimals and fractions.' },

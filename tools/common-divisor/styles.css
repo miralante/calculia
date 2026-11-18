@@ -8,4 +8,3 @@
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
-.suite-chrome-activity .activity-icon { width: 48px; height: 48px; flex: none; }

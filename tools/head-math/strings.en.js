@@ -4,8 +4,8 @@
   App.i18n.register({
     title: '🧠 Head Math',
     btnMenu: 'Back to the start',
-    instruction: 'Choose what you want to practise.',
-    chooseOperation: 'Choose what you want to practise.',
+    instruction: 'Count in your head, reach 10 first or share out among 10 with coloured dots.',
+    chooseOperation: 'Choose what you want to practise',
     chooseLevel: 'Choose a step.',
     stepLevel: 'Add and subtract {n}',
     roundSummary: 'You solved {count} operations. Now you have {stars} {starsWord}.',
