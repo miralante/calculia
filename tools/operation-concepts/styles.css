@@ -267,7 +267,7 @@
 /* Powers slides: the title and the text go above the drawing (the chips of the multiplication). */
 .gallery-card:has(#introVisual .power-visual) { display: flex; flex-direction: column; }
 .gallery-card:has(#introVisual .power-visual) #introTitle { order: -2; }
-.gallery-card:has(#introVisual .power-visual) #introText { order: -1; }
+.gallery-card:has(#introVisual .power-visual) #introVisual { order: -1; }
 
 /* Powers practice: the base as a big number, and the answer lines under each card. */
 .power-card { max-width: 100%; }
