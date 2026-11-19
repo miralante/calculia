@@ -264,19 +264,90 @@
 /* No «← Otras operaciones» under the slides: the header «← Volver» is the way out. */
 #introBack { display: none; }
 
-/* Powers slides: the title and the text go above the drawing (the chips of the multiplication). */
-.gallery-card:has(#introVisual .power-visual) { display: flex; flex-direction: column; }
-.gallery-card:has(#introVisual .power-visual) #introTitle { order: -2; }
-.gallery-card:has(#introVisual .power-visual) #introVisual { order: -1; }
+/* Powers slides: the title and the drawing go before the text (the chips of the
+   multiplication, and the parts of the power). */
+.gallery-card:has(#introVisual .power-visual),
+.gallery-card:has(#introVisual .power-anatomy) { display: flex; flex-direction: column; }
+.gallery-card:has(#introVisual .power-visual) #introTitle,
+.gallery-card:has(#introVisual .power-anatomy) #introTitle { order: -2; }
+.gallery-card:has(#introVisual .power-visual) #introVisual,
+.gallery-card:has(#introVisual .power-anatomy) #introVisual { order: -1; }
 
-/* Powers practice: the base as a big number, and the answer lines under each card. */
+/* The parts of a power: 4³ = 64, with the exponent above the little number, the base
+   below and the power at the right of the result. The same drawing, with empty places,
+   is the game of the last slide. The grid keeps the equation in one line at every width:
+   every name is a cell of it, so none of them hangs out of the card. */
+.power-anatomy {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-template-rows: auto auto auto;
+  justify-content: center;
+  align-items: center;
+  gap: 6px 8px;
+}
+.power-anat-power { grid-area: 2 / 1; display: inline-flex; align-items: flex-start; }
+.power-anat-equal { grid-area: 2 / 2; font-size: var(--texto-grande); font-weight: 800; color: var(--color-texto-suave); }
+.power-anat-res { grid-area: 2 / 3; }
+.power-num { font-size: clamp(2.4rem, 9vw, 3.6rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; line-height: 1; }
+.power-sup { font-size: clamp(1.2rem, 5vw, 1.8rem); font-weight: 800; color: var(--mod-razonamiento); margin-left: 2px; line-height: 1; }
+/* The name of a part: the word in a box. */
+.power-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--mod-razonamiento);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* Where each name goes: the exponent above the little number, the base below the big
+   one and the power at the right of the result. */
+.power-above { grid-area: 1 / 1; justify-self: center; }
+.power-below { grid-area: 3 / 1; justify-self: center; }
+.power-side { grid-area: 2 / 4; }
+/* On a narrow screen the name of the power goes under the result, so the equation and
+   the three names always fit in one column. */
+@media (max-width: 420px) {
+  .power-anatomy { grid-template-columns: auto auto auto; }
+  .power-side { grid-area: 3 / 3; justify-self: center; }
+}
+
+/* The names game: the empty places where they go, and the names to put there. */
+.power-names { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.power-names-msg { margin: 0; }
+.power-names-chips { min-height: 44px; gap: 8px; }
+.power-chip.is-selected { outline: 3px solid var(--mod-razonamiento); outline-offset: 2px; }
+.power-chip.is-placed { visibility: hidden; }
+.power-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  min-height: 44px;
+  padding: 3px 10px;
+  border: 2px dashed var(--color-texto-suave);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--mod-razonamiento);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+.power-slot.is-ok { border: 2px solid var(--mod-razonamiento); background: var(--mod-razonamiento-suave); }
+.power-slot.is-wrong { animation: ops-shake 0.35s; border-style: solid; }
+
+/* Powers practice: the given number and the box to fill, side by side, and the answer under them. */
 .power-card { max-width: 100%; }
-.power-base { font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 700; margin: 0; line-height: 1.1; }
+.power-try { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 18px; }
+.power-try-part { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.power-try-num { font-size: clamp(2.6rem, 10vw, 4rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.power-try-cap { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); letter-spacing: .04em; text-transform: uppercase; }
 .power-result { width: 100%; }
 .power-count { font-weight: 600; margin: 0.5rem 0; }
-
-/* Powers practice: the back arrow of screen 2 sits on its own line, at the start. */
-.power-back { align-self: flex-start; min-width: 3rem; }
-
-/* Powers practice: the box for the exponent is big enough to read and to tap. */
-.power-card input[type="number"] { width: 4.5rem; min-height: 3rem; font-size: 1.4rem; text-align: center; }
+/* The box for the number is big enough to read and to tap. */
+.power-card input[type="number"] { width: 5rem; min-height: var(--boton-min); font-size: 1.6rem; text-align: center; }

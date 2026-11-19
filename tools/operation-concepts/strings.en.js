@@ -159,8 +159,10 @@
       pow: {
         name: 'Powers', detail: 'Multiply the same number many times.',
         intro: {
-          1: { title: 'A power is multiplying the same thing', text: '2 × 2 × 2 = 2³ = 8\n2³ is read «2 to the power of 3».' },
-          2: { title: 'The small number counts the times', text: '3² = 3 × 3 = 9\nThe small 2 says how many times the 3 is written' }
+          1: { title: 'A power is multiplying the same thing', text: '2 × 2 × 2 = 2³ = 8.\n2³ is read «2 to the power of 3».' },
+          2: { title: 'The small number counts the repetitions', text: 'It is called the exponent.\n3² = 3 × 3 = 9.' },
+          3: { title: 'The three parts', text: '' },
+          4: { title: 'The game', text: 'Put each name in its place.' }
         }
       }
     },
@@ -287,12 +289,24 @@
 
     /* The Powers practice (no test): few words, the pictures count. */
     power: {
-      label: 'Exponent',
+      /* The name of each part of the power. */
+      parts: { base: 'Base', exp: 'Exponent', pow: 'Power' },
+      /* The empty place of the game: the name that goes in it. */
+      partsAria: { base: 'Place for the base', exp: 'Place for the exponent', pow: 'Place for the power' },
+      namesPick: 'Tap a name and then the place it goes.',
+      namesPlace: 'Now tap the place it goes.',
+      namesRight: 'That is it!',
+      namesWrong: 'That name goes somewhere else. Try again.',
+      namesDone: 'Well done! Every part of the power has its name.',
+      /* The practice: the two ways of practising a power. */
+      practiceTitle: 'Start practising',
+      practiceExp: 'Put a number between 2 and 5 for the exponent.',
+      practiceBase: 'Put a number in the base between 2 and 5.',
+      calc: 'Calculate',
       count: '{e} times',
       empty: 'Type a number',
-      range: 'From 1 to 9',
-      wrong: '🤔 Count again',
-      another: 'Another →'
+      range: 'Put a number between 2 and 5.',
+      again: 'Again'
     },
 
     answerName: { add: 'Add', sub: 'Subtract', mul: 'Multiply', div: 'Divide' },

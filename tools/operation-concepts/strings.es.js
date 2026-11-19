@@ -161,8 +161,10 @@
       pow: {
         name: 'Potencias', detail: 'Multiplicar muchas veces el mismo número.',
         intro: {
-          1: { title: 'Potencia es multiplicar lo mismo', text: '2 × 2 × 2 = 2³ = 8\n2³ se lee «2 elevado a 3».' },
-          2: { title: 'El número pequeño cuenta las veces', text: '3² = 3 × 3 = 9\nEl 2 pequeño dice cuántas veces se escribe el 3' }
+          1: { title: 'Potencia es multiplicar lo mismo', text: '2 × 2 × 2 = 2³ = 8.\n2³ se lee «2 elevado a 3».' },
+          2: { title: 'El número pequeño cuenta las repeticiones', text: 'Se llama exponente.\n3² = 3 × 3 = 9.' },
+          3: { title: 'Las tres partes', text: '' },
+          4: { title: 'El juego', text: 'Pon cada nombre en su sitio.' }
         }
       }
     },
@@ -292,12 +294,24 @@
 
     /* La práctica de Potencias (sin test): pocas palabras, las figuras cuentan. */
     power: {
-      label: 'Exponente',
+      /* El nombre de cada parte de la potencia. */
+      parts: { base: 'Base', exp: 'Exponente', pow: 'Potencia' },
+      /* El sitio vacío del juego: el nombre que le toca. */
+      partsAria: { base: 'Sitio de la base', exp: 'Sitio del exponente', pow: 'Sitio de la potencia' },
+      namesPick: 'Toca un nombre y luego el sitio donde va.',
+      namesPlace: 'Ahora toca el sitio donde va.',
+      namesRight: '¡Eso es!',
+      namesWrong: 'Ese nombre va en otro sitio. Prueba otra vez.',
+      namesDone: '¡Bien! Cada parte de la potencia ya tiene su nombre.',
+      /* La práctica: las dos maneras de practicar una potencia. */
+      practiceTitle: 'Empezar a practicar',
+      practiceExp: 'Pon un número entre el 2 y 5 para el exponente.',
+      practiceBase: 'Pon un número en la base entre el 2 y 5.',
+      calc: 'Calcular',
       count: '{e} veces',
       empty: 'Escribe un número',
-      range: 'Del 1 al 9',
-      wrong: '🤔 Cuenta otra vez',
-      another: 'Otra →'
+      range: 'Pon un número entre el 2 y el 5.',
+      again: 'Otra vez'
     },
 
     answerName: { add: 'Sumar', sub: 'Restar', mul: 'Multiplicar', div: 'Dividir' },

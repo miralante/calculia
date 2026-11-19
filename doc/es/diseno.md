@@ -209,7 +209,8 @@ El flujo lo marca `assets/js/activity-flow.js`: escribe `data-slide-kind`
 > la vista y la prueba ocupa toda la pantalla. El contenedor `.flow-stack` vive
 > en `components.css` y lo monta `activity-flow.js`. Tienen juego debajo de
 > su explicación, en la diapositiva, *Operaciones* (`gameHtml`: repartir
-> bolas numeradas entre amigos) y *Divisibilidad* (`gameHtml`).
+> bolas numeradas entre amigos, y poner los nombres de las partes de una
+> potencia en su sitio) y *Divisibilidad* (`gameHtml`).
 > *Divisores*, *Múltiplos* y *Primo o compuesto* tienen su práctica en una
 > pantalla propia, que sale después de la explicación. Ninguna diapositiva
 > tiene todavía `kind: 'animated'`: el mecanismo está listo.

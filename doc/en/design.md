@@ -204,7 +204,8 @@ Rules:
 > takes the whole view: when practice starts, the explanation leaves. The
 > `.flow-stack` container lives in `components.css` and `activity-flow.js`
 > mounts it. Slides with a game underneath: *Operations* (`gameHtml`:
-> sharing numbered balls among friends) and *Divisibility* (`gameHtml`).
+> sharing numbered balls among friends, and putting the names of the parts of a
+> power in their places) and *Divisibility* (`gameHtml`).
 > *Divisors*, *Multiples* and *Prime or composite* have their practice on a
 > screen of its own, shown after the explanation. No slide has `kind: 'animated'`
 > yet: the mechanism is ready.

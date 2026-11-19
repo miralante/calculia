@@ -73,10 +73,14 @@ var DATA = {
         { visual: { kind: 'divide', total: 6, size: 2, icon: '📖', caption: true, alt: true, label: 'shelf' } },
         { visual: { kind: 'divide', total: 8, size: 3, icon: '🍪', caption: true, alt: true, label: 'box' } }
       ] },
+    /* Four slides: what a power is, what the small number counts, the name of
+       each part, and the game that puts the names in their place. */
     { id: 'pow', symbol: '^', pick: false,
       intro: [
         { visual: { kind: 'power', base: 2, exp: 3 } },
-        { visual: { kind: 'power', base: 3, exp: 2 } }
+        { visual: { kind: 'power', base: 3, exp: 2 } },
+        { visual: { kind: 'anatomy', base: 4, exp: 3 } },
+        { frame: { kind: 'powerNames', base: 4, exp: 3 } }
       ],
       skipReal: true },
     { id: 'fac', symbol: '!', pick: false,
