@@ -54,12 +54,12 @@
 
     /* Pistas socráticas: enseñan el mecanismo, nunca dan la
        respuesta (ver SPEC: la anatomía socrática completa). */
-    hintWrite: 'Pulsa 🔊 y escribe con palabras lo que oigas.',
     hintPoints: 'Cuenta las cifras de tres en tres, desde la derecha. Entre un grupo y el siguiente va un punto.',
 
-    /* Leer: al fallar se enseña el número en cifras y en palabras, y la
-       persona lo escribe otra vez tras pulsar «Entendido». */
-    typedSolution: '👀 Así se escribe: {n}. Se lee: {words}. Escríbelo tú en la casilla.',
+    /* Leer y escribir: al fallar se enseña cómo se escribe, y la persona
+       lo escribe otra vez tras pulsar «Entendido». Corto a propósito:
+       se ve mientras el botón no se pulsa. */
+    typedSolution: '👀 Se escribe: {words}. Escríbelo tú.',
 
     /* Refuerzo: al terminar la ronda, los fallos se repiten en una
        mini-ronda. Las estrellas ya ganadas no se quitan. */
@@ -70,7 +70,6 @@
     roundComplete: '¡Ronda terminada!',
     roundSummary: 'Has resuelto {count} ejercicios. Ahora tienes {stars} {starsWord}.',
     progress: '{current} de {stars}',
-    correctFormat: 'Se escribe: {n}',
 
     answerInputAria: 'Escribe el número con letras',
 

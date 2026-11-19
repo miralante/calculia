@@ -51,12 +51,12 @@
 
     /* Socratic hints: they teach the mechanic, they never give the
        answer away (see SPEC: full socratic anatomy). */
-    hintWrite: 'Press 🔊 and write in words what you hear.',
     hintPoints: 'Count the digits in threes, from the right. Between one group and the next there is a comma.',
 
-    /* Reading: when wrong, the number is shown in digits and in words, and
-       the person writes it again after pressing "Entendido". */
-    typedSolution: '👀 This is how it is written: {n}. It is read: {words}. Write it yourself in the box.',
+    /* Reading and writing: when wrong, it shows how the number is written,
+       and the person writes it again after pressing "Entendido". Short on
+       purpose: it stays on screen until that button is pressed. */
+    typedSolution: '👀 It is written: {words}. Write it yourself.',
 
     /* Reinforcement: after the round, the missed exercises are
        replayed in a mini-round. Stars already earned are kept. */
@@ -67,7 +67,6 @@
     roundComplete: 'Round finished!',
     roundSummary: 'You solved {count} exercises. Now you have {stars} {starsWord}.',
     progress: '{current} of {stars}',
-    correctFormat: 'It is written: {n}',
 
     answerInputAria: 'Write the number in words',
 

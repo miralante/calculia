@@ -418,6 +418,7 @@
     $('#progressFill').style.width = ((index / round.length) * 100) + '%';
     $('#progressText').textContent = '';
     $('#feedback').textContent = '';
+    showFeedbackZone();
     show($('#checkAnswer'));
     hide($('#nextTask'));
 
@@ -446,26 +447,26 @@
          is stable because case_ is regenerated each round. */
       if (attempts === 1) App.reinforce.add(practice + ':' + case_.correct, case_);
       App.feedback.encourage($('#feedback'));
-      if (practice === 'read') {
-        showReadSolution();
-        return;
-      }
-      $('#feedback').textContent += ' ' + t('hintWrite');
-      /* In write mode we do not lock: the user can correct and
-         press "Comprobar" again. */
-      $('#answerInput').focus();
+      showSolution();
     }
   }
 
-  /* Reading: a wrong answer shows the number in digits and in words, then
-     the box and "Comprobar" lock until "Entendido" (App.feedback.lockUntilAck),
-     as in the other socratic hints. A hint cannot help with a number, so the
+  /* App.feedback.lockUntilAck hides its zone when «Entendido» is pressed, and
+     this page never unhides it. Without this, the praise and the next
+     solution were written into a hidden box, and the next «Entendido» could
+     not be seen or pressed, so the round stopped there. */
+  function showFeedbackZone() {
+    $('#feedback').classList.remove('hidden');
+  }
+
+  /* Reading and writing: a wrong answer shows how the number is written
+     in words, then the box and "Comprobar" lock until "Entendido"
+     (App.feedback.lockUntilAck). A hint cannot help with a number, so the
      solution is shown and the person writes the number again after it. */
-  function showReadSolution() {
+  function showSolution() {
     var zone = $('#feedback');
-    zone.textContent += ' ' + t('typedSolution')
-      .replace('{n}', format(case_.n))
-      .replace('{words}', case_.correct);
+    showFeedbackZone();
+    zone.textContent += ' ' + t('typedSolution').replace('{words}', case_.correct);
     App.feedback.lockUntilAck([$('#answerInput'), $('#checkAnswer')], zone, function () {
       zone.textContent = '';
       $('#answerInput').focus();
@@ -475,8 +476,10 @@
   function correct() {
     progress.stars += 1;
     save();
+    /* Only the praise: the number is already on screen (or was just typed),
+       so it is not written out again. */
+    showFeedbackZone();
     App.feedback.success($('#feedback'));
-    $('#feedback').textContent += ' ' + t('correctFormat').replace('{n}', case_.correct);
     waitingCheck = false;
     /* Challenge met: the number is shown with each group of three in its
        own colour, so it is easier to see its groups. */
@@ -512,8 +515,10 @@
      ends (in that case consume's callback already started the
      mini-round, and this runs only when the queue empties). */
   function closeRound() {
-    $('#contexto').textContent = t('contexto');
-    $('#explanation').textContent = t('explicacion');
+    /* The achievement screen is the only closing screen (see CLAUDE.md). The
+       old end-screen elements (#contexto, #explanation) are gone from the page,
+       so writing to them threw here and the round never reached the closing
+       screen: «Siguiente» on the last item did nothing. */
     App.feedback.celebrate(t('roundComplete'), null, App.feedback.starsGoal(progress.stars));
     switchTo(menuScreen);
   }

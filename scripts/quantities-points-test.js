@@ -125,7 +125,9 @@ async function testProgressionAndAudio(browser, base) {
       await placeCorrectly(page, digits);
       await page.locator('#checkAnswer').click();
       const feedback = await page.textContent('#feedback');
-      assert.match(feedback, /Se escribe:/, `item ${i + 1}: correct answer should be confirmed`);
+      assert.match(feedback, /⭐/, `item ${i + 1}: correct answer should be confirmed`);
+      assert.doesNotMatch(feedback, /Se escribe:/,
+        `item ${i + 1}: a right answer should not repeat how the number is written`);
       assert.equal(await page.locator('#hearNumber').count(), 0,
         `item ${i + 1}: there should be no second 🔊 button after a right answer`);
       assert.equal(await page.locator('#listenBtn').isVisible(), true,
