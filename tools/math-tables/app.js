@@ -160,12 +160,21 @@
     list.innerHTML = '';
     for (var n = 1; n <= DATA.factsPerTable; n += 1) {
       (function (index) {
-        var button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'btn btn-secondary fact-row';
-        button.textContent = equationText(factAt(index + 1), false) + ' = ?';
-        button.addEventListener('click', function () { showDemo(index); });
-        list.appendChild(button);
+        var item = factAt(index + 1);
+        var row = document.createElement('div');
+        row.className = 'fact-row';
+        var text = document.createElement('span');
+        text.className = 'fact-text';
+        text.textContent = equationText(item, false) + ' = ?';
+        var ask = document.createElement('button');
+        ask.type = 'button';
+        ask.className = 'btn btn-secondary fact-ask';
+        ask.textContent = '❓';
+        ask.setAttribute('aria-label', fillKey('factAsk', { eq: equationText(item, false) }));
+        ask.addEventListener('click', function () { showDemo(index); });
+        row.appendChild(text);
+        row.appendChild(ask);
+        list.appendChild(row);
       })(n - 1);
     }
     showLearnList();
@@ -365,8 +374,15 @@
     DATA.tables.forEach(function (value) {
       var button = document.createElement('button');
       button.type = 'button';
-      button.className = 'btn table-btn';
-      button.textContent = fillKey('tableButton', { n: value });
+      button.className = 'btn-actividad table-card';
+      /* A round badge with the number, then the name, as the topic cards of
+         Memofun. The badge is decorative: the name already says it. */
+      var badge = document.createElement('span');
+      badge.className = 'picto table-number';
+      badge.setAttribute('aria-hidden', 'true');
+      badge.textContent = String(value);
+      button.appendChild(badge);
+      button.appendChild(document.createTextNode(fillKey('tableButton', { n: value })));
       button.addEventListener('click', function () {
         table = value;
         showOnly('#screenLearn');
@@ -396,7 +412,6 @@
       window.location.replace('../../');
       return;
     }
-    $('#tablesBack').addEventListener('click', function () { window.location.href = '../../'; });
     $('#learnBack').addEventListener('click', function () { showOnly('#screenTables'); });
     $('#quizBack').addEventListener('click', function () { showOnly('#screenTables'); });
     App.utils.$$('#practiceModes [data-channel]').forEach(function (button) {

@@ -12,8 +12,19 @@
 
 /* Tabla grid: 10 tablas (1-10) en autofit. minmax(140px,1fr) força 2 cols
    a partir de ~300px; en móvil muy estrecho (< 320px) se reduce a 120px. */
-.table-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--espacio); }
-.table-btn { min-height: var(--boton-min); background: var(--mod-razonamiento); }
+.table-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--espacio); }
+/* Table cards: the shared activity card (.btn-actividad) with a round badge
+   holding the number, as the topic cards of Memofun. */
+.table-card { padding: 16px 8px; }
+.table-card .table-number {
+  display: flex; align-items: center; justify-content: center;
+  width: 64px; height: 64px; border-radius: 50%;
+  font-size: 28px; line-height: 1; font-variant-numeric: tabular-nums;
+  color: var(--mod-razonamiento);
+  background: var(--mod-razonamiento-suave);
+  border: 2px solid var(--mod-razonamiento);
+}
+.table-card:hover { background: var(--mod-razonamiento-suave); }
 
 /* Learn screen */
 /* One column: either the list of operations, or one demonstration. The
@@ -25,13 +36,21 @@
   align-items: start;
 }
 .fact-list { display: flex; flex-direction: column; gap: 8px; }
-.fact-row { font-variant-numeric: tabular-nums; justify-content: flex-start; }
-/* Practice modules: one row per channel (written or audio), each with its
-   two orders (in order, random). The buttons share the row and wrap. */
-.practice-modes { display: flex; flex-direction: column; gap: var(--espacio); }
-.practice-channel { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
-.practice-channel-name { width: 100%; margin: 0; text-align: center; font-weight: 700; color: var(--mod-razonamiento); }
-.practice-channel .btn { flex: 1 1 140px; }
+/* One learn row: the operation as text, and a ❓ button that opens its demo. */
+.fact-row {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--espacio);
+  padding: 8px 12px; border: 2px solid var(--color-borde); border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+.fact-text { font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+.fact-ask { min-width: var(--boton-min); min-height: var(--boton-min); padding: 0 12px; font-size: var(--texto-base); }
+/* Practice modules: two cards side by side (written, audio), each with its
+   two orders (in order, random). One column on narrow screens. */
+.practice-modes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--espacio); }
+.practice-channel { display: flex; flex-direction: column; gap: var(--espacio); align-items: stretch; min-width: 0; }
+.practice-channel-name { margin: 0; text-align: center; font-weight: 700; color: var(--mod-razonamiento); }
+.practice-channel-buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.practice-channel-buttons .btn { flex: 1 1 120px; }
 #quizReplay { align-self: center; }
 .fact-row.activa { background: var(--mod-razonamiento); color: var(--texto-sobre-acento); border-color: var(--mod-razonamiento); }
 
@@ -132,6 +151,7 @@
   }
   /* Operación y tabla: 2 columnas si hay espacio. */
   .operation-grid, .table-grid { grid-template-columns: 1fr 1fr; }
+  .practice-modes { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 400px) {
   /* Móvil muy estrecho: operación en 1 columna, tarjetas más compactas. */

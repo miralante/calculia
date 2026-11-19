@@ -3,14 +3,14 @@
 
   App.i18n.register({
     title: '🔢 Math Tables',
-    btnMenu: 'Back to the start',
     instruction: 'Choose what you want to practise',
     chooseTable: 'Choose a table.',
     tableButton: 'Table of {n}',
-    learnInstruction: 'Tap an operation to see it counted with dots.',
+    learnInstruction: 'Tap the ❓ next to an operation to see it counted with dots.',
+    factAsk: 'See how {eq} is counted',
     demoPrev: 'Previous',
     demoNext: 'Next',
-    demoBack: '← Back to the operations',
+    demoBack: '← Back to the tables',
     demoCounter: '{i} of {n}',
     channelWritten: 'Written',
     channelAudio: 'With audio',

@@ -30,13 +30,12 @@
         </div>
         <h2 id="tablesTitle" data-i18n="chooseTable">Elige una tabla.</h2>
         <div class="table-grid" id="tableGrid"></div>
-        <button type="button" class="btn btn-secondary" id="tablesBack" data-i18n="btnMenu">Volver al inicio</button>
       </section>
 
       <!-- Learn the table -->
       <section id="screenLearn" class="stack hidden" aria-labelledby="learnTitle">
         <h2 id="learnTitle"></h2>
-        <p id="learnInstruction" data-i18n="learnInstruction">Toca una operación para ver cómo se cuenta con puntos.</p>
+        <p id="learnInstruction" data-i18n="learnInstruction">Toca el ❓ de una operación para ver cómo se cuenta con puntos.</p>
         <div class="learn-layout">
           <div class="fact-list" id="factList"></div>
           <div class="stack learn-demo hidden" id="learnDemo">
@@ -47,22 +46,26 @@
               <button type="button" class="btn btn-secondary" id="demoPrev" data-i18n-aria="demoPrev" aria-label="Anterior">←</button>
               <button type="button" class="btn btn-secondary" id="demoNext" data-i18n-aria="demoNext" aria-label="Siguiente">→</button>
             </div>
-            <button type="button" class="btn btn-secondary" id="demoBack" data-i18n="demoBack">← Volver a las operaciones</button>
+            <button type="button" class="btn btn-secondary" id="demoBack" data-i18n="demoBack">← Volver a las tablas</button>
           </div>
         </div>
-        <!-- Four practice modules: written or audio, each in order or random.
-             The module is chosen by data-channel and data-order (app.js). -->
+        <!-- Two practice cards: written or audio. Each card holds its two orders
+             (in order, random). The module is chosen by data-channel and data-order (app.js). -->
         <div class="practice-modes" id="practiceModes">
-          <div class="practice-channel">
-            <p class="practice-channel-name" data-i18n="channelWritten">Escrita</p>
-            <button type="button" class="btn" data-channel="written" data-order="sequential" data-i18n="modeSequential">En orden</button>
-            <button type="button" class="btn" data-channel="written" data-order="random" data-i18n="modeRandom">Al azar</button>
-          </div>
-          <div class="practice-channel">
-            <p class="practice-channel-name" data-i18n="channelAudio">Con audio</p>
-            <button type="button" class="btn" data-channel="audio" data-order="sequential" data-i18n="modeSequential">En orden</button>
-            <button type="button" class="btn" data-channel="audio" data-order="random" data-i18n="modeRandom">Al azar</button>
-          </div>
+          <section class="card practice-channel" role="group" aria-labelledby="channelWrittenName">
+            <h3 class="practice-channel-name" id="channelWrittenName" data-i18n="channelWritten">Escrita</h3>
+            <div class="practice-channel-buttons">
+              <button type="button" class="btn" data-channel="written" data-order="sequential" data-i18n="modeSequential">En orden</button>
+              <button type="button" class="btn" data-channel="written" data-order="random" data-i18n="modeRandom">Al azar</button>
+            </div>
+          </section>
+          <section class="card practice-channel" role="group" aria-labelledby="channelAudioName">
+            <h3 class="practice-channel-name" id="channelAudioName" data-i18n="channelAudio">Con audio</h3>
+            <div class="practice-channel-buttons">
+              <button type="button" class="btn" data-channel="audio" data-order="sequential" data-i18n="modeSequential">En orden</button>
+              <button type="button" class="btn" data-channel="audio" data-order="random" data-i18n="modeRandom">Al azar</button>
+            </div>
+          </section>
         </div>
         <button type="button" class="btn btn-secondary" id="learnBack" data-i18n="backToTables">← Elegir otra tabla</button>
       </section>

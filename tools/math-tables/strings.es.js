@@ -3,14 +3,14 @@
 
   App.i18n.register({
     title: '🔢 Las Tablas',
-    btnMenu: 'Volver al inicio',
     instruction: 'Elige qué quieres practicar',
     chooseTable: 'Elige una tabla.',
     tableButton: 'Tabla del {n}',
-    learnInstruction: 'Toca una operación para ver cómo se cuenta con puntos.',
+    learnInstruction: 'Toca el ❓ de una operación para ver cómo se cuenta con puntos.',
+    factAsk: 'Ver cómo se cuenta {eq}',
     demoPrev: 'Anterior',
     demoNext: 'Siguiente',
-    demoBack: '← Volver a las operaciones',
+    demoBack: '← Volver a las tablas',
     demoCounter: '{i} de {n}',
     channelWritten: 'Escrita',
     channelAudio: 'Con audio',
