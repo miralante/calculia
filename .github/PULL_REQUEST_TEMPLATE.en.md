@@ -6,7 +6,7 @@
 
 ## Checks
 
-- [ ] `node scripts/check.js` passes locally.
+- [ ] `npm run lint` passes locally.
 - [ ] If you added or renamed an activity, its `tools/<slug>/` has
       the 6 canonical files and is registered in `index.html`,
       `settings/index.html` and `sw.js`.

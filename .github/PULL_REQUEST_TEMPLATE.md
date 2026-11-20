@@ -6,7 +6,7 @@
 
 ## Comprobaciones
 
-- [ ] `node scripts/check.js` pasa en local.
+- [ ] `npm run lint` pasa en local.
 - [ ] Si has añadido o renombrado una actividad, su `tools/<slug>/`
       tiene los 6 archivos canónicos y está registrada en
       `index.html`, `settings/index.html` y `sw.js`.
