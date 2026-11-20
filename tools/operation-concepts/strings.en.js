@@ -15,7 +15,7 @@
       hintPrefix: '',
       wrongPrefix: '❌ Look: ',
       rightPrefix: '✅ Correct! ',
-      menuTitle: 'Add, subtract, multiply and divide',
+      menuTitle: 'What do you want to practice?',
       menuText: 'Here you understand what each one means, without long sums.',
       coin: '$',
       deal: 'Share',

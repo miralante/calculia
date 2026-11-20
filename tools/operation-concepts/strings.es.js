@@ -16,7 +16,7 @@
       hintPrefix: '',
       wrongPrefix: '❌ Mira: ',
       rightPrefix: '✅ ¡Correcto! ',
-      menuTitle: 'Sumar, restar, multiplicar y dividir',
+      menuTitle: '¿Qué quieres practicar?',
       menuText: 'Aquí se entiende qué significa cada una, sin hacer cuentas largas.',
       coin: '€',
       deal: 'Repartir',

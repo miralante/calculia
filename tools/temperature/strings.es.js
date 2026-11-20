@@ -10,7 +10,7 @@
     title: '🛗 Sube y baja',
 
     menu: {
-      intro: 'Elige un juego y sube y baja hasta la flecha.'
+      intro: '¿Qué quieres practicar?'
     },
 
     /* Shared by both games. */

@@ -10,7 +10,7 @@
     title: '🛗 Up and down',
 
     menu: {
-      intro: 'Pick a game and go up and down to the arrow.'
+      intro: 'What do you want to practice?'
     },
 
     /* Shared by both games. */
