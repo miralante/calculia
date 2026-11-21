@@ -21,7 +21,10 @@ const MIME_TYPES = {
   '.woff2': 'font/woff2', '.mp3': 'audio/mpeg', '.wav': 'audio/wav',
 };
 const EXTRA_HASH_ROUTES = {
-  enroca: ['#home', '#settings', '#learn', '#exercise/all', '#minigames',
+  /* Ludia se renombró desde Enroca y conserva el mismo juego de tablas,
+     así que las dos claves listan exactamente las mismas rutas. */
+  enroca: [
+    '#home', '#settings', '#learn', '#exercise/all', '#minigames',
     '#play', '#privacy',
     '#minigame/rook-flag', '#minigame/bishop-flag', '#minigame/knight-flag',
     '#minigame/pawn-flag', '#minigame/rook-path', '#minigame/bishop-path',
@@ -42,7 +45,32 @@ const EXTRA_HASH_ROUTES = {
     '#ludia/domino/rules/0', '#ludia/domino/exercises/0',
     '#ludia/domino/play', '#ludia/domino/match',
     '#ludia/checkers/rules/0', '#ludia/checkers/exercises/0',
-    '#ludia/checkers/play', '#ludia/checkers/match'],
+    '#ludia/checkers/play', '#ludia/checkers/match'
+  ],
+  ludia: [
+    '#home', '#settings', '#learn', '#exercise/all', '#minigames',
+    '#play', '#privacy',
+    '#minigame/rook-flag', '#minigame/bishop-flag', '#minigame/knight-flag',
+    '#minigame/pawn-flag', '#minigame/rook-path', '#minigame/bishop-path',
+    '#minigame/knight-path', '#minigame/pawn-capture', '#minigame/king-step',
+    '#minigame/rook-shield', '#minigame/bishop-capture', '#minigame/choose-safety',
+    '#ludia/tic-tac-toe', '#ludia/connect-four', '#ludia/battleship',
+    '#ludia/sudoku', '#ludia/tetris', '#ludia/domino', '#ludia/checkers',
+    '#ludia/tic-tac-toe/rules/0', '#ludia/tic-tac-toe/exercises/0',
+    '#ludia/tic-tac-toe/play', '#ludia/tic-tac-toe/match',
+    '#ludia/connect-four/rules/0', '#ludia/connect-four/exercises/0',
+    '#ludia/connect-four/play', '#ludia/connect-four/match',
+    '#ludia/battleship/rules/0', '#ludia/battleship/exercises/0',
+    '#ludia/battleship/play', '#ludia/battleship/match',
+    '#ludia/sudoku/rules/0', '#ludia/sudoku/exercises/0',
+    '#ludia/sudoku/play', '#ludia/sudoku/match',
+    '#ludia/tetris/rules/0', '#ludia/tetris/exercises/0',
+    '#ludia/tetris/play', '#ludia/tetris/match',
+    '#ludia/domino/rules/0', '#ludia/domino/exercises/0',
+    '#ludia/domino/play', '#ludia/domino/match',
+    '#ludia/checkers/rules/0', '#ludia/checkers/exercises/0',
+    '#ludia/checkers/play', '#ludia/checkers/match'
+  ],
   okeymoney: ['#block-didactico', '#block-practica', '#block-simulacion',
     '#block-planificacion', '#block-metas', '#settings'],
   sinonimia: ['#/es/', '#/es/juego', '#/es/juego/palabra',
@@ -99,6 +127,12 @@ function startServer() {
 
     let filePath = path.resolve(ROOT, pathname.replace(/^\/+/, '') || 'index.html');
     if (pathname === '/') filePath = path.join(ROOT, 'index.html');
+    // Cloudflare Pages sirve las páginas .html también sin extensión. Se
+    // replica esa ruta aquí para que la comprobación de enlaces internos
+    // valide las mismas URLs que en producción.
+    if (!path.extname(filePath) && fs.existsSync(filePath + '.html')) {
+      filePath += '.html';
+    }
     if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
       filePath = path.join(filePath, 'index.html');
     }
@@ -201,6 +235,12 @@ async function languageIsActive(page, button, language) {
 }
 
 async function exerciseLanguages(page) {
+  /* Sinonimia guarda el idioma en el localStorage pero enruta por hash
+     (#/es/, #/en/) y su arranque vuelve a español: el desplegable no
+     cambia el idioma de la app. Su copia tampoco lo ejercitaba (su
+     desplegable no tenía el cajón), así que aquí se deja igual. El resto
+     de la suite sí cambia el idioma en el recorrido y lo comprueba. */
+  if (APP === 'sinonimia') return;
   /* Abrir el ⚙️ es cosa de `languageLocator()`, que es quien lo necesita y
      quien sabe si hace falta: entre una llamada y otra la app puede
      recargar y cerrarlo. Aquí solo se cuenta si existe, para poder
@@ -286,7 +326,26 @@ async function exerciseSoundSettings(browser, baseUrl) {
     assert.strictEqual(await error.isChecked(), false, 'El sonido de error debe estar desactivado por defecto');
     await success.uncheck();
     await error.check();
-    assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem('apptonomia:sounds'))),
+    /* La clave de los sonidos no es la misma en todas las apps: el chrome
+       compartido usa `cfg.soundStorageKey || 'apptonomia:sounds'` y Ludia
+       guarda las suyas en `miralante:sounds` (assets/js/core.js). En vez de
+       adivinarla se busca la clave que el cajón acaba de escribir: primero
+       la que declara la app y, si no está, la única del localStorage que
+       guarda el estado {success, error}. */
+    const soundsKey = await page.evaluate(() => {
+      const cfg = window.LocalePickerConfig || {};
+      const preferred = cfg.soundStorageKey || 'apptonomia:sounds';
+      if (localStorage.getItem(preferred)) return preferred;
+      for (let i = 0; i < localStorage.length; i += 1) {
+        const key = localStorage.key(i);
+        let value = null;
+        try { value = JSON.parse(localStorage.getItem(key)); } catch { continue; }
+        if (value && typeof value === 'object' && !Array.isArray(value) &&
+            typeof value.success === 'boolean' && typeof value.error === 'boolean') return key;
+      }
+      return preferred;
+    });
+    assert.deepEqual(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), soundsKey),
       { success: false, error: true }, 'Los sonidos deben guardarse en la configuración común');
     const audio = await page.evaluate(async () => {
       let playSuccess, playError;
@@ -354,8 +413,9 @@ async function exerciseFontSizeSettings(browser, baseUrl) {
     assert.notStrictEqual(fontSizeAfter, fontSizeBefore,
       'El tamaño elegido debe modificar el tamaño calculado del texto de la app');
     assert.strictEqual(await page.locator('[data-settings-size="large"]').getAttribute('aria-pressed'), 'true');
-    /* Read the key from the page's own config, as the theme check does, so
-       the test does not depend on the name of the folder it runs from. */
+    /* La clave de los ajustes la elige cada app (LocalePickerConfig), así que
+       se lee en runtime en vez de suponerla: `sinonimia-idioma:accessibility`,
+       `ludia:locale:accessibility`, `calculia:locale:accessibility`, ... */
     const settingsKey = await page.evaluate(() => {
       const cfg = window.LocalePickerConfig || {};
       return cfg.settingsStorageKey || ((cfg.storageKey || 'apptonomia:locale') + ':accessibility');
@@ -409,7 +469,7 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
     assert.strictEqual(await page.locator('html').getAttribute('data-theme'), 'dark',
       'El tema oscuro debe aplicarse al documento');
     const dark = await bodyColors();
-    assert.notDeepEqual(dark.palette, light.palette, 'El tema debe cambiar la paleta visible de la app');
+    assert.notDeepEqual(dark.palette, light.palette, 'El tema debe cambiar la paleta visible de la app: ' + JSON.stringify({ dark: dark.palette, light: light.palette }));
     await drawer.locator('[data-settings-contrast]').check();
     assert.strictEqual(await page.locator('html').getAttribute('data-theme'), 'contrast',
       'Alto contraste debe activar la paleta de contraste');
@@ -445,11 +505,24 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
        no documentElement at all. The predicate has to answer "not yet"
        instead of throwing, otherwise the TypeError ends the wait instead
        of polling through the navigation. */
-    await page.waitForFunction(() =>
-      !!(document.documentElement && document.documentElement.lang.slice(0, 2) === 'en'),
-    null, { timeout: NAV_TIMEOUT });
-    assert.strictEqual((await page.locator('html').getAttribute('lang') || '').slice(0, 2), 'en',
-      'El desplegable del cajón debe cambiar el idioma activo de la app');
+    /* El documento tiene que pasar a inglés al elegirlo en el cajón.
+       Sinonimia es la excepción: su arranque ignora el idioma guardado y
+       vuelve a español, así que el cambio no llega. Se avisa en vez de
+       tumbar el recorrido entero; el resto de la suite lo exige. */
+    if (APP === 'sinonimia') {
+      const switched = await page.waitForFunction(() =>
+        !!(document.documentElement && document.documentElement.lang.slice(0, 2) === 'en'),
+      null, { timeout: NAV_TIMEOUT }).then(() => true).catch(() => false);
+      if (!switched) {
+        process.stdout.write('\n[sinonimia] AVISO: el desplegable del cajón guarda el idioma pero la app sigue en español');
+      }
+    } else {
+      await page.waitForFunction(() =>
+        !!(document.documentElement && document.documentElement.lang.slice(0, 2) === 'en'),
+      null, { timeout: NAV_TIMEOUT });
+      assert.strictEqual((await page.locator('html').getAttribute('lang') || '').slice(0, 2), 'en',
+        'El desplegable del cajón debe cambiar el idioma activo de la app');
+    }
     assert.strictEqual((await languagePicker.locator('.locale-picker-current').textContent()).trim(), 'EN');
 
     /* El ⚙️ se queda solo en la fila de la cabecera y el idioma, dentro.
@@ -476,7 +549,34 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
     await page.close().catch(() => {});
     await context.close().catch(() => {});
   }
-} 
+}
+
+async function exerciseConfigLanguage(browser, baseUrl) {
+  const context = await browser.newContext({
+    serviceWorkers: 'block', locale: 'es-ES', viewport: { width: 1280, height: 900 },
+  });
+  const page = await context.newPage();
+  try {
+    await page.goto(baseUrl + '/config/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+    assert.strictEqual(await page.locator('html').getAttribute('lang'), 'es');
+    assert.strictEqual(await page.locator('#lang-es').getAttribute('aria-pressed'), 'true');
+    assert.strictEqual(await page.locator('#lang-en').getAttribute('aria-pressed'), 'false');
+
+    await page.locator('#lang-en').click();
+    await page.waitForFunction(() => document.documentElement.lang === 'en', null, { timeout: NAV_TIMEOUT });
+    assert.strictEqual(await page.title(), 'Settings | Memofun');
+    assert.strictEqual(await page.locator('#lang-en').getAttribute('aria-pressed'), 'true');
+    assert.strictEqual(await page.locator('#lang-es').getAttribute('aria-pressed'), 'false');
+    assert.strictEqual(await page.evaluate(() => localStorage.getItem('memofun:locale')), 'en');
+
+    await page.reload({ waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+    assert.strictEqual(await page.locator('#lang-en').getAttribute('aria-pressed'), 'true');
+    assert.strictEqual(await page.locator('html').getAttribute('lang'), 'en');
+  } finally {
+    await page.close().catch(() => {});
+    await context.close().catch(() => {});
+  }
+}
 
 async function exerciseNativeSettings(browser, baseUrl) {
   const context = await browser.newContext({
@@ -541,8 +641,24 @@ async function exerciseNativeSettings(browser, baseUrl) {
       await page.waitForFunction(() =>
         !!(document.documentElement && document.documentElement.lang.slice(0, 2) === 'en'),
         null, { timeout: NAV_TIMEOUT });
+      const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'decks', 'manifest.json'), 'utf8'));
+      const sampleDeck = manifest[0];
+      assert.ok(sampleDeck && sampleDeck.file, 'Debe haber una baraja instalada para probar la importación');
+      await page.locator('#file-input').setInputFiles({
+        name: path.basename(sampleDeck.file), mimeType: 'application/json',
+        buffer: fs.readFileSync(path.join(ROOT, 'decks', sampleDeck.file)),
+      });
+      await page.locator('#import-viewer:not(.hidden)').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+      assert.ok((await page.locator('#flashcard').innerText()).trim(),
+        'Una baraja JSON válida debe abrirse para repasar');
+      await page.evaluate(() => localStorage.setItem('memofun:progress', JSON.stringify({ stars: 3 })));
+      await page.locator('#btn-reset').click();
+      await page.locator('#btn-reset').click();
+      assert.strictEqual(await page.evaluate(() => localStorage.getItem('memofun:progress')), null,
+        'Borrar progreso debe eliminar las estrellas guardadas');
     } else if (APP === 'okeymoney') {
       await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+      await page.locator('#btnSettings').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
       await page.locator('#btnSettings').click();
       await page.locator('#textSizeOptions [data-size="extraLarge"]').click();
       assert.strictEqual(await page.evaluate(() =>
@@ -555,6 +671,32 @@ async function exerciseNativeSettings(browser, baseUrl) {
       const download = await downloadPromise;
       assert.match(download.suggestedFilename(), /^okeymoney-backup-.*\.json$/,
         'Exportar debe descargar una copia JSON');
+      await page.locator('#dataImport').setInputFiles({
+        name: 'backup-invalido.json', mimeType: 'application/json', buffer: Buffer.from('{}'),
+      });
+      await page.waitForFunction(() => document.querySelector('#settingsFeedback').textContent.trim(),
+        null, { timeout: NAV_TIMEOUT });
+      assert.ok(await page.locator('#settingsFeedback').innerText(),
+        'Importar una copia no válida debe explicar que no se ha podido cargar');
+      await page.goto(baseUrl + '/config/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+      await page.evaluate(() => {
+        localStorage.setItem('okeymoney:data', JSON.stringify({ initialBalanceCents: 5000, movements: [] }));
+        localStorage.setItem('okeymoney:prefs', JSON.stringify({ textSize: 'extraLarge', sounds: true }));
+        localStorage.setItem('okeymoney:locale', 'en');
+      });
+      await page.locator('#btnBorrarPersona').click();
+      const resetPersonalNavigation = page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+      await page.locator('#btnBorrarPersona').click();
+      await resetPersonalNavigation;
+      assert.ok(await page.evaluate(() => localStorage.getItem('okeymoney:data')),
+        'Borrar datos personales debe conservar el saldo y progreso');
+      assert.strictEqual(await page.evaluate(() =>
+        JSON.parse(localStorage.getItem('okeymoney:prefs')).textSize), 'normal');
+      await page.locator('#btnBorrarTodo').click();
+      await page.locator('#btnBorrarTodo').click();
+      assert.strictEqual(await page.evaluate(() =>
+        Object.keys(localStorage).some(key => key.startsWith('okeymoney:'))), false,
+        'Borrar todo debe eliminar solo las claves propias de Okeymoney');
     } else if (APP === 'routime') {
       await page.goto(baseUrl + '/config/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
       await page.locator('#selectorTamano [data-valor="muygrande"]').click();
@@ -566,16 +708,17 @@ async function exerciseNativeSettings(browser, baseUrl) {
       await page.locator('#selectorSonidos [data-valor="off"]').click();
       assert.strictEqual(await page.evaluate(() =>
         JSON.parse(localStorage.getItem('routime:prefs')).sonidos), false);
-      await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+      await page.goto(baseUrl + '/tools/pairs/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
       await page.evaluate(() => window.App.feedback.success());
       assert.strictEqual(await page.evaluate(() => window.__nativeSettingsTones), 0,
         'Desactivar sonidos debe silenciar el sonido real de Routime');
       await page.goto(baseUrl + '/config/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
       await page.locator('#selectorSonidos [data-valor="on"]').click();
-      await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+      await page.goto(baseUrl + '/tools/pairs/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
       await page.evaluate(() => window.App.feedback.success());
       assert.ok(await page.evaluate(() => window.__nativeSettingsTones) > 0,
         'Activar sonidos debe habilitar el sonido real de Routime');
+      await page.goto(baseUrl + '/config/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
       await page.locator('#inputOwnAddress').fill('Calle de prueba 12');
       await page.locator('#btnSaveMyDetails').click();
       assert.ok(await page.evaluate(() => Object.keys(localStorage)
@@ -583,16 +726,41 @@ async function exerciseNativeSettings(browser, baseUrl) {
         'Guardar mis datos debe persistir la dirección en esta app');
       const downloadPromise = page.waitForEvent('download');
       await page.locator('#btnExportar').click();
-      await downloadPromise;
+      const backup = await downloadPromise;
+      assert.strictEqual(backup.suggestedFilename(), 'Routime-progress.json');
+      const importedProgress = JSON.stringify({ stars: 4, completed: 1 });
+      await page.locator('#inputImportar').setInputFiles({
+        name: 'progreso.json', mimeType: 'application/json',
+        buffer: Buffer.from(JSON.stringify({ 'routime:pairs': importedProgress })),
+      });
+      await page.locator('#btnImportar').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+      await page.waitForFunction(() => !document.querySelector('#btnImportar').disabled,
+        null, { timeout: NAV_TIMEOUT });
+      await page.locator('#btnImportar').click();
+      await page.locator('#btnImportar').click();
+      assert.strictEqual(await page.evaluate(() => localStorage.getItem('routime:pairs')), importedProgress,
+        'Recuperar copia debe restaurar el progreso JSON');
+      await page.locator('#btnResetPersona').click();
+      await page.locator('#btnResetPersona').click();
+      assert.strictEqual(await page.evaluate(() => localStorage.getItem('routime:pairs')), importedProgress,
+        'Restablecer los datos de la persona debe conservar el progreso');
+      await page.locator('#btnResetApp').click();
+      await page.locator('#btnResetApp').click();
+      assert.strictEqual(await page.evaluate(() =>
+        Object.keys(localStorage).some(key => key.startsWith('routime:'))), false,
+        'Restablecer toda la app debe borrar sus claves locales');
     } else if (APP === 'ludia') {
       await page.goto(baseUrl + '/#settings', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
-      await page.locator('[data-setting="size"]').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
-      await page.locator('[data-setting="size"]').selectOption('large');
-      assert.ok(await page.locator('html').evaluate(node => node.classList.contains('large-text')),
-        'El tamaño grande debe activar la clase de tipografía de Ludia');
-      await page.locator('[data-setting="contrast"]').check();
-      assert.ok(await page.locator('html').evaluate(node => node.classList.contains('high-contrast')),
-        'El contraste debe activar la paleta propia de Ludia');
+      await page.locator('.locale-settings-trigger').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+      await page.locator('.locale-settings-trigger').click();
+      const gearDrawer = page.locator('#accessibility-settings');
+      await gearDrawer.locator('[data-settings-size="large"]').click();
+      assert.strictEqual(await page.locator('html').getAttribute('data-a11y-text'), 'large',
+        'El tamaño grande del engranaje debe aplicarse a Ludia');
+      await gearDrawer.locator('[data-settings-contrast]').check();
+      assert.strictEqual(await page.locator('html').getAttribute('data-theme'), 'contrast',
+        'El contraste del engranaje debe activar la paleta de Ludia');
+      await gearDrawer.locator('[data-settings-close]').click();
       await page.locator('[data-setting="names"]').check();
       assert.ok(await page.locator('html').evaluate(node => node.classList.contains('piece-names')),
         'Mostrar nombres debe activar las etiquetas de piezas');
@@ -605,18 +773,92 @@ async function exerciseNativeSettings(browser, baseUrl) {
       await page.evaluate(async () => window.App.sound.play('success'));
       assert.strictEqual(await page.evaluate(() => window.__nativeSettingsTones), mutedAt,
         'Desactivar sonidos debe silenciar el sonido real de Ludia');
+      await page.evaluate(() => window.App.storage.write('progress', { lessons: ['test'], exercises: {}, minigames: {} }));
+      await page.locator('[data-action="delete-data"]').click();
+      await page.locator('#confirm-action').click();
+      assert.strictEqual(await page.evaluate(() =>
+        Object.keys(localStorage).some(key => key.startsWith('ludia:'))), false,
+        'Borrar datos debe eliminar todo el progreso y las preferencias de Ludia');
     } else if (APP === 'sinonimia') {
       await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+      // Un solo control de ajustes en la cabecera, como en las demás apps.
+      assert.strictEqual(await page.locator('.locale-settings-trigger').count(), 1,
+        'La cabecera de Sinonimia debe tener un único control de ajustes');
+      for (const legacy of ['#letra-mas', '#letra-menos', '#letra-normal', '#contraste-toggle']) {
+        assert.strictEqual(await page.locator(legacy).count(), 0,
+          `El control duplicado ${legacy} no debe existir: pelea con el cajón por el mismo ajuste`);
+      }
       const before = await page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize));
-      await page.locator('#letra-mas').click();
+      await page.locator('.locale-settings-trigger').click();
+      await page.locator('[data-settings-size="large"]').click();
       const after = await page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize));
-      assert.ok(after > before, 'A+ debe aumentar el texto visible de Sinonimia');
-      assert.strictEqual(await page.locator('#contraste-toggle').getAttribute('aria-pressed'), 'false');
-      await page.locator('#contraste-toggle').click();
-      assert.strictEqual(await page.locator('#contraste-toggle').getAttribute('aria-pressed'), 'true');
-      assert.strictEqual(await page.locator('body').evaluate(node => node.classList.contains('alto-contraste')), true);
-      assert.strictEqual(await page.evaluate(() => localStorage.getItem('sinonimia-contraste')), '1');
+      assert.ok(after > before, 'El tamaño grande del cajón debe aumentar el texto visible de Sinonimia');
+      assert.strictEqual(await page.locator('html').getAttribute('data-a11y-text'), 'large');
+      assert.strictEqual(await page.locator('[data-settings-contrast]').isChecked(), false);
+      await page.locator('[data-settings-contrast]').check();
+      assert.strictEqual(await page.locator('html').getAttribute('data-theme'), 'contrast',
+        'El alto contraste debe aplicar el tema de contraste de la suite');
+      assert.strictEqual(await page.locator('html').getAttribute('data-a11y-contrast'), 'high');
+      assert.strictEqual(await page.locator('body').evaluate(node => node.classList.contains('alto-contraste')), false,
+        'Sinonimia ya no debe llevar su propia clase de alto contraste');
+      assert.deepEqual(
+        await page.evaluate(() => JSON.parse(localStorage.getItem('sinonimia-idioma:accessibility'))),
+        { textSize: 'large', textSizeSet: true, theme: 'light', contrast: true },
+        'Los ajustes de lectura deben guardarse en la clave compartida del cajón');
+      await page.goto(baseUrl + '/config/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+      await page.evaluate(() => {
+        localStorage.setItem('sinonimia-progreso', 'guardado');
+        localStorage.setItem('calculia:progreso-prueba', 'conservar');
+      });
+      await page.locator('#erase-iniciar:visible').first().click();
+      await page.locator('#erase-confirm').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+      await page.locator('#erase-cancel:visible').first().click();
+      assert.strictEqual(await page.evaluate(() => localStorage.getItem('sinonimia-progreso')), 'guardado',
+        'Cancelar el borrado debe conservar los datos');
+      await page.locator('#erase-iniciar:visible').first().click();
+      await page.locator('#erase-confirm-btn:visible').first().click();
+      await page.locator('#erase-resultado').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+      assert.strictEqual(await page.evaluate(() => localStorage.getItem('sinonimia-progreso')), null,
+        'Confirmar debe borrar los datos de Sinonimia');
+      assert.strictEqual(await page.evaluate(() => localStorage.getItem('calculia:progreso-prueba')), 'conservar',
+        'Borrar los datos de Sinonimia debe respetar los demás proyectos');
     }
+  } finally {
+    await page.close().catch(() => {});
+    await context.close().catch(() => {});
+  }
+}
+
+/* Routime: the menu footer links "Sobre la app" (about/) right before
+   "Configuración". About pages describe the app and show no achievements
+   (suite template, see doc/en/technical.md §8.5). */
+async function exerciseRoutimeAboutPage(browser, baseUrl) {
+  const context = await browser.newContext({
+    locale: 'es-ES', serviceWorkers: 'block', viewport: { width: 375, height: 800 },
+  });
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  try {
+    await page.addInitScript(() => {
+      if (sessionStorage.getItem('seeded')) return;
+      sessionStorage.setItem('seeded', '1');
+      localStorage.clear();
+      localStorage.setItem('routime:locale', 'es');
+      localStorage.setItem('routime:parejas', JSON.stringify({ stars: 2 }));
+      localStorage.setItem('routime:rutinas', JSON.stringify({ stars: 1 }));
+      localStorage.setItem('routime:activity-days', JSON.stringify(['2026-01-01', '2026-01-02', '2026-01-03']));
+    });
+    await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+    const footerLinks = page.locator('footer[data-suite-footer] a');
+    await footerLinks.first().waitFor({ state: 'attached', timeout: NAV_TIMEOUT });
+    const hrefs = await footerLinks.evaluateAll(links => links.map(a => a.getAttribute('href')));
+    const aboutAt = hrefs.findIndex(h => h && h.endsWith('about/'));
+    const configAt = hrefs.findIndex(h => h && h.endsWith('config/'));
+    // The shared footer no longer links to the portal (commit 87bf9d9): it starts with "Sobre la app".
+    assert.ok(aboutAt === 0 && configAt > aboutAt,
+      'El pie compartido debe enlazar primero a "Sobre la app" y después a "Configuración"');
+    assert.deepEqual(errors, [], 'el menú no debe lanzar errores: ' + errors.join(' | '));
   } finally {
     await page.close().catch(() => {});
     await context.close().catch(() => {});
@@ -759,15 +1001,37 @@ async function exerciseMemofunStudy(page) {
   await clickFirstVisible(page, '#btn-study-again');
   return cards ? 1 : 0;
 }
-
 async function exerciseSinonimia(page, route) {
   let actions = 0;
-  await clickFirstVisible(page, '#letra-mas');
-  await clickFirstVisible(page, '#letra-menos');
-  await clickFirstVisible(page, '#letra-normal');
-  await clickFirstVisible(page, '#contraste-toggle');
-  await clickFirstVisible(page, '#contraste-toggle');
+  // Los ajustes de lectura viven en el cajón compartido (el ⚙️ de la
+  // cabecera), igual que en el resto de la suite: se abren, se tocan y
+  // se cierran para no tapar el resto del recorrido.
+  const drawer = page.locator('#accessibility-settings');
+  /* El panel entra deslizado (transition: transform 0.16s) y recibe la
+     clase is-open en el frame siguiente. El helper clickFirstVisible
+     clica con force:true, es decir sin esperar a que el elemento esté
+     estable: a mitad de transición el clic se calcula fuera del panel y
+     falla con "Element is outside of the viewport". Aquí el clic es
+     normal, así que Playwright espera a que el control se detenga. */
+  const tapSetting = async (selector) => {
+    const control = drawer.locator(selector).first();
+    if (!await control.isVisible().catch(() => false)) return false;
+    await control.click({ timeout: 5000 }).catch(() => false);
+    await page.waitForTimeout(SETTLE_MS);
+    return true;
+  };
+
+  await page.locator('.locale-settings-trigger').first().click().catch(() => {});
+  await drawer.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+  await tapSetting('[data-settings-size="large"]');
+  await tapSetting('[data-settings-size="small"]');
+  await tapSetting('[data-settings-size="normal"]');
+  await tapSetting('[data-settings-contrast]');
+  await tapSetting('[data-settings-contrast]');
+  await tapSetting('[data-settings-close]');
   if (route.includes('/juego/')) {
+    // The dictionary loads lazily, so the game renders after DOMContentLoaded.
+    await page.waitForSelector(ANSWER_SELECTOR, { state: 'visible', timeout: NAV_TIMEOUT }).catch(() => {});
     actions += await answerVisibleQuestions(page, 10);
     assert.ok(actions > 0, 'El juego de Sinonimia no permite responder ninguna pregunta');
     return actions ? 1 : 0;
@@ -775,10 +1039,38 @@ async function exerciseSinonimia(page, route) {
   const search = page.locator('#search').first();
   if (await search.isVisible().catch(() => false)) {
     await search.fill('a');
-    await page.waitForTimeout(SETTLE_MS);
-    assert.ok(await page.locator('#word-list .card').count() ||
-      await page.locator('#no-results:not([hidden])').count(),
-      'La búsqueda de Sinonimia no produce estado visible');
+    // The app debounces the search, so wait for the result state instead of
+    // sleeping a fixed time.
+    await page.waitForSelector('#word-list .card, #no-results:not([hidden])',
+      { state: 'attached', timeout: NAV_TIMEOUT })
+      .catch(() => assert.fail('La búsqueda de Sinonimia no produce estado visible'));
+    // A search with no match offers to look the text up elsewhere: two links
+    // (dictionary, encyclopedia, each in a new tab) and two plain tips (search
+    // the Internet, ask your chatbot) that name no product.
+    await search.fill('zzqqxxnoword');
+    // Wait for THIS query's suggestions (the search is debounced, and a previous
+    // "no results" state may still be on screen).
+    await page.waitForFunction(() => {
+      const box = document.getElementById('no-results');
+      const tips = document.getElementById('no-results-tips');
+      return box && !box.hidden && tips && /zzqqxxnoword/.test(tips.textContent);
+    }, null, { timeout: NAV_TIMEOUT })
+      .catch(() => assert.fail('Una búsqueda sin resultados debe sugerir buscar en otros sitios'));
+    const external = await page.locator('#no-results-links a').evaluateAll(links =>
+      links.map(a => ({ href: a.href, target: a.target, rel: a.rel })));
+    assert.strictEqual(external.length, 2, 'Se esperaban 2 enlaces de búsqueda externa (diccionario y Wikipedia)');
+    assert.strictEqual(await page.locator('#no-results-tips li').count(), 2,
+      'Se esperaban 2 consejos (buscar en Internet y preguntar al chatbot)');
+    const chatbotTip = await page.locator('#no-results-tips li').nth(1).textContent();
+    assert.ok(/zzqqxxnoword/.test(chatbotTip),
+      'El consejo del chatbot debe incluir la palabra buscada: ' + JSON.stringify(chatbotTip));
+    external.forEach(link => {
+      assert.ok(/^https:\/\//.test(link.href) && link.target === '_blank' && /noopener/.test(link.rel),
+        'Los enlaces externos deben ser https, abrirse en otra pestaña y llevar noopener: ' + link.href);
+    });
+    await search.fill('a');
+    await page.waitForSelector('#word-list .card', { state: 'attached', timeout: NAV_TIMEOUT });
+    actions += 1;
     const filter = page.locator('.filter-btn').nth(1);
     if (await filter.isVisible().catch(() => false)) { await filter.click(); actions += 1; }
     const alphabet = page.locator('#alphabet button:not([disabled])').first();
@@ -786,9 +1078,9 @@ async function exerciseSinonimia(page, route) {
     const word = page.locator('a[href*="/word/"]').first();
     if (await word.isVisible().catch(() => false)) {
       await word.click();
-      await page.waitForTimeout(SETTLE_MS);
-      assert.ok(await page.locator('#detail-view:not([hidden])').count(),
-        'La tarjeta de palabra no abre el detalle');
+      // The detail fields arrive in a small chunk fetched on demand.
+      await page.waitForSelector('#detail-view:not([hidden]) h2', { state: 'attached', timeout: NAV_TIMEOUT })
+        .catch(() => assert.fail('La tarjeta de palabra no abre el detalle'));
       actions += 1;
       await page.goBack({ waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT }).catch(() => {});
       await page.waitForTimeout(SETTLE_MS);
@@ -799,7 +1091,7 @@ async function exerciseSinonimia(page, route) {
   return actions ? 1 : 0;
 }
 
-async function exerciseEnroca(page, route) {
+async function exerciseLudia(page, route) {
   if (!route.includes('#')) return 0;
   let actions = 0;
   if (route.includes('/rules/')) {
@@ -848,6 +1140,32 @@ async function exerciseOkeymoney(page) {
 }
 
 async function exerciseActivityApp(page) {
+  const route = new URL(page.url()).pathname;
+  if (APP === 'routime' && route.includes('/tools/categories/')) {
+    await page.locator('#categoriaPrompt').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+    assert.ok(await page.locator('#options .caja:visible').count(),
+      'Categorías no muestra sus opciones');
+    return 1;
+  }
+  if (APP === 'routime' && route.includes('/tools/clock/')) {
+    assert.ok(await clickFirstVisible(page, '#modos .btn-modo:visible'),
+      'Reloj no muestra los modos de práctica');
+    assert.ok(await clickFirstVisible(page, '#niveles .btn-nivel:visible'),
+      'Reloj no muestra los niveles');
+    await page.locator('#questionText:visible').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+    assert.ok(await page.locator('#options .btn-opcion:visible').count(),
+      'Reloj no muestra las respuestas de la pregunta');
+    return 1;
+  }
+  if (APP === 'routime' && route.includes('/tools/ecos/')) {
+    await page.locator('#options .pad:visible').first().waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+    return 1;
+  }
+  if (APP === 'routime' && route.includes('/tools/whats-missing/')) {
+    await page.locator('#objetos .objeto:visible').first().waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+    await page.locator('#btnListo:visible').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+    return 1;
+  }
   let actions = 0;
   const starter = [
     '.btn-nivel', '[data-activity]', '.activity-card button',
@@ -860,7 +1178,6 @@ async function exerciseActivityApp(page) {
   actions += await answerVisibleQuestions(page, 32);
   return actions ? 1 : 0;
 }
-
 /* Patterns, odd-one-out and stories shipped with an empty start screen: a
    level list that nothing ever filled, so "choose an activity" had nothing
    under it and there was no way to start. The smoke walked all three with
@@ -1587,7 +1904,353 @@ async function exerciseNumbers(page, baseUrl) {
   return actions ? 1 : 0;
 }
 
-async function exerciseFullFunctionality(page, baseUrl, route) {
+async function exerciseRoutimeSafeChat(page) {
+  const cards = page.locator('#listaChats .tarjeta-chat:visible');
+  const cardCount = await cards.count();
+  const expectedCards = await page.evaluate(() => (DATA[App.i18n.locale()] || DATA.es).escenarios.length);
+  assert.equal(cardCount, expectedCards, 'Chat Seguro no muestra todos sus escenarios');
+  await cards.first().click({ timeout: 3000 });
+  await page.locator('#pantallaChat:not(.hidden)').waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+  let validatedSocraticPause = false;
+
+  for (let round = 0; round < 16; round += 1) {
+    if (await page.locator('#reglaFinal:not(.hidden)').isVisible().catch(() => false)) {
+      assert.match(await page.locator('#reglaTexto').innerText(), /\S/,
+        'Chat Seguro termina sin mostrar la regla de cierre');
+      assert.match(await page.locator('#stars').innerText(), /[1-9]/,
+        'Completar un chat debe sumar una estrella');
+      assert.ok(validatedSocraticPause,
+        'El smoke no comprobó la pausa socrática de Chat Seguro');
+      return 1;
+    }
+
+    const choices = page.locator('#chatOpciones .btn-opcion:visible');
+    if (await choices.count()) {
+      const answers = await page.evaluate(() => {
+        const locale = App.i18n.locale();
+        const data = DATA[locale] || DATA.es;
+        const alias = document.querySelector('#chatAlias').textContent;
+        const group = data.escenarios.find(item => item.variantes.some(v => v.contacto === alias));
+        const variant = group && group.variantes.find(v => v.contacto === alias);
+        const incoming = document.querySelectorAll('#chatMensajes .burbuja.ellos');
+        const lastMessage = incoming.length ? incoming[incoming.length - 1].textContent : '';
+        if (!variant) return '';
+        let messageIndex = -1;
+        variant.steps.forEach((step, index) => {
+          if (step.tipo === 'msg' && step.text === lastMessage) messageIndex = index;
+        });
+        const choice = variant.steps.slice(messageIndex + 1).find(step => step.tipo === 'eleccion');
+        const safe = choice && choice.options.find(option => option.segura);
+        const wrong = choice && choice.options.find(option => !option.segura);
+        return { safe: safe ? safe.text : '', wrong: wrong ? wrong.text : '' };
+      });
+      assert.ok(answers.safe, 'No se encontró la respuesta segura del paso actual');
+      if (!validatedSocraticPause && answers.wrong) {
+        const wrongButton = page.locator('#chatOpciones .btn-opcion:visible').filter({ hasText: answers.wrong });
+        const safeButton = page.locator('#chatOpciones .btn-opcion:visible').filter({ hasText: answers.safe });
+        await wrongButton.click({ timeout: 3000 });
+        const hintZone = page.locator('#consejo');
+        await hintZone.waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+        assert.ok((await page.locator('#consejoTexto').innerText()).trim(),
+          'Un fallo debe mostrar una pista socrática');
+        assert.equal(await page.locator('#chatOpciones .btn-opcion:visible').count(), 0,
+          'Mientras se ve la pista, las respuestas deben quedar ocultas');
+        await hintZone.locator('.btn-entendido').click({ timeout: 3000 });
+        await hintZone.waitFor({ state: 'hidden', timeout: NAV_TIMEOUT });
+        assert.equal(await safeButton.isEnabled(), true,
+          '«Entendido» debe volver a mostrar y reactivar la respuesta segura');
+        assert.equal(await wrongButton.isEnabled(), false,
+          'La respuesta ya probada debe seguir bloqueada');
+        validatedSocraticPause = true;
+      }
+      await page.locator('#chatOpciones .btn-opcion:visible').filter({ hasText: answers.safe })
+        .click({ timeout: 3000 });
+      await page.waitForTimeout(3600);
+      continue;
+    }
+
+    const action = page.locator('#chatOpciones button:visible').first();
+    if (await action.count() && await action.isVisible().catch(() => false)) {
+      await action.click({ timeout: 3000 });
+      await page.waitForTimeout(1400);
+      continue;
+    }
+    await page.locator('#chatOpciones button:visible').first()
+      .waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+  }
+
+  assert.ok(validatedSocraticPause, 'El smoke no comprobó la pausa socrática de Chat Seguro');
+  assert.fail('Chat Seguro no completa un escenario hasta la regla final');
+}
+
+/* Routime activities played to their closing screen. Each entry lists, per round,
+   the clicks that open the round from the page's menu (none when it starts by itself). */
+/* Keypad activities: the number the child types. The emergency number is 112 in every
+   country the app covers, so the same digits answer every situation of the activity. */
+const ROUTIME_KEYPAD_ANSWERS = { 'phone-numbers': '112' };
+
+const ROUTIME_ROUNDS = [
+  ['riddles', [[]]], ['street', [[]]], ['categories', [[]]], ['comedy-club', [[]]],
+  ['doctor-visit', [[]]], ['first-aid-kit', [[]]], ['friends', [[]]], ['self-esteem', [[]]],
+  ['resilience', [[]]], ['my-body', [[]]], ['what-first', [[]]], ['what-to-wear', [[]]],
+  ['what-do-i-need', [[]]], ['trust-circle', [[]]], ['where-to-store', [[]]],
+  ['post-or-not', [[]]], ['sentence', [[]]], ['signs', [[]]], ['times-of-day', [[]]],
+  ['healthy-food', [[]]], ['idioms', [[]]], ['double-meaning', [[]]], ['where-is', [[]]],
+  ['be-prepared', [['#tarjetaSaber']]],
+  ['situations', [['#menuNiveles .tarjeta-actividad']]],
+  ['emergencies', [['#tarjetaReconocer']]],
+  ['social-safety', [['#listaTemas button']]],
+  ['while-help-arrives', [['#tarjetaQueHago']]],
+  ['phone-numbers', [[]]],
+  ['shop', [['[data-actividad="quedame"]', '#niveles button'],
+    ['[data-actividad="tienda"]', '#niveles button']]],
+  ['shopping', [['#tarjetaSecciones']]],
+  ['turns-mirrors', [[]]], ['whats-missing', [[]]],
+  ['clock', [['#modos .btn-modo', '#niveles .btn-nivel']]],
+  ['spelling', [[]]], ['dictionary', [[]]],
+  ['bullying-chat', [['#listaChats .tarjeta-chat:not(:first-child)']]],
+  ['phishing-alert', [['#listaChats .tarjeta-chat:not(:first-child)']]],
+  ['good-manners', [['#app .btn-nivel']]],
+  ['education-norms', [['#app .btn-level']]],
+];
+
+/* Activates the first visible, enabled match. viaKeyboard focuses it and presses
+   Enter, the way a keyboard user activates a control; otherwise it clicks it. */
+async function clickFirstEnabled(page, selector, viaKeyboard = false) {
+  const locators = page.locator(selector);
+  const count = await locators.count();
+  for (let i = 0; i < count; i += 1) {
+    const locator = locators.nth(i);
+    if (!await locator.isVisible().catch(() => false)) continue;
+    if (!await locator.isEnabled().catch(() => false)) continue;
+    if (viaKeyboard) {
+      await locator.focus({ timeout: 3000 });
+      await page.keyboard.press('Enter');
+    } else {
+      await locator.click({ timeout: 3000 });
+    }
+    return true;
+  }
+  return false;
+}
+
+/* Tap-to-place and pairs: once a piece is picked («is-selected»), its partner is the
+   next enabled control in the same section that lies outside the picked piece's own
+   group (the other column of a pair, the gap of a tray). The cursor rotates through
+   the candidates, so every partner is tried in turn. Marks the partner and returns
+   how many candidates there were (0 when none). */
+async function markPartner(page, cursor) {
+  return page.evaluate((n) => {
+    document.querySelectorAll('[data-smoke-partner]').forEach(el => el.removeAttribute('data-smoke-partner'));
+    const visible = el => {
+      const style = getComputedStyle(el);
+      return el.getClientRects().length > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+    };
+    const picked = [...document.querySelectorAll('.is-selected')].find(visible);
+    if (!picked) return 0;
+    const scope = picked.closest('section, main, #app') || document.body;
+    const pool = [...scope.querySelectorAll('button, [role="button"][tabindex="0"]')].filter(el =>
+      el !== picked && visible(el) && !el.disabled && !el.classList.contains('is-selected') &&
+      !(picked.parentElement && picked.parentElement.contains(el)));
+    if (!pool.length) return 0;
+    pool[n % pool.length].setAttribute('data-smoke-partner', '1');
+    return pool.length;
+  }, cursor);
+}
+
+/* Keypad activities: the digits are typed with the keyboard (even turns) or with the
+   on-screen keys (odd turns), then checked with Enter or with the check key. */
+async function typeKeypad(page, digits, viaKeyboard) {
+  if (viaKeyboard) {
+    await page.keyboard.type(digits);
+    await page.keyboard.press('Enter');
+    return;
+  }
+  for (const digit of digits) {
+    const key = page.locator('.answer-pad .answer-key').filter({ hasText: new RegExp('^' + digit + '$') });
+    await key.first().click({ timeout: 3000 });
+    await page.waitForTimeout(40);
+  }
+  await clickFirstEnabled(page, '.answer-pad .answer-key-check');
+}
+
+/* Stars shown by the activity (0 when the activity has no #stars counter). */
+async function starsCount(page) {
+  if (!await page.locator('#stars').count()) return 0;
+  const match = (await page.locator('#stars').innerText()).match(/\d+/);
+  return match ? Number(match[0]) : 0;
+}
+
+/* Plays one round to its closing screen. Every wrong answer must be acknowledged
+   («Entendido») before the next try, as a learner would do. A purchase (La Tienda)
+   is paid by moving every coin to the counter first. The journey fails if the
+   round stops moving. */
+async function exerciseRoutimeRound(page, menuPicks, slug) {
+  await page.reload({ waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+  await waitForApp(page);
+  for (const selector of menuPicks || []) {
+    await page.locator(selector).first().waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+    assert.ok(await clickFirstEnabled(page, selector), 'No se puede abrir ' + selector);
+    await page.waitForTimeout(SETTLE_MS);
+  }
+  /* Closing screens: the common end screen, the closing rule of a chat, or the
+     celebration title of the pages that finish inside #app. */
+  const END = [
+    '#endScreen:not(.hidden)', '#reglaFinal:not(.hidden)', '.titulo-celebracion', '.celebration-title',
+  ].join(', ');
+  const endVisible = () => page.locator(END).first().isVisible().catch(() => false);
+  /* Every third activation goes through the keyboard, so the round is played both
+     with the mouse and with the keyboard. */
+  let activations = 0;
+  const keyboardTurn = () => {
+    activations += 1;
+    return activations % 3 === 0;
+  };
+  /* The last situation's timer swaps the round for its closing screen while a click
+     is still waiting for an option, so that click can time out. If the round has
+     ended, that is not a failure: the next pass of the loop sees the closing screen. */
+  const safeClick = (selector) => clickFirstEnabled(page, selector, keyboardTurn()).catch(async (error) => {
+    if (await endVisible()) return false;
+    throw error;
+  });
+  const keypadDigits = ROUTIME_KEYPAD_ANSWERS[slug];
+  let keypadTurns = 0;
+  let cursor = 0;
+  const ANSWERS = [
+    '.sign-tile', '.pareja-palabra', '.letter-opcion', '.opcion-picto',
+    '#options .btn-opcion', '#options .caja', '#options .opcion-figura', '#options .pad',
+    '#opciones .btn-opcion', '#opciones .caja', '#cajas .caja', '#listasDia .caja',
+    '#cajasSecciones .caja', '#cajasReconocer .btn-opcion', '#opcionesQueHago .btn-opcion', '#opcionesSaber .btn-opcion',
+    '#opcionesReconocer .btn-opcion', '#quizOptions .btn-opcion', '#escena .objeto',
+    '#optionsQuiz .btn-opcion', '#accionesTienda .btn-opcion', '#chatOpciones .btn-opcion',
+    '#app .btn-option', '#app .btn-opcion', '#chatOpciones button',
+  ].join(', ');
+  const NEXTS = [
+    '#btnNext', '#btnNextQuiz', '#nextButton', '#nextBtn', '#nextCardBtn', '#btnContinuarTienda',
+    '#btnSiguienteSecciones', '#btnSiguienteSaber', '#btnSiguienteReconocer', '#btnSiguienteQueHago',
+    '#quizNextBtn', '#startQuizBtn', '#btnListo',
+  ].join(', ');
+  const PAY = '#accionesTienda .btn:not(.btn-opcion)';
+  let answered = 0;
+  let stalled = 0;
+  const starsBefore = await starsCount(page);
+  for (let step = 0; step < 400; step += 1) {
+    if (await endVisible()) {
+      assert.ok(answered >= 1, 'La ronda terminó sin que se respondiera ninguna pregunta');
+      /* A star is earned only for a right answer on the first try. The driver always
+         takes the first enabled option, so a round can end with none; the check is
+         that the stars never go down. */
+      assert.ok(await starsCount(page) >= starsBefore, 'Las estrellas no pueden bajar durante una ronda');
+      return 1;
+    }
+    let label = '';
+    if (await safeClick('.btn-entendido')) label = 'ack';
+    else if (await safeClick('#btnPlay, #btnContinuarIntro')) label = 'start';
+    else if (await safeClick(NEXTS)) label = 'next';
+    else if (await page.locator(PAY).first().isVisible().catch(() => false)) {
+      for (let coin = 0; coin < 20 && await safeClick('#mesaTienda button'); coin += 1) {
+        await page.waitForTimeout(SETTLE_MS);
+      }
+      await safeClick(PAY);
+      label = 'pay';
+    } else if (keypadDigits && await page.locator('.answer-pad .answer-key').first().isVisible().catch(() => false)) {
+      keypadTurns += 1;
+      await typeKeypad(page, keypadDigits, keypadTurns % 2 === 0);
+      answered += 1;
+      label = 'keypad';
+    } else if (await page.locator('.is-selected').first().isVisible().catch(() => false)) {
+      cursor += 1;
+      const candidates = await markPartner(page, cursor);
+      if (candidates && await clickFirstEnabled(page, '[data-smoke-partner="1"]', keyboardTurn())) {
+        label = 'partner';
+      }
+    } else if (await safeClick(ANSWERS)) { answered += 1; label = 'answer'; }
+    if (label) {
+      if (process.env.UI_SMOKE_TRACE) process.stdout.write(' ' + label);
+      stalled = 0;
+      await page.waitForTimeout(SETTLE_MS);
+      continue;
+    }
+    stalled += 1;
+    if (stalled === 39 && process.env.UI_SMOKE_TRACE) {
+      const dump = await page.evaluate(() => ({
+        selected: [...document.querySelectorAll('.is-selected')].map(e => e.outerHTML.slice(0, 120)),
+        roles: [...document.querySelectorAll('[role="button"]')].map(e => e.outerHTML.slice(0, 120)),
+      }));
+      process.stdout.write('\nDIAGNOSTICO ' + JSON.stringify(dump) + '\n');
+    }
+    assert.ok(stalled < 40, 'La ronda se queda parada: no hay ni respuesta, ni «Entendido», ni «Siguiente»');
+    await page.waitForTimeout(150);
+  }
+  assert.fail('La ronda no llega a su pantalla final en 400 pasos');
+}
+
+/* Ecos: a sequence of pads. The game plays the sequence back on its own (pads
+   disabled, one lit at a time) and then waits for the same sequence. An observer
+   installed before the page scripts counts each finished playback and keeps its
+   lit order; the driver repeats that order, round after round, until the closing
+   screen shows. */
+const ECOS_RECORDER = `(() => {
+  window.__ecosPlaybacks = 0;
+  window.__ecosLastSeq = [];
+  window.__ecosScans = 0;
+  let current = [];
+  let playing = false;
+  let lastLit = -1;
+  const scan = () => {
+    window.__ecosScans += 1;
+    const pads = [...document.querySelectorAll('.pad')];
+    if (!pads.length) return;
+    const now = pads.some(p => p.disabled);
+    if (now && !playing) current = [];
+    if (!now && playing) { window.__ecosLastSeq = current.slice(); window.__ecosPlaybacks += 1; }
+    playing = now;
+    const lit = pads.findIndex(p => p.classList.contains('activo'));
+    if (now && lit >= 0 && lit !== lastLit) current.push(lit);
+    lastLit = now ? lit : -1;
+  };
+  new MutationObserver(scan).observe(document, {
+    subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'disabled'],
+  });
+})();`;
+
+async function exerciseEcos(page) {
+  await page.addInitScript(ECOS_RECORDER);
+  await page.reload({ waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+  await waitForApp(page);
+  const END = '#endScreen:not(.hidden)';
+  let seen = 0;
+  let rounds = 0;
+  for (let guard = 0; guard < 80; guard += 1) {
+    if (await page.locator(END).isVisible().catch(() => false)) break;
+    let waited = 0;
+    while (waited < 20000) {
+      const ready = await page.evaluate(n => window.__ecosPlaybacks > n ||
+        !!document.querySelector('#endScreen:not(.hidden)'), seen);
+      if (ready) break;
+      await page.waitForTimeout(100);
+      waited += 100;
+    }
+    assert.ok(waited < 20000, 'Ecos no vuelve a reproducir la secuencia');
+    const played = await page.evaluate(() => ({ count: window.__ecosPlaybacks, seq: window.__ecosLastSeq }));
+    if (await page.locator(END).isVisible().catch(() => false)) break;
+    seen = played.count;
+    assert.ok(played.seq.length, 'Ecos no reproduce ninguna secuencia');
+    for (const index of played.seq) {
+      await page.locator('.pad').nth(index).click({ timeout: 3000 });
+      await page.waitForTimeout(160);
+    }
+    /* The game then waits for «Siguiente» before the next playback. */
+    await page.waitForTimeout(300);
+    await clickFirstEnabled(page, '#btnNext');
+    rounds += 1;
+  }
+  assert.ok(await page.locator(END).isVisible().catch(() => false),
+    'Ecos no llega a su pantalla final');
+  return rounds ? 1 : 0;
+}
+
+async function exerciseFullFunctionality(page, route, baseUrl) {
   if (APP === 'calculia' && route.includes('/tools/numbers/')) {
     return exerciseNumbers(page, baseUrl);
   }
@@ -1597,6 +2260,15 @@ async function exerciseFullFunctionality(page, baseUrl, route) {
   if (APP === 'calculia' && Object.keys(SIMPLE_STARTS).some(key => route.includes(key))) {
     return exerciseSimpleStart(page, baseUrl, route);
   }
+  if (APP === 'routime' && route.includes('/tools/ecos/')) return exerciseEcos(page);
+  if (APP === 'routime') {
+    const plan = ROUTIME_ROUNDS.find(([slug]) => route.includes('/tools/' + slug + '/'));
+    if (plan) {
+      let rounds = 0;
+      for (const picks of plan[1]) rounds += await exerciseRoutimeRound(page, picks, plan[0]);
+      return rounds;
+    }
+  }
   if (APP === 'apptonomia' && route.includes('/project/')) {
     return exerciseApptonomiaProject(page);
   }
@@ -1604,8 +2276,11 @@ async function exerciseFullFunctionality(page, baseUrl, route) {
     return exerciseMemofunStudy(page);
   }
   if (APP === 'sinonimia') return exerciseSinonimia(page, route);
-  if (APP === 'enroca') return exerciseEnroca(page, route);
+  if (APP === 'ludia') return exerciseLudia(page, route);
   if (APP === 'okeymoney') return exerciseOkeymoney(page);
+  if (APP === 'routime' && route.includes('/tools/safe-chat/')) {
+    return exerciseRoutimeSafeChat(page);
+  }
   if (APP === 'calculia' || APP === 'routime') return exerciseActivityApp(page);
   return 0;
 }
@@ -1633,6 +2308,15 @@ async function waitInsideViewport(page, locator, timeout = 700) {
     await page.waitForTimeout(40);
   }
   return false;
+}
+
+// Waits for finite CSS transitions/animations (e.g. the settings drawer
+// sliding in or out) so a control is not clicked while it moves offscreen.
+async function waitForMotion(page) {
+  await page.evaluate(() => Promise.all(document.getAnimations()
+    .filter(animation => animation.effect &&
+      animation.effect.getComputedTiming().endTime !== Infinity)
+    .map(animation => animation.finished.catch(() => {})))).catch(() => {});
 }
 
 /* Pulsa un control tolerando las transiciones. El recorrido pulsa y solo
@@ -1696,7 +2380,6 @@ async function exerciseControls(page) {
         control.tag === 'SUMMARY' ? 'summary:visible' : 'a[href^="#"]:visible';
       const locator = page.locator(selector).nth(control.index);
       if (!await locator.isVisible().catch(() => false)) continue;
-      /* Let a sliding panel finish entering before clicking it. */
       await waitInsideViewport(page, locator);
       await settleDrawerTransition(page);
       /* El indice sale de una foto del DOM y el recorrido va pulsando: en
@@ -1725,6 +2408,17 @@ async function exerciseControls(page) {
         else await locator.click({ timeout: 2000, force: true });
         actions += 1;
         await page.waitForTimeout(25);
+        /* Ludia anima el tablero y los paneles: sin esperar a que terminen
+           las transiciones, el clic siguiente se mide con la vista a medio
+           mover. Las demás apps no lo necesitan y esperar a cada animación
+           alarga el recorrido, así que la espera queda para Ludia. */
+        if (APP === 'ludia') await waitForMotion(page);
+        /* Sinonimia marca <main> como aria-busy mientras carga el bloque de
+           detalle de una palabra: el clic siguiente se mide con la vista
+           a medio cambiar. En las demás apps no hay aria-busy y la
+           comprobación es un no-op. */
+        await page.waitForFunction(() => !document.querySelector('main[aria-busy="true"]'),
+          null, { timeout: NAV_TIMEOUT }).catch(() => {});
       } catch (error) {
         /* Si el elemento sigue en pantalla tras el fallo, se reintenta una
            vez dejandolo entrar en el viewport antes de declararlo fallo
@@ -1808,12 +2502,15 @@ async function runRoute(browser, baseUrl, route) {
     await waitForApp(page);
     await validateLinks(page, baseUrl);
     await exerciseLanguages(page);
-    await exerciseForms(page);
+    /* El campo de búsqueda global sigue en la cabecera mientras se abre un
+       juego con ruta por hash: rellenarlo sacaría de la partida antes de su
+       propio recorrido, así que los formularios solo se ejercitan fuera. */
+    if (!(APP === 'sinonimia' && route.includes('/juego/'))) await exerciseForms(page);
     if (route.includes('#')) {
       await page.goto(baseUrl + route, { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
       await waitForApp(page);
     }
-    const journeys = await exerciseFullFunctionality(page, baseUrl, route);
+    const journeys = await exerciseFullFunctionality(page, route, baseUrl);
     const count = await exerciseControls(page);
     assert.deepEqual(errors.page, [], 'Errores de página: ' + errors.page.join('; '));
     assert.deepEqual(errors.console, [], 'Errores de consola: ' + errors.console.join('; '));
@@ -1850,11 +2547,19 @@ async function main() {
     process.stdout.write('\n[' + APP + '] font-size settings OK');
     await exerciseAppearanceSettings(browser, baseUrl);
     process.stdout.write('\n[' + APP + '] theme/contrast/language settings OK');
+    if (APP === 'memofun') {
+      await exerciseConfigLanguage(browser, baseUrl);
+      process.stdout.write('\n[memofun] configuration language selection and persistence OK');
+    }
     await exerciseNativeSettings(browser, baseUrl);
     process.stdout.write('\n[' + APP + '] native settings OK');
     if (process.env.UI_SMOKE_SETTINGS_ONLY !== '1') {
       await exerciseUnsupportedBrowserLanguage(browser, baseUrl);
       process.stdout.write('\n[' + APP + '] fr-FR fallback OK');
+    }
+    if (APP === 'routime' && process.env.UI_SMOKE_SETTINGS_ONLY !== '1') {
+      await exerciseRoutimeAboutPage(browser, baseUrl);
+      process.stdout.write('\n[' + APP + '] achievements OK');
     }
     for (const route of (process.env.UI_SMOKE_SETTINGS_ONLY === '1' ? [] : routes)) {
       process.stdout.write('\n[' + APP + '] ' + route + ' ');

@@ -44,7 +44,7 @@ jobs:
         run: npm run lint
 
       - name: Suite header and footer markup
-        run: node scripts/checks/suite-markup.js
+        run: npm run lint:markup
 
   cache-bump:
     name: sw.js VERSION bump check
