@@ -34,9 +34,8 @@ pattern as the sibling projects Apptonomia, Sinonimia and Teclatlon:
   Pages serves every static file with implicit `index.html` lookup per
   directory, so `/tools/<slug>/` resolves to `tools/<slug>/index.html`
   automatically.
-- **Cache headers live in `_headers`** at the repo root. HTML entry
-  points, `manifest.json` and `sw.js` are forced to `must-revalidate`;
-  fingerprinted JS/CSS/font assets get a 1-year immutable cache.
+- **Cache headers live in `_headers`** at the repo root. every file, HTML and
+  assets included, is served `no-cache, must-revalidate`.
 - **`manifest.json` and `sw.js` must use relative paths** (start `./`)
   so the app works on any host without changes.
 - A one-off preview deploy from a dirty worktree, without committing any
@@ -428,7 +427,7 @@ mode, with the typed answer and the audio of the engine.)
    row in `settings/`, and its files in `sw.js` (`ARCHIVOS`), then bump
    `VERSION`.
 6. Run `node scripts/check.js`, `node scripts/smoke-sw.js` and the UI test,
-   and refresh `?v=` tokens with `scripts/asset-tokens.js`.
+   and bump `VERSION` in `sw.js` if a cached file changed.
 
 Families and their users are listed in the doc at the time of each change;
 verify them with a search of `App.activityFlow.setup` and `App.reinforce`
@@ -651,7 +650,7 @@ the **template**; deviations are called out where they apply.
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v75403dc2">
+  <link rel="stylesheet" href="../assets/css/locale-picker.css">
 </head>
 <body>
   <div class="container {legal|about}">
@@ -693,13 +692,9 @@ the **template**; deviations are called out where they apply.
   <script src="strings.en.js"></script>
   <!-- The dropdown needs its config BEFORE the component. Both
        are deferred, and deferred scripts run in document order, so
-       listing them in that order is enough. The ?v= is not optional:
-       .js and .css are served immutable for a year, and without it the
-       page serves the stale copy from cache. The value is NOT typed by
-       hand: `node scripts/asset-tokens.js` derives it from the file's own
-       hash, and scripts/check.js (check 16) fails if any drifted. -->
-  <script src="../assets/js/locale-picker-config.js?v=calculia-v3be3c240"></script>
-  <script src="../assets/js/locale-picker.js?v=calculia-v8b6a4103" defer></script>
+       listing them in that order is enough. Assets are served no-cache, so no version token is needed. -->
+  <script src="../assets/js/locale-picker-config.js"></script>
+  <script src="../assets/js/locale-picker.js" defer></script>
   <script>
     /* Register the SW from this entry point so it is active for any
        later navigation, matching what the main index.html and the

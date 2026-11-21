@@ -56,7 +56,7 @@ jobs:
           # Need enough history to diff against the parent of the
           # current HEAD — the script uses HEAD~1 (or DIFF_BASE) as
           # the diff base.
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -103,8 +103,11 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run Playwright UI smoke
+      - name: Run Playwright spec suite
         run: npm run test:ui
+
+      - name: Run the UI crawler
+        run: npm run test:crawl
 
       - name: Run service-worker smoke
         run: npm run test:sw

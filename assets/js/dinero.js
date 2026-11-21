@@ -86,7 +86,7 @@
 
   /* "1,50 €" — amount with the active language's decimal separator. */
   function format(cent) {
-    var sep = DECIMAL_SEP[App.i18n.locale()] || DECIMAL_SEP[App.i18n.DEFAULT];
+    var sep = DECIMAL_SEP[App.i18n.locale()] || DECIMAL_SEP[App.i18n.DEFAULT_LOCALE];
     return (cent / 100).toFixed(2).replace('.', sep) + ' €';
   }
 

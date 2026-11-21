@@ -7,7 +7,7 @@
 
   App.i18n.register({
     title: '🔢 Ordenar positivos',
-    instructionIntro: 'Mira cómo se comparan los números.',
+    instructionIntro: 'Pon los números de menor a mayor.',
     transfer: 'Lo usas cada vez que buscas el precio más bajo o la puntuación más alta de una lista.',
 
     ui: {

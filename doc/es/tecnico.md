@@ -445,7 +445,7 @@ modo de opciones, con la respuesta escrita y el audio del motor.)
    progreso en `settings/` y sus ficheros en `sw.js` (`ARCHIVOS`), y subir
    `VERSION`.
 6. Ejecutar `node scripts/check.js`, `node scripts/smoke-sw.js` y la prueba de
-   interfaz, y refrescar los tokens `?v=` con `scripts/asset-tokens.js`.
+   interfaz, y subir `VERSION` en `sw.js` si cambió un fichero en caché.
 
 Las familias y sus usuarios se anotan en la documentación en el momento de cada
 cambio; compruébalos buscando `App.activityFlow.setup` y `App.reinforce` antes
@@ -679,7 +679,7 @@ la **plantilla**; las desviaciones se indican donde apliquen.
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="../assets/css/locale-picker.css?v=calculia-v75403dc2">
+  <link rel="stylesheet" href="../assets/css/locale-picker.css">
 </head>
 <body>
   <div class="container {legal|about}">
@@ -718,14 +718,9 @@ la **plantilla**; las desviaciones se indican donde apliquen.
   <script src="strings.en.js"></script>
   <!-- El desplegable necesita su configuracion ANTES que el
        componente. Los dos van diferidos, y los diferidos se ejecutan
-       en orden de documento, con listarlos en ese orden basta. El ?v=
-       no es opcional: los .js y .css se sirven immutable un ano, sin el
-       la pagina sirve la version vieja desde la cache. El valor NO se
-       escribe a mano: lo calcula `node scripts/asset-tokens.js` a partir
-       del hash del propio fichero, y `scripts/check.js` (check 16) falla
-       si queda alguno desactualizado. -->
-  <script src="../assets/js/locale-picker-config.js?v=calculia-v3be3c240"></script>
-  <script src="../assets/js/locale-picker.js?v=calculia-v8b6a4103" defer></script>
+       en orden de documento, con listarlos en ese orden basta. Los recursos se sirven sin caché, así que no hace falta ningún token de versión. -->
+  <script src="../assets/js/locale-picker-config.js"></script>
+  <script src="../assets/js/locale-picker.js" defer></script>
   <script>
     /* Register the SW from this entry point so it is active for any
        later navigation, matching what the main index.html and the

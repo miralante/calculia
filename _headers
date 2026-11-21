@@ -15,10 +15,9 @@
 #        - data: URLs for the celebration emoji overlay
 #          (assets/js/feedback.js builds the wrapper with innerHTML)
 #        - no inline scripts, no eval, no remote scripts
-#   3. Long-cache the immutable assets so users don't re-download
-#      the same activity files on every visit. The HTML entry points
-#      and the service worker are *not* long-cached — otherwise the
-#      PWA's cache-first strategy gets pinned to an old shell.
+#   3. Every asset is revalidated on each request (no-cache), so a deploy
+#      reaches users at once. The service worker's VERSION bump is what
+#      ships a change to the cached shell.
 
 # ---------------------------------------------------------------------------
 # Security headers — applied to every response, including HTML.
@@ -85,69 +84,64 @@
 #
 # `assets/js/*`, `assets/css/*`, `assets/fonts/*`, the per-activity files
 # (app.js, data.js, strings.*.js) and the PWA manifest don't change on
-# most commits. A year-long `immutable` cache is safe — and when content
+# most commits. They are revalidated on each request, so when content
 # does change, the service worker picks up the new files via its
 # `VERSION` bump in sw.js (see "When adding new files: add them to
 # ARCHIVOS and bump VERSION" at the top of sw.js).
 #
-# The HTML entry points and the service worker itself must NOT be
-# long-cached, otherwise the PWA's cache-first strategy gets pinned to
-# an old shell. Five minutes is short enough that any visitor who
-# reloads within that window (very common for repeat visits) gets the
-# latest version without a manual "borrar historial y datos de sitios
-# web"; long enough to deduplicate within a single browsing session.
+# Every page, including the HTML entry points and the service worker, is
+# revalidated on each request (no-cache), so the PWA never pins an old shell.
 # ---------------------------------------------------------------------------
 /index.html
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 # The landing IS the site root, so `/` is an HTML entry point and needs the
 # same no-cache rule as the other pages. Without it, the request for `/`
 # would fall through to Cloudflare's default caching.
 /
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 /404.html
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 /config/index.html
-  Cache-Control: public, max-age=0, must-revalidate
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 /legal/index.html
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 /sw.js
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 /manifest.json
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 
 /assets/js/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: no-cache, must-revalidate
 /assets/css/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: no-cache, must-revalidate
 /assets/fonts/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: no-cache, must-revalidate
 /assets/img/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: no-cache, must-revalidate
 
-# Page-local css/js carry no ?v= token, so they are revalidated on every use
-# (a 304 when nothing moved) instead of being served from a 5-minute cache.
+# Page-local css/js are revalidated on every request (no-cache).
 /styles.css
   Cache-Control: no-cache, must-revalidate
 /strings.*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: no-cache, must-revalidate
 
 /config/styles.css
   Cache-Control: no-cache, must-revalidate
 /config/app.js
   Cache-Control: no-cache, must-revalidate
 /config/strings.*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: no-cache, must-revalidate
 
-  Cache-Control: public, max-age=300
-  Cache-Control: public, max-age=300
+  Cache-Control: no-cache, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 /about/strings.*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: no-cache, must-revalidate
 
 /legal/styles.css
   Cache-Control: no-cache, must-revalidate
 /legal/strings.*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: no-cache, must-revalidate
 
 /tools/*
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate

@@ -7,7 +7,7 @@
 
   App.i18n.register({
     title: '➖ Ordenar negativos',
-    instructionIntro: 'Mira cómo se ordenan los números bajo cero.',
+    instructionIntro: 'Pon los números negativos de menor a mayor.',
     transfer: 'Lo usas para leer un termómetro o los pisos de un parking.',
 
     ui: {

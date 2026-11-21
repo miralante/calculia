@@ -9,7 +9,7 @@
 
   App.i18n.register({
     title: '🍰 Ordenar fracciones',
-    instructionIntro: 'Mira cómo se comparan las fracciones.',
+    instructionIntro: 'Pon las fracciones de menor a mayor.',
     transfer: 'Lo usas para saber qué parte de una pizza, una tarta o una hora es más grande.',
 
     ui: {

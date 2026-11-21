@@ -1,5 +1,5 @@
 'use strict';
-/* Checks: _headers and _redirects limits, CSS class coverage, file sizes, asset tokens and the Socratic hint. Runs with the shared context of scripts/check.js. */
+/* Checks: _headers and _redirects limits, CSS class coverage, file sizes and the Socratic hint. Runs with the shared context of scripts/check.js. */
 module.exports = function (ctx) {
   var fs = ctx.fs, path = ctx.path, vm = ctx.vm, ROOT = ctx.ROOT;
   var failures = ctx.failures, largeFileWarnings = ctx.largeFileWarnings;
@@ -304,38 +304,6 @@ module.exports = function (ctx) {
       }
     });
   })(ROOT);
-
-  /* --- 16. Asset version tokens must match the file's own bytes.
-      _headers serves assets/css|js|fonts|img immutable for a year, so a
-      changed file only reaches a returning visitor if its reference changes.
-      The tokens were a hand-maintained serial bumped by appending an "a",
-      applied per file instead of per deploy: the same asset ended up with
-      different tokens on different pages (locale-picker.css carried
-      calculia-v2bcaa on the landing and calculia-v5aa on about/), and
-      nothing failed when a reference was missed. scripts/asset-tokens.js
-      derives the token from the file's bytes, so drift is now detectable.
-      Run `node scripts/asset-tokens.js` to fix. --- */
-  ctx.checks += 1;
-  (function () {
-    try {
-      /* The suite keeps one shared tool at <suite>/scripts/asset-tokens.js
-         because the rule is identical in every project (token = hash of the
-         file's own bytes) and each project declares its immutable paths in
-         its own _headers. Scoped to `calculia` so this gate reports only
-         about this project. */
-      require('node:child_process').execFileSync(
-        process.execPath,
-        [path.join(ROOT, 'scripts', 'asset-tokens.js'), '--check', 'calculia'],
-        { cwd: ROOT, encoding: 'utf8' }
-      );
-    } catch (e) {
-      /* Non-zero exit means the tokens are stale: surface its report
-         verbatim instead of a generic failure. */
-      failures.push('assets/css|js|img: token ?v= desactualizado (ejecuta '
-        + '`node scripts/asset-tokens.js calculia`)\n'
-        + String(e.stdout || e.message).trim());
-    }
-  })();
 
   /* --- 17. The Socratic hint must be written per question.
       On a wrong answer every activity shows a hint instead of the answer

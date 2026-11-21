@@ -7,7 +7,7 @@
 
   App.i18n.register({
     title: '🔹 Order decimals',
-    instructionIntro: 'See how decimals are compared.',
+    instructionIntro: 'Put the decimals from smallest to largest.',
     transfer: 'You use this to compare times, prices and weights with cents and tenths.',
 
     ui: {

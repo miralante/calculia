@@ -78,45 +78,12 @@ changes, so a file changed without a bump stays stale offline and the
 installed worker does not re-install. This is also called out in
 `doc/en/technical.md` § 4 and in `doc/en/I18N.md` step 6.
 
-### Asset version tokens (`?v=`) — never hand-edit these
+### Asset cache policy (no `?v=` tokens)
 
-This is the **second, independent** cache layer and it has its own trap.
-`_headers` serves `assets/css/*`, `assets/js/*`, `assets/fonts/*` and
-`assets/img/*` as `max-age=31536000, immutable`: one year, no revalidation.
-A changed asset therefore only reaches a returning visitor if the *URL that
-references it* changes. That is what `?v=` is for.
-
-The tokens used to be a hand-typed serial bumped by appending an `a`
-(`calculia-v5aa` → `calculia-v5aaa`), applied per file rather than per
-deploy. The same asset ended up referenced with **different tokens from
-different pages** — `locale-picker.css` carried `calculia-v2bcaa` on the
-landing page and `calculia-v5aa` on `about/`, `team/`, `config/` and
-`legal/` — and 15 immutable assets had no token at all. Nothing failed
-when a reference was missed; pages just quietly served a year-old
-stylesheet.
-
-**Rule: never type a `?v=` value by hand.** Run:
-
-```bash
-node scripts/asset-tokens.js          # rewrite all tokens
-node scripts/asset-tokens.js --check  # verify only (exit 1 on drift)
-```
-
-The token is `sha256(<file bytes>)[0:8]`, so the same file always yields
-the same token on every page, editing a file changes its token everywhere,
-and there is no serial left to forget. `scripts/check.js` check 16 runs
-`--check` and fails the gate with the exact expected value if anything
-drifted, so this can no longer happen silently.
-
-Only the four globs above get a token. Page-local files (`styles.css`,
-`app.js`, `strings.*.js`) are `max-age=300` or `must-revalidate` and must
-**not** have one — a token there would defeat the revalidation.
-
-Note the service worker caches the *clean* paths (`assets/js/i18n.js`),
-never the tokenised URL. That is intentional: the SW owns the offline
-copy, the token only busts the HTTP cache of a live visitor.
-
-The suite-wide tool is `../scripts/asset-tokens.js` (run as `node ../scripts/asset-tokens.js calculia` from the suite root, or `node scripts/asset-tokens.js` here); which paths are tokenised is read from this project's own `_headers`. See [../scripts/ASSET-TOKENS.md](../scripts/ASSET-TOKENS.md) for the per-project table, including why `*.js` matches nested paths and why fonts are tokenised from CSS.
+Every asset is served `Cache-Control: no-cache, must-revalidate` (see `_headers`), so
+browsers revalidate on each request and a deploy is visible at once. Do not add
+`?v=` query strings to asset references. A changed cached file still needs the
+service worker `VERSION` bump (sw.js).
 
 ## Architecture
 

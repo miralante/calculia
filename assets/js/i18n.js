@@ -12,15 +12,24 @@
      - only the active locale's file is loaded (saves bandwidth, simpler maintenance)
      - each file calls App.i18n.register({key: 'text', ...}, 'es'|'en')
    ========================================================================== */
+
 (function () {
-  'use strict';
+  "use strict";
 
   window.App = window.App || {};
 
-  var LOCALE_KEY = 'calculia:locale';
-  var SUPPORTED = ['es', 'en'];
-  var DEFAULT = 'en';
+  var STORAGE_KEY = "calculia:locale";
+  var SUPPORTED = ["es", "en"];
+  var DEFAULT_LOCALE = "en";
+  var BCP47 = { es: "es-ES", en: "en-US" };
+  var TITLE_SUFFIX = " | Calculia";
+  var TEXT_FIELDS = {
+    titulo: 1, texto: 1, aviso: 1, avisoSeguro: 1,
+    confirmacion: 1, regla: 1, contacto: 1, relacion: 1
+  };
 
+  /* Built-in shell strings. strings.<locale>.js may override any of them:
+     register() deep-merges over this table. */
   var DICT = {
     es: {
       core: {
@@ -160,89 +169,87 @@
 
   function detect() {
     try {
-      var languages = (navigator.languages && navigator.languages.length)
-        ? navigator.languages[0]
-        : (navigator.language || '');
-      var prefix = (languages || '').split(/[-_]/)[0].toLowerCase();
+      var first = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+      var prefix = first.split(/[-_]/)[0].toLowerCase();
       if (SUPPORTED.indexOf(prefix) !== -1) return prefix;
     } catch (e) { /* ignore */ }
-    return DEFAULT;
+    return DEFAULT_LOCALE;
+  }
+
+  /* Optional resolvers, checked before ?lang, storage and the browser. An app
+     whose language lives somewhere else (sinonimia: the URL hash) adds one with
+     App.i18n.addResolver(fn); fn returns 'es', 'en' or anything else. */
+  var RESOLVERS = [];
+
+  function urlLocale() {
+    try {
+      var fromUrl = new URLSearchParams(window.location.search).get("lang");
+      if (fromUrl && SUPPORTED.indexOf(fromUrl) !== -1) return fromUrl;
+    } catch (e) { /* old browser: ignore */ }
+    return null;
   }
 
   function locale() {
+    for (var r = 0; r < RESOLVERS.length; r++) {
+      try {
+        var found = RESOLVERS[r]();
+        if (SUPPORTED.indexOf(found) !== -1) return found;
+      } catch (e) { /* a resolver that throws is skipped */ }
+    }
+    var fromUrl = urlLocale();
+    if (fromUrl) return fromUrl;
     try {
-      var saved = localStorage.getItem(LOCALE_KEY);
+      var saved = localStorage.getItem(STORAGE_KEY);
       if (saved && SUPPORTED.indexOf(saved) !== -1) return saved;
-    } catch (e) { /* ignore */ }
+    } catch (e) { /* storage may be off */ }
     return detect();
   }
 
   function setLocale(loc) {
     if (SUPPORTED.indexOf(loc) === -1) return;
-    try {
-      localStorage.setItem(LOCALE_KEY, loc);
-    } catch (e) { /* ignore */ }
-    location.reload();
+    try { localStorage.setItem(STORAGE_KEY, loc); } catch (e) { /* ignore */ }
+    window.location.reload();
   }
 
-  /* BCP-47 map per supported locale, with fallback to the default
-     locale's BCP-47. App.tts.speak() uses this to pick the speechSynthesis
-     voice. Add an entry here when adding a new language — see doc/I18N.md
-     §4 for the full recipe. */
-  var BCP47 = { es: 'es-ES', en: 'en-US' };
+  function addResolver(fn) {
+    if (typeof fn === "function") RESOLVERS.push(fn);
+  }
 
   function lang() {
-    return BCP47[locale()] || BCP47[DEFAULT];
+    return BCP47[locale()] || BCP47[DEFAULT_LOCALE];
   }
 
-  /**
-   * Merges texts into the internal dictionary.
-   *
-   * Two backward-compatible signatures:
-   *  1. Multi-file (recommended): App.i18n.register(dict, locale)
-   *       Loads only the active language. Each strings.<locale>.js registers its texts.
-   *         E.g.: App.i18n.register({title: 'Parejas', ...}, 'es');
-   *  2. Legacy (single file with both languages): App.i18n.register({es: {...}, en: {...}})
-   *       Registers into every locale present in the dict.
-   */
-  /* Objects are merged key by key, so an activity can add to a block the core
-     already has (for example `ui`) without replacing it. Anything else is replaced. */
-  function mergeInto(target, source) {
-    for (var key in source) {
-      if (!Object.prototype.hasOwnProperty.call(source, key)) continue;
-      var value = source[key];
-      var current = target[key];
-      var both = value && typeof value === 'object' && !Array.isArray(value) &&
-        current && typeof current === 'object' && !Array.isArray(current);
-      if (both) mergeInto(current, value);
-      else target[key] = value;
+  /* Deep merge, so several files (a page's own strings and the app's shared
+     strings) can register keys under the same branch. */
+  function merge(into, from) {
+    for (var key in from) {
+      if (!Object.prototype.hasOwnProperty.call(from, key)) continue;
+      var value = from[key];
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        if (!into[key] || typeof into[key] !== "object") into[key] = {};
+        merge(into[key], value);
+      } else {
+        into[key] = value;
+      }
     }
   }
 
-  function register(dict, locale) {
-    // New signature: (dict, locale)
-    if (typeof locale === 'string') {
-      if (SUPPORTED.indexOf(locale) === -1) return;
-      if (!dict || typeof dict !== 'object') return;
-      DICT[locale] = DICT[locale] || {};
-      mergeInto(DICT[locale], dict);
+  /* Two signatures:
+       register(table, "es" | "en")     one locale per file (the standard)
+       register({ es: {...}, en: {...} })  both locales in one call (legacy) */
+  function register(table, loc) {
+    if (typeof loc !== "string") {
+      if (!table || typeof table !== "object") return;
+      SUPPORTED.forEach(function (l) { if (table[l]) merge(DICT[l], table[l]); });
       return;
     }
-    // Old signature: ({es: {...}, en: {...}})
-    SUPPORTED.forEach(function (loc) {
-      if (!dict[loc]) return;
-      DICT[loc] = DICT[loc] || {};
-      for (var key in dict[loc]) {
-        if (Object.prototype.hasOwnProperty.call(dict[loc], key)) {
-          DICT[loc][key] = dict[loc][key];
-        }
-      }
-    });
+    if (SUPPORTED.indexOf(loc) === -1 || !table || typeof table !== "object") return;
+    merge(DICT[loc], table);
   }
 
-  function lookup(dictLoc, key) {
-    var parts = key.split('.');
-    var current = dictLoc;
+  function lookup(table, key) {
+    var parts = key.split(".");
+    var current = table;
     for (var i = 0; i < parts.length; i++) {
       if (current == null) return undefined;
       current = current[parts[i]];
@@ -250,113 +257,61 @@
     return current;
   }
 
-  function t(key) {
+  function raw(key) {
+    if (typeof key !== "string") return undefined;
     var loc = locale();
     var value = lookup(DICT[loc], key);
-    if (value === undefined && loc !== DEFAULT) {
-      value = lookup(DICT[DEFAULT], key);
-    }
-    if (value === undefined) return key;
-    if (Array.isArray(value)) return value.join(', ');
+    if (value === undefined && loc !== DEFAULT_LOCALE) value = lookup(DICT[DEFAULT_LOCALE], key);
     return value;
   }
 
-  function pick(key) {
-    var loc = locale();
-    var value = lookup(DICT[loc], key);
-    if (!Array.isArray(value) && loc !== DEFAULT) {
-      value = lookup(DICT[DEFAULT], key);
+  /* params (optional): replaces each {name} with params.name; a placeholder
+     without a value is left as it is. */
+  function t(key, params) {
+    var value = raw(key);
+    if (value === undefined || value === null) {
+      if (window.console && console.warn) console.warn("[i18n] missing key:", key, "(locale=" + locale() + ")");
+      return "";
     }
-    if (!Array.isArray(value) || !value.length) return '';
+    if (Array.isArray(value)) value = value.join(", ");
+    value = String(value);
+    if (params) {
+      value = value.replace(/\{(\w+)\}/g, function (mark, name) {
+        return params[name] !== undefined ? String(params[name]) : mark;
+      });
+    }
+    return value;
+  }
+
+  /* A random entry of an array key (e.g. feedback.success). */
+  function pick(key) {
+    var value = raw(key);
+    if (!Array.isArray(value) || !value.length) return "";
     return value[Math.floor(Math.random() * value.length)];
   }
 
-  /* The noun that follows a star count: "1 estrella", "2 estrellas".
-     The count decides it; templates write {starsWord} (or {nWord}) where
-     the noun goes, so no string needs to know the number. */
+  /* The noun that follows a star count: "1 estrella", "2 estrellas". */
   function starsWord(count) {
-    return t(Number(count) === 1 ? 'core.starOne' : 'core.starOther');
+    return t(Number(count) === 1 ? "core.starOne" : "core.starOther");
   }
 
-  /**
-   * Returns a sub-tree (object/array) for the given key in the active
-   * language, falling back to the default locale. Unlike t(), it does
-   * NOT flatten arrays — it returns the structure as-is so data trees
-   * (escenarios, variantes, pasos...) can be accessed after registering
-   * them with App.i18n.register({data: {...}}, locale).
-   *
-   * Example:
-   *   // strings.es.js
-   *   App.i18n.register({ data: { escenarios: [{titulo: 'Acoso', ...}] } }, 'es');
-   *   // app.js
-   *   var DATOS = App.i18n.data('data');
-   */
+  /* Structured data trees (escenarios, variantes, pasos...) are returned as
+     they are, not flattened: register them with register({data: {...}}, loc)
+     and read them with App.i18n.data("data"). */
   function data(key) {
-    var loc = locale();
-    var value = lookup(DICT[loc], key);
-    if (value === undefined && loc !== DEFAULT) {
-      value = lookup(DICT[DEFAULT], key);
-    }
-    return value;
+    return raw(key);
   }
 
-  /**
-   * Returns the per-locale data tree, split by language: { es: {...}, en: {...} }.
-   *
-   * Background: legacy tools/<slug>/data.js had the form
-   *   const DATA = { es: { escenarios: [...] }, en: { escenarios: [...] } }
-   * and app.js accessed `DATA[App.i18n.locale()] || DATA.es` directly.
-   *
-   * After the i18n refactor, data.js is locale-neutral (only ids/types/flags)
-   * and the translated content lives in strings.<locale>.js registered as
-   * { data: { escenarios: [...] } }. This function rebuilds the legacy shape
-   * on demand by deep-merging the structure (registered via registerStructure,
-   * see below) with each locale's text tree, so existing app.js keeps working
-   * unchanged.
-   *
-   * If a tool never called registerStructure, the result is just the
-   * registered `data` trees in the legacy {es, en} shape.
-   */
-  function dataByLocale() {
-    var out = {};
-    SUPPORTED.forEach(function (loc) {
-      var text = (DICT[loc] && DICT[loc].data) || null;
-      var structure = DICT[loc] && DICT[loc].__structure__;
-      out[loc] = mergeStructureAndText(structure, text);
-    });
-    return out;
-  }
-
-  /**
-   * Registers a locale-neutral structure tree (typically loaded from
-   * data.js). The structure has ids/types/booleans and no text. The
-   * text lives in strings.<locale>.js as a parallel tree registered
-   * with register({data: ...}, locale). Together they form the legacy
-   * {es, en} shape returned by dataByLocale().
-   */
+  /* Locale-neutral structure (ids, types, flags) registered once; the text
+     for each locale is merged over it by dataByLocale(). */
   function registerStructure(structure) {
-    /* Bind to every supported locale so dataByLocale() can find it for any of them. */
     SUPPORTED.forEach(function (loc) {
-      DICT[loc] = DICT[loc] || {};
       DICT[loc].__structure__ = structure;
     });
   }
 
-  /**
-   * Deep-merges two parallel trees: structure (ids/types) + text (strings).
-   * For each key:
-   *   - if the value is an object/array in both, recurse
-   *   - if the key is in TEXT_FIELDS for the structure or appears in
-   *     text only, the text value wins
-   *   - everything else stays in the structure side
-   * Fields registered as text-only (titulo, texto, aviso, avisoSeguro,
-   * confirmacion, regla, contacto, relacion) are sourced from the text
-   * tree when present, otherwise kept from the structure.
-   */
-  var TEXT_FIELDS = {
-    titulo: 1, texto: 1, aviso: 1, avisoSeguro: 1,
-    confirmacion: 1, regla: 1, contacto: 1, relacion: 1
-  };
+  /* Deep-merges structure + text: text fields (TEXT_FIELDS) come from the text
+     tree when present; everything else stays in the structure side. */
   function mergeStructureAndText(structure, text) {
     if (!structure && !text) return null;
     if (!text) return structure;
@@ -366,19 +321,17 @@
         return mergeStructureAndText(item, Array.isArray(text) ? text[i] : null);
       });
     }
-    if (typeof structure === 'object') {
+    if (typeof structure === "object") {
       var out = {};
-      var keys = new Set();
-      Object.keys(structure).forEach(function (k) { keys.add(k); });
-      Object.keys(text).forEach(function (k) { keys.add(k); });
-      keys.forEach(function (k) {
+      var keys = {};
+      Object.keys(structure).forEach(function (k) { keys[k] = true; });
+      Object.keys(text).forEach(function (k) { keys[k] = true; });
+      Object.keys(keys).forEach(function (k) {
         var sVal = structure[k];
         var tVal = text[k];
         if (TEXT_FIELDS[k]) {
           out[k] = (tVal !== undefined) ? tVal : sVal;
-        } else if (Array.isArray(sVal) || Array.isArray(tVal)) {
-          out[k] = mergeStructureAndText(sVal, tVal);
-        } else if (sVal && typeof sVal === 'object') {
+        } else if (Array.isArray(sVal) || Array.isArray(tVal) || (sVal && typeof sVal === "object")) {
           out[k] = mergeStructureAndText(sVal, tVal);
         } else {
           out[k] = (tVal !== undefined) ? tVal : sVal;
@@ -389,20 +342,35 @@
     return text !== undefined ? text : structure;
   }
 
+  /* Returns the per-locale data tree: { es: {...}, en: {...} }, rebuilt from
+     the registered structure plus each locale's text tree. */
+  function dataByLocale() {
+    var out = {};
+    SUPPORTED.forEach(function (loc) {
+      var text = (DICT[loc] && DICT[loc].data) || null;
+      var structure = DICT[loc] && DICT[loc].__structure__;
+      out[loc] = mergeStructureAndText(structure, text);
+    });
+    return out;
+  }
+
   function apply(root) {
     root = root || document;
-    var nodes = root.querySelectorAll('[data-i18n]');
-    for (var i = 0; i < nodes.length; i++) {
-      nodes[i].textContent = t(nodes[i].getAttribute('data-i18n'));
-    }
-    var ariaNodes = root.querySelectorAll('[data-i18n-aria]');
-    for (var j = 0; j < ariaNodes.length; j++) {
-      ariaNodes[j].setAttribute('aria-label', t(ariaNodes[j].getAttribute('data-i18n-aria')));
-    }
-    var titleKey = document.documentElement.getAttribute('data-i18n-title');
-    if (titleKey) {
-      document.title = t(titleKey) + ' | Calculia';
-    }
+    var i;
+    var nodes = root.querySelectorAll("[data-i18n]");
+    for (i = 0; i < nodes.length; i++) nodes[i].textContent = t(nodes[i].getAttribute("data-i18n"));
+    var aria = root.querySelectorAll("[data-i18n-aria]");
+    for (i = 0; i < aria.length; i++) aria[i].setAttribute("aria-label", t(aria[i].getAttribute("data-i18n-aria")));
+    var meta = root.querySelectorAll("[data-i18n-meta]");
+    for (i = 0; i < meta.length; i++) meta[i].setAttribute("content", t(meta[i].getAttribute("data-i18n-meta")));
+    var titleKey = document.documentElement.getAttribute("data-i18n-title");
+    if (titleKey) document.title = t(titleKey) + TITLE_SUFFIX;
+  }
+
+  /* applyTo("#selector") or applyTo(element): applies the bindings inside one
+     part of the page (for example a block rendered after a round). */
+  function applyTo(target) {
+    apply(typeof target === "string" ? document.querySelector(target) : target);
   }
 
   function init() {
@@ -410,25 +378,27 @@
     apply(document);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-
   window.App.i18n = {
     SUPPORTED: SUPPORTED,
-    DEFAULT: DEFAULT,
+    DEFAULT_LOCALE: DEFAULT_LOCALE,
+    STORAGE_KEY: STORAGE_KEY,
     locale: locale,
     setLocale: setLocale,
     lang: lang,
     register: register,
+    addResolver: addResolver,
     registerStructure: registerStructure,
     t: t,
     pick: pick,
     data: data,
     dataByLocale: dataByLocale,
     apply: apply,
-    starsWord: starsWord
+    applyTo: applyTo,
+    starsWord: starsWord,
+    LABEL: { es: "Español", en: "English" },
+    FLAG: { es: "🇪🇸", en: "🇬🇧" }
   };
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
 })();

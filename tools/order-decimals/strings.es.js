@@ -7,7 +7,7 @@
 
   App.i18n.register({
     title: '🔹 Ordenar decimales',
-    instructionIntro: 'Mira cómo se comparan los decimales.',
+    instructionIntro: 'Pon los decimales de menor a mayor.',
     transfer: 'Lo usas para comparar tiempos, precios y pesos con céntimos y décimas.',
 
     ui: {
