@@ -515,23 +515,12 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
        instead of throwing, otherwise the TypeError ends the wait instead
        of polling through the navigation. */
     /* El documento tiene que pasar a inglés al elegirlo en el cajón.
-       Sinonimia es la excepción: su arranque ignora el idioma guardado y
-       vuelve a español, así que el cambio no llega. Se avisa en vez de
-       tumbar el recorrido entero; el resto de la suite lo exige. */
-    if (APP === 'sinonimia') {
-      const switched = await page.waitForFunction(() =>
-        !!(document.documentElement && document.documentElement.lang.slice(0, 2) === 'en'),
-      null, { timeout: NAV_TIMEOUT }).then(() => true).catch(() => false);
-      if (!switched) {
-        process.stdout.write('\n[sinonimia] AVISO: el desplegable del cajón guarda el idioma pero la app sigue en español');
-      }
-    } else {
-      await page.waitForFunction(() =>
-        !!(document.documentElement && document.documentElement.lang.slice(0, 2) === 'en'),
-      null, { timeout: NAV_TIMEOUT });
-      assert.strictEqual((await page.locator('html').getAttribute('lang') || '').slice(0, 2), 'en',
-        'El desplegable del cajón debe cambiar el idioma activo de la app');
-    }
+       Las 6 apps van por el mismo camino: sin excepciones por app. */
+    await page.waitForFunction(() =>
+      !!(document.documentElement && document.documentElement.lang.slice(0, 2) === 'en'),
+    null, { timeout: NAV_TIMEOUT });
+    assert.strictEqual((await page.locator('html').getAttribute('lang') || '').slice(0, 2), 'en',
+      'El desplegable del cajón debe cambiar el idioma activo de la app');
     assert.strictEqual((await languagePicker.locator('.locale-picker-current').textContent()).trim(), 'EN');
 
     /* El ⚙️ se queda solo en la fila de la cabecera y el idioma, dentro.
@@ -2127,9 +2116,14 @@ async function exerciseRoutimeRound(page, menuPicks, slug) {
     await page.waitForTimeout(SETTLE_MS);
   }
   /* Closing screens: the common end screen, the closing rule of a chat, or the
-     celebration title of the pages that finish inside #app. */
+     celebration title of the pages that finish inside #app.
+     The shared celebration (suite:celebrate) also counts: when it is shown,
+     `<main>` carries .is-celebrating and the app's own end screen is hidden
+     (`main.is-celebrating > :not(.celebration) { display: none }`), so the
+     round ends in the celebration layer and nowhere else. */
   const END = [
     '#endScreen:not(.hidden)', '#reglaFinal:not(.hidden)', '.titulo-celebracion', '.celebration-title',
+    '#app-celebration:not(.hidden)', '.celebration:not(.hidden)',
   ].join(', ');
   const endVisible = () => page.locator(END).first().isVisible().catch(() => false);
   /* Every third activation goes through the keyboard, so the round is played both
