@@ -7,7 +7,22 @@ const path = require('node:path');
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || 'playwright');
 
 const ROOT = path.resolve(__dirname, '..');
-const APP = path.basename(ROOT);
+
+/* La app se identifica por el nombre que ella misma declara (data-suite-name),
+   no por el nombre de la carpeta en la que está desplegada: el repo
+   miralante/enroca es la app Ludia, y el CI la despliega como `enroca` mientras
+   que el espacio de trabajo la llama `ludia`. Con el nombre de la carpeta, el
+   crawler se tomaba por otra app y recorría sus ramas equivocadas. */
+const APP = (function () {
+  try {
+    const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+    const declared = html.match(/data-suite-name="([^"]+)"/);
+    if (declared && declared[1].trim()) return declared[1].trim().toLowerCase();
+  } catch (error) {
+    /* La app no tiene index.html: se cae al nombre de la carpeta. */
+  }
+  return path.basename(ROOT);
+})();
 const BASE_PATH = '/';
 const NAV_TIMEOUT = 15000;
 const SETTLE_MS = 120;
@@ -235,12 +250,6 @@ async function languageIsActive(page, button, language) {
 }
 
 async function exerciseLanguages(page) {
-  /* Sinonimia guarda el idioma en el localStorage pero enruta por hash
-     (#/es/, #/en/) y su arranque vuelve a español: el desplegable no
-     cambia el idioma de la app. Su copia tampoco lo ejercitaba (su
-     desplegable no tenía el cajón), así que aquí se deja igual. El resto
-     de la suite sí cambia el idioma en el recorrido y lo comprueba. */
-  if (APP === 'sinonimia') return;
   /* Abrir el ⚙️ es cosa de `languageLocator()`, que es quien lo necesita y
      quien sabe si hace falta: entre una llamada y otra la app puede
      recargar y cerrarlo. Aquí solo se cuenta si existe, para poder
@@ -532,17 +541,26 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
       const gear = document.querySelector('.locale-settings-trigger');
       const drawer = document.getElementById('accessibility-settings');
       const picker = document.getElementById('locale-picker');
+      const row = gear ? gear.parentNode : null;
+      const style = row ? getComputedStyle(row) : null;
       return {
-        pickerInDrawer: drawer.contains(picker),
-        gearIsLast: !!gear && gear.parentNode.lastElementChild === gear,
-        alignsEnd: getComputedStyle(gear.parentNode).justifyContent === 'flex-end',
+        pickerInDrawer: !!(drawer && picker && drawer.contains(picker)),
+        gearIsLast: !!gear && row.lastElementChild === gear,
+        alignsEnd: !!style && style.justifyContent === 'flex-end',
+        /* Diagnóstico: si la comprobación falla, el mensaje dice cuál es la
+           fila del engranaje y cómo está alineada, para no tener que adivinar. */
+        fila: row ? row.tagName + '.' + (row.className || '') : '(sin engranaje)',
+        justify: style ? style.justifyContent : null,
+        display: style ? style.display : null,
+        url: location.href,
+        lang: document.documentElement.lang,
       };
     });
     assert.strictEqual(await page.locator('#accessibility-settings .locale-picker-btn').count(), 1,
       'El cajón debe traer el desplegable de idioma');
     assert.ok(gearRow.pickerInDrawer, 'El selector de idioma debe vivir dentro del cajón de ajustes');
-    assert.ok(gearRow.gearIsLast, 'El engranaje debe quedar arriba a la derecha, el último de su fila');
-    assert.ok(gearRow.alignsEnd, 'La fila de controles debe alinearse al final para quedar arriba a la derecha');
+    assert.ok(gearRow.gearIsLast, 'El engranaje debe quedar arriba a la derecha, el último de su fila: ' + JSON.stringify(gearRow));
+    assert.ok(gearRow.alignsEnd, 'La fila de controles debe alinearse al final para quedar arriba a la derecha: ' + JSON.stringify(gearRow));
     assert.strictEqual(await page.locator('#accessibility-settings [data-settings-more]').count(), 0,
       'El cajón no debe enlazar a la página de ajustes propia del proyecto');
   } finally {
@@ -830,8 +848,10 @@ async function exerciseNativeSettings(browser, baseUrl) {
 }
 
 /* Routime: the menu footer links "Sobre la app" (about/) right before
-   "Configuración". About pages describe the app and show no achievements
-   (suite template, see doc/en/technical.md §8.5). */
+   the legal notice. About pages describe the app and show no achievements
+   (suite template, see doc/en/technical.md §8.5). The shared chrome paints
+   the footer with "Sobre la app" and the legal notice; the settings link
+   is not in the footer, so it is only checked when the app has one. */
 async function exerciseRoutimeAboutPage(browser, baseUrl) {
   const context = await browser.newContext({
     locale: 'es-ES', serviceWorkers: 'block', viewport: { width: 375, height: 800 },
@@ -856,8 +876,16 @@ async function exerciseRoutimeAboutPage(browser, baseUrl) {
     const aboutAt = hrefs.findIndex(h => h && h.endsWith('about/'));
     const configAt = hrefs.findIndex(h => h && h.endsWith('config/'));
     // The shared footer no longer links to the portal (commit 87bf9d9): it starts with "Sobre la app".
-    assert.ok(aboutAt === 0 && configAt > aboutAt,
-      'El pie compartido debe enlazar primero a "Sobre la app" y después a "Configuración"');
+    /* El pie compartido empieza por "Sobre la app" (about/). El enlace a
+       "Configuración" ya no lo pinta el chrome compartido (solo el pie
+       con about/ y legal/), así que solo se comprueba si está: cuando
+       aparece, tiene que ir después de "Sobre la app". */
+    assert.ok(aboutAt === 0,
+      'El pie compartido debe enlazar primero a "Sobre la app"');
+    if (configAt >= 0) {
+      assert.ok(configAt > aboutAt,
+        'El pie compartido debe enlazar "Configuración" después de "Sobre la app"');
+    }
     assert.deepEqual(errors, [], 'el menú no debe lanzar errores: ' + errors.join(' | '));
   } finally {
     await page.close().catch(() => {});
