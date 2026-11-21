@@ -7,7 +7,6 @@
   'use strict';
 
   App.i18n.register({
-    "rightsLinkSettings": "Go to Settings",
     "footerActivities": "Go to the activities",
     "pageTitle": "Data protection",
     "tagline": "No registration. No cookies. No analytics.",
@@ -30,6 +29,7 @@
     "dataP4": "This information is kept until it is deleted, and its only purpose is to stop your progress being lost when you close the application.",
     "rightsTitle": "Your rights and how to exercise them",
     "rightsP1": "Since everything saved lives on your device and not on a server, you have direct control: you can view it, change it or delete it at any time, without asking us.",
+    "rightsP1a": "You can do this from the gear icon in the header.",
     "rightsP2": "You can also delete this data by clearing your browser’s site data for this website from its settings.",
     "minorsTitle": "All ages and abilities",
     "minorsP1": "Calculia is designed to be used autonomously by anyone, regardless of age or abilities.",

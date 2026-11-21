@@ -25,6 +25,7 @@ window.LocalePickerConfig = {
      preferencias. Coste: un clic más para llegar al idioma. */
   languageInDrawer: true,
   storageKey: 'calculia:locale',
+  storagePrefix: 'calculia:',
   /* Calculia keeps the landing strings next to the page (at the site
      root), not under assets/js/, so discovery is skipped: no HEAD probes,
      and requiredLocales names the two locales shipped. */
