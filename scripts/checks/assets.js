@@ -41,7 +41,7 @@ module.exports = function (ctx) {
      styles.css had long been renamed to `floor-row` / `current-floor`.
 
      Scope: only tools/<slug>/{app.js,styles.css} is cross-checked.
-     the landing (site root), config/ and legal/ are out of scope on purpose — they
+     the landing (site root) and legal/ are out of scope on purpose — they
      have little dynamic class emission and a lot of static HTML, so
      the false-positive rate would be high. The CSS side pools every
      .css file in the repo (the shared assets/css/*.css sheets count)
@@ -71,7 +71,6 @@ module.exports = function (ctx) {
     }
     walk(path.join(ROOT, 'tools'));
     walk(path.join(ROOT, 'assets', 'css'));
-    walk(path.join(ROOT, 'config'));
     walk(path.join(ROOT, 'legal'));
     /* The landing's own stylesheet sits at the site root, so walk() can't
        reach it — add the file explicitly. */

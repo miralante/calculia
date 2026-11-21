@@ -101,9 +101,6 @@
   Cache-Control: no-cache, must-revalidate
 /404.html
   Cache-Control: no-cache, must-revalidate
-/config/index.html
-  Cache-Control: no-cache, must-revalidate
-  Cache-Control: no-cache, must-revalidate
 /legal/index.html
   Cache-Control: no-cache, must-revalidate
 /sw.js
@@ -126,12 +123,6 @@
 /strings.*
   Cache-Control: no-cache, must-revalidate
 
-/config/styles.css
-  Cache-Control: no-cache, must-revalidate
-/config/app.js
-  Cache-Control: no-cache, must-revalidate
-/config/strings.*
-  Cache-Control: no-cache, must-revalidate
 
   Cache-Control: no-cache, must-revalidate
   Cache-Control: no-cache, must-revalidate

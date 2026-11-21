@@ -86,7 +86,6 @@ module.exports = function (ctx) {
 
   slugs.forEach(function (slug) { compareEsEn(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
   compareEsEn(ROOT, 'raíz/');
-  compareEsEn(path.join(ROOT, 'config'), 'config/');
   compareEsEn(path.join(ROOT, 'legal'), 'legal/');
   /* Hidden routes with their own strings.<locale>.js pair (about/):
      each is a standalone guide aimed at families/therapists/agents, not
@@ -105,7 +104,7 @@ module.exports = function (ctx) {
      registered in either language file: browser fallback then renders
      the literal key name on the page. This section cross-references
      actual usage sites against the registered keys, per unit
-     (tools/<slug>/, the site root, config/, legal/) and per language.
+     (tools/<slug>/, the site root, legal/) and per language.
   */
   /* Each usage entry is { key, prefix }: prefix=false means the call
      passed a complete literal key (App.i18n.t('yourStars')) and must
@@ -212,7 +211,6 @@ module.exports = function (ctx) {
 
   slugs.forEach(function (slug) { checkUsageVsRegistration(path.join(toolsDir, slug), 'tools/' + slug + '/'); });
   checkUsageVsRegistration(ROOT, 'raíz/');
-  checkUsageVsRegistration(path.join(ROOT, 'config'), 'config/');
   checkUsageVsRegistration(path.join(ROOT, 'legal'), 'legal/');
 
 };

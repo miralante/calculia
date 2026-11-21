@@ -177,38 +177,6 @@ test('4 — an activity can be started and a question can be answered',
 // SETTINGS
 // ===========================================================================
 
-test('5 — resetting the person\'s data keeps the progress of the activities',
-  async ({ page }) => {
-    await seedStorage(page, {
-      'calculia:pairs': { stars: 2, completed: 1 },
-    });
-    await seedLocale(page, 'es');
-    await page.goto('/config/');
-
-    // The reset asks for confirmation: the first tap arms the button and
-    // the second one wipes.
-    await page.locator('#btnResetPersona').click();
-    await page.locator('#btnResetPersona').click();
-    await expect(page.locator('#feedbackPersona')).not.toBeEmpty();
-
-    const afterPerson = await page.evaluate(() => ({
-      pairs: localStorage.getItem('calculia:pairs'),
-      locale: localStorage.getItem('calculia:locale'),
-    }));
-    // The progress of the activities is NOT touched by this reset.
-    expect(afterPerson.pairs).not.toBeNull();
-    // The language is the only personal datum Calculia keeps.
-    expect(afterPerson.locale).toBeNull();
-
-    // The full reset, on the other hand, wipes everything.
-    await page.locator('#btnResetApp').click();
-    await page.locator('#btnResetApp').click();
-    await expect(page.locator('#feedbackApp')).not.toBeEmpty();
-    const afterApp = await page.evaluate(() =>
-      localStorage.getItem('calculia:pairs'));
-    expect(afterApp).toBeNull();
-  });
-
 // ===========================================================================
 // LANGUAGE
 // ===========================================================================

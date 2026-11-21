@@ -131,8 +131,8 @@
 
   /**
    * Ids of every tool with something saved (without the prefix,
-   * and without the NON_TOOL_KEYS keys). Used by /config/ to show
-   * status and for the full reset.
+   * and without the NON_TOOL_KEYS keys). Used by the achievements
+   * to read what is saved.
    * @returns {string[]}
    */
   function toolIds() {

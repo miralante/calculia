@@ -62,7 +62,6 @@ module.exports = function (ctx) {
     .concat(landingFilesByExt('.html'))
     .concat(landingFilesByExt('.js'))
     .concat(listDir(path.join(ROOT, 'dev')))
-    .concat(listDir(path.join(ROOT, 'config')))
     .concat(listDir(path.join(ROOT, 'legal')));
   slugs.forEach(function (slug) {
     userTargets = userTargets.concat(listDir(path.join(toolsDir, slug)));

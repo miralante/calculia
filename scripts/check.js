@@ -4,17 +4,17 @@
    Structural check with no dependencies (plain Node only).
    Usage: node scripts/check.js
    Checks:
-   1. That every .js file in tools/, the landing at the site root, config/, legal/ and
+   1. That every .js file in tools/, the landing at the site root, legal/ and
       assets/js/ parses (equivalent to `node --check`).
    2. That every tools/<slug>/ has the canonical files:
       index.html, app.js, data.js, strings.es.js, strings.en.js, styles.css.
    3. sw.js <-> disk parity: every FILES path exists, and every
       tool file is listed in FILES.
    4. es/en key parity between strings.es.js and strings.en.js
-      (tools/, the site root, config/, legal/).
+      (tools/, the site root, legal/).
    5. Single catalogue: the root index.html links every activity except the
       children of group hubs; dev/ must not exist; together with the hubs
-      they cover all activity slugs in tools/, config/, and sw.js FILES.
+      they cover all activity slugs in tools/, and sw.js FILES.
    6. Mandatory rule: zero mentions of disability, occupational therapy
       or minors in user-facing files (see doc/<locale>/SPEC.md §4).
  6.1 Zero school-year / syllabus labels in anything served to the

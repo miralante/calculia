@@ -69,16 +69,8 @@ module.exports = function (ctx) {
     });
     return set;
   }
-  function parseDataToolInConfig() {
-    var html = fs.readFileSync(path.join(ROOT, 'config', 'index.html'), 'utf8');
-    var re = /data-tool="([^"]+)"/g;
-    var set = new Set();
-    var m;
-    while ((m = re.exec(html)) !== null) set.add(m[1]);
-    return set;
-  }
   var slugsSet = new Set(slugs);
-  var targets = { config: parseDataToolInConfig(), sw: parseSlugsFromSw() };
+  var targets = { sw: parseSlugsFromSw() };
   Object.keys(targets).forEach(function (f) {
     var targetSet = targets[f];
     slugs.forEach(function (slug) {

@@ -9,7 +9,7 @@
 
    Storage: 'calculia:achievements' → { <id>: <timestamp of first unlock> }
    (listed in storage.js NON_TOOL_KEYS, so it never counts as an activity;
-   /config/ "reset the whole app" deletes it).
+   the gear reset deletes it).
 
    Public API (window.App.achievements):
      list                   the catalogue

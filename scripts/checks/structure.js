@@ -6,11 +6,10 @@ module.exports = function (ctx) {
   var rel = ctx.rel, listJs = ctx.listJs, landingFiles = ctx.landingFiles, landingFilesByExt = ctx.landingFilesByExt;
   var LANDING_FILES = ctx.LANDING_FILES, execFileSync = ctx.execFileSync, execFile = ctx.execFile;
 
-  /* --- 1. node --check on the landing at the site root, tools/, config/, legal/, assets/js/ --- */
+  /* --- 1. node --check on the landing at the site root, tools/, legal/, assets/js/ --- */
   var jsFiles = []
     .concat(listJs(path.join(ROOT, 'tools')))
     .concat(landingFilesByExt('.js'))
-    .concat(listJs(path.join(ROOT, 'config')))
     .concat(listJs(path.join(ROOT, 'legal')))
     .concat(listJs(path.join(ROOT, 'assets', 'js')));
 
