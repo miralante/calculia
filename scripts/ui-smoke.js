@@ -546,7 +546,12 @@ async function exerciseAppearanceSettings(browser, baseUrl) {
       return {
         pickerInDrawer: !!(drawer && picker && drawer.contains(picker)),
         gearIsLast: !!gear && row.lastElementChild === gear,
-        alignsEnd: !!style && style.justifyContent === 'flex-end',
+        /* `justify-content: flex-end` no siempre vuelve del CSSOM como
+           "flex-end": CSS Box Alignment 3 renombró la alineación de flujo a
+           "flow-end" y Chrome ya devuelve ese nombre. Las dos grafías
+           significan lo mismo, así que se aceptan las dos. */
+        alignsEnd: !!style && (style.justifyContent === 'flex-end' ||
+          style.justifyContent === 'flow-end' || style.justifyContent === 'end'),
         /* Diagnóstico: si la comprobación falla, el mensaje dice cuál es la
            fila del engranaje y cómo está alineada, para no tener que adivinar. */
         fila: row ? row.tagName + '.' + (row.className || '') : '(sin engranaje)',
