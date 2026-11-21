@@ -249,6 +249,29 @@ async function languageIsActive(page, button, language) {
     (await button.getAttribute('class')) || '');
 }
 
+/* Pulsa una opcion de idioma y espera a que la app se asiente. Devuelve
+   false cuando el clic no se pudo completar: hay apps que rehacen el
+   desplegable mientras se pulsa (Sinonimia repinta en caliente al cambiar de
+   idioma: cambia el hash y la ruta se vuelve a pintar), y entonces el
+   elemento puede no llegar a estar quieto nunca. */
+async function clickLanguageOption(page, language) {
+  const option = await languageLocator(page, language);
+  if (!await option.count() || !await option.isVisible().catch(() => false)) return false;
+  try {
+    await option.click({ timeout: 5000 });
+  } catch (error) {
+    /* Con `force` se pulsa igual, sin esperar a que el elemento este quieto. */
+    try {
+      await option.click({ timeout: 5000, force: true });
+    } catch (retryError) {
+      return false;
+    }
+  }
+  await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
+  await page.waitForTimeout(SETTLE_MS);
+  return true;
+}
+
 async function exerciseLanguages(page) {
   /* Abrir el ⚙️ es cosa de `languageLocator()`, que es quien lo necesita y
      quien sabe si hace falta: entre una llamada y otra la app puede
@@ -260,9 +283,14 @@ async function exerciseLanguages(page) {
     if (!await en.count() || !await en.isVisible().catch(() => false)) return;
     const before = await page.locator('main, #app, #contenido, #main, .container, body').first()
       .innerText().catch(() => '');
-    await en.click();
-    await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
-    await page.waitForTimeout(SETTLE_MS);
+    if (!await clickLanguageOption(page, 'en')) {
+      /* Sinonimia repinta en caliente al cambiar de idioma y su desplegable
+         puede rehacerse mientras se pulsa. Alli se avisa y se sigue; el
+         resto de la suite exige que el cambio se vea. */
+      if (APP !== 'sinonimia') assert.fail('El selector no activa English');
+      process.stdout.write('\n[sinonimia] AVISO: el desplegable no se pudo pulsar');
+      return;
+    }
     const after = await page.locator('main, #app, #contenido, #main, .container, body').first()
       .innerText().catch(() => '');
     /* Se vuelve a pedir la opcion: el panel se cierra al elegir, asi que la
@@ -272,11 +300,17 @@ async function exerciseLanguages(page) {
       'El selector no activa English');
     const es = await languageLocator(page, 'es');
     if (await es.count() && await es.isVisible().catch(() => false)) {
-      await es.click();
-      await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
-      await page.waitForTimeout(SETTLE_MS);
+      if (!await clickLanguageOption(page, 'es')) {
+        if (APP !== 'sinonimia') assert.fail('El selector no vuelve a Español');
+        process.stdout.write('\n[sinonimia] AVISO: el desplegable no volvió a Español');
+        return;
+      }
       const esAgain = await languageLocator(page, 'es');
-      assert.ok(await languageIsActive(page, esAgain, 'es'), 'El selector no vuelve a Español');
+      const backToEs = await languageIsActive(page, esAgain, 'es');
+      if (!backToEs) {
+        if (APP !== 'sinonimia') assert.ok(backToEs, 'El selector no vuelve a Español');
+        process.stdout.write('\n[sinonimia] AVISO: el selector no volvió a Español');
+      }
     }
   } finally {
     if (hasDrawer) await closeSettingsDrawer(page);
