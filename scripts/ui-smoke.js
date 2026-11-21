@@ -2159,7 +2159,18 @@ async function exerciseRoutimeRound(page, menuPicks, slug) {
     '#endScreen:not(.hidden)', '#reglaFinal:not(.hidden)', '.titulo-celebracion', '.celebration-title',
     '#app-celebration:not(.hidden)', '.celebration:not(.hidden)',
   ].join(', ');
-  const endVisible = () => page.locator(END).first().isVisible().catch(() => false);
+  /* EndVisible mira si ALGUNO de las pantallas finales es visible, no solo la
+     primera: la lista incluye la celebracion compartida, y esa capa puede
+     estar vacia (0x0), que Playwright da por no visible, mientras la
+     pantalla final de la app, que si lo esta, se quedaba sin ver. */
+  const endVisible = async () => {
+    const screens = page.locator(END);
+    const total = await screens.count();
+    for (let i = 0; i < total; i += 1) {
+      if (await screens.nth(i).isVisible().catch(() => false)) return true;
+    }
+    return false;
+  };
   /* Every third activation goes through the keyboard, so the round is played both
      with the mouse and with the keyboard. */
   let activations = 0;
