@@ -540,7 +540,7 @@ restablecimiento de `settings/index.html`.
 
 Cloudflare Pages, mismo patrón que Apptonomia, Sinonimia y Teclatlon: la
 raíz del repositorio es la salida del build, sin bundler. Un push a
-`master` dispara el build a través del conector de Git de Cloudflare;
+`main` dispara el build a través del conector de Git de Cloudflare;
 los pull requests obtienen un canal de previsualización automático. Un
 despliegue — incluso a un canal de previsualización — es una operación
 de red: pide confirmación antes de ejecutarlo (ver `CLAUDE.md`

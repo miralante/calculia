@@ -517,7 +517,7 @@ and check `settings/index.html`'s progress table and reset actions.
 ## 6. Deployment
 
 Cloudflare Pages, same pattern as Apptonomia, Sinonimia and Teclatlon:
-the repository root is the build output, no bundler. Push to `master`
+the repository root is the build output, no bundler. Push to `main`
 triggers the build through the Cloudflare Git connector; pull requests
 get an automatic preview channel. A deploy — even to a preview channel —
 is a network operation: ask before running one (see `CLAUDE.md` §"Agent
