@@ -12,6 +12,8 @@
   App.i18n.register({
     title: '➗ Cuentas rápidas',
     instructionMenu: 'Elige qué quieres practicar',
+    expoInstruction: 'Antes de jugar, lee la explicación.',
+    realInstruction: 'Esto se usa en la vida real.',
     btnMenu: 'Volver al inicio',
     endSummary: 'Has resuelto {n} preguntas de {activity}. Ahora tienes {stars} {starsWord}.',
     correctExplanation: '✅ ¡Correcto! La respuesta es: ',

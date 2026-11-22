@@ -9,6 +9,8 @@
   App.i18n.register({
     title: '🧮 Los Números',
     instructionMenu: 'Elige qué quieres practicar',
+    expoInstruction: 'Antes de jugar, lee la explicación.',
+    realInstruction: 'Esto se usa en la vida real.',
     notaTablas: '🔢 Para contar, sumar y multiplicar, ve a {link}.',
     notaTablasLink: 'Tablas',
     btnMenu: 'Volver al inicio',

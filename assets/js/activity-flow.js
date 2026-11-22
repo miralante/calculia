@@ -96,7 +96,7 @@
   /* The menu of activities, shown only when there is more than one. Both modes use it. */
   var MENU_HTML = [
     '<section id="screenMenu" class="hidden stack">',
-    '  <div class="row center-row"><p class="instruction" data-i18n="ui.menuInstruction">Elige un test.</p></div>',
+    '  <div class="row center-row"><p class="instruction" data-i18n="ui.menuInstruction">Elige qué quieres practicar</p></div>',
     '  <div class="card reference-card stack">',
     '    <h2 class="reference-title" data-i18n="ui.menuTitle">¿Qué quieres practicar?</h2>',
     '    <p class="reference-text" data-i18n="ui.menuText">Elige qué quieres practicar</p>',

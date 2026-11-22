@@ -483,6 +483,8 @@ button.locked {
 .row { display: flex; align-items: center; gap: var(--espacio); flex-wrap: wrap; }
 /* A row whose content is centred: the menu subtitles use it (one rule for all activities). */
 .center-row { justify-content: center; text-align: center; }
+/* The instruction line is always left-aligned, and spans its row so the text starts at the left edge. */
+.instruction { text-align: left; width: 100%; }
 
 /* ---- Visual money (euros drawn with CSS; logic in assets/js/dinero.js) ---- */
 .money {

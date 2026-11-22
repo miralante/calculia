@@ -9,6 +9,8 @@
   App.i18n.register({
     title: '🧮 Numbers',
     instructionMenu: 'Choose what you want to practise',
+    expoInstruction: 'Before you play, read the explanation.',
+    realInstruction: 'This is used in real life.',
     notaTablasLink: 'Math Tables',
     notaTablas: '🔢 To count, add and multiply, go to {link}.',
     btnMenu: 'Back to start',
