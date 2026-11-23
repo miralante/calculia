@@ -1750,8 +1750,15 @@ async function exerciseRoutimeSafeChat(page) {
       await page.waitForTimeout(1400);
       continue;
     }
-    await page.locator('#chatOpciones button:visible').first()
-      .waitFor({ state: 'visible', timeout: NAV_TIMEOUT });
+    /* La última acción del chat puede abrir directamente la regla de cierre:
+       entonces #chatOpciones se queda vacío y no llega ningún botón. Se espera
+       lo que ocurra primero: un botón nuevo o la pantalla de cierre. */
+    await Promise.race([
+      page.locator('#chatOpciones button:visible').first()
+        .waitFor({ state: 'visible', timeout: NAV_TIMEOUT }).catch(() => null),
+      page.locator('#reglaFinal:not(.hidden)')
+        .waitFor({ state: 'visible', timeout: NAV_TIMEOUT }).catch(() => null),
+    ]);
   }
 
   assert.ok(validatedSocraticPause, 'El smoke no comprobó la pausa socrática de Chat Seguro');
