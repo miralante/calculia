@@ -21,7 +21,7 @@
 .parity-card { border-color: var(--mod-razonamiento-suave); }
 .parity-dots {
   display: flex; flex-wrap: wrap; gap: 6px;
-  max-width: 360px;
+  /* No fixed cap: on a wide screen all the pairs sit in one row; the wrap is for phones only. */
   padding: var(--espacio);
   border-radius: var(--radio);
   background: var(--mod-razonamiento-suave);
@@ -56,7 +56,6 @@
 .parity-real-row { gap: 8px; }
 .parity-real-column { flex-direction: column; gap: 8px; }
 .parity-real-emoji { font-size: 40px; line-height: 1; }
-.parity-real-leftover { border-radius: 50%; }
 .parity-real-eggs {
   display: grid; grid-template-columns: repeat(3, auto);
   gap: 2px 6px; justify-content: center;
@@ -64,6 +63,22 @@
 .parity-real-eggs .parity-real-emoji { font-size: 30px; }
 .parity-real-svg { width: 170px; height: auto; }
 .parity-real-title { margin: 0; text-align: center; color: var(--mod-razonamiento); }
+
+/* Explanation slides: the balls sit centred in their box, large, with the
+   caption and the arrows centred under them (the format before the shared
+   flow took these slides over). activity-flow.css centres the slide itself. */
+.gallery-card, .real-card { align-items: center; border-color: var(--mod-razonamiento-suave); }
+#introVisual { width: 100%; }
+#introVisual .parity-dots {
+  width: 100%; max-width: none; min-height: 110px;
+  justify-content: center; align-items: flex-start; gap: 12px;
+}
+#introVisual .parity-ball { width: 44px; height: 44px; font-size: 18px; }
+#introVisual .parity-ball-pair { gap: 8px; }
+
+/* The stage labels ("Ejemplos de la vida real", the menu instruction) sit
+   centred over the card; the shared .instruction is left-aligned by default. */
+.center-row .instruction { text-align: center; }
 
 /* pantalla 4: la regla, plegada para no distraer durante la práctica */
 .parity-rule {
@@ -98,8 +113,11 @@
 
 /* The review slide after the numbers: the rule, then the even and the odd numbers, one line each. */
 .parity-review { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; max-width: 100%; }
-.parity-review-rule { margin: 0; font-size: var(--texto-grande); font-weight: 700; line-height: 1.35; }
 .parity-review-line { margin: 0; font-size: var(--texto-grande); font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* The help of a question: the number with its last digit highlighted, then the balls of that digit. */
+.parity-help-number { margin: 0 0 var(--espacio); text-align: center; font-size: clamp(2rem, 8vw, 2.75rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+.parity-help-digit { background: #FFE082; color: #111; border-radius: 8px; padding: 0 0.15em; box-shadow: 0 0 0 3px #F9A825; }
 
 /* 0 has no balls: its label stands in their place, in the same space. */
 .parity-zero-text {

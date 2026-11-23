@@ -29,11 +29,10 @@ var DATA = {
 
   /* Ejemplos de la vida real (pantalla 2), en orden, uno por
      diapositiva. Cada id dibuja el número que dice su texto: dos
-     zapatos y media docena de huevos (pares); una zapatilla y media
-     docena más un huevo (impares, con la pieza sola en el color de
-     sobrante); un triciclo y un trébol (impares). El texto vive en
+     zapatos y media docena de huevos (pares); una zapatilla (impar,
+     sin anillo); un triciclo y un trébol (impares). El texto vive en
      strings.<locale>.js bajo real.<índice>. */
-  examples: ['shoes', 'shoe', 'eggs', 'eggs-odd', 'trike', 'clover'],
+  examples: ['shoes', 'shoe', 'eggs', 'trike', 'clover'],
 
   /* Partes del test. count = preguntas de la parte; min/max = rango
      de valores. Las partes se hacen en el orden de esta lista. */

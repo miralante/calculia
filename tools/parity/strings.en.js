@@ -30,17 +30,15 @@
     /* ---------- Screen 1: what is even and what is odd ---------- */
     introTitle: 'What is even and what is odd?',
     introText: 'A number is even if its dots go two by two and none is left over. If one is left over, it is odd.',
-    /* Captions for the 0 to 10 slides. {p} = even or odd. */
+    /* Captions for the 0 to 9 slides. {p} = even or odd. */
     seqZero: 'No balls: it is {p}.',
     zeroLabel: '0 = even',
     seqEven: '{n} balls, all in pairs: it is {p}.',
     seqOne: 'One ball, left alone: it is {p}.',
     seqOdd: '{n} balls: one is left alone and the rest go in pairs: it is {p}.',
-    /* Review slide, after the numbers 0 to 10. */
-    reviewRule: 'Even: its dots go in pairs and none is left over. Odd: one is left over.',
+    /* Review slide, after the numbers 0 to 9: only the two lists. */
     reviewEven: 'Even: {list}',
     reviewOdd: 'Odd: {list}',
-    reviewCaption: 'Review: even numbers go in pairs, and odd numbers leave one on its own.',
     introNext: 'See it in real life →',
 
     /* ---------- Screen 2: real life ---------- */
@@ -54,42 +52,35 @@
       },
       1: {
         title: 'One slipper',
-        text: 'If there is only one slipper, one is left over. Odd.'
+        text: 'If there is only one slipper, there is only one. Odd.'
       },
       2: {
         title: 'Half a dozen',
         text: 'Six eggs: three exact pairs and none is left over. Even.'
       },
       3: {
-        title: 'Half a dozen and one',
-        text: 'Seven eggs: six go in pairs and one egg is left over. Odd.'
-      },
-      4: {
         title: 'Tricycle',
         text: 'Two back wheels, as a pair, and one front wheel on its own. Three wheels: odd.'
       },
-      5: {
+      4: {
         title: 'Clover',
         text: 'Two leaves below, as a pair, and one leaf on top on its own. Three leaves: odd.'
       }
     },
 
     /* ---------- Screen 3: the test, in three parts ----------
-       Each part has its name (label), its rule (rule, in the
-       "Remember the rule" box) and its hint (hint). */
+       Each part has its rule (rule, in the "Remember the rule" box)
+       and its hint (hint). The test shows no part label. */
     blocks: {
       dots: {
-        label: 'Part 1: dots',
         rule: 'The dots go two by two. If none is left over, it is even. If one is left over, it is odd.',
         hint: '«{elegida}» is not the answer: pair the dots two by two. If one is left alone, it is odd.'
       },
       numbers: {
-        label: 'Part 2: numbers from 0 to 99',
         rule: 'A number is even if it can be split into pairs with none left over. If one is left over, it is odd.',
         hint: '«{elegida}» is not the answer: picture the dots two by two. Is one left over?'
       },
       big: {
-        label: 'Part 3: big numbers',
         rule: 'Look at the last digit: 0, 2, 4, 6 or 8 → even. 1, 3, 5, 7 or 9 → odd.',
         hint: '«{elegida}» is not the answer: look only at the last digit.'
       }

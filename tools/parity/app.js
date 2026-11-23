@@ -1,7 +1,7 @@
 /* ============================================================
    Calculia — Pares e impares
    Three stages, in the flow of the test: 1. the explanation (the numbers 0 to
-   10 as balls in pairs, and the review), 2. the real-life examples, 3. the
+   9 as balls in pairs, and the review), 2. the real-life examples, 3. the
    reminder of the rule, and the test, one question at a time, with a closing
    screen. The stages are built by assets/js/activity-flow.js; this file has the
    drawings (balls and real-life pictures) and the questions. The data is in
@@ -40,8 +40,8 @@
     return '<div class="parity-dots" role="img" aria-label="' + label + '">' + html + '</div>';
   }
 
-  /* ---- Explanation slides: 0 to 10, and the review ---- */
-  var SEQ_MAX = 10;
+  /* ---- Explanation slides: 0 to 9, and the review ---- */
+  var SEQ_MAX = 9;
   var SEQ_LAST = SEQ_MAX + 1;
 
   function seqCaptionFor(n) {
@@ -52,12 +52,11 @@
     return fill(t('seqOdd'), { n: n, p: p });
   }
 
-  /* The review: the two lists side by side, and the rule in one line. */
+  /* The review: only the two lists, the even numbers and the odd ones explained. */
   function reviewHtml() {
     var evens = [], odds = [];
     for (var k = 0; k <= SEQ_MAX; k += 1) (isEven(k) ? evens : odds).push(String(k));
     return '<div class="parity-review">' +
-      '<p class="parity-review-rule">' + t('reviewRule') + '</p>' +
       '<p class="parity-review-line">' + fill(t('reviewEven'), { list: evens.join(', ') }) + '</p>' +
       '<p class="parity-review-line">' + fill(t('reviewOdd'), { list: odds.join(', ') }) + '</p>' +
       '</div>';
@@ -110,22 +109,15 @@
      drawn in the pair colour; the one left alone is drawn in the
      leftover colour, so the odd example is visible at a glance. */
 
-  /* An emoji ringed in the leftover colour: the one that is left alone. */
-  function leftoverEmoji(emoji) {
-    var span = document.createElement('span');
-    span.className = 'parity-real-emoji parity-real-leftover';
-    span.textContent = emoji;
-    span.style.boxShadow = '0 0 0 4px ' + DATA.leftoverColor;
-    return span;
-  }
-
-  /* Shoes: two shoes, one pair (even). Or one shoe alone, ringed in
-     the leftover colour (odd). */
+  /* Shoes: two shoes, one pair (even). Or one shoe alone, with no ring (odd). */
   function shoesDrawing(single) {
     var box = document.createElement('div');
     box.className = 'parity-real-visual parity-real-row';
     if (single) {
-      box.appendChild(leftoverEmoji('👟'));
+      var alone = document.createElement('span');
+      alone.className = 'parity-real-emoji';
+      alone.textContent = '👟';
+      box.appendChild(alone);
       return box;
     }
     for (var i = 0; i < 2; i += 1) {
@@ -138,9 +130,8 @@
   }
 
   /* Half a dozen eggs: two rows of three, so each column of the
-     carton is a pair of eggs (even). With one more egg (odd), that
-     egg stands alone below, ringed in the leftover colour. */
-  function eggsDrawing(extra) {
+     carton is a pair of eggs (even). */
+  function eggsDrawing() {
     var box = document.createElement('div');
     box.className = 'parity-real-visual parity-real-column';
     var grid = document.createElement('div');
@@ -152,7 +143,6 @@
       grid.appendChild(egg);
     }
     box.appendChild(grid);
-    if (extra) box.appendChild(leftoverEmoji('🥚'));
     return box;
   }
 
@@ -208,8 +198,7 @@
   function drawingFor(id) {
     if (id === 'shoes') return shoesDrawing(false);
     if (id === 'shoe') return shoesDrawing(true);
-    if (id === 'eggs') return eggsDrawing(false);
-    if (id === 'eggs-odd') return eggsDrawing(true);
+    if (id === 'eggs') return eggsDrawing();
     if (id === 'trike') return trikeDrawing();
     return cloverDrawing();
   }
@@ -231,6 +220,16 @@
     return out;
   }
 
+  /* The help of a question follows the rule (the last digit): the number with its last
+     digit highlighted, and only the balls of that digit. 24 shows the 4 and four balls. */
+  function lastDigitHelp(n) {
+    var text = format(n);
+    var d = n % 10;
+    var num = text.slice(0, -1) + '<span class="parity-help-digit">' + text.slice(-1) + '</span>';
+    var balls = d === 0 ? '<span class="parity-zero-text">' + t('zeroLabel') + '</span>' : dotsHtml(d);
+    return '<p class="parity-help-number">' + num + '</p>' + balls;
+  }
+
   function explanationFor(item) {
     var n = item.a;
     if (item.block.kind === 'dots') return fill(t('explainParity'), { a: n });
@@ -243,11 +242,11 @@
   function question(item) {
     return {
       prompt: fill(t('parityPrompt'), { a: format(item.a) }),
-      legend: t('blocks.' + item.block.id + '.label'),
       hint: t('blocks.' + item.block.id + '.rule'),
       visual: item.block.kind === 'dots' ? dotsHtml(item.a) : '',
       visualAria: item.block.kind === 'dots' ? String(item.a) : '',
       explanation: explanationFor(item),
+      explanationVisual: lastDigitHelp(item.a),
       options: App.utils.shuffle([
         { value: true, label: t('evenLabel') },
         { value: false, label: t('oddLabel') }
@@ -274,14 +273,17 @@
     toolId: 'parity',
     pairedTest: true,
     test: 'options',
-    review: 'rule',
+    /* Socratic: a wrong answer shows the hint, and the options stay locked until
+       «Entendido». No review button in the test: the rule is read before it (the reminder). */
+    socratic: true,
+    review: 'none',
     testVisuals: true,
     introHeading: function () { return t('instruction'); },
     introCard: function () { return { title: t('introTitle'), text: t('introText') }; },
     intro: Array.apply(null, Array(SEQ_LAST + 1)).map(function (_, n) { return { visual: n }; }),
     visualHtml: slideVisual,
     introCopy: function (n) {
-      if (n === SEQ_LAST) return { title: t('reviewCaption'), text: '' };
+      if (n === SEQ_LAST) return { title: '', text: '' };
       return { title: String(n), text: seqCaptionFor(n) };
     },
     real: DATA.examples.map(function (id, i) { return { visual: { id: id, i: i } }; }),
