@@ -28,7 +28,7 @@
     ruleOpen: 'Abre aquí para ver la regla',
     ruleLastDigit: 'Si termina en 0, 2, 4, 6 u 8: par. Si termina en 1, 3, 5, 7 o 9: impar.',
     reminderTitle: 'Recuerda la regla',
-    reminderPairs: 'Si sus puntos van de dos en dos y ninguno se queda suelto, es par. Si se queda uno suelto, es impar.',
+    reminderPairs: 'Si sus puntos van de dos en dos, es par. Si se queda uno suelto, es impar.',
     reminderLastDigit: 'Mira la última cifra:',
     reminderExample: 'Ejemplo: 18 termina en 8, así que es par. 27 termina en 7, así que es impar.',
     reminderNext: 'Empezar a practicar →',
@@ -38,13 +38,13 @@
 
     /* ---------- Pantalla 1: qué es par y qué es impar ---------- */
     introTitle: '¿Qué es par y qué es impar?',
-    introText: 'Un número es par si sus puntos van de dos en dos y no sobra ninguno. Si sobra uno, es impar.',
+    introText: 'Es par si sus puntos van de dos en dos. Si sobra uno, es impar.',
     /* Pies de las diapositivas del 0 al 9. {p} = par o impar. */
     seqZero: 'Ninguna bola: es {p}.',
     zeroLabel: '0 = par',
     seqEven: '{n} bolas, todas en parejas: es {p}.',
-    seqOne: 'Una bola, y se queda sola: es {p}.',
-    seqOdd: '{n} bolas: una se queda sola y las demás van en parejas: es {p}.',
+    seqOne: 'Una bola sola: es {p}.',
+    seqOdd: '{n} bolas: sobra una: es {p}.',
     /* Diapositiva de repaso, al final de los números del 0 al 9: solo las dos listas. */
     reviewEven: 'Pares: {list}',
     reviewOdd: 'Impares: {list}',
@@ -52,28 +52,28 @@
 
     /* ---------- Pantalla 2: la vida real ---------- */
     realTitle: 'En la vida real',
-    realText: 'Fíjate: lo par va en parejas y lo impar deja uno suelto.',
+    realText: 'Lo par va en parejas; lo impar deja uno suelto.',
     realNext: 'Ver la regla →',
     real: {
       0: {
         title: 'Zapatos',
-        text: 'Un par: un pie y el otro. Van de dos en dos y no sobra ninguno: es par.'
+        text: 'Un pie y el otro: van en pareja. Es par.'
       },
       1: {
         title: 'Una zapatilla',
-        text: 'Si hay una sola zapatilla, solo hay una. Es impar.'
+        text: 'Hay una sola zapatilla, es impar.'
       },
       2: {
         title: 'Media docena',
-        text: 'Seis huevos: tres parejas exactas y no sobra ninguno. Es par.'
+        text: 'Seis huevos: parejas exactas y no sobra ninguno. Es par.'
       },
       3: {
         title: 'Triciclo',
-        text: 'Dos ruedas detrás, en pareja, y una delante que va sola. Tres ruedas: impar.'
+        text: 'Dos ruedas en pareja y una delante sola. Es impar.'
       },
       4: {
         title: 'Trébol',
-        text: 'Dos hojas abajo, en pareja, y una arriba que se queda sola. Tres hojas: impar.'
+        text: 'Dos hojas en pareja y una arriba sola. Es impar.'
       }
     },
 
@@ -82,12 +82,12 @@
        y su pista (hint). El test no muestra ningún rótulo de parte. */
     blocks: {
       dots: {
-        rule: 'Los puntos van de dos en dos. Si no sobra ninguno, es par. Si sobra uno, es impar.',
-        hint: '«{elegida}» no es la respuesta: empareja los puntos de dos en dos. Si sobra uno, es impar.'
+        rule: 'Si los puntos van de dos en dos, es par. Si sobra uno, es impar.',
+        hint: '«{elegida}» no es la respuesta. Empareja los puntos: ¿sobra uno?'
       },
       numbers: {
-        rule: 'Un número es par si se puede repartir en parejas sin que sobre nada. Si sobra uno, es impar.',
-        hint: '«{elegida}» no es la respuesta: imagina los puntos de dos en dos. ¿Sobra uno?'
+        rule: 'Es par si se reparte en parejas sin que sobre nada. Si sobra uno, es impar.',
+        hint: '«{elegida}» no es la respuesta. ¿Sobra uno al hacer parejas?'
       },
       big: {
         rule: 'Mira la última cifra: 0, 2, 4, 6 u 8 → par. 1, 3, 5, 7 o 9 → impar.',
@@ -106,13 +106,13 @@
 
     /* Explicaciones: se publican al acertar. Las pistas de cada parte
        están en blocks.<id>.hint. */
-    explainParity: 'Los {a} puntos van de dos en dos. Si no sobra ninguno, es par; si sobra uno, es impar.',
-    explainPairsEven: '{a} es par: de dos en dos no sobra ninguno. Mira la última cifra: {d}, que es par.',
-    explainPairsOdd: '{a} es impar: de dos en dos, sobra uno. Mira la última cifra: {d}, que es impar.',
-    explainLast: 'La última cifra de {a} es {d}. Así que {a} es {p}.',
+    explainParity: 'Los {a} puntos: si van de dos en dos, es par; si sobra uno, es impar.',
+    explainPairsEven: '{a} es par: sus puntos van en parejas. Su última cifra, {d}, es par.',
+    explainPairsOdd: '{a} es impar: sobra uno. Su última cifra, {d}, es impar.',
+    explainLast: 'La última cifra de {a} es {d}: {a} es {p}.',
 
     /* ---------- Cierre ---------- */
     parityFinalSummary: 'Has terminado {count} preguntas. Ya tienes {stars} {starsWord}.',
-    parityTransfer: 'Saber qué números son pares y cuáles impares sirve para repartir en dos equipos, alternar turnos o cortar listas por la mitad.'
+    parityTransfer: 'Saber si un número es par o impar sirve para repartir en equipos o alternar turnos.'
   }, 'es');
 })();

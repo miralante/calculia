@@ -19,7 +19,7 @@
     ruleOpen: 'Open here to see the rule',
     ruleLastDigit: 'If it ends in 0, 2, 4, 6 or 8: even. If it ends in 1, 3, 5, 7 or 9: odd.',
     reminderTitle: 'Remember the rule',
-    reminderPairs: 'If its dots go two by two and none is left over, it is even. If one is left over, it is odd.',
+    reminderPairs: 'If its dots go two by two, it is even. If one is left alone, it is odd.',
     reminderLastDigit: 'Look at the last digit:',
     reminderExample: 'Example: 18 ends in 8, so it is even. 27 ends in 7, so it is odd.',
     reminderNext: 'Start practising →',
@@ -29,13 +29,13 @@
 
     /* ---------- Screen 1: what is even and what is odd ---------- */
     introTitle: 'What is even and what is odd?',
-    introText: 'A number is even if its dots go two by two and none is left over. If one is left over, it is odd.',
+    introText: 'It is even if its dots go two by two. If one is left over, it is odd.',
     /* Captions for the 0 to 9 slides. {p} = even or odd. */
     seqZero: 'No balls: it is {p}.',
     zeroLabel: '0 = even',
     seqEven: '{n} balls, all in pairs: it is {p}.',
-    seqOne: 'One ball, left alone: it is {p}.',
-    seqOdd: '{n} balls: one is left alone and the rest go in pairs: it is {p}.',
+    seqOne: 'One ball alone: it is {p}.',
+    seqOdd: '{n} balls: one is left over: it is {p}.',
     /* Review slide, after the numbers 0 to 9: only the two lists. */
     reviewEven: 'Even: {list}',
     reviewOdd: 'Odd: {list}',
@@ -43,28 +43,28 @@
 
     /* ---------- Screen 2: real life ---------- */
     realTitle: 'In real life',
-    realText: 'Look: even things go in pairs, and odd things leave one alone.',
+    realText: 'Even things go in pairs; odd things leave one alone.',
     realNext: 'See the rule →',
     real: {
       0: {
         title: 'Shoes',
-        text: 'A pair: one foot and the other. They go two by two and none is left over. Even.'
+        text: 'One foot and the other: a pair. Even.'
       },
       1: {
         title: 'One slipper',
-        text: 'If there is only one slipper, there is only one. Odd.'
+        text: 'There is only one slipper. Odd.'
       },
       2: {
         title: 'Half a dozen',
-        text: 'Six eggs: three exact pairs and none is left over. Even.'
+        text: 'Six eggs: exact pairs, none left over. Even.'
       },
       3: {
         title: 'Tricycle',
-        text: 'Two back wheels, as a pair, and one front wheel on its own. Three wheels: odd.'
+        text: 'Two back wheels as a pair and one front wheel alone. Odd.'
       },
       4: {
         title: 'Clover',
-        text: 'Two leaves below, as a pair, and one leaf on top on its own. Three leaves: odd.'
+        text: 'Two leaves below as a pair and one on top alone. Odd.'
       }
     },
 
@@ -73,12 +73,12 @@
        and its hint (hint). The test shows no part label. */
     blocks: {
       dots: {
-        rule: 'The dots go two by two. If none is left over, it is even. If one is left over, it is odd.',
-        hint: '«{elegida}» is not the answer: pair the dots two by two. If one is left alone, it is odd.'
+        rule: 'If the dots go two by two, it is even. If one is left over, it is odd.',
+        hint: '«{elegida}» is not the answer. Pair the dots: is one left over?'
       },
       numbers: {
-        rule: 'A number is even if it can be split into pairs with none left over. If one is left over, it is odd.',
-        hint: '«{elegida}» is not the answer: picture the dots two by two. Is one left over?'
+        rule: 'It is even if it splits into pairs with none left over. If one is left, it is odd.',
+        hint: '«{elegida}» is not the answer. Does one get left over in pairs?'
       },
       big: {
         rule: 'Look at the last digit: 0, 2, 4, 6 or 8 → even. 1, 3, 5, 7 or 9 → odd.',
@@ -97,13 +97,13 @@
 
     /* Explanations: shown on a right answer. Each part's hint is
        in blocks.<id>.hint. */
-    explainParity: 'The {a} dots go two by two. If none is left, it is even; if one is left, it is odd.',
-    explainPairsEven: '{a} is even: two by two, none is left over. Look at the last digit: {d}, which is even.',
-    explainPairsOdd: '{a} is odd: two by two, one is left over. Look at the last digit: {d}, which is odd.',
-    explainLast: 'The last digit of {a} is {d}. So {a} is {p}.',
+    explainParity: 'The {a} dots: if they go two by two, it is even; if one is left, it is odd.',
+    explainPairsEven: '{a} is even: its dots go in pairs. Its last digit, {d}, is even.',
+    explainPairsOdd: '{a} is odd: one is left over. Its last digit, {d}, is odd.',
+    explainLast: 'The last digit of {a} is {d}: {a} is {p}.',
 
     /* ---------- Closing ---------- */
     parityFinalSummary: 'You finished {count} questions. You have {stars} {starsWord} now.',
-    parityTransfer: 'Knowing which numbers are even and which are odd helps split into two teams, alternate turns, or cut a list in half.'
+    parityTransfer: 'Knowing if a number is even or odd helps split into teams or take turns.'
   }, 'en');
 })();
