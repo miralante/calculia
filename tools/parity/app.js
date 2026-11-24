@@ -225,8 +225,10 @@
   }
 
   /* The help of a question follows the rule (the last digit): the number with its last
-     digit highlighted, and only the balls of that digit. 24 shows the 4 and four balls. */
+     digit highlighted, and only the balls of that digit. 24 shows the 4 and four balls.
+     A one-digit number is its own last digit, so it gets no help: the help would repeat it. */
   function lastDigitHelp(n) {
+    if (n < 10) return '';
     var text = format(n);
     var d = n % 10;
     var num = text.slice(0, -1) + '<span class="parity-help-digit">' + text.slice(-1) + '</span>';
@@ -292,6 +294,8 @@
     /* «← Volver» from the real-life examples or the reminder returns to the explanation on the
        slide it was left on. */
     keepSlideOnBack: true,
+    /* «← Volver» from the test goes to the activity's card on the landing, not to the explanation. */
+    hubOnBackFromTest: true,
     /* Socratic: a wrong answer shows the hint, and the options stay locked until
        «Entendido». No review button in the test: the rule is read before it (the reminder). */
     socratic: true,

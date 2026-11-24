@@ -460,6 +460,8 @@
     App.backStep = function () {
       var open = ctx.screens.filter(function (id) { return !$(id).classList.contains('hidden'); })[0];
       if (!open || open === '#screenIntro' || open === '#screenMenu') return false;
+      /* hubOnBackFromTest: the test's «← Volver» leaves for the hub, as the explanation does. */
+      if (open === '#screenGame' && ctx.config.hubOnBackFromTest) return false;
       /* keepSlideOnBack: the explanation comes back on the slide it was left on, not its first. */
       if (!ctx.config.keepSlideOnBack) ctx.state.intro = 0;
       paintIntro(ctx);
