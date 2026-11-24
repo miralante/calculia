@@ -29,13 +29,11 @@
 
     /* ---------- Screen 1: what is even and what is odd ---------- */
     introTitle: 'What is even and what is odd?',
-    introText: 'It is even if its dots go two by two. If one is left over, it is odd.',
-    /* Captions for the 0 to 9 slides. {p} = even or odd. */
-    seqZero: 'No balls: it is {p}.',
+    /* The rule in the card above the slides: EVEN and ODD, each with its condition. */
+    introRuleEven: 'none left over',
+    introRuleOdd: 'one left over',
+    /* Zero has no balls: its label takes their place. */
     zeroLabel: '0 = even',
-    seqEven: '{n} balls, all in pairs: it is {p}.',
-    seqOne: 'One ball alone: it is {p}.',
-    seqOdd: '{n} balls: one is left over: it is {p}.',
     /* Review slide, after the numbers 0 to 9: only the two lists. */
     reviewEven: 'Even: {list}',
     reviewOdd: 'Odd: {list}',

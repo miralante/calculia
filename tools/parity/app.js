@@ -44,12 +44,13 @@
   var SEQ_MAX = 9;
   var SEQ_LAST = SEQ_MAX + 1;
 
-  function seqCaptionFor(n) {
-    var p = wordFor(n);
-    if (n === 0) return fill(t('seqZero'), { p: p });
-    if (n === 1) return fill(t('seqOne'), { p: p });
-    if (isEven(n)) return fill(t('seqEven'), { n: n, p: p });
-    return fill(t('seqOdd'), { n: n, p: p });
+  /* The word under each number: PAR or IMPAR (the CSS sets it in capitals). */
+  function labelFor(n) { return isEven(n) ? t('evenLabel') : t('oddLabel'); }
+
+  /* The card above the slides: the rule, PAR and IMPAR, each with its condition. */
+  function introRuleHtml() {
+    return '<p class="parity-rule-line"><strong>' + t('evenLabel') + ':</strong> ' + t('introRuleEven') + '</p>' +
+      '<p class="parity-rule-line"><strong>' + t('oddLabel') + ':</strong> ' + t('introRuleOdd') + '</p>';
   }
 
   /* The review: only the two lists, the even numbers and the odd ones explained. */
@@ -62,7 +63,10 @@
       '</div>';
   }
 
-  function slideVisual(n) {
+  /* The picture of a slide: its spec is { n: the number }. An object, not the bare
+     number, because the shared flow skips a falsy visual, and 0 would vanish. */
+  function slideVisual(spec) {
+    var n = spec.n;
     if (n === SEQ_LAST) return reviewHtml();
     /* 0 has no balls: the words «0 = par» stand in their place. */
     if (n === 0) return '<span class="parity-zero-text">' + t('zeroLabel') + '</span>';
@@ -279,12 +283,12 @@
     review: 'none',
     testVisuals: true,
     introHeading: function () { return t('instruction'); },
-    introCard: function () { return { title: t('introTitle'), text: t('introText') }; },
-    intro: Array.apply(null, Array(SEQ_LAST + 1)).map(function (_, n) { return { visual: n }; }),
+    introCard: function () { return { title: t('introTitle'), text: '', html: introRuleHtml() }; },
+    intro: Array.apply(null, Array(SEQ_LAST + 1)).map(function (_, n) { return { visual: { n: n } }; }),
     visualHtml: slideVisual,
     introCopy: function (n) {
       if (n === SEQ_LAST) return { title: '', text: '' };
-      return { title: String(n), text: seqCaptionFor(n) };
+      return { title: String(n), text: labelFor(n) };
     },
     real: DATA.examples.map(function (id, i) { return { visual: { id: id, i: i } }; }),
     realText: function (i) { return t('real.' + i + '.text'); },

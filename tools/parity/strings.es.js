@@ -38,13 +38,11 @@
 
     /* ---------- Pantalla 1: qué es par y qué es impar ---------- */
     introTitle: '¿Qué es par y qué es impar?',
-    introText: 'Es par si sus puntos van de dos en dos. Si sobra uno, es impar.',
-    /* Pies de las diapositivas del 0 al 9. {p} = par o impar. */
-    seqZero: 'Ninguna bola: es {p}.',
+    /* La regla de la tarjeta de arriba: PAR y IMPAR, cada uno con su condición. */
+    introRuleEven: 'no sobra ninguno',
+    introRuleOdd: 'sobra uno',
+    /* El 0 no tiene bolas: su etiqueta ocupa su sitio. */
     zeroLabel: '0 = par',
-    seqEven: '{n} bolas, todas en parejas: es {p}.',
-    seqOne: 'Una bola sola: es {p}.',
-    seqOdd: '{n} bolas: sobra una: es {p}.',
     /* Diapositiva de repaso, al final de los números del 0 al 9: solo las dos listas. */
     reviewEven: 'Pares: {list}',
     reviewOdd: 'Impares: {list}',

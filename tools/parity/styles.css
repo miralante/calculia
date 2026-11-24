@@ -76,6 +76,15 @@
 #introVisual .parity-ball { width: 44px; height: 44px; font-size: 18px; }
 #introVisual .parity-ball-pair { gap: 8px; }
 
+/* The slide reads: the dots, then the number, then PAR or IMPAR in capitals. */
+#introTitle { font-size: clamp(2rem, 8vw, 2.75rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
+#introText { text-transform: uppercase; font-weight: 800; letter-spacing: 0.06em; color: var(--mod-razonamiento); }
+
+/* The rule card above the slides: PAR and IMPAR, each with its condition. */
+#introCardHtml { text-align: center; }
+.parity-rule-line { margin: 0; font-size: var(--texto-grande); line-height: 1.45; }
+.parity-rule-line strong { text-transform: uppercase; color: var(--mod-razonamiento); }
+
 /* The stage labels ("Ejemplos de la vida real", the menu instruction) sit
    centred over the card; the shared .instruction is left-aligned by default. */
 .center-row .instruction { text-align: center; }
