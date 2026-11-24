@@ -233,6 +233,10 @@
   font-variant-numeric: tabular-nums;
 }
 .fac-result { background: var(--mod-razonamiento-suave); }
+/* The power as plain figures, with no frames: the exponent is raised and coloured, the result is bold. */
+.power-term { display: inline-flex; align-items: flex-start; font-size: var(--texto-grande); font-weight: 800; font-variant-numeric: tabular-nums; }
+.power-exp-box { margin-left: 2px; font-size: 0.6em; font-weight: 800; color: var(--mod-razonamiento); line-height: 1.3; }
+.power-result-num { color: var(--mod-razonamiento); }
 .fac-growth { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .fac-card { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 72px; padding: 8px 10px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
 .fac-name { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
@@ -341,13 +345,17 @@
 .power-slot.is-ok { border: 2px solid var(--mod-razonamiento); background: var(--mod-razonamiento-suave); }
 .power-slot.is-wrong { animation: ops-shake 0.35s; border-style: solid; }
 
-/* Powers practice: the given number and the box to fill, side by side, and the answer under them. */
+/* Powers practice, as the sketch draws it: the number with its exponent written above it (a box to type,
+   or the given one), the «Calcular» button beside it, and the answer as a line under them. */
 .power-card { max-width: 100%; }
-.power-try { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 18px; }
-.power-try-part { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.power-try { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 18px; }
+.power-try-group { display: inline-flex; align-items: flex-start; gap: 4px; }
 .power-try-num { font-size: clamp(2.6rem, 10vw, 4rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; line-height: 1.1; }
-.power-try-cap { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); letter-spacing: .04em; text-transform: uppercase; }
+.power-try-exp { font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; line-height: 1; }
 .power-result { width: 100%; }
-.power-count { font-weight: 600; margin: 0.5rem 0; }
 /* The box for the number is big enough to read and to tap. */
 .power-card input[type="number"] { width: 5rem; min-height: var(--boton-min); font-size: 1.6rem; text-align: center; }
+/* The box of the exponent sits above the base, small, as a superscript. */
+.power-card input.power-try-exp { width: 3.6rem; font-size: 1.3rem; }
+/* The box of the base is as tall as the big number beside the exponent it is given with. */
+.power-card input.power-try-base { min-height: 56px; }

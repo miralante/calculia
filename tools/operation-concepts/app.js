@@ -570,8 +570,19 @@
   /* n! as 4 × 3 × 2 × 1 = 24. */
   function chainHtml(n) { return chipLine(factorsDown(n, 1), factorialOf(n)); }
   /* a^n as 2 × 2 × 2 = 8. */
-  /* The class lets the styles put the title and the text of this slide above its drawing. */
-  function powerHtml(base, exp) { return '<div class="power-visual">' + chipLine(repeatOf(base, exp), Math.pow(base, exp)) + '</div>'; }
+  /* The class lets the styles put the title and the text of this slide above its drawing. `mode` 'repeat' writes
+     2 × 2 × 2 = 2³ = 8 (the multiplication, then the power); 'exponent' writes 3² = 3 × 3 = 9 (the power first,
+     with its exponent boxed, then the multiplication). */
+  function powerHtml(base, exp, mode) {
+    var repeated = '';
+    repeatOf(base, exp).forEach(function (b, i) {
+      repeated += (i ? sign('×') : '') + '<span class="power-term">' + b + '</span>';
+    });
+    var power = '<span class="power-term"><span>' + base + '</span><sup class="power-exp-box">' + exp + '</sup></span>';
+    var result = '<span class="power-term power-result-num">' + Math.pow(base, exp) + '</span>';
+    var line = mode === 'exponent' ? power + sign('=') + repeated : repeated + sign('=') + power;
+    return '<div class="power-visual"><div class="fac-line">' + line + sign('=') + result + '</div></div>';
+  }
   /* The name of each part of a power: the base, the exponent and the power. */
   function powerPart(key) { return t('power.parts.' + key); }
   /* The place of one name: the written name on the slide of the parts, or the empty
@@ -628,7 +639,7 @@
     /* A slide with no picture on the left (the game on the right carries it). */
     if (!spec) return '';
     if (spec.kind === 'chain') return chainHtml(spec.n);
-    if (spec.kind === 'power') return powerHtml(spec.base, spec.exp);
+    if (spec.kind === 'power') return powerHtml(spec.base, spec.exp, spec.mode);
     if (spec.kind === 'anatomy') return anatomyHtml(spec.base, spec.exp, false);
     if (spec.kind === 'growth') return growthHtml(spec.max);
     if (spec.kind === 'chips') return chipsHtml(spec.n);
@@ -678,50 +689,57 @@
     return App.utils.shuffle(list);
   }
 
-  /* ---- Powers: the practice that replaces the test. One screen with the two ways
-     of practising a power:
+  /* ---- Powers: the practice that replaces the test. Three slides, one at a time, with the arrows:
      1. the base is given; you type the exponent, and the multiplications and the value appear;
-     2. the exponent is given; you type the base, and the multiplications and the value appear.
+     2. the exponent is given; you type the base, and the multiplications and the value appear;
+     3. you type both the base and the exponent, and the multiplications and the value appear.
      Numbers from 2 to 5. Little text: the pictures carry it. There is no test and no stars here. ---- */
   var POWER_HTML = [
     '<section id="screenPower" class="hidden stack">',
     '  <div class="row center-row">',
     '    <p class="instruction" id="powPracticeTitle"></p>',
     '  </div>',
-    '  <article class="card centered stack power-card">',
+    '  <article class="card centered stack power-card" data-power-slide="0">',
     '    <h3 class="reference-title" id="powExpTitle"></h3>',
     '    <div class="power-try">',
-    '      <span class="power-try-part">',
+    '      <span class="power-try-group">',
     '        <span class="power-try-num" id="powExpBase" aria-live="polite"></span>',
-    '        <span class="power-try-cap" id="powExpBaseCap"></span>',
+    '        <input type="number" class="power-try-exp" id="powExpInput" min="2" max="5" inputmode="numeric" autocomplete="off">',
     '      </span>',
-    '      <span class="power-try-part">',
-    '        <input type="number" id="powExpInput" min="2" max="5" inputmode="numeric" autocomplete="off">',
-    '        <label class="power-try-cap" for="powExpInput" id="powExpInputCap"></label>',
-    '      </span>',
+    '      <button type="button" class="btn" id="powExpCalc"></button>',
     '    </div>',
-    '    <button type="button" class="btn" id="powExpCalc"></button>',
     '    <p class="feedback" id="powExpFeedback" aria-live="polite"></p>',
     '    <div class="power-result" id="powExpResult" aria-live="polite"></div>',
     '  </article>',
-    '  <article class="card centered stack power-card">',
+    '  <article class="card centered stack power-card" data-power-slide="1">',
     '    <h3 class="reference-title" id="powBaseTitle"></h3>',
     '    <div class="power-try">',
-    '      <span class="power-try-part">',
-    '        <input type="number" id="powBaseInput" min="2" max="5" inputmode="numeric" autocomplete="off">',
-    '        <label class="power-try-cap" for="powBaseInput" id="powBaseInputCap"></label>',
+    '      <span class="power-try-group">',
+    '        <input type="number" class="power-try-base" id="powBaseInput" min="2" max="5" inputmode="numeric" autocomplete="off">',
+    '        <span class="power-try-exp" id="powBaseExp" aria-live="polite"></span>',
     '      </span>',
-    '      <span class="power-try-part">',
-    '        <span class="power-try-num" id="powBaseExp" aria-live="polite"></span>',
-    '        <span class="power-try-cap" id="powBaseExpCap"></span>',
-    '      </span>',
+    '      <button type="button" class="btn" id="powBaseCalc"></button>',
     '    </div>',
-    '    <button type="button" class="btn" id="powBaseCalc"></button>',
     '    <p class="feedback" id="powBaseFeedback" aria-live="polite"></p>',
     '    <div class="power-result" id="powBaseResult" aria-live="polite"></div>',
     '  </article>',
+    '  <article class="card centered stack power-card" data-power-slide="2">',
+    '    <h3 class="reference-title" id="powBothTitle"></h3>',
+    '    <div class="power-try">',
+    '      <span class="power-try-group">',
+    '        <input type="number" class="power-try-base" id="powBothBase" min="2" max="5" inputmode="numeric" autocomplete="off">',
+    '        <input type="number" class="power-try-exp" id="powBothExp" min="2" max="5" inputmode="numeric" autocomplete="off">',
+    '      </span>',
+    '      <button type="button" class="btn" id="powBothCalc"></button>',
+    '    </div>',
+    '    <p class="feedback" id="powBothFeedback" aria-live="polite"></p>',
+    '    <div class="power-result" id="powBothResult" aria-live="polite"></div>',
+    '  </article>',
+    '  <div class="carousel-controls">',
+    '    <button type="button" class="btn btn-secondary" id="powPrev">←</button>',
+    '    <button type="button" class="btn btn-secondary" id="powNext">→</button>',
+    '  </div>',
     '  <button type="button" class="btn btn-secondary" id="powAgain"></button>',
-    '  <button type="button" class="btn btn-secondary" id="powBack"></button>',
     '</section>'
   ].join('\n');
 
@@ -751,6 +769,15 @@
     byId('powBaseFeedback').textContent = '';
     byId('powExpResult').innerHTML = '';
     byId('powBaseResult').innerHTML = '';
+    byId('powBothBase').value = '';
+    byId('powBothExp').value = '';
+    byId('powBothFeedback').textContent = '';
+    byId('powBothResult').innerHTML = '';
+  }
+
+  /* The answer of the practice as a plain line, as the sketch writes it: 5 × 5 = 25. */
+  function powerSumHtml(b, e) {
+    return '<p class="ops-expr">' + repeatOf(b, e).join(' × ') + ' = ' + Math.pow(b, e) + '</p>';
   }
 
   /* The first way: the base is given and the exponent is typed. The answer shows the
@@ -764,8 +791,7 @@
     }
     var b = power.base, e = typed.value;
     byId('powExpFeedback').textContent = '';
-    byId('powExpResult').innerHTML = '<p class="power-count">✅ ' + fill(t('power.count'), { e: e }) + '</p>' +
-      chipLine(repeatOf(b, e), Math.pow(b, e));
+    byId('powExpResult').innerHTML = powerSumHtml(b, e);
   }
 
   /* The second way: the exponent is given and the base is typed. */
@@ -778,8 +804,31 @@
     }
     var b = typed.value, e = power.exp;
     byId('powBaseFeedback').textContent = '';
-    byId('powBaseResult').innerHTML = '<p class="power-count">✅ ' + fill(t('power.count'), { e: e }) + '</p>' +
-      chipLine(repeatOf(b, e), Math.pow(b, e));
+    byId('powBaseResult').innerHTML = powerSumHtml(b, e);
+  }
+
+  /* The third slide: both numbers are typed, the base and the exponent, and the answer shows the multiplications. */
+  function checkBoth() {
+    var b = typedNumber('powBothBase'), e = typedNumber('powBothExp');
+    var error = b.error || e.error;
+    if (error) {
+      byId('powBothFeedback').textContent = error;
+      byId('powBothResult').innerHTML = '';
+      return;
+    }
+    byId('powBothFeedback').textContent = '';
+    byId('powBothResult').innerHTML = powerSumHtml(b.value, e.value);
+  }
+
+  /* The practice is three slides, one at a time, with the same arrows as the intro. */
+  var POWER_SLIDES = 3, powerSlide = 0;
+  function showPowerSlide(i) {
+    powerSlide = Math.max(0, Math.min(POWER_SLIDES - 1, i));
+    document.querySelectorAll('[data-power-slide]').forEach(function (el) {
+      el.classList.toggle('hidden', Number(el.getAttribute('data-power-slide')) !== powerSlide);
+    });
+    byId('powPrev').disabled = powerSlide === 0;
+    byId('powNext').disabled = powerSlide === POWER_SLIDES - 1;
   }
 
   /* The power practice of the menu entry (ownTest): the two ways of practising a
@@ -792,22 +841,30 @@
       byId('powBaseCalc').addEventListener('click', checkBase);
       byId('powExpInput').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); checkExponent(); } });
       byId('powBaseInput').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); checkBase(); } });
+      byId('powBothCalc').addEventListener('click', checkBoth);
+      byId('powBothExp').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); checkBoth(); } });
+      byId('powPrev').addEventListener('click', function () { showPowerSlide(powerSlide - 1); });
+      byId('powNext').addEventListener('click', function () { showPowerSlide(powerSlide + 1); });
       byId('powAgain').addEventListener('click', newPower);
-      byId('powBack').addEventListener('click', function () { powerCtx.openMenu(); });
     }
     /* The texts are set on every start, so a language change shows in the practice too. */
     byId('powPracticeTitle').textContent = t('power.practiceTitle');
     byId('powExpTitle').textContent = t('power.practiceExp');
     byId('powBaseTitle').textContent = t('power.practiceBase');
-    byId('powExpBaseCap').textContent = t('power.parts.base');
-    byId('powExpInputCap').textContent = t('power.parts.exp');
-    byId('powBaseInputCap').textContent = t('power.parts.base');
-    byId('powBaseExpCap').textContent = t('power.parts.exp');
+    /* The boxes have no visible name in the sketch: their name is read aloud. */
+    byId('powExpInput').setAttribute('aria-label', t('power.parts.exp'));
+    byId('powBaseInput').setAttribute('aria-label', t('power.parts.base'));
     byId('powExpCalc').textContent = t('power.calc');
     byId('powBaseCalc').textContent = t('power.calc');
+    byId('powBothTitle').textContent = t('power.practiceBoth');
+    byId('powBothCalc').textContent = t('power.calc');
+    byId('powBothBase').setAttribute('aria-label', t('power.parts.base'));
+    byId('powBothExp').setAttribute('aria-label', t('power.parts.exp'));
+    byId('powPrev').setAttribute('aria-label', t('power.prev'));
+    byId('powNext').setAttribute('aria-label', t('power.next'));
     byId('powAgain').textContent = t('power.again');
-    byId('powBack').textContent = t('ui.otherOps');
     newPower();
+    showPowerSlide(0);
     ctx.show('#screenPower');
   }
 

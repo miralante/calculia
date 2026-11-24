@@ -77,8 +77,8 @@ var DATA = {
        each part, and the game that puts the names in their place. */
     { id: 'pow', symbol: '^', pick: false,
       intro: [
-        { visual: { kind: 'power', base: 2, exp: 3 } },
-        { visual: { kind: 'power', base: 3, exp: 2 } },
+        { visual: { kind: 'power', base: 2, exp: 3, mode: 'repeat' } },
+        { visual: { kind: 'power', base: 3, exp: 2, mode: 'exponent' } },
         { visual: { kind: 'anatomy', base: 4, exp: 3 } },
         { frame: { kind: 'powerNames', base: 4, exp: 3 } }
       ],

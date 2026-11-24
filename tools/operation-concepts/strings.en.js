@@ -159,8 +159,8 @@
       pow: {
         name: 'Powers', detail: 'Multiply the same number many times.',
         intro: {
-          1: { title: 'A power is multiplying the same thing', text: '2 × 2 × 2 = 2³ = 8.\n2³ is read «2 to the power of 3».' },
-          2: { title: 'The small number counts the repetitions', text: 'It is called the exponent.\n3² = 3 × 3 = 9.' },
+          1: { title: 'A power is multiplying the same thing', text: '2³ is read «2 to the power of 3».' },
+          2: { title: 'The small number counts the repetitions', text: 'It is called the exponent.' },
           3: { title: 'The three parts', text: '' },
           4: { title: 'The game', text: 'Put each name in its place.' }
         }
@@ -302,8 +302,10 @@
       practiceTitle: 'Start practising',
       practiceExp: 'Put a number between 2 and 5 for the exponent.',
       practiceBase: 'Put a number in the base between 2 and 5.',
+      practiceBoth: 'Put the base and the exponent, between 2 and 5.',
+      prev: 'Previous',
+      next: 'Next',
       calc: 'Calculate',
-      count: '{e} times',
       empty: 'Type a number',
       range: 'Put a number between 2 and 5.',
       again: 'Again'

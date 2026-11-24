@@ -161,8 +161,8 @@
       pow: {
         name: 'Potencias', detail: 'Multiplicar muchas veces el mismo número.',
         intro: {
-          1: { title: 'Potencia es multiplicar lo mismo', text: '2 × 2 × 2 = 2³ = 8.\n2³ se lee «2 elevado a 3».' },
-          2: { title: 'El número pequeño cuenta las repeticiones', text: 'Se llama exponente.\n3² = 3 × 3 = 9.' },
+          1: { title: 'Potencia es multiplicar lo mismo', text: '2³ se lee «2 elevado a 3».' },
+          2: { title: 'El número pequeño cuenta las repeticiones', text: 'Se llama exponente.' },
           3: { title: 'Las tres partes', text: '' },
           4: { title: 'El juego', text: 'Pon cada nombre en su sitio.' }
         }
@@ -307,8 +307,10 @@
       practiceTitle: 'Empezar a practicar',
       practiceExp: 'Pon un número entre el 2 y 5 para el exponente.',
       practiceBase: 'Pon un número en la base entre el 2 y 5.',
+      practiceBoth: 'Pon la base y el exponente, entre el 2 y 5.',
+      prev: 'Anterior',
+      next: 'Siguiente',
       calc: 'Calcular',
-      count: '{e} veces',
       empty: 'Escribe un número',
       range: 'Pon un número entre el 2 y el 5.',
       again: 'Otra vez'
