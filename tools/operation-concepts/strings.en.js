@@ -68,6 +68,7 @@
       checkFillSubQ: 'How many coins are missing to reach {n}?',
       checkSwapQ: 'Does the total change if you swap the order?',
       namesDone: 'Well done! Every part of the division has its name.',
+      factNamesDone: 'Well done! Every part of the factorial has its name.',
       dealResult: '{T} ÷ {g} = {e}',
       friend: 'Friend {n}',
       pack: 'Package {n}',
@@ -148,8 +149,10 @@
         intro: {
           1: { title: 'What is a factorial?', text: '4! is read «4 factorial». It means 4 × 3 × 2 × 1. The result is 24.' },
           2: { title: 'It grows very fast', text: '1! = 1, 2! = 2, 3! = 6, 4! = 24, 5! = 120. Each step multiplies by one more number. By agreement, 0! = 1.' },
-          3: { title: 'It helps with divisibility', text: '5! = 120. 120 divides exactly by 1, 2, 3, 4 and 5: nothing is left over. That is why factorials help us understand divisibility.' }
+          3: { title: 'It helps with divisibility', text: '5! = 120. 120 divides exactly by 1, 2, 3, 4 and 5: nothing is left over. That is why factorials help us understand divisibility.' },
+          4: { title: 'The game', text: 'Put each name in its place.' }
         },
+        names: { number: 'Number', result: 'Result' },
         real: {
           1: '3 friends line up for a photo. There are 6 different ways to stand.',
           2: 'You have 4 books for a shelf. You can place them in 24 different ways.',
@@ -264,27 +267,24 @@
         prompt: 'You share {T} into groups of {e}. Which division is it?',
         hint: '🤔 Think about groups of {e}: how many groups are there?',
         explain: '{T} ÷ {e} = {g}: {g} groups of {e} fit.'
-      },
-      factValue: {
-        prompt: 'What is {n}!?',
-        hint: 'Multiply, do not add. Keep going down to 1.',
-        explain: '{chain} = {T}.'
-      },
-      factMeaning: {
-        prompt: 'What does {n}! mean?',
-        hint: 'The sign ! means: multiply from that number down to 1.',
-        explain: '{n}! = {chain}.'
-      },
-      factSlots: {
-        prompt: 'In how many ways can {n} friends line up?',
-        hint: 'For the first place there are {n} choices. For the second, one less. And so on to the last one.',
-        explain: '{chain} = {T} ways.'
-      },
-      factDivides: {
-        prompt: 'Which of these numbers divides {n}! exactly?',
-        hint: 'Divide {T} by each number. The one that leaves nothing over is the answer.',
-        explain: '{T} ÷ {k} = {g}, with nothing left over.'
       }
+    },
+
+    /* The Factorial practice (no test), as the Powers one: a number is typed and its working shows. */
+    factorial: {
+      practiceTitle: 'Start practising',
+      practiceN: 'Type a number from 2 to 5. See how its factorial is worked out.',
+      practiceValue: 'This is the factorial of a number. Type that number.',
+      practiceSlots: 'Type a number from 2 to 5. See in how many ways its friends can line up.',
+      numberAria: 'Number',
+      right: 'That is it!',
+      wrong: 'That number gives {r}, not {v}. Try again.',
+      empty: 'Type a number',
+      range: 'Type a number from 2 to 5.',
+      calc: 'Work it out',
+      again: 'Again',
+      prev: 'Previous',
+      next: 'Next'
     },
 
     /* The Powers practice (no test): few words, the pictures count. */

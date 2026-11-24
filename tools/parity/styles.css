@@ -67,7 +67,7 @@
 /* Explanation slides: the balls sit centred in their box, large, with the
    caption and the arrows centred under them (the format before the shared
    flow took these slides over). activity-flow.css centres the slide itself. */
-.gallery-card, .real-card { align-items: center; border-color: var(--mod-razonamiento-suave); }
+.gallery-card, .act-card--real { align-items: center; border-color: var(--mod-razonamiento-suave); }
 #introVisual { width: 100%; }
 #introVisual .parity-dots {
   width: 100%; max-width: none; min-height: 110px;
@@ -129,8 +129,7 @@
 .parity-mark-odd { color: #A84300; }
 
 /* pantalla final */
-.big-emoji { font-size: 96px; }
-.transfer  { color: var(--color-texto-suave); max-width: 480px; }
+.act-transfer  { color: var(--color-texto-suave); max-width: 480px; }
 
 /* The review slide after the numbers: the rule, then the even and the odd numbers, one line each. */
 .parity-review { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; max-width: 100%; }

@@ -10,29 +10,29 @@
    ============================================================ */
 
 /* ---- Digits ---- */
-.num-color { font-weight: 800; letter-spacing: 2px; }
-.digit-u { color: var(--mod-coordinacion); }   /* blue — units */
-.digit-d { color: var(--mod-secuencia); }      /* green — tens */
-.digit-c { color: var(--mod-emocional); }      /* purple — hundreds */
-.digit-sep { color: var(--color-texto-suave); }
-.highlight { text-decoration: underline; text-underline-offset: 6px; }
+.pv-number { font-weight: 800; letter-spacing: 2px; }
+.pv-digit--u { color: var(--mod-coordinacion); }   /* blue — units */
+.pv-digit--d { color: var(--mod-secuencia); }      /* green — tens */
+.pv-digit--c { color: var(--mod-emocional); }      /* purple — hundreds */
+.pv-digit--sep { color: var(--color-texto-suave); }
+.pv-digit--hl { text-decoration: underline; text-underline-offset: 6px; }
 /* A group of three digits with its label under it (thousands, millions…). */
 .place-group { display: inline-flex; flex-direction: column; align-items: center; }
 .group-label { font-size: 14px; font-weight: 700; color: var(--color-texto-suave); letter-spacing: 0; }
 
 /* ---- Legend and hint under a question ---- */
-.legend { font-size: var(--texto-pequeno); font-weight: 700; }
-.hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
+.act-legend { font-size: var(--texto-pequeno); font-weight: 700; }
+.act-hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
 
 /* ---- Signs and empty boxes (orange signs, as in the number scale) ---- */
 .sign { font-size: 40px; font-weight: 800; color: var(--mod-memoria); }
-.num-box {
+.pv-box {
   min-width: 64px; min-height: 64px; padding: 8px 12px;
   display: inline-flex; align-items: center; justify-content: center;
   border: 3px solid var(--color-borde); border-radius: var(--radio);
   background: var(--color-superficie); font-size: 30px; font-weight: 800;
 }
-.num-box.empty { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
+.pv-box.pv-box--empty { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
 
 /* A ×10 ladder or any "a — b = ?" row, wrapping on narrow screens. */
 .place-expression {

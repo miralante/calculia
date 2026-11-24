@@ -68,7 +68,7 @@
         card.className = 'card stack test-sheet-card';
 
         var promptEl = document.createElement('p');
-        promptEl.className = 'prompt';
+        promptEl.className = 'act-prompt';
         promptEl.textContent = sheet.question.prompt;
         card.appendChild(promptEl);
 
@@ -89,7 +89,7 @@
 
         if (sheet.question.legend) {
           var legendEl = document.createElement('p');
-          legendEl.className = 'legend';
+          legendEl.className = 'act-legend';
           legendEl.innerHTML = sheet.question.legend;
           card.appendChild(legendEl);
         }

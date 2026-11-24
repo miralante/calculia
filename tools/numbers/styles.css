@@ -5,14 +5,13 @@
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 
-.difficulty {
+.act-difficulty {
   font-size: var(--texto-pequeno);
   color: var(--color-texto-suave, #666);
 }
 
 
 
-.extra-note { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
 
@@ -23,8 +22,8 @@
 .digit-comma, .digit-dec { color: var(--mod-memoria); } /* orange — negative scale (below 0) */
 
 .card { border-color: var(--mod-razonamiento-suave); }
-.prompt { font-weight: 700 }
-.visual { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); }
+.act-prompt { font-weight: 700 }
+.visual { flex-direction: column; gap: var(--espacio); }
 .visual-number { font-size: 52px; }
 .words-number { font-size: var(--texto-grande); font-weight: 800; }
 
@@ -58,7 +57,7 @@
 .emoji-large { font-size: 96px; }
 #screenEnd { padding-top: 48px; }
 #screenEnd .btn { align-self: center; min-width: 280px; }
-#screenEnd .transfer {
+#screenEnd .act-transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-suave, #555);
@@ -157,7 +156,7 @@
   gap: 10px;
   margin-top: 10px;
 }
-.compare-sign {
+.cmp-sign {
   font-size: 2.2rem;
   font-weight: 700;
 }
@@ -171,7 +170,7 @@
    canonical answer (so the user can study it before moving on).
    ============================================================ */
 .lectura-card {
-  /* Same card vocabulary as .task-card in tools/quantities so the
+  /* Same card vocabulary as .act-card--task in tools/quantities so the
      typing practices look like siblings across the suite. */
   display: flex;
   flex-direction: column;

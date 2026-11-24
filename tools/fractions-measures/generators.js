@@ -52,7 +52,7 @@
             '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
             svgFraccion(b[0], b[1], 110) +
           '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.mixFracHint')
+          '<p class="act-hint">' + App.i18n.t('gen.mixFracHint')
             .replace(/\{den\}/g, den) + '</p>',
         visualAria: App.i18n.t('gen.mixFracAria')
           .replace('{na}', a[0]).replace('{da}', a[1])
@@ -94,7 +94,7 @@
           .replace(/\{part\}/g, App.i18n.t('part.' + den)),
         hint: App.i18n.t('gen.socraticFracOf'),
         visual: '<div class="frac-groups">' + groups + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.fracOfHint')
+          '<p class="act-hint">' + App.i18n.t('gen.fracOfHint')
             .replace(/\{den\}/g, den) + '</p>',
         visualAria: App.i18n.t('gen.fracOfAria')
           .replace(/\{den\}/g, den).replace(/\{each\}/g, each),
@@ -136,7 +136,7 @@
             '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
             svgFraccion(tenths, 10, 110) +
           '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.mixedOpHint') + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.mixedOpHint') + '</p>',
         visualAria: App.i18n.t('gen.mixedOpAria')
           .replace('{a}', App.i18n.t('gen.fraccionAria')
             .replace('{num}', frac[0]).replace('{den}', frac[1]))
@@ -158,7 +158,7 @@
       return {
         prompt: App.i18n.t('gen.whichIsMore'),
         hint: App.i18n.t('gen.socraticFracVsDecimal'),
-        visual: '<p class="hint">' + App.i18n.t('gen.mixedCompareHint') + '</p>',
+        visual: '<p class="act-hint">' + App.i18n.t('gen.mixedCompareHint') + '</p>',
         legend: '',
         options: App.utils.shuffle([
           {
@@ -201,7 +201,7 @@
             '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
             svgFraccion(y, 10, 110) +
           '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.decimalOpHint') + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.decimalOpHint') + '</p>',
         visualAria: App.i18n.t('gen.decimalOpAria')
           .replace('{a}', decimalText([x, 10])).replace('{b}', decimalText([y, 10])),
         options: tenthOptions(resultTenths, [otherWay, resultTenths + 1]),
@@ -262,7 +262,7 @@
         hint: App.i18n.t('gen.socraticEquivalentes'),
         visual: '<div class="frac-ref">' + svgFraccion(base[0], base[1], 150) +
           htmlFraccion(base) + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.equivalentesPista') + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.equivalentesPista') + '</p>',
         visualAria: fracAria(base),
         legend: leyendaFrac(),
         options: App.utils.shuffle(
@@ -311,7 +311,7 @@
             '<span class="frac-sign">' + (adding ? '+' : '−') + '</span>' +
             svgFraccion(y, den, 110) +
           '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.sumaFracPista') + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.sumaFracPista') + '</p>',
         /* {den} appears twice, so it needs a global replace — a plain
            string replace would leave the second one in the spoken text. */
         visualAria: App.i18n.t(adding ? 'gen.sumaFracAria' : 'gen.restaFracAria')
@@ -348,7 +348,7 @@
         hint: App.i18n.t('gen.socraticDecimalToPicture'),
           visual: '<div class="frac-ref"><span class="decimal-value">' +
             decimalText(f) + '</span></div>' +
-            '<p class="hint">' + hint + '</p>',
+            '<p class="act-hint">' + hint + '</p>',
           visualAria: decimalText(f),
           options: App.utils.shuffle(
             [{ html: fracOption(f), aria: fracAria(f), correct: true }].concat(
@@ -363,7 +363,7 @@
         prompt: App.i18n.t('gen.decimalToNumberPrompt'),
         hint: App.i18n.t('gen.socraticDecimalToNumber'),
         visual: '<div class="frac-ref">' + svgFraccion(f[0], f[1], 150) + '</div>' +
-          '<p class="hint">' + hint + '</p>',
+          '<p class="act-hint">' + hint + '</p>',
         visualAria: fracAria(f),
         legend: leyendaFrac(),
         options: App.utils.shuffle(

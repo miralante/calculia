@@ -41,7 +41,7 @@
     for (var i = 0; i < s.length; i++) {
       var fromRight = s.length - 1 - i;
       /* The separator goes in front of the first digit of each new group. */
-      if (i > 0 && fromRight % 3 === 2) htmlOut += '<span class="digit-sep">' + sep + '</span>';
+      if (i > 0 && fromRight % 3 === 2) htmlOut += '<span class="pv-digit--sep">' + sep + '</span>';
       var group = Math.floor(fromRight / 3);
       htmlOut += '<span class="' + GROUP_CLASS[group % GROUP_CLASS.length] + '">' + s.charAt(i) + '</span>';
     }

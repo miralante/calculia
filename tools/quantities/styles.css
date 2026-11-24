@@ -13,23 +13,12 @@
    Menú de prácticas
    ============================================================ */
 .task-icon { font-size: 42px; line-height: 1; }
-.practice-stars { font-size: var(--texto-pequeno); letter-spacing: 2px; }
-.practice-done {
-  font-size: var(--texto-pequeno);
-  font-weight: 700;
-  background: var(--color-acierto-suave);
-  color: var(--color-acierto);
-  border-radius: var(--radio);
-  padding: 2px 12px;
-  margin-top: 4px;
-}
 
 /* ============================================================
    Prácticas de escritura
    ============================================================ */
-.task-card { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); text-align: center }
-.task-card h2 { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); }
-.task-detail { margin: 0; color: var(--color-texto-suave); }
+.act-card--task { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); text-align: center }
+.act-card--task h2 { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); }
 
 #nextTask { align-self: center; }
 
@@ -282,7 +271,7 @@
 .dot-group-1 { color: var(--mod-coordinacion); }
 .dot-group-2 { color: var(--mod-secuencia); }
 .dot-group-3 { color: var(--mod-emocional); }
-.digit-sep { color: var(--color-texto-suave); }
+.pv-digit--sep { color: var(--color-texto-suave); }
 .sign { color: var(--mod-memoria); }
 
 /* Caja de la respuesta en palabras: ancha, como un procesador de
@@ -303,16 +292,15 @@
 }
 
 /* --- Pantalla final de las prácticas de escritura --- */
-.big-emoji { font-size: 96px; }
 
-.transfer { color: var(--color-texto-suave); max-width: 480px; }
+.act-transfer { color: var(--color-texto-suave); max-width: 480px; }
 .contexto, .explanation { color: var(--color-texto-suave); }
 
 /* ============================================================
    Responsive — 320 / 375 / 768 / desktop
    ============================================================ */
 @media (max-width: 480px) {
-  .task-card { padding: var(--espacio); }
+  .act-card--task { padding: var(--espacio); }
   .number-shown { min-width: 0; width: 100%; font-size: 40px; }
   .answer-input { min-width: 0; width: 100%; }
   .big-emoji { font-size: 64px; }

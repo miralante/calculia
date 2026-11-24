@@ -19,16 +19,6 @@
 .ord-c4 { color: var(--mod-memoria); }
 .ord-c5 { color: var(--mod-lenguaje); }
 
-.practice-stars { font-size: var(--texto-pequeno); letter-spacing: 2px; }
-.practice-done {
-  font-size: var(--texto-pequeno);
-  font-weight: 700;
-  background: var(--color-acierto-suave);
-  color: var(--color-acierto);
-  border-radius: var(--radio);
-  padding: 2px 12px;
-  margin-top: 4px;
-}
 
 /* ============================================================
    Shared card titles
@@ -336,7 +326,6 @@
 /* ============================================================
    Screen 3: reminder
    ============================================================ */
-.reminder-buttons { justify-content: center; margin-top: var(--espacio-grande); }
 
 /* The series as a grid of chips: three per row on a phone, more on a wide
    screen. The stripe on top carries the ordinal colour. */
@@ -472,13 +461,6 @@
   color: var(--color-texto-suave);
 }
 
-.context-text {
-  margin: 0;
-  text-align: center;
-  color: var(--color-texto-suave);
-  font-size: var(--texto-pequeno);
-  max-width: 480px;
-}
 
 .question {
   margin: 0;
@@ -495,16 +477,10 @@
   gap: var(--espacio);
   flex-wrap: wrap;
 }
-.progress-step { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
 
 /* Options: one column on a phone (words read better on a line of their own),
    a grid of several on a wide screen. */
-.options-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  width: min(100%, 480px);
-}
+.options-grid { grid-template-columns: 1fr; gap: 10px; }
 @media (min-width: 480px) {
   .options-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--espacio); }
 }
@@ -530,8 +506,7 @@
 /* ============================================================
    Final screen
    ============================================================ */
-.big-emoji { font-size: 96px; }
-.transfer { color: var(--color-texto-suave); max-width: 480px; }
+.act-transfer { color: var(--color-texto-suave); max-width: 480px; }
 
 /* ============================================================
    Responsive: 320 / 375 / 768 / desktop

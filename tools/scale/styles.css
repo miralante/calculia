@@ -15,14 +15,9 @@
   overflow: visible;
 }
 
-.visual {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 150px;
-}
+.visual { justify-content: center; min-height: 150px; }
 
-.legend {
+.act-legend {
   margin: 0.5rem 0 0;
   color: var(--color-texto-suave);
   font-size: var(--texto-pequeno);
@@ -234,41 +229,24 @@
 }
 
 /* ---- Four answers: two by two when there is room for them ---- */
-.options {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--espacio);
-}
 @media (min-width: 480px) {
   .options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ---- Screens ---- */
 .centered { align-items: center }
-
-.concept-card {
-  align-items: center;
-  border-color: var(--mod-razonamiento-suave);
-}
-.concept-visual {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 150px;
-}
-.concept-title {
+.act-title {
   margin: 0;
   color: var(--mod-razonamiento);
   font-size: 1.3rem;
 }
-.concept-text {
+.act-text {
   max-width: 34rem;
   margin: 0;
   text-align: center;
 }
 
-.real-card {
+.act-card--real {
   align-items: center;
   border-color: var(--mod-razonamiento-suave);
 }
@@ -282,13 +260,6 @@
   font-size: 1.3rem;
   font-weight: 700;
 }
-.real-note {
-  max-width: 30rem;
-  margin: 0;
-  color: var(--color-texto-suave);
-  font-size: 0.95rem;
-  text-align: center;
-}
 
 
 
@@ -296,7 +267,7 @@
   font-size: 3.5rem;
   line-height: 1.1;
 }
-.transfer {
+.act-transfer {
   max-width: 34rem;
   margin: 0 auto;
   color: var(--color-texto-suave);

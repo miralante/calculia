@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
   <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/place-value.css">
   <link rel="stylesheet" href="../../assets/css/locale-picker.css">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -20,7 +21,7 @@
       <h1 data-i18n="title">🍕 Fracciones</h1>
     </div>
     <main class="suite-body">
-    <span class="stars" data-suite-stars id="stars">⭐ 0</span>
+    <span class="stars" data-suite-stars id="stars">0 ⭐</span>
 
     <section id="screenMenu" class="stack">
       <div class="row center-row">
@@ -58,7 +59,7 @@
       <div class="row center-row">
         <p class="instruction" id="realTitle">Las fracciones están en la vida real.</p>
       </div>
-      <div class="card centered stack real-card">
+      <div class="card centered stack act-card--real">
         <div class="real-object" id="realObject" aria-hidden="true"></div>
         <p class="carousel-caption" id="realCaption"></p>
         <div class="carousel-controls">
@@ -75,13 +76,13 @@
       <div class="progress-bar" data-suite-progress>
         <div class="progress-fill" id="progressFill"></div>
         <span class="progress-text" id="progressText">0 / 6</span>
-        <span class="difficulty" id="difficulty"></span>
+        <span class="act-difficulty" id="difficulty"></span>
       </div>
 
       <div class="card centered stack">
-        <p class="prompt" id="prompt"></p>
+        <p class="act-prompt" id="prompt"></p>
         <div class="visual" id="visual"></div>
-        <p class="legend hidden" id="legend"></p>
+        <p class="act-legend hidden" id="legend"></p>
       </div>
 
       <div class="stack options" id="options"></div>
@@ -99,7 +100,7 @@
     <section id="screenComma" class="hidden stack" aria-live="polite">
       <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="comaProgressFill"></div></div>
       <p class="progress-text" id="comaProgressText"></p>
-      <article class="card task-card">
+      <article class="card act-card--task">
         <h2 id="comaPrompt"></h2>
         <p class="task-detail" id="comaDetail"></p>
         <button type="button" class="btn btn-secondary hidden" id="comaHear" data-i18n="core.listen">🔊 Escuchar</button>
@@ -130,6 +131,7 @@
   <script src="../../assets/js/stars-engine.js"></script>
   <script src="../../assets/js/feedback.js"></script>
   <script src="../../assets/js/tts.js"></script>
+  <script src="../../assets/js/suite-chrome.js"></script>
   <script src="strings.es.js"></script>
   <script src="strings.en.js"></script>
   <script src="data.js"></script>
@@ -144,6 +146,5 @@
   <script src="../../assets/js/sw-register.js"></script>
   <script src="../../assets/js/locale-picker-config.js"></script>
   <script src="../../assets/js/locale-picker.js" defer></script>
-  <script src="../../assets/js/suite-chrome.js"></script>
 </body>
 </html>

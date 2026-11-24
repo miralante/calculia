@@ -21,11 +21,7 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.answer-text {
-  font-size: 1.3rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
+.answer-text { font-variant-numeric: tabular-nums; }
 
 .options.options-row .option-btn { display: flex;
   align-items: center;

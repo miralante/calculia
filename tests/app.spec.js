@@ -62,7 +62,7 @@ test('1 — the home shows the catalogue and the stars of this browser',
     // browser it starts at zero, but it must be there.
     const stars = page.locator('#totalStars');
     await expect(stars).toBeVisible();
-    await expect(stars).toHaveText(/⭐\s*0/);
+    await expect(stars).toHaveText(/0\s*⭐/);
 
     // The catalogue is four blocks of cards, and every card is a link to
     // its own folder.

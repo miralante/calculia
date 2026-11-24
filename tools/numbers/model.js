@@ -84,13 +84,13 @@
           '<span class="compare-gap">?</span>' +
           '<span class="compare-side">' + paintNumber(b) + '</span>' +
           '</div>' + blocksHtml +
-          '<p class="hint">' + App.i18n.t('gen.compararPista') + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.compararPista') + '</p>',
         visualAria: App.i18n.t('gen.compararAria').replace('{a}', a).replace('{b}', b),
         hint: App.i18n.t('gen.socraticCompare'),
         options: App.utils.shuffle([
-          { html: '<span class="compare-sign">&lt;</span>', aria: App.i18n.t('gen.signLess'), correct: sign === '<' },
-          { html: '<span class="compare-sign">&gt;</span>', aria: App.i18n.t('gen.signGreater'), correct: sign === '>' },
-          { html: '<span class="compare-sign">=</span>', aria: App.i18n.t('gen.signEqual'), correct: sign === '=' }
+          { html: '<span class="cmp-sign">&lt;</span>', aria: App.i18n.t('gen.signLess'), correct: sign === '<' },
+          { html: '<span class="cmp-sign">&gt;</span>', aria: App.i18n.t('gen.signGreater'), correct: sign === '>' },
+          { html: '<span class="cmp-sign">=</span>', aria: App.i18n.t('gen.signEqual'), correct: sign === '=' }
         ]),
         inline: true
       };

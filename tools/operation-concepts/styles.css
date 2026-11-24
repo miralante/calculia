@@ -6,38 +6,15 @@
 
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
-.op-sym { font-size: 40px; font-weight: 800; line-height: 1; }
-.ops-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
-.ops-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
-.ops-group-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 /* Two arrangements of the same total side by side; they wrap to one column on a narrow screen. */
-.ops-compare { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; }
-.ops-compare-side { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 /* The number on an item, in a small pill over its lower edge. */
-.ops-num { position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); padding: 0 4px; border-radius: 999px; background: var(--color-superficie); color: var(--color-texto); font-size: var(--texto-pequeno); font-weight: 900; line-height: 1.3; }
 /* An empty group to be filled in: a dashed frame with room for the items. */
-.ops-empty-box { min-width: 150px; min-height: 52px; border-style: dashed; }
 
 /* A total, a down arrow and the groups it is divided into, one above the other at any width. */
-.ops-divide { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 /* One group that repeats: a frame around its items, so the group reads as one unit. */
-.ops-group-box { display: flex; justify-content: center; padding: 6px 12px; border: 2px solid var(--mod-razonamiento); border-radius: var(--radio); }
-.ops-item {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 42px;
-  min-height: 42px;
-  font-size: 36px;
-  line-height: 1;
-}
 /* A second group of the same object, tinted a little, so the groups read apart (real-life examples). */
-.ops-alt { filter: hue-rotate(-25deg); }
 /* An empty place: a dashed outline, so it reads as «falta». */
-.ops-empty { border: 2px dashed var(--color-texto-suave); border-radius: var(--radio); background: transparent; }
 /* A crossed-out item (taken away): dimmed, with a heavy cross on top. */
-.ops-cross { opacity: 0.4; }
 .ops-cross::after {
   content: '✕';
   position: absolute;
@@ -57,11 +34,6 @@
 .div-name { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
 
 /* What is left over after the full groups (division with remainder). */
-.ops-left { outline: 2px dashed var(--mod-razonamiento); outline-offset: 2px; border-radius: 50%; }
-.ops-left-row { padding-top: 4px; border-top: 2px dotted var(--color-texto-suave); }
-.ops-sign { font-size: var(--texto-grande); font-weight: 800; color: var(--color-texto-suave); }
-.ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; }
-.ops-story { margin: 0; font-size: var(--texto-grande); text-align: center; line-height: 1.4; }
 /* An answer drawn as groups: the drawing above its «g × e» name. Small icons, so three answers fit one row or wrap. */
 .ops-option { display: flex; flex-direction: column; align-items: center; gap: 4px; max-width: 100%; }
 .ops-mini { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 100%; }
@@ -70,20 +42,16 @@
 .ops-option-name { font-size: var(--texto-pequeno); font-weight: 700; font-variant-numeric: tabular-nums; }
 
 /* One slice of a pizza: the inline SVG from app.js, at a size that reads on a phone. */
-.ops-slice { display: inline-block; width: 40px; height: 40px; }
 
 /* The deal drawing: a pool of pieces, the groups to fill, and the buttons under them. */
-.ops-deal { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.ops-deal-pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; min-height: 80px; }
-.ops-deal-groups { justify-content: center; gap: 12px; }
+.ops-deal-pool { gap: 8px; min-height: 80px; }
 /* Each friend: a name above the box that receives the slices. */
 .ops-deal-slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 /* The name of a group (Amigo, Paquete, Estante, Caja): a small auxiliary style, uppercase and spaced, so the names
    identify the groups without competing with the numbers of the drawing. */
 .ops-tag { font-family: var(--fuente); font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-texto); line-height: 1.2; }
 .ops-group-slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.ops-deal-group { min-width: 120px; min-height: 80px; flex-wrap: wrap; align-content: flex-start; gap: 4px; }
-.ops-deal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.ops-deal-group { min-width: 120px; min-height: 80px; }
 /* «Empezar de nuevo» is hidden until the first slice is dealt. The hidden attribute must win over .btn's display. */
 .ops-deal-actions [hidden] { display: none; }
 /* A slide with no picture on the left: its empty drawing box takes no room. */
@@ -167,7 +135,7 @@
   .ops-name-slot.is-wrong { animation: none; }
 }
 /* A slice in the deal is drawn large, with its number on the lower edge. It is a tap target to deal it. */
-.ops-deal-piece { display: inline-flex; position: relative; margin-bottom: 8px; cursor: pointer; border-radius: var(--radio); }
+.ops-deal-piece { position: relative; margin-bottom: 8px; cursor: pointer; border-radius: var(--radio); }
 .ops-deal-piece:focus-visible { outline: 3px solid var(--mod-razonamiento); outline-offset: 3px; }
 /* The numbered balls of the sharing game beside the division slides: 64px touch targets, the number inside. */
 .ops-deal-ball { width: 64px; height: 64px; margin-bottom: 0; justify-content: center; align-items: center; border-radius: 50%; background: var(--mod-razonamiento); color: var(--texto-sobre-acento); font-size: var(--texto-grande); font-weight: 800; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15); }
@@ -196,24 +164,9 @@
 .ops-share .ops-row { gap: 10px; padding-bottom: 10px; }
 .ops-share .ops-item { min-width: 64px; min-height: 64px; }
 .ops-share .ops-slice { width: 64px; height: 64px; }
-.ops-deal-result { margin-top: 4px; }
 .ops-deal-result[hidden] { display: none; }
 
 /* A coin for money drawings: the currency sign of the locale (€ or $) on a round gold coin. */
-.ops-coin {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 2px solid #b8860b;
-  background: radial-gradient(circle at 35% 35%, #ffe38a, #d4a017);
-  color: #5c4300;
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1;
-}
 
 /* The operations icon (assets/img/operaciones.svg) beside the title in the header. */
 

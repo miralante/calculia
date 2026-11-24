@@ -13,7 +13,7 @@
 
   var totalEl = document.getElementById('totalStars');
   var total = App.storage.totalStars();
-  totalEl.textContent = '⭐ ' + total;
+  App.chrome.paintStars(total, totalEl);
   totalEl.title = App.i18n.t('yourStars');
 
   // Re-apply translations now that strings.<locale>.js have registered their

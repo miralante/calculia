@@ -156,8 +156,8 @@
     '  <div class="progress-bar" id="introProgress" data-suite-progress role="progressbar" aria-valuemin="0"><div class="progress-fill" id="introProgressFill"></div></div>',
     '  <article class="card stack gallery-card">',
     '    <div class="ops-visual" id="introVisual"></div>',
-    '    <h2 class="concept-title" id="introTitle"></h2>',
-    '    <p class="concept-text" id="introText"></p>',
+    '    <h2 class="act-title" id="introTitle"></h2>',
+    '    <p class="act-text" id="introText"></p>',
     '    <div class="carousel-controls">',
     '      <button type="button" class="btn btn-secondary" id="introPrev" data-i18n-aria="ui.prev" aria-label="Anterior">←</button>',
     '      <button type="button" class="btn btn-secondary" id="introNext" data-i18n-aria="ui.next" aria-label="Siguiente">→</button>',
@@ -173,8 +173,8 @@
     '    <p class="instruction" data-i18n="ui.realLabel">Ejemplos de la vida real</p>',
     '  </div>',
     '  <div class="progress-bar" id="realProgress" data-suite-progress role="progressbar" aria-valuemin="0"><div class="progress-fill" id="realProgressFill"></div></div>',
-    '  <article class="card centered stack real-card">',
-    '    <h2 class="concept-title hidden" id="realTitle"></h2>',
+    '  <article class="card centered stack act-card--real">',
+    '    <h2 class="act-title hidden" id="realTitle"></h2>',
     '    <div class="ops-visual" id="realVisual"></div>',
     '    <p class="real-text" id="realText"></p>',
     '    <div class="carousel-controls">',
@@ -325,7 +325,7 @@
         slideBars: config.slideProgress !== false,
         screens: mode.screens(config).concat(config.reminder ? ['#screenReminder'] : []).concat(config.extraScreens || []),
         save: function () { App.storage.set(TOOL_ID, progress); },
-        paintStars: function () { $('#stars').textContent = '⭐ ' + progress.stars; },
+        paintStars: function () { App.chrome.paintStars(progress.stars, $('#stars')); },
         show: function (screen) {
           /* One screen at a time: a game (the practice, the test) shows alone, and the explanation leaves. */
           ctx.screens.forEach(function (id) { $(id).classList.toggle('hidden', id !== screen); });
@@ -454,18 +454,14 @@
       ctx.show('#screenIntro');
     }
 
-    /* The header's «← Volver» steps back to the entry of the activity (its first slide) from
-       any screen inside it; from the entry itself, or from the menu, it returns false and the
-       link goes to the hub (suite-chrome.js). The same rule for every activity of the template. */
+    /* The header's «← Volver» goes to the activity's menu from any screen inside it (the
+       sub-activity is picked there). An activity with no menu, or the menu itself, returns
+       false and the link goes to the hub (suite-chrome.js). */
     App.backStep = function () {
+      if (!App.activityFlow.hasMenu(ctx.config)) return false;
       var open = ctx.screens.filter(function (id) { return !$(id).classList.contains('hidden'); })[0];
-      if (!open || open === '#screenIntro' || open === '#screenMenu') return false;
-      /* hubOnBack: the activity's «← Volver» leaves for the hub from every screen, as the explanation does. */
-      if (ctx.config.hubOnBack) return false;
-      /* keepSlideOnBack: the explanation comes back on the slide it was left on, not its first. */
-      if (!ctx.config.keepSlideOnBack) ctx.state.intro = 0;
-      paintIntro(ctx);
-      ctx.show('#screenIntro');
+      if (!open || open === '#screenMenu') return false;
+      ctx.openMenu();
       return true;
     };
   }

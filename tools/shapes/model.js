@@ -566,7 +566,7 @@
 
     /* Count the sides or the corners. Every corner carries a dot, so the
        answer can be reached by counting what is on screen. The "count
-       the marked dots" reminder used to live as a `<p class="hint">`
+       the marked dots" reminder used to live as a `<p class="act-hint">`
        under the figure, but the dots are already on the drawing, so the
        text was a duplicate of the picture. It moved to the socratic
        hint, which only fires when the answer is wrong, so the screen

@@ -132,7 +132,7 @@
 
 
 /* ---- Cierre ---- */
-#screenEnd .transfer {
+#screenEnd .act-transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-suave);

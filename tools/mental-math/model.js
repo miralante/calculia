@@ -11,15 +11,15 @@
   var rint = App.utils.rint;
 
 
-  var POS_CLASS = ['digit-u', 'digit-d', 'digit-c'];
+  var POS_CLASS = ['pv-digit--u', 'pv-digit--d', 'pv-digit--c'];
 
   var thousandsSeparator = App.utils.thousandsSeparator;
 
 
   function legendPos() {
-    return '<span class="digit-u">' + App.i18n.t('leyendaUnidadesTxt') + '</span> · ' +
-      '<span class="digit-d">' + App.i18n.t('leyendaDecenasTxt') + '</span> · ' +
-      '<span class="digit-c">' + App.i18n.t('leyendaCentenasTxt') + '</span>';
+    return '<span class="pv-digit--u">' + App.i18n.t('leyendaUnidadesTxt') + '</span> · ' +
+      '<span class="pv-digit--d">' + App.i18n.t('leyendaDecenasTxt') + '</span> · ' +
+      '<span class="pv-digit--c">' + App.i18n.t('leyendaCentenasTxt') + '</span>';
   }
 
   function digits(n, highlight) {
@@ -33,10 +33,10 @@
         var pos = groups[g].length - 1 - j;
         var posAbs = (groups.length - 1 - g) * 3 + pos;
         var cls = POS_CLASS[pos];
-        if (highlight === posAbs) cls += ' highlight';
+        if (highlight === posAbs) cls += ' pv-digit--hl';
         body += '<span class="' + cls + '">' + groups[g][j] + '</span>';
       }
-      if (g > 0) html += '<span class="digit-sep">' + thousandsSeparator() + '</span>';
+      if (g > 0) html += '<span class="pv-digit--sep">' + thousandsSeparator() + '</span>';
       html += body;
     }
     return html;
@@ -44,7 +44,7 @@
 
   function paintNumber(n, opts) {
     opts = opts || {};
-    return '<span class="num-color">' + digits(n, opts.highlight) + '</span>';
+    return '<span class="pv-number">' + digits(n, opts.highlight) + '</span>';
   }
 
   function paintSign(s) { return '<span class="sign">' + s + '</span>'; }
@@ -177,12 +177,12 @@
           .replace('{a}', a).replace('{step}', step),
         visual: '<div class="expression">' + paintNumber(a) +
           paintSign(adding ? '+' : '−') + paintNumber(step) + paintSign('=') +
-          '<span class="num-box empty">?</span></div>' +
+          '<span class="pv-box pv-box--empty">?</span></div>' +
           '<div class="dot-array" aria-hidden="true">' +
             baseTen(a, adding ? 0 : step) +
             (adding ? paintSign('+') + addedPieces(step) : '') +
           '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.' + hintKey) + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.' + hintKey) + '</p>',
         hint: App.i18n.t('gen.socraticAnchor'),
         options: buildOptions(correct,
           /* Near misses that a real mistake would produce: moving by one
@@ -204,10 +204,10 @@
         return {
           prompt: App.i18n.t('gen.placeValueAddPrompt').replace('{a}', whole).replace('{b}', units),
           visual: '<div class="expression">' + paintNumber(whole) + paintSign('+') +
-            paintNumber(units) + paintSign('=') + '<span class="num-box empty">?</span></div>' +
+            paintNumber(units) + paintSign('=') + '<span class="pv-box pv-box--empty">?</span></div>' +
             '<div class="dot-array" aria-hidden="true">' + baseTen(whole) +
             paintSign('+') + '<span class="unit-group">' + unitDots(units, 'pb') + '</span></div>' +
-            '<p class="hint">' + App.i18n.t('gen.placeValueAddHint') + '</p>',
+            '<p class="act-hint">' + App.i18n.t('gen.placeValueAddHint') + '</p>',
           legend: legendPos(),
           hint: App.i18n.t('gen.socraticPlaceAdd'),
           /* tens + units is the classic slip: adding the digits instead
@@ -220,9 +220,9 @@
       return {
         prompt: App.i18n.t('gen.placeValueSubtractPrompt').replace('{a}', start).replace('{b}', units),
         visual: '<div class="expression">' + paintNumber(start) + paintSign('−') +
-          paintNumber(units) + paintSign('=') + '<span class="num-box empty">?</span></div>' +
+          paintNumber(units) + paintSign('=') + '<span class="pv-box pv-box--empty">?</span></div>' +
           '<div class="dot-array" aria-hidden="true">' + baseTen(start, units) + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.placeValueSubtractHint') + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.placeValueSubtractHint') + '</p>',
         legend: legendPos(),
         hint: App.i18n.t('gen.socraticPlaceSub'),
         options: buildOptions(whole, [start, whole - units, whole + units],
@@ -244,10 +244,10 @@
       return {
         prompt: App.i18n.t('gen.carryAddPrompt').replace('{a}', a).replace('{b}', b),
         visual: '<div class="expression">' + paintNumber(a) + paintSign('+') +
-          paintNumber(b) + paintSign('=') + '<span class="num-box empty">?</span></div>' +
+          paintNumber(b) + paintSign('=') + '<span class="pv-box pv-box--empty">?</span></div>' +
           '<div class="dot-array" aria-hidden="true">' + baseTen(a) +
           paintSign('+') + '<span class="unit-group">' + unitDots(b, 'pb') + '</span></div>' +
-          '<p class="hint">' + App.i18n.t('gen.carryAddHint') + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.carryAddHint') + '</p>',
         hint: App.i18n.t('gen.socraticCarry'),
         options: buildOptions(correct, [forgotCarry, correct + 10, a],
           function (v) { return paintNumber(v); })
@@ -268,9 +268,9 @@
       return {
         prompt: App.i18n.t('gen.borrowSubtractPrompt').replace('{a}', a).replace('{b}', b),
         visual: '<div class="expression">' + paintNumber(a) + paintSign('−') +
-          paintNumber(b) + paintSign('=') + '<span class="num-box empty">?</span></div>' +
+          paintNumber(b) + paintSign('=') + '<span class="pv-box pv-box--empty">?</span></div>' +
           '<div class="dot-array" aria-hidden="true">' + baseTenBorrow(a, b) + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.borrowSubtractHint').replace('{b}', b) + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.borrowSubtractHint').replace('{b}', b) + '</p>',
         hint: App.i18n.t('gen.socraticBorrow'),
         options: buildOptions(correct, [flipped, correct - 10, a],
           function (v) { return paintNumber(v); })
@@ -284,9 +284,9 @@
       return {
         prompt: App.i18n.t('gen.restarEnunciado').replace('{a}', a).replace('{b}', b),
         visual: '<div class="expression">' + paintNumber(a) + paintSign('−') + paintNumber(b) +
-          paintSign('=') + '<span class="num-box empty">?</span></div>' +
+          paintSign('=') + '<span class="pv-box pv-box--empty">?</span></div>' +
           '<div class="dot-array" aria-hidden="true">' + dotsGroupSubtract(a, b) + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.restarPista').replace('{b}', b) + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.restarPista').replace('{b}', b) + '</p>',
         hint: App.i18n.t('gen.socraticRestar'),
         options: buildOptions(correct, [correct - 1, correct + 1, a],
           function (v) { return paintNumber(v); })
@@ -298,10 +298,10 @@
       return {
         prompt: App.i18n.t('gen.doblesEnunciado').replace(/\{a\}/g, a),
         visual: '<div class="expression">' + paintNumber(a) + paintSign('+') + paintNumber(a) +
-          paintSign('=') + '<span class="num-box empty">?</span></div>' +
+          paintSign('=') + '<span class="pv-box pv-box--empty">?</span></div>' +
           '<div class="dot-array" aria-hidden="true">' + dotsGroup(a, 'pa') +
           paintSign('+') + dotsGroup(a, 'pb') + '</div>' +
-          '<p class="hint">' + App.i18n.t('gen.doblesPista') + '</p>',
+          '<p class="act-hint">' + App.i18n.t('gen.doblesPista') + '</p>',
         hint: App.i18n.t('gen.socraticDoubles'),
         options: buildOptions(2 * a, [2 * a - 1, 2 * a + 2, 2 * a + 1],
           function (v) { return paintNumber(v); })
@@ -329,8 +329,8 @@
         prompt: App.i18n.t('gen.sumaGrandeEnunciado').replace('{n}', n).replace('{suma}', nv.suma),
         visual: '<div class="expression">' + paintNumber(n, { highlight: highlight }) +
           paintSign('+') + paintNumber(nv.suma) + paintSign('=') +
-          '<span class="num-box empty">?</span></div>' +
-          '<p class="hint">' + hint + '</p>',
+          '<span class="pv-box pv-box--empty">?</span></div>' +
+          '<p class="act-hint">' + hint + '</p>',
         legend: legendPos(),
         hint: App.i18n.t('gen.socraticSumLarge'),
         options: buildOptions(correct,
@@ -360,8 +360,8 @@
         prompt: App.i18n.t('gen.restaGrandeEnunciado').replace('{n}', n).replace('{resta}', nv.resta),
         visual: '<div class="expression">' + paintNumber(n, { highlight: highlight }) +
           paintSign('−') + paintNumber(nv.resta) + paintSign('=') +
-          '<span class="num-box empty">?</span></div>' +
-          '<p class="hint">' + hint + '</p>',
+          '<span class="pv-box pv-box--empty">?</span></div>' +
+          '<p class="act-hint">' + hint + '</p>',
         legend: legendPos(),
         hint: App.i18n.t('gen.socraticSubtractLarge'),
         options: buildOptions(correct,
@@ -380,8 +380,8 @@
       return {
         prompt: App.i18n.t('gen.multiplicaGrandeEnunciado').replace('{n}', n).replace('{factor}', nv.factor),
         visual: '<div class="expression">' + paintNumber(n) + paintSign('×') + paintNumber(nv.factor) +
-          paintSign('=') + '<span class="num-box empty">?</span></div>' +
-          '<p class="hint">' + App.i18n.t('gen.multiplicaGrandePista').replace('{ceros}', zeros).replace('{n}', n) + '</p>',
+          paintSign('=') + '<span class="pv-box pv-box--empty">?</span></div>' +
+          '<p class="act-hint">' + App.i18n.t('gen.multiplicaGrandePista').replace('{ceros}', zeros).replace('{n}', n) + '</p>',
         hint: App.i18n.t('gen.socraticMultiplyLarge'),
         options: buildOptions(correct, App.utils.shuffle(distractors),
           function (v) { return paintNumber(v); })
@@ -463,10 +463,10 @@
         var cls = GROUPS_DIGIT_CLASSES[posAbs] || 'grp-dozen';
         body += '<span class="' + cls + '">' + groups[g][j] + '</span>';
       }
-      if (g > 0) html += '<span class="digit-sep">' + sep + '</span>';
+      if (g > 0) html += '<span class="pv-digit--sep">' + sep + '</span>';
       html += body;
     }
-    return '<span class="num-color">' + html + '</span>';
+    return '<span class="pv-number">' + html + '</span>';
   }
 
   function groupsPlainShown(roundData) {

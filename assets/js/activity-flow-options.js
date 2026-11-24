@@ -77,16 +77,16 @@
     }
     html.push(
       '  <p class="round-header hidden" id="chainBanner" aria-live="polite"></p>',
-      '  <p class="difficulty hidden" id="difficulty"></p>',
+      '  <p class="act-difficulty hidden" id="difficulty"></p>',
       '  <div class="progress-bar" data-suite-progress>',
       '    <div class="progress-fill" id="progressFill"></div>',
       '    <span class="progress-text" id="progressText">0 / 0</span>',
       '  </div>',
-      '  <article class="card centered stack task-card">',
-      '    <h2 class="prompt" id="testPrompt"></h2>'
+      '  <article class="card centered stack act-card--task">',
+      '    <h2 class="act-prompt" id="testPrompt"></h2>'
     );
     if (visual) html.push('    <div class="' + (config.testVisualClass || 'fac-visual') + '" id="testVisual"></div>');
-    html.push('    <p class="legend hidden" id="testLegend"></p>');
+    html.push('    <p class="act-legend hidden" id="testLegend"></p>');
     if (config.audio) html.push('    <button type="button" class="btn btn-secondary hidden" id="testReplay" data-i18n="ui.replay"></button>');
     html.push('    <p class="step-label hidden" id="stepLabel" aria-live="polite"></p>');
     html.push('    <div class="options-row" id="testOptions"></div>');

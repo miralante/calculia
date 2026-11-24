@@ -17,7 +17,7 @@
 .instruction { font-size: var(--texto-pequeno); }
 
 
-.difficulty {
+.act-difficulty {
   font-size: var(--texto-pequeno);
   color: var(--color-texto-suave, #666);
 }
@@ -90,17 +90,9 @@
 /* ---- Pantalla de juego ---- */
 .card { border-color: var(--mod-razonamiento-suave); }
 
-.context-text {
-  font-size: var(--texto-pequeno);
-  color: var(--color-texto-suave);
-  text-align: center;
-  margin: 0;
-  max-width: 480px;
-}
 
 .question { color: var(--color-texto-suave); }
 
-.big-emoji { font-size: 96px; }
 
 #endScreen { padding-top: 48px; }
 
@@ -168,37 +160,15 @@
 
 
 
-.famosos-card {
-  border-color: var(--mod-razonamiento-suave);
-  align-items: center;
-}
+.famosos-card { align-items: center; }
 
-.famoso-ejemplo {
-  font-size: 64px;
-  font-weight: 800;
-  letter-spacing: 4px;
-  padding: var(--espacio) var(--espacio-grande);
-  border: 3px solid var(--mod-razonamiento-suave);
-  border-radius: var(--radio);
-  background: var(--color-superficie);
-  text-align: center;
-  width: 100%;
-  max-width: 480px;
-}
+.famoso-ejemplo { font-size: 64px; letter-spacing: 4px; }
 
 /* Fila que contiene el ejemplo famoso + botón de audio. El flex
    permite que el botón quede a la derecha del romano en pantallas
    anchas y, en pantallas estrechas, que se coloque debajo sin
    romper el centered. */
-.famoso-ejemplo-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--espacio);
-  width: 100%;
-  max-width: 560px;
-  flex-wrap: wrap;
-}
+.famoso-ejemplo-row { max-width: 560px; }
 
 .famoso-ejemplo-row .famoso-ejemplo {
   flex: 1 1 240px;
@@ -235,14 +205,7 @@
   flex: 0 0 auto;
 }
 
-.famous-text {
-  font-size: var(--texto-base);
-  color: var(--color-texto);
-  text-align: center;
-  margin: 0;
-  max-width: 480px;
-  min-height: 1.5em;
-}
+.famous-text { font-size: var(--texto-base); max-width: 480px; min-height: 1.5em; }
 
 
 .intro-card {
@@ -252,10 +215,6 @@
 /* ============================================================
    Pantalla 2: recordatorio (mecánica con colores)
    ============================================================ */
-.reminder-buttons {
-  justify-content: center;
-  margin-top: var(--espacio-grande);
-}
 
 .symbols-card {
   border-color: var(--mod-razonamiento-suave);
@@ -310,11 +269,7 @@
   text-align: center;
 }
 
-.rule-card {
-  border-color: var(--mod-razonamiento-suave);
-  align-items: center;
-  gap: var(--espacio);
-}
+.rule-card { align-items: center; gap: var(--espacio); }
 
 .rule-title {
   font-weight: 700;

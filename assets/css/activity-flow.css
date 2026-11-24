@@ -13,11 +13,11 @@
 .activity-title { margin: 0; text-align: center; color: var(--mod-razonamiento); }
 
 /* Text blocks */
-.concept-title, .concept-count, .concept-text, .real-text { text-align: center; margin: 0; }
-.concept-text, .real-text { font-size: var(--texto-grande); line-height: 1.45; }
+.act-title, .concept-count, .act-text, .real-text { text-align: center; margin: 0; }
+.act-text, .real-text { font-size: var(--texto-grande); line-height: 1.45; }
 .concept-count { color: var(--color-texto-suave); }
 .real-text { font-size: var(--texto-grande); }
-.real-card { min-height: 180px; justify-content: center; }
+.act-card--real { min-height: 180px; justify-content: center; }
 
 /* Slide arrows: centred under the drawing. */
 
@@ -29,8 +29,8 @@
 .option-btn.incorrect { opacity: 0.5; text-decoration: line-through; }
 .option-btn:disabled { opacity: 0.6; }
 .option-btn .op-sym { font-size: var(--texto-grande); }
-.task-card { border-color: var(--mod-razonamiento-suave); }
-.prompt { margin: 0; text-align: center; font-size: var(--texto-grande); }
+.act-card--task { border-color: var(--mod-razonamiento-suave); }
+.act-prompt { margin: 0; text-align: center; font-size: var(--texto-grande); }
 :where(#activity) .feedback { margin: 0; text-align: center; min-height: 1.4em; }
 :where(#activity) .feedback.success { color: var(--color-texto); font-weight: 700; }
 .feedback.error { color: var(--color-texto-suave); }

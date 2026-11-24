@@ -6,7 +6,7 @@
 .instruction { font-size: var(--texto-base); }
 
 
-.difficulty {
+.act-difficulty {
   font-size: var(--texto-pequeno);
   color: var(--color-texto-suave, #666);
 }
@@ -42,7 +42,7 @@
   min-width: 280px;
 }
 
-#screenEnd .transfer {
+#screenEnd .act-transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-suave, #555);

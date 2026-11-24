@@ -9,7 +9,7 @@
 .instruction { font-size: var(--texto-base); }
 
 
-.difficulty {
+.act-difficulty {
   font-size: var(--texto-pequeno);
   color: var(--color-texto-suave, #666);
 }
@@ -33,4 +33,4 @@
 .options .money { align-self: center; }
 
 /* ---- Quiz compartido ---- */
-.prompt { font-weight: 700 }
+.act-prompt { font-weight: 700 }

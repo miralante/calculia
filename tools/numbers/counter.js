@@ -112,7 +112,7 @@
       var s = String(n);
       var groups = [];
       for (var i = s.length; i > 0; i -= 3) groups.unshift(s.slice(Math.max(0, i - 3), i));
-      var html = '<span class="num-color">';
+      var html = '<span class="pv-number">';
       for (var g = 0; g < groups.length; g++) {
         var body = '';
         for (var j = 0; j < groups[g].length; j++) {

@@ -35,13 +35,30 @@
     };
   };
 
+  /* The header's «← Volver» from a sub-activity: when the menu screen is hidden, it shows the menu
+     again and hides the screen that is open, and the link does not navigate (returns true). When
+     the menu is already showing, or the page has no menu, it returns false and the link goes to
+     the hub (suite-chrome.js). */
+  App.menuBack = function (menuId) {
+    var menu = $(menuId);
+    if (!menu || !menu.classList.contains('hidden')) return false;
+    var sections = [].slice.call(document.querySelectorAll('main section'));
+    sections.forEach(function (s) { s.classList.toggle('hidden', s !== menu); });
+    menu.classList.remove('hidden');
+    return true;
+  };
+
+  /* The default step of every activity with a menu screen (#screenMenu). An activity that
+     defines its own App.backStep (activity-flow.js, operations) replaces it. */
+  App.backStep = function () { return App.menuBack('#screenMenu'); };
+
   App.activityGlue = function (host) {
     function save() {
       App.storage.set(host.toolId, host.progress());
     }
 
     function paintStars() {
-      host.starsEl().textContent = '⭐ ' + host.progress().stars;
+      App.chrome.paintStars(host.progress().stars, host.starsEl());
     }
 
     // The level of the current activity, from the rounds completed so far.

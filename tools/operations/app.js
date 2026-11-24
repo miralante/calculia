@@ -427,7 +427,7 @@
           prompt: App.i18n.t('gen.canjeDirecto' + nv.lugar).replace('{n}', n),
           visual: '<div class="blocks">' +
             repeatHtml('<span class="trade-group">' + repeatHtml(blocks[nv.lugar], 10) + '</span>', k) +
-            '</div><p class="hint">' + hint + '</p>',
+            '</div><p class="act-hint">' + hint + '</p>',
           visualAria: App.i18n.t('gen.canjeAriaDirecto').replace('{k}', k),
           legend: legendPlace(),
           hint: App.i18n.t('gen.socraticTradeUp'),
@@ -439,7 +439,7 @@
         prompt: App.i18n.t('gen.canjeInverso' + nv.lugar).replace('{k}', kInv),
         visual: '<div class="blocks"><span class="blocks-group">' +
           repeatHtml(blocks[nv.lugar + 1], kInv) +
-          '</span></div><p class="hint">' + hint + '</p>',
+          '</span></div><p class="act-hint">' + hint + '</p>',
         visualAria: App.i18n.t('gen.canjeAriaInverso').replace('{k}', kInv),
         legend: legendPlace(),
         hint: App.i18n.t('gen.socraticTradeDown'),
@@ -461,8 +461,8 @@
         hint: App.i18n.t('gen.socraticLadder'),
         visual: '<div class="place-expression">' + paintNumber(10) + paintSign('—') +
           paintNumber(n, { labels: true }) + paintSign('=') +
-          '<span class="num-box empty">?</span></div>' +
-          '<p class="hint">' + App.i18n.t('gen.escaleraPista') + '</p>',
+          '<span class="pv-box pv-box--empty">?</span></div>' +
+          '<p class="act-hint">' + App.i18n.t('gen.escaleraPista') + '</p>',
         legend: legendPlace(),
         options: pickPlaceOptions(correct, [n, correct * 10])
       };
@@ -478,6 +478,17 @@
       p.classList.toggle('hidden', p !== screen);
     });
   }
+
+  /* The header's «← Volver» goes to this activity's menu (its sub-activities) from any screen
+     inside a sub-activity; from the menu it returns false and the link goes to the hub. */
+  App.backStep = function () {
+    if (!screenGame.classList.contains('hidden') || !screenExpo.classList.contains('hidden') ||
+        !screenReal.classList.contains('hidden')) {
+      show(screenMenu);
+      return true;
+    }
+    return false;
+  };
 
   /* The explanation and the real-life screens, for the sub-activities that set
      hasExpoReal in data.js (assets/js/expo-screens.js). */

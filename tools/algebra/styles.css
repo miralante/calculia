@@ -123,7 +123,6 @@
 .is-marked .graph-hour { text-decoration: underline; }
 
 .trend-name { display: block; }
-.answer-name { display: block; }
 
 /* How something grows: the jump between each pair is written above, so
    "by the same each time" is read and not felt. */
@@ -286,4 +285,4 @@
 }
 
 .emoji-large { font-size: 96px; }
-.transfer { margin: 8px auto 24px; font-size: 1.1rem; color: var(--color-texto-suave, #555); max-width: 480px; }
+.act-transfer { margin: 8px auto 24px; font-size: 1.1rem; color: var(--color-texto-suave, #555); max-width: 480px; }

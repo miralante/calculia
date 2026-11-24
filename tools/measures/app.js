@@ -217,7 +217,7 @@
     medidas: function (nv) {
       var group = DATA.measures[App.i18n.locale()][nv.lista];
       var item = App.utils.drawRound('med_' + nv.lista, group.items);
-      var ej = item.ej ? '<p class="hint">' + item.ej + '</p>' : '';
+      var ej = item.ej ? '<p class="act-hint">' + item.ej + '</p>' : '';
       return {
         prompt: item.question,
         visual: '<div class="measure-picto" aria-hidden="true">' + group.picto + '</div>' +

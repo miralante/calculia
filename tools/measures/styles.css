@@ -3,7 +3,7 @@
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 
-.difficulty {
+.act-difficulty {
   font-size: var(--texto-pequeno);
   color: var(--color-texto-suave, #666);
 }
@@ -15,14 +15,14 @@
 #btnBackToMenu { align-self: center; }
 
 /* Color-coded legend text (parts painted / parts total) */
-.digit-u { color: var(--mod-coordinacion); }
-.digit-d { color: var(--mod-secuencia); }
+.pv-digit--u { color: var(--mod-coordinacion); }
+.pv-digit--d { color: var(--mod-secuencia); }
 
 .card { border-color: var(--mod-razonamiento-suave); }
-.prompt { font-weight: 700 }
-.visual { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); }
-.legend { font-size: var(--texto-pequeno); font-weight: 700; }
-.hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
+.act-prompt { font-weight: 700 }
+.visual { flex-direction: column; gap: var(--espacio); }
+.act-legend { font-size: var(--texto-pequeno); font-weight: 700; }
+.act-hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
 
 /* Measurements */
 .measure-picto { font-size: 64px; }
@@ -34,7 +34,7 @@
 .emoji-large { font-size: 96px; }
 #screenEnd { padding-top: 48px; }
 #screenEnd .btn { align-self: center; min-width: 280px; }
-#screenEnd .transfer {
+#screenEnd .act-transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-suave, #555);

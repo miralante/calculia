@@ -1,7 +1,6 @@
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 
 /* Dots visual */
-.visual-card { display: flex; flex-direction: column; gap: var(--espacio); align-items: flex-start; padding: var(--espacio); border: 3px solid var(--mod-razonamiento-suave); border-radius: var(--radio); background: var(--color-superficie); }
 .visual-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .group-stack { display: flex; flex-direction: column; gap: 8px; }
 .dot-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
@@ -11,7 +10,6 @@
 .ten-frame { padding: 6px; border: 3px solid var(--mod-razonamiento); border-radius: var(--radio); background: var(--mod-razonamiento-suave); }
 .visual-sign { font-size: var(--texto-grande); font-weight: 700; color: var(--color-texto-suave); }
 .equation { margin: 0; color: var(--mod-razonamiento); font-size: var(--texto-grande); font-variant-numeric: tabular-nums; }
-.option-row { display: flex; gap: var(--espacio); justify-content: center; flex-wrap: wrap; }
 .explanation { color: var(--color-texto-suave) }
 #nextFact { align-self: center; }
 

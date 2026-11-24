@@ -162,6 +162,41 @@ function mountProblems(file, appRoot, appName, html) {
   return out;
 }
 
+/* A script that draws through the shared header (App.chrome.*) must load after suite-chrome.js.
+   Returns the problem for the first body script before suite-chrome.js that calls App.chrome,
+   or null. Only the scripts that use the header are named: the others may load in any order. */
+function chromeOrderProblem(html, file, appRoot) {
+  const bodyAt = html.search(/<body\b/);
+  const chromeAt = html.search(/<script\b[^>]*\bsuite-chrome\.js/);
+  if (bodyAt === -1 || chromeAt === -1 || chromeAt < bodyAt) return null;
+  const tag = /<script\b([^>]*)>([\s\S]*?)<\/script>|<script\b([^>]*)\/>|<script\b([^>]*)>/g;
+  let m;
+  while ((m = tag.exec(html)) !== null) {
+    if (m.index < bodyAt) continue;
+    if (m.index >= chromeAt) break;
+    const attrs = m[1] !== undefined ? m[1] : (m[3] !== undefined ? m[3] : m[4]);
+    const type = attrOf(attrs, 'type');
+    if (type !== null && type !== 'text/javascript' && type !== 'module') continue; // data, not code
+    const src = attrOf(attrs, 'src');
+    let code;
+    let name;
+    if (src === null) {
+      code = m[2] || '';
+      name = 'inline script';
+    } else {
+      const clean = src.split(/[?#]/)[0];
+      const target = clean.startsWith('/') ? path.join(appRoot, clean) : path.resolve(path.dirname(file), clean);
+      code = fs.existsSync(target) ? fs.readFileSync(target, 'utf8') : '';
+      name = path.basename(clean);
+    }
+    if (/\bApp\.chrome\b/.test(code)) {
+      return name + ' calls App.chrome before suite-chrome.js loads: put suite-chrome.js before it ' +
+        '(the header draws the star counter at boot through App.chrome.paintStars)';
+    }
+  }
+  return null;
+}
+
 /* Returns the list of problems of one page, empty when it conforms. `isActivity(slug, folder)`
    tells whether the app lists the folder `slug` somewhere outside `folder` itself. */
 function pageProblems(file, appRoot, appName, isActivity = () => false) {
@@ -178,6 +213,8 @@ function pageProblems(file, appRoot, appName, isActivity = () => false) {
   if (!picker) out.push('no locale-picker.js script');
   if (oldPie) out.push('still uses data-pie-app');
   if (backLinkOutsideActivity(html)) out.push('back link outside its data-suite-activity block');
+  const order = chromeOrderProblem(html, file, appRoot);
+  if (order) out.push(order);
   const back = backLinkProblem(file, html, isActivity);
   if (back) out.push(back);
   return out.concat(mountProblems(file, appRoot, appName, html));

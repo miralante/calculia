@@ -69,6 +69,7 @@
       checkFillSubQ: '¿Cuántas monedas faltan para llegar a {n}?',
       checkSwapQ: '¿Cambia el total si cambias el orden?',
       namesDone: '¡Bien! Cada parte de la división ya tiene su nombre.',
+      factNamesDone: '¡Bien! Cada parte del factorial ya tiene su nombre.',
       dealResult: '{T} ÷ {g} = {e}',
       friend: 'Amigo {n}',
       pack: 'Paquete {n}',
@@ -150,8 +151,10 @@
         intro: {
           1: { title: '¿Qué es un factorial?', text: '4! se lee «4 factorial». Es multiplicar 4 × 3 × 2 × 1. El resultado es 24.' },
           2: { title: 'Crece muy deprisa', text: '1! = 1, 2! = 2, 3! = 6, 4! = 24, 5! = 120. Cada paso multiplica por un número más. Por acuerdo, 0! = 1.' },
-          3: { title: 'Sirve para la divisibilidad', text: '5! = 120. Entre 1, 2, 3, 4 y 5 se divide exacto: no sobra nada. Por eso los factoriales ayudan a entender la divisibilidad.' }
+          3: { title: 'Sirve para la divisibilidad', text: '5! = 120. Entre 1, 2, 3, 4 y 5 se divide exacto: no sobra nada. Por eso los factoriales ayudan a entender la divisibilidad.' },
+          4: { title: 'El juego', text: 'Pon cada nombre en su sitio.' }
         },
+        names: { number: 'Número', result: 'Resultado' },
         real: {
           1: '3 amigos se ponen en fila para una foto. Hay 6 formas distintas de ponerse.',
           2: 'Tienes 4 libros para un estante. Los puedes colocar de 24 formas distintas.',
@@ -269,27 +272,24 @@
         prompt: 'Repartes {T} en grupos de {e}. ¿Qué división sale?',
         hint: '🤔 Piensa en grupos de {e}: ¿cuántos grupos salen?',
         explain: '{T} ÷ {e} = {g}: caben {g} grupos de {e}.'
-      },
-      factValue: {
-        prompt: '¿Cuánto vale {n}!?',
-        hint: 'Multiplica, no sumes. Sigue bajando hasta el 1.',
-        explain: '{chain} = {T}.'
-      },
-      factMeaning: {
-        prompt: '¿Qué significa {n}!?',
-        hint: 'El signo ! quiere decir: multiplica desde ese número hasta el 1.',
-        explain: '{n}! = {chain}.'
-      },
-      factSlots: {
-        prompt: '¿De cuántas formas se pueden poner {n} amigos en fila?',
-        hint: 'Para el primer sitio hay {n} opciones. Para el segundo, una menos. Así hasta el último.',
-        explain: '{chain} = {T} formas.'
-      },
-      factDivides: {
-        prompt: '¿Entre cuál de estos números se divide exacto {n}!?',
-        hint: 'Divide {T} entre cada número. El que no deja nada sobrando es la respuesta.',
-        explain: '{T} ÷ {k} = {g}, sin nada sobrando.'
       }
+    },
+
+    /* La práctica de Factorial (sin test), como la de Potencias: se escribe un número y se ve su cuenta. */
+    factorial: {
+      practiceTitle: 'Empezar a practicar',
+      practiceN: 'Escribe un número entre el 2 y el 5. Mira cómo se calcula su factorial.',
+      practiceValue: 'Este es el factorial de un número. Escribe ese número.',
+      practiceSlots: 'Escribe un número entre el 2 y el 5. Mira de cuántas formas se pueden poner en fila sus amigos.',
+      numberAria: 'Número',
+      right: '¡Eso es!',
+      wrong: 'Ese número da {r}, no {v}. Prueba otra vez.',
+      empty: 'Escribe un número',
+      range: 'Pon un número entre el 2 y el 5.',
+      calc: 'Calcular',
+      again: 'Otra vez',
+      prev: 'Anterior',
+      next: 'Siguiente'
     },
 
     /* La práctica de Potencias (sin test): pocas palabras, las figuras cuentan. */

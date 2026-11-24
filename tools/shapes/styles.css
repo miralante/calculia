@@ -50,7 +50,7 @@
 }
 
 .gallery-card,
-.real-card {
+.act-card--real {
   align-items: center;
   border-color: var(--mod-razonamiento-suave);
 }
@@ -223,7 +223,7 @@
 
 /* The name of a figure in the gallery, and the caption of a real-life example:
    the flow's classes, with the sizes of this activity. */
-.concept-title,
+.act-title,
 .real-text {
   min-height: 3em;
   max-width: 560px;
@@ -231,7 +231,7 @@
   text-align: center;
 }
 .real-text { line-height: inherit }
-.gallery-card .concept-title {
+.gallery-card .act-title {
   color: var(--mod-razonamiento);
   font-size: 1.35rem;
   font-weight: 800;
@@ -288,7 +288,6 @@
   .shape-compare-visual svg { width: 76px; height: 76px; }
 }
 /* The soft line under the figure. Same rule as money/numbers/measures. */
-.hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
 /* Centred instead of left-hugging the screen edge. A lone button
    lands centred; back/next stay side by side. Same as scale. */
 

@@ -30,11 +30,11 @@
       slides: [
         { key: 'whole', visual: function () {
           return '<div class="intro-notation"><span class="decimal-value">' +
-            '<span class="digit-u">3</span>' + decimalSeparator() + '47</span></div>';
+            '<span class="pv-digit--u">3</span>' + decimalSeparator() + '47</span></div>';
         } },
         { key: 'decimal', visual: function () {
           return '<div class="intro-notation"><span class="decimal-value">3' + decimalSeparator() +
-            '<span class="digit-d">47</span></span></div>';
+            '<span class="pv-digit--d">47</span></span></div>';
         } },
         { key: 'tenths', visual: function () {
           return '<div class="intro-notation">' + svgFraccion(3, 10, 170) +
@@ -42,8 +42,8 @@
         } },
         { key: 'point', visual: function () {
           return '<div class="intro-notation"><span class="decimal-value">' +
-            '<span class="digit-u">0</span>' + decimalSeparator() +
-            '<span class="digit-d">3</span></span></div>';
+            '<span class="pv-digit--u">0</span>' + decimalSeparator() +
+            '<span class="pv-digit--d">3</span></span></div>';
         } },
         { key: 'half', visual: function () {
           return '<div class="intro-compare">' +

@@ -4,31 +4,30 @@
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 
-.difficulty {
+.act-difficulty {
   font-size: var(--texto-pequeno);
   color: var(--color-texto-suave, #666);
 }
 
 
 
-.extra-note { text-align: center; color: var(--color-texto-suave); margin-top: var(--espacio-grande); }
 
 #screenLevels h2 { text-align: center; color: var(--mod-razonamiento); }
 #btnBackToMenu { align-self: center; }
 
 /* Prices */
-.num-color { font-weight: 800; letter-spacing: 2px; }
-.digit-u { color: var(--mod-coordinacion); }   /* blue — euro units */
-.digit-d { color: var(--mod-secuencia); }      /* green — euro tens */
-.digit-c { color: var(--mod-emocional); }      /* purple — euro hundreds */
+.pv-number { font-weight: 800; letter-spacing: 2px; }
+.pv-digit--u { color: var(--mod-coordinacion); }   /* blue — euro units */
+.pv-digit--d { color: var(--mod-secuencia); }      /* green — euro tens */
+.pv-digit--c { color: var(--mod-emocional); }      /* purple — euro hundreds */
 .digit-comma, .digit-dec { color: var(--mod-memoria); } /* orange — comma and cents */
 
 .card { border-color: var(--mod-razonamiento-suave); }
-.prompt { font-weight: 700 }
-.visual { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); }
+.act-prompt { font-weight: 700 }
+.visual { flex-direction: column; gap: var(--espacio); }
 .visual-number { font-size: 52px; }
-.legend { font-size: var(--texto-pequeno); font-weight: 700; }
-.hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
+.act-legend { font-size: var(--texto-pequeno); font-weight: 700; }
+.act-hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
 
 /* Is it enough? / The change */
 .llega-caja {
@@ -42,7 +41,7 @@
 /* Reading and comparing prices */
 .measure-picto { font-size: 64px; }
 .price-tag { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; font-size: var(--texto-base); }
-.price-tag .num-color { font-size: 30px; }
+.price-tag .pv-number { font-size: 30px; }
 .price-tag .option-picto { font-size: 44px; }
 
 /* Answer options */
@@ -51,7 +50,7 @@
 .emoji-large { font-size: 96px; }
 #screenEnd { padding-top: 48px; }
 #screenEnd .btn { align-self: center; min-width: 280px; }
-#screenEnd .transfer {
+#screenEnd .act-transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-suave, #555);

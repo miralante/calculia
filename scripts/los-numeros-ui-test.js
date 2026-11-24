@@ -157,7 +157,7 @@ async function walk(page, locale, onSlide) {
 async function testWalksAllSlidesInSpanish(browser, base) {
   const { context, page, errors } = await openGallery(browser, base, 'es');
   try {
-    assert.equal(await page.textContent('#stars'), '⭐ 0', 'the star count starts at 0');
+    assert.equal(await page.textContent('#stars'), '0 ⭐', 'the star count starts at 0');
     await walk(page, 'es');
     assert.deepEqual(errors, [], 'no page errors while walking the gallery');
   } finally {
@@ -199,11 +199,11 @@ async function testFinishGivesOneStarAndKeepsIt(browser, base) {
     for (let i = 0; i < TOTAL - 1; i++) await page.locator('#slideNext').click();
     await page.locator('#slideFinish').click();
     await page.waitForSelector('#app-celebration:not(.hidden)');
-    assert.equal(await page.textContent('#stars'), '⭐ 1', 'finishing gives one star');
+    assert.equal(await page.textContent('#stars'), '1 ⭐', 'finishing gives one star');
     /* The star is kept after a reload. */
     await page.reload();
     await page.waitForSelector('#slideTitle:not(:empty)');
-    assert.equal(await page.textContent('#stars'), '⭐ 1', 'the star is still there after a reload');
+    assert.equal(await page.textContent('#stars'), '1 ⭐', 'the star is still there after a reload');
     assert.deepEqual(errors, [], 'no page errors while finishing');
   } finally {
     await context.close();

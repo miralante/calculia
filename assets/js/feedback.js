@@ -470,7 +470,7 @@
     container.textContent = '';
     var estrellas = document.createElement('span');
     estrellas.className = 'reward-stars';
-    estrellas.textContent = '⭐ ' + stars;
+    estrellas.textContent = stars + ' ⭐';
     var texto = document.createElement('span');
     texto.className = 'reward-summary';
     texto.textContent = summary || '';

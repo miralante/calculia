@@ -43,7 +43,7 @@
 
       function t(key) { return App.i18n.t(key); }
       function save() { App.storage.set(config.toolId, progress); }
-      function paintStars() { starsEl.textContent = '⭐ ' + progress.stars; }
+      function paintStars() { App.chrome.paintStars(progress.stars, starsEl); }
       function showScreen(id) {
         $('#screenGame').classList.toggle('hidden', id !== 'screenGame');
       }

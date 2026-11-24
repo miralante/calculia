@@ -47,12 +47,12 @@
       '  <div class="progress-bar" data-suite-progress>',
       '    <div class="progress-fill" id="progressFill"></div>',
       '    <span class="progress-text" id="progressText">0 / 0</span>' +
-        (config.levelName ? '<span class="difficulty" id="difficulty"></span>' : ''),
+        (config.levelName ? '<span class="act-difficulty" id="difficulty"></span>' : ''),
       '  </div>',
       '  <div class="stack test-sheet" id="testSheet" aria-live="polite"></div>'
     ];
     /* The sentence that says what the round was for; it appears when the round is complete. */
-    if (config.transferKey) html.push('  <p class="transfer hidden" id="transfer" data-i18n="' + config.transferKey + '"></p>');
+    if (config.transferKey) html.push('  <p class="act-transfer hidden" id="transfer" data-i18n="' + config.transferKey + '"></p>');
     html.push(
       '  <div class="row sheet-actions">',
       '    <button type="button" class="btn" id="btnCheck" data-i18n="ui.check">Comprobar</button>',

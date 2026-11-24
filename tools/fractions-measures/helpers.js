@@ -5,8 +5,8 @@
   'use strict';
 
   function leyendaFrac() {
-    return '<span class="digit-u">' + App.i18n.t('leyendaPartesPintadasTxt') + '</span> · ' +
-      '<span class="digit-d">' + App.i18n.t('leyendaPartesTotalTxt') + '</span>';
+    return '<span class="pv-digit--u">' + App.i18n.t('leyendaPartesPintadasTxt') + '</span> · ' +
+      '<span class="pv-digit--d">' + App.i18n.t('leyendaPartesTotalTxt') + '</span>';
   }
 
   function svgFraccion(num, den, size) {

@@ -10,11 +10,11 @@
 
 /* ---- Captions of the slides and of the examples ---- */
 .gallery-card,
-.real-card {
+.act-card--real {
   align-items: center;
   border-color: var(--mod-razonamiento-suave);
 }
-.concept-title,
+.act-title,
 .real-text {
   min-height: 2em;
   max-width: 560px;
@@ -22,7 +22,7 @@
   font-size: 1.35rem;
   font-weight: 800;
 }
-.concept-text {
+.act-text {
   min-height: 3em;
   max-width: 560px;
   color: var(--color-texto-suave);
@@ -176,7 +176,6 @@
 }
 
 /* ---- The answers of the test ---- */
-.answer-name { display: block; }
 .answer-num {
   display: block;
   font-size: 2.2rem;

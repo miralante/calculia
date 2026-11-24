@@ -70,7 +70,7 @@
     var groupsProgress = GROUPS_PROGRESS.load();
     function groupsSave() { GROUPS_PROGRESS.save(groupsProgress); }
     function groupsPaintStars() {
-      starsEl.textContent = '⭐ ' + ((progress.stars || 0) + groupsProgress.stars);
+      App.chrome.paintStars((progress.stars || 0) + groupsProgress.stars, starsEl);
     }
 
     /* ---- Switcher for the four walkthrough screens + quiz + end. ----

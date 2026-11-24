@@ -13,8 +13,7 @@
 /* A hidden element stays hidden even where a class sets its display. */
 .intro-game [hidden] { display: none !important; }
 
-.ops-story { margin: 0; font-size: var(--texto-grande); text-align: center; line-height: 1.4; }
-.ops-expr { margin: 0; font-size: var(--texto-grande); font-weight: 700; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; text-align: center; line-height: 1.4; }
+.ops-expr { line-height: 1.4; }
 
 /* One frame: the text, the buttons, and the result below them. */
 .ops-div { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }

@@ -80,7 +80,7 @@
      el separador entre idiomas es obligatorio (ver I18N.md §2). */
   function decimalSeparator() { return App.i18n.locale() === 'en' ? '.' : ','; }
 
-  var POS_CLASS = ['digit-u', 'digit-d', 'digit-c'];
+  var POS_CLASS = ['pv-digit--u', 'pv-digit--d', 'pv-digit--c'];
 
   /* Color-coded digits by place value, same convention as the euro/units
      legend below (blue units, green tens, purple hundreds). */
@@ -89,14 +89,14 @@
     var html = '';
     for (var j = 0; j < s.length; j++) {
       var pos = s.length - 1 - j;
-      var clase = POS_CLASS[pos] || 'digit-c';
+      var clase = POS_CLASS[pos] || 'pv-digit--c';
       html += '<span class="' + clase + '">' + s[j] + '</span>';
     }
     return html;
   }
 
   function legendPrice() {
-    return '<span class="digit-u">' + App.i18n.t('leyendaEurosTxt') + '</span> · ' +
+    return '<span class="pv-digit--u">' + App.i18n.t('leyendaEurosTxt') + '</span> · ' +
       '<span class="digit-comma">' + App.i18n.t('leyendaComaTxt') + '</span>';
   }
 
@@ -104,7 +104,7 @@
     var e = Math.floor(cent / 100);
     var c = cent % 100;
     var cc = (c < 10 ? '0' : '') + c;
-    return '<span class="num-color">' + digits(e) +
+    return '<span class="pv-number">' + digits(e) +
       '<span class="digit-comma">' + decimalSeparator() + '</span><span class="digit-dec">' + cc + '</span> €</span>';
   }
 

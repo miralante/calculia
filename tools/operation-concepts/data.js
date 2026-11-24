@@ -2,8 +2,10 @@
    Calculia — Operaciones — datos
    Seis subactividades, una por operación: + − × ÷, el factorial (!) y
    las potencias (^). Cada una tiene su explicación (slides con dibujo),
-   sus ejemplos de la vida real y su prueba (las potencias no tienen
-   ejemplos: `skipReal`). No hay cálculo difícil: se trata de entender qué
+   sus ejemplos de la vida real y su prueba. Factorial y potencias no
+   tienen prueba: tienen su práctica propia (`ownTest`, con números
+   escritos). Las potencias no tienen ejemplos (`skipReal`). No hay
+   cálculo difícil: se trata de entender qué
    significa cada operación y cuándo se usa.
    `pick: false` quita la operación de las preguntas «¿qué operación
    usarías?», que solo cubren las cuatro básicas.
@@ -83,11 +85,14 @@ var DATA = {
         { frame: { kind: 'powerNames', base: 4, exp: 3 } }
       ],
       skipReal: true },
+    /* Four slides, as the powers: what it is, how it grows, what it divides, and the game that puts the
+       names of its parts in their place (the last slide of the powers). */
     { id: 'fac', symbol: '!', pick: false,
       intro: [
         { visual: { kind: 'chain', n: 4 } },
         { visual: { kind: 'growth', max: 5 } },
-        { visual: { kind: 'chips', n: 5 } }
+        { visual: { kind: 'chips', n: 5 } },
+        { frame: { kind: 'factNames', n: 5 } }
       ],
       real: [
         { visual: { kind: 'slots', n: 3, counts: true, result: true } },
@@ -114,7 +119,6 @@ var DATA = {
     add: ['pick', 'join', 'more', 'swap'],
     sub: ['pick', 'take', 'gap'],
     mul: ['pick', 'times', 'repeat', 'swapTimes'],
-    div: ['pick', 'share', 'rest', 'leftover', 'relation', 'integer', 'decimal'],
-    fac: ['factValue', 'factMeaning', 'factSlots', 'factDivides']
+    div: ['pick', 'share', 'rest', 'leftover', 'relation', 'integer', 'decimal']
   }
 };

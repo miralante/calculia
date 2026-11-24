@@ -341,6 +341,14 @@
     });
   }
 
+  /* The header's «← Volver» goes back to the practice list of this table (screenTables) from the
+     explanation or the test; from the list itself it returns false and the link goes to the hub. */
+  App.backStep = function () {
+    if (!$('#screenTables').classList.contains('hidden')) return false;
+    showOnly('#screenTables');
+    return true;
+  };
+
   /* Between rounds the input becomes disabled (see checkAnswer). Reset
      it back to enabled for the next round so it accepts input again. */
   function resetInputControls() {

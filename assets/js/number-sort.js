@@ -275,7 +275,7 @@
       inline: true,
       options: App.utils.shuffle(['less', 'eq', 'greater'].map(function (r) {
         return {
-          html: '<span class="compare-sign">' + SIGN_HTML[r] + '</span>',
+          html: '<span class="cmp-sign">' + SIGN_HTML[r] + '</span>',
           aria: words[r],
           correct: r === rel
         };
@@ -435,7 +435,7 @@
         var inner = example.column ? columnHtml(example.column) : example.emoji;
         /* An example can also carry a visual (for example fractions drawn as
            circles), so the picture shows the comparison the sentence talks about. */
-        var picture = example.visual ? '<div class="real-visual">' + visualHtml(example.visual) + '</div>' : '';
+        var picture = example.visual ? '<div class="act-visual--real">' + visualHtml(example.visual) + '</div>' : '';
         return '<div class="real-object" aria-hidden="true">' + inner + '</div>' + picture;
       },
       /* One entry with the levels: the engine counts the rounds of the activity and finds the level. */

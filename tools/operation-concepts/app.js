@@ -307,8 +307,23 @@
     }
     repeatOne(box);
   });
-  /* The names game beside the first slide: the four names to put in their place under the numbers.
-     Tap a name, then the place it goes. A wrong place shakes and the name stays free. */
+  /* The names game, shared by the division's parts and the factorial's parts: a line of numbers, an empty place under
+     each one, and the names to put in them. `keys` is the list of places; `label(key)` is the name's text; `done` is
+     the line that shows when every name is in its place. The names are offered in the reverse order of `keys`, so they
+     are not already in place. Tap a name, then the place it goes (or drag it). A wrong place shakes and the name stays free. */
+  function namesGameInner(line, keys, label, done) {
+    var chips = '';
+    keys.slice().reverse().forEach(function (key) {
+      chips += '<button type="button" class="btn btn-secondary ops-name-chip" data-name="' + key + '">' + label(key) + '</button>';
+    });
+    return '<p class="ops-story ops-names-msg" aria-live="polite">' + t('ui.namesPick') + '</p>' +
+      line +
+      '<div class="ops-row ops-names-chips">' + chips + '</div>' +
+      '<p class="ops-expr ops-names-done" hidden>' + done + '</p>' +
+      '<div class="ops-deal-actions"><button type="button" class="btn btn-secondary" data-names="reset" style="visibility:hidden">' +
+      t('ui.dealReset') + '</button></div>';
+  }
+  /* The names game beside the first division slide: the four names to put under the numbers of a division. */
   function namesFrameInner(total, size) {
     var quotient = Math.floor(total / size), rest = total % size;
     var nums = { dividend: total, divisor: size, quotient: quotient, rest: rest };
@@ -320,21 +335,28 @@
     var line = '<div class="div-names">' + slot('dividend') + sign('÷') + slot('divisor') + sign('=') + slot('quotient');
     if (rest) line += sign(t('ops.div.names.leftOver')) + slot('rest');
     line += '</div>';
-    /* The names are offered in a different order from the sum, so they are not already in place. */
-    var chips = '';
-    keys.slice().reverse().forEach(function (key) {
-      chips += '<button type="button" class="btn btn-secondary ops-name-chip" data-name="' + key + '">' +
-        t('ops.div.names.' + key) + '</button>';
-    });
-    return '<p class="ops-story ops-names-msg" aria-live="polite">' + t('ui.namesPick') + '</p>' +
-      line +
-      '<div class="ops-row ops-names-chips">' + chips + '</div>' +
-      '<p class="ops-expr ops-names-done" hidden>' + t('ui.namesDone') + '</p>' +
-      '<div class="ops-deal-actions"><button type="button" class="btn btn-secondary" data-names="reset" style="visibility:hidden">' +
-      t('ui.dealReset') + '</button></div>';
+    return namesGameInner(line, keys, function (key) { return t('ops.div.names.' + key); }, t('ui.namesDone'));
   }
   function namesFrameHtml(total, size) {
     return '<div class="ops-names" data-total="' + total + '" data-size="' + size + '">' + namesFrameInner(total, size) + '</div>';
+  }
+  /* The names game of the factorial's last slide: the number and the result of n! = n!, each with its place. The
+     reset rebuilds the same box, so it is told apart from the division's by `data-game`. */
+  function factNamesInner(n) {
+    var line = '<div class="div-names">' +
+      '<div class="div-part"><span class="div-num">' + n + '</span><span class="ops-name-slot" data-slot="number"></span></div>' +
+      sign('!') + sign('=') +
+      '<div class="div-part"><span class="div-num">' + factorialOf(n) + '</span><span class="ops-name-slot" data-slot="result"></span></div>' +
+      '</div>';
+    return namesGameInner(line, ['number', 'result'], function (key) { return t('ops.fac.names.' + key); }, t('ui.factNamesDone'));
+  }
+  function factNamesFrameHtml(n) {
+    return '<div class="ops-names" data-game="fac" data-total="' + n + '">' + factNamesInner(n) + '</div>';
+  }
+  /* The inner markup of a names game box, rebuilt by its reset button. */
+  function namesInnerOf(box) {
+    if (box.getAttribute('data-game') === 'fac') return factNamesInner(parseInt(box.getAttribute('data-total'), 10));
+    return namesFrameInner(parseInt(box.getAttribute('data-total'), 10), parseInt(box.getAttribute('data-size'), 10));
   }
   /* The apples of the addition games: red for the first group, green for the second. */
   var APPLE_RED = '🍎';
@@ -472,6 +494,7 @@
     if (f.kind === 'repeat') return repeatFrameHtml(f.size, f.times, f.icon);
     if (f.kind === 'names') return namesFrameHtml(f.total, f.size);
     if (f.kind === 'powerNames') return powerNamesFrameHtml(f.base, f.exp);
+    if (f.kind === 'factNames') return factNamesFrameHtml(f.n);
     if (f.kind === 'join') return joinFrameHtml(f.a, f.b);
     if (f.kind === 'take') return takeFrameHtml(f.n, f.take, f.coin);
     if (f.kind === 'fill') return fillFrameHtml(f.need, f.have, f.mode);
@@ -569,7 +592,6 @@
   }
   /* n! as 4 × 3 × 2 × 1 = 24. */
   function chainHtml(n) { return chipLine(factorsDown(n, 1), factorialOf(n)); }
-  /* a^n as 2 × 2 × 2 = 8. */
   /* The class lets the styles put the title and the text of this slide above its drawing. `mode` 'repeat' writes
      2 × 2 × 2 = 2³ = 8 (the multiplication, then the power); 'exponent' writes 3² = 3 × 3 = 9 (the power first,
      with its exponent boxed, then the multiplication). */
@@ -912,6 +934,195 @@
     ctx.show('#screenPower');
   }
 
+  /* ---- Factorials: the practice that replaces the test, as the powers' one. Three slides, one at a time, with the same arrows:
+     1. a number is typed; its factorial is worked out as the chain 4 × 3 × 2 × 1 = 24;
+     2. the factorial is given; the number it comes from is typed, and the chain shows when it is right;
+     3. a number is typed; the slots show the ways its friends can line up (5, 4, 3, 2, 1 choices) and the result.
+     Numbers from 2 to 5. The first and third slides show the working; the second checks the answer. One star per round. ---- */
+  var FAC_HTML = [
+    '<section id="screenFactorial" class="hidden stack">',
+    '  <div class="row center-row">',
+    '    <p class="instruction" id="facPracticeTitle"></p>',
+    '  </div>',
+    '  <div class="progress-bar" id="facProgress" data-suite-progress role="progressbar" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><div class="progress-fill" id="facProgressFill"></div></div>',
+    '  <article class="card centered stack power-card" data-fac-slide="0">',
+    '    <h3 class="reference-title" id="facNTitle"></h3>',
+    '    <div class="power-try">',
+    '      <input type="number" class="power-try-exp-input" id="facNInput" min="2" max="5" inputmode="numeric" autocomplete="off">',
+    '      <button type="button" class="btn" id="facNCalc"></button>',
+    '    </div>',
+    '    <p class="feedback" id="facNFeedback" aria-live="polite"></p>',
+    '    <div class="power-result" id="facNResult" aria-live="polite"></div>',
+    '  </article>',
+    '  <article class="card centered stack power-card" data-fac-slide="1">',
+    '    <h3 class="reference-title" id="facValueTitle"></h3>',
+    '    <div class="power-try">',
+    '      <span class="power-try-num" id="facValueGiven" aria-live="polite"></span>',
+    '      <input type="number" class="power-try-exp-input" id="facValueInput" min="2" max="5" inputmode="numeric" autocomplete="off">',
+    '      <button type="button" class="btn" id="facValueCalc"></button>',
+    '    </div>',
+    '    <p class="feedback" id="facValueFeedback" aria-live="polite"></p>',
+    '    <div class="power-result" id="facValueResult" aria-live="polite"></div>',
+    '  </article>',
+    '  <article class="card centered stack power-card" data-fac-slide="2">',
+    '    <h3 class="reference-title" id="facSlotsTitle"></h3>',
+    '    <div class="power-try">',
+    '      <input type="number" class="power-try-exp-input" id="facSlotsInput" min="2" max="5" inputmode="numeric" autocomplete="off">',
+    '      <button type="button" class="btn" id="facSlotsCalc"></button>',
+    '    </div>',
+    '    <p class="feedback" id="facSlotsFeedback" aria-live="polite"></p>',
+    '    <div class="power-result" id="facSlotsResult" aria-live="polite"></div>',
+    '  </article>',
+    '  <div class="row sheet-actions">',
+    '    <button type="button" class="btn btn-secondary" id="facPrev">←</button>',
+    '    <button type="button" class="btn btn-secondary" id="facNext">→</button>',
+    '  </div>',
+    '  <button type="button" class="btn btn-secondary" id="facAgain"></button>',
+    '</section>'
+  ].join('\n');
+
+  var FAC_SLIDES = 3;
+  var facCtx = null, facWired = false, facSlide = 0;
+  var facValueN = 0;                 /* the number whose factorial the second slide gives */
+  var facAnswered = {}, facAwarded = false;
+
+  /* A whole number from 2 to 5 typed in the box, or an error text. */
+  function facTyped(id) {
+    var raw = byId(id).value.trim();
+    if (raw === '') return { error: t('factorial.empty') };
+    var n = Number(raw);
+    if (!Number.isInteger(n) || n < 2 || n > 5) return { error: t('factorial.range') };
+    return { value: n };
+  }
+
+  /* A new round: a new number for the second slide, and the boxes are empty again. */
+  function newFactorial() {
+    facValueN = rint(2, 5);
+    byId('facValueGiven').textContent = String(factorialOf(facValueN));
+    ['facNInput', 'facValueInput', 'facSlotsInput'].forEach(function (id) { byId(id).value = ''; });
+    ['facNFeedback', 'facValueFeedback', 'facSlotsFeedback'].forEach(function (id) { byId(id).textContent = ''; });
+    ['facNResult', 'facValueResult', 'facSlotsResult'].forEach(function (id) { byId(id).innerHTML = ''; });
+    resetFacAnswers();
+  }
+
+  /* The bar counts the answered slides. The round is done when the three are answered: one star, then the achievement screen. */
+  function resetFacAnswers() {
+    facAnswered = {};
+    facAwarded = false;
+    byId('facProgressFill').style.width = '0%';
+    byId('facProgress').setAttribute('aria-valuenow', '0');
+    byId('facProgress').setAttribute('aria-label', fill(t('ui.count'), { i: 0, n: FAC_SLIDES }));
+  }
+  function answerFac(key) {
+    facAnswered[key] = true;
+    var n = Object.keys(facAnswered).length;
+    byId('facProgressFill').style.width = (n / FAC_SLIDES * 100) + '%';
+    byId('facProgress').setAttribute('aria-valuenow', String(n));
+    byId('facProgress').setAttribute('aria-label', fill(t('ui.count'), { i: n, n: FAC_SLIDES }));
+    if (n === FAC_SLIDES) finishFactorial();
+  }
+  function finishFactorial() {
+    if (facAwarded || !facCtx) return;
+    facAwarded = true;
+    var progress = facCtx.progress;
+    progress.stars += 1;
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
+    if (facCtx.current) {
+      progress.roundsByActivity[facCtx.current.id] = (progress.roundsByActivity[facCtx.current.id] || 0) + 1;
+    }
+    facCtx.save();
+    facCtx.paintStars();
+    App.feedback.celebrate(t('core.roundComplete'), nextFactorialRound, App.feedback.starsGoal(progress.stars));
+  }
+  function nextFactorialRound() {
+    newFactorial();
+    showFacSlide(0);
+  }
+
+  /* First slide: the typed number is worked out as the chain, with its factorial at the end. */
+  function checkFacN() {
+    var typed = facTyped('facNInput');
+    if (typed.error) {
+      byId('facNFeedback').textContent = typed.error;
+      byId('facNResult').innerHTML = '';
+      return;
+    }
+    byId('facNFeedback').textContent = '';
+    byId('facNResult').innerHTML = chainHtml(typed.value);
+    answerFac('n');
+  }
+
+  /* Second slide: the typed number must be the one the factorial comes from. A wrong number says what it gives. */
+  function checkFacValue() {
+    var typed = facTyped('facValueInput');
+    if (typed.error) {
+      byId('facValueFeedback').textContent = typed.error;
+      byId('facValueResult').innerHTML = '';
+      return;
+    }
+    var given = factorialOf(facValueN), gives = factorialOf(typed.value);
+    if (gives !== given) {
+      byId('facValueFeedback').textContent = fill(t('factorial.wrong'), { r: gives, v: given });
+      byId('facValueResult').innerHTML = '';
+      return;
+    }
+    byId('facValueFeedback').textContent = t('factorial.right');
+    byId('facValueResult').innerHTML = chainHtml(typed.value);
+    answerFac('value');
+  }
+
+  /* Third slide: the typed number's ways to line up its friends, slot by slot, and the result. */
+  function checkFacSlots() {
+    var typed = facTyped('facSlotsInput');
+    if (typed.error) {
+      byId('facSlotsFeedback').textContent = typed.error;
+      byId('facSlotsResult').innerHTML = '';
+      return;
+    }
+    byId('facSlotsFeedback').textContent = '';
+    byId('facSlotsResult').innerHTML = slotsHtml(typed.value, true, true);
+    answerFac('slots');
+  }
+
+  function showFacSlide(i) {
+    facSlide = Math.max(0, Math.min(FAC_SLIDES - 1, i));
+    document.querySelectorAll('[data-fac-slide]').forEach(function (el) {
+      el.classList.toggle('hidden', Number(el.getAttribute('data-fac-slide')) !== facSlide);
+    });
+    byId('facPrev').disabled = facSlide === 0;
+    byId('facNext').disabled = facSlide === FAC_SLIDES - 1;
+  }
+
+  /* The factorial practice of the menu entry (ownTest): it replaces the test, as the powers' practice does. */
+  function startFactorial(ctx) {
+    facCtx = ctx;
+    if (!facWired) {
+      facWired = true;
+      byId('facNCalc').addEventListener('click', checkFacN);
+      byId('facValueCalc').addEventListener('click', checkFacValue);
+      byId('facSlotsCalc').addEventListener('click', checkFacSlots);
+      [['facNInput', checkFacN], ['facValueInput', checkFacValue], ['facSlotsInput', checkFacSlots]].forEach(function (pair) {
+        byId(pair[0]).addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); pair[1](); } });
+      });
+      byId('facPrev').addEventListener('click', function () { showFacSlide(facSlide - 1); });
+      byId('facNext').addEventListener('click', function () { showFacSlide(facSlide + 1); });
+      byId('facAgain').addEventListener('click', nextFactorialRound);
+    }
+    /* The texts are set on every start, so a language change shows in the practice too. */
+    byId('facPracticeTitle').textContent = t('factorial.practiceTitle');
+    byId('facNTitle').textContent = t('factorial.practiceN');
+    byId('facValueTitle').textContent = t('factorial.practiceValue');
+    byId('facSlotsTitle').textContent = t('factorial.practiceSlots');
+    ['facNInput', 'facValueInput', 'facSlotsInput'].forEach(function (id) { byId(id).setAttribute('aria-label', t('factorial.numberAria')); });
+    ['facNCalc', 'facValueCalc', 'facSlotsCalc'].forEach(function (id) { byId(id).textContent = t('factorial.calc'); });
+    byId('facPrev').setAttribute('aria-label', t('factorial.prev'));
+    byId('facNext').setAttribute('aria-label', t('factorial.next'));
+    byId('facAgain').textContent = t('factorial.again');
+    newFactorial();
+    showFacSlide(0);
+    ctx.show('#screenFactorial');
+  }
+
   var ACTIVITIES = DATA.ops.map(function (entry) {
     return {
       id: entry.id,
@@ -921,14 +1132,10 @@
       intro: entry.intro,
       real: entry.real,
       skipReal: entry.skipReal,
-      /* Powers has no test: after its slides, its own practice. */
-      ownTest: entry.id === 'pow' ? startPower : null
+      /* Powers and factorials have no test: after their slides (and examples), their own practice. */
+      ownTest: entry.id === 'pow' ? startPower : (entry.id === 'fac' ? startFactorial : null)
     };
   });
-
-  /* Numbers as answers: the right one and two others, all different and not
-     below zero, in a shuffled order. */
-  var numericOptions = App.utils.numericOptions;
 
   function textOptions(correctText, wrongTexts) {
     var texts = [correctText];
@@ -938,59 +1145,10 @@
     });
   }
 
-  /* The factorial questions: a small calculation with its own drawing. */
-  function makeMath(type) {
-    var key = 'q.' + type + '.';
-    if (type === 'factValue') {
-      var n = rint(2, 5), value = factorialOf(n), chain = factorsDown(n, 1).join(' × ');
-      return {
-        prompt: fill(t(key + 'prompt'), { n: n }),
-        visual: '<p class="fac-expr">' + chain + ' = ?</p>',
-        hint: t(key + 'hint'),
-        /* The wrong answers are the usual mix-ups: adding instead of multiplying, or leaving out the n. */
-        input: { answer: value },
-        explanation: fill(t(key + 'explain'), { chain: chain, T: value })
-      };
-    }
-    if (type === 'factMeaning') {
-      var m = rint(3, 5), mChain = factorsDown(m, 1).join(' × ');
-      return {
-        prompt: fill(t(key + 'prompt'), { n: m }),
-        visual: '',
-        hint: t(key + 'hint'),
-        options: textOptions(mChain, [factorsDown(m, 1).join(' + '), factorsDown(m, 2).join(' × ')]),
-        explanation: fill(t(key + 'explain'), { n: m, chain: mChain, T: factorialOf(m) })
-      };
-    }
-    if (type === 'factSlots') {
-      var s = rint(3, 5), total = factorialOf(s);
-      return {
-        prompt: fill(t(key + 'prompt'), { n: s }),
-        visual: slotsHtml(s, false, false),
-        hint: fill(t(key + 'hint'), { n: s }),
-        input: { answer: total },
-        explanation: fill(t(key + 'explain'), { chain: factorsDown(s, 1).join(' × '), T: total })
-      };
-    }
-    if (type === 'factDivides') {
-      /* The answer divides n! with nothing left over. The wrong ones are numbers just above n that do not. */
-      var d = rint(3, 5), whole = factorialOf(d), fits = rint(2, d), misses = [];
-      for (var c = d + 1; misses.length < 2 && c <= d + 8; c += 1) if (whole % c) misses.push(c);
-      return {
-        prompt: fill(t(key + 'prompt'), { n: d }),
-        visual: '<p class="fac-expr">' + d + '! = ' + whole + '</p>',
-        hint: fill(t(key + 'hint'), { T: whole }),
-        options: numericOptions(fits, misses),
-        explanation: fill(t(key + 'explain'), { T: whole, k: fits, g: whole / fits })
-      };
-    }
-  }
-
   /* A question of the round: def is the operation being practised (its entry of ACTIVITIES). */
   function makeQuestion(type, index, def) {
-    if (type.indexOf('fact') === 0) return makeMath(type);
-    var q = t('q.' + type + '.prompt');
-    var hint = t('q.' + type + '.hint');
+    var q = t('q.' + type + '.act-prompt');
+    var hint = t('q.' + type + '.act-hint');
     var icon = pickIcon(), pair = pickTwoIcons();
     if (type === 'pick') return makePick(def);
     /* integer and decimal: the packs with a leftover; the calculator's answer names the whole part, or the decimal part. */
@@ -1244,7 +1402,7 @@
     if (!box) return;
     var msg = box.querySelector('.ops-names-msg');
     if (target.closest('[data-names="reset"]')) {
-      box.innerHTML = namesFrameInner(parseInt(box.getAttribute('data-total'), 10), parseInt(box.getAttribute('data-size'), 10));
+      box.innerHTML = namesInnerOf(box);
       return;
     }
     var chip = target.closest('.ops-name-chip');
@@ -1266,9 +1424,10 @@
       selected.classList.add('is-placed');
       msg.textContent = t('ui.namesRight');
       if (!box.querySelector('.ops-name-slot:not(.is-ok)')) {
-        box.querySelector('.ops-names-done').hidden = false;
+        var done = box.querySelector('.ops-names-done');
+        done.hidden = false;
         box.querySelector('[data-names="reset"]').style.visibility = 'visible';
-        msg.textContent = t('ui.namesDone');
+        msg.textContent = done.textContent;
       }
     } else {
       selected.classList.remove('is-selected');
@@ -1525,8 +1684,8 @@
     menuBackKey: 'ui.otherOps',
     testVisuals: true,
     testVisualClass: 'ops-visual',
-    extraMarkup: POWER_HTML,
-    extraScreens: ['#screenPower'],
+    extraMarkup: POWER_HTML + '\n' + FAC_HTML,
+    extraScreens: ['#screenPower', '#screenFactorial'],
     visualHtml: drawingHtml,
     gameHtml: gameHtml,
     introCopy: function (i, def) {

@@ -71,7 +71,7 @@
   }
 
   function paintStars() {
-    starsEl.textContent = '⭐ ' + progress.stars;
+    App.chrome.paintStars(progress.stars, starsEl);
   }
 
   /* The line on screen for the current game, and whether it runs left to
@@ -191,12 +191,11 @@
     return screenPlay.querySelector('[data-role="' + role + '"]');
   }
 
-  /* The shared progress bar is moved to the top of the page by
-     assets/js/suite-chrome.js. Its fill is captured here, before that move,
-     so the game keeps updating it from its new place. */
+  /* The shared progress bar is not inside the game screen (suite-chrome.js
+     keeps it under the header), so its fill is looked up in the whole page. */
   var els = {
     stage: q('stage'),
-    progressFill: q('progress-fill'),
+    progressFill: document.querySelector('[data-role="progress-fill"]'),
     orderText: q('order-text'),
     orderArrow: q('order-arrow'),
     board: q('board'),

@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var PLACE_CLASS = ['digit-u', 'digit-d', 'digit-c'];
+  var PLACE_CLASS = ['pv-digit--u', 'pv-digit--d', 'pv-digit--c'];
 
   /* html of the digits of n. labels: a label under each group of three
      (App.i18n 'grupoEtq.<n>'). highlight: the place (0 = units, 1 = tens…)
@@ -28,10 +28,10 @@
         var pos = groups[g].length - 1 - j;
         var posAbs = (groups.length - 1 - g) * 3 + pos;
         var cls = PLACE_CLASS[pos];
-        if (highlight === posAbs) cls += ' highlight';
+        if (highlight === posAbs) cls += ' pv-digit--hl';
         body += '<span class="' + cls + '">' + groups[g][j] + '</span>';
       }
-      if (g > 0) html += '<span class="digit-sep">' + App.utils.thousandsSeparator() + '</span>';
+      if (g > 0) html += '<span class="pv-digit--sep">' + App.utils.thousandsSeparator() + '</span>';
       if (labels && groups.length > 1) {
         html += '<span class="place-group"><span>' + body + '</span>' +
           '<span class="group-label">' + (App.i18n.t('grupoEtq.' + (groups.length - 1 - g)) || '&nbsp;') + '</span></span>';
@@ -45,16 +45,16 @@
   /* A number as a coloured span. opts: { labels, highlight }. */
   function paintNumber(n, opts) {
     opts = opts || {};
-    return '<span class="num-color">' + digits(n, opts.labels, opts.highlight) + '</span>';
+    return '<span class="pv-number">' + digits(n, opts.labels, opts.highlight) + '</span>';
   }
 
   function paintSign(s) { return '<span class="sign">' + s + '</span>'; }
 
   /* The colour legend as html (for an element set with innerHTML). */
   function legendHtml() {
-    return '<span class="digit-u">' + App.i18n.t('leyendaUnidadesTxt') + '</span> · ' +
-      '<span class="digit-d">' + App.i18n.t('leyendaDecenasTxt') + '</span> · ' +
-      '<span class="digit-c">' + App.i18n.t('leyendaCentenasTxt') + '</span>';
+    return '<span class="pv-digit--u">' + App.i18n.t('leyendaUnidadesTxt') + '</span> · ' +
+      '<span class="pv-digit--d">' + App.i18n.t('leyendaDecenasTxt') + '</span> · ' +
+      '<span class="pv-digit--c">' + App.i18n.t('leyendaCentenasTxt') + '</span>';
   }
 
   /* The same legend as plain text, for an element set with textContent. It

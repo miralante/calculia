@@ -288,7 +288,7 @@
     }
     progress.stars += 1;
     saveProgress();
-    $('#stars').textContent = '⭐ ' + progress.stars;
+    App.chrome.paintStars(progress.stars, $('#stars'));
     App.feedback.success(feedback);
     renderVisual($('#quizVisual'), item, true);
     $('#explanation').textContent = fill('explain' + keySuffix(item), itemValues(item));
@@ -367,7 +367,7 @@
 
   function init() {
     App.i18n.apply();
-    $('#stars').textContent = '⭐ ' + progress.stars;
+    App.chrome.paintStars(progress.stars, $('#stars'));
     renderModeMenu();
     $('#nextFact').addEventListener('click', nextFact);
   }

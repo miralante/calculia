@@ -5,7 +5,7 @@
 .suite-chrome-activity h1 { color: var(--mod-razonamiento); }
 .instruction { font-size: var(--texto-base); }
 
-.difficulty {
+.act-difficulty {
   font-size: var(--texto-pequeno);
   color: var(--color-texto-suave, #666);
 }
@@ -17,19 +17,19 @@
 #btnBackToMenu { align-self: center; }
 
 /* Color-coded digits by place value */
-.num-color { font-weight: 800; letter-spacing: 2px; }
-.digit-u { color: var(--mod-coordinacion); }   /* blue — units */
-.digit-d { color: var(--mod-secuencia); }      /* green — tens */
-.digit-c { color: var(--mod-emocional); }      /* purple — hundreds */
-.digit-sep { color: var(--color-texto-suave); }
+.pv-number { font-weight: 800; letter-spacing: 2px; }
+.pv-digit--u { color: var(--mod-coordinacion); }   /* blue — units */
+.pv-digit--d { color: var(--mod-secuencia); }      /* green — tens */
+.pv-digit--c { color: var(--mod-emocional); }      /* purple — hundreds */
+.pv-digit--sep { color: var(--color-texto-suave); }
 .sign { color: var(--mod-memoria); }          /* orange */
-.highlight { text-decoration: underline; text-underline-offset: 6px; }
+.pv-digit--hl { text-decoration: underline; text-underline-offset: 6px; }
 
 .card { border-color: var(--mod-razonamiento-suave); }
-.prompt { font-weight: 700 }
-.visual { display: flex; flex-direction: column; align-items: center; gap: var(--espacio); }
-.legend { font-size: var(--texto-pequeno); font-weight: 700; }
-.hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
+.act-prompt { font-weight: 700 }
+.visual { flex-direction: column; gap: var(--espacio); }
+.act-legend { font-size: var(--texto-pequeno); font-weight: 700; }
+.act-hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
 
 /* Expressions (subtraction, doubles, round-number strategies) */
 .expression {
@@ -37,13 +37,13 @@
   gap: 12px; font-size: 40px; font-weight: 800; flex-wrap: wrap;
 }
 .sign { font-size: 40px; font-weight: 800; }
-.num-box {
+.pv-box {
   min-width: 64px; min-height: 64px; padding: 8px 12px;
   display: inline-flex; align-items: center; justify-content: center;
   border: 3px solid var(--color-borde); border-radius: var(--radio);
   background: var(--color-superficie); font-size: 30px; font-weight: 800;
 }
-.num-box.empty { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
+.pv-box.pv-box--empty { border-style: dashed; border-color: var(--mod-razonamiento); color: var(--mod-razonamiento); }
 
 /* Dots for counting */
 .dot-array { display: flex; align-items: center; justify-content: center; gap: var(--espacio); flex-wrap: wrap; }
@@ -67,7 +67,7 @@
 .emoji-large { font-size: 96px; }
 #screenEnd { padding-top: 48px; }
 #screenEnd .btn { align-self: center; min-width: 280px; }
-#screenEnd .transfer {
+#screenEnd .act-transfer {
   margin: 8px auto 24px;
   font-size: 1.1rem;
   color: var(--color-texto-suave, #555);
@@ -152,33 +152,15 @@
 
 
 /* --- Pantalla 2: ejemplos reales --- */
-.famosos-card { border-color: var(--mod-razonamiento-suave); }
-.famoso-ejemplo-row { display: flex; align-items: center; justify-content: center; gap: var(--espacio); width: 100%; flex-wrap: wrap; }
 
-.famoso-ejemplo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  font-weight: 800;
-  padding: var(--espacio) var(--espacio-grande);
-  border: 3px solid var(--mod-razonamiento-suave);
-  border-radius: var(--radio);
-  background: var(--color-superficie);
-  text-align: center;
-  width: 100%;
-  max-width: 480px;
-  flex: 1 1 240px;
-}
+.famoso-ejemplo { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1 1 240px; }
 .famoso-group { font-size: 44px; line-height: 1.1; }
 .famoso-value { display: flex; align-items: baseline; justify-content: center; gap: 6px; }
 .famoso-equals { color: var(--color-texto-suave); font-size: var(--texto-grande); }
 .famoso-number { font-size: var(--texto-grande); color: var(--color-texto); font-variant-numeric: tabular-nums; }
 
-.famous-text { margin: 0; color: var(--color-texto); text-align: center; }
 
 /* --- Pantalla 3: recordatorio --- */
-.reminder-buttons { justify-content: center; margin-top: var(--espacio-grande); }
 
 .groups-row { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--espacio); width: 100%; }
 
@@ -196,7 +178,6 @@
 .group-chip-name { font-size: var(--texto-base); font-weight: 800; }
 .group-chip-size { font-size: var(--texto-grande); font-weight: 700; color: var(--color-texto); font-variant-numeric: tabular-nums; }
 
-.rule-card { border-color: var(--mod-razonamiento-suave); }
 .rule-title { font-weight: 700; margin: 0; text-align: center; font-size: var(--texto-base); color: var(--color-texto); }
 
 /* "3 decenas = 3 × 10 = 30". Cada pieza que pertenece al grupo
@@ -241,13 +222,6 @@
    necesita el texto más pequeño. */
 .quiz-shown--phrase { font-size: var(--texto-titulo); letter-spacing: 1px; }
 
-.context-text {
-  margin: 0;
-  text-align: center;
-  color: var(--color-texto-suave);
-  font-size: var(--texto-pequeno);
-  max-width: 480px;
-}
 
 .question { color: var(--color-texto-suave); font-size: var(--texto-grande); }
 
@@ -258,7 +232,6 @@
   gap: var(--espacio);
   flex-wrap: wrap;
 }
-.progress-step { font-size: var(--texto-pequeno); font-weight: 700; color: var(--color-texto-suave); }
 
 /* Cabecera de la mini-ronda encadenada: sólo aparece al pasar de un
    sub-nivel al siguiente dentro de un grupo, para que se entienda
@@ -277,14 +250,13 @@
    columnas de ~90px obligaban a partir la frase ("4 dece/nas"), y
    una frase de grupo partida se lee mal. Con 110px mínimos salen
    dos columnas cómodas a 320-375px y tres en tablet y escritorio. */
-.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: var(--espacio); width: min(100%, 480px); }
+.options-grid { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: var(--espacio); }
 
 /* Opciones de texto: `break-word` y no `anywhere` — `anywhere` parte
    la frase aunque haya sitio; `break-word` sólo corta si de verdad
    no cabe. */
 .option-btn--word { font-size: var(--texto-base); overflow-wrap: break-word; padding: 12px 10px; }
 
-.big-emoji { font-size: 96px; }
 .transfer-groups { color: var(--color-texto-suave); max-width: 480px; }
 
 /* ============================================================
