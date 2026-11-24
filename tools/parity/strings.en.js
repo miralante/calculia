@@ -94,7 +94,6 @@
 
     /* Explanations: shown on a right answer. Each part's hint is
        in blocks.<id>.hint. */
-    explainParity: 'The {a} dots: if they go two by two, it is even; if one is left, it is odd.',
     explainPairsEven: '{a} is even: its dots go in pairs. Its last digit, {d}, is even.',
     explainPairsOdd: '{a} is odd: one is left over. Its last digit, {d}, is odd.',
     explainLast: 'The last digit of {a} is {d}: {a} is {p}.',

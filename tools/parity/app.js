@@ -236,8 +236,8 @@
 
   function explanationFor(item) {
     var n = item.a;
-    if (item.block.kind === 'dots') return fill(t('explainParity'), { a: n });
-    if (item.block.id === 'big') {
+    /* The dots and the big numbers both explain by the last digit. */
+    if (item.block.kind === 'dots' || item.block.id === 'big') {
       return fill(t('explainLast'), { a: format(n), d: n % 10, p: wordFor(n) });
     }
     return fill(t(isEven(n) ? 'explainPairsEven' : 'explainPairsOdd'), { a: format(n), d: n % 10 });

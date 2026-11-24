@@ -103,7 +103,6 @@
 
     /* Explicaciones: se publican al acertar. Las pistas de cada parte
        están en blocks.<id>.hint. */
-    explainParity: 'Los {a} puntos: si van de dos en dos, es par; si sobra uno, es impar.',
     explainPairsEven: '{a} es par: sus puntos van en parejas. Su última cifra, {d}, es par.',
     explainPairsOdd: '{a} es impar: sobra uno. Su última cifra, {d}, es impar.',
     explainLast: 'La última cifra de {a} es {d}: {a} es {p}.',

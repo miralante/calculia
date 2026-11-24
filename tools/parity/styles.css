@@ -84,7 +84,6 @@
 #explanation { white-space: pre-line; }
 
 /* The rule card above the slides: PAR and IMPAR, each with its condition. */
-#introCardHtml { text-align: center; }
 .parity-rule-line { margin: 0; font-size: var(--texto-grande); line-height: 1.45; }
 .parity-rule-line strong { text-transform: uppercase; color: var(--mod-razonamiento); }
 
@@ -118,6 +117,10 @@
 .parity-chip-even { background: #1565C0; color: #fff; }
 .parity-chip-odd { background: #E65100; color: #111; }
 .parity-rule .parity-last-line { margin-top: var(--espacio); }
+
+/* The reminder box: the title, the two digit lines and the example, spaced apart. */
+#reminderBody { display: flex; flex-direction: column; gap: 12px; }
+#reminderBody .parity-last-title, #reminderBody .reference-text { margin: 0; }
 
 /* pantalla final */
 .big-emoji { font-size: 96px; }
