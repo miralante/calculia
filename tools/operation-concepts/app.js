@@ -808,7 +808,8 @@
     }
     powerCtx.save();
     powerCtx.paintStars();
-    App.feedback.celebrate(t('core.roundComplete'), nextPowerRound, App.feedback.starsGoal(progress.stars));
+    /* No action of its own: «A por más» goes back to the entry point of the activity, as in the others. */
+    App.feedback.celebrate(t('core.roundComplete'), null, App.feedback.starsGoal(progress.stars));
   }
   function nextPowerRound() {
     newPower();
