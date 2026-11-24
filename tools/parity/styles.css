@@ -80,6 +80,9 @@
 #introTitle { font-size: clamp(2rem, 8vw, 2.75rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; }
 #introText { text-transform: uppercase; font-weight: 800; letter-spacing: 0.06em; color: var(--mod-razonamiento); }
 
+/* The hint of a wrong answer keeps its line break: PAR on one line, IMPAR on the next. */
+#explanation { white-space: pre-line; }
+
 /* The rule card above the slides: PAR and IMPAR, each with its condition. */
 #introCardHtml { text-align: center; }
 .parity-rule-line { margin: 0; font-size: var(--texto-grande); line-height: 1.45; }

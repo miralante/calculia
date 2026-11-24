@@ -28,7 +28,6 @@
     ruleOpen: 'Abre aquí para ver la regla',
     ruleLastDigit: 'Si termina en 0, 2, 4, 6 u 8: par. Si termina en 1, 3, 5, 7 o 9: impar.',
     reminderTitle: 'Recuerda la regla',
-    reminderPairs: 'Si sus puntos van de dos en dos, es par. Si se queda uno suelto, es impar.',
     reminderLastDigit: 'Mira la última cifra:',
     reminderExample: 'Ejemplo: 18 termina en 8, así que es par. 27 termina en 7, así que es impar.',
     reminderNext: 'Empezar a practicar →',
@@ -80,7 +79,7 @@
        y su pista (hint). El test no muestra ningún rótulo de parte. */
     blocks: {
       dots: {
-        rule: 'Si los puntos van de dos en dos, es par. Si sobra uno, es impar.',
+        rule: 'PAR: no sobra ninguno\nIMPAR: sobra uno',
         hint: '«{elegida}» no es la respuesta. Empareja los puntos: ¿sobra uno?'
       },
       numbers: {

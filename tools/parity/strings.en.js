@@ -19,7 +19,6 @@
     ruleOpen: 'Open here to see the rule',
     ruleLastDigit: 'If it ends in 0, 2, 4, 6 or 8: even. If it ends in 1, 3, 5, 7 or 9: odd.',
     reminderTitle: 'Remember the rule',
-    reminderPairs: 'If its dots go two by two, it is even. If one is left alone, it is odd.',
     reminderLastDigit: 'Look at the last digit:',
     reminderExample: 'Example: 18 ends in 8, so it is even. 27 ends in 7, so it is odd.',
     reminderNext: 'Start practising →',
@@ -71,7 +70,7 @@
        and its hint (hint). The test shows no part label. */
     blocks: {
       dots: {
-        rule: 'If the dots go two by two, it is even. If one is left over, it is odd.',
+        rule: 'EVEN: none left over\nODD: one left over',
         hint: '«{elegida}» is not the answer. Pair the dots: is one left over?'
       },
       numbers: {

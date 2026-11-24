@@ -266,8 +266,7 @@
 
   /* ---- Reminder: the rule, read once more before the test ---- */
   function reminderHtml() {
-    return '<p class="reference-text">' + t('reminderPairs') + '</p>' +
-      '<p class="parity-last-title">' + t('reminderLastDigit') + '</p>' +
+    return '<p class="parity-last-title">' + t('reminderLastDigit') + '</p>' +
       '<p class="parity-last-line"><span class="parity-chip parity-chip-even">0 · 2 · 4 · 6 · 8</span> → <strong>' + t('evenLabel') + '</strong></p>' +
       '<p class="parity-last-line"><span class="parity-chip parity-chip-odd">1 · 3 · 5 · 7 · 9</span> → <strong>' + t('oddLabel') + '</strong></p>' +
       '<p class="reference-text">' + t('reminderExample') + '</p>';
