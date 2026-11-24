@@ -1026,3 +1026,13 @@ main.is-celebrating > :not(.celebration) {
 .answer-text { font-size: 1.3rem; font-weight: 700; }
 .practice-stars { font-size: var(--texto-pequeno); letter-spacing: 2px; }
 .practice-done { font-size: var(--texto-pequeno); font-weight: 700; background: var(--color-acierto-suave); color: var(--color-acierto); border-radius: var(--radio); padding: 2px 12px; margin-top: 4px; }
+
+/* ---- Three-stage flow: the text and the drawing of a stage (assets/js/activity-flow.js) ----
+   Moved from activity-flow.css. Only the flow uses these classes (no other tool's markup has them). */
+.ops-visual { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--espacio); min-height: 120px; }
+.activity-title { margin: 0; text-align: center; color: var(--mod-razonamiento); }
+.act-title, .concept-count, .act-text, .real-text { text-align: center; margin: 0; }
+.act-text, .real-text { font-size: var(--texto-grande); line-height: 1.45; }
+.concept-count { color: var(--color-texto-suave); }
+.real-text { font-size: var(--texto-grande); }
+.step-label { margin: 0; text-align: center; font-weight: 700; color: var(--color-texto-suave); }

@@ -6,17 +6,8 @@
    drawings in its own file, or in a shared file of its family.
    ========================================================================== */
 
-/* The drawing of a slide or of an example. */
-.ops-visual { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--espacio); min-height: 120px; }
-
-/* The title of the activity picked from the menu, above its slides. */
-.activity-title { margin: 0; text-align: center; color: var(--mod-razonamiento); }
-
-/* Text blocks */
-.act-title, .concept-count, .act-text, .real-text { text-align: center; margin: 0; }
-.act-text, .real-text { font-size: var(--texto-grande); line-height: 1.45; }
-.concept-count { color: var(--color-texto-suave); }
-.real-text { font-size: var(--texto-grande); }
+/* The stage text and drawing rules (.ops-visual, .act-title, .act-text, .real-text,
+   .activity-title, .concept-count) are in components.css: only the flow uses them. */
 .act-card--real { min-height: 180px; justify-content: center; }
 
 /* Slide arrows: centred under the drawing. */
@@ -34,8 +25,7 @@
 :where(#activity) .feedback { margin: 0; text-align: center; min-height: 1.4em; }
 :where(#activity) .feedback.success { color: var(--color-texto); font-weight: 700; }
 .feedback.error { color: var(--color-texto-suave); }
-/* «Paso 1 de 3» above the prompt of a question made of steps. */
-.step-label { margin: 0; text-align: center; font-weight: 700; color: var(--color-texto-suave); }
+/* «Paso 1 de 3» (.step-label) is in components.css. */
 
 /* A question whose options sit in one row (inline: true). Without this
    rule the class is inert and the answers stack in a column. */
