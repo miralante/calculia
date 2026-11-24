@@ -355,7 +355,8 @@
 .power-result { width: 100%; }
 /* The box for the number is big enough to read and to tap. */
 .power-card input[type="number"] { width: 5rem; min-height: var(--boton-min); font-size: 1.6rem; text-align: center; }
-/* The box of the exponent sits above the base, small, as a superscript. */
-.power-card input.power-try-exp { width: 3.6rem; font-size: 1.3rem; }
+/* The box of the exponent sits at the top right of the base, small, as a superscript: its top edge
+   lines up with the top of the base and it keeps the same look as the other boxes (dark text, not green). */
+.power-card input.power-try-exp-input { width: 3.2rem; height: 44px; min-height: 44px; padding: 0; margin-top: 0; font-size: 1.3rem; font-weight: 700; line-height: 1; color: var(--color-texto); }
 /* The box of the base is as tall as the big number beside the exponent it is given with. */
 .power-card input.power-try-base { min-height: 56px; }
