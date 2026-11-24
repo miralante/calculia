@@ -291,11 +291,8 @@
     toolId: 'parity',
     pairedTest: true,
     test: 'options',
-    /* «← Volver» from the real-life examples or the reminder returns to the explanation on the
-       slide it was left on. */
-    keepSlideOnBack: true,
-    /* «← Volver» from the test goes to the activity's card on the landing, not to the explanation. */
-    hubOnBackFromTest: true,
+    /* «← Volver» goes to the activity's card on the landing from every screen. */
+    hubOnBack: true,
     /* Socratic: a wrong answer shows the hint, and the options stay locked until
        «Entendido». No review button in the test: the rule is read before it (the reminder). */
     socratic: true,
