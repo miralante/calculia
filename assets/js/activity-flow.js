@@ -363,8 +363,8 @@
     var config = ctx.config;
     $('#activity').innerHTML = STAGES + '\n' + (config.reminder ? REMINDER + '\n' : '') + ctx.mode.markup(ctx) +
       (config.extraMarkup ? '\n' + config.extraMarkup : '');
-    /* One column, top to bottom (design.md §3.5): the explanation, then the game under it when the slide has one
-       (gameHtml), then the activity's own practice (pairedPractice) or test (pairedTest). Each game shows alone
+    /* One column, top to bottom (design.md §3.5): the explanation, its game under the card when the slide has one
+       (gameHtml, placed above the explanation's buttons), then the activity's own practice (pairedPractice) or test (pairedTest). Each game shows alone
        once it starts; the explanation never sits beside it. See .flow-stack in components.css. */
     if ((config.pairedTest || config.pairedPractice || config.gameHtml) && $('#screenIntro')) {
       var stack = document.createElement('div');
@@ -375,7 +375,9 @@
         var introGame = document.createElement('div');
         introGame.id = 'introGame';
         introGame.className = 'intro-game hidden';
-        stack.appendChild(introGame);
+        /* Inside the explanation, between its card and its buttons: the buttons («Empezar otra vez»,
+           «Empezar a practicar») close the screen, under the game, as in the rest of the activities. */
+        $('#introRestart').parentNode.insertBefore(introGame, $('#introRestart'));
       }
       if (config.pairedPractice && $('#screenPractice')) stack.appendChild($('#screenPractice'));
       if (config.pairedTest && $('#screenGame')) stack.appendChild($('#screenGame'));
