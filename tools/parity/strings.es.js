@@ -99,12 +99,13 @@
     wordEven: 'par',
     wordOdd: 'impar',
     pairsWord: 'parejas',
+    oneWord: 'uno',
     oneLeftWord: 'uno que sobra',
 
     /* Explicaciones: se publican al acertar. Las pistas de cada parte
        están en blocks.<id>.hint. */
-    explainPairsEven: '{a} es par: sus puntos van en parejas. Su última cifra, {d}, es par.',
-    explainPairsOdd: '{a} es impar: sobra uno. Su última cifra, {d}, es impar.',
+    explainPairsEven: '{a} es {p}: sus puntos van en {k}. Su última cifra, {d}, es {p}.',
+    explainPairsOdd: '{a} es {p}: sobra {k}. Su última cifra, {d}, es {p}.',
     explainLast: 'La última cifra de {a} es {d}: {a} es {p}.',
 
     /* ---------- Cierre ---------- */

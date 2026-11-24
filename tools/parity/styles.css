@@ -122,6 +122,12 @@
 #reminderBody { display: flex; flex-direction: column; gap: 12px; }
 #reminderBody .parity-last-title, #reminderBody .reference-text { margin: 0; }
 
+/* The explanation: the number and its parity word take the colour of their parity (blue even,
+   orange odd, darker than the chips so the text keeps its contrast); the key words are bold. */
+.parity-mark { font-weight: 800; }
+.parity-mark-even { color: #0D47A1; }
+.parity-mark-odd { color: #A84300; }
+
 /* pantalla final */
 .big-emoji { font-size: 96px; }
 .transfer  { color: var(--color-texto-suave); max-width: 480px; }

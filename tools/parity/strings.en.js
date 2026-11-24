@@ -90,12 +90,13 @@
     wordEven: 'even',
     wordOdd: 'odd',
     pairsWord: 'pairs',
+    oneWord: 'one',
     oneLeftWord: 'one left over',
 
     /* Explanations: shown on a right answer. Each part's hint is
        in blocks.<id>.hint. */
-    explainPairsEven: '{a} is even: its dots go in pairs. Its last digit, {d}, is even.',
-    explainPairsOdd: '{a} is odd: one is left over. Its last digit, {d}, is odd.',
+    explainPairsEven: '{a} is {p}: its dots go in {k}. Its last digit, {d}, is {p}.',
+    explainPairsOdd: '{a} is {p}: {k} is left over. Its last digit, {d}, is {p}.',
     explainLast: 'The last digit of {a} is {d}: {a} is {p}.',
 
     /* ---------- Closing ---------- */

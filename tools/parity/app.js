@@ -68,8 +68,8 @@
   function slideVisual(spec) {
     var n = spec.n;
     if (n === SEQ_LAST) return reviewHtml();
-    /* 0 has no balls: the words «0 = par» stand in their place. */
-    if (n === 0) return '<span class="parity-zero-text">' + t('zeroLabel') + '</span>';
+    /* 0 has no balls: the words «0 = par» stand in their place, in the same blue box. */
+    if (n === 0) return '<div class="parity-dots"><span class="parity-zero-text">' + t('zeroLabel') + '</span></div>';
     return dotsHtml(n);
   }
 
@@ -234,13 +234,25 @@
     return '<p class="parity-help-number">' + num + '</p>' + balls;
   }
 
-  function explanationFor(item) {
+  /* The explanation of a right answer. As text (marked false) or as marked HTML (true): the number
+     and its parity word take the colour of the parity, and the key words are bold. Both come from
+     the same strings, so they say the same thing. */
+  function explanationOf(item, marked) {
     var n = item.a;
+    var even = isEven(n);
+    var mark = function (s) {
+      return marked ? '<strong class="parity-mark ' + (even ? 'parity-mark-even' : 'parity-mark-odd') + '">' + s + '</strong>' : s;
+    };
+    var bold = function (s) { return marked ? '<strong>' + s + '</strong>' : s; };
+    var args = {
+      a: mark(format(n)),
+      d: bold(String(n % 10)),
+      p: mark(wordFor(n)),
+      k: bold(t(even ? 'pairsWord' : 'oneWord'))
+    };
     /* The dots and the big numbers both explain by the last digit. */
-    if (item.block.kind === 'dots' || item.block.id === 'big') {
-      return fill(t('explainLast'), { a: format(n), d: n % 10, p: wordFor(n) });
-    }
-    return fill(t(isEven(n) ? 'explainPairsEven' : 'explainPairsOdd'), { a: format(n), d: n % 10 });
+    if (item.block.kind === 'dots' || item.block.id === 'big') return fill(t('explainLast'), args);
+    return fill(t(even ? 'explainPairsEven' : 'explainPairsOdd'), args);
   }
 
   function question(item) {
@@ -249,7 +261,8 @@
       hint: t('blocks.' + item.block.id + '.rule'),
       visual: item.block.kind === 'dots' ? dotsHtml(item.a) : '',
       visualAria: item.block.kind === 'dots' ? String(item.a) : '',
-      explanation: explanationFor(item),
+      explanation: explanationOf(item, false),
+      explanationHtml: explanationOf(item, true),
       explanationVisual: lastDigitHelp(item.a),
       options: App.utils.shuffle([
         { value: true, label: t('evenLabel') },
@@ -276,6 +289,9 @@
     toolId: 'parity',
     pairedTest: true,
     test: 'options',
+    /* «← Volver» from the real-life examples or the reminder returns to the explanation on the
+       slide it was left on. */
+    keepSlideOnBack: true,
     /* Socratic: a wrong answer shows the hint, and the options stay locked until
        «Entendido». No review button in the test: the rule is read before it (the reminder). */
     socratic: true,

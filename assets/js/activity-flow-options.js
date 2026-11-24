@@ -376,6 +376,13 @@
     });
   }
 
+  /* The explanation is text. A question may bring its own markup (explanationHtml), which is then
+     shown as HTML so the activity can mark words inside it. */
+  function setExplanation(el, prefix, question) {
+    if (question.explanationHtml) el.innerHTML = prefix + question.explanationHtml;
+    else el.textContent = prefix + (question.explanation || '');
+  }
+
   /* The judgement of one try, for a choice and for a typed number alike. A right try is a star and
      shows the explanation at once. A wrong one shows the hint, then the explanation, and locks the
      controls until «Entendido» (which runs onAck). marker is the button picked, or null when typed. */
@@ -396,7 +403,7 @@
       if (s.attempts === 0) s.roundRight += 1;
       ctx.save();
       ctx.paintStars();
-      explanation.textContent = t('ui.rightPrefix') + (s.question.explanation || '');
+      setExplanation(explanation, t('ui.rightPrefix'), s.question);
       $('#explanationVisual').innerHTML = s.question.explanationVisual || '';
       wrap.classList.remove('hidden');
       $('#btnNext').classList.remove('hidden');
@@ -410,9 +417,8 @@
       marker.disabled = true;
     }
     App.feedback.encourage(feedback);
-    explanation.textContent = s.attempts === 1
-      ? t('ui.hintPrefix') + App.feedback.hintText(s.question.hint, chosen)
-      : t('ui.wrongPrefix') + s.question.explanation;
+    if (s.attempts === 1) explanation.textContent = t('ui.hintPrefix') + App.feedback.hintText(s.question.hint, chosen);
+    else setExplanation(explanation, t('ui.wrongPrefix'), s.question);
     $('#explanationVisual').innerHTML = s.question.explanationVisual || '';
     wrap.classList.remove('hidden');
     /* Locks the controls until «Entendido», so the hint is read before the next try. */
