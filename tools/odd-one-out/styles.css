@@ -13,7 +13,7 @@
 
 .progress-bar { margin-top: var(--espacio); }
 
-.question { color: var(--color-texto-suave); }
+.act-question { color: var(--color-texto-suave); }
 
 .group-grid {
   display: grid;

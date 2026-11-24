@@ -100,12 +100,12 @@
 }
 
 /* ---- Intro and real-life carousels (before the first round) ---- */
-.reference-card, .act-card--real {
+.ref-card, .act-card--real {
   align-items: center;
   border-color: var(--mod-razonamiento-suave);
 }
-.reference-title { text-align: center; color: var(--mod-razonamiento); }
-.reference-text { text-align: center; font-size: var(--texto-base); }
+.ref-title { text-align: center; color: var(--mod-razonamiento); }
+.ref-text { text-align: center; font-size: var(--texto-base); }
 .intro-visual {
   display: flex;
   flex-direction: column;

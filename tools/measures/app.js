@@ -99,7 +99,7 @@
      written out: that way "how many steps" and "times what" are both
      counted off the picture instead of recalled. */
   function ladderHtml(ladder, from, to) {
-    var html = '<div class="ladder">';
+    var html = '<div class="act-ladder">';
     ladder.units.forEach(function (u, i) {
       var mark = (u === from || u === to);
       if (i > 0) {

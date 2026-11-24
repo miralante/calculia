@@ -40,12 +40,12 @@
 }
 
 /* ---- Ficha de referencia (I, V, X) ---- */
-.reference-card {
+.ref-card {
   border-color: var(--mod-razonamiento-suave);
   align-items: center;
 }
 
-.reference-title {
+.ref-title {
   font-weight: 800;
   color: var(--mod-razonamiento);
   margin: 0;
@@ -63,7 +63,7 @@
   font-weight: 700;
 }
 
-.reference-text {
+.ref-text {
   font-size: var(--texto-pequeno);
   color: var(--color-texto-suave);
   text-align: center;
@@ -91,7 +91,7 @@
 .card { border-color: var(--mod-razonamiento-suave); }
 
 
-.question { color: var(--color-texto-suave); }
+.act-question { color: var(--color-texto-suave); }
 
 
 #endScreen { padding-top: 48px; }
@@ -208,7 +208,7 @@
 .famous-text { font-size: var(--texto-base); max-width: 480px; min-height: 1.5em; }
 
 
-.intro-card {
+.act-intro-card {
   border-color: var(--mod-razonamiento-suave);
 }
 
@@ -216,7 +216,7 @@
    Pantalla 2: recordatorio (mecánica con colores)
    ============================================================ */
 
-.symbols-card {
+.act-symbols-card {
   border-color: var(--mod-razonamiento-suave);
   align-items: center;
 }

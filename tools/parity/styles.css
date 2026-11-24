@@ -120,7 +120,7 @@
 
 /* The reminder box: the title, the two digit lines and the example, spaced apart. */
 #reminderBody { display: flex; flex-direction: column; gap: 12px; }
-#reminderBody .parity-last-title, #reminderBody .reference-text { margin: 0; }
+#reminderBody .parity-last-title, #reminderBody .ref-text { margin: 0; }
 
 /* The explanation: the number and its parity word take the colour of their parity (blue even,
    orange odd, darker than the chips so the text keeps its contrast); the key words are bold. */

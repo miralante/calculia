@@ -22,7 +22,7 @@
   gap: var(--espacio);
 }
 
-.symbol {
+.act-symbol {
   font-size: 48px;
   line-height: 1;
   min-width: 64px;
@@ -32,13 +32,13 @@
   justify-content: center;
 }
 
-.symbol.empty {
+.act-symbol.empty {
   border: 3px dashed var(--mod-razonamiento);
   border-radius: var(--radio);
   background: var(--mod-razonamiento-suave);
 }
 
-.question { color: var(--color-texto-suave); }
+.act-question { color: var(--color-texto-suave); }
 
 .option-symbol {
   text-align: center;

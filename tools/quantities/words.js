@@ -45,7 +45,7 @@
       var group = Math.floor(fromRight / 3);
       htmlOut += '<span class="' + GROUP_CLASS[group % GROUP_CLASS.length] + '">' + s.charAt(i) + '</span>';
     }
-    if (n < 0) htmlOut = '<span class="sign">−</span>' + htmlOut;
+    if (n < 0) htmlOut = '<span class="act-sign">−</span>' + htmlOut;
     return htmlOut;
   }
 

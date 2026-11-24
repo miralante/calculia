@@ -155,7 +155,7 @@
     seriesEl.innerHTML = '';
     item.pattern.forEach(function (symbol) {
       var span = document.createElement('span');
-      span.className = 'symbol' + (symbol === '❓' ? ' empty' : '');
+      span.className = 'act-symbol' + (symbol === '❓' ? ' empty' : '');
       span.textContent = symbol;
       seriesEl.appendChild(span);
     });

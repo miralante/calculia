@@ -199,7 +199,7 @@
   function groupsHtml(count, per, tone) {
     var html = '<span class="group-row">';
     for (var g = 0; g < count; g++) {
-      html += '<span class="group' + (tone ? ' tone-' + tone : '') + '">';
+      html += '<span class="act-group' + (tone ? ' tone-' + tone : '') + '">';
       for (var i = 0; i < per; i++) html += '<span class="dot"></span>';
       html += '</span>';
     }
@@ -382,8 +382,8 @@
         legend: App.i18n.t(parens ? 'gen.parensHint' : 'gen.timesFirstHint'),
         hint: App.i18n.t('gen.socraticWhatFirst'),
         options: App.utils.shuffle([
-          { html: '<span class="part">' + mul + '</span>', aria: mul, correct: !parens },
-          { html: '<span class="part">' + add + '</span>', aria: add, correct: parens }
+          { html: '<span class="act-part">' + mul + '</span>', aria: mul, correct: !parens },
+          { html: '<span class="act-part">' + add + '</span>', aria: add, correct: parens }
         ]),
         inline: true
       };

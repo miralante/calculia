@@ -48,7 +48,7 @@
     return '<span class="pv-number">' + digits(n, opts.labels, opts.highlight) + '</span>';
   }
 
-  function paintSign(s) { return '<span class="sign">' + s + '</span>'; }
+  function paintSign(s) { return '<span class="act-sign">' + s + '</span>'; }
 
   /* The colour legend as html (for an element set with innerHTML). */
   function legendHtml() {

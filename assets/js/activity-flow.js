@@ -97,9 +97,9 @@
   var MENU_HTML = [
     '<section id="screenMenu" class="hidden stack">',
     '  <div class="row center-row"><p class="instruction" data-i18n="ui.menuInstruction">Elige qué quieres practicar</p></div>',
-    '  <div class="card reference-card stack">',
-    '    <h2 class="reference-title" data-i18n="ui.menuTitle">¿Qué quieres practicar?</h2>',
-    '    <p class="reference-text" data-i18n="ui.menuText">Elige qué quieres practicar</p>',
+    '  <div class="card ref-card stack">',
+    '    <h2 class="ref-title" data-i18n="ui.menuTitle">¿Qué quieres practicar?</h2>',
+    '    <p class="ref-text" data-i18n="ui.menuText">Elige qué quieres practicar</p>',
     '  </div>',
     '  <div id="activitiesMenu"></div>',
     '</section>'
@@ -152,7 +152,7 @@
     '<section id="screenIntro" class="stack">',
     '  <div class="row center-row" id="introHeadingRow"><p class="instruction" id="introHeading"></p></div>',
     '  <h2 class="activity-title hidden" id="introActivityTitle"></h2>',
-    '  <div class="card reference-card stack intro-card" id="introCard"><h2 class="reference-title" id="introCardTitle"></h2><p class="reference-text" id="introCardText"></p><div class="intro-card-html" id="introCardHtml"></div></div>',
+    '  <div class="card ref-card stack act-intro-card" id="introCard"><h2 class="ref-title" id="introCardTitle"></h2><p class="ref-text" id="introCardText"></p><div class="intro-card-html" id="introCardHtml"></div></div>',
     '  <div class="progress-bar" id="introProgress" data-suite-progress role="progressbar" aria-valuemin="0"><div class="progress-fill" id="introProgressFill"></div></div>',
     '  <article class="card stack gallery-card">',
     '    <div class="ops-visual" id="introVisual"></div>',
@@ -191,8 +191,8 @@
      and the test. Its title, body and button text come from the activity. */
   var REMINDER = [
     '<section id="screenReminder" class="hidden stack">',
-    '  <div class="card reference-card stack">',
-    '    <h2 class="reference-title" id="reminderTitle"></h2>',
+    '  <div class="card ref-card stack">',
+    '    <h2 class="ref-title" id="reminderTitle"></h2>',
     '    <div class="reminder-body" id="reminderBody"></div>',
     '  </div>',
     '  <button type="button" class="btn" id="reminderNext"></button>',

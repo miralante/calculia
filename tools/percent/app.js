@@ -161,7 +161,7 @@
   function coins(total, part) {
     var html = '<div class="coin-row">';
     for (var i = 0; i < total; i++) {
-      html += '<span class="coin' + (i < part ? ' is-part' : '') + '">€</span>';
+      html += '<span class="act-coin' + (i < part ? ' is-part' : '') + '">€</span>';
     }
     return html + '</div>';
   }
@@ -191,7 +191,7 @@
     var html = '<div class="limit-stage">' + coins(b.budget, 0) +
       '<p class="price-tag"><span class="tag-picto" aria-hidden="true">' +
       b.picto + '</span>';
-    for (var i = 0; i < b.price; i++) html += '<span class="coin is-price">€</span>';
+    for (var i = 0; i < b.price; i++) html += '<span class="act-coin is-price">€</span>';
     return html + '</p></div>';
   }
 

@@ -133,7 +133,7 @@
     var html = '';
     for (var i = 0; i < n; i++) {
       html += '<span class="token' + (gone ? ' is-gone' : '') + '">' + picto +
-        (gone ? '<span class="cross" aria-hidden="true">✖</span>' : '') + '</span>';
+        (gone ? '<span class="act-cross" aria-hidden="true">✖</span>' : '') + '</span>';
     }
     return html;
   }

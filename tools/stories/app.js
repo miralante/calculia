@@ -115,7 +115,7 @@
     sequenceEl.innerHTML = '';
     slots.forEach(function (picto) {
       var div = document.createElement('div');
-      div.className = 'slot' + (picto ? ' lleno' : '');
+      div.className = 'act-slot' + (picto ? ' lleno' : '');
       div.textContent = picto || '';
       sequenceEl.appendChild(div);
     });

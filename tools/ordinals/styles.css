@@ -23,17 +23,17 @@
 /* ============================================================
    Shared card titles
    ============================================================ */
-.reference-card,
+.ref-card,
 .stops-card,
 .famosos-card,
 .ordinals-card,
 .rule-card,
 .quiz-card { border-color: var(--mod-razonamiento-suave); }
 
-.reference-title { margin: 0; font-size: var(--texto-grande); color: var(--mod-razonamiento); }
-.reference-text { margin: 0; color: var(--color-texto); }
+.ref-title { margin: 0; font-size: var(--texto-grande); color: var(--mod-razonamiento); }
+.ref-text { margin: 0; color: var(--color-texto); }
 
-.intro-card, .famosos-card, .ordinals-card, .rule-card, .quiz-card {
+.act-intro-card, .famosos-card, .ordinals-card, .rule-card, .quiz-card {
   align-items: center;
   gap: var(--espacio);
 }
@@ -462,7 +462,7 @@
 }
 
 
-.question {
+.act-question {
   margin: 0;
   font-size: var(--texto-grande);
   font-weight: 800;

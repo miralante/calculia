@@ -145,12 +145,12 @@
    The name of a side and the reason a triangle rises are shown the same
    way: the real name on top, its plain-words gloss underneath. */
 .reason-name,
-.kind-name {
+.act-kind-name {
   display: block;
   font-weight: 700;
 }
 .reason-gloss,
-.kind-gloss {
+.act-kind-gloss {
   display: block;
   font-size: 0.9em;
 }

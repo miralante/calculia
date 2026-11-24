@@ -284,7 +284,7 @@
           .replace(/\{e\}/g, named[1].ladder.rise).replace(/\{f\}/g, named[1].ladder.run),
         options: App.utils.shuffle(named.map(function (item) {
           var optionText = App.i18n.t('gen.ladderOption').replace(/\{x\}/g, item.letter);
-          return { html: '<span class="kind-name">' + optionText + '</span>', aria: optionText, correct: item === right };
+          return { html: '<span class="act-kind-name">' + optionText + '</span>', aria: optionText, correct: item === right };
         })),
         inline: true
       };
@@ -312,7 +312,7 @@
         legend: App.i18n.t('gen.steeperRampHint'),
         options: App.utils.shuffle(named.map(function (item) {
           var text = App.i18n.t('gen.steeperRampOption').replace(/\{x\}/g, item.letter);
-          return { html: '<span class="kind-name">' + text + '</span>', aria: text, correct: item === steeper };
+          return { html: '<span class="act-kind-name">' + text + '</span>', aria: text, correct: item === steeper };
         })),
         inline: true
       };
@@ -330,8 +330,8 @@
         legend: App.i18n.t('gen.ladderSideHint'),
         options: App.utils.shuffle(['ladder', 'wall', 'floor'].map(function (k) {
           return {
-            html: '<span class="kind-name">' + App.i18n.t('ladderPart.' + k + '.name') + '</span>' +
-              '<span class="kind-gloss">' + App.i18n.t('ladderPart.' + k + '.gloss') + '</span>',
+            html: '<span class="act-kind-name">' + App.i18n.t('ladderPart.' + k + '.name') + '</span>' +
+              '<span class="act-kind-gloss">' + App.i18n.t('ladderPart.' + k + '.gloss') + '</span>',
             aria: App.i18n.t('ladderPart.' + k + '.name') + ', ' + App.i18n.t('ladderPart.' + k + '.gloss'),
             correct: k === 'ladder'
           };
@@ -376,8 +376,8 @@
         options: App.utils.shuffle(named.map(function (n) {
           var text = App.i18n.t('gen.ladderOption').replace(/\{x\}/g, n.letter);
           return {
-            html: '<span class="kind-name">' + text + '</span>' +
-              '<span class="kind-gloss">' + App.i18n.t('gen.ladderOptionHint') + '</span>',
+            html: '<span class="act-kind-name">' + text + '</span>' +
+              '<span class="act-kind-gloss">' + App.i18n.t('gen.ladderOptionHint') + '</span>',
             aria: text,
             correct: n.ladder.rise === tallest
           };

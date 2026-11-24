@@ -17,7 +17,7 @@
 
 .moment-picto { font-size: 72px; }
 
-.question { color: var(--color-texto-suave); }
+.act-question { color: var(--color-texto-suave); }
 
 .options-clock {
   flex-direction: row;
@@ -165,14 +165,14 @@
 }
 
 /* ---- Reference screen: how the two hands are read ---- */
-.reference-card {
+.ref-card {
   background: var(--color-superficie);
 }
-.reference-title {
+.ref-title {
   margin: 0 0 4px;
   font-size: 1.25rem;
 }
-.reference-text {
+.ref-text {
   margin: 0;
   color: var(--color-texto-suave);
 }

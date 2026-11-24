@@ -236,7 +236,7 @@
   }
 
   function reminderHtml() {
-    return '<p class="reference-text">' + t('reminderText') + '</p>' +
+    return '<p class="ref-text">' + t('reminderText') + '</p>' +
       '<div class="ordinals-row">' + chipsHtml(DATA.presentedOrdinals) + '</div>' +
       '<p class="rule-title">' + t('ruleMatchTitle') + '</p>' +
       RULE_ONE.map(exampleHtml).join('');

@@ -27,9 +27,9 @@
       <div class="row center-row">
         <p class="instruction" data-i18n="instruction">Aprende los números romanos y úsalos para reconocer los siglos.</p>
       </div>
-      <div class="card reference-card stack intro-card">
-        <h2 class="reference-title" data-i18n="introTitle">Qué son los números romanos</h2>
-        <p class="reference-text" data-i18n="introText">Los números romanos son un sistema antiguo que aún se usa hoy. Los verás en relojes, monumentos y libros.</p>
+      <div class="card ref-card stack act-intro-card">
+        <h2 class="ref-title" data-i18n="introTitle">Qué son los números romanos</h2>
+        <p class="ref-text" data-i18n="introText">Los números romanos son un sistema antiguo que aún se usa hoy. Los verás en relojes, monumentos y libros.</p>
       </div>
 
       <div class="card stack carousel-card">
@@ -49,8 +49,8 @@
     <!-- Pantalla 2: números romanos famosos -->
     <section id="famousScreen" class="hidden stack">
       <div class="card famosos-card stack" aria-labelledby="famousTitle">
-        <h2 class="reference-title" id="famousTitle" data-i18n="introFamousTitle">Un número romano famoso</h2>
-        <p class="reference-text" data-i18n="introFamousSubtitle">Fíjate en este ejemplo:</p>
+        <h2 class="ref-title" id="famousTitle" data-i18n="introFamousTitle">Un número romano famoso</h2>
+        <p class="ref-text" data-i18n="introFamousSubtitle">Fíjate en este ejemplo:</p>
         <div class="famoso-ejemplo-row">
           <div class="famoso-ejemplo" id="famousExample"></div>        </div>
         <p class="famous-text" id="famousText"></p>
@@ -67,13 +67,13 @@
 
     <!-- Pantalla 3: recordatorio (valor de cada letra, con colores) -->
     <section id="reminderScreen" class="hidden stack">
-      <div class="card reference-card stack">
-        <h2 class="reference-title" data-i18n="referenceTitle">Recuerda el valor de cada letra</h2>
-        <p class="reference-text" data-i18n="referenceText">Cada letra vale siempre lo mismo.</p>
+      <div class="card ref-card stack">
+        <h2 class="ref-title" data-i18n="referenceTitle">Recuerda el valor de cada letra</h2>
+        <p class="ref-text" data-i18n="referenceText">Cada letra vale siempre lo mismo.</p>
       </div>
 
       <!-- Tabla de referencia con colores por letra -->
-      <div class="card stack symbols-card">
+      <div class="card stack act-symbols-card">
         <div class="symbols-row" id="symbolsRow"></div>
       </div>
 
@@ -134,7 +134,7 @@
         <!-- Descomposición paso a paso con colores -->
         <div class="decomposition hidden" id="decomposition" aria-live="polite"></div>
       </div>
-      <h2 class="question centered" id="questionText"></h2>
+      <h2 class="act-question centered" id="questionText"></h2>
       <div class="stack" id="options"></div>
       <div class="feedback" id="feedback" aria-live="polite"></div>
       <div class="explanation hidden" id="explanationWrap">

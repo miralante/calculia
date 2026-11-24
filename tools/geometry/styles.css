@@ -32,11 +32,11 @@
 }
 
 /* ---- Options ---- */
-.kind-name {
+.act-kind-name {
   display: block;
   font-weight: 700;
 }
-.kind-gloss {
+.act-kind-gloss {
   display: block;
   font-size: 0.9em;
 }

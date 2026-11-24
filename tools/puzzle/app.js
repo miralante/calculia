@@ -105,7 +105,7 @@
     })).forEach(function (p) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'piece';
+      btn.className = 'act-piece';
       btn.textContent = p.picto;
       btn.setAttribute('aria-label', App.i18n.t('pieceAria'));
       btn.addEventListener('click', function () { select(btn, p.correctIndex); });
@@ -117,7 +117,7 @@
   }
 
   function select(btn, correctIndex) {
-    App.utils.$$('.piece').forEach(function (b) { b.classList.remove('selected'); });
+    App.utils.$$('.act-piece').forEach(function (b) { b.classList.remove('selected'); });
     btn.classList.add('selected');
     selectedPiece = { btn: btn, correctIndex: correctIndex };
   }
@@ -136,11 +136,11 @@
         endImage();
       }
     } else {
-      App.utils.$$('.piece').forEach(function (b) { b.classList.remove('selected'); });
+      App.utils.$$('.act-piece').forEach(function (b) { b.classList.remove('selected'); });
       selectedPiece = null;
       App.feedback.encourage(feedbackEl);
       feedbackEl.textContent += ' ' + App.feedback.hintText(App.i18n.t('hint'), '');
-      App.feedback.lockUntilAck(App.utils.$$('.piece'), feedbackEl);
+      App.feedback.lockUntilAck(App.utils.$$('.act-piece'), feedbackEl);
     }
   }
 

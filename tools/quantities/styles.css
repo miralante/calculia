@@ -237,7 +237,7 @@
 }
 
 
-.answer-input {
+.act-answer-input {
   font-size: 32px;
   font-weight: 800;
   letter-spacing: 2px;
@@ -252,7 +252,7 @@
   font-family: inherit;
 }
 
-.answer-input:focus {
+.act-answer-input:focus {
   outline: 3px solid var(--mod-razonamiento);
   outline-offset: 2px;
 }
@@ -272,7 +272,7 @@
 .dot-group-2 { color: var(--mod-secuencia); }
 .dot-group-3 { color: var(--mod-emocional); }
 .pv-digit--sep { color: var(--color-texto-suave); }
-.sign { color: var(--mod-memoria); }
+.act-sign { color: var(--mod-memoria); }
 
 /* Caja de la respuesta en palabras: ancha, como un procesador de
    texto. Las palabras de un número de 9 cifras son largas: el texto
@@ -302,7 +302,7 @@
 @media (max-width: 480px) {
   .act-card--task { padding: var(--espacio); }
   .number-shown { min-width: 0; width: 100%; font-size: 40px; }
-  .answer-input { min-width: 0; width: 100%; }
+  .act-answer-input { min-width: 0; width: 100%; }
   .big-emoji { font-size: 64px; }
   .points-tray { flex-direction: row; flex-wrap: wrap; justify-content: center; }
 }

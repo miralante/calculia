@@ -361,8 +361,8 @@
         legend: App.i18n.t('gen.angleHint'),
         options: App.utils.shuffle(kinds.map(function (k) {
           return {
-            html: '<span class="kind-name">' + kindName(k) + '</span>' +
-              '<span class="kind-gloss">' + kindGloss(k) + '</span>',
+            html: '<span class="act-kind-name">' + kindName(k) + '</span>' +
+              '<span class="act-kind-gloss">' + kindGloss(k) + '</span>',
             aria: kindName(k) + ', ' + kindGloss(k),
             correct: k === kind
           };
@@ -413,8 +413,8 @@
         legend: App.i18n.t('gen.equalHint'),
         options: App.utils.shuffle(pool.map(function (f) {
           return {
-            html: '<span class="kind-name">' + figureName(f.id) + '</span>' +
-              '<span class="kind-gloss">' + figureGloss(f.id) + '</span>',
+            html: '<span class="act-kind-name">' + figureName(f.id) + '</span>' +
+              '<span class="act-kind-gloss">' + figureGloss(f.id) + '</span>',
             aria: figureName(f.id) + ', ' + figureGloss(f.id),
             correct: f.id === fig.id
           };

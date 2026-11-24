@@ -32,7 +32,7 @@
   gap: var(--espacio);
 }
 
-.slot {
+.act-slot {
   min-width: 64px;
   min-height: 64px;
   font-size: 40px;
@@ -44,7 +44,7 @@
   background: var(--color-superficie);
 }
 
-.slot.lleno {
+.act-slot.lleno {
   border-style: solid;
   border-color: var(--color-acierto);
   background: var(--color-acierto-suave);

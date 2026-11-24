@@ -45,7 +45,7 @@
    Drawn as real steps, each one indented a little more than the one above,
    with the ×10 written in the gap between rungs. The ten is what makes
    "how many steps" and "times what" countable instead of remembered. */
-.ladder {
+.act-ladder {
   display: flex;
   flex-direction: column;
   align-items: flex-start;

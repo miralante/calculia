@@ -17,7 +17,7 @@ main { margin-top: var(--espacio-grande); }
 
 .card { border-color: var(--mod-razonamiento-suave); }
 
-.question { color: var(--color-texto-suave); }
+.act-question { color: var(--color-texto-suave); }
 
 .emoji-large { font-size: 96px; }
 

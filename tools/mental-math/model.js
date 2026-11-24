@@ -47,7 +47,7 @@
     return '<span class="pv-number">' + digits(n, opts.highlight) + '</span>';
   }
 
-  function paintSign(s) { return '<span class="sign">' + s + '</span>'; }
+  function paintSign(s) { return '<span class="act-sign">' + s + '</span>'; }
 
   function buildOptions(correct, distractors, format) {
     var values = [correct];

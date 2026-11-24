@@ -25,7 +25,7 @@
 .act-hint { color: var(--color-texto-suave); font-size: var(--texto-base); }
 
 /* ---- Signs and empty boxes (orange signs, as in the number scale) ---- */
-.sign { font-size: 40px; font-weight: 800; color: var(--mod-memoria); }
+.act-sign { font-size: 40px; font-weight: 800; color: var(--mod-memoria); }
 .pv-box {
   min-width: 64px; min-height: 64px; padding: 8px 12px;
   display: inline-flex; align-items: center; justify-content: center;
