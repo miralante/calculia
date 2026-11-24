@@ -699,6 +699,7 @@
     '  <div class="row center-row">',
     '    <p class="instruction" id="powPracticeTitle"></p>',
     '  </div>',
+    '  <div class="progress-bar" id="powProgress" data-suite-progress role="progressbar" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><div class="progress-fill" id="powProgressFill"></div></div>',
     '  <article class="card centered stack power-card" data-power-slide="0">',
     '    <h3 class="reference-title" id="powExpTitle"></h3>',
     '    <div class="power-try">',
@@ -773,6 +774,45 @@
     byId('powBothExp').value = '';
     byId('powBothFeedback').textContent = '';
     byId('powBothResult').innerHTML = '';
+    resetPowerAnswers();
+  }
+
+  /* The practice is done when each of its three slides has an answer. The bar counts the
+     answered slides; when the last one is answered, the round ends with the achievement screen. */
+  var POWER_SLIDES = 3;
+  var powerAnswered = {}, powerAwarded = false;
+  function resetPowerAnswers() {
+    powerAnswered = {};
+    powerAwarded = false;
+    byId('powProgressFill').style.width = '0%';
+    byId('powProgress').setAttribute('aria-valuenow', '0');
+    byId('powProgress').setAttribute('aria-label', fill(t('ui.count'), { i: 0, n: POWER_SLIDES }));
+  }
+  function answerPower(key) {
+    powerAnswered[key] = true;
+    var n = Object.keys(powerAnswered).length;
+    byId('powProgressFill').style.width = (n / POWER_SLIDES * 100) + '%';
+    byId('powProgress').setAttribute('aria-valuenow', String(n));
+    byId('powProgress').setAttribute('aria-label', fill(t('ui.count'), { i: n, n: POWER_SLIDES }));
+    if (n === POWER_SLIDES) finishPower();
+  }
+  /* One star for the round, as the other activities give it; «A por más» starts a new round. */
+  function finishPower() {
+    if (powerAwarded || !powerCtx) return;
+    powerAwarded = true;
+    var progress = powerCtx.progress;
+    progress.stars += 1;
+    progress.completedRounds = (progress.completedRounds || 0) + 1;
+    if (powerCtx.current) {
+      progress.roundsByActivity[powerCtx.current.id] = (progress.roundsByActivity[powerCtx.current.id] || 0) + 1;
+    }
+    powerCtx.save();
+    powerCtx.paintStars();
+    App.feedback.celebrate(t('core.roundComplete'), nextPowerRound, App.feedback.starsGoal(progress.stars));
+  }
+  function nextPowerRound() {
+    newPower();
+    showPowerSlide(0);
   }
 
   /* The answer of the practice as a plain line, as the sketch writes it: 5 × 5 = 25. */
@@ -792,6 +832,7 @@
     var b = power.base, e = typed.value;
     byId('powExpFeedback').textContent = '';
     byId('powExpResult').innerHTML = powerSumHtml(b, e);
+    answerPower('exp');
   }
 
   /* The second way: the exponent is given and the base is typed. */
@@ -805,6 +846,7 @@
     var b = typed.value, e = power.exp;
     byId('powBaseFeedback').textContent = '';
     byId('powBaseResult').innerHTML = powerSumHtml(b, e);
+    answerPower('base');
   }
 
   /* The third slide: both numbers are typed, the base and the exponent, and the answer shows the multiplications. */
@@ -818,10 +860,11 @@
     }
     byId('powBothFeedback').textContent = '';
     byId('powBothResult').innerHTML = powerSumHtml(b.value, e.value);
+    answerPower('both');
   }
 
   /* The practice is three slides, one at a time, with the same arrows as the intro. */
-  var POWER_SLIDES = 3, powerSlide = 0;
+  var powerSlide = 0;
   function showPowerSlide(i) {
     powerSlide = Math.max(0, Math.min(POWER_SLIDES - 1, i));
     document.querySelectorAll('[data-power-slide]').forEach(function (el) {
@@ -845,7 +888,7 @@
       byId('powBothExp').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); checkBoth(); } });
       byId('powPrev').addEventListener('click', function () { showPowerSlide(powerSlide - 1); });
       byId('powNext').addEventListener('click', function () { showPowerSlide(powerSlide + 1); });
-      byId('powAgain').addEventListener('click', newPower);
+      byId('powAgain').addEventListener('click', nextPowerRound);
     }
     /* The texts are set on every start, so a language change shows in the practice too. */
     byId('powPracticeTitle').textContent = t('power.practiceTitle');
@@ -1235,10 +1278,37 @@
     }
   });
 
+  /* The powers game: a name goes in its place by tapping it and then the place, or by
+     dragging it onto the place (see below). A wrong place shakes and the name stays free.
+     The places are buttons, so the game can also be done with the keyboard. */
+  function placePowerName(box, chip, slot) {
+    var msg = box.querySelector('.power-names-msg');
+    if (chip.getAttribute('data-name') === slot.getAttribute('data-slot')) {
+      slot.textContent = chip.textContent;
+      /* The empty place had a name of its own; now it shows the name that was put there. */
+      slot.removeAttribute('aria-label');
+      slot.classList.add('is-ok');
+      chip.classList.remove('is-selected');
+      chip.setAttribute('aria-pressed', 'false');
+      chip.classList.add('is-placed');
+      msg.textContent = t('power.namesRight');
+      if (!box.querySelector('.power-slot:not(.is-ok)')) {
+        msg.textContent = t('power.namesDone');
+      }
+    } else {
+      chip.classList.remove('is-selected');
+      chip.setAttribute('aria-pressed', 'false');
+      slot.classList.remove('is-wrong');
+      void slot.offsetWidth;
+      slot.classList.add('is-wrong');
+      msg.textContent = t('power.namesWrong');
+    }
+  }
+
   /* The powers game's taps: a name is picked (tap it again to drop it), then the place
-     it goes is tapped. A wrong place shakes and the name stays free. The places are
-     buttons, so the game can also be done with the keyboard. */
+     it goes is tapped. A drag is not a tap: the click that ends a drag is swallowed. */
   document.addEventListener('click', function (e) {
+    if (powerDragJustEnded) return;
     var target = e.target.closest ? e.target : null;
     var box = target ? target.closest('.power-names') : null;
     if (!box) return;
@@ -1261,27 +1331,82 @@
     if (!slot || slot.classList.contains('is-ok')) return;
     var selected = box.querySelector('.power-chip.is-selected');
     if (!selected) { msg.textContent = t('power.namesPick'); return; }
-    if (selected.getAttribute('data-name') === slot.getAttribute('data-slot')) {
-      slot.textContent = selected.textContent;
-      /* The empty place had a name of its own; now it shows the name that was put there. */
-      slot.removeAttribute('aria-label');
-      slot.classList.add('is-ok');
-      selected.classList.remove('is-selected');
-      selected.setAttribute('aria-pressed', 'false');
-      selected.classList.add('is-placed');
-      msg.textContent = t('power.namesRight');
-      if (!box.querySelector('.power-slot:not(.is-ok)')) {
-        msg.textContent = t('power.namesDone');
-      }
-    } else {
-      selected.classList.remove('is-selected');
-      selected.setAttribute('aria-pressed', 'false');
-      slot.classList.remove('is-wrong');
-      void slot.offsetWidth;
-      slot.classList.add('is-wrong');
-      msg.textContent = t('power.namesWrong');
-    }
+    placePowerName(box, selected, slot);
   });
+
+  /* Dragging a name to its place, as the points of the numbers game: the name follows
+     the pointer and the place under it lights up. Let go on a free place, the name is
+     put there, as a tap does; let go anywhere else, it stays where it was. A drag starts
+     after a few pixels of movement, so a plain tap still picks the name. */
+  var POWER_DRAG_PX = 6;
+  var powerDrag = null;             /* { chip, box, ghost, moved, startX, startY } */
+  var powerDragJustEnded = false;   /* swallows the click that follows a drop */
+
+  function onPowerNamePointerDown(e) {
+    if (e.button !== 0) return;
+    var chip = e.target.closest ? e.target.closest('.power-chip') : null;
+    if (!chip || chip.classList.contains('is-placed')) return;
+    powerDrag = { chip: chip, box: chip.closest('.power-names'), ghost: null, moved: false, startX: e.clientX, startY: e.clientY };
+    document.addEventListener('pointermove', movePowerName);
+    document.addEventListener('pointerup', endPowerName);
+    document.addEventListener('pointercancel', cancelPowerName);
+  }
+
+  /* The free place under the pointer, or null. */
+  function powerSlotAt(x, y) {
+    var el = document.elementFromPoint(x, y);
+    var slot = el && el.closest ? el.closest('.power-slot') : null;
+    return slot && !slot.classList.contains('is-ok') ? slot : null;
+  }
+
+  function movePowerName(e) {
+    var d = powerDrag;
+    if (!d) return;
+    if (!d.moved) {
+      if (Math.abs(e.clientX - d.startX) + Math.abs(e.clientY - d.startY) < POWER_DRAG_PX) return;
+      d.moved = true;
+      d.chip.classList.add('is-dragging');
+      d.ghost = document.createElement('span');
+      d.ghost.className = 'power-ghost';
+      d.ghost.setAttribute('aria-hidden', 'true');
+      d.ghost.textContent = d.chip.textContent;
+      document.body.appendChild(d.ghost);
+    }
+    d.ghost.style.left = e.clientX + 'px';
+    d.ghost.style.top = e.clientY + 'px';
+    var over = powerSlotAt(e.clientX, e.clientY);
+    d.box.querySelectorAll('.power-slot').forEach(function (s) {
+      s.classList.toggle('is-target', s === over);
+    });
+  }
+
+  /* Ends the drag and clears what it showed; returns the drag that was running, or null. */
+  function stopPowerDrag() {
+    var d = powerDrag;
+    document.removeEventListener('pointermove', movePowerName);
+    document.removeEventListener('pointerup', endPowerName);
+    document.removeEventListener('pointercancel', cancelPowerName);
+    powerDrag = null;
+    if (d) {
+      d.chip.classList.remove('is-dragging');
+      d.box.querySelectorAll('.power-slot.is-target').forEach(function (s) { s.classList.remove('is-target'); });
+      if (d.ghost) d.ghost.remove();
+    }
+    return d;
+  }
+
+  function endPowerName(e) {
+    var over = powerDrag && powerDrag.moved ? powerSlotAt(e.clientX, e.clientY) : null;
+    var d = stopPowerDrag();
+    if (!d || !d.moved) return;   /* a tap: the click does the work */
+    powerDragJustEnded = true;
+    setTimeout(function () { powerDragJustEnded = false; }, 300);
+    if (over) placePowerName(d.box, d.chip, over);
+  }
+
+  function cancelPowerName() { stopPowerDrag(); }
+
+  document.addEventListener('pointerdown', onPowerNamePointerDown);
 
 
   /* The join and take games' buttons. «Juntar» moves the second group into the first; «Quitar» crosses out the last ones. */

@@ -293,8 +293,8 @@
       parts: { base: 'Base', exp: 'Exponent', pow: 'Power' },
       /* The empty place of the game: the name that goes in it. */
       partsAria: { base: 'Place for the base', exp: 'Place for the exponent', pow: 'Place for the power' },
-      namesPick: 'Tap a name and then the place it goes.',
-      namesPlace: 'Now tap the place it goes.',
+      namesPick: 'Drag a name to its place, or tap it and then the place.',
+      namesPlace: 'Now tap or drag the name to its place.',
       namesRight: 'That is it!',
       namesWrong: 'That name goes somewhere else. Try again.',
       namesDone: 'Well done! Every part of the power has its name.',

@@ -326,6 +326,27 @@
 .power-names-chips { min-height: 44px; gap: 8px; }
 .power-chip.is-selected { outline: 3px solid var(--mod-razonamiento); outline-offset: 2px; }
 .power-chip.is-placed { visibility: hidden; }
+/* A name can be dragged: the page does not scroll under the finger, and the name left behind is faded. */
+.power-chip { touch-action: none; user-select: none; cursor: grab; }
+.power-chip.is-dragging { opacity: .4; }
+/* The place a dragged name would go into. */
+.power-slot.is-target { border-style: solid; background: var(--mod-razonamiento-suave); }
+/* The name that follows the pointer while it is dragged. */
+.power-ghost {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  padding: 6px 14px;
+  border: 2px solid var(--mod-razonamiento);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--mod-razonamiento);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+}
 .power-slot {
   display: inline-flex;
   align-items: center;
@@ -351,7 +372,7 @@
 .power-try { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 18px; }
 .power-try-group { display: inline-flex; align-items: flex-start; gap: 4px; }
 .power-try-num { font-size: clamp(2.6rem, 10vw, 4rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; line-height: 1.1; }
-.power-try-exp { font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; line-height: 1; }
+.power-try-exp { font-size: 1.1rem; font-weight: 800; color: var(--mod-razonamiento); font-variant-numeric: tabular-nums; line-height: 1; }
 .power-result { width: 100%; }
 /* The box for the number is big enough to read and to tap. */
 .power-card input[type="number"] { width: 5rem; min-height: var(--boton-min); font-size: 1.6rem; text-align: center; }

@@ -298,8 +298,8 @@
       parts: { base: 'Base', exp: 'Exponente', pow: 'Potencia' },
       /* El sitio vacío del juego: el nombre que le toca. */
       partsAria: { base: 'Sitio de la base', exp: 'Sitio del exponente', pow: 'Sitio de la potencia' },
-      namesPick: 'Toca un nombre y luego el sitio donde va.',
-      namesPlace: 'Ahora toca el sitio donde va.',
+      namesPick: 'Arrastra un nombre a su sitio, o tócalo y luego el sitio.',
+      namesPlace: 'Ahora toca o arrastra el nombre al sitio donde va.',
       namesRight: '¡Eso es!',
       namesWrong: 'Ese nombre va en otro sitio. Prueba otra vez.',
       namesDone: '¡Bien! Cada parte de la potencia ya tiene su nombre.',
