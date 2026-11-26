@@ -18,20 +18,16 @@
 
 Las técnicas didácticas, de gamificación, de persuasión y de
 neuromarketing completas que comparten todas las apps de la suite
-de Apptonomia viven en el repositorio de **Routime** en
-[`guia-crear-elementos.md`](https://github.com/thenkdframe/routime/blob/main/doc/es/guia-crear-elementos.md).
+de Apptonomia viven en la guía canónica de **Apptonomia** en
+[`guia-crear-elementos.md`](https://github.com/miralante/apptonomia/blob/main/doc/es/guia-crear-elementos.md).
 
 Léela antes de diseñar nada. Cubre (entre otras cosas):
 
-- Las 13 reglas obligatorias de accesibilidad (con su porqué).
-- La escalera de pistas del método socrático (pista → pista más
-  grande → respuesta).
-- La paleta de refuerzo positivo (sonidos, animaciones, micro-copy).
-- Los patrones de neuromarketing que usa el suite (compromiso,
-  reciprocidad, prueba social) y cómo se ajustan a una audiencia
-  que aprende a su ritmo.
-- La lista de comprobación del diseño de niveles (progresión
-  Fácil → Medio → Difícil).
+- Principios para definir objetivos de aprendizaje y adaptar el contenido al público.
+- Pautas de accesibilidad y comprensión para las consignas y la interacción.
+- Una secuencia de pistas, respuesta al error y refuerzo respetuoso.
+- Gamificación y persuasión responsables, sin presión ni penalizaciones.
+- Una lista de comprobación antes de publicar.
 
 ## 2. Lo específico de Calculia
 
@@ -76,7 +72,7 @@ ningún código.**
       `tools/<slug>/strings.en.js` con las mismas claves.
 - [ ] Niveles (1, 2, 3) configurados con dificultad progresiva.
 - [ ] Escalera de pistas con método socrático (ver la guía de
-      Routime, §3).
+      Apptonomia, §3).
 - [ ] Pista de audio que respeta `prefers-reduced-motion` y la
       preferencia de audio de la persona en ajustes.
 - [ ] Progreso guardado solo en `localStorage`; sin llamadas de
@@ -86,8 +82,8 @@ ningún código.**
 
 ## 5. Ver también
 
-- Guía pedagógica canónica (Routime):
-  [guia-crear-elementos.md](https://github.com/thenkdframe/routime/blob/main/doc/es/guia-crear-elementos.md).
+- Guía pedagógica canónica (Apptonomia):
+  [guia-crear-elementos.md](https://github.com/miralante/apptonomia/blob/main/doc/es/guia-crear-elementos.md).
 - Receta técnica: [`tecnico.md`](tecnico.md) §9.
 - Reglas innegociables del producto:
   [`SPEC.md`](SPEC.md) §3.

@@ -17,18 +17,16 @@
 
 The full didactic, gamification, persuasion and neuromarketing
 techniques that all the apps of the Miralante suite share live in the
-**Routime** repository under
-[`creating-elements-guide.md`](https://github.com/thenkdframe/routime/blob/main/doc/en/creating-elements-guide.md).
+Apptonomia's canonical guide at
+[`creating-elements-guide.md`](https://github.com/miralante/apptonomia/blob/main/doc/en/creating-elements-guide.md).
 
 Read it before designing anything. It covers (non-exhaustive):
 
-- The 13 mandatory accessibility rules (with the rationale for each).
-- The Socratic-method hint ladder (clue → bigger clue → answer).
-- The positive-feedback palette (sounds, animations, micro-copy).
-- The neuromarketing patterns that the suite uses (commitment,
-   reciprocity, social proof) and how they're tuned for an audience
-   that learns at their own pace.
-- The level-design checklist (Easy → Medium → Hard progression).
+- Principles for clear learning objectives and audience adaptation.
+- Accessibility and comprehension guidance for instructions and interactions.
+- A graduated hint sequence, responses to mistakes and respectful reinforcement.
+- Responsible gamification without pressure or penalties.
+- A pre-publication checklist.
 
 ## 2. What's specific to Calculia
 
@@ -69,7 +67,7 @@ writing any code.**
 - [ ] Strings added to BOTH `tools/<slug>/strings.es.js` **and**
       `tools/<slug>/strings.en.js` with the same keys.
 - [ ] Levels (1, 2, 3) configured with progressive difficulty.
-- [ ] Hint ladder follows the Socratic method (see Routime's
+- [ ] Hint ladder follows the Socratic method (see Apptonomia's
       guide, §3).
 - [ ] Audio cue respects `prefers-reduced-motion` and the user
       audio preference in settings.
@@ -79,8 +77,8 @@ writing any code.**
 
 ## 5. See also
 
-- Canonical pedagogical guide (Routime):
-  [creating-elements-guide.md](https://github.com/thenkdframe/routime/blob/main/doc/en/creating-elements-guide.md).
+- Canonical pedagogical guide (Apptonomia):
+  [creating-elements-guide.md](https://github.com/miralante/apptonomia/blob/main/doc/en/creating-elements-guide.md).
 - Technical recipe:
   [`technical.md`](technical.md) §9.
 - Product non-negotiables:
