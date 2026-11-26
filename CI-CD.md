@@ -1,4 +1,12 @@
-# Cloudflare Workers (static assets) — Calculia
+# CI/CD and deployment — Calculia
+
+This is the project-specific CI/CD and Cloudflare deployment runbook. For the suite-wide test matrix, see the [Miralante CI/CD guide](https://github.com/miralante/apptonomia/blob/main/CI-CD.md).
+
+## CI validation
+
+Run the checks required by `.github/workflows/validate.yml` from this repository before merging. Project-specific checks and the suite-wide Playwright, crawler, service-worker, and release checks are listed in the linked CI/CD guide.
+
+## Cloudflare deployment profile — Calculia
 
 > **Deploy:** automatic on every push to `main` through the Cloudflare Git connector; Workers Builds deploys the repo and GitHub Actions only validates. The Cloudflare dashboard is the source of truth for project settings. This is a Worker with static assets, not classic Pages. Canonical URL: <https://calculia.apptonomia.uk/>; fallback: <https://calculia.miralante.workers.dev>.
 
@@ -45,4 +53,4 @@ No server-side calls or environment variables are needed; fonts, icons, and acti
 - [`_headers`](_headers) — security and cache policy.
 - [`.github/workflows/validate.yml`](.github/workflows/validate.yml) — validation; it does not deploy unless stated above.
 - [`CLAUDE.md`](CLAUDE.md) — agent workflow and, where applicable, the canonical service-worker cache contract (§B.1).
-- [Miralante's shared Cloudflare runbook](https://github.com/miralante/apptonomia/blob/main/CLOUDFLARE.md) — common setup and recovery steps.
+- [Miralante's shared Cloudflare runbook](https://github.com/miralante/apptonomia/blob/main/CI-CD.md) — common setup and recovery steps.

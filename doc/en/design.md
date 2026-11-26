@@ -291,8 +291,7 @@ at 320, 375, 768 and 1280 pixels.
 (`components.css`), and that compaction **masks** a hardcoded
 `min-height` that breaks the rule.
 
-Playwright is global on this machine; if it is missing, see CLAUDE.md §
-"Shared Playwright installation" for the setup.
+[CI/CD guide for Miralante](https://github.com/miralante/apptonomia/blob/main/CI-CD.md).
 
 ---
 

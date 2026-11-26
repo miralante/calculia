@@ -297,8 +297,7 @@ pantallas que se han añadido caben a 320, 375, 768 y 1280 píxeles.
 (`components.css`), y ese compacto **tapa** un `min-height`
 hardcodeado que incumple.
 
-Playwright es global en esta máquina; si no lo tienes, `CLAUDE.md` §
-"Shared Playwright installation" explica el montaje.
+[Guía CI/CD de Miralante](https://github.com/miralante/apptonomia/blob/main/CI-CD.md).
 
 ---
 

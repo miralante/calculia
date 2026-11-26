@@ -1,18 +1,10 @@
 # CLAUDE.md
 
-## Shared Playwright installation
+## CI/CD and browser tests
 
-Playwright and its browsers are installed globally for the machine by
-`dev/setups/pc-playwright-first-setup.ps1` or
-`pc-playwright-next-setup.ps1`. Run the project's existing browser-test
-command (for example, `npm run test:ui`) or invoke the global CLI with
-`playwright test`.
-
-Do not add `playwright` or `@playwright/test` to project dependencies, install
-Playwright with `npm`/`npx`, or run `npx playwright install`. The setup scripts
-manage the shared browser cache under `{drive}\apps\playwright_browsers`.
-Always attempt the relevant browser test; if the global CLI or browsers are
-unavailable, report that blocker and continue with the other checks.
+Use this repository's configured test commands. See the
+[project CI/CD guide](CI-CD.md)
+for this project's Cloudflare deployment steps and the suite-wide test matrix.
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -44,8 +36,9 @@ shipping a layout change.
 
 ## Commands
 
-There is no build step, no package.json, and no test framework — it's plain
-HTML/CSS/JS served as static files.
+There is no app build step or runtime dependency. The root `package.json`
+contains development and CI test tooling only; the app remains static
+HTML/CSS/JS.
 
 - **Preview**: open `index.html` directly in a browser, or serve the
   folder with any static server (e.g. `npx serve .`). Everything runs
