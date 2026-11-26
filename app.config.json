@@ -20,7 +20,7 @@
   "hasItemList": false,
   "dcCreator": "Calculia (parte de la suite Apptonomia)",
   "dcSubject": "Actividades cortas y visuales de cálculo y razonamiento lógico: números, formas, fracciones, medidas, suma y resta, dinero, tablas, cantidades, números romanos, acertijos, patrones, el calendario y puzzles.",
-  "dcRights": "MIT (código). Las actividades (datos y enunciados) son contenido propio bajo CC BY 4.0.",
+  "dcRights": "GNU AGPL v3.0 (código). Las actividades (datos y enunciados) son contenido propio bajo CC BY 4.0.",
   "dcType": "InteractiveResource",
   "supportEmail": "hello@apptonomia.uk",
   "faq": [
@@ -68,5 +68,5 @@
     { "name": "Memofun", "url": "https://memofun.apptonomia.uk/", "description": "Tarjetas de estudio." },
     { "name": "Teclatlon", "url": "https://teclatlon.apptonomia.uk/", "description": "Mecanografía con el teclado del ordenador." }
   ],
-  "llmsLicense": "MIT (código). Las actividades y enunciados son contenido propio bajo CC BY 4.0."
+  "llmsLicense": "GNU AGPL v3.0 (código). Las actividades y enunciados son contenido propio bajo CC BY 4.0."
 }

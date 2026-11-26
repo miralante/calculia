@@ -526,7 +526,7 @@ workflow").
 
 ## 7. License
 
-MIT. See [`LICENSE`](../../LICENSE).
+GNU AGPL v3.0. See [`LICENSE`](../../LICENSE).
 
 ## 8. Suite pattern — how every app of Miralante is built
 

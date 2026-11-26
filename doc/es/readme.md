@@ -113,6 +113,6 @@ Si aciertas, aparecerá una celebración breve. Si no, recibirás un mensaje de 
 
 ## Créditos y licencia
 
-Calculia es un proyecto de código abierto, distribuido bajo la licencia MIT.
+Calculia es un proyecto de código abierto, distribuido bajo la licencia GNU AGPL v3.0.
 
 Los pictogramas utilizados son emojis estándar del sistema operativo para máxima compatibilidad.

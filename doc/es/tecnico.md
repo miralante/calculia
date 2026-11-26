@@ -550,7 +550,7 @@ de red: pide confirmación antes de ejecutarlo (ver `CLAUDE.md`
 
 ## 7. Licencia
 
-MIT. Ver [`LICENSE`](../../LICENSE).
+GNU AGPL v3.0. Ver [`LICENSE`](../../LICENSE).
 
 ## 8. Patrón de la suite — cómo se construye cada app de Miralante
 

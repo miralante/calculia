@@ -113,6 +113,6 @@ If you get it right, a brief celebration appears. If not, you get an encouraging
 
 ## Credits and licence
 
-Calculia is an open source project, distributed under the MIT licence.
+Calculia is an open source project, distributed under the GNU AGPL v3.0 licence.
 
 The pictograms used are standard system emojis for maximum compatibility.
