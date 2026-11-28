@@ -783,17 +783,15 @@ main.is-celebrating > :not(.celebration) {
   min-height: var(--button-min, var(--boton-min, var(--tocable, 44px)));
   padding: 6px 16px;
   border-radius: var(--radius, var(--radio, 12px));
-  background: var(--color-surface, var(--color-superficie, var(--superficie-1, #fff)));
-  border: 2px solid var(--color-border, var(--color-borde, var(--borde, #c9ced3)));
-  color: var(--color-text, var(--color-texto, var(--texto-primario, #1a1a2e)));
-  /* 17px at the default text size, the same as Teclatlon's back link (its --text-small at the
-     default base); it follows the reader's text-size setting like the rest of the page. */
+  background: var(--accent, var(--acento, #1B6CA8));
+  border: 2px solid var(--accent, var(--acento, #1B6CA8));
+  color: var(--color-on-accent, #FFFFFF);
   font-size: var(--text-small, var(--texto-pequeno, var(--texto-300, 1rem)));
   font-weight: 700;
   text-decoration: none;
 }
 
-.back-link:hover { border-color: var(--accent, var(--acento, currentColor)); }
+.back-link:hover { filter: brightness(1.08); }
 
 .back-link:focus-visible {
   outline: 2px solid var(--accent, var(--acento, currentColor));

@@ -33,7 +33,7 @@
   var DICT = {
     es: {
       core: {
-        back: '← Volver',
+        back: 'Menú de Teclatlon',
         backToMenu: 'Volver al menú',
         playAgain: 'Jugar otra vez',
         next: 'Siguiente →',
@@ -100,7 +100,7 @@
     },
     en: {
       core: {
-        back: '← Back',
+        back: 'Teclatlon menu',
         backToMenu: 'Back to menu',
         playAgain: 'Play again',
         next: 'Next →',
